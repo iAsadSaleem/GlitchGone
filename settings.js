@@ -37,6 +37,7 @@
         section.appendChild(header);
         section.appendChild(content);
         contentBuilder(content);
+
         return section;
     }
 
@@ -92,11 +93,11 @@
 
     // Apply sidebar text color live
     function applySidebarTextColor(color) {
-        const sidebarLinks = document.querySelectorAll('.sidebar-v2 nav a'); // corrected selector
+        const sidebarLinks = document.querySelectorAll('.sidebar-v2 nav a');
         sidebarLinks.forEach(a => {
-            a.style.setProperty("color", color, "important"); // link color
+            a.style.setProperty("color", color, "important");
             const span = a.querySelector('span');
-            if (span) span.style.setProperty("color", color, "important"); // span text
+            if (span) span.style.setProperty("color", color, "important");
         });
     }
 
@@ -109,15 +110,80 @@
             document.head.appendChild(styleTag);
         }
         styleTag.innerHTML = `
-    .sidebar-v2 nav a:hover,
-    .sidebar-v2 nav a:hover span {
-        color: ${color} !important;
-        opacity: 1 !important;
+        .sidebar-v2 nav a:hover, .sidebar-v2 nav a:hover span {
+            color: ${color} !important;
+            opacity: 1 !important;
+        }
+        .sidebar-v2 nav a.active, .sidebar-v2 nav a.active span {
+            color: ${color} !important;
+        }`;
     }
-    .sidebar-v2 nav a.active,
-    .sidebar-v2 nav a.active span {
-        color: ${color} !important;
-    }`;
+
+    // NEW: Theme Selector Section
+    function buildThemeSelectorSection(container) {
+        const wrapper = document.createElement("div");
+        wrapper.className = "tb-theme-selector-wrapper";
+
+        const label = document.createElement("label");
+        label.textContent = "Select Theme";
+        label.className = "tb-theme-selector-label";
+
+        const select = document.createElement("select");
+        select.className = "tb-theme-selector";
+
+        const themes = {
+            "default": {
+                "--primary-color": "#007bff",
+                "--primary-bg-color": "#ffffff",
+                "--sidebar-bg-color": "#1f1f1f",
+                "--sidebar-menu-bg": "#2a2a2a",
+                "--sidebar-menu-color": "#ffffff"
+            },
+            "dark": {
+                "--primary-color": "#ff5722",
+                "--primary-bg-color": "#121212",
+                "--sidebar-bg-color": "#000000",
+                "--sidebar-menu-bg": "#1c1c1c",
+                "--sidebar-menu-color": "#ff5722"
+            },
+            "pastel": {
+                "--primary-color": "#9c27b0",
+                "--primary-bg-color": "#f8f0ff",
+                "--sidebar-bg-color": "#f3e5f5",
+                "--sidebar-menu-bg": "#e1bee7",
+                "--sidebar-menu-color": "#4a148c"
+            }
+        };
+
+        Object.keys(themes).forEach(key => {
+            const option = document.createElement("option");
+            option.value = key;
+            option.textContent = key.charAt(0).toUpperCase() + key.slice(1);
+            select.appendChild(option);
+        });
+
+        // Apply saved theme
+        const savedTheme = localStorage.getItem("selectedTheme");
+        if (savedTheme && themes[savedTheme]) {
+            select.value = savedTheme;
+            applyTheme(themes[savedTheme]);
+        }
+
+        select.addEventListener("change", () => {
+            const theme = select.value;
+            localStorage.setItem("selectedTheme", theme);
+            applyTheme(themes[theme]);
+        });
+
+        wrapper.appendChild(label);
+        wrapper.appendChild(select);
+        container.appendChild(wrapper);
+
+        function applyTheme(themeVars) {
+            Object.keys(themeVars).forEach(varName => {
+                document.body.style.setProperty(varName, themeVars[varName]);
+            });
+        }
     }
 
     // Build theme colors section
@@ -126,12 +192,17 @@
             { label: "Choose Primary Color", key: "primaryColor", var: "--primary-color" },
             { label: "Choose Primary BG Color", key: "primaryBgColor", var: "--primary-bg-color" },
             { label: "Left Sidebar BG Color", key: "sidebarBgColor", var: "--sidebar-bg-color" },
-            { label: "Left Sidebar Tabs BG Color", key: "sidebarTabsBgColor", var: "--sidebar-menu-bg", apply: (color) => { document.body.style.setProperty("--sidebar-menu-bg", color); } },
-            { label: "Left Sidebar Tabs Text Color", key: "sidebarTabsTextColor", var: "--sidebar-menu-color", apply: (color) => { document.body.style.setProperty("--sidebar-menu-color", color); } },
+            {
+                label: "Left Sidebar Tabs BG Color", key: "sidebarTabsBgColor", var: "--sidebar-menu-bg",
+                apply: (color) => { document.body.style.setProperty("--sidebar-menu-bg", color); }
+            },
+            {
+                label: "Left Sidebar Tabs Text Color", key: "sidebarTabsTextColor", var: "--sidebar-menu-color",
+                apply: (color) => { document.body.style.setProperty("--sidebar-menu-color", color); }
+            },
         ];
         colors.forEach(c => container.appendChild(createColorPicker(c.label, c.key, c.var, c.apply)));
     }
-
 
     // Dummy Button Style section
     function buildButtonStyleSection(container) {
@@ -205,6 +276,8 @@
             contentWrapper.className = "tb-drawer-content";
             drawer.appendChild(contentWrapper);
 
+            // NEW: Add Select Theme before General Settings
+            contentWrapper.appendChild(createSection("🎨 Select Theme", buildThemeSelectorSection));
             contentWrapper.appendChild(createSection("🎨 General Settings", buildThemeColorsSection));
             contentWrapper.appendChild(createSection("🔘 Button Style", buildButtonStyleSection));
 
@@ -237,7 +310,8 @@
         const headerEl = document.querySelector('header.hl_header') || document.querySelector('header');
         if (headerEl && !headerObserver) {
             headerObserver = new MutationObserver(() => {
-                if (!document.getElementById('hl_header--themebuilder-icon')) setTimeout(() => initThemeBuilder(0), 200);
+                if (!document.getElementById('hl_header--themebuilder-icon'))
+                    setTimeout(() => initThemeBuilder(0), 200);
             });
             headerObserver.observe(headerEl, { childList: true, subtree: true });
         }
@@ -245,6 +319,4 @@
 
     document.addEventListener('DOMContentLoaded', () => setTimeout(() => initThemeBuilder(0), 50));
     setTimeout(() => initThemeBuilder(0), 50);
-
 })();
-
