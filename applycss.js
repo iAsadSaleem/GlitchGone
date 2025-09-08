@@ -9,7 +9,7 @@
         }
 
         if (key.includes(rlno)) {
-            var code = "https://glitch-gone.vercel.app/style-base64.txt";
+            var code = "https://glitch-gone-nu.vercel.app/style-base64.txt";
             fetch(code)
                 .then(res => res.text())
                 .then(encodedCSS => {
