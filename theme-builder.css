@@ -22,16 +22,16 @@
         right: 10px;
     }
 /* Drawer header */
-#themeBuilderDrawer > div:first-child {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  padding: 14px 16px;
-  border-bottom: 1px solid #e6e6e6;
-  background: #fafafa;
-  font-weight: 600;
-}
+    #themeBuilderDrawer > div:first-child {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        padding: 14px 16px;
+        border-bottom: 1px solid #e6e6e6;
+        background: #e38633;
+        font-weight: 600;
+    }
 
 /* Close button */
 #themeBuilderDrawer button {
@@ -126,6 +126,7 @@
 }
 .tb-drawer-header {
     border-radius: 23px;
+
 }
 .tb-drawer-title {
     color: #632405a6;
