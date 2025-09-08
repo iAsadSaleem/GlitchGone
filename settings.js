@@ -122,6 +122,7 @@
     // NEW: Theme Selector Section
     // NEW: Theme Selector Section
     // NEW: Theme Selector Section
+    // NEW: Theme Selector Section
     function buildThemeSelectorSection(container) {
         const wrapper = document.createElement("div");
         wrapper.className = "tb-theme-selector-wrapper";
@@ -191,8 +192,15 @@
             Object.keys(themeVars).forEach(varName => {
                 document.body.style.setProperty(varName, themeVars[varName]);
             });
+
+            // 🔑 Ensure --dark-color = --sidebar-menu-active-bg
+            if (themeVars["--sidebar-menu-active-bg"]) {
+                document.body.style.setProperty("--dark-color", themeVars["--sidebar-menu-active-bg"]);
+                document.body.style.setProperty("--second-color", themeVars["--sidebar-menu-active-bg"]);
+            }
         }
     }
+
 
     // Build theme colors section
     function buildThemeColorsSection(container) {
