@@ -213,6 +213,7 @@
             contentWrapper.className = "tb-drawer-content";
             drawer.appendChild(contentWrapper);
 
+            contentWrapper.appendChild(createSection("Theme Color", buildThemeColorsSection));
             contentWrapper.appendChild(createSection("🎨 Theme Colors", buildThemeColorsSection));
             contentWrapper.appendChild(createSection("🔘 Button Style", buildButtonStyleSection));
 
