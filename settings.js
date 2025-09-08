@@ -120,6 +120,7 @@
     }
 
     // NEW: Theme Selector Section
+    // NEW: Theme Selector Section
     function buildThemeSelectorSection(container) {
         const wrapper = document.createElement("div");
         wrapper.className = "tb-theme-selector-wrapper";
@@ -137,21 +138,24 @@
                 "--primary-bg-color": "#ffffff",
                 "--sidebar-bg-color": "#1f1f1f",
                 "--sidebar-menu-bg": "#2a2a2a",
-                "--sidebar-menu-color": "#ffffff"
+                "--sidebar-menu-color": "#ffffff",
+                "--sidebar-menu-hover-bg": "#333333"
             },
             "dark": {
                 "--primary-color": "#ff5722",
                 "--primary-bg-color": "#121212",
                 "--sidebar-bg-color": "#000000",
                 "--sidebar-menu-bg": "#1c1c1c",
-                "--sidebar-menu-color": "#ff5722"
+                "--sidebar-menu-color": "#ff5722",
+                "--sidebar-menu-hover-bg": "#2b2b2b"
             },
             "pastel": {
                 "--primary-color": "#9c27b0",
                 "--primary-bg-color": "#f8f0ff",
                 "--sidebar-bg-color": "#f3e5f5",
                 "--sidebar-menu-bg": "#e1bee7",
-                "--sidebar-menu-color": "#4a148c"
+                "--sidebar-menu-color": "#4a148c",
+                "--sidebar-menu-hover-bg": "#d1c4e9"
             }
         };
 
@@ -185,6 +189,7 @@
             });
         }
     }
+
 
     // Build theme colors section
     function buildThemeColorsSection(container) {
