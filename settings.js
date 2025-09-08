@@ -18,6 +18,41 @@
     }
     loadThemeBuilderCSS();
 
+    const themePresets = {
+        "Default": {
+            "--primary-color": "#007bff",
+            "--primary-bg-color": "#ffffff",
+            "--sidebar-bg-color": "#1f1f1f",
+            "--sidebar-menu-bg": "#2a2a2a",
+            "--sidebar-menu-color": "#ffffff",
+            "--header-bg-color": "#007bff",
+        },
+        "Dark Blue": {
+            "--primary-color": "#0d6efd",
+            "--primary-bg-color": "#0b1d3a",
+            "--sidebar-bg-color": "#0a0f1c",
+            "--sidebar-menu-bg": "#112240",
+            "--sidebar-menu-color": "#ffffff",
+            "--header-bg-color": "#0d6efd",
+        },
+        "Green Glow": {
+            "--primary-color": "#28a745",
+            "--primary-bg-color": "#eafbea",
+            "--sidebar-bg-color": "#1a3d1a",
+            "--sidebar-menu-bg": "#245c24",
+            "--sidebar-menu-color": "#d4ffd4",
+            "--header-bg-color": "#28a745",
+        },
+        "Purple Haze": {
+            "--primary-color": "#6f42c1",
+            "--primary-bg-color": "#f6f1fa",
+            "--sidebar-bg-color": "#2e1a47",
+            "--sidebar-menu-bg": "#3b2561",
+            "--sidebar-menu-color": "#ffffff",
+            "--header-bg-color": "#6f42c1",
+        }
+    };
+
     // Create collapsible sections
     function createSection(title, contentBuilder) {
         const section = document.createElement("div");
@@ -89,7 +124,33 @@
         wrapper.appendChild(colorCode);
         return wrapper;
     }
+    function buildThemePresetsSection(container) {
+        const label = document.createElement("label");
+        label.textContent = "Choose Theme Preset:";
+        label.className = "tb-dropdown-label";
 
+        const select = document.createElement("select");
+        select.className = "tb-dropdown";
+
+        Object.keys(themePresets).forEach(name => {
+            const option = document.createElement("option");
+            option.value = name;
+            option.textContent = name;
+            select.appendChild(option);
+        });
+
+        // Apply theme on change
+        select.addEventListener("change", () => {
+            const theme = themePresets[select.value];
+            Object.keys(theme).forEach(key => {
+                document.body.style.setProperty(key, theme[key]);
+                localStorage.setItem(key, theme[key]); // save to localStorage
+            });
+        });
+
+        container.appendChild(label);
+        container.appendChild(select);
+    }
     // Apply sidebar text color live
     function applySidebarTextColor(color) {
         const sidebarLinks = document.querySelectorAll('.sidebar-v2 nav a'); // corrected selector
@@ -126,16 +187,8 @@
             { label: "Choose Primary Color", key: "primaryColor", var: "--primary-color" },
             { label: "Choose Primary BG Color", key: "primaryBgColor", var: "--primary-bg-color" },
             { label: "Left Sidebar BG Color", key: "sidebarBgColor", var: "--sidebar-bg-color" },
-            {
-                label: "Left Sidebar Tabs BG Color", key: "sidebarTabsBgColor", var: "--sidebar-menu-bg", apply: (color) => {
-                    document.body.style.setProperty("--sidebar-menu-bg", color);
-                }
-            },
-            {
-                label: "Left Sidebar Tabs Text Color", key: "sidebarTabsTextColor", var: "--sidebar-menu-color", apply: (color) => {
-                    document.body.style.setProperty("--sidebar-menu-color", color);
-                }
-            },
+            { label: "Left Sidebar Tabs BG Color", key: "sidebarTabsBgColor", var: "--sidebar-menu-bg", apply: (color) => { document.body.style.setProperty("--sidebar-menu-bg", color); } },
+            { label: "Left Sidebar Tabs Text Color", key: "sidebarTabsTextColor", var: "--sidebar-menu-color", apply: (color) => { document.body.style.setProperty("--sidebar-menu-color", color); } },
         ];
         colors.forEach(c => container.appendChild(createColorPicker(c.label, c.key, c.var, c.apply)));
     }
@@ -150,14 +203,9 @@
 
     // Apply saved settings
     function applySavedSettings() {
-        const colorMap = [
-            { key: "primaryColor", cssVar: "--primary-color" },
-            { key: "primaryBgColor", cssVar: "--primary-bg-color" },
-            { key: "sidebarBgColor", cssVar: "--sidebar-bg-color" },
-        ];
-        colorMap.forEach(c => {
-            const val = localStorage.getItem(c.key);
-            if (val) document.body.style.setProperty(c.cssVar, val);
+        Object.keys(themePresets["Default"]).forEach(cssVar => {
+            const saved = localStorage.getItem(cssVar);
+            if (saved) document.body.style.setProperty(cssVar, saved);
         });
 
         const sidebarText = localStorage.getItem("sidebarTextColor");
@@ -213,8 +261,8 @@
             contentWrapper.className = "tb-drawer-content";
             drawer.appendChild(contentWrapper);
 
-            contentWrapper.appendChild(createSection("Theme Color", buildThemeColorsSection));
-            contentWrapper.appendChild(createSection("🎨 Theme Colors", buildThemeColorsSection));
+            contentWrapper.appendChild(createSection("🌈 Theme Presets", buildThemePresetsSection));
+            contentWrapper.appendChild(createSection("🎨 General Settings", buildThemeColorsSection));
             contentWrapper.appendChild(createSection("🔘 Button Style", buildButtonStyleSection));
 
             document.body.appendChild(drawer);
