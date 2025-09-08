@@ -136,20 +136,20 @@
 
         const themes = {
             "default": {
-                "--primary-color": "#007bff",
-                "--primary-bg-color": "#ffffff",
-                "--sidebar-bg-color": "#1f1f1f",
-                "--sidebar-menu-bg": "#2a2a2a",
+                "--primary-color": "#113F67",
+                "--primary-bg-color": "#34699A",
+                "--sidebar-bg-color": "#58A0C8",
+                "--sidebar-menu-bg": "#FDF5AA",
                 "--sidebar-menu-color": "#ffffff",
                 "--sidebar-menu-hover-bg": "#333333",
                 "--sidebar-menu-active-bg": "#444444"
             },
-            "dark": {
-                "--primary-color": "#ff5722",
-                "--primary-bg-color": "#121212",
-                "--sidebar-bg-color": "#000000",
-                "--sidebar-menu-bg": "#1c1c1c",
-                "--sidebar-menu-color": "#ff5722",
+            "Pastel Grass": {
+                "--primary-color": "#b7e4ba",
+                "--primary-bg-color": "#95d59d",
+                "--sidebar-bg-color": "#74c691",
+                "--sidebar-menu-bg": "#52b776",
+                "--sidebar-menu-color": "#40915d",
                 "--sidebar-menu-hover-bg": "#2b2b2b",
                 "--sidebar-menu-active-bg": "#3d3d3d"
             },
