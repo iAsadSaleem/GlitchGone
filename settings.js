@@ -11,7 +11,7 @@
             const link = document.createElement('link');
             link.id = 'themeBuilderCSS';
             link.rel = 'stylesheet';
-            link.href = 'https://glitch-gone.vercel.app/theme-builder.css';
+            link.href = 'https://glitch-gone-nu.vercel.app/theme-builder.css';
             document.head.appendChild(link);
             log('CSS loaded');
         }
