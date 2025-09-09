@@ -407,7 +407,7 @@
             resetBtn.style.flex = "1";
             resetBtn.addEventListener("click", resetThemeChanges);
 
-            //buttonsWrapper.appendChild(applyBtn);
+            buttonsWrapper.appendChild(applyBtn);
             buttonsWrapper.appendChild(resetBtn);
             contentWrapper.appendChild(buttonsWrapper);
 
