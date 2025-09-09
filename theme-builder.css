@@ -134,18 +134,7 @@
 }
 
 .tb-theme-cycle-btn {
-    padding: 10px 16px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 14px;
-    background: #444;
-    color: #fff;
-    transition: all 0.3s ease;
+    display: block;
     width: 100%;
+    margin: 8px 0 12px;
 }
-
-    .tb-theme-cycle-btn:hover {
-        opacity: 0.9;
-    }

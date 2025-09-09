@@ -277,7 +277,7 @@
             // 🔥 Place Select Theme button just after headerBar
             const themeBtnWrapper = document.createElement("div");
             buildThemeSelectorSection(themeBtnWrapper);
-            drawer.appendChild(themeBtnWrapper);
+            headerBar.insertAdjacentElement("afterend", themeBtnWrapper);
 
             // Now the rest of the drawer content
             const contentWrapper = document.createElement('div');
