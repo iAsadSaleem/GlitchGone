@@ -19,7 +19,7 @@
 
     // NEW: Fetch user theme from DB and apply
     async function loadUserThemeFromDB(rlNo) {
-        console.log('Get Code WOrking', res);
+        console.log('Get Code WOrking', rlNo);
         try {
             const res = await fetch(`https://theme-builder-delta.vercel.app/api/theme/${rlNo}`);
             console.log('Here is the inof', res);
