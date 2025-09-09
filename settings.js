@@ -310,6 +310,7 @@
         container.appendChild(wrapper);
     }
 
+    // Reset Theme Changes Function
     function resetThemeChanges() {
         const keysToRemove = [
             "primaryBgColor",
@@ -317,12 +318,12 @@
             "sidebarTabsTextColor",
             "sidebarTabsBgColor",
             "sidebarBgColor",
-            "selectedTheme" // also remove selected theme if using theme cycle button
+            "selectedTheme" // remove theme cycle selection too
         ];
 
         keysToRemove.forEach(key => localStorage.removeItem(key));
 
-        // Optionally reset the CSS variables to defaults
+        // Reset CSS variables to defaults
         document.body.style.removeProperty("--primary-bg-color");
         document.body.style.removeProperty("--primary-color");
         document.body.style.removeProperty("--sidebar-menu-color");
@@ -353,6 +354,7 @@
             drawer.id = "themeBuilderDrawer";
             drawer.className = "tb-drawer";
 
+            // Header
             const headerBar = document.createElement('div');
             headerBar.className = "tb-drawer-header";
 
@@ -368,27 +370,50 @@
             headerBar.appendChild(closeBtn);
             drawer.appendChild(headerBar);
 
-            // 🔥 Place theme button wrapper immediately below header
+            // Theme Selector Button
             const themeBtnWrapper = document.createElement("div");
-            themeBtnWrapper.style.padding = "0 12px"; // some side padding
+            themeBtnWrapper.style.padding = "0 12px"; // side padding
             buildThemeSelectorSection(themeBtnWrapper);
             drawer.appendChild(themeBtnWrapper);
 
-            // Now the rest of the drawer content
+            // Drawer Content
             const contentWrapper = document.createElement('div');
             contentWrapper.className = "tb-drawer-content";
             drawer.appendChild(contentWrapper);
 
+            // Sections
             contentWrapper.appendChild(createSection("🎨 General Settings", buildThemeColorsSection));
             contentWrapper.appendChild(createSection("🔘 Button Style", buildButtonStyleSection));
 
+            // Buttons Wrapper for Apply & Reset
+            const buttonsWrapper = document.createElement("div");
+            buttonsWrapper.style.padding = "12px";
+            buttonsWrapper.style.display = "flex";
+            buttonsWrapper.style.gap = "10px";
+
+            // Apply Changes Button
+            const applyBtn = document.createElement("button");
+            applyBtn.textContent = "Apply Changes";
+            applyBtn.className = "tb-apply-btn";
+            applyBtn.style.flex = "1";
+            applyBtn.addEventListener("click", () => {
+                alert("Changes Applied!");
+            });
+
+            // Reset Changes Button
             const resetBtn = document.createElement("button");
             resetBtn.textContent = "Reset Changes";
             resetBtn.className = "tb-reset-btn";
+            resetBtn.style.flex = "1";
             resetBtn.addEventListener("click", resetThemeChanges);
+
+            buttonsWrapper.appendChild(applyBtn);
+            buttonsWrapper.appendChild(resetBtn);
+            contentWrapper.appendChild(buttonsWrapper);
 
             document.body.appendChild(drawer);
 
+            // Drawer open/close events
             btn.addEventListener('click', () => drawer.classList.add('open'));
             closeBtn.addEventListener('click', () => drawer.classList.remove('open'));
 
