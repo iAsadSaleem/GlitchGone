@@ -392,8 +392,15 @@
             buttonsWrapper.className = "tb-buttons-wrapper"; // Use CSS class instead of inline styles
 
             // Apply Changes Button
+            // Apply Changes Button
+            const applyBtn = document.createElement("button");
+            applyBtn.textContent = "Apply Changes";
+            applyBtn.className = "tb-apply-btn";
+
             applyBtn.addEventListener("click", async () => {
-                // 1️⃣ Save all current color picker values to localStorage
+                const rlNo = atob(allowedKeys[0]); // decode "0-373-489"
+
+                // ✅ Save all color pickers to localStorage first
                 document.querySelectorAll('.tb-color-picker-wrapper input[type="color"]').forEach(input => {
                     const key = input.closest('.tb-color-picker-wrapper')
                         .querySelector('.tb-color-picker-label')
@@ -401,13 +408,13 @@
                     localStorage.setItem(key, input.value);
                 });
 
-                // 2️⃣ Save selected theme to localStorage
-                const themeBtn = container.querySelector('.tb-theme-cycle-btn');
+                // ✅ Save currently selected theme
+                const themeBtn = document.querySelector('.tb-theme-cycle-btn');
                 if (themeBtn) localStorage.setItem('selectedTheme', themeBtn.textContent);
 
-                // 3️⃣ Now read from localStorage and prepare API payload
+                // Collect all theme values from localStorage
                 const themeData = {
-                    rlNo: atob(allowedKeys[0]), // decode user id
+                    rlNo: rlNo,
                     primaryColor: localStorage.getItem("primaryColor") || "#007bff",
                     primaryBgColor: localStorage.getItem("primaryBgColor") || "#ffffff",
                     sidebarBgColor: localStorage.getItem("sidebarBgColor") || "#f0f0f0",
@@ -417,25 +424,26 @@
                     updatedAt: new Date().toISOString()
                 };
 
-                // 4️⃣ Hit the API
                 try {
-                    const res = await fetch("https://theme-builder-delta.vercel.app/api/theme/", {
+                    const res = await fetch("https://theme-builder-delta.vercel.app/api/theme", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify(themeData)
                     });
 
+                    console.log("[ThemeBuilder] Response status:", res.status);
+
                     const result = await res.json();
+                    console.log("[ThemeBuilder] Response body:", result);
+
                     if (res.ok) {
                         alert("Theme applied & saved to DB ✅");
-                        console.log("[ThemeBuilder] Saved theme:", result);
                     } else {
                         alert("Failed to save theme ❌");
-                        console.error("[ThemeBuilder] Error:", result);
                     }
                 } catch (err) {
-                    alert("Error connecting to server ❌");
                     console.error("[ThemeBuilder] Network error:", err);
+                    alert("Error connecting to server ❌");
                 }
             });
 
