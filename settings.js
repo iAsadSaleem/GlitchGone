@@ -159,7 +159,7 @@
                 "--primary-bg-color": "#f8f0ff",
                 "--sidebar-bg-color": "#f3e5f5",
                 "--sidebar-menu-bg": "#e1bee7",
-                "--sidebar-menu-color": "#4a148c",
+                "--sidebar-menu-color": "#ffffff",
                 "--sidebar-menu-hover-bg": "#d1c4e9",
                 "--sidebar-menu-active-bg": "#b39ddb",
                 "--header-bg-color":"#e1bee7"
