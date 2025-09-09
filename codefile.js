@@ -1,5 +1,7 @@
 (function () {
-  function srlno() {
+    function srlno() {
+
+        console.log("Getting the Code");
     var labelSpan = Array.from(document.querySelectorAll("span"))
       .find(span => span.textContent.trim() === "Relationship Number");
 
