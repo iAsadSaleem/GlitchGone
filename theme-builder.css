@@ -133,3 +133,20 @@
     font-size: 34px;
 }
 
+/* Reset Changes Button */
+.tb-reset-btn {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    background-color: #e74c3c; /* red color for reset */
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+    .tb-reset-btn:hover {
+        background-color: #c0392b; /* darker red on hover */
+        opacity: 0.9;
+    }
