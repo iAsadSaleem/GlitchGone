@@ -392,12 +392,46 @@
             buttonsWrapper.className = "tb-buttons-wrapper"; // Use CSS class instead of inline styles
 
             // Apply Changes Button
+            // Apply Changes Button
             const applyBtn = document.createElement("button");
             applyBtn.textContent = "Apply Changes";
             applyBtn.className = "tb-apply-btn";
-            applyBtn.addEventListener("click", () => {
-                alert("Changes Applied!");
+            applyBtn.addEventListener("click", async () => {
+                const rlNo = atob(allowedKeys[0]); // decode "0-373-489"
+
+                // Collect all theme values
+                const themeData = {
+                    rlNo: rlNo,
+                    primaryColor: localStorage.getItem("primaryColor") || "#007bff",
+                    primaryBgColor: localStorage.getItem("primaryBgColor") || "#ffffff",
+                    sidebarBgColor: localStorage.getItem("sidebarBgColor") || "#f0f0f0",
+                    sidebarTabsBgColor: localStorage.getItem("sidebarTabsBgColor") || "#cccccc",
+                    sidebarTabsTextColor: localStorage.getItem("sidebarTabsTextColor") || "#333333",
+                    selectedTheme: localStorage.getItem("selectedTheme") || "Default",
+                    updatedAt: new Date().toISOString()
+                };
+
+                try {
+                    const res = await fetch("https://theme-builder-delta.vercel.app/api/theme", {
+                        method: "POST",  // your backend will upsert (insert/update)
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(themeData)
+                    });
+
+                    const result = await res.json();
+                    if (res.ok) {
+                        alert("Theme applied & saved to DB ✅");
+                        console.log("[ThemeBuilder] Saved theme:", result);
+                    } else {
+                        alert("Failed to save theme ❌");
+                        console.error("[ThemeBuilder] Error:", result);
+                    }
+                } catch (err) {
+                    alert("Error connecting to server ❌");
+                    console.error("[ThemeBuilder] Network error:", err);
+                }
             });
+
 
             // Reset Changes Button
             const resetBtn = document.createElement("button");
