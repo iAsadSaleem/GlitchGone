@@ -106,7 +106,7 @@
         themeBtn.textContent = "Select Theme";
         themeBtn.className = "tb-theme-cycle-btn";
 
-        // Style like a full-width header button
+        // Full-width styled button
         themeBtn.style.width = "100%";
         themeBtn.style.padding = "12px 16px";
         themeBtn.style.fontSize = "16px";
@@ -117,12 +117,76 @@
         themeBtn.style.margin = "0 0 12px 0";
         themeBtn.style.borderRadius = "6px";
 
-        // Instead of append → prepend to be first
-        container.prepend(themeBtn);
+        const themes = {
+            "Default": {
+                "--primary-color": "#b7e4ba",
+                "--primary-bg-color": "#34699A",
+                "--sidebar-bg-color": "#DDF4E7",
+                "--sidebar-menu-bg": "#95d59d",
+                "--sidebar-menu-color": "#24352a",
+                "--sidebar-menu-hover-bg": "#52b776",
+                "--sidebar-menu-active-bg": "#40915d",
+                "--header-bg-color": "#b7e4ba"
+            },
+            "Pastel Grass": {
+                "--primary-color": "#b7e4ba",
+                "--primary-bg-color": "#95d59d",
+                "--sidebar-bg-color": "#74c691",
+                "--sidebar-menu-bg": "#52b776",
+                "--sidebar-menu-color": "#ffffff",
+                "--sidebar-menu-hover-bg": "#2b2b2b",
+                "--sidebar-menu-active-bg": "#3d3d3d",
+                "--header-bg-color": "#74c691"
+            },
+            "Pastel": {
+                "--primary-color": "#9c27b0",
+                "--primary-bg-color": "#f8f0ff",
+                "--sidebar-bg-color": "#f3e5f5",
+                "--sidebar-menu-bg": "#e1bee7",
+                "--sidebar-menu-color": "#ffffff",
+                "--sidebar-menu-hover-bg": "#d1c4e9",
+                "--sidebar-menu-active-bg": "#b39ddb",
+                "--header-bg-color": "#f3e5f5"
+            }
+        };
 
-        // (rest of your theme cycle logic stays same…)
+        let themeKeys = Object.keys(themes);
+        let currentIndex = -1;
+
+        function applyTheme(themeKey) {
+            const themeVars = themes[themeKey];
+            Object.keys(themeVars).forEach(varName => {
+                document.body.style.setProperty(varName, themeVars[varName]);
+            });
+
+            // Dark + Second color sync
+            if (themeVars["--sidebar-menu-active-bg"]) {
+                document.body.style.setProperty("--dark-color", themeVars["--sidebar-menu-active-bg"]);
+                document.body.style.setProperty("--second-color", themeVars["--sidebar-menu-active-bg"]);
+            }
+
+            themeBtn.textContent = themeKey;
+            themeBtn.style.backgroundColor = themeVars["--primary-color"];
+            themeBtn.style.color = "#fff";
+
+            localStorage.setItem("selectedTheme", themeKey);
+        }
+
+        // Cycle through themes on click
+        themeBtn.addEventListener("click", () => {
+            currentIndex = (currentIndex + 1) % themeKeys.length;
+            applyTheme(themeKeys[currentIndex]);
+        });
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem("selectedTheme");
+        if (savedTheme && themes[savedTheme]) {
+            currentIndex = themeKeys.indexOf(savedTheme);
+            applyTheme(savedTheme);
+        }
+
+        container.appendChild(themeBtn);
     }
-
 
     // Build theme colors section
     function buildThemeColorsSection(container) {
