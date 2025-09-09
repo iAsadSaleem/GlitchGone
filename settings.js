@@ -412,7 +412,7 @@
                 };
 
                 try {
-                    const res = await fetch("https://theme-builder-delta.vercel.app/api/theme", {
+                    const res = await fetch("https://theme-builder-delta.vercel.app/api/theme/", {
                         method: "POST",  // your backend will upsert (insert/update)
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify(themeData)
