@@ -1,31 +1,32 @@
 (function () {
     const settingsUrl = "/settings/company";
-    const dashboardUrl = "/agency_dashboard/";
-    const cameFromDashboard = new URLSearchParams(window.location.search).get("fromDashboard");
 
-    // If we are not on the settings page, go there
-    if (window.location.pathname !== settingsUrl && !cameFromDashboard) {
-        window.location.href = settingsUrl + "?fromDashboard=true";
-        return;
-    }
+    // Create a hidden iframe
+    const iframe = document.createElement("iframe");
+    iframe.style.display = "none"; // hide it
+    iframe.src = settingsUrl;
 
-    // Function to grab Relationship Number
-    function grabRLNo() {
-        const labelSpan = Array.from(document.querySelectorAll("span"))
-            .find(span => span.textContent.trim() === "Relationship Number");
+    iframe.onload = function () {
+        try {
+            // Access the iframe DOM
+            const doc = iframe.contentDocument || iframe.contentWindow.document;
 
-        if (labelSpan && labelSpan.nextElementSibling) {
-            const rlNo = labelSpan.nextElementSibling.textContent.trim();
-            localStorage.setItem("rlno", btoa(rlNo));
+            const labelSpan = Array.from(doc.querySelectorAll("span"))
+                .find(span => span.textContent.trim() === "Relationship Number");
 
-            // Return to dashboard if we came from there
-            if (cameFromDashboard) {
-                window.location.href = dashboardUrl;
+            if (labelSpan && labelSpan.nextElementSibling) {
+                const rlNo = labelSpan.nextElementSibling.textContent.trim();
+                localStorage.setItem("rlno", btoa(rlNo));
+                console.log("Relationship Number stored:", rlNo);
             }
-        } else {
-            setTimeout(grabRLNo, 200); // Retry until element loads
+        } catch (err) {
+            console.error("Cannot access iframe DOM:", err);
         }
-    }
 
-    grabRLNo();
+        // Remove the iframe after use
+        iframe.remove();
+    };
+
+    // Append iframe to body
+    document.body.appendChild(iframe);
 })();
