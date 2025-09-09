@@ -19,8 +19,10 @@
 
     // NEW: Fetch user theme from DB and apply
     async function loadUserThemeFromDB(rlNo) {
+        console.log('Get Code WOrking', res);
         try {
             const res = await fetch(`https://theme-builder-delta.vercel.app/api/theme/${rlNo}`);
+            console.log('Here is the inof', res);
             if (!res.ok) throw new Error('Failed to fetch theme');
 
             const data = await res.json();
