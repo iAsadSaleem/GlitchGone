@@ -116,10 +116,10 @@
         themeBtn.style.border = "none";
         themeBtn.style.cursor = "pointer";
         themeBtn.style.margin = "12px auto"; // center horizontally
-        themeBtn.style.display = "block";
         themeBtn.style.borderRadius = "6px";
         themeBtn.style.backgroundColor = "#b7e4ba";
         themeBtn.style.color = "#fff";
+        themeBtn.style.top = "96px";
 
         const themes = {
             "Default": {
