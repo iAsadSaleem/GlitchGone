@@ -106,28 +106,19 @@
         const wrapper = document.createElement("div");
         wrapper.className = "tb-theme-selector-wrapper";
 
-        // Label as clickable tab
-        const label = document.createElement("button");
-        label.textContent = "Select Theme";
-        label.className = "tb-theme-tab";
+        // Main button
+        const themeBtn = document.createElement("button");
+        themeBtn.textContent = "Select Theme";
+        themeBtn.className = "tb-theme-btn";
 
-        // Theme name display
-        const themeNameDisplay = document.createElement("span");
-        themeNameDisplay.className = "tb-theme-name";
-        themeNameDisplay.textContent = "";
-
-        // Dropdown toggle button (arrow)
-        const arrowBtn = document.createElement("button");
-        arrowBtn.innerHTML = "▼"; // Down arrow
-        arrowBtn.className = "tb-theme-arrow";
-
-        // Dropdown select
-        const select = document.createElement("select");
-        select.className = "tb-theme-dropdown";
-        select.style.display = "none"; // hidden by default
+        // Reset button (circle)
+        const resetBtn = document.createElement("button");
+        resetBtn.innerHTML = "⟳"; // Reset icon
+        resetBtn.className = "tb-reset-btn";
+        resetBtn.title = "Reset Theme";
 
         const themes = {
-            "default": {
+            "Default": {
                 "--primary-color": "#b7e4ba",
                 "--primary-bg-color": "#34699A",
                 "--sidebar-bg-color": "#DDF4E7",
@@ -147,7 +138,7 @@
                 "--sidebar-menu-active-bg": "#3d3d3d",
                 "--header-bg-color": "#74c691"
             },
-            "pastel": {
+            "Pastel": {
                 "--primary-color": "#9c27b0",
                 "--primary-bg-color": "#f8f0ff",
                 "--sidebar-bg-color": "#f3e5f5",
@@ -159,16 +150,8 @@
             }
         };
 
-        Object.keys(themes).forEach(key => {
-            const option = document.createElement("option");
-            option.value = key;
-            option.textContent = key.charAt(0).toUpperCase() + key.slice(1);
-            select.appendChild(option);
-        });
-
-        // Track theme index
         let themeKeys = Object.keys(themes);
-        let currentIndex = 0;
+        let currentIndex = -1; // no theme applied initially
 
         function applyTheme(themeKey) {
             const themeVars = themes[themeKey];
@@ -182,43 +165,48 @@
                 document.body.style.setProperty("--second-color", themeVars["--sidebar-menu-active-bg"]);
             }
 
-            themeNameDisplay.textContent = themeKey.charAt(0).toUpperCase() + themeKey.slice(1);
+            themeBtn.textContent = themeKey;
             localStorage.setItem("selectedTheme", themeKey);
-            select.value = themeKey;
         }
 
-        // Click on tab → cycle through themes
-        label.addEventListener("click", () => {
+        // Reset theme
+        function resetTheme() {
+            // Remove all theme vars
+            Object.values(themes).forEach(themeVars => {
+                Object.keys(themeVars).forEach(varName => {
+                    document.body.style.removeProperty(varName);
+                });
+            });
+
+            document.body.style.removeProperty("--dark-color");
+            document.body.style.removeProperty("--second-color");
+
+            themeBtn.textContent = "Select Theme";
+            localStorage.removeItem("selectedTheme");
+            currentIndex = -1;
+        }
+
+        // Main button click → cycle through themes
+        themeBtn.addEventListener("click", () => {
             currentIndex = (currentIndex + 1) % themeKeys.length;
             applyTheme(themeKeys[currentIndex]);
         });
 
-        // Dropdown toggle
-        arrowBtn.addEventListener("click", () => {
-            select.style.display = (select.style.display === "none") ? "block" : "none";
-        });
-
-        // Dropdown selection
-        select.addEventListener("change", () => {
-            applyTheme(select.value);
-            currentIndex = themeKeys.indexOf(select.value);
-        });
+        // Reset button click
+        resetBtn.addEventListener("click", resetTheme);
 
         // Load saved theme
         const savedTheme = localStorage.getItem("selectedTheme");
         if (savedTheme && themes[savedTheme]) {
             currentIndex = themeKeys.indexOf(savedTheme);
             applyTheme(savedTheme);
-        } else {
-            applyTheme(themeKeys[0]); // default to first theme
         }
 
-        wrapper.appendChild(label);
-        wrapper.appendChild(themeNameDisplay);
-        wrapper.appendChild(arrowBtn);
-        wrapper.appendChild(select);
+        wrapper.appendChild(themeBtn);
+        wrapper.appendChild(resetBtn);
         container.appendChild(wrapper);
     }
+
 
     // Build theme colors section
     function buildThemeColorsSection(container) {
