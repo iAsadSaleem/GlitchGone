@@ -274,14 +274,16 @@
             headerBar.appendChild(closeBtn);
             drawer.appendChild(headerBar);
 
+            // 🔥 Place Select Theme button just after headerBar
+            const themeBtnWrapper = document.createElement("div");
+            buildThemeSelectorSection(themeBtnWrapper);
+            drawer.appendChild(themeBtnWrapper);
+
+            // Now the rest of the drawer content
             const contentWrapper = document.createElement('div');
             contentWrapper.className = "tb-drawer-content";
             drawer.appendChild(contentWrapper);
 
-            // 🟢 Insert theme button FIRST (before any tabs/sections)
-            buildThemeSelectorSection(contentWrapper);
-
-            // Now add other sections
             contentWrapper.appendChild(createSection("🎨 General Settings", buildThemeColorsSection));
             contentWrapper.appendChild(createSection("🔘 Button Style", buildButtonStyleSection));
 
