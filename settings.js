@@ -107,15 +107,19 @@
         themeBtn.className = "tb-theme-cycle-btn";
 
         // Full-width styled button
-        themeBtn.style.width = "100%";
+
+        themeBtn.style.width = "calc(100% - 24px)";
         themeBtn.style.padding = "12px 16px";
         themeBtn.style.fontSize = "16px";
         themeBtn.style.fontWeight = "600";
         themeBtn.style.textAlign = "center";
         themeBtn.style.border = "none";
         themeBtn.style.cursor = "pointer";
-        themeBtn.style.margin = "0 0 12px 0";
+        themeBtn.style.margin = "12px auto"; // center horizontally
+        themeBtn.style.display = "block";
         themeBtn.style.borderRadius = "6px";
+        themeBtn.style.backgroundColor = "#b7e4ba";
+        themeBtn.style.color = "#fff";
 
         const themes = {
             "Default": {
@@ -274,10 +278,11 @@
             headerBar.appendChild(closeBtn);
             drawer.appendChild(headerBar);
 
-            // 🔥 Place Select Theme button just after headerBar
+            // 🔥 Place theme button wrapper immediately below header
             const themeBtnWrapper = document.createElement("div");
+            themeBtnWrapper.style.padding = "0 12px"; // some side padding
             buildThemeSelectorSection(themeBtnWrapper);
-            headerBar.insertAdjacentElement("afterend", themeBtnWrapper);
+            drawer.appendChild(themeBtnWrapper);
 
             // Now the rest of the drawer content
             const contentWrapper = document.createElement('div');
