@@ -17,6 +17,48 @@
     }
     loadThemeBuilderCSS();
 
+    // NEW: Fetch user theme from DB and apply
+    async function loadUserThemeFromDB(rlNo) {
+        try {
+            const res = await fetch(`https://theme-builder-delta.vercel.app/api/theme/${rlNo}`);
+            if (!res.ok) throw new Error('Failed to fetch theme');
+
+            const data = await res.json();
+            const theme = data.theme; // Assuming API returns { theme: { ... } }
+
+            if (!theme) return;
+
+            // Apply the theme CSS variables to body
+            document.body.style.setProperty("--primary-color", theme.primaryColor || "#007bff");
+            document.body.style.setProperty("--primary-bg-color", theme.primaryBgColor || "#ffffff");
+            document.body.style.setProperty("--sidebar-bg-color", theme.sidebarBgColor || "#f0f0f0");
+            document.body.style.setProperty("--sidebar-menu-bg", theme.sidebarTabsBgColor || "#cccccc");
+            document.body.style.setProperty("--sidebar-menu-color", theme.sidebarTabsTextColor || "#333333");
+
+            // Optional: Apply dark and second color based on sidebar menu active bg
+            if (theme.sidebarTabsBgColor) {
+                document.body.style.setProperty("--dark-color", theme.sidebarTabsBgColor);
+                document.body.style.setProperty("--second-color", theme.sidebarTabsBgColor);
+            }
+
+            // Save in localStorage
+            localStorage.setItem("primaryColor", theme.primaryColor);
+            localStorage.setItem("primaryBgColor", theme.primaryBgColor);
+            localStorage.setItem("sidebarBgColor", theme.sidebarBgColor);
+            localStorage.setItem("sidebarTabsBgColor", theme.sidebarTabsBgColor);
+            localStorage.setItem("sidebarTabsTextColor", theme.sidebarTabsTextColor);
+            localStorage.setItem("selectedTheme", theme.selectedTheme || "Default");
+
+            console.log("[ThemeBuilder] User theme loaded from DB:", theme);
+
+        } catch (err) {
+            console.error("[ThemeBuilder] Failed to load user theme from DB:", err);
+        }
+    }
+
+
+
+
     // Create collapsible sections
     function createSection(title, contentBuilder) {
         const section = document.createElement("div");
@@ -350,6 +392,11 @@
         initTooltip(btn, "Theme Builder");
         controlsContainer.appendChild(btn);
 
+        const rlNo = atob(allowedKeys[0]); // decode user ID
+        loadUserThemeFromDB(rlNo).then(() => {
+            applySavedSettings(); // Apply local storage settings (if any)
+        });
+
         if (!document.getElementById('themeBuilderDrawer')) {
             // Drawer
             const drawer = document.createElement("div");
@@ -461,8 +508,6 @@
             btn.addEventListener('click', () => drawer.classList.add('open'));
             closeBtn.addEventListener('click', () => drawer.classList.remove('open'));
 
-            // Apply saved theme settings
-            applySavedSettings();
         }
     }
 
