@@ -140,7 +140,7 @@
                 "--primary-bg-color": "#34699A",
                 "--sidebar-bg-color": "#b7e4ba",
                 "--sidebar-menu-bg": "#95d59d",
-                "--sidebar-menu-color": "#74c691",
+                "--sidebar-menu-color": "#24352a",
                 "--sidebar-menu-hover-bg": "#52b776",
                 "--sidebar-menu-active-bg": "#40915d"
             },
