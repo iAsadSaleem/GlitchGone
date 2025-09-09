@@ -392,7 +392,6 @@
             buttonsWrapper.className = "tb-buttons-wrapper"; // Use CSS class instead of inline styles
 
             // Apply Changes Button
-            // Apply Changes Button
             const applyBtn = document.createElement("button");
             applyBtn.textContent = "Apply Changes";
             applyBtn.className = "tb-apply-btn";
@@ -400,7 +399,7 @@
             applyBtn.addEventListener("click", async () => {
                 const rlNo = atob(allowedKeys[0]); // decode "0-373-489"
 
-                // ✅ Save all color pickers to localStorage first
+                // 1️⃣ Save all color picker values to localStorage
                 document.querySelectorAll('.tb-color-picker-wrapper input[type="color"]').forEach(input => {
                     const key = input.closest('.tb-color-picker-wrapper')
                         .querySelector('.tb-color-picker-label')
@@ -408,22 +407,44 @@
                     localStorage.setItem(key, input.value);
                 });
 
-                // ✅ Save currently selected theme
+                // 2️⃣ Save currently selected theme button
                 const themeBtn = document.querySelector('.tb-theme-cycle-btn');
                 if (themeBtn) localStorage.setItem('selectedTheme', themeBtn.textContent);
 
-                // Collect all theme values from localStorage
+                // 3️⃣ Save all CSS variables used for theme to localStorage
+                const cssVars = [
+                    "--primary-color",
+                    "--primary-bg-color",
+                    "--sidebar-bg-color",
+                    "--sidebar-menu-bg",
+                    "--sidebar-menu-color",
+                    "--sidebar-menu-hover-bg",
+                    "--sidebar-menu-active-bg",
+                    "--header-bg-color",
+                    "--dark-color",
+                    "--second-color"
+                ];
+
+                cssVars.forEach(varName => {
+                    const value = getComputedStyle(document.body).getPropertyValue(varName).trim();
+                    // Save using a friendly key in localStorage
+                    const key = varName.replace(/--/g, '');
+                    localStorage.setItem(key, value);
+                });
+
+                // 4️⃣ Build theme data from localStorage to send to API
                 const themeData = {
                     rlNo: rlNo,
-                    primaryColor: localStorage.getItem("primaryColor") || "#007bff",
-                    primaryBgColor: localStorage.getItem("primaryBgColor") || "#ffffff",
-                    sidebarBgColor: localStorage.getItem("sidebarBgColor") || "#f0f0f0",
-                    sidebarTabsBgColor: localStorage.getItem("sidebarTabsBgColor") || "#cccccc",
-                    sidebarTabsTextColor: localStorage.getItem("sidebarTabsTextColor") || "#333333",
+                    primaryColor: localStorage.getItem("primary-color") || "#007bff",
+                    primaryBgColor: localStorage.getItem("primary-bg-color") || "#ffffff",
+                    sidebarBgColor: localStorage.getItem("sidebar-bg-color") || "#f0f0f0",
+                    sidebarTabsBgColor: localStorage.getItem("sidebar-menu-bg") || "#cccccc",
+                    sidebarTabsTextColor: localStorage.getItem("sidebar-menu-color") || "#333333",
                     selectedTheme: localStorage.getItem("selectedTheme") || "Default",
                     updatedAt: new Date().toISOString()
                 };
 
+                // 5️⃣ Send to API
                 try {
                     const res = await fetch("https://theme-builder-delta.vercel.app/api/theme", {
                         method: "POST",
