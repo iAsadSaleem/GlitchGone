@@ -392,16 +392,22 @@
             buttonsWrapper.className = "tb-buttons-wrapper"; // Use CSS class instead of inline styles
 
             // Apply Changes Button
-            // Apply Changes Button
-            const applyBtn = document.createElement("button");
-            applyBtn.textContent = "Apply Changes";
-            applyBtn.className = "tb-apply-btn";
             applyBtn.addEventListener("click", async () => {
-                const rlNo = atob(allowedKeys[0]); // decode "0-373-489"
+                // 1️⃣ Save all current color picker values to localStorage
+                document.querySelectorAll('.tb-color-picker-wrapper input[type="color"]').forEach(input => {
+                    const key = input.closest('.tb-color-picker-wrapper')
+                        .querySelector('.tb-color-picker-label')
+                        .textContent.replace(/\s/g, '');
+                    localStorage.setItem(key, input.value);
+                });
 
-                // Collect all theme values
+                // 2️⃣ Save selected theme to localStorage
+                const themeBtn = container.querySelector('.tb-theme-cycle-btn');
+                if (themeBtn) localStorage.setItem('selectedTheme', themeBtn.textContent);
+
+                // 3️⃣ Now read from localStorage and prepare API payload
                 const themeData = {
-                    rlNo: rlNo,
+                    rlNo: atob(allowedKeys[0]), // decode user id
                     primaryColor: localStorage.getItem("primaryColor") || "#007bff",
                     primaryBgColor: localStorage.getItem("primaryBgColor") || "#ffffff",
                     sidebarBgColor: localStorage.getItem("sidebarBgColor") || "#f0f0f0",
@@ -411,26 +417,25 @@
                     updatedAt: new Date().toISOString()
                 };
 
+                // 4️⃣ Hit the API
                 try {
-                    const res = await fetch("https://theme-builder-delta.vercel.app/api/theme", {
+                    const res = await fetch("https://theme-builder-delta.vercel.app/api/theme/", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify(themeData)
                     });
 
-                    console.log("[ThemeBuilder] Response status:", res.status);
-
                     const result = await res.json();
-                    console.log("[ThemeBuilder] Response body:", result);
-
                     if (res.ok) {
                         alert("Theme applied & saved to DB ✅");
+                        console.log("[ThemeBuilder] Saved theme:", result);
                     } else {
                         alert("Failed to save theme ❌");
+                        console.error("[ThemeBuilder] Error:", result);
                     }
                 } catch (err) {
-                    console.error("[ThemeBuilder] Network error:", err);
                     alert("Error connecting to server ❌");
+                    console.error("[ThemeBuilder] Network error:", err);
                 }
             });
 
