@@ -19,31 +19,33 @@
 
     // NEW: Fetch user theme from DB and apply
     async function loadUserThemeFromDB(rlNo) {
-        console.log('Get Code WOrking', rlNo);
+        console.log('Fetching theme for rlNo:', rlNo);
         try {
             const res = await fetch(`https://theme-builder-delta.vercel.app/api/theme/${rlNo}`);
-            console.log('Here is the inof', res);
             if (!res.ok) throw new Error('Failed to fetch theme');
 
-            const data = await res.json();
-            const theme = data.theme; // Assuming API returns { theme: { ... } }
+            const theme = await res.json(); // API returns the theme object directly
 
-            if (!theme) return;
+            // Only apply if isActive is true
+            if (!theme.isActive) {
+                console.log("[ThemeBuilder] User theme is not active, skipping...");
+                return;
+            }
 
-            // Apply the theme CSS variables to body
+            // Apply theme colors to CSS variables
             document.body.style.setProperty("--primary-color", theme.primaryColor || "#007bff");
             document.body.style.setProperty("--primary-bg-color", theme.primaryBgColor || "#ffffff");
             document.body.style.setProperty("--sidebar-bg-color", theme.sidebarBgColor || "#f0f0f0");
             document.body.style.setProperty("--sidebar-menu-bg", theme.sidebarTabsBgColor || "#cccccc");
             document.body.style.setProperty("--sidebar-menu-color", theme.sidebarTabsTextColor || "#333333");
 
-            // Optional: Apply dark and second color based on sidebar menu active bg
+            // Optional: Dark and second color based on sidebar active bg
             if (theme.sidebarTabsBgColor) {
                 document.body.style.setProperty("--dark-color", theme.sidebarTabsBgColor);
                 document.body.style.setProperty("--second-color", theme.sidebarTabsBgColor);
             }
 
-            // Save in localStorage
+            // Save theme colors in localStorage
             localStorage.setItem("primaryColor", theme.primaryColor);
             localStorage.setItem("primaryBgColor", theme.primaryBgColor);
             localStorage.setItem("sidebarBgColor", theme.sidebarBgColor);
@@ -51,12 +53,13 @@
             localStorage.setItem("sidebarTabsTextColor", theme.sidebarTabsTextColor);
             localStorage.setItem("selectedTheme", theme.selectedTheme || "Default");
 
-            console.log("[ThemeBuilder] User theme loaded from DB:", theme);
+            console.log("[ThemeBuilder] User theme applied:", theme);
 
         } catch (err) {
-            console.error("[ThemeBuilder] Failed to load user theme from DB:", err);
+            console.error("[ThemeBuilder] Failed to load user theme:", err);
         }
     }
+
 
 
 
