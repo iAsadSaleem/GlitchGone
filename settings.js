@@ -201,7 +201,6 @@
                 document.body.style.setProperty("--dark-color", themeVars["--sidebar-menu-active-bg"]);
                 document.body.style.setProperty("--second-color", themeVars["--sidebar-menu-active-bg"]);
             }
-            document.body.style.setProperty("--header-bg-color", themeVars["--sidebar-bg-color"]);
         }
     }
 
