@@ -136,13 +136,13 @@
 
         const themes = {
             "default": {
-                "--primary-color": "#113F67",
+                "--primary-color": "#b7e4ba",
                 "--primary-bg-color": "#34699A",
-                "--sidebar-bg-color": "#58A0C8",
-                "--sidebar-menu-bg": "#FDF5AA",
-                "--sidebar-menu-color": "#ffffff",
-                "--sidebar-menu-hover-bg": "#333333",
-                "--sidebar-menu-active-bg": "#444444"
+                "--sidebar-bg-color": "#b7e4ba",
+                "--sidebar-menu-bg": "#95d59d",
+                "--sidebar-menu-color": "#74c691",
+                "--sidebar-menu-hover-bg": "#52b776",
+                "--sidebar-menu-active-bg": "#40915d"
             },
             "Pastel Grass": {
                 "--primary-color": "#b7e4ba",
