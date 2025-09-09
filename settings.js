@@ -142,7 +142,8 @@
                 "--sidebar-menu-bg": "#95d59d",
                 "--sidebar-menu-color": "#24352a",
                 "--sidebar-menu-hover-bg": "#52b776",
-                "--sidebar-menu-active-bg": "#40915d"
+                "--sidebar-menu-active-bg": "#40915d",
+                "--header-bg-color": "#b7e4ba"
             },
             "Pastel Grass": {
                 "--primary-color": "#b7e4ba",
@@ -152,7 +153,7 @@
                 "--sidebar-menu-color": "#ffffff",
                 "--sidebar-menu-hover-bg": "#2b2b2b",
                 "--sidebar-menu-active-bg": "#3d3d3d",
-                "--header-bg-color": "#52b776"
+                "--header-bg-color": "#74c691"
             },
             "pastel": {
                 "--primary-color": "#9c27b0",
@@ -162,7 +163,7 @@
                 "--sidebar-menu-color": "#ffffff",
                 "--sidebar-menu-hover-bg": "#d1c4e9",
                 "--sidebar-menu-active-bg": "#b39ddb",
-                "--header-bg-color":"#e1bee7"
+                "--header-bg-color":"#f3e5f5"
             }
         };
 
@@ -200,7 +201,7 @@
                 document.body.style.setProperty("--dark-color", themeVars["--sidebar-menu-active-bg"]);
                 document.body.style.setProperty("--second-color", themeVars["--sidebar-menu-active-bg"]);
             }
-            document.body.style.setProperty("--header-bg-color", themeVars["--second-color"]);
+            document.body.style.setProperty("--header-bg-color", themeVars["--sidebar-bg-color"]);
         }
     }
 
