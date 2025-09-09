@@ -132,3 +132,34 @@
     color: #632405a6;
     font-size: 34px;
 }
+
+.tb-theme-selector-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tb-theme-tab {
+    background: var(--primary-color);
+    color: #fff;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.tb-theme-name {
+    font-weight: bold;
+    margin-left: 6px;
+}
+
+.tb-theme-arrow {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.tb-theme-dropdown {
+    margin-top: 8px;
+}
