@@ -341,7 +341,7 @@
     function createBuilderUI(controlsContainer) {
         if (!controlsContainer || document.getElementById("hl_header--themebuilder-icon")) return;
 
-        // Theme Builder Icon Button
+        // Theme Builder Button in header
         const btn = document.createElement("a");
         btn.href = "javascript:void(0);";
         btn.id = "hl_header--themebuilder-icon";
@@ -350,13 +350,13 @@
         initTooltip(btn, "Theme Builder");
         controlsContainer.appendChild(btn);
 
-        // Drawer
-        if (!document.getElementById('themeBuilderDrawer')) {
-            const drawer = document.createElement("div");
-            drawer.id = "themeBuilderDrawer";
-            drawer.className = "tb-drawer";
+        if (!document.getElementById('themeBuilderDrawerCard')) {
+            // Card wrapper for Theme Builder
+            const card = document.createElement("div");
+            card.id = "themeBuilderDrawerCard";
+            card.className = "tb-drawer-card"; // all styling via CSS
 
-            // Drawer Header
+            // Drawer header
             const headerBar = document.createElement('div');
             headerBar.className = "tb-drawer-header";
 
@@ -370,91 +370,58 @@
 
             headerBar.appendChild(title);
             headerBar.appendChild(closeBtn);
-            drawer.appendChild(headerBar);
+            card.appendChild(headerBar);
 
-            // ---------------------------
-            // Create Card inside Drawer
-            const card = document.createElement("div");
-            card.className = "tb-drawer-card";
-            card.style.backgroundColor = "#ffffff"; // default card color
-            card.style.borderRadius = "12px";
-            card.style.boxShadow = "0 4px 12px rgba(0,0,0,0.15)";
-            card.style.padding = "12px";
-            card.style.margin = "12px";
-            card.style.display = "flex";
-            card.style.flexDirection = "column";
-            card.style.gap = "12px";
-
-            // Theme Selector Button
+            // Theme selector
             const themeBtnWrapper = document.createElement("div");
-            themeBtnWrapper.style.padding = "0 12px"; // side padding
+            themeBtnWrapper.className = "tb-theme-selector-wrapper";
             buildThemeSelectorSection(themeBtnWrapper);
             card.appendChild(themeBtnWrapper);
 
-            // Drawer Content Sections
-            card.appendChild(createSection("🎨 General Settings", buildThemeColorsSection));
-            card.appendChild(createSection("🔘 Button Style", buildButtonStyleSection));
+            // Drawer content
+            const contentWrapper = document.createElement('div');
+            contentWrapper.className = "tb-drawer-content";
 
-            // Buttons Wrapper (Apply & Reset)
+            contentWrapper.appendChild(createSection("🎨 General Settings", buildThemeColorsSection));
+            contentWrapper.appendChild(createSection("🔘 Button Style", buildButtonStyleSection));
+
+            // Buttons wrapper
             const buttonsWrapper = document.createElement("div");
-            buttonsWrapper.style.display = "flex";
-            buttonsWrapper.style.gap = "10px";
+            buttonsWrapper.className = "tb-buttons-wrapper"; // CSS handles flex & spacing
 
-            // Apply Changes Button
             const applyBtn = document.createElement("button");
             applyBtn.textContent = "Apply Changes";
-            applyBtn.className = "tb-apply-btn";
-            applyBtn.style.flex = "1";
-            applyBtn.style.padding = "10px";
-            applyBtn.style.borderRadius = "6px";
-            applyBtn.style.border = "none";
-            applyBtn.style.backgroundColor = "#4CAF50";
-            applyBtn.style.color = "#fff";
-            applyBtn.style.fontWeight = "600";
-            applyBtn.style.cursor = "pointer";
-
+            applyBtn.className = "tb-apply-btn"; // styled in CSS
             applyBtn.addEventListener("click", () => {
-                // Save all color pickers to localStorage
                 document.querySelectorAll('.tb-color-picker-wrapper input[type="color"]').forEach(input => {
-                    const key = input.closest('.tb-color-picker-wrapper').querySelector('.tb-color-picker-label').textContent.replace(/\s/g, '');
+                    const key = input.closest('.tb-color-picker-wrapper')
+                        .querySelector('.tb-color-picker-label')
+                        .textContent.replace(/\s/g, '');
                     localStorage.setItem(key, input.value);
                 });
 
-                // Save currently selected theme
                 const themeBtn = card.querySelector('.tb-theme-cycle-btn');
                 if (themeBtn) localStorage.setItem('selectedTheme', themeBtn.textContent);
 
                 alert('Theme applied and saved!');
             });
 
-            // Reset Changes Button
             const resetBtn = document.createElement("button");
             resetBtn.textContent = "Reset Changes";
-            resetBtn.className = "tb-reset-btn";
-            resetBtn.style.flex = "1";
-            resetBtn.style.padding = "10px";
-            resetBtn.style.borderRadius = "6px";
-            resetBtn.style.border = "none";
-            resetBtn.style.backgroundColor = "#f44336";
-            resetBtn.style.color = "#fff";
-            resetBtn.style.fontWeight = "600";
-            resetBtn.style.cursor = "pointer";
-
+            resetBtn.className = "tb-reset-btn"; // styled in CSS
             resetBtn.addEventListener("click", resetThemeChanges);
 
             buttonsWrapper.appendChild(applyBtn);
             buttonsWrapper.appendChild(resetBtn);
-            card.appendChild(buttonsWrapper);
+            contentWrapper.appendChild(buttonsWrapper);
 
-            // Append Card to Drawer
-            drawer.appendChild(card);
-            document.body.appendChild(drawer);
+            card.appendChild(contentWrapper);
+            document.body.appendChild(card);
 
-            // Drawer open/close
-            btn.addEventListener('click', () => drawer.classList.add('open'));
-            closeBtn.addEventListener('click', () => drawer.classList.remove('open'));
+            // Drawer open/close events
+            btn.addEventListener('click', () => card.classList.add('open'));
+            closeBtn.addEventListener('click', () => card.classList.remove('open'));
 
-            // Apply previously saved theme/colors
             applySavedSettings();
         }
     }
