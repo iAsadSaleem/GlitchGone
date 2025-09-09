@@ -310,7 +310,30 @@
         container.appendChild(wrapper);
     }
 
+    function resetThemeChanges() {
+        const keysToRemove = [
+            "primaryBgColor",
+            "primaryColor",
+            "sidebarTabsTextColor",
+            "sidebarTabsBgColor",
+            "sidebarBgColor",
+            "selectedTheme" // also remove selected theme if using theme cycle button
+        ];
 
+        keysToRemove.forEach(key => localStorage.removeItem(key));
+
+        // Optionally reset the CSS variables to defaults
+        document.body.style.removeProperty("--primary-bg-color");
+        document.body.style.removeProperty("--primary-color");
+        document.body.style.removeProperty("--sidebar-menu-color");
+        document.body.style.removeProperty("--sidebar-menu-bg");
+        document.body.style.removeProperty("--sidebar-bg-color");
+        document.body.style.removeProperty("--dark-color");
+        document.body.style.removeProperty("--second-color");
+
+        // Refresh the drawer UI to reflect reset
+        location.reload();
+    }
 
     // Create Builder UI
     let headerObserver = null;
@@ -359,7 +382,10 @@
             contentWrapper.appendChild(createSection("🎨 General Settings", buildThemeColorsSection));
             contentWrapper.appendChild(createSection("🔘 Button Style", buildButtonStyleSection));
 
-            buildApplyResetButtons(contentWrapper);
+            const resetBtn = document.createElement("button");
+            resetBtn.textContent = "Reset Changes";
+            resetBtn.className = "tb-reset-btn";
+            resetBtn.addEventListener("click", resetThemeChanges);
 
             document.body.appendChild(drawer);
 
