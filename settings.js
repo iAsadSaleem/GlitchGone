@@ -106,6 +106,17 @@
         themeBtn.textContent = "Select Theme";
         themeBtn.className = "tb-theme-cycle-btn";
 
+        // Make button full-width and same height as a section header
+        themeBtn.style.width = "100%";
+        themeBtn.style.padding = "12px 16px";
+        themeBtn.style.fontSize = "16px";
+        themeBtn.style.fontWeight = "600";
+        themeBtn.style.textAlign = "center";
+        themeBtn.style.border = "none";
+        themeBtn.style.cursor = "pointer";
+        themeBtn.style.marginBottom = "12px";
+        themeBtn.style.borderRadius = "6px";
+
         const themes = {
             "Default": {
                 "--primary-color": "#b7e4ba",
@@ -140,7 +151,7 @@
         };
 
         let themeKeys = Object.keys(themes);
-        let currentIndex = -1; // initially no theme applied
+        let currentIndex = -1;
 
         function applyTheme(themeKey) {
             const themeVars = themes[themeKey];
@@ -161,7 +172,7 @@
             localStorage.setItem("selectedTheme", themeKey);
         }
 
-        // Button click → cycle through themes
+        // Cycle through themes on click
         themeBtn.addEventListener("click", () => {
             currentIndex = (currentIndex + 1) % themeKeys.length;
             applyTheme(themeKeys[currentIndex]);
@@ -267,8 +278,10 @@
             contentWrapper.className = "tb-drawer-content";
             drawer.appendChild(contentWrapper);
 
-            // NEW: Add Select Theme before General Settings
-            contentWrapper.appendChild(createSection("🎨 Select Theme", buildThemeSelectorSection));
+            // 🟢 Select Theme → now a direct button (NOT inside a section)
+            buildThemeSelectorSection(contentWrapper);
+
+            // Other sections
             contentWrapper.appendChild(createSection("🎨 General Settings", buildThemeColorsSection));
             contentWrapper.appendChild(createSection("🔘 Button Style", buildButtonStyleSection));
 
