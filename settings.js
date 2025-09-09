@@ -412,23 +412,25 @@
                 };
 
                 try {
-                    const res = await fetch("https://theme-builder-delta.vercel.app/api/theme/", {
-                        method: "POST",  // your backend will upsert (insert/update)
+                    const res = await fetch("https://theme-builder-delta.vercel.app/api/theme", {
+                        method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify(themeData)
                     });
 
+                    console.log("[ThemeBuilder] Response status:", res.status);
+
                     const result = await res.json();
+                    console.log("[ThemeBuilder] Response body:", result);
+
                     if (res.ok) {
                         alert("Theme applied & saved to DB ✅");
-                        console.log("[ThemeBuilder] Saved theme:", result);
                     } else {
                         alert("Failed to save theme ❌");
-                        console.error("[ThemeBuilder] Error:", result);
                     }
                 } catch (err) {
-                    alert("Error connecting to server ❌");
                     console.error("[ThemeBuilder] Network error:", err);
+                    alert("Error connecting to server ❌");
                 }
             });
 
