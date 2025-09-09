@@ -19,7 +19,6 @@
 
     // NEW: Fetch user theme from DB and apply
     async function loadUserThemeFromDB(rlNo) {
-        console.log('Fetching theme for rlNo:', rlNo);
         try {
             const res = await fetch(`https://theme-builder-delta.vercel.app/api/theme/${rlNo}`);
             if (!res.ok) throw new Error('Failed to fetch theme');
@@ -28,7 +27,6 @@
 
             // Only apply if isActive is true
             if (!theme.isActive) {
-                console.log("[ThemeBuilder] User theme is not active, skipping...");
                 return;
             }
 
@@ -53,16 +51,10 @@
             localStorage.setItem("sidebarTabsTextColor", theme.sidebarTabsTextColor);
             localStorage.setItem("selectedTheme", theme.selectedTheme || "Default");
 
-            console.log("[ThemeBuilder] User theme applied:", theme);
-
         } catch (err) {
             console.error("[ThemeBuilder] Failed to load user theme:", err);
         }
     }
-
-
-
-
 
     // Create collapsible sections
     function createSection(title, contentBuilder) {
@@ -484,7 +476,6 @@
                     const result = await res.json();
                     if (res.ok) {
                         alert("Theme applied & saved to DB ✅");
-                        console.log("[ThemeBuilder] Saved theme:", result);
                     } else {
                         alert("Failed to save theme ❌");
                         console.error("[ThemeBuilder] Error:", result);
