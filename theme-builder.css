@@ -33,18 +33,18 @@
         font-weight: 600;
     }
 
-/* Close button */
-#themeBuilderDrawer button {
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 22px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #333;
-}
+    /* Only style the close button */
+    #themeBuilderDrawer .tb-drawer-close {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 22px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #333;
+    }
 
 /* Sections */
 .tb-section {
@@ -148,5 +148,51 @@
 
     .tb-reset-btn:hover {
         background-color: #c0392b; /* darker red on hover */
+        opacity: 0.9;
+    }
+
+/* Reset Changes button */
+#themeBuilderDrawer .tb-reset-btn {
+    position: relative !important;
+    right: auto !important;
+    top: auto !important;
+    transform: none !important;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    background-color: #e74c3c;
+    color: #fff;
+    flex: 1;
+    transition: all 0.3s ease;
+}
+
+    #themeBuilderDrawer .tb-reset-btn:hover {
+        background-color: #c0392b;
+        opacity: 0.9;
+    }
+
+/* Optional: Apply button next to it */
+#themeBuilderDrawer .tb-apply-btn {
+    position: relative !important;
+    right: auto !important;
+    top: auto !important;
+    transform: none !important;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    background-color: #3498db;
+    color: #fff;
+    flex: 1;
+    transition: all 0.3s ease;
+}
+
+    #themeBuilderDrawer .tb-apply-btn:hover {
+        background-color: #2980b9;
         opacity: 0.9;
     }
