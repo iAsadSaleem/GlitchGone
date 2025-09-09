@@ -103,113 +103,6 @@
 
     // NEW: Theme Selector Section
     function buildThemeSelectorSection(container) {
-        const wrapper = document.createElement("div");
-        wrapper.className = "tb-theme-selector-wrapper";
-
-        // Main button
-        const themeBtn = document.createElement("button");
-        themeBtn.textContent = "Select Theme";
-        themeBtn.className = "tb-theme-btn";
-
-        // Reset button (circle)
-        const resetBtn = document.createElement("button");
-        resetBtn.innerHTML = "⟳"; // Reset icon
-        resetBtn.className = "tb-reset-btn";
-        resetBtn.title = "Reset Theme";
-
-        const themes = {
-            "Default": {
-                "--primary-color": "#b7e4ba",
-                "--primary-bg-color": "#34699A",
-                "--sidebar-bg-color": "#DDF4E7",
-                "--sidebar-menu-bg": "#95d59d",
-                "--sidebar-menu-color": "#24352a",
-                "--sidebar-menu-hover-bg": "#52b776",
-                "--sidebar-menu-active-bg": "#40915d",
-                "--header-bg-color": "#b7e4ba"
-            },
-            "Pastel Grass": {
-                "--primary-color": "#b7e4ba",
-                "--primary-bg-color": "#95d59d",
-                "--sidebar-bg-color": "#74c691",
-                "--sidebar-menu-bg": "#52b776",
-                "--sidebar-menu-color": "#ffffff",
-                "--sidebar-menu-hover-bg": "#2b2b2b",
-                "--sidebar-menu-active-bg": "#3d3d3d",
-                "--header-bg-color": "#74c691"
-            },
-            "Pastel": {
-                "--primary-color": "#9c27b0",
-                "--primary-bg-color": "#f8f0ff",
-                "--sidebar-bg-color": "#f3e5f5",
-                "--sidebar-menu-bg": "#e1bee7",
-                "--sidebar-menu-color": "#ffffff",
-                "--sidebar-menu-hover-bg": "#d1c4e9",
-                "--sidebar-menu-active-bg": "#b39ddb",
-                "--header-bg-color": "#f3e5f5"
-            }
-        };
-
-        let themeKeys = Object.keys(themes);
-        let currentIndex = -1; // no theme applied initially
-
-        function applyTheme(themeKey) {
-            const themeVars = themes[themeKey];
-            Object.keys(themeVars).forEach(varName => {
-                document.body.style.setProperty(varName, themeVars[varName]);
-            });
-
-            // Dark + Second color sync
-            if (themeVars["--sidebar-menu-active-bg"]) {
-                document.body.style.setProperty("--dark-color", themeVars["--sidebar-menu-active-bg"]);
-                document.body.style.setProperty("--second-color", themeVars["--sidebar-menu-active-bg"]);
-            }
-
-            themeBtn.textContent = themeKey;
-            localStorage.setItem("selectedTheme", themeKey);
-        }
-
-        // Reset theme
-        function resetTheme() {
-            // Remove all theme vars
-            Object.values(themes).forEach(themeVars => {
-                Object.keys(themeVars).forEach(varName => {
-                    document.body.style.removeProperty(varName);
-                });
-            });
-
-            document.body.style.removeProperty("--dark-color");
-            document.body.style.removeProperty("--second-color");
-
-            themeBtn.textContent = "Select Theme";
-            localStorage.removeItem("selectedTheme");
-            currentIndex = -1;
-        }
-
-        // Main button click → cycle through themes
-        themeBtn.addEventListener("click", () => {
-            currentIndex = (currentIndex + 1) % themeKeys.length;
-            applyTheme(themeKeys[currentIndex]);
-        });
-
-        // Reset button click
-        resetBtn.addEventListener("click", resetTheme);
-
-        // Load saved theme
-        const savedTheme = localStorage.getItem("selectedTheme");
-        if (savedTheme && themes[savedTheme]) {
-            currentIndex = themeKeys.indexOf(savedTheme);
-            applyTheme(savedTheme);
-        }
-
-        wrapper.appendChild(themeBtn);
-        wrapper.appendChild(resetBtn);
-        container.appendChild(wrapper);
-    }
-
-
-    // Build theme colors section
-    function buildThemeSelectorSection(container) {
         const themeBtn = document.createElement("button");
         themeBtn.textContent = "Select Theme";
         themeBtn.className = "tb-theme-cycle-btn";
@@ -285,6 +178,23 @@
         container.appendChild(themeBtn);
     }
 
+    // Build theme colors section
+    function buildThemeColorsSection(container) {
+        const colors = [
+            { label: "Choose Primary Color", key: "primaryColor", var: "--primary-color" },
+            { label: "Choose Primary BG Color", key: "primaryBgColor", var: "--primary-bg-color" },
+            { label: "Left Sidebar BG Color", key: "sidebarBgColor", var: "--sidebar-bg-color" },
+            {
+                label: "Left Sidebar Tabs BG Color", key: "sidebarTabsBgColor", var: "--sidebar-menu-bg",
+                apply: (color) => { document.body.style.setProperty("--sidebar-menu-bg", color); }
+            },
+            {
+                label: "Left Sidebar Tabs Text Color", key: "sidebarTabsTextColor", var: "--sidebar-menu-color",
+                apply: (color) => { document.body.style.setProperty("--sidebar-menu-color", color); }
+            },
+        ];
+        colors.forEach(c => container.appendChild(createColorPicker(c.label, c.key, c.var, c.apply)));
+    }
 
     // Dummy Button Style section
     function buildButtonStyleSection(container) {
