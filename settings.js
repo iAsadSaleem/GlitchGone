@@ -13,7 +13,6 @@
             link.rel = 'stylesheet';
             link.href = 'https://glitch-gone-nu.vercel.app/theme-builder.css';
             document.head.appendChild(link);
-            log('CSS loaded');
         }
     }
     loadThemeBuilderCSS();
