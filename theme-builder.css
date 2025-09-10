@@ -6,7 +6,7 @@
     width: 350px;
     max-width: 90%;
     height: 90%;
-    background: var(--sidebar-menu-bg-gradient) !important;
+    background: var(--sidebar-menu-active-bg) !important;
     box-shadow: -2px 0 5px rgba(0,0,0,0.3);
     transition: right 0.28s ease;
     z-index: 99999;
@@ -28,9 +28,7 @@
         position: relative;
         padding: 14px 16px;
         border-bottom: 1px solid #e6e6e6;
-        background: #536976; /* fallback for old browsers */
-        background: -webkit-linear-gradient(to right, #292E49, #536976); /* Chrome 10-25, Safari 5.1-6 */
-        background: linear-gradient(to right, #292E49, #536976); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        background: var(--sidebar-menu-bg) !important;
         font-weight: 600;
     }
 
@@ -248,12 +246,12 @@
     border: none;
     cursor: pointer;
     margin: 12px auto;
-  /*  background-color: #b7e4ba;
+    /*  background-color: #b7e4ba;
     color: #fff;*/
     top: 96px;
     border-radius: 10px;
-    background: #a83ab4;
-    background: linear-gradient(90deg,rgba(168, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%);
+    background: var(--sidebar-bg-color) !important;
+    
 }
 
 .tb-card {
