@@ -430,6 +430,8 @@
             // Theme Selector Button
             const themeBtnWrapper = document.createElement("div");
             themeBtnWrapper.style.padding = "0 12px"; // side padding
+            themeBtnWrapper.style.position = "relative"; // side padding
+            themeBtnWrapper.style.left = "-11"; // side padding
             buildThemeSelectorSection(themeBtnWrapper);
             drawer.appendChild(themeBtnWrapper);
 
