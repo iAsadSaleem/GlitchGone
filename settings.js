@@ -145,21 +145,6 @@
         themeBtn.textContent = "Select Theme";
         themeBtn.className = "tb-theme-cycle-btn";
 
-        // Full-width styled button
-
-        //themeBtn.style.width = "calc(115% - 24px)";
-        //themeBtn.style.padding = "12px 16px";
-        //themeBtn.style.fontSize = "16px";
-        //themeBtn.style.fontWeight = "600";
-        //themeBtn.style.textAlign = "center";
-        //themeBtn.style.border = "none";
-        //themeBtn.style.cursor = "pointer";
-        //themeBtn.style.margin = "12px auto"; // center horizontally
-        //themeBtn.style.borderRadius = "6px";
-        //themeBtn.style.backgroundColor = "#b7e4ba";
-        //themeBtn.style.color = "#fff";
-        //themeBtn.style.top = "96px";
-
         const themes = {
             "Default": {
                 "--primary-color": "#b7e4ba",
@@ -426,6 +411,10 @@
             headerBar.appendChild(title);
             headerBar.appendChild(closeBtn);
             drawer.appendChild(headerBar);
+
+            // ✅ Card Wrapper after header
+            const cardWrapper = document.createElement("div");
+            cardWrapper.className = "tb-card";
 
             // Theme Selector Button
             const themeBtnWrapper = document.createElement("div");
