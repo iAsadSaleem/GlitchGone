@@ -147,18 +147,18 @@
 
         // Full-width styled button
 
-        themeBtn.style.width = "calc(115% - 24px)";
-        themeBtn.style.padding = "12px 16px";
-        themeBtn.style.fontSize = "16px";
-        themeBtn.style.fontWeight = "600";
-        themeBtn.style.textAlign = "center";
-        themeBtn.style.border = "none";
-        themeBtn.style.cursor = "pointer";
-        themeBtn.style.margin = "12px auto"; // center horizontally
-        themeBtn.style.borderRadius = "6px";
-        themeBtn.style.backgroundColor = "#b7e4ba";
-        themeBtn.style.color = "#fff";
-        themeBtn.style.top = "96px";
+        //themeBtn.style.width = "calc(115% - 24px)";
+        //themeBtn.style.padding = "12px 16px";
+        //themeBtn.style.fontSize = "16px";
+        //themeBtn.style.fontWeight = "600";
+        //themeBtn.style.textAlign = "center";
+        //themeBtn.style.border = "none";
+        //themeBtn.style.cursor = "pointer";
+        //themeBtn.style.margin = "12px auto"; // center horizontally
+        //themeBtn.style.borderRadius = "6px";
+        //themeBtn.style.backgroundColor = "#b7e4ba";
+        //themeBtn.style.color = "#fff";
+        //themeBtn.style.top = "96px";
 
         const themes = {
             "Default": {
