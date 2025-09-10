@@ -194,12 +194,12 @@
             "Pastel": {
                 "--primary-color": "#9c27b0",
                 "--primary-bg-color": "#f8f0ff",
-                "--sidebar-bg-color": "#f3e5f5",
-                "--sidebar-menu-bg": "#e1bee7",
+                "--sidebar-bg-color": "linear-gradient(to top, #30cfd0 0%, #330867 100%)",
+                "--sidebar-menu-bg": "linear-gradient(to top, #48c6ef 0%, #6f86d6 100%)",
                 "--sidebar-menu-color": "#ffffff",
-                "--sidebar-menu-hover-bg": "#d1c4e9",
-                "--sidebar-menu-active-bg": "#b39ddb",
-                "--header-bg-color": "#f3e5f5"
+                "--sidebar-menu-hover-bg": "linear-gradient(to top, #5ee7df 0%, #b490ca 100%)",
+                "--sidebar-menu-active-bg": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                "--header-bg-color": "linear-gradient(to top, #30cfd0 0%, #330867 100%)"
             }
         };
 
