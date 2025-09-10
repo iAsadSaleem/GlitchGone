@@ -3,7 +3,7 @@
   position: fixed;
   top: 50px;
   right: -420px;
-  width: 400px;
+  width: 350px;
   max-width: 90%;
   height: 90%;
   background: #fff;
@@ -134,29 +134,6 @@
 }
 
 
-/* Reset Changes button */
-#themeBuilderDrawer .tb-reset-btn {
-    position: relative !important;
-    right: auto !important;
-    top: auto !important;
-    transform: none !important;
-    padding: 10px 16px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 14px;
-    background-color: #e74c3c;
-    color: #fff;
-    flex: 1;
-    transition: all 0.3s ease;
-}
-
-    #themeBuilderDrawer .tb-reset-btn:hover {
-        background-color: #c0392b;
-        opacity: 0.9;
-    }
-
 /* Optional: Apply button next to it */
 /*#themeBuilderDrawer .tb-apply-btn {
     position: relative !important;
@@ -193,7 +170,6 @@
     font-weight: 500;
     line-height: 2.5;
     outline: transparent;
-    left: 100px;
     padding: 4px 16px;
     text-align: center;
     text-decoration: none;
