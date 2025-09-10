@@ -147,7 +147,7 @@
 
         // Full-width styled button
 
-        themeBtn.style.width = "calc(112% - 24px)";
+        themeBtn.style.width = "calc(115% - 24px)";
         themeBtn.style.padding = "12px 16px";
         themeBtn.style.fontSize = "16px";
         themeBtn.style.fontWeight = "600";
