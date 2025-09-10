@@ -134,23 +134,23 @@
 }
 
 /* Reset Changes Button */
-.tb-reset-btn {
+/*.tb-reset-btn {
     padding: 10px 16px;
     border: none;
     border-radius: 6px;
     cursor: pointer;
     font-weight: 600;
     font-size: 14px;
-    background-color: #e74c3c; /* red color for reset */
-    color: #fff;
+    background-color: #e74c3c;*/ /* red color for reset */
+    /*color: #fff;
     transition: all 0.3s ease;
     left: 100px;
 }
 
     .tb-reset-btn:hover {
-        background-color: #c0392b; /* darker red on hover */
-        opacity: 0.9;
-    }
+        background-color: #c0392b;*/ /* darker red on hover */
+        /*opacity: 0.9;
+    }*/
 
 /* Reset Changes button */
 #themeBuilderDrawer .tb-reset-btn {
@@ -197,4 +197,34 @@
     #themeBuilderDrawer .tb-apply-btn:hover {
         background-color: #2980b9;
         opacity: 0.9;
+    }
+
+.tb-reset-btn {
+    background: linear-gradient(to bottom right, #EF4765, #FF9A5A);
+    border: 0;
+    border-radius: 12px;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: inline-block;
+    font-family: -apple-system,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 2.5;
+    outline: transparent;
+    padding: 0 1rem;
+    text-align: center;
+    text-decoration: none;
+    transition: box-shadow .2s ease-in-out;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    white-space: nowrap;
+}
+
+    .tb-reset-btn:not([disabled]):focus {
+        box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5);
+    }
+
+    .tb-reset-btn:not([disabled]):hover {
+        box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5);
     }
