@@ -405,12 +405,23 @@
             headerBar.className = "tb-drawer-header";
 
             const title = document.createElement('div');
-            title.textContent = 'Theme Builder';
             title.className = "tb-drawer-title";
+
+            // Create spans for each word
+            const themeSpan = document.createElement('span');
+            themeSpan.textContent = 'Theme ';
+            themeSpan.style.color = '#3BB273'; // green color
+
+            const builderSpan = document.createElement('span');
+            builderSpan.textContent = 'Builder';
+            builderSpan.style.color = '#E15554'; // red color
 
             const closeBtn = document.createElement('button');
             closeBtn.innerHTML = '&times;';
             closeBtn.className = "tb-drawer-close";
+
+            title.appendChild(themeSpan);
+            title.appendChild(builderSpan);
 
             headerBar.appendChild(title);
             headerBar.appendChild(closeBtn);
