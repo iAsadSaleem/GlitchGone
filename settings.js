@@ -400,8 +400,9 @@
 
         // Apply instantly when changed
         select.addEventListener("change", () => {
-            document.body.style.setProperty("--body-font", select.value);
-            localStorage.setItem("--body-font", select.value);
+            const font = select.value;
+            document.body.style.setProperty("--body-font", font);
+            localStorage.setItem("--body-font", font); // keep synced
         });
 
         wrapper.appendChild(label);
@@ -506,7 +507,9 @@
                     sidebarBgColor: styles.getPropertyValue("--sidebar-bg-color").trim() || "#f0f0f0",
                     sidebarTabsBgColor: styles.getPropertyValue("--sidebar-menu-bg").trim() || "#cccccc",
                     sidebarTabsTextColor: styles.getPropertyValue("--sidebar-menu-color").trim() || "#333333",
-                    bodyFont: styles.getPropertyValue("--body-font").trim() || "Arial, sans-serif", // ✅ updated
+                    bodyFont: styles.getPropertyValue("--body-font").trim()
+                        || localStorage.getItem("--body-font")
+                        || "Arial, sans-serif",
                     selectedTheme: localStorage.getItem("selectedTheme") || "Default",
                     updatedAt: new Date().toISOString()
                 };
