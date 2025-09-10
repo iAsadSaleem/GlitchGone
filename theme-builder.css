@@ -170,6 +170,8 @@
     font-weight: 500;
     line-height: 2.5;
     outline: transparent;
+    left: 38px;
+    position:relative;
     padding: 4px 16px;
     text-align: center;
     text-decoration: none;
@@ -204,6 +206,8 @@
     text-decoration: none;
     transition: all 250ms;
     border: 0;
+    left: 10px;
+    position: relative;
     font-size: 16px;
     user-select: none;
     -webkit-user-select: none;
