@@ -27,7 +27,6 @@
         justify-content: center;
         position: relative;
         padding: 14px 16px;
-        border-bottom: 1px solid #e6e6e6;
         background: var(--sidebar-menu-bg) !important;
         font-weight: 600;
     }
@@ -264,4 +263,20 @@
     max-width: 100%;
     box-sizing: border-box;
     height: 37pc;
+}
+
+.tb-font-label {
+    display: block;
+    margin-top: 12px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.tb-font-select {
+    width: 100%;
+    padding: 6px 8px;
+    margin-top: 6px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
 }

@@ -360,6 +360,52 @@
         location.reload();
     }
 
+    function buildFontFamilySelector(wrapper) {
+        const label = document.createElement("label");
+        label.textContent = "Choose Font Family";
+        label.className = "tb-font-label";
+
+        const select = document.createElement("select");
+        select.className = "tb-font-select";
+
+        const fonts = [
+            "Arial, sans-serif",
+            "Verdana, sans-serif",
+            "Tahoma, sans-serif",
+            "Georgia, serif",
+            "Times New Roman, serif",
+            "Courier New, monospace",
+            "Trebuchet MS, sans-serif",
+            "Comic Sans MS, cursive",
+            "Poppins, sans-serif",
+            "Roboto, sans-serif"
+        ];
+
+        fonts.forEach(font => {
+            const option = document.createElement("option");
+            option.value = font;
+            option.textContent = font.split(",")[0]; // show just first name
+            option.style.fontFamily = font; // preview
+            select.appendChild(option);
+        });
+
+        // Load from localStorage if exists
+        const savedFont = localStorage.getItem("fontfamily");
+        if (savedFont) {
+            select.value = savedFont;
+            document.body.style.fontFamily = savedFont; // apply instantly
+        }
+
+        // Apply instantly when changed
+        select.addEventListener("change", () => {
+            document.body.style.fontFamily = select.value;
+            localStorage.setItem("fontfamily", select.value);
+        });
+
+        wrapper.appendChild(label);
+        wrapper.appendChild(select);
+    }
+
     // Create Builder UI
     let headerObserver = null;
     function createBuilderUI(controlsContainer) {
@@ -428,7 +474,12 @@
             drawer.appendChild(contentWrapper);
 
             // Sections
-            contentWrapper.appendChild(createSection("🎨 General Settings", buildThemeColorsSection));
+            contentWrapper.appendChild(
+                createSection("🎨 General Settings", (section) => {
+                    buildThemeColorsSection(section);
+                    buildFontFamilySelector(section); // ✅ add font family selector here
+                })
+            );
             contentWrapper.appendChild(createSection("🔘 Button Style", buildButtonStyleSection));
 
             // Buttons Wrapper for Apply & Reset
@@ -445,6 +496,7 @@
 
                 // Get current CSS variable values from the page
                 const styles = getComputedStyle(document.body);
+                const fontfamily = localStorage.getItem("fontfamily") || "Arial, sans-serif";
 
                 const themeData = {
                     rlNo,
@@ -454,6 +506,7 @@
                     sidebarTabsBgColor: styles.getPropertyValue("--sidebar-menu-bg").trim() || "#cccccc",
                     sidebarTabsTextColor: styles.getPropertyValue("--sidebar-menu-color").trim() || "#333333",
                     selectedTheme: localStorage.getItem("selectedTheme") || "Default",
+                    fontfamily,
                     updatedAt: new Date().toISOString()
                 };
 
@@ -464,6 +517,8 @@
                 localStorage.setItem("sidebar-menu-bg", themeData.sidebarTabsBgColor);
                 localStorage.setItem("sidebar-menu-color", themeData.sidebarTabsTextColor);
                 localStorage.setItem("selectedTheme", themeData.selectedTheme);
+                localStorage.setItem("fontfamily", themeData.fontfamily); 
+
 
                 // Send to API
                 try {
