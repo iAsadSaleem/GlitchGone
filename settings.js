@@ -71,7 +71,7 @@
         content.className = "tb-section-content";
 
         // Initially closed or open as needed
-        content.classList.add("open");
+        //content.classList.add("open");
 
         // Set scrollable only for open content
         if (content.classList.contains("open")) {
