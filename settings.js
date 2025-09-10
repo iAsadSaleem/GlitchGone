@@ -70,8 +70,27 @@
         const content = document.createElement("div");
         content.className = "tb-section-content";
 
+        // Initially closed or open as needed
+        content.classList.add("open");
+
+        // Set scrollable only for open content
+        if (content.classList.contains("open")) {
+            content.style.maxHeight = "200px"; // adjust as needed
+            content.style.overflowY = "auto";
+            content.style.paddingRight = "6px"; // optional: avoid scrollbar overlap
+        }
+
         header.addEventListener("click", () => {
             content.classList.toggle("open");
+
+            // Toggle scrollable when opening/closing
+            if (content.classList.contains("open")) {
+                content.style.maxHeight = "200px";
+                content.style.overflowY = "auto";
+            } else {
+                content.style.maxHeight = null;
+                content.style.overflowY = null;
+            }
         });
 
         section.appendChild(header);
@@ -80,6 +99,7 @@
 
         return section;
     }
+
 
     // Tooltip helper
     function initTooltip(btn, text) {
@@ -474,22 +494,15 @@
             // Drawer Content
             const contentWrapper = document.createElement('div');
             contentWrapper.className = "tb-drawer-content";
-
-            // ✅ Make drawer content scrollable
-            contentWrapper.style.maxHeight = "400px"; // adjust to your drawer height
-            contentWrapper.style.overflowY = "auto";
-            contentWrapper.style.padding = "12px"; // optional padding
             drawer.appendChild(contentWrapper);
-
 
             // Sections
             contentWrapper.appendChild(
                 createSection("🎨 General Settings", (section) => {
                     buildThemeColorsSection(section);
-                    buildFontFamilySelector(section); // font selector inside
+                    buildFontFamilySelector(section); // ✅ add font family selector here
                 })
             );
-
             contentWrapper.appendChild(createSection("🔘 Button Style", buildButtonStyleSection));
 
             // Buttons Wrapper for Apply & Reset
