@@ -6,9 +6,7 @@
     width: 350px;
     max-width: 90%;
     height: 90%;
-    background: #BBD2C5; /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #536976, #BBD2C5); /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #536976, #BBD2C5); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: var(--sidebar-menu-bg-gradient) !important;
     box-shadow: -2px 0 5px rgba(0,0,0,0.3);
     transition: right 0.28s ease;
     z-index: 99999;
