@@ -412,9 +412,7 @@
             headerBar.appendChild(closeBtn);
             drawer.appendChild(headerBar);
 
-            // ✅ Card Wrapper after header
-            const cardWrapper = document.createElement("div");
-            cardWrapper.className = "tb-card";
+           
 
             // Theme Selector Button
             const themeBtnWrapper = document.createElement("div");
@@ -422,12 +420,12 @@
             themeBtnWrapper.style.position = "relative"; // side padding
             themeBtnWrapper.style.left = "-11px"; // side padding
             buildThemeSelectorSection(themeBtnWrapper);
-            cardWrapper.appendChild(themeBtnWrapper);
+            drawer.appendChild(themeBtnWrapper);
 
             // Drawer Content
             const contentWrapper = document.createElement('div');
             contentWrapper.className = "tb-drawer-content";
-            cardWrapper.appendChild(contentWrapper);
+            drawer.appendChild(contentWrapper);
 
             // Sections
             contentWrapper.appendChild(createSection("🎨 General Settings", buildThemeColorsSection));
@@ -500,7 +498,6 @@
             buttonsWrapper.appendChild(resetBtn);
             contentWrapper.appendChild(buttonsWrapper);
 
-            drawer.appendChild(cardWrapper);
             document.body.appendChild(drawer);
 
             // Drawer open/close events
