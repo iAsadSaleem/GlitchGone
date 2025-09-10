@@ -147,7 +147,7 @@
 
         // Full-width styled button
 
-        themeBtn.style.width = "calc(100% - 24px)";
+        themeBtn.style.width = "calc(112% - 24px)";
         themeBtn.style.padding = "12px 16px";
         themeBtn.style.fontSize = "16px";
         themeBtn.style.fontWeight = "600";
@@ -431,7 +431,7 @@
             const themeBtnWrapper = document.createElement("div");
             themeBtnWrapper.style.padding = "0 12px"; // side padding
             themeBtnWrapper.style.position = "relative"; // side padding
-            themeBtnWrapper.style.left = "-11"; // side padding
+            themeBtnWrapper.style.left = "-11px"; // side padding
             buildThemeSelectorSection(themeBtnWrapper);
             drawer.appendChild(themeBtnWrapper);
 
