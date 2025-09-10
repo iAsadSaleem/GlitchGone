@@ -467,7 +467,7 @@
             // Create spans for each word
             const themeSpan = document.createElement('span');
             themeSpan.textContent = 'Theme ';
-            themeSpan.style.color = '#3BB273'; // green color
+            themeSpan.style.color = '#ffffff'; // green color
 
             const builderSpan = document.createElement('span');
             builderSpan.textContent = 'Builder';
