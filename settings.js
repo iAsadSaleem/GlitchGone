@@ -369,37 +369,37 @@
         select.className = "tb-font-select";
 
         const fonts = [
-            "Arial, sans-serif",
-            "Verdana, sans-serif",
-            "Tahoma, sans-serif",
-            "Georgia, serif",
-            "Times New Roman, serif",
-            "Courier New, monospace",
-            "Trebuchet MS, sans-serif",
-            "Comic Sans MS, cursive",
-            "Poppins, sans-serif",
-            "Roboto, sans-serif"
+            "Arial",
+            "Verdana",
+            "Tahoma",
+            "Georgia",
+            "Times New Roman",
+            "Courier New",
+            "Trebuchet MS",
+            "Comic Sans MS",
+            "Poppins",
+            "Roboto"
         ];
 
         fonts.forEach(font => {
             const option = document.createElement("option");
             option.value = font;
-            option.textContent = font.split(",")[0]; // show just first name
-            option.style.fontFamily = font; // preview
+            option.textContent = font.split(",")[0]; // show first name
+            option.style.fontFamily = font; // preview in dropdown
             select.appendChild(option);
         });
 
         // Load from localStorage if exists
-        const savedFont = localStorage.getItem("fontfamily");
+        const savedFont = localStorage.getItem("--body-font");
         if (savedFont) {
             select.value = savedFont;
-            document.body.style.fontFamily = savedFont; // apply instantly
+            document.body.style.setProperty("--body-font", savedFont);
         }
 
         // Apply instantly when changed
         select.addEventListener("change", () => {
-            document.body.style.fontFamily = select.value;
-            localStorage.setItem("fontfamily", select.value);
+            document.body.style.setProperty("--body-font", select.value);
+            localStorage.setItem("--body-font", select.value);
         });
 
         wrapper.appendChild(label);
@@ -505,8 +505,8 @@
                     sidebarBgColor: styles.getPropertyValue("--sidebar-bg-color").trim() || "#f0f0f0",
                     sidebarTabsBgColor: styles.getPropertyValue("--sidebar-menu-bg").trim() || "#cccccc",
                     sidebarTabsTextColor: styles.getPropertyValue("--sidebar-menu-color").trim() || "#333333",
+                    bodyFont: styles.getPropertyValue("--body-font").trim() || "Arial, sans-serif", // ✅ updated
                     selectedTheme: localStorage.getItem("selectedTheme") || "Default",
-                    fontfamily,
                     updatedAt: new Date().toISOString()
                 };
 
@@ -517,7 +517,7 @@
                 localStorage.setItem("sidebar-menu-bg", themeData.sidebarTabsBgColor);
                 localStorage.setItem("sidebar-menu-color", themeData.sidebarTabsTextColor);
                 localStorage.setItem("selectedTheme", themeData.selectedTheme);
-                localStorage.setItem("fontfamily", themeData.fontfamily); 
+                localStorage.setItem("body-font", themeData.bodyFont); // ✅ updated
 
 
                 // Send to API
