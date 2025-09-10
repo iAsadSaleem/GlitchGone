@@ -480,7 +480,15 @@
             contentWrapper.appendChild(
                 createSection("🎨 General Settings", (section) => {
                     buildThemeColorsSection(section);
-                    buildFontFamilySelector(section); // ✅ add font family selector here
+
+                    const extraWrapper = document.createElement('div');
+                    extraWrapper.style.maxHeight = "150px"; // adjust as needed
+                    extraWrapper.style.overflowY = "auto";
+                    extraWrapper.style.marginTop = "10px";
+
+                    buildFontFamilySelector(extraWrapper);
+                    section.appendChild(extraWrapper);
+                })
                 })
             );
             contentWrapper.appendChild(createSection("🔘 Button Style", buildButtonStyleSection));
