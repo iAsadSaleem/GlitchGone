@@ -36,6 +36,7 @@
             document.body.style.setProperty("--sidebar-bg-color", theme.sidebarBgColor || "#f0f0f0");
             document.body.style.setProperty("--sidebar-menu-bg", theme.sidebarTabsBgColor || "#cccccc");
             document.body.style.setProperty("--sidebar-menu-color", theme.sidebarTabsTextColor || "#333333");
+            document.body.style.setProperty("--body-font", theme.bodyFont);
 
             // Optional: Dark and second color based on sidebar active bg
             if (theme.sidebarTabsBgColor) {
@@ -50,6 +51,7 @@
             localStorage.setItem("sidebarTabsBgColor", theme.sidebarTabsBgColor);
             localStorage.setItem("sidebarTabsTextColor", theme.sidebarTabsTextColor);
             localStorage.setItem("selectedTheme", theme.selectedTheme || "Default");
+            localStorage.setItem("bodyFont", theme.bodyFont);
 
         } catch (err) {
             console.error("[ThemeBuilder] Failed to load user theme:", err);
@@ -496,7 +498,6 @@
 
                 // Get current CSS variable values from the page
                 const styles = getComputedStyle(document.body);
-                const fontfamily = localStorage.getItem("fontfamily") || "Arial, sans-serif";
 
                 const themeData = {
                     rlNo,
@@ -522,6 +523,7 @@
 
                 // Send to API
                 try {
+                    console.log("Here is the Data", themeData);
                     const res = await fetch("https://theme-builder-delta.vercel.app/api/theme", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
