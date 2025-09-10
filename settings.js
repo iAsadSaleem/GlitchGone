@@ -489,7 +489,6 @@
                     buildFontFamilySelector(extraWrapper);
                     section.appendChild(extraWrapper);
                 })
-                })
             );
             contentWrapper.appendChild(createSection("🔘 Button Style", buildButtonStyleSection));
 
