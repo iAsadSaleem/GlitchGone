@@ -266,10 +266,13 @@
 }
 
 .tb-font-label {
+    border-radius: 10px;
+    border: solid 1px;
     display: block;
     margin-top: 12px;
     font-size: 14px;
-    font-weight: 500;
+    padding: 4px 5px;
+    font-weight: bold;
 }
 
 .tb-font-select {
