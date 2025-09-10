@@ -133,24 +133,6 @@
     font-size: 34px;
 }
 
-/* Reset Changes Button */
-/*.tb-reset-btn {
-    padding: 10px 16px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 14px;
-    background-color: #e74c3c;*/ /* red color for reset */
-    /*color: #fff;
-    transition: all 0.3s ease;
-    left: 100px;
-}
-
-    .tb-reset-btn:hover {
-        background-color: #c0392b;*/ /* darker red on hover */
-        /*opacity: 0.9;
-    }*/
 
 /* Reset Changes button */
 #themeBuilderDrawer .tb-reset-btn {
@@ -176,7 +158,7 @@
     }
 
 /* Optional: Apply button next to it */
-#themeBuilderDrawer .tb-apply-btn {
+/*#themeBuilderDrawer .tb-apply-btn {
     position: relative !important;
     right: auto !important;
     top: auto !important;
@@ -197,7 +179,7 @@
     #themeBuilderDrawer .tb-apply-btn:hover {
         background-color: #2980b9;
         opacity: 0.9;
-    }
+    }*/
 
 .tb-reset-btn {
     background: linear-gradient(to bottom right, #EF4765, #FF9A5A);
@@ -211,7 +193,8 @@
     font-weight: 500;
     line-height: 2.5;
     outline: transparent;
-    padding: 0 1rem;
+    left: 100px;
+    padding: 4px 16px;
     text-align: center;
     text-decoration: none;
     transition: box-shadow .2s ease-in-out;
@@ -228,3 +211,50 @@
     .tb-reset-btn:not([disabled]):hover {
         box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5);
     }
+
+
+
+/* CSS */
+.tb-apply-btn {
+    background-color: #c2fbd7;
+    border-radius: 100px;
+    box-shadow: rgba(44, 187, 99, .2) 0 -25px 18px -14px inset,rgba(44, 187, 99, .15) 0 1px 2px,rgba(44, 187, 99, .15) 0 2px 4px,rgba(44, 187, 99, .15) 0 4px 8px,rgba(44, 187, 99, .15) 0 8px 16px,rgba(44, 187, 99, .15) 0 16px 32px;
+    color: green;
+    cursor: pointer;
+    display: inline-block;
+    font-family: CerebriSans-Regular,-apple-system,system-ui,Roboto,sans-serif;
+    padding: 7px 20px;
+    text-align: center;
+    text-decoration: none;
+    transition: all 250ms;
+    border: 0;
+    font-size: 16px;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+    .tb-apply-btn:hover {
+        box-shadow: rgba(44,187,99,.35) 0 -25px 18px -14px inset,rgba(44,187,99,.25) 0 1px 2px,rgba(44,187,99,.25) 0 2px 4px,rgba(44,187,99,.25) 0 4px 8px,rgba(44,187,99,.25) 0 8px 16px,rgba(44,187,99,.25) 0 16px 32px;
+        transform: scale(1.05) rotate(-1deg);
+    }
+
+
+/* Reset Changes Button */
+/*.tb-reset-btn {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    background-color: #e74c3c;*/ /* red color for reset */
+    /*color: #fff;
+    transition: all 0.3s ease;
+    left: 100px;
+}
+
+    .tb-reset-btn:hover {
+        background-color: #c0392b;*/ /* darker red on hover */
+        /*opacity: 0.9;
+    }*/
