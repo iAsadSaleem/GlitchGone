@@ -59,33 +59,35 @@
     }
 
     // Create collapsible sections
-    function createSection(title, contentBuilder) {
+    // Utility to create section with optional icon
+    function createSection(title, contentBuilder, icon = null) {
         const section = document.createElement("div");
         section.className = "tb-section";
 
         const header = document.createElement("div");
         header.className = "tb-section-header";
-        header.textContent = title;
+
+        // If an icon is provided, add it
+        if (icon) {
+            const iconEl = document.createElement("span");
+            iconEl.className = "tb-section-icon";
+            iconEl.innerHTML = icon; // this can be emoji or HTML icon
+            iconEl.style.marginRight = "6px";
+            header.appendChild(iconEl);
+        }
+
+        const titleText = document.createElement("span");
+        titleText.textContent = title;
+        header.appendChild(titleText);
 
         const content = document.createElement("div");
         content.className = "tb-section-content";
 
-        // Initially closed or open as needed
-        //content.classList.add("open");
-
-        // Set scrollable only for open content
-        if (content.classList.contains("open")) {
-            content.style.maxHeight = "200px"; // adjust as needed
-            content.style.overflowY = "auto";
-            content.style.paddingRight = "6px"; // optional: avoid scrollbar overlap
-        }
-
         header.addEventListener("click", () => {
             content.classList.toggle("open");
-
-            // Toggle scrollable when opening/closing
+            // Optional: set scroll for open content
             if (content.classList.contains("open")) {
-                content.style.maxHeight = "200px";
+                content.style.maxHeight = "200px"; // adjust as needed
                 content.style.overflowY = "auto";
             } else {
                 content.style.maxHeight = null;
@@ -99,6 +101,7 @@
 
         return section;
     }
+
 
 
     // Tooltip helper
@@ -500,10 +503,27 @@
             contentWrapper.appendChild(
                 createSection("🎨 General Settings", (section) => {
                     buildThemeColorsSection(section);
-                    buildFontFamilySelector(section); // ✅ add font family selector here
+                    buildFontFamilySelector(section);
                 })
             );
-            contentWrapper.appendChild(createSection("🔘 Button Style", buildButtonStyleSection));
+
+            contentWrapper.appendChild(
+                createSection("🔘 Button Style", buildButtonStyleSection)
+            );
+
+            // New Tab 1: Login Page Settings with Door Icon
+            contentWrapper.appendChild(
+                createSection("Login Page Settings", (section) => {
+                    // You can add your login page settings inputs here
+                }, "🚪") // Door emoji
+            );
+
+            // New Tab 2: Advance Settings with Database Icon
+            contentWrapper.appendChild(
+                createSection("Advance Settings", (section) => {
+                    // Add your advanced settings inputs here
+                }, "🗄️") // Database emoji
+            );
 
             // Buttons Wrapper for Apply & Reset
             const buttonsWrapper = document.createElement("div");
