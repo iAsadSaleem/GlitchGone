@@ -500,6 +500,7 @@
             buttonsWrapper.appendChild(resetBtn);
             contentWrapper.appendChild(buttonsWrapper);
 
+            drawer.appendChild(cardWrapper);
             document.body.appendChild(drawer);
 
             // Drawer open/close events
