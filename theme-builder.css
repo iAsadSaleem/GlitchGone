@@ -29,7 +29,9 @@
         position: relative;
         padding: 14px 16px;
         border-bottom: 1px solid #e6e6e6;
-        background: #e38633;
+        background: #1488CC; /* fallback for old browsers */
+        background: -webkit-linear-gradient(to right, #2B32B2, #1488CC); /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to right, #2B32B2, #1488CC); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
         font-weight: 600;
     }
 
@@ -126,7 +128,6 @@
 }
 .tb-drawer-header {
     border-radius: 23px;
-
 }
 .tb-drawer-title {
     color: #632405a6;
