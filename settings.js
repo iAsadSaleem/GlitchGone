@@ -474,22 +474,22 @@
             // Drawer Content
             const contentWrapper = document.createElement('div');
             contentWrapper.className = "tb-drawer-content";
+
+            // ✅ Make drawer content scrollable
+            contentWrapper.style.maxHeight = "400px"; // adjust to your drawer height
+            contentWrapper.style.overflowY = "auto";
+            contentWrapper.style.padding = "12px"; // optional padding
             drawer.appendChild(contentWrapper);
+
 
             // Sections
             contentWrapper.appendChild(
                 createSection("🎨 General Settings", (section) => {
                     buildThemeColorsSection(section);
-
-                    const extraWrapper = document.createElement('div');
-                    extraWrapper.style.maxHeight = "150px"; // adjust as needed
-                    extraWrapper.style.overflowY = "auto";
-                    extraWrapper.style.marginTop = "10px";
-
-                    buildFontFamilySelector(extraWrapper);
-                    section.appendChild(extraWrapper);
+                    buildFontFamilySelector(section); // font selector inside
                 })
             );
+
             contentWrapper.appendChild(createSection("🔘 Button Style", buildButtonStyleSection));
 
             // Buttons Wrapper for Apply & Reset
