@@ -422,12 +422,12 @@
             themeBtnWrapper.style.position = "relative"; // side padding
             themeBtnWrapper.style.left = "-11px"; // side padding
             buildThemeSelectorSection(themeBtnWrapper);
-            drawer.appendChild(themeBtnWrapper);
+            cardWrapper.appendChild(themeBtnWrapper);
 
             // Drawer Content
             const contentWrapper = document.createElement('div');
             contentWrapper.className = "tb-drawer-content";
-            drawer.appendChild(contentWrapper);
+            cardWrapper.appendChild(contentWrapper);
 
             // Sections
             contentWrapper.appendChild(createSection("🎨 General Settings", buildThemeColorsSection));
