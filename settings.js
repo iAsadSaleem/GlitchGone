@@ -71,7 +71,7 @@
         if (icon) {
             const iconEl = document.createElement("span");
             iconEl.className = "tb-section-icon";
-            iconEl.innerHTML = icon; // this can be emoji or HTML icon
+            iconEl.innerHTML = icon; // emoji or HTML icon
             iconEl.style.marginRight = "6px";
             header.appendChild(iconEl);
         }
@@ -84,10 +84,21 @@
         content.className = "tb-section-content";
 
         header.addEventListener("click", () => {
+            const drawer = header.closest(".tb-drawer-content");
+
+            // Close all other sections
+            drawer.querySelectorAll(".tb-section-content.open").forEach(openContent => {
+                if (openContent !== content) {
+                    openContent.classList.remove("open");
+                    openContent.style.maxHeight = null;
+                    openContent.style.overflowY = null;
+                }
+            });
+
+            // Toggle the clicked section
             content.classList.toggle("open");
-            // Optional: set scroll for open content
             if (content.classList.contains("open")) {
-                content.style.maxHeight = "200px"; // adjust as needed
+                content.style.maxHeight = "200px"; // adjust if needed
                 content.style.overflowY = "auto";
             } else {
                 content.style.maxHeight = null;
@@ -190,6 +201,16 @@
                 "--sidebar-menu-hover-bg": "#2b2b2b",
                 "--sidebar-menu-active-bg": "#3d3d3d",
                 "--header-bg-color": "#74c691"
+            },
+            "Pastel": {
+                "--primary-color": "#9c27b0",
+                "--primary-bg-color": "#f8f0ff",
+                "--sidebar-bg-color": "linear-gradient(to top, #30cfd0 0%, #330867 100%)",
+                "--sidebar-menu-bg": "linear-gradient(to top, #48c6ef 0%, #6f86d6 100%)",
+                "--sidebar-menu-color": "#ffffff",
+                "--sidebar-menu-hover-bg": "linear-gradient(to top, #5ee7df 0%, #b490ca 100%)",
+                "--sidebar-menu-active-bg": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                "--header-bg-color": "linear-gradient(to top, #30cfd0 0%, #330867 100%)"
             },
             "Pastel": {
                 "--primary-color": "#9c27b0",
