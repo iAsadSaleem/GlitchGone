@@ -5,7 +5,7 @@
     right: -420px;
     width: 350px;
     max-width: 90%;
-    height: 90%;
+    height: 80%;
     background: var(--sidebar-menu-active-bg) !important;
     box-shadow: -2px 0 5px rgba(0,0,0,1);
     transition: right 0.28s ease;
@@ -17,7 +17,7 @@
 }
 
     #themeBuilderDrawer.open {
-        border-radius: 40px;
+        border-radius: 20px;
         right: 10px;
     }
 /* Drawer header */
@@ -169,7 +169,7 @@
     outline: transparent;
     left: 27px;
     position: relative;
-    padding: 4px 16px;
+    padding: 0px 16px;
     text-align: center;
     text-decoration: none;
     transition: box-shadow .2s ease-in-out;
