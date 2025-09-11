@@ -307,6 +307,7 @@
                 "--sidebar-menu-icon-color": "#e0f2fe",
                 "--sidebar-menu-icon-hover-color": "#bae6fd",
                 "--sidebar-menu-icon-active-color": "#60a5fa",
+                "--scroll-color":"#2563eb",
 
                 /* Header */
                 "--header-bg-color": "#1e40af",
