@@ -288,7 +288,50 @@
                 "--top-nav-menu-color": "#ffffff",
                 "--top-nav-menu-hover-color": "#d1ffd6",
                 "--top-nav-menu-active-color": "#ffffff"
+            },
+            "BlueWhite Theme": {
+                "--primary-color": "#2563eb",          /* Bright blue */
+                "--second-color": "#3b82f6",           /* Softer blue */
+                "--dark-color": "#1e3a8a",             /* Deep navy for contrast */
+                "--grey-color": "#f9fafb",             /* Light grey background */
+                "--alert-color": "#dc2626",            /* Red for alerts */
+                "--app-bg-color": "#ffffff",           /* Pure white app background */
+                "--Acent-color": "#1d4ed8",            /* Strong accent blue */
+
+                /* Sidebar */
+                "--sidebar-bg-color": "#1e40af",       /* Deep sidebar blue */
+                "--sidebar-menu-bg": "#2563eb",        /* Menu background */
+                "--sidebar-menu-color": "#ffffff",     /* Menu text */
+                "--sidebar-menu-hover-bg": "#1d4ed8",  /* Hover state */
+                "--sidebar-menu-active-bg": "#1e3a8a", /* Active item */
+                "--sidebar-menu-icon-color": "#e0f2fe",
+                "--sidebar-menu-icon-hover-color": "#bae6fd",
+                "--sidebar-menu-icon-active-color": "#60a5fa",
+
+                /* Header */
+                "--header-bg-color": "#1e40af",
+                "--header-icon-color": "#ffffff",
+                "--header-icon-hover-color": "#dbeafe",
+                "--header-icon-bg": "#2563eb",
+                "--header-icon-hover-bg": "#1e3a8a",
+
+                /* Cards */
+                "--card-body-bg-color": "#f0f9ff",     /* Soft blue-white bg */
+                "--card-body-font-color": "#1e293b",   /* Dark text */
+                "--card-title-font-color": "#0f172a",  /* Stronger title */
+                "--card-dec-font-color": "#334155",    /* Grey for description */
+                "--card-footer-bg-color": "#e0f2fe",   /* Light blue footer */
+                "--card-footer-font-color": "#1e3a8a", /* Footer text */
+
+                /* Top Navigation */
+                "--top-nav-menu-bg": "#2563eb",
+                "--top-nav-menu-hover-bg": "#1d4ed8",
+                "--top-nav-menu-active-bg": "#1e3a8a",
+                "--top-nav-menu-color": "#ffffff",
+                "--top-nav-menu-hover-color": "#bae6fd",
+                "--top-nav-menu-active-color": "#ffffff"
             }
+
         };
 
         let themeKeys = Object.keys(themes);
