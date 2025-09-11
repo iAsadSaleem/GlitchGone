@@ -23,30 +23,38 @@
             const res = await fetch(`https://theme-builder-delta.vercel.app/api/theme/${rlNo}`);
             if (!res.ok) throw new Error('Failed to fetch theme');
 
-            const theme = await res.json();
-            if (!theme.isActive) return;
-            if (theme.themeData) {
-                Object.entries(theme.themeData).forEach(([key, value]) => {
-                    document.body.style.setProperty(key, value);
-                });
+            const theme = await res.json(); // ✅ only call once
+            console.log('Here is the information', theme);
+
+            // Only apply if isActive is true
+            if (!theme.isActive) {
+                return;
             }
-            // Save whole theme object in localStorage (for offline use)
-            localStorage.setItem("userTheme", JSON.stringify(theme));
+
+            // Apply theme colors to CSS variables
+            document.body.style.setProperty("--primary-color", theme.primaryColor || "#007bff");
+            document.body.style.setProperty("--primary-bg-color", theme.primaryBgColor || "#ffffff");
+            document.body.style.setProperty("--sidebar-bg-color", theme.sidebarBgColor || "#f0f0f0");
+            document.body.style.setProperty("--sidebar-menu-bg", theme.sidebarTabsBgColor || "#cccccc");
+            document.body.style.setProperty("--sidebar-menu-color", theme.sidebarTabsTextColor || "#333333");
+            document.body.style.setProperty("--body-font", theme.bodyFont);
+
+            if (theme.sidebarTabsBgColor) {
+                document.body.style.setProperty("--dark-color", theme.sidebarTabsBgColor);
+                document.body.style.setProperty("--second-color", theme.sidebarTabsBgColor);
+            }
+
+            // Save theme in localStorage
+            localStorage.setItem("primaryColor", theme.primaryColor);
+            localStorage.setItem("primaryBgColor", theme.primaryBgColor);
+            localStorage.setItem("sidebarBgColor", theme.sidebarBgColor);
+            localStorage.setItem("sidebarTabsBgColor", theme.sidebarTabsBgColor);
+            localStorage.setItem("sidebarTabsTextColor", theme.sidebarTabsTextColor);
+            localStorage.setItem("selectedTheme", theme.selectedTheme || "Default");
+            localStorage.setItem("bodyFont", theme.bodyFont);
 
         } catch (err) {
             console.error("[ThemeBuilder] Failed to load user theme:", err);
-
-            // ✅ fallback: load from localStorage if API fails
-            const cached = localStorage.getItem("userTheme");
-            if (cached) {
-                const theme = JSON.parse(cached);
-                if (theme.themeData) {
-                    Object.entries(theme.themeData).forEach(([key, value]) => {
-                        document.body.style.setProperty(key, value);
-                    });
-                }
-                console.log("Applied cached theme from localStorage");
-            }
         }
     }
 
