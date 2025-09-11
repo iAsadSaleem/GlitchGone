@@ -298,7 +298,6 @@
             Object.keys(themeVars).forEach(varName => {
                 document.body.style.setProperty(varName, themeVars[varName]);
             });
-            localStorage.setItem("userTheme", JSON.stringify(themeData));
 
             // Dark + Second color sync
             if (themeVars["--sidebar-menu-active-bg"]) {
