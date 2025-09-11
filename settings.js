@@ -331,7 +331,50 @@
                 "--top-nav-menu-color": "#ffffff",
                 "--top-nav-menu-hover-color": "#bae6fd",
                 "--top-nav-menu-active-color": "#ffffff"
+            },
+            "IndigoPurple Theme": {
+                "--primary-color": "#3B38A0",          /* Strong indigo */
+                "--second-color": "#7A85C1",           /* Softer purple-blue */
+                "--dark-color": "#1A2A80",             /* Deep navy base */
+                "--grey-color": "#f9fafb",             /* Light grey background */
+                "--alert-color": "#e11d48",            /* Pinkish red for alerts */
+                "--app-bg-color": "#ffffff",           /* White app background */
+                "--Acent-color": "#B2B0E8",            /* Soft accent lavender */
+
+                /* Sidebar */
+                "--sidebar-bg-color": "#1A2A80",       /* Deep sidebar */
+                "--sidebar-menu-bg": "#3B38A0",        /* Menu background */
+                "--sidebar-menu-color": "#ffffff",     /* Menu text */
+                "--sidebar-menu-hover-bg": "#2a2f7c",  /* Darker hover */
+                "--sidebar-menu-active-bg": "#7A85C1", /* Active item */
+                "--sidebar-menu-icon-color": "#e0e7ff",
+                "--sidebar-menu-icon-hover-color": "#c7d2fe",
+                "--sidebar-menu-icon-active-color": "#B2B0E8",
+
+                /* Header */
+                "--header-bg-color": "#3B38A0",
+                "--header-icon-color": "#ffffff",
+                "--header-icon-hover-color": "#e0e7ff",
+                "--header-icon-bg": "#7A85C1",
+                "--header-icon-hover-bg": "#1A2A80",
+
+                /* Cards */
+                "--card-body-bg-color": "#f5f6ff",     /* Very light lavender */
+                "--card-body-font-color": "#1f2937",   /* Dark text */
+                "--card-title-font-color": "#111827",  /* Strong titles */
+                "--card-dec-font-color": "#374151",    /* Grey descriptions */
+                "--card-footer-bg-color": "#e0e7ff",   /* Soft footer */
+                "--card-footer-font-color": "#1A2A80", /* Footer text */
+
+                /* Top Navigation */
+                "--top-nav-menu-bg": "#3B38A0",
+                "--top-nav-menu-hover-bg": "#2a2f7c",
+                "--top-nav-menu-active-bg": "#1A2A80",
+                "--top-nav-menu-color": "#ffffff",
+                "--top-nav-menu-hover-color": "#c7d2fe",
+                "--top-nav-menu-active-color": "#ffffff"
             }
+
 
         };
 
