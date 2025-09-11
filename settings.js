@@ -579,7 +579,7 @@
                     rlNo,
                     themeData: themeData, // store everything inside themeData
                     selectedTheme: localStorage.getItem("selectedTheme") || "Custom",
-                    bodyFont: themeVars["--body-font"] || "Arial, sans-serif",
+                    bodyFont: themeData["--body-font"] || "Arial, sans-serif",
                     updatedAt: new Date().toISOString(),
                 };
 
