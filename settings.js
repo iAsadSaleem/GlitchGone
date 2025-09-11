@@ -125,15 +125,20 @@
         label.textContent = labelText;
         label.className = "tb-color-picker-label";
 
+        // Get stored color or fallback to default
+        let storedColor = localStorage.getItem(storageKey);
+        if (!storedColor || storedColor === "undefined") storedColor = "#007bff";
+
         const colorInput = document.createElement("input");
         colorInput.type = "color";
-        colorInput.value = localStorage.getItem(storageKey) || "#007bff";
+        colorInput.value = storedColor;
         colorInput.className = "tb-color-input";
 
         const colorCode = document.createElement("span");
         colorCode.className = "tb-color-code";
         colorCode.textContent = colorInput.value;
 
+        // Copy color code to clipboard on click
         colorCode.addEventListener("click", () => {
             navigator.clipboard.writeText(colorCode.textContent).then(() => {
                 colorCode.style.background = "#c8e6c9";
@@ -141,17 +146,27 @@
             });
         });
 
+        // Apply color changes
         colorInput.addEventListener("input", () => {
             const color = colorInput.value;
+
+            // Only apply valid colors
+            if (!color || color === "undefined") return;
+
             colorCode.textContent = color;
             localStorage.setItem(storageKey, color);
             if (cssVar) document.body.style.setProperty(cssVar, color);
             if (applyFn) applyFn(color);
         });
 
+        // Apply initial color
+        if (cssVar) document.body.style.setProperty(cssVar, storedColor);
+        if (applyFn) applyFn(storedColor);
+
         wrapper.appendChild(label);
         wrapper.appendChild(colorInput);
         wrapper.appendChild(colorCode);
+
         return wrapper;
     }
 
