@@ -113,8 +113,6 @@
         return section;
     }
 
-
-
     // Tooltip helper
     function initTooltip(btn, text) {
         const tooltip = document.createElement("div");
@@ -202,93 +200,6 @@
                 "--sidebar-menu-active-bg": "#3d3d3d",
                 "--header-bg-color": "#74c691"
             },
-            "Pastel": {
-                "--primary-color": "#9c27b0",
-                "--primary-bg-color": "#f8f0ff",
-                "--sidebar-bg-color": "linear-gradient(to top, #30cfd0 0%, #330867 100%)",
-                "--sidebar-menu-bg": "linear-gradient(to top, #48c6ef 0%, #6f86d6 100%)",
-                "--sidebar-menu-color": "#ffffff",
-                "--sidebar-menu-hover-bg": "linear-gradient(to top, #5ee7df 0%, #b490ca 100%)",
-                "--sidebar-menu-active-bg": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                "--header-bg-color": "linear-gradient(to top, #30cfd0 0%, #330867 100%)"
-            },
-            "Customize": {
-                "--primary-color": "#212121",
-                "--second-color": "#038c3f",
-                "--dark-color": "#038c3f",
-                "--grey-color": "#fff8f8ff",
-                "--alert-color": "#ff0101ff",
-                "--app-bg-color": "#F9FAFB",
-                "--Acent-color": "#100939",
-
-                "--sidebar-bg-color": "#212121",
-                "--sidebar-menu-bg": "#212121",
-                "--sidebar-menu-color": "#fafafa",
-                "--sidebar-menu-hover-bg": "#038c3f",
-                "--sidebar-menu-active-bg": "#038c3f",
-                "--sidebar-menu-icon-color": "#fff",
-                "--sidebar-menu-icon-hover-color": "#fff",
-                "--sidebar-menu-icon-active-color": "#fff",
-
-                "--header-bg-color": "#F2F7FA",
-                "--header-icon-color": "#fafafa",
-                "--header-icon-hover-color": "#e7e9eaff",
-                "--header-icon-bg": "#212121",
-                "--header-icon-hover-bg": "#100939ff",
-
-                "--card-body-bg-color": "#212121",
-                "--card-body-font-color": "#fafafa",
-                "--card-title-font-color": "#fafafa",
-                "--card-dec-font-color": "#fafafa",
-                "--card-footer-bg-color": "#212121",
-                "--card-footer-font-color": "#fafafa",
-
-                "--top-nav-menu-bg": "#212121",
-                "--top-nav-menu-hover-bg": "#038c3f",
-                "--top-nav-menu-active-bg": "#038c3f",
-                "--top-nav-menu-color": "#fafafa",
-                "--top-nav-menu-hover-color": "#fafafa",
-                "--top-nav-menu-active-color": "#fafafa"
-            },
-
-            "2nd Theme": {
-                "--primary-color": "#95d59d",
-                "--second-color": "#52b776",
-                "--dark-color": "#40915d",
-                "--grey-color": "#ffffff",
-                "--alert-color": "#db0707ff",
-                "--app-bg-color": "#f0fff4",
-                "--Acent-color": "#2f855a",
-
-                "--sidebar-bg-color": "#74c691",
-                "--sidebar-menu-bg": "#52b776",
-                "--sidebar-menu-color": "#ffffff",
-                "--sidebar-menu-hover-bg": "#2b2b2b",
-                "--sidebar-menu-active-bg": "#3d3d3d",
-                "--sidebar-menu-icon-color": "#ffffff",
-                "--sidebar-menu-icon-hover-color": "#d1ffd6",
-                "--sidebar-menu-icon-active-color": "#74c691",
-
-                "--header-bg-color": "#74c691",
-                "--header-icon-color": "#ffffff",
-                "--header-icon-hover-color": "#e7ffe7",
-                "--header-icon-bg": "#52b776",
-                "--header-icon-hover-bg": "#40915d",
-
-                "--card-body-bg-color": "#95d59d",
-                "--card-body-font-color": "#24352a",
-                "--card-title-font-color": "#24352a",
-                "--card-dec-font-color": "#24352a",
-                "--card-footer-bg-color": "#74c691",
-                "--card-footer-font-color": "#24352a",
-
-                "--top-nav-menu-bg": "#52b776",
-                "--top-nav-menu-hover-bg": "#40915d",
-                "--top-nav-menu-active-bg": "#2f855a",
-                "--top-nav-menu-color": "#ffffff",
-                "--top-nav-menu-hover-color": "#d1ffd6",
-                "--top-nav-menu-active-color": "#ffffff"
-            },
             "BlueWhite Theme": {
                 "--primary-color": "#2563eb",          /* Bright blue */
                 "--second-color": "#3b82f6",           /* Softer blue */
@@ -350,6 +261,7 @@
                 "--sidebar-menu-icon-color": "#e0e7ff",
                 "--sidebar-menu-icon-hover-color": "#c7d2fe",
                 "--sidebar-menu-icon-active-color": "#B2B0E8",
+                "--scroll-color": "#7A85C1",
 
                 /* Header */
                 "--header-bg-color": "#3B38A0",
@@ -372,10 +284,9 @@
                 "--top-nav-menu-active-bg": "#1A2A80",
                 "--top-nav-menu-color": "#ffffff",
                 "--top-nav-menu-hover-color": "#c7d2fe",
-                "--top-nav-menu-active-color": "#ffffff"
+                "--top-nav-menu-active-color": "#ffffff",
+
             }
-
-
         };
 
         let themeKeys = Object.keys(themes);
@@ -386,6 +297,7 @@
             Object.keys(themeVars).forEach(varName => {
                 document.body.style.setProperty(varName, themeVars[varName]);
             });
+            localStorage.setItem("userTheme", JSON.stringify(themeData));
 
             // Dark + Second color sync
             if (themeVars["--sidebar-menu-active-bg"]) {
@@ -407,11 +319,10 @@
         });
 
         // Load saved theme
-        const savedTheme = localStorage.getItem("selectedTheme");
-        if (savedTheme && themes[savedTheme]) {
-            currentIndex = themeKeys.indexOf(savedTheme);
-            applyTheme(savedTheme);
-        }
+        const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        Object.keys(savedTheme).forEach(key => {
+            document.body.style.setProperty(key, savedTheme[key]);
+        });
 
         container.appendChild(themeBtn);
     }
@@ -712,45 +623,40 @@
             applyBtn.addEventListener("click", async () => {
                 const rlNo = atob(allowedKeys[0]); // decode user ID
 
-                // Get current CSS variable values from the page
+                // Collect all CSS variables dynamically
                 const styles = getComputedStyle(document.body);
+                const themeVars = {};
 
-                const themeData = {
+                // Pick only CSS variables (those starting with --)
+                for (let i = 0; i < styles.length; i++) {
+                    const prop = styles[i];
+                    if (prop.startsWith("--")) {
+                        themeVars[prop] = styles.getPropertyValue(prop).trim();
+                    }
+                }
+
+                const dbData = {
                     rlNo,
-                    primaryColor: styles.getPropertyValue("--primary-color").trim() || "#007bff",
-                    primaryBgColor: styles.getPropertyValue("--primary-bg-color").trim() || "#ffffff",
-                    sidebarBgColor: styles.getPropertyValue("--sidebar-bg-color").trim() || "#f0f0f0",
-                    sidebarTabsBgColor: styles.getPropertyValue("--sidebar-menu-bg").trim() || "#cccccc",
-                    sidebarTabsTextColor: styles.getPropertyValue("--sidebar-menu-color").trim() || "#333333",
-                    bodyFont: styles.getPropertyValue("--body-font").trim()
-                        || localStorage.getItem("--body-font")
-                        || "Arial, sans-serif",
-                    selectedTheme: localStorage.getItem("selectedTheme") || "Default",
-                    updatedAt: new Date().toISOString()
+                    themeData: themeVars, // 👈 store everything inside themeData
+                    selectedTheme: localStorage.getItem("selectedTheme") || "Custom",
+                    bodyFont: themeVars["--body-font"] || "Arial",
+                    updatedAt: new Date().toISOString(),
                 };
 
-                // Save to localStorage
-                localStorage.setItem("primary-color", themeData.primaryColor);
-                localStorage.setItem("primary-bg-color", themeData.primaryBgColor);
-                localStorage.setItem("sidebar-bg-color", themeData.sidebarBgColor);
-                localStorage.setItem("sidebar-menu-bg", themeData.sidebarTabsBgColor);
-                localStorage.setItem("sidebar-menu-color", themeData.sidebarTabsTextColor);
-                localStorage.setItem("selectedTheme", themeData.selectedTheme);
-                localStorage.setItem("body-font", themeData.bodyFont); // ✅ updated
-
+                // Save to localStorage (optional, for instant reloads)
+                localStorage.setItem("userTheme", JSON.stringify(dbData));
 
                 // Send to API
                 try {
-                    console.log("Here is the Data", themeData);
                     const res = await fetch("https://theme-builder-delta.vercel.app/api/theme", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify(themeData)
+                        body: JSON.stringify(dbData),
                     });
 
                     const result = await res.json();
                     if (res.ok) {
-                        alert("Theme applied & saved to DB ✅");
+                        alert("Theme applied & saved ✅");
                     } else {
                         alert("Failed to save theme ❌");
                         console.error("[ThemeBuilder] Error:", result);
@@ -760,6 +666,7 @@
                     console.error("[ThemeBuilder] Network error:", err);
                 }
             });
+
 
 
 
