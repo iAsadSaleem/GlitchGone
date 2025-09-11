@@ -568,8 +568,6 @@
                             themeVars[prop] = bodyStyle.getPropertyValue(prop).trim();
                         }
                     }
-
-                    console.log("Collected Theme Vars:", themeVars);
                     return themeVars;
                 }
 
@@ -577,11 +575,9 @@
                 const themeData = collectThemeVars();
                 localStorage.setItem("userTheme", JSON.stringify(themeData));
 
-                console.log("Collected themeData:", themeData);
-
                 const dbData = {
                     rlNo,
-                    themeData: themeVars, // store everything inside themeData
+                    themeData: themeData, // store everything inside themeData
                     selectedTheme: localStorage.getItem("selectedTheme") || "Custom",
                     bodyFont: themeVars["--body-font"] || "Arial, sans-serif",
                     updatedAt: new Date().toISOString(),
