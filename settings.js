@@ -21,11 +21,11 @@
     async function loadUserThemeFromDB(rlNo) {
         try {
             const res = await fetch(`https://theme-builder-delta.vercel.app/api/theme/${rlNo}`);
-            console.log('Here is the information',res)
+           
             if (!res.ok) throw new Error('Failed to fetch theme');
 
             const theme = await res.json(); // API returns the theme object directly
-
+            console.log('Here is the information', theme)
             // Only apply if isActive is true
             if (!theme.isActive) {
                 return;
