@@ -24,18 +24,12 @@
             if (!res.ok) throw new Error('Failed to fetch theme');
 
             const theme = await res.json();
-            console.log('Loaded Theme:', theme);
-
-            // Only apply if active
             if (!theme.isActive) return;
-
-            // ✅ Loop over all CSS variables saved in themeData
             if (theme.themeData) {
                 Object.entries(theme.themeData).forEach(([key, value]) => {
                     document.body.style.setProperty(key, value);
                 });
             }
-
             // Save whole theme object in localStorage (for offline use)
             localStorage.setItem("userTheme", JSON.stringify(theme));
 
@@ -373,7 +367,7 @@
         const header = document.querySelector('header.hl_header') || document.querySelector('header');
         if (!header) return null;
         const controls = header.querySelectorAll('.hl_header--controls');
-        if (!controls.length) return null;
+        if (!controls || !controls.length) return null;
         return Array.from(controls).sort((a, b) => b.childElementCount - a.childElementCount)[0];
     }
 
