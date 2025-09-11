@@ -288,7 +288,7 @@
                 "--top-nav-menu-color": "#ffffff",
                 "--top-nav-menu-hover-color": "#d1ffd6",
                 "--top-nav-menu-active-color": "#ffffff"
-            },
+            }
         };
 
         let themeKeys = Object.keys(themes);
