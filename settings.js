@@ -380,71 +380,6 @@
         return Array.from(controls).sort((a, b) => b.childElementCount - a.childElementCount)[0];
     }
 
-
-    function buildApplyResetButtons(container) {
-        const wrapper = document.createElement('div');
-        wrapper.style.display = 'flex';
-        wrapper.style.justifyContent = 'space-between';
-        wrapper.style.padding = '12px';
-
-        // Apply Changes Button
-        const applyBtn = document.createElement('button');
-        applyBtn.textContent = "Apply Changes";
-        applyBtn.style.flex = '1';
-        applyBtn.style.marginRight = '6px';
-        applyBtn.style.padding = '10px';
-        applyBtn.style.border = 'none';
-        applyBtn.style.borderRadius = '6px';
-        applyBtn.style.cursor = 'pointer';
-        applyBtn.style.backgroundColor = '#4CAF50';
-        applyBtn.style.color = '#fff';
-        applyBtn.style.fontWeight = '600';
-
-        applyBtn.addEventListener('click', () => {
-            // Save all color pickers to localStorage
-            document.querySelectorAll('.tb-color-picker-wrapper input[type="color"]').forEach(input => {
-                const key = input.closest('.tb-color-picker-wrapper').querySelector('.tb-color-picker-label').textContent.replace(/\s/g, '');
-                localStorage.setItem(key, input.value);
-            });
-
-            // Save currently selected theme
-            const themeBtn = container.querySelector('.tb-theme-cycle-btn');
-            if (themeBtn) localStorage.setItem('selectedTheme', themeBtn.textContent);
-
-            alert('Theme applied and saved!');
-        });
-
-        // Reset Changes Button
-        const resetBtn = document.createElement('button');
-        resetBtn.textContent = "Reset Changes";
-        resetBtn.style.flex = '1';
-        resetBtn.style.marginLeft = '6px';
-        resetBtn.style.padding = '10px';
-        resetBtn.style.border = 'none';
-        resetBtn.style.borderRadius = '6px';
-        resetBtn.style.cursor = 'pointer';
-        resetBtn.style.backgroundColor = '#f44336';
-        resetBtn.style.color = '#fff';
-        resetBtn.style.fontWeight = '600';
-
-        resetBtn.addEventListener('click', () => {
-            // Remove all theme-related items from localStorage
-            localStorage.removeItem('selectedTheme');
-            document.querySelectorAll('.tb-color-picker-wrapper input[type="color"]').forEach(input => {
-                const key = input.closest('.tb-color-picker-wrapper').querySelector('.tb-color-picker-label').textContent.replace(/\s/g, '');
-                localStorage.removeItem(key);
-            });
-
-            // Reload page or reset theme
-            location.reload();
-        });
-
-        wrapper.appendChild(applyBtn);
-        wrapper.appendChild(resetBtn);
-
-        container.appendChild(wrapper);
-    }
-
     // Reset Theme Changes Function
     function resetThemeChanges() {
         const keysToRemove = [
@@ -623,8 +558,8 @@
             applyBtn.addEventListener("click", async () => {
                 const rlNo = atob(allowedKeys[0]); // decode user ID
 
-                // Collect all CSS variables dynamically
-                const styles = getComputedStyle(document.body);
+                // Collect all CSS variables dynamically from :root
+                const styles = getComputedStyle(document.documentElement);
                 const themeVars = {};
 
                 // Pick only CSS variables (those starting with --)
@@ -634,16 +569,18 @@
                         themeVars[prop] = styles.getPropertyValue(prop).trim();
                     }
                 }
-                console.log(themeVars);
+
+                console.log("Collected Theme Vars:", themeVars);
+
                 const dbData = {
                     rlNo,
-                    themeData: themeVars, // 👈 store everything inside themeData
+                    themeData: themeVars, // store everything inside themeData
                     selectedTheme: localStorage.getItem("selectedTheme") || "Custom",
-                    bodyFont: themeVars["--body-font"] || "Arial",
+                    bodyFont: themeVars["--body-font"] || "Arial, sans-serif",
                     updatedAt: new Date().toISOString(),
                 };
 
-                // Save to localStorage (optional, for instant reloads)
+                // Save to localStorage (for instant reloads)
                 localStorage.setItem("userTheme", JSON.stringify(dbData));
 
                 // Send to API
@@ -666,7 +603,6 @@
                     console.error("[ThemeBuilder] Network error:", err);
                 }
             });
-
 
             // Reset Changes Button
             const resetBtn = document.createElement("button");
