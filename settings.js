@@ -335,20 +335,24 @@
 
     // Build theme colors section
     function buildThemeColorsSection(container) {
-        const colors = [
-            { label: "Choose Primary Color", key: "primaryColor", var: "--primary-color" },
-            { label: "Choose Primary BG Color", key: "primaryBgColor", var: "--primary-bg-color" },
-            { label: "Left Sidebar BG Color", key: "sidebarBgColor", var: "--sidebar-bg-color" },
-            {
-                label: "Left Sidebar Tabs BG Color", key: "sidebarTabsBgColor", var: "--sidebar-menu-bg",
-                apply: (color) => { document.body.style.setProperty("--sidebar-menu-bg", color); }
-            },
-            {
-                label: "Left Sidebar Tabs Text Color", key: "sidebarTabsTextColor", var: "--sidebar-menu-color",
-                apply: (color) => { document.body.style.setProperty("--sidebar-menu-color", color); }
-            },
+        const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        const themeData = savedTheme.themeData || {};
+
+        const editableColors = [
+            "--primary-color",
+            "--primary-bg-color",
+            "--sidebar-bg-color",
+            "--sidebar-menu-bg",
+            "--sidebar-menu-color",
         ];
-        colors.forEach(c => container.appendChild(createColorPicker(c.label, c.key, c.var, c.apply)));
+
+        editableColors.forEach(key => {
+            const value = localStorage.getItem(key) || themeData[key] || "#000000";
+            const picker = createColorPicker(key, key, key, (val) => {
+                document.body.style.setProperty(key, val);
+            });
+            container.appendChild(picker);
+        });
     }
 
     // Dummy Button Style section
