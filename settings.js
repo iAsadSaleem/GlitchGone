@@ -558,19 +558,26 @@
             applyBtn.addEventListener("click", async () => {
                 const rlNo = atob(allowedKeys[0]); // decode user ID
 
-                // Collect all CSS variables dynamically from :root
-                const styles = getComputedStyle(document.documentElement);
-                const themeVars = {};
+                function collectThemeVars() {
+                    const bodyStyle = document.body.style;
+                    const themeVars = {};
 
-                // Pick only CSS variables (those starting with --)
-                for (let i = 0; i < styles.length; i++) {
-                    const prop = styles[i];
-                    if (prop.startsWith("--")) {
-                        themeVars[prop] = styles.getPropertyValue(prop).trim();
+                    for (let i = 0; i < bodyStyle.length; i++) {
+                        const prop = bodyStyle[i];
+                        if (prop.startsWith("--")) {
+                            themeVars[prop] = bodyStyle.getPropertyValue(prop).trim();
+                        }
                     }
+
+                    console.log("Collected Theme Vars:", themeVars);
+                    return themeVars;
                 }
 
-                console.log("Collected Theme Vars:", themeVars);
+                // Example usage:
+                const themeData = collectThemeVars();
+                localStorage.setItem("userTheme", JSON.stringify(themeData));
+
+                console.log("Collected themeData:", themeData);
 
                 const dbData = {
                     rlNo,
