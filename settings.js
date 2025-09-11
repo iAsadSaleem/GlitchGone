@@ -634,7 +634,7 @@
                         themeVars[prop] = styles.getPropertyValue(prop).trim();
                     }
                 }
-                console.log('Here is the themevars',themeVars);
+
                 const dbData = {
                     rlNo,
                     themeData: themeVars, // 👈 store everything inside themeData
@@ -666,8 +666,6 @@
                     console.error("[ThemeBuilder] Network error:", err);
                 }
             });
-
-
 
 
             // Reset Changes Button
