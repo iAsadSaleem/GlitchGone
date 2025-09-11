@@ -634,7 +634,7 @@
                         themeVars[prop] = styles.getPropertyValue(prop).trim();
                     }
                 }
-
+                console.log(themeVars);
                 const dbData = {
                     rlNo,
                     themeData: themeVars, // 👈 store everything inside themeData
