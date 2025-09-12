@@ -332,6 +332,7 @@
         // Load saved theme
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedThemeObj.themeData || {};
+
         Object.entries(themeData).forEach(([key, value]) => {
             if (value && value !== "undefined") {
                 document.body.style.setProperty(key, value);
