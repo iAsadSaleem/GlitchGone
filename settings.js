@@ -121,6 +121,8 @@
 
         const header = document.createElement("div");
         header.className = "tb-section-header";
+        header.style.cursor = "pointer";
+        header.style.transition = "background 0.3s, color 0.3s"; // smooth color change
 
         // If an icon is provided, add it
         if (icon) {
@@ -147,6 +149,9 @@
                     openContent.classList.remove("open");
                     openContent.style.maxHeight = null;
                     openContent.style.overflowY = null;
+                    // revert header color
+                    openContent.previousSibling.style.background = "";
+                    openContent.previousSibling.style.color = "";
                 }
             });
 
@@ -155,9 +160,13 @@
             if (content.classList.contains("open")) {
                 content.style.maxHeight = "200px"; // adjust if needed
                 content.style.overflowY = "auto";
+                header.style.background = "#3BB273"; // green when open
+                header.style.color = "#ffffff"; // white text
             } else {
                 content.style.maxHeight = null;
                 content.style.overflowY = null;
+                header.style.background = ""; // revert
+                header.style.color = ""; // revert
             }
         });
 
