@@ -382,3 +382,7 @@
     border: 1px solid #ccc;
     font-size: 14px;
 }
+.tb-logo-input {
+    width: 185px;
+    height: 40px;
+}

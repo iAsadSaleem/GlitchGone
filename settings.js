@@ -542,12 +542,15 @@
         label.textContent = labelText;
         label.className = "tb-color-picker-label";
 
-        // 1️⃣ Load current color from themeData or CSS variable
+        // Load current color from themeData or CSS variable
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedThemeObj.themeData || {};
-        let storedColor = themeData[cssVar]
+        let storedValue = themeData[cssVar]
             || getComputedStyle(document.body).getPropertyValue(cssVar).trim()
             || "#007bff"; // fallback
+
+        // ✅ Ensure it's a valid hex color (not a url(...))
+        let storedColor = /^#([0-9A-Fa-f]{3}){1,2}$/.test(storedValue) ? storedValue : "#007bff";
 
         const colorInput = document.createElement("input");
         colorInput.type = "color";
@@ -558,25 +561,23 @@
         colorCode.className = "tb-color-code";
         colorCode.textContent = storedColor;
 
-        // Copy color code to clipboard on click
+        // Copy to clipboard
         colorCode.addEventListener("click", () => {
             navigator.clipboard.writeText(colorCode.textContent);
             colorCode.style.background = "#c8e6c9";
             setTimeout(() => (colorCode.style.background = "#f0f0f0"), 800);
         });
 
-        // Apply color changes live
+        // Apply changes
         colorInput.addEventListener("input", () => {
             const color = colorInput.value;
             colorCode.textContent = color;
 
-            // Apply to CSS
             document.body.style.setProperty(cssVar, color);
 
-            // Save to userTheme.themeData
             const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
             savedThemeObj.themeData = savedThemeObj.themeData || {};
-            savedThemeObj.themeData[cssVar] = color;
+            savedThemeObj.themeData[cssVar] = color; // always hex
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
         });
 
@@ -589,7 +590,6 @@
 
         return wrapper;
     }
-
     function createLoginLogoInput(labelText, cssVar) {
         const wrapper = document.createElement("div");
         wrapper.className = "tb-color-picker-wrapper"; // you can reuse wrapper style
