@@ -22,44 +22,39 @@
         if (!modal) {
             modal = document.createElement("div");
             modal.id = "jc-confirm-modal";
-            modal.style.position = "fixed";
-            modal.style.top = 0;
-            modal.style.left = 0;
-            modal.style.width = "100%";
-            modal.style.height = "100%";
-            modal.style.background = "rgba(0,0,0,0.6)";
-            modal.style.display = "flex";
-            modal.style.justifyContent = "center";
-            modal.style.alignItems = "center";
-            modal.style.zIndex = 999999;
+            modal.className = "jc-confirm-modal"; // use CSS class
+
+            // Modal content
             modal.innerHTML = `
-            <div style="background:#fff;padding:20px 30px;border-radius:8px;max-width:400px;text-align:center;box-shadow:0 4px 10px rgba(0,0,0,0.3);">
-                <p id="jc-confirm-message" style="margin-bottom:20px;"></p>
-                <button id="jc-yes-btn" style="margin-right:10px;padding:6px 16px;background:#4caf50;color:#fff;border:none;border-radius:4px;cursor:pointer;">Yes</button>
-                <button id="jc-no-btn" style="padding:6px 16px;background:#f44336;color:#fff;border:none;border-radius:4px;cursor:pointer;">No</button>
-            </div>
+            <p id="jc-confirm-message"></p>
+            <button id="jc-yes-btn">Yes</button>
+            <button id="jc-no-btn">No</button>
         `;
-            document.body.appendChild(modal);
+
+            // Append modal inside the Theme Builder Drawer
+            const drawer = document.getElementById("themeBuilderDrawer") || document.body;
+            drawer.appendChild(modal);
         }
 
-        // Set message
-        document.getElementById("jc-confirm-message").textContent = message;
+        // Set the message
+        modal.querySelector("#jc-confirm-message").textContent = message;
 
-        modal.style.display = "flex";
+        // Show modal
+        modal.style.display = "block";
 
-        const yesBtn = document.getElementById("jc-yes-btn");
-        const noBtn = document.getElementById("jc-no-btn");
+        const yesBtn = modal.querySelector("#jc-yes-btn");
+        const noBtn = modal.querySelector("#jc-no-btn");
 
-        // Clean previous event listeners
+        // Remove previous event listeners
         yesBtn.replaceWith(yesBtn.cloneNode(true));
         noBtn.replaceWith(noBtn.cloneNode(true));
 
-        document.getElementById("jc-yes-btn").addEventListener("click", () => {
+        modal.querySelector("#jc-yes-btn").addEventListener("click", () => {
             modal.style.display = "none";
             onYes && onYes();
         });
 
-        document.getElementById("jc-no-btn").addEventListener("click", () => {
+        modal.querySelector("#jc-no-btn").addEventListener("click", () => {
             modal.style.display = "none";
             onNo && onNo();
         });
