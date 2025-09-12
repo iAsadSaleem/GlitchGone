@@ -22,16 +22,18 @@
         if (!modal) {
             modal = document.createElement("div");
             modal.id = "jc-confirm-modal";
-            modal.className = "jc-confirm-modal"; // use CSS class
+            modal.className = "jc-confirm-modal-overlay"; // overlay covers drawer
 
-            // Modal content
+            // Modal content inside overlay
             modal.innerHTML = `
-            <p id="jc-confirm-message"></p>
-            <button id="jc-yes-btn">Yes</button>
-            <button id="jc-no-btn">No</button>
+            <div class="jc-confirm-modal-content">
+                <p id="jc-confirm-message"></p>
+                <button id="jc-yes-btn">Yes</button>
+                <button id="jc-no-btn">No</button>
+            </div>
         `;
 
-            // Append modal inside the Theme Builder Drawer
+            // Append modal inside Theme Builder Drawer
             const drawer = document.getElementById("themeBuilderDrawer") || document.body;
             drawer.appendChild(modal);
         }
@@ -40,7 +42,7 @@
         modal.querySelector("#jc-confirm-message").textContent = message;
 
         // Show modal
-        modal.style.display = "block";
+        modal.style.display = "flex";
 
         const yesBtn = modal.querySelector("#jc-yes-btn");
         const noBtn = modal.querySelector("#jc-no-btn");
@@ -59,6 +61,7 @@
             onNo && onNo();
         });
     }
+
 
 
     // Load CSS for Theme Builder

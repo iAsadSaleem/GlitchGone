@@ -45,12 +45,22 @@
         color: #333;
     }
 
-/* JC Confirm Modal inside Theme Builder Drawer */
-.jc-confirm-modal {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+/* Overlay covers entire drawer and blocks clicks */
+.jc-confirm-modal-overlay {
+    position: absolute; /* relative to drawer */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* above drawer content */
+}
+
+/* Modal box inside overlay */
+.jc-confirm-modal-content {
     background: #fff;
     padding: 20px 30px;
     border-radius: 8px;
@@ -58,20 +68,16 @@
     width: 90%;
     text-align: center;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    z-index: 1000;
-    display: none; /* hidden by default */
 }
 
-    /* JC Confirm message text */
-    .jc-confirm-modal p#jc-confirm-message {
+    .jc-confirm-modal-content p#jc-confirm-message {
         margin-bottom: 20px;
         font-size: 16px;
         color: #333;
     }
 
-    /* JC Confirm buttons */
-    .jc-confirm-modal button#jc-yes-btn,
-    .jc-confirm-modal button#jc-no-btn {
+    .jc-confirm-modal-content button#jc-yes-btn,
+    .jc-confirm-modal-content button#jc-no-btn {
         padding: 6px 16px;
         border: none;
         border-radius: 4px;
@@ -79,16 +85,17 @@
         font-size: 14px;
     }
 
-    .jc-confirm-modal button#jc-yes-btn {
+    .jc-confirm-modal-content button#jc-yes-btn {
         margin-right: 10px;
         background-color: #4caf50;
         color: #fff;
     }
 
-    .jc-confirm-modal button#jc-no-btn {
+    .jc-confirm-modal-content button#jc-no-btn {
         background-color: #f44336;
         color: #fff;
     }
+
 
 /* Sections */
 .tb-section {
