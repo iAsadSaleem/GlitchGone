@@ -57,6 +57,7 @@
 .tb-section-header {
     padding: 10px;
     background: var(--primary-color) !important;
+    color: var(--sidebar-menu-color) !important;
     cursor: pointer;
 }
 .tb-section-content { display: none; padding: 15px; background: #fff; }
