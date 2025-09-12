@@ -337,13 +337,15 @@
 
     // Build theme colors section
     function buildThemeColorsSection(container) {
-        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        const themeData = savedThemeObj.themeData || {};
-
-        Object.entries(themeData).forEach(([key, value]) => {
-            if (value && value !== "undefined") {
-                document.body.style.setProperty(key, value);
-            }
+        const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        const themeData = savedTheme.themeData || {};
+        const editableColors = ["--primary-color", "--primary-bg-color", "--sidebar-bg-color", "--sidebar-menu-bg", "--sidebar-menu-color",];
+        editableColors.forEach(key => {
+            const value = localStorage.getItem(key) || themeData[key] || "#000000";
+            const picker = createColorPicker(key, key, key, (val) => {
+                document.body.style.setProperty(key, val);
+            });
+            container.appendChild(picker);
         });
     }
 
