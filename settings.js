@@ -306,21 +306,21 @@
 
         function applyTheme(themeKey) {
             const themeVars = themes[themeKey];
+
+            // Apply all CSS variables
             Object.keys(themeVars).forEach(varName => {
                 document.body.style.setProperty(varName, themeVars[varName]);
             });
 
-            // Dark + Second color sync
-            if (themeVars["--sidebar-menu-active-bg"]) {
-                document.body.style.setProperty("--dark-color", themeVars["--sidebar-menu-active-bg"]);
-                document.body.style.setProperty("--second-color", themeVars["--sidebar-menu-active-bg"]);
-            }
+            // Save full theme to localStorage
+            localStorage.setItem(
+                "userTheme",
+                JSON.stringify({ themeData: themeVars })
+            );
 
             themeBtn.textContent = themeKey;
             themeBtn.style.backgroundColor = themeVars["--primary-color"];
             themeBtn.style.color = "#fff";
-
-            localStorage.setItem("selectedTheme", themeKey);
         }
 
         // Cycle through themes on click
@@ -346,20 +346,10 @@
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedThemeObj.themeData || {};
 
-        const editableColors = [
-            "--primary-color",
-            "--primary-bg-color",
-            "--sidebar-bg-color",
-            "--sidebar-menu-bg",
-            "--sidebar-menu-color",
-        ];
-
-        editableColors.forEach(key => {
-            const value = localStorage.getItem(key) || themeData[key] || "#000000";
-            const picker = createColorPicker(key, key, key, (val) => {
-                document.body.style.setProperty(key, val);
-            });
-            container.appendChild(picker);
+        Object.entries(themeData).forEach(([key, value]) => {
+            if (value && value !== "undefined") {
+                document.body.style.setProperty(key, value);
+            }
         });
     }
 
