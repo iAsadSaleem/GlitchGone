@@ -32,7 +32,6 @@
             if (!res.ok) throw new Error('Failed to fetch theme');
 
             const theme = await res.json();
-            console.log('theme Colors', theme);
             if (!theme.isActive) return;
             if (theme.themeData) {
                 Object.entries(theme.themeData).forEach(([key, value]) => {
