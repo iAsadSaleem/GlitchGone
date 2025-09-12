@@ -104,7 +104,7 @@
     margin-bottom: 10px;
     overflow: hidden;
     position: relative;
-    
+    top: 30px;
 }
 .tb-section-header {
     padding: 10px;
@@ -267,8 +267,9 @@
     user-select: none;
     -webkit-user-select: none;
     touch-action: manipulation;
-    width: 304px;
-    height: 65px;
+    width: 307px;
+    height: 47px;
+    top: 30px;
 }
 
     .tb-apply-btn:hover {
