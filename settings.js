@@ -462,10 +462,12 @@
         label.textContent = labelText;
         label.className = "tb-color-picker-label";
 
-        // Get stored color from themeData
+        // 1️⃣ Load current color from themeData or CSS variable
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedThemeObj.themeData || {};
-        let storedColor = themeData[cssVar] || "#007bff";
+        let storedColor = themeData[cssVar]
+            || getComputedStyle(document.body).getPropertyValue(cssVar).trim()
+            || "#007bff"; // fallback
 
         const colorInput = document.createElement("input");
         colorInput.type = "color";
@@ -476,14 +478,14 @@
         colorCode.className = "tb-color-code";
         colorCode.textContent = storedColor;
 
-        // Copy color code on click
+        // Copy color code to clipboard on click
         colorCode.addEventListener("click", () => {
             navigator.clipboard.writeText(colorCode.textContent);
             colorCode.style.background = "#c8e6c9";
             setTimeout(() => (colorCode.style.background = "#f0f0f0"), 800);
         });
 
-        // Apply color on input
+        // Apply color changes live
         colorInput.addEventListener("input", () => {
             const color = colorInput.value;
             colorCode.textContent = color;
@@ -507,7 +509,6 @@
 
         return wrapper;
     }
-
 
     // Create Builder UI
     let headerObserver = null;
