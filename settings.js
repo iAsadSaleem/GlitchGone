@@ -690,7 +690,21 @@
                     async () => {
                         // YES pressed
                         const rlNo = atob(allowedKeys[0]);
-                        const themeData = collectThemeVars(); // function to collect all --vars from body
+
+                        // Collect all CSS variables starting with --
+                        const collectThemeVars = () => {
+                            const bodyStyle = document.body.style;
+                            const themeVars = {};
+                            for (let i = 0; i < bodyStyle.length; i++) {
+                                const prop = bodyStyle[i];
+                                if (prop.startsWith("--")) {
+                                    themeVars[prop] = bodyStyle.getPropertyValue(prop).trim();
+                                }
+                            }
+                            return themeVars;
+                        };
+
+                        const themeData = collectThemeVars();
 
                         const dbData = {
                             rlNo,
@@ -700,6 +714,7 @@
                             updatedAt: new Date().toISOString(),
                         };
 
+                        // Save theme locally
                         localStorage.setItem("userTheme", JSON.stringify(dbData));
 
                         // Save to API
@@ -709,22 +724,29 @@
                                 headers: { "Content-Type": "application/json" },
                                 body: JSON.stringify(dbData),
                             });
-                            const result = await res.json();
-                            if (!res.ok) console.error(result);
+                            if (!res.ok) {
+                                const result = await res.json();
+                                console.error("[ThemeBuilder] API error:", result);
+                            }
                         } catch (err) {
-                            console.error("Network error:", err);
+                            console.error("[ThemeBuilder] Network error:", err);
                         }
 
-                        // Reload page after saving
+                        // Reload page to apply fully
                         location.reload();
                     },
                     () => {
                         // NO pressed, revert changes
-                        applySavedSettings(); // apply last saved theme
+                        const savedThemeStr = localStorage.getItem("userTheme");
+                        if (savedThemeStr) {
+                            const savedTheme = JSON.parse(savedThemeStr).themeData;
+                            Object.keys(savedTheme).forEach(varName => {
+                                document.body.style.setProperty(varName, savedTheme[varName]);
+                            });
+                        }
                     }
                 );
             });
-
             // Reset Changes Button
             //const resetBtn = document.createElement("button");
             //resetBtn.textContent = "Reset Changes";
