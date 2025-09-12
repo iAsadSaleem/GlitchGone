@@ -326,7 +326,11 @@
             // Save to localStorage
             localStorage.setItem("userTheme", JSON.stringify({ themeData: themeVars }));
         }
-
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        if (savedThemeObj.selectedTheme && themes[savedThemeObj.selectedTheme]) {
+            applyTheme(savedThemeObj.selectedTheme);
+            currentIndex = themeKeys.indexOf(savedThemeObj.selectedTheme);
+        }
         themeBtn.addEventListener("click", () => {
             currentIndex = (currentIndex + 1) % themeKeys.length;
             applyTheme(themeKeys[currentIndex]);

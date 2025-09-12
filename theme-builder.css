@@ -54,7 +54,11 @@
     position: relative;
     
 }
-.tb-section-header { padding: 10px; background: #f5f5f5; cursor: pointer; font-weight: bold; }
+.tb-section-header {
+    padding: 10px;
+    background: var(--primary-color) !important;
+    cursor: pointer;
+}
 .tb-section-content { display: none; padding: 15px; background: #fff; }
 
 /* Color picker */
