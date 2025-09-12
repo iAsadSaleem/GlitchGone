@@ -5,6 +5,14 @@
     const allowedKeys = [btoa("0-373-489")];
     const MAX_ATTEMPTS = 40;
 
+    const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+    const themeData = savedThemeObj.themeData || {};
+    Object.entries(themeData).forEach(([key, value]) => {
+        if (value && value !== "undefined") {
+            document.body.style.setProperty(key, value);
+        }
+    });
+
     // Load CSS for Theme Builder
     function loadThemeBuilderCSS() {
         if (!document.getElementById('themeBuilderCSS')) {
@@ -306,37 +314,23 @@
 
         function applyTheme(themeKey) {
             const themeVars = themes[themeKey];
-
-            // Apply all CSS variables
             Object.keys(themeVars).forEach(varName => {
-                document.body.style.setProperty(varName, themeVars[varName]);
+                if (themeVars[varName] && themeVars[varName] !== "undefined") {
+                    document.body.style.setProperty(varName, themeVars[varName]);
+                }
             });
-
-            // Save full theme to localStorage
-            localStorage.setItem(
-                "userTheme",
-                JSON.stringify({ themeData: themeVars })
-            );
 
             themeBtn.textContent = themeKey;
             themeBtn.style.backgroundColor = themeVars["--primary-color"];
             themeBtn.style.color = "#fff";
+
+            // Save to localStorage
+            localStorage.setItem("userTheme", JSON.stringify({ themeData: themeVars }));
         }
 
-        // Cycle through themes on click
         themeBtn.addEventListener("click", () => {
             currentIndex = (currentIndex + 1) % themeKeys.length;
             applyTheme(themeKeys[currentIndex]);
-        });
-
-        // Load saved theme
-        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        const themeData = savedThemeObj.themeData || {};
-
-        Object.entries(themeData).forEach(([key, value]) => {
-            if (value && value !== "undefined") {
-                document.body.style.setProperty(key, value);
-            }
         });
 
         container.appendChild(themeBtn);
