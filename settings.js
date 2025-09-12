@@ -42,7 +42,7 @@
                 });
             }
             // Save whole theme object in localStorage (for offline use)
-            localStorage.setItem("userTheme", JSON.stringify(theme));
+            //localStorage.setItem("userTheme", JSON.stringify(theme));
 
         } catch (err) {
             console.error("[ThemeBuilder] Failed to load user theme:", err);
@@ -195,6 +195,9 @@
 
     // NEW: Theme Selector Section
     function buildThemeSelectorSection(container) {
+        const themeBtn = document.createElement("button");
+        themeBtn.textContent = "Select Theme";
+        themeBtn.className = "tb-theme-cycle-btn";
 
         const themes = {
             "Default": {
@@ -306,46 +309,31 @@
             }
         };
 
-        // 2️⃣ Get saved theme from localStorage
-        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        const savedThemeData = savedThemeObj.themeData || {};
+        let themeKeys = Object.keys(themes);
+        let currentIndex = -1;
 
-        // 3️⃣ Function to apply a theme safely
         function applyTheme(themeKey) {
-            // Merge default theme with saved values (saved values override defaults)
-            const themeVars = { ...themes[themeKey], ...savedThemeData };
-
-            Object.entries(themeVars).forEach(([key, value]) => {
-                if (value && value !== "undefined") {
-                    document.body.style.setProperty(key, value);
+            const themeVars = themes[themeKey];
+            Object.keys(themeVars).forEach(varName => {
+                if (themeVars[varName] && themeVars[varName] !== "undefined") {
+                    document.body.style.setProperty(varName, themeVars[varName]);
                 }
             });
 
             themeBtn.textContent = themeKey;
-            themeBtn.style.backgroundColor = themeVars["--primary-color"] || "#000";
+            themeBtn.style.backgroundColor = themeVars["--primary-color"];
             themeBtn.style.color = "#fff";
 
-            // Save the selected theme back to localStorage
+            // Save to localStorage
             localStorage.setItem("userTheme", JSON.stringify({ themeData: themeVars }));
         }
 
-        // 4️⃣ Create the theme selector button
-        const themeBtn = document.createElement("button");
-        themeBtn.textContent = "Select Theme";
-        themeBtn.className = "tb-theme-cycle-btn";
-        container.appendChild(themeBtn);
-
-        // 5️⃣ Load previously selected theme or default
-        const initialTheme = savedThemeObj.selectedTheme || "Default";
-        applyTheme(initialTheme);
-
-        // 6️⃣ Cycle through themes on button click
-        const themeKeys = Object.keys(themes);
-        let currentIndex = themeKeys.indexOf(initialTheme);
         themeBtn.addEventListener("click", () => {
             currentIndex = (currentIndex + 1) % themeKeys.length;
             applyTheme(themeKeys[currentIndex]);
         });
+
+        container.appendChild(themeBtn);
     }
 
     // Build theme colors section
