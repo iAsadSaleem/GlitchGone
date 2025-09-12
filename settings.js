@@ -528,10 +528,6 @@
                 })
             );
 
-            contentWrapper.appendChild(
-                createSection("🔘 Button Style", buildButtonStyleSection)
-            );
-
             // New Tab 1: Login Page Settings with Door Icon
             contentWrapper.appendChild(
                 createSection("Login Page Settings", (section) => {
