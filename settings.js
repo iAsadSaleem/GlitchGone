@@ -311,26 +311,40 @@
         let themeKeys = Object.keys(themes);
         let currentIndex = -1;
 
-        function applyTheme(themeKey) {
-            const themeVars = themes[themeKey];
-            Object.keys(themeVars).forEach(varName => {
-                if (themeVars[varName] && themeVars[varName] !== "undefined") {
-                    document.body.style.setProperty(varName, themeVars[varName]);
+        function applyTheme(themeName, themeVars) {
+            const vars = themeVars || themes[themeName];
+            if (!vars) return;
+
+            Object.entries(vars).forEach(([key, value]) => {
+                if (value && value !== "undefined") {
+                    document.body.style.setProperty(key, value);
                 }
             });
 
-            themeBtn.textContent = themeKey;
-            themeBtn.style.backgroundColor = themeVars["--primary-color"];
+            // Update button text to show the current theme
+            themeBtn.textContent = themeName;
+            themeBtn.style.backgroundColor = vars["--primary-color"] || "#007bff";
             themeBtn.style.color = "#fff";
 
-            // Save to localStorage
-            localStorage.setItem("userTheme", JSON.stringify({ themeData: themeVars }));
+            // Save updated theme in localStorage
+            const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+            savedThemeObj.themeData = vars;
+            savedThemeObj.selectedTheme = themeName;
+            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
         }
+
+        // ✅ On page load: apply saved theme and show its name
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        if (savedThemeObj.selectedTheme && themes[savedThemeObj.selectedTheme]) {
-            applyTheme(savedThemeObj.selectedTheme);
-            currentIndex = themeKeys.indexOf(savedThemeObj.selectedTheme);
+        if (savedThemeObj.selectedTheme) {
+            applyTheme(savedThemeObj.selectedTheme, savedThemeObj.themeData);
+
+            // Update currentIndex only if it's a predefined theme
+            if (themeKeys.includes(savedThemeObj.selectedTheme)) {
+                currentIndex = themeKeys.indexOf(savedThemeObj.selectedTheme);
+            }
         }
+
+        // Cycle through themes on button click
         themeBtn.addEventListener("click", () => {
             currentIndex = (currentIndex + 1) % themeKeys.length;
             applyTheme(themeKeys[currentIndex]);
