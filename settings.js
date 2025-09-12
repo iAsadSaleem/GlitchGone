@@ -453,6 +453,62 @@
         wrapper.appendChild(select);
     }
 
+    // Login Page settings
+    function createLoginColorPicker(labelText, cssVar) {
+        const wrapper = document.createElement("div");
+        wrapper.className = "tb-color-picker-wrapper";
+
+        const label = document.createElement("label");
+        label.textContent = labelText;
+        label.className = "tb-color-picker-label";
+
+        // Get stored color from themeData
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        const themeData = savedThemeObj.themeData || {};
+        let storedColor = themeData[cssVar] || "#007bff";
+
+        const colorInput = document.createElement("input");
+        colorInput.type = "color";
+        colorInput.value = storedColor;
+        colorInput.className = "tb-color-input";
+
+        const colorCode = document.createElement("span");
+        colorCode.className = "tb-color-code";
+        colorCode.textContent = storedColor;
+
+        // Copy color code on click
+        colorCode.addEventListener("click", () => {
+            navigator.clipboard.writeText(colorCode.textContent);
+            colorCode.style.background = "#c8e6c9";
+            setTimeout(() => (colorCode.style.background = "#f0f0f0"), 800);
+        });
+
+        // Apply color on input
+        colorInput.addEventListener("input", () => {
+            const color = colorInput.value;
+            colorCode.textContent = color;
+
+            // Apply to CSS
+            document.body.style.setProperty(cssVar, color);
+
+            // Save to userTheme.themeData
+            const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+            savedThemeObj.themeData = savedThemeObj.themeData || {};
+            savedThemeObj.themeData[cssVar] = color;
+            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+        });
+
+        // Apply initial color
+        document.body.style.setProperty(cssVar, storedColor);
+
+        wrapper.appendChild(label);
+        wrapper.appendChild(colorInput);
+        wrapper.appendChild(colorCode);
+
+        return wrapper;
+    }
+
+
     // Create Builder UI
     let headerObserver = null;
     function createBuilderUI(controlsContainer) {
@@ -531,7 +587,11 @@
             // New Tab 1: Login Page Settings with Door Icon
             contentWrapper.appendChild(
                 createSection("Login Page Settings", (section) => {
-                    // You can add your login page settings inputs here
+                    // Add color pickers
+                    section.appendChild(createLoginColorPicker("Login Card BG Gradient", "--login-card-bg-gradient"));
+                    section.appendChild(createLoginColorPicker("Login Link Text Color", "--login-link-text-color"));
+                    section.appendChild(createLoginColorPicker("Login Button BG Gradient", "--login-button-bg-gradient"));
+                    section.appendChild(createLoginColorPicker("Login Button BG Color", "--login-button-bg-color"));
                 }, "🚪") // Door emoji
             );
 
