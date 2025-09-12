@@ -42,7 +42,7 @@
                 });
             }
             // Save whole theme object in localStorage (for offline use)
-            //localStorage.setItem("userTheme", JSON.stringify(theme));
+            localStorage.setItem("userTheme", JSON.stringify(theme));
 
         } catch (err) {
             console.error("[ThemeBuilder] Failed to load user theme:", err);
@@ -357,23 +357,19 @@
 
     // Apply saved settings
     function applySavedSettings() {
-        const colorMap = [
-            { key: "primaryColor", cssVar: "--primary-color" },
-            { key: "primaryBgColor", cssVar: "--primary-bg-color" },
-            { key: "sidebarBgColor", cssVar: "--sidebar-bg-color" },
-        ];
-        colorMap.forEach(c => {
-            const val = localStorage.getItem(c.key);
-            if (val) document.body.style.setProperty(c.cssVar, val);
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        const themeData = savedThemeObj.themeData || {};
+
+        Object.entries(themeData).forEach(([key, value]) => {
+            if (value && value !== "undefined") {
+                document.body.style.setProperty(key, value);
+            }
         });
 
+        // Apply sidebar text color if stored
         const sidebarText = localStorage.getItem("sidebarTextColor");
         if (sidebarText) applySidebarTextColor(sidebarText);
-
-        const sidebarTabsBg = localStorage.getItem("sidebarTabsBgColor");
-        if (sidebarTabsBg) document.body.style.setProperty("--sidebar-menu-bg", sidebarTabsBg);
     }
-
     // Find header controls container
     function findControlsContainer() {
         const header = document.querySelector('header.hl_header') || document.querySelector('header');
