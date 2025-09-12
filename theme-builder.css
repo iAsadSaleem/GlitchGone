@@ -114,11 +114,43 @@
 }
 .tb-section-content { display: none; padding: 15px; background: #fff; }
 
-/* Color picker */
-.tb-color-picker-wrapper { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-.tb-color-picker-label { min-width: 150px; font-weight: bold; }
-.tb-color-input { width: 50px; height: 40px; border: none; cursor: pointer; }
-.tb-color-code { font-family: monospace; font-size: 14px; cursor: pointer; color: #333; background: #f0f0f0; padding: 5px 10px; border-radius: 4px; }
+/* Wrapper for color picker */
+.tb-color-picker-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* space between input and code */
+    margin-bottom: 12px;
+}
+
+/* Label */
+.tb-color-picker-label {
+    flex-shrink: 0;
+    width: 180px; /* optional fixed width */
+    font-weight: 500;
+}
+
+/* Color input */
+.tb-color-input {
+    width: 40px;
+    height: 30px;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    flex-shrink: 0;
+    border-radius: 4px;
+}
+
+/* Color code span */
+.tb-color-code {
+    padding: 4px 8px;
+    background: #f0f0f0;
+    border-radius: 4px;
+    font-size: 14px;
+    min-width: 60px;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+}
 
 /* Tooltip */
 .tb-tooltip {
