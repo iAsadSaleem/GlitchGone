@@ -666,13 +666,13 @@
             });
 
             // Reset Changes Button
-            const resetBtn = document.createElement("button");
-            resetBtn.textContent = "Reset Changes";
-            resetBtn.className = "tb-reset-btn";
-            resetBtn.addEventListener("click", resetThemeChanges);
+            //const resetBtn = document.createElement("button");
+            //resetBtn.textContent = "Reset Changes";
+            //resetBtn.className = "tb-reset-btn";
+            //resetBtn.addEventListener("click", resetThemeChanges);
 
             buttonsWrapper.appendChild(applyBtn);
-            buttonsWrapper.appendChild(resetBtn);
+            //buttonsWrapper.appendChild(resetBtn);
             contentWrapper.appendChild(buttonsWrapper);
 
             document.body.appendChild(drawer);
