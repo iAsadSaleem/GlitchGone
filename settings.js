@@ -188,9 +188,12 @@
         label.textContent = labelText;
         label.className = "tb-color-picker-label";
 
-        // Get stored color or fallback to default
-        let storedColor = localStorage.getItem(storageKey);
-        if (!storedColor || storedColor === "undefined") storedColor = "#007bff";
+        // 1️⃣ Load current color from saved themeData or CSS variable
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        const themeData = savedThemeObj.themeData || {};
+        let storedColor = themeData[cssVar]
+            || getComputedStyle(document.body).getPropertyValue(cssVar).trim()
+            || "#007bff"; // fallback
 
         const colorInput = document.createElement("input");
         colorInput.type = "color";
@@ -199,27 +202,31 @@
 
         const colorCode = document.createElement("span");
         colorCode.className = "tb-color-code";
-        colorCode.textContent = colorInput.value;
+        colorCode.textContent = storedColor;
 
         // Copy color code to clipboard on click
         colorCode.addEventListener("click", () => {
-            navigator.clipboard.writeText(colorCode.textContent).then(() => {
-                colorCode.style.background = "#c8e6c9";
-                setTimeout(() => (colorCode.style.background = "#f0f0f0"), 800);
-            });
+            navigator.clipboard.writeText(colorCode.textContent);
+            colorCode.style.background = "#c8e6c9";
+            setTimeout(() => (colorCode.style.background = "#f0f0f0"), 800);
         });
 
-        // Apply color changes
+        // Apply color changes live
         colorInput.addEventListener("input", () => {
             const color = colorInput.value;
-
-            // Only apply valid colors
-            if (!color || color === "undefined") return;
-
             colorCode.textContent = color;
-            localStorage.setItem(storageKey, color);
+
+            // Apply to CSS
             if (cssVar) document.body.style.setProperty(cssVar, color);
             if (applyFn) applyFn(color);
+
+            // Save to userTheme.themeData
+            savedThemeObj.themeData = savedThemeObj.themeData || {};
+            savedThemeObj.themeData[cssVar] = color;
+            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+
+            // Optional: also save separate key if needed
+            if (storageKey) localStorage.setItem(storageKey, color);
         });
 
         // Apply initial color
