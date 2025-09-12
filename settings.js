@@ -590,6 +590,43 @@
         return wrapper;
     }
 
+    function createLoginLogoInput(labelText, cssVar) {
+        const wrapper = document.createElement("div");
+        wrapper.className = "tb-color-picker-wrapper"; // you can reuse wrapper style
+
+        const label = document.createElement("label");
+        label.textContent = labelText;
+        label.className = "tb-color-picker-label";
+        wrapper.appendChild(label);
+
+        const input = document.createElement("input");
+        input.type = "text";
+        input.placeholder = "Paste logo URL here";
+        input.className = "tb-logo-input";
+
+        // Load saved value from userTheme
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        const themeData = savedThemeObj.themeData || {};
+        const savedLogo = themeData[cssVar] ? themeData[cssVar].replace(/^url\(["']?/, '').replace(/["']?\)$/, '') : '';
+        input.value = savedLogo;
+
+        // Update CSS variable on input change
+        input.addEventListener("input", () => {
+            const url = input.value.trim();
+            const value = url ? `url(${url})` : "";
+            document.body.style.setProperty(cssVar, value);
+
+            // Save to localStorage
+            const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+            savedThemeObj.themeData = savedThemeObj.themeData || {};
+            savedThemeObj.themeData[cssVar] = value;
+            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+        });
+
+        wrapper.appendChild(input);
+        return wrapper;
+    }
+
     // Create Builder UI
     let headerObserver = null;
     function createBuilderUI(controlsContainer) {
@@ -675,6 +712,7 @@
                     section.appendChild(createLoginColorPicker("Login Button BG Gradient", "--login-button-bg-gradient"));
                     section.appendChild(createLoginColorPicker("Login Button BG Color", "--login-button-bg-color"));
                     section.appendChild(createLoginColorPicker("Login Card Backgroud Color", "--login-card-bg-color"));
+                    section.appendChild(createLoginLogoInput("Logo URL", "--login-company-logo"));
                 }, "🚪") // Door emoji
             );
 
