@@ -592,6 +592,7 @@
                     section.appendChild(createLoginColorPicker("Login Link Text Color", "--login-link-text-color"));
                     section.appendChild(createLoginColorPicker("Login Button BG Gradient", "--login-button-bg-gradient"));
                     section.appendChild(createLoginColorPicker("Login Button BG Color", "--login-button-bg-color"));
+                    section.appendChild(createLoginColorPicker("Login Card Backgroud Color", "--login-card-bg-color"));
                 }, "🚪") // Door emoji
             );
 
