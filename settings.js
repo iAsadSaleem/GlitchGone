@@ -28,7 +28,9 @@
             if (!theme.isActive) return;
             if (theme.themeData) {
                 Object.entries(theme.themeData).forEach(([key, value]) => {
-                    document.body.style.setProperty(key, value);
+                    if (value && value !== "undefined") {
+                        document.body.style.setProperty(key, value);
+                    }
                 });
             }
             // Save whole theme object in localStorage (for offline use)
@@ -43,7 +45,9 @@
                 const theme = JSON.parse(cached);
                 if (theme.themeData) {
                     Object.entries(theme.themeData).forEach(([key, value]) => {
-                        document.body.style.setProperty(key, value);
+                        if (value && value !== "undefined") {
+                            document.body.style.setProperty(key, value);
+                        }
                     });
                 }
                 console.log("Applied cached theme from localStorage");
@@ -326,9 +330,12 @@
         });
 
         // Load saved theme
-        const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        Object.keys(savedTheme).forEach(key => {
-            document.body.style.setProperty(key, savedTheme[key]);
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        const themeData = savedThemeObj.themeData || {};
+        Object.entries(themeData).forEach(([key, value]) => {
+            if (value && value !== "undefined") {
+                document.body.style.setProperty(key, value);
+            }
         });
 
         container.appendChild(themeBtn);
@@ -336,8 +343,8 @@
 
     // Build theme colors section
     function buildThemeColorsSection(container) {
-        const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        const themeData = savedTheme.themeData || {};
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        const themeData = savedThemeObj.themeData || {};
 
         const editableColors = [
             "--primary-color",
