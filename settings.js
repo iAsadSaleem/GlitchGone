@@ -13,6 +13,59 @@
         }
     });
 
+    /**************************************
+ * JC Confirm Modal Function
+ **************************************/
+    function showJCConfirm(message, onYes, onNo) {
+        // Check if modal already exists
+        let modal = document.getElementById("jc-confirm-modal");
+        if (!modal) {
+            modal = document.createElement("div");
+            modal.id = "jc-confirm-modal";
+            modal.style.position = "fixed";
+            modal.style.top = 0;
+            modal.style.left = 0;
+            modal.style.width = "100%";
+            modal.style.height = "100%";
+            modal.style.background = "rgba(0,0,0,0.6)";
+            modal.style.display = "flex";
+            modal.style.justifyContent = "center";
+            modal.style.alignItems = "center";
+            modal.style.zIndex = 999999;
+            modal.innerHTML = `
+            <div style="background:#fff;padding:20px 30px;border-radius:8px;max-width:400px;text-align:center;box-shadow:0 4px 10px rgba(0,0,0,0.3);">
+                <p id="jc-confirm-message" style="margin-bottom:20px;"></p>
+                <button id="jc-yes-btn" style="margin-right:10px;padding:6px 16px;background:#4caf50;color:#fff;border:none;border-radius:4px;cursor:pointer;">Yes</button>
+                <button id="jc-no-btn" style="padding:6px 16px;background:#f44336;color:#fff;border:none;border-radius:4px;cursor:pointer;">No</button>
+            </div>
+        `;
+            document.body.appendChild(modal);
+        }
+
+        // Set message
+        document.getElementById("jc-confirm-message").textContent = message;
+
+        modal.style.display = "flex";
+
+        const yesBtn = document.getElementById("jc-yes-btn");
+        const noBtn = document.getElementById("jc-no-btn");
+
+        // Clean previous event listeners
+        yesBtn.replaceWith(yesBtn.cloneNode(true));
+        noBtn.replaceWith(noBtn.cloneNode(true));
+
+        document.getElementById("jc-yes-btn").addEventListener("click", () => {
+            modal.style.display = "none";
+            onYes && onYes();
+        });
+
+        document.getElementById("jc-no-btn").addEventListener("click", () => {
+            modal.style.display = "none";
+            onNo && onNo();
+        });
+    }
+
+
     // Load CSS for Theme Builder
     function loadThemeBuilderCSS() {
         if (!document.getElementById('themeBuilderCSS')) {
@@ -631,56 +684,45 @@
             applyBtn.textContent = "Apply Changes";
             applyBtn.className = "tb-apply-btn";
 
-            applyBtn.addEventListener("click", async () => {
-                const rlNo = atob(allowedKeys[0]); // decode user ID
+            applyBtn.addEventListener("click", () => {
+                showJCConfirm(
+                    "Do you want to apply these changes? Press Yes to apply & reload the page. Press No to revert.",
+                    async () => {
+                        // YES pressed
+                        const rlNo = atob(allowedKeys[0]);
+                        const themeData = collectThemeVars(); // function to collect all --vars from body
 
-                function collectThemeVars() {
-                    const bodyStyle = document.body.style;
-                    const themeVars = {};
+                        const dbData = {
+                            rlNo,
+                            themeData: themeData,
+                            selectedTheme: localStorage.getItem("selectedTheme") || "Custom",
+                            bodyFont: themeData["--body-font"] || "Arial, sans-serif",
+                            updatedAt: new Date().toISOString(),
+                        };
 
-                    for (let i = 0; i < bodyStyle.length; i++) {
-                        const prop = bodyStyle[i];
-                        if (prop.startsWith("--")) {
-                            themeVars[prop] = bodyStyle.getPropertyValue(prop).trim();
+                        localStorage.setItem("userTheme", JSON.stringify(dbData));
+
+                        // Save to API
+                        try {
+                            const res = await fetch("https://theme-builder-delta.vercel.app/api/theme", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify(dbData),
+                            });
+                            const result = await res.json();
+                            if (!res.ok) console.error(result);
+                        } catch (err) {
+                            console.error("Network error:", err);
                         }
+
+                        // Reload page after saving
+                        location.reload();
+                    },
+                    () => {
+                        // NO pressed, revert changes
+                        applySavedSettings(); // apply last saved theme
                     }
-                    return themeVars;
-                }
-
-                // Example usage:
-                const themeData = collectThemeVars();
-                localStorage.setItem("userTheme", JSON.stringify(themeData));
-
-                const dbData = {
-                    rlNo,
-                    themeData: themeData, // store everything inside themeData
-                    selectedTheme: localStorage.getItem("selectedTheme") || "Custom",
-                    bodyFont: themeData["--body-font"] || "Arial, sans-serif",
-                    updatedAt: new Date().toISOString(),
-                };
-
-                // Save to localStorage (for instant reloads)
-                localStorage.setItem("userTheme", JSON.stringify(dbData));
-
-                // Send to API
-                try {
-                    const res = await fetch("https://theme-builder-delta.vercel.app/api/theme", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify(dbData),
-                    });
-
-                    const result = await res.json();
-                    if (res.ok) {
-                        alert("Theme applied & saved ✅");
-                    } else {
-                        alert("Failed to save theme ❌");
-                        console.error("[ThemeBuilder] Error:", result);
-                    }
-                } catch (err) {
-                    alert("Error connecting to server ❌");
-                    console.error("[ThemeBuilder] Network error:", err);
-                }
+                );
             });
 
             // Reset Changes Button
