@@ -115,7 +115,11 @@
     color: var(--sidebar-menu-color) !important;
     cursor: pointer;
 }
-.tb-section-content { display: none; padding: 15px; background: #fff; }
+.tb-section-content {
+    display: none;
+    padding: 0px 1px 2px 4px;
+    background: #fff;
+}
 
 /* Wrapper for color picker */
 .tb-color-picker-wrapper {
@@ -467,11 +471,11 @@
     border-radius: 23px;
 }
 .tb-drawer-card {
-    background-color: #ffffff; /* card background */
-    margin: 12px 12px 0 12px;
+    background-color: #ffffff;
+    margin: 2px 2px 1px 1px;
     border-radius: 27px;
-    padding: 8px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    padding: 10px 6px 0px 7px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
     display: flex;
     flex-direction: column;
     height: 421px;
