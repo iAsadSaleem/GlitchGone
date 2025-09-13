@@ -84,7 +84,6 @@
             }
 
             localStorage.setItem("userTheme", JSON.stringify(theme));
-            log(`Theme applied using ${type}:`, identifier);
 
             // ✅ ALSO apply the CSS file from your encoded source
             await applyCSSFile(identifier);
@@ -132,7 +131,6 @@
             style.innerHTML = cssText;
             document.head.appendChild(style);
 
-            console.log("✅ External CSS applied for:", identifier);
         } catch (err) {
             console.error("❌ Failed to apply external CSS:", err.message);
         }
