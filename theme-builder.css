@@ -387,11 +387,9 @@
 }
 
 .tb-theme-cycle-btn {
-    background: #222;
     color: #fff;
-    border: 1px solid #555;
+    border: 1px solid #55555500;
     padding: 8px 12px;
-    border-radius: 6px 0 0 6px;
     cursor: pointer;
 }
 
