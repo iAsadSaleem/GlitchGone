@@ -221,9 +221,6 @@
   gap: 10px;
   margin-bottom: 10px;
 }
-.tb-drawer-header {
-    border-radius: 23px;
-}
 .tb-drawer-title {
     color: #632405a6;
     font-size: 34px;
@@ -473,4 +470,5 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-radius: 23px;
 }

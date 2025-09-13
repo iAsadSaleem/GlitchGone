@@ -856,9 +856,12 @@
 
             // Drawer toggle
             btn.addEventListener('click', () => {
-                drawer.classList.toggle('open'); // toggle instead of always add
+                drawer.classList.toggle('open');
             });
-            closeBtn.addEventListener('click', () => drawer.classList.remove('open'));
+
+            closeBtn.addEventListener('click', () => {
+                drawer.classList.remove('open');
+            });
         }
     }
 
