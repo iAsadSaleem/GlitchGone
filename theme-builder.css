@@ -402,13 +402,14 @@
 }
 
 .themeArrowBtn {
-    background: #222;
-    color: #fff;
-    border: 1px solid #555;
-    border-left: none;
-    padding: 8px 10px;
-    border-radius: 0 6px 6px 0;
+    position: absolute;
+    background: #fffdfd;
+    color: #000000;
+    padding: -1px -1px;
+    border-radius: 10px;
     cursor: pointer;
+    text-align: right;
+    right: 10px;
 }
 
 .themeDropdownBox {

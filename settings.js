@@ -722,7 +722,7 @@
             const themeBtnWrapper = document.createElement("div");
             themeBtnWrapper.style.padding = "0 12px";
             themeBtnWrapper.style.position = "relative";
-            themeBtnWrapper.style.left = "-11px";
+            themeBtnWrapper.style.left = "1px";
             themeBtnWrapper.style.top = "31px";
             buildThemeSelectorSection(themeBtnWrapper);
             drawer.appendChild(themeBtnWrapper);
