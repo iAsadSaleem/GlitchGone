@@ -2,16 +2,8 @@
     const DEBUG = true;
     const log = (...args) => { if (DEBUG) console.log('[ThemeBuilder]', ...args); };
 
-    const allowedKeys = [btoa("0-373-489")];
+    let headerObserver = null;
     const MAX_ATTEMPTS = 40;
-
-    const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-    const themeData = savedThemeObj.themeData || {};
-    Object.entries(themeData).forEach(([key, value]) => {
-        if (value && value !== "undefined") {
-            document.body.style.setProperty(key, value);
-        }
-    });
 
     /**************************************
  * JC Confirm Modal Function
@@ -61,9 +53,6 @@
             onNo && onNo();
         });
     }
-
-
-
     // Load CSS for Theme Builder
     function loadThemeBuilderCSS() {
         if (!document.getElementById('themeBuilderCSS')) {
@@ -77,13 +66,14 @@
     loadThemeBuilderCSS();
 
     // NEW: Fetch user theme from DB and apply
-    async function loadUserThemeFromDB(rlNo) {
+    async function loadUserThemeFromDB(identifier, type = "rlno") {
         try {
-            const res = await fetch(`https://theme-builder-delta.vercel.app/api/theme/${rlNo}`);
-            if (!res.ok) throw new Error('Failed to fetch theme');
+            const res = await fetch(`https://theme-builder-delta.vercel.app/api/theme/${identifier}?type=${type}`);
+            if (!res.ok) throw new Error(`Failed to fetch theme for ${type}: ${identifier}`);
 
             const theme = await res.json();
             if (!theme.isActive) return;
+
             if (theme.themeData) {
                 Object.entries(theme.themeData).forEach(([key, value]) => {
                     if (value && value !== "undefined") {
@@ -91,13 +81,14 @@
                     }
                 });
             }
-            // Save whole theme object in localStorage (for offline use)
+
             localStorage.setItem("userTheme", JSON.stringify(theme));
+            log(`Theme applied using ${type}:`, identifier);
 
         } catch (err) {
             console.error("[ThemeBuilder] Failed to load user theme:", err);
 
-            // ✅ fallback: load from localStorage if API fails
+            // ✅ fallback from cache
             const cached = localStorage.getItem("userTheme");
             if (cached) {
                 const theme = JSON.parse(cached);
@@ -108,11 +99,10 @@
                         }
                     });
                 }
-                console.log("Applied cached theme from localStorage");
+                log("Applied cached theme from localStorage");
             }
         }
     }
-
     // Create collapsible sections
     // Utility to create section with optional icon
     function createSection(title, contentBuilder, icon = null) {
@@ -460,32 +450,6 @@
         return Array.from(controls).sort((a, b) => b.childElementCount - a.childElementCount)[0];
     }
 
-    // Reset Theme Changes Function
-    function resetThemeChanges() {
-        const keysToRemove = [
-            "primaryBgColor",
-            "primaryColor",
-            "sidebarTabsTextColor",
-            "sidebarTabsBgColor",
-            "sidebarBgColor",
-            "selectedTheme" // remove theme cycle selection too
-        ];
-
-        keysToRemove.forEach(key => localStorage.removeItem(key));
-
-        // Reset CSS variables to defaults
-        document.body.style.removeProperty("--primary-bg-color");
-        document.body.style.removeProperty("--primary-color");
-        document.body.style.removeProperty("--sidebar-menu-color");
-        document.body.style.removeProperty("--sidebar-menu-bg");
-        document.body.style.removeProperty("--sidebar-bg-color");
-        document.body.style.removeProperty("--dark-color");
-        document.body.style.removeProperty("--second-color");
-
-        // Refresh the drawer UI to reflect reset
-        location.reload();
-    }
-
     function buildFontFamilySelector(wrapper) {
         const label = document.createElement("label");
         label.textContent = "Choose Font Family";
@@ -628,7 +592,6 @@
     }
 
     // Create Builder UI
-    let headerObserver = null;
     function createBuilderUI(controlsContainer) {
         if (!controlsContainer || document.getElementById("hl_header--themebuilder-icon")) return;
 
@@ -637,17 +600,21 @@
         btn.href = "javascript:void(0);";
         btn.id = "hl_header--themebuilder-icon";
         btn.className = "tb-btn-icon";
-        btn.innerHTML = '<span style="font-size:18px;">🖌️</span>'; // Fixed syntax
+        btn.innerHTML = '<span style="font-size:18px;">🖌️</span>';
         initTooltip(btn, "Theme Builder");
         controlsContainer.appendChild(btn);
 
-        const rlNo = atob(allowedKeys[0]); // decode user ID
-        loadUserThemeFromDB(rlNo).then(() => {
-            applySavedSettings(); // Apply local storage settings (if any)
-        });
+        // 🔹 Load theme (prefer rlno, fallback to email)
+        const rlNo = localStorage.getItem("rlno") ? atob(localStorage.getItem("rlno")) : null;
+        const email = localStorage.getItem("userEmail") ? atob(localStorage.getItem("userEmail")) : null;
+
+        if (rlNo) {
+            loadUserThemeFromDB(rlNo, "rlno").then(() => applySavedSettings());
+        } else if (email) {
+            loadUserThemeFromDB(email, "email").then(() => applySavedSettings());
+        }
 
         if (!document.getElementById('themeBuilderDrawer')) {
-            // Drawer
             const drawer = document.createElement("div");
             drawer.id = "themeBuilderDrawer";
             drawer.className = "tb-drawer";
@@ -659,14 +626,13 @@
             const title = document.createElement('div');
             title.className = "tb-drawer-title";
 
-            // Create spans for each word
             const themeSpan = document.createElement('span');
             themeSpan.textContent = 'Theme ';
-            themeSpan.style.color = '#ffffff'; // green color
+            themeSpan.style.color = '#ffffff';
 
             const builderSpan = document.createElement('span');
             builderSpan.textContent = 'Builder';
-            builderSpan.style.color = '#E15554'; // red color
+            builderSpan.style.color = '#E15554';
 
             const closeBtn = document.createElement('button');
             closeBtn.innerHTML = '&times;';
@@ -679,18 +645,16 @@
             headerBar.appendChild(closeBtn);
             drawer.appendChild(headerBar);
 
-           
-
-            // Theme Selector Button
+            // Theme Selector
             const themeBtnWrapper = document.createElement("div");
-            themeBtnWrapper.style.padding = "0 12px"; // side padding
-            themeBtnWrapper.style.position = "relative"; // position
-            themeBtnWrapper.style.left = "-11px"; // left
-            themeBtnWrapper.style.top = "31px"; // top
+            themeBtnWrapper.style.padding = "0 12px";
+            themeBtnWrapper.style.position = "relative";
+            themeBtnWrapper.style.left = "-11px";
+            themeBtnWrapper.style.top = "31px";
             buildThemeSelectorSection(themeBtnWrapper);
             drawer.appendChild(themeBtnWrapper);
 
-            // Drawer Content
+            // Content
             const contentWrapper = document.createElement('div');
             contentWrapper.className = "tb-drawer-content";
             drawer.appendChild(contentWrapper);
@@ -703,31 +667,27 @@
                 })
             );
 
-            // New Tab 1: Login Page Settings with Door Icon
             contentWrapper.appendChild(
                 createSection("Login Page Settings", (section) => {
-                    // Add color pickers
                     section.appendChild(createLoginColorPicker("Login Card BG Gradient", "--login-card-bg-gradient"));
                     section.appendChild(createLoginColorPicker("Login Link Text Color", "--login-link-text-color"));
                     section.appendChild(createLoginColorPicker("Login Button BG Gradient", "--login-button-bg-gradient"));
                     section.appendChild(createLoginColorPicker("Login Button BG Color", "--login-button-bg-color"));
                     section.appendChild(createLoginColorPicker("Login Card Backgroud Color", "--login-card-bg-color"));
                     section.appendChild(createLoginLogoInput("Logo URL", "--login-company-logo"));
-                }, "🚪") // Door emoji
+                }, "🚪")
             );
 
-            // New Tab 2: Advance Settings with Database Icon
             contentWrapper.appendChild(
                 createSection("Advance Settings", (section) => {
-                    // Add your advanced settings inputs here
-                }, "🗄️") // Database emoji
+                    // Add more advanced options later
+                }, "🗄️")
             );
 
-            // Buttons Wrapper for Apply & Reset
+            // Buttons
             const buttonsWrapper = document.createElement("div");
-            buttonsWrapper.className = "tb-buttons-wrapper"; // Use CSS class instead of inline styles
+            buttonsWrapper.className = "tb-buttons-wrapper";
 
-            // Apply Changes Button
             const applyBtn = document.createElement("button");
             applyBtn.textContent = "Apply Changes";
             applyBtn.className = "tb-apply-btn";
@@ -737,9 +697,9 @@
                     "Do you want to apply these changes? Press Yes to apply & reload the page. Press No to revert.",
                     async () => {
                         // YES pressed
-                        const rlNo = atob(allowedKeys[0]);
+                        const rlNo = localStorage.getItem("rlno") ? atob(localStorage.getItem("rlno")) : null;
+                        const email = localStorage.getItem("userEmail") ? atob(localStorage.getItem("userEmail")) : null;
 
-                        // Collect all CSS variables starting with --
                         const collectThemeVars = () => {
                             const bodyStyle = document.body.style;
                             const themeVars = {};
@@ -756,16 +716,15 @@
 
                         const dbData = {
                             rlNo,
-                            themeData: themeData,
+                            email,
+                            themeData,
                             selectedTheme: localStorage.getItem("selectedTheme") || "Custom",
                             bodyFont: themeData["--body-font"] || "Arial, sans-serif",
                             updatedAt: new Date().toISOString(),
                         };
 
-                        // Save theme locally
                         localStorage.setItem("userTheme", JSON.stringify(dbData));
 
-                        // Save to API
                         try {
                             const res = await fetch("https://theme-builder-delta.vercel.app/api/theme", {
                                 method: "POST",
@@ -780,11 +739,10 @@
                             console.error("[ThemeBuilder] Network error:", err);
                         }
 
-                        // Reload page to apply fully
                         location.reload();
                     },
                     () => {
-                        // NO pressed, revert changes
+                        // NO pressed → revert
                         const savedThemeStr = localStorage.getItem("userTheme");
                         if (savedThemeStr) {
                             const savedTheme = JSON.parse(savedThemeStr).themeData;
@@ -795,33 +753,26 @@
                     }
                 );
             });
-            // Reset Changes Button
-            //const resetBtn = document.createElement("button");
-            //resetBtn.textContent = "Reset Changes";
-            //resetBtn.className = "tb-reset-btn";
-            //resetBtn.addEventListener("click", resetThemeChanges);
 
             buttonsWrapper.appendChild(applyBtn);
-            //buttonsWrapper.appendChild(resetBtn);
             contentWrapper.appendChild(buttonsWrapper);
-
             document.body.appendChild(drawer);
 
-            // Drawer open/close events
+            // Drawer toggle
             btn.addEventListener('click', () => drawer.classList.add('open'));
             closeBtn.addEventListener('click', () => drawer.classList.remove('open'));
-
         }
     }
 
     // Initialize Theme Builder
     function initThemeBuilder(attempts = 0) {
         const rlno = localStorage.getItem('rlno');
-        if (!rlno) {
+        const email = localStorage.getItem('userEmail');
+
+        if (!rlno && !email) {
             if (attempts < MAX_ATTEMPTS) setTimeout(() => initThemeBuilder(attempts + 1), 200);
             return;
         }
-        if (!allowedKeys.includes(rlno)) return;
 
         const controlsContainer = findControlsContainer();
         if (!controlsContainer) {
