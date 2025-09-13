@@ -469,7 +469,7 @@
 .tb-drawer-card {
     background-color: #ffffff; /* card background */
     margin: 12px 12px 0 12px;
-    border-radius: 8px;
+    border-radius: 27px;
     padding: 8px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.3);
     display: flex;
