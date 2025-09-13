@@ -842,7 +842,7 @@
                     isDragging = false;
                     document.body.style.userSelect = "";
                 });
-            })(drawer, headerBar); 
+            })(drawer, drawerTitleWrapper); 
 
             // Drawer toggle
             btn.addEventListener('click', () => {
