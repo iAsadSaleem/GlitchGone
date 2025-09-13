@@ -727,7 +727,7 @@
                 createSection("🎨 General Settings", (section) => {
                     buildThemeColorsSection(section);
                     buildFontFamilySelector(section);
-                })
+                }, "", true) // <-- true = open by default
             );
 
             contentWrapper.appendChild(
