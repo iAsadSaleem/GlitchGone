@@ -18,7 +18,7 @@
 }
 
     #themeBuilderDrawer.open {
-        border-radius: 20px;
+        border-radius: 8px;
         right: 10px;
     }
 /* Drawer header */
@@ -185,9 +185,10 @@
   border-top: 1px solid #ddd;
 }
 
-.tb-section-content.open {
-  display: block;
-}
+    .tb-section-content.open {
+        display: block;
+        border: solid 1px #e7dede;
+    }
 
 /* Optional styling for color pickers */
 .tb-color-picker-wrapper {
@@ -346,7 +347,7 @@
     text-align: center;
     margin: 12px auto;
     top: -13px;
-    border-radius: 27px !important;
+    border-radius: 8px !important;
     background: var(--sidebar-bg-color) !important;
     position: relative;
 }
@@ -473,7 +474,7 @@
 .tb-drawer-card {
     background-color: #ffffff;
     margin: 2px 2px 1px 1px;
-    border-radius: 27px;
+    border-radius: 8px;
     padding: 10px 6px 0px 7px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
     display: flex;
