@@ -692,7 +692,7 @@
             drawer.id = "themeBuilderDrawer";
             drawer.className = "tb-drawer";
 
-            // Header
+            // ===== Title with Close Button =====
             const drawerTitleWrapper = document.createElement('div');
             drawerTitleWrapper.className = "tb-drawer-title-wrapper";
 
@@ -708,19 +708,19 @@
             drawerTitleWrapper.appendChild(closeBtn);
             drawer.appendChild(drawerTitleWrapper);
 
+            // ===== Card Wrapper =====
+            const cardWrapper = document.createElement('div');
+            cardWrapper.className = "tb-drawer-card";
+
             // Theme Selector
             const themeBtnWrapper = document.createElement("div");
-            themeBtnWrapper.style.padding = "0 12px";
-            themeBtnWrapper.style.position = "relative";
-            themeBtnWrapper.style.left = "1px";
-            themeBtnWrapper.style.top = "31px";
+            themeBtnWrapper.className = "tb-theme-btn-wrapper";
             buildThemeSelectorSection(themeBtnWrapper);
-            drawer.appendChild(themeBtnWrapper);
+            cardWrapper.appendChild(themeBtnWrapper);
 
-            // Content
+            // Content Wrapper (includes sections)
             const contentWrapper = document.createElement('div');
             contentWrapper.className = "tb-drawer-content";
-            drawer.appendChild(contentWrapper);
 
             // Sections
             contentWrapper.appendChild(
@@ -747,7 +747,13 @@
                 }, "🗄️")
             );
 
-            // Buttons
+            // Append contentWrapper to card
+            cardWrapper.appendChild(contentWrapper);
+
+            // Append cardWrapper to drawer
+            drawer.appendChild(cardWrapper);
+
+            // ===== Apply Button Outside Card =====
             const buttonsWrapper = document.createElement("div");
             buttonsWrapper.className = "tb-buttons-wrapper";
 
@@ -759,7 +765,6 @@
                 showJCConfirm(
                     "Do you want to apply these changes? Press Yes to apply & reload the page. Press No to revert.",
                     async () => {
-                        // YES pressed
                         const rlNo = localStorage.getItem("rlno") ? atob(localStorage.getItem("rlno")) : null;
                         const email = localStorage.getItem("userEmail") ? atob(localStorage.getItem("userEmail")) : null;
 
@@ -805,7 +810,6 @@
                         location.reload();
                     },
                     () => {
-                        // NO pressed → revert
                         const savedThemeStr = localStorage.getItem("userTheme");
                         if (savedThemeStr) {
                             const savedTheme = JSON.parse(savedThemeStr).themeData;
@@ -818,8 +822,10 @@
             });
 
             buttonsWrapper.appendChild(applyBtn);
-            contentWrapper.appendChild(buttonsWrapper);
+            drawer.appendChild(buttonsWrapper); // Outside card
             document.body.appendChild(drawer);
+
+            // ===== Make Draggable =====
             (function makeDraggable(el, handle) {
                 let isDragging = false, offsetX = 0, offsetY = 0;
 
@@ -829,7 +835,7 @@
                     offsetY = e.clientY - el.offsetTop;
                     el.style.position = "absolute";
                     el.style.zIndex = 9999;
-                    document.body.style.userSelect = "none"; // prevent text select
+                    document.body.style.userSelect = "none";
                 });
 
                 document.addEventListener("mousemove", (e) => {
@@ -842,7 +848,7 @@
                     isDragging = false;
                     document.body.style.userSelect = "";
                 });
-            })(drawer, drawerTitleWrapper); 
+            })(drawer, drawerTitleWrapper);
 
             // Drawer toggle
             btn.addEventListener('click', () => {
