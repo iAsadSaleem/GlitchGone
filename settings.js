@@ -693,30 +693,20 @@
             drawer.className = "tb-drawer";
 
             // Header
-            const headerBar = document.createElement('div');
-            headerBar.className = "tb-drawer-header";
+            const drawerTitleWrapper = document.createElement('div');
+            drawerTitleWrapper.className = "tb-drawer-title-wrapper";
 
             const title = document.createElement('div');
-            title.className = "tb-drawer-title";
-
-            const themeSpan = document.createElement('span');
-            themeSpan.textContent = 'Theme ';
-            themeSpan.style.color = '#ffffff';
-
-            const builderSpan = document.createElement('span');
-            builderSpan.textContent = 'Builder';
-            builderSpan.style.color = '#E15554';
+            title.textContent = "Theme Builder";
+            title.className = "tb-title";
 
             const closeBtn = document.createElement('button');
             closeBtn.innerHTML = '&times;';
             closeBtn.className = "tb-drawer-close";
 
-            title.appendChild(themeSpan);
-            title.appendChild(builderSpan);
-
-            headerBar.appendChild(title);
-            headerBar.appendChild(closeBtn);
-            drawer.appendChild(headerBar);
+            drawerTitleWrapper.appendChild(title);
+            drawerTitleWrapper.appendChild(closeBtn);
+            drawer.appendChild(drawerTitleWrapper);
 
             // Theme Selector
             const themeBtnWrapper = document.createElement("div");
