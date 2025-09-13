@@ -23,12 +23,13 @@
     }
 /* Drawer header */
     #themeBuilderDrawer > div:first-child {
+        font-size: 27px;
+        color: white;
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: left;
         position: relative;
         padding: 14px 16px;
-        background: var(--sidebar-menu-bg) !important;
         font-weight: 600;
     }
 
