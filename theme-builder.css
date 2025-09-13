@@ -103,13 +103,12 @@
 .tb-section {
     border: 1px solid #cccccc00;
     border-radius: 6px;
-    margin-bottom: 10px;
     overflow: hidden;
     position: relative;
     top: -12px;
 }
 .tb-section-header {
-    padding: 10px;
+    padding: 7px;
     background: var(--primary-color) !important;
     color: var(--sidebar-menu-color) !important;
     cursor: pointer;
@@ -393,7 +392,7 @@
 .tb-theme-cycle-btn {
     color: #fff;
     border: 1px solid #55555500;
-    padding: 8px 12px;
+    padding: 7px 4px;
     cursor: pointer;
 }
 
