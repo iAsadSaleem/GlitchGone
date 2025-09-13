@@ -405,13 +405,14 @@
 
 .themeArrowBtn {
     position: absolute;
-    background: #fffdfd;
-    color: #000000;
-    padding: -1px -1px;
-    border-radius: 10px;
+    background: #2a313569;
+    color: #d9cece;
+    padding: 0px 5px 0px 4px;
     cursor: pointer;
     text-align: right;
     right: 10px;
+    border: solid 1px;
+    border-radius: 14px;
 }
 
 .themeDropdownBox {
