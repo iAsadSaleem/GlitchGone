@@ -448,3 +448,29 @@
         .themeDropdownBox button:hover {
             background: #444;
         }
+
+
+.tb-drawer {
+    position: fixed; /* so it can move anywhere */
+    top: 50px;
+    right: 20px;
+    width: 320px;
+    background: #1e1e1e;
+    border: 1px solid #444;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+}
+
+    .tb-drawer.open {
+        display: block;
+    }
+
+.tb-drawer-header {
+    cursor: move; /* show draggable cursor */
+    background: #333;
+    padding: 10px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
