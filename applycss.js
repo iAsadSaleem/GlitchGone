@@ -14,17 +14,15 @@
         var url = "https://theme-builder-delta.vercel.app/api/theme/file/" + encodeURIComponent(identifier);
 
         fetch(url)
-            .then(res => res.text())  // ✅ no need for res.ok check, your API always returns Base64
-            .then(encodedCSS => {
+            .then(res => res.text())
+            .then(cssText => {
                 try {
-                    var decodedCSS = atob(encodedCSS.trim()); // decode Base64 to CSS
                     console.log("✅ CSS loaded successfully");
-
                     var style = document.createElement("style");
-                    style.innerHTML = decodedCSS;
+                    style.innerHTML = cssText;  // ⬅️ no atob, directly inject
                     document.head.appendChild(style);
                 } catch (err) {
-                    console.error("❌ Failed to decode CSS:", err.message);
+                    console.error("❌ Failed to apply CSS:", err.message);
                 }
             })
             .catch(err => console.error("❌ Fetch error:", err.message));
