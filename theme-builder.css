@@ -386,3 +386,61 @@
     width: 185px;
     height: 40px;
 }
+.themeSelectWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.tb-theme-cycle-btn {
+    background: #222;
+    color: #fff;
+    border: 1px solid #555;
+    padding: 8px 12px;
+    border-radius: 6px 0 0 6px;
+    cursor: pointer;
+}
+
+.themeArrowBtn {
+    background: #222;
+    color: #fff;
+    border: 1px solid #555;
+    border-left: none;
+    padding: 8px 10px;
+    border-radius: 0 6px 6px 0;
+    cursor: pointer;
+}
+
+.themeDropdownBox {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 999;
+    background: #333;
+    border: 1px solid #555;
+    border-radius: 6px;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    margin-top: 4px;
+}
+
+    .themeDropdownBox.show {
+        display: block;
+    }
+
+    .themeDropdownBox button {
+        display: block;
+        width: 100%;
+        background: transparent;
+        border: none;
+        color: #fff;
+        padding: 8px 12px;
+        text-align: left;
+        cursor: pointer;
+    }
+
+        .themeDropdownBox button:hover {
+            background: #444;
+        }
