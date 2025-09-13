@@ -279,9 +279,23 @@
 
     // NEW: Theme Selector Section
     function buildThemeSelectorSection(container) {
+        // Wrapper for button + arrow
+        const wrapper = document.createElement("div");
+        wrapper.className = "themeSelectWrapper";
+
+        // Main button (keeps existing behavior: cycle themes)
         const themeBtn = document.createElement("button");
         themeBtn.textContent = "Select Theme";
         themeBtn.className = "tb-theme-cycle-btn";
+
+        // Arrow button
+        const arrowBtn = document.createElement("button");
+        arrowBtn.className = "themeArrowBtn";
+        arrowBtn.innerHTML = "&#9662;"; // ▼
+
+        // Dropdown box (hidden by default)
+        const dropdownBox = document.createElement("div");
+        dropdownBox.className = "themeDropdownBox";
 
         const themes = {
             "Default": {
@@ -406,36 +420,62 @@
                 }
             });
 
-            // Update button text to show the current theme
+            // Update main button text & color
             themeBtn.textContent = themeName;
             themeBtn.style.backgroundColor = vars["--primary-color"] || "#007bff";
             themeBtn.style.color = "#fff";
 
-            // Save updated theme in localStorage
+            // Save
             const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
             savedThemeObj.themeData = vars;
             savedThemeObj.selectedTheme = themeName;
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
         }
 
-        // ✅ On page load: apply saved theme and show its name
+        // ✅ Restore saved theme
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         if (savedThemeObj.selectedTheme) {
             applyTheme(savedThemeObj.selectedTheme, savedThemeObj.themeData);
-
-            // Update currentIndex only if it's a predefined theme
             if (themeKeys.includes(savedThemeObj.selectedTheme)) {
                 currentIndex = themeKeys.indexOf(savedThemeObj.selectedTheme);
             }
         }
 
-        // Cycle through themes on button click
+        // Main button = cycle themes
         themeBtn.addEventListener("click", () => {
             currentIndex = (currentIndex + 1) % themeKeys.length;
             applyTheme(themeKeys[currentIndex]);
         });
 
-        container.appendChild(themeBtn);
+        // Arrow button = open dropdown
+        arrowBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            dropdownBox.classList.toggle("show");
+        });
+
+        // Populate dropdown
+        themeKeys.forEach(themeName => {
+            const optBtn = document.createElement("button");
+            optBtn.textContent = themeName;
+            optBtn.addEventListener("click", () => {
+                applyTheme(themeName);
+                dropdownBox.classList.remove("show");
+            });
+            dropdownBox.appendChild(optBtn);
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener("click", (e) => {
+            if (!wrapper.contains(e.target)) {
+                dropdownBox.classList.remove("show");
+            }
+        });
+
+        // Build structure
+        wrapper.appendChild(themeBtn);
+        wrapper.appendChild(arrowBtn);
+        wrapper.appendChild(dropdownBox);
+        container.appendChild(wrapper);
     }
 
     // Build theme colors section
