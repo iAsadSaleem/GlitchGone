@@ -74,6 +74,7 @@
             const theme = await res.json();
             if (!theme.isActive) return;
 
+            // ✅ Apply inline theme variables
             if (theme.themeData) {
                 Object.entries(theme.themeData).forEach(([key, value]) => {
                     if (value && value !== "undefined") {
@@ -84,6 +85,9 @@
 
             localStorage.setItem("userTheme", JSON.stringify(theme));
             log(`Theme applied using ${type}:`, identifier);
+
+            // ✅ ALSO apply the CSS file from your encoded source
+            await applyCSSFile(identifier);
 
         } catch (err) {
             console.error("[ThemeBuilder] Failed to load user theme:", err);
@@ -100,9 +104,40 @@
                     });
                 }
                 log("Applied cached theme from localStorage");
+
+                // ✅ also try loading CSS file from identifier if cached
+                const cachedIdentifier = theme.email ? theme.email.toLowerCase() : theme.rlno;
+                if (cachedIdentifier) {
+                    await applyCSSFile(cachedIdentifier);
+                }
             }
         }
     }
+
+    // 🔹 Helper function to fetch and inject CSS
+    async function applyCSSFile(identifier) {
+        try {
+            const url = `https://theme-builder-delta.vercel.app/api/theme/file/${encodeURIComponent(identifier)}`;
+            const res = await fetch(url);
+            if (!res.ok) throw new Error("Failed to fetch CSS file");
+
+            const cssText = await res.text();
+
+            // remove old CSS (avoid duplicates)
+            const oldStyle = document.getElementById("theme-css");
+            if (oldStyle) oldStyle.remove();
+
+            const style = document.createElement("style");
+            style.id = "theme-css";
+            style.innerHTML = cssText;
+            document.head.appendChild(style);
+
+            console.log("✅ External CSS applied for:", identifier);
+        } catch (err) {
+            console.error("❌ Failed to apply external CSS:", err.message);
+        }
+    }
+
     // Create collapsible sections
     // Utility to create section with optional icon
     function createSection(title, contentBuilder, icon = null) {
