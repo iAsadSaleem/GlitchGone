@@ -931,7 +931,7 @@
 
         const title = document.createElement("h4");
         title.className = "tb-help-title";
-        title.textContent = "Help Button Settings";
+        title.textContent = "Help Button";
         helpWrapper.appendChild(title);
 
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
