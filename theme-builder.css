@@ -497,7 +497,7 @@
     padding: 1px 1px 1px 1px;
 }
 .tb-input-wrapper {
-    padding: 5px 1px 1px 1px;
+    padding: 2px 1px 1px 1px;
 }
 .tb-number-input {
     padding: 8px;
@@ -518,4 +518,9 @@
     background: #0058ff9c;
     border: solid 1px #ffff;
     border-radius: 4px;
+}
+
+.tb-instruction-text {
+    color: #9b9b9b73;
+    font-size: 11px;
 }

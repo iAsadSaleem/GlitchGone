@@ -681,7 +681,7 @@
         // === Section Title ===
         const header = document.createElement("h4");
         header.className = "tb-header-controls";
-        header.textContent = "Header Controls";
+        header.textContent = "Header Background Color";
         section.appendChild(header);
 
         // === Gradient Controls Wrapper ===
