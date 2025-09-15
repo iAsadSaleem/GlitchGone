@@ -683,15 +683,14 @@
         radioWrapper.className = "tb-radio-wrapper";
 
         const radioInput = document.createElement("input");
-        radioInput.type = "radio";
+        radioInput.type = "checkbox"; // 🔹 use checkbox (toggles on/off)
         radioInput.className = "tb-radio";
-        radioInput.name = "tb-adv-header-bg";
 
         const radioLabel = document.createElement("label");
         radioLabel.className = "tb-radio-label";
         radioLabel.textContent = "Enable Header Gradient";
 
-        // Load initial state from CSS var or themeData
+        // Load initial state
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedThemeObj.themeData || {};
         const enabledInit =
@@ -713,7 +712,6 @@
         const gradientWrapper = document.createElement("div");
         gradientWrapper.className = "tb-gradient-controls";
 
-        // Helper: simple color picker (no auto-save)
         function makePicker(labelText, cssVar, fallback = "#007bff") {
             const wrapper = document.createElement("div");
             wrapper.className = "tb-color-picker-wrapper";
@@ -802,6 +800,17 @@
 
         // === Update Gradient Preview ===
         function updateGradientPreview() {
+            const headerEl = document.querySelector(".hl_header");
+            if (!headerEl) return;
+
+            if (!radioInput.checked) {
+                // Gradient disabled → reset header
+                headerEl.style.removeProperty("background-image");
+                headerEl.style.removeProperty("background");
+                document.body.style.setProperty("--header-main-bg-enabled", "0");
+                return;
+            }
+
             const start = startPicker.input.value;
             const end = endPicker.input.value;
             const stop = stopInput.value || 50;
@@ -809,41 +818,24 @@
 
             const gradient = `linear-gradient(${angle}deg, ${start} ${stop}%, ${end} 100%)`;
 
+            // Update CSS vars
             document.body.style.setProperty("--header-gradient-start", start);
             document.body.style.setProperty("--header-gradient-end", end);
             document.body.style.setProperty("--header-gradient-stop", stop + "%");
             document.body.style.setProperty("--header-gradient-angle", angle + "deg");
             document.body.style.setProperty("--header-main-bg-gradient", gradient);
-            document.body.style.setProperty(
-                "--header-main-bg-enabled",
-                radioInput.checked ? "1" : "0"
-            );
+            document.body.style.setProperty("--header-main-bg-enabled", "1");
 
-            const headerEl = document.querySelector(".hl_header");
-            if (headerEl) {
-                if (radioInput.checked) {
-                    headerEl.style.background = "none";
-                    headerEl.style.setProperty(
-                        "background-image",
-                        "var(--header-main-bg-gradient)",
-                        "important"
-                    );
-                } else {
-                    headerEl.style.removeProperty("background-image");
-                    headerEl.style.removeProperty("background");
-                }
-            }
+            // Apply live
+            headerEl.style.background = "none";
+            headerEl.style.setProperty("background-image", "var(--header-main-bg-gradient)", "important");
         }
 
         // === Event Listeners ===
         [stopInput, angleInput].forEach((el) =>
             el.addEventListener("input", updateGradientPreview)
         );
-        radioInput.addEventListener("click", (e) => {
-            e.preventDefault(); // allow toggle
-            radioInput.checked = !radioInput.checked;
-            updateGradientPreview();
-        });
+        radioInput.addEventListener("change", updateGradientPreview);
 
         // Initial Preview
         updateGradientPreview();
