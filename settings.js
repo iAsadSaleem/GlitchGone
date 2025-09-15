@@ -678,32 +678,6 @@
         const section = document.createElement("div");
         section.className = "tb-controls-section";
 
-        // === Radio button (master switch) ===
-        const radioWrapper = document.createElement("div");
-        radioWrapper.className = "tb-radio-wrapper";
-
-        const radioLabel = document.createElement("label");
-        radioLabel.className = "tb-radio-label";
-        radioLabel.textContent = "Advance Settings";
-
-        const radioInput = document.createElement("input");
-        radioInput.type = "checkbox"; // toggle switch
-        radioInput.className = "tb-radio";
-
-
-        // Load initial state
-        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        const themeData = savedThemeObj.themeData || {};
-        const enabledInit =
-            (themeData["--header-main-bg-enabled"] ||
-                getComputedStyle(document.body).getPropertyValue("--header-main-bg-enabled") ||
-                "").trim();
-        radioInput.checked = enabledInit === "1";
-
-        radioWrapper.appendChild(radioLabel);
-        radioWrapper.appendChild(radioInput);
-        section.appendChild(radioWrapper);
-
         // === Section Title ===
         const header = document.createElement("h4");
         header.className = "tb-header-controls";
@@ -714,6 +688,7 @@
         const gradientWrapper = document.createElement("div");
         gradientWrapper.className = "tb-gradient-controls";
 
+        // Color picker helper
         function makePicker(labelText, cssVar, fallback = "#007bff") {
             const wrapper = document.createElement("div");
             wrapper.className = "tb-color-picker-wrapper";
@@ -749,6 +724,10 @@
 
             return { wrapper, input };
         }
+
+        // === Load saved state ===
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        const themeData = savedThemeObj.themeData || {};
 
         // === Create Inputs ===
         const startPicker = makePicker("Color Start", "--header-gradient-start", "#ff0000");
@@ -801,23 +780,10 @@
         gradientWrapper.appendChild(angleWrapper);
         section.appendChild(gradientWrapper);
 
-        // === Save original header background before any changes ===
-        const headerEl = document.querySelector(".hl_header");
-        const originalHeaderBg = headerEl
-            ? window.getComputedStyle(headerEl).getPropertyValue("background")
-            : "";
-
         // === Update Gradient Preview ===
+        const headerEl = document.querySelector(".hl_header");
         function updateGradientPreview() {
             if (!headerEl) return;
-
-            if (!radioInput.checked) {
-                // Disable gradient → restore background color
-                headerEl.style.setProperty("background-image", "none", "important");
-                headerEl.style.setProperty("background", "var(--header-bg-color)", "important");
-                document.body.style.setProperty("--header-main-bg-enabled", "0");
-                return;
-            }
 
             const start = startPicker.input.value;
             const end = endPicker.input.value;
@@ -832,9 +798,8 @@
             document.body.style.setProperty("--header-gradient-stop", stop + "%");
             document.body.style.setProperty("--header-gradient-angle", angle + "deg");
             document.body.style.setProperty("--header-main-bg-gradient", gradient);
-            document.body.style.setProperty("--header-main-bg-enabled", "1");
 
-            // Enable gradient → remove solid background
+            // Apply live
             headerEl.style.setProperty("background", "none", "important");
             headerEl.style.setProperty("background-image", "var(--header-main-bg-gradient)", "important");
         }
@@ -843,7 +808,6 @@
         [stopInput, angleInput, startPicker.input, endPicker.input].forEach((el) =>
             el.addEventListener("input", updateGradientPreview)
         );
-        radioInput.addEventListener("change", updateGradientPreview);
 
         // Initial Preview
         updateGradientPreview();
