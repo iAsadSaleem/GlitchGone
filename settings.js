@@ -210,10 +210,10 @@
     // 🌟 Mapping of CSS vars -> Human-friendly labels
     const cssVarLabels = {
         "--primary-color": "Tab Label Color",
-        "--primary-bg-color": "None",
+        "--header-bg-color": "None",
         "--sidebar-bg-color": "Side Bar Background",
         "--sidebar-menu-bg": "SideBar Menu Background",
-        "--sidebar-menu-color": "SideBar Menu Color"
+        "--sidebar-menu-color": "SideBar Text Color"
     };
 
     function createColorPicker(labelText, storageKey, cssVar, applyFn) {
