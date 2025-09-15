@@ -704,7 +704,7 @@
         gradientWrapper.className = "tb-gradient-controls";
 
         // Helpers
-        function makePicker(labelText, fallback = "#007bff") {
+        function makePicker(labelText, cssVar, fallback = "#007bff") {
             const wrapper = document.createElement("div");
             wrapper.className = "tb-color-picker-wrapper";
 
@@ -733,8 +733,8 @@
             return { wrapper, input };
         }
 
-        const startPicker = makePicker("Color Start", "#ff0000");
-        const endPicker = makePicker("Color End", "#0000ff");
+        const startPicker = makePicker("Color Start", "--header-gradient-start", "#ff0000");
+        const endPicker = makePicker("Color End", "--header-gradient-end", "#0000ff");
 
         const stopInput = document.createElement("input");
         stopInput.type = "number";
@@ -753,10 +753,12 @@
         gradientWrapper.appendChild(endPicker.wrapper);
 
         const stopWrapper = document.createElement("div");
+        stopWrapper.className = "tb-input-wrapper";
         stopWrapper.append("Color Stop (%)", stopInput);
         gradientWrapper.appendChild(stopWrapper);
 
         const angleWrapper = document.createElement("div");
+        angleWrapper.className = "tb-input-wrapper";
         angleWrapper.append("Gradient Angle", angleInput);
         gradientWrapper.appendChild(angleWrapper);
 
@@ -784,9 +786,19 @@
             const angle = angleInput.value || 90;
 
             const gradient = `linear-gradient(${angle}deg, ${start} ${stop}%, ${end} 100%)`;
+
+            // Apply live
             headerEl.style.background = gradient;
+
+            // Also set CSS variables for Apply button to pick up
+            document.body.style.setProperty("--header-gradient", gradient);
+            document.body.style.setProperty("--header-gradient-start", start);
+            document.body.style.setProperty("--header-gradient-end", end);
+            document.body.style.setProperty("--header-gradient-stop", stop + "%");
+            document.body.style.setProperty("--header-gradient-angle", angle + "deg");
         }
 
+        // Listeners
         [stopInput, angleInput, startPicker.input, endPicker.input].forEach((el) =>
             el.addEventListener("input", updateGradientPreview)
         );
