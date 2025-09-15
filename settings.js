@@ -781,8 +781,8 @@
         const angleInput = document.createElement("input");
         angleInput.type = "number";
         angleInput.className = "tb-number-input";
-        angleInput.left = "41px";
-        angleInput.position = "relative";
+        angleInput.style.position = "relative";
+        angleInput.style.left = "41px";
         angleInput.min = 0;
         angleInput.max = 360;
         angleInput.value =
