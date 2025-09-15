@@ -502,13 +502,6 @@
         });
     }
 
-    // Dummy Button Style section
-    function buildButtonStyleSection(container) {
-        const span = document.createElement('span');
-        span.textContent = "Button style options will be here.";
-        container.appendChild(span);
-    }
-
     // Apply saved settings
     function applySavedSettings() {
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
@@ -823,6 +816,104 @@
         return section;
     }
 
+    function buildProfileButtonControls(section) {
+        const profileWrapper = document.createElement("div");
+        profileWrapper.className = "tb-profile-btn-controls";
+
+        // === Section Title ===
+        const title = document.createElement("h4");
+        title.className = "tb-profile-title";
+        title.textContent = "Profile Button Settings";
+        profileWrapper.appendChild(title);
+
+        // Find profile button
+        const profileBtn = document.querySelector(".hl_header--avatar");
+        if (!profileBtn) {
+            console.warn("Profile button not found");
+            return;
+        }
+
+        // Helper for color pickers
+        function makePicker(labelText, cssVar, fallback = "#000000", applyFn) {
+            const wrapper = document.createElement("div");
+            wrapper.className = "tb-color-picker-wrapper";
+
+            const label = document.createElement("label");
+            label.className = "tb-color-picker-label";
+            label.textContent = labelText;
+
+            const input = document.createElement("input");
+            input.type = "color";
+            input.className = "tb-color-input";
+
+            let initial =
+                getComputedStyle(document.body).getPropertyValue(cssVar).trim() || fallback;
+            if (!initial.startsWith("#")) initial = fallback;
+            input.value = initial;
+
+            const code = document.createElement("span");
+            code.className = "tb-color-code";
+            code.textContent = initial;
+
+            input.addEventListener("input", () => {
+                code.textContent = input.value;
+                document.body.style.setProperty(cssVar, input.value);
+                if (applyFn) applyFn(input.value);
+            });
+
+            wrapper.appendChild(label);
+            wrapper.appendChild(input);
+            wrapper.appendChild(code);
+
+            return wrapper;
+        }
+
+        // === Apply functions ===
+        const applyIconColor = (val) => {
+            profileBtn.querySelector(".avatar_img").style.color = val;
+        };
+        const applyIconHoverColor = (val) => {
+            addDynamicHoverStyle(
+                ".hl_header--avatar .avatar_img",
+                `color: ${val} !important;`,
+                "profile-icon-hover"
+            );
+        };
+        const applyBgColor = (val) => {
+            profileBtn.querySelector(".avatar_img").style.backgroundColor = val;
+        };
+        const applyBgHoverColor = (val) => {
+            addDynamicHoverStyle(
+                ".hl_header--avatar .avatar_img",
+                `background-color: ${val} !important;`,
+                "profile-bg-hover"
+            );
+        };
+
+        // === Create Pickers ===
+        profileWrapper.appendChild(makePicker("Icon Color", "--profile-icon-color", "#ffffff", applyIconColor));
+        profileWrapper.appendChild(makePicker("Icon Hover Color", "--profile-icon-hover", "#cccccc", applyIconHoverColor));
+        profileWrapper.appendChild(makePicker("Background Color", "--profile-bg-color", "#9f75bd", applyBgColor));
+        profileWrapper.appendChild(makePicker("Background Hover Color", "--profile-bg-hover", "#7a559e", applyBgHoverColor));
+
+        section.appendChild(profileWrapper);
+
+        // Initial Apply
+        applyIconColor(getComputedStyle(document.body).getPropertyValue("--profile-icon-color") || "#ffffff");
+        applyBgColor(getComputedStyle(document.body).getPropertyValue("--profile-bg-color") || "#9f75bd");
+    }
+
+    // Utility for hover styles
+    function addDynamicHoverStyle(selector, styleContent, id) {
+        let styleTag = document.getElementById("style-" + id);
+        if (!styleTag) {
+            styleTag = document.createElement("style");
+            styleTag.id = "style-" + id;
+            document.head.appendChild(styleTag);
+        }
+        styleTag.textContent = `${selector}:hover { ${styleContent} }`;
+    }
+
 
     // Create Builder UI
     function createBuilderUI(controlsContainer) {
@@ -904,6 +995,8 @@
             contentWrapper.appendChild(
                 createSection("Advance Settings", (section) => {
                     buildHeaderControlsSection(section);
+                    buildProfileButtonControls(section);   // Profile Button Color Controls
+
                     // Add more advanced options later
                 }, "🗄️")
             );
