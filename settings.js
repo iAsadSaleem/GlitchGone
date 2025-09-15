@@ -864,16 +864,19 @@
             code.className = "tb-color-code";
             code.textContent = initial;
 
+            // Apply on load
             applyFn(initial);
 
             input.addEventListener("input", () => {
                 const val = input.value;
                 code.textContent = val;
 
+                // save in localStorage
                 savedThemeObj.themeData = savedThemeObj.themeData || {};
                 savedThemeObj.themeData[cssVar] = val;
                 localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
 
+                // apply live
                 applyFn(val);
             });
 
@@ -884,17 +887,14 @@
             return wrapper;
         }
 
-        // === Icon Color ===
+        // === Icon Color === (inline style)
         profileWrapper.appendChild(
             makePicker("Icon Color", "--profile-icon-color", "#8d4e4e", (val) => {
-                setImportantStyle(
-                    "profile-icon-color",
-                    `${selector} { color: ${val} !important; }`
-                );
+                profileBtn.style.setProperty("color", val, "important");
             })
         );
 
-        // === Icon Hover Color ===
+        // === Icon Hover Color === (needs CSS)
         profileWrapper.appendChild(
             makePicker("Icon Hover Color", "--profile-icon-hover", "#aa6666", (val) => {
                 setImportantStyle(
@@ -904,17 +904,14 @@
             })
         );
 
-        // === Background Color ===
+        // === Background Color === (inline style)
         profileWrapper.appendChild(
             makePicker("Background Color", "--profile-bg-color", "#344391", (val) => {
-                setImportantStyle(
-                    "profile-bg-color",
-                    `${selector} { background-color: ${val} !important; }`
-                );
+                profileBtn.style.setProperty("background-color", val, "important");
             })
         );
 
-        // === Background Hover Color ===
+        // === Background Hover Color === (needs CSS)
         profileWrapper.appendChild(
             makePicker("Background Hover Color", "--profile-bg-hover", "#1f2c66", (val) => {
                 setImportantStyle(
