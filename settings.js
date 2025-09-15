@@ -1001,6 +1001,107 @@
         section.appendChild(helpWrapper);
     }
 
+
+    function buildScrollbarControls(section) {
+        const scrollbarWrapper = document.createElement("div");
+        scrollbarWrapper.className = "tb-scrollbar-controls";
+
+        const title = document.createElement("h4");
+        title.className = "tb-scrollbar-title";
+        title.textContent = "Scrollbar Settings";
+        scrollbarWrapper.appendChild(title);
+
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        const themeData = savedThemeObj.themeData || {};
+
+        // helper: persist & apply variable
+        function setCssVar(key, val, cssVar) {
+            savedThemeObj.themeData = savedThemeObj.themeData || {};
+            savedThemeObj.themeData[key] = val;
+            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            document.body.style.setProperty(cssVar, val);
+        }
+
+        // === Scrollbar Color Picker ===
+        const colorWrapper = document.createElement("div");
+        colorWrapper.className = "tb-color-picker-wrapper";
+
+        const colorLabel = document.createElement("label");
+        colorLabel.className = "tb-color-picker-label";
+        colorLabel.textContent = "Scrollbar Color";
+
+        const colorInput = document.createElement("input");
+        colorInput.type = "color";
+        colorInput.className = "tb-color-input";
+
+        let initialColor = themeData["scrollbar-color"] || "#888888";
+        colorInput.value = initialColor;
+        document.body.style.setProperty("--scrollbar-color", initialColor);
+
+        const colorCode = document.createElement("span");
+        colorCode.className = "tb-color-code";
+        colorCode.textContent = initialColor;
+
+        colorInput.addEventListener("input", () => {
+            const val = colorInput.value;
+            colorCode.textContent = val;
+            setCssVar("scrollbar-color", val, "--scrollbar-color");
+        });
+
+        colorWrapper.appendChild(colorLabel);
+        colorWrapper.appendChild(colorInput);
+        colorWrapper.appendChild(colorCode);
+        scrollbarWrapper.appendChild(colorWrapper);
+
+        // === Scrollbar Width Input ===
+        const widthWrapper = document.createElement("div");
+        widthWrapper.className = "tb-input-wrapper";
+
+        const widthLabel = document.createElement("label");
+        widthLabel.className = "tb-input-label";
+        widthLabel.textContent = "Scrollbar Width (px)";
+
+        const widthInput = document.createElement("input");
+        widthInput.type = "number";
+        widthInput.className = "tb-number-input";
+        widthInput.min = 4;
+        widthInput.max = 30;
+
+        let initialWidth = themeData["scrollbar-width"] || "8px";
+        widthInput.value = parseInt(initialWidth, 10);
+        document.body.style.setProperty("--scrollbar-width", initialWidth);
+
+        widthInput.addEventListener("input", () => {
+            const val = widthInput.value + "px";
+            setCssVar("scrollbar-width", val, "--scrollbar-width");
+        });
+
+        widthWrapper.appendChild(widthLabel);
+        widthWrapper.appendChild(widthInput);
+        scrollbarWrapper.appendChild(widthWrapper);
+
+        // === Inject global scrollbar styles (once) ===
+        if (!document.getElementById("style-scrollbar")) {
+            const style = document.createElement("style");
+            style.id = "style-scrollbar";
+            style.textContent = `
+            ::-webkit-scrollbar {
+                width: var(--scrollbar-width, 8px);
+            }
+            ::-webkit-scrollbar-thumb {
+                background-color: var(--scrollbar-color, #888);
+                border-radius: 10px;
+            }
+            ::-webkit-scrollbar-thumb:hover {
+                background-color: var(--scrollbar-color, #555);
+            }
+        `;
+            document.head.appendChild(style);
+        }
+
+        section.appendChild(scrollbarWrapper);
+    }
+
     // Utility for hover styles
     function addDynamicHoverStyle(selector, styleContent, id) {
         let styleTag = document.getElementById("style-" + id);
@@ -1095,6 +1196,7 @@
                     buildHeaderControlsSection(section);
                     buildProfileButtonControls(section);   // Profile Button Color Controls
                     buildHelpButtonControls(section);   // Profile Button Color Controls
+                    buildScrollbarControls(section);   // Profile Button Color Controls
 
                     // Add more advanced options later
                 }, "🗄️")
