@@ -483,6 +483,29 @@
     border-bottom: solid 1px;
     padding: 1px 1px 1px 10px;
 }
-.tb-number-input{
+.tb-radio {
+    border-radius: 10px;
+    left: 30%;
+    position: relative;
+}
+.tb-radio-label {
+    font-size: 16px;
+    font-weight: bold;
+}
 
+.tb-radio-wrapper {
+    padding: 1px 1px 1px 1px;
+}
+.tb-input-wrapper {
+    padding: 5px 1px 1px 1px;
+}
+.tb-number-input {
+    padding: 8px;
+    width: 69px;
+    height: 30px;
+    cursor: pointer;
+    left: 77px;
+    position: relative;
+    border: solid 1px;
+    border-radius: 10px;
 }

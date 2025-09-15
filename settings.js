@@ -706,6 +706,7 @@
 
         // === Section Title ===
         const header = document.createElement("h4");
+        header.className = "tb-header-controls";
         header.textContent = "Header Controls";
         section.appendChild(header);
 
@@ -780,6 +781,8 @@
         const angleInput = document.createElement("input");
         angleInput.type = "number";
         angleInput.className = "tb-number-input";
+        angleInput.left = "41px";
+        angleInput.position = "relative";
         angleInput.min = 0;
         angleInput.max = 360;
         angleInput.value =
