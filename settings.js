@@ -778,6 +778,13 @@
         gradientWrapper.appendChild(endPicker.wrapper);
         gradientWrapper.appendChild(stopWrapper);
         gradientWrapper.appendChild(angleWrapper);
+        // === Instruction Comment ===
+        const instruction = document.createElement("p");
+        instruction.className = "tb-instruction-text";
+        instruction.textContent =
+            "💡 For Flat Color in Header: Choose the same color for Start & End, Stop %: 0, Gradient Angle: 0";
+        gradientWrapper.appendChild(instruction);
+
         section.appendChild(gradientWrapper);
 
         // === Update Gradient Preview ===
@@ -787,8 +794,8 @@
 
             const start = startPicker.input.value;
             const end = endPicker.input.value;
-            const stop = stopInput.value || 50;
-            const angle = angleInput.value || 90;
+            const stop = stopInput.value;
+            const angle = angleInput.value;
 
             const gradient = `linear-gradient(${angle}deg, ${start} ${stop}%, ${end} 100%)`;
 
