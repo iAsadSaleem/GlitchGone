@@ -210,7 +210,7 @@
     // 🌟 Mapping of CSS vars -> Human-friendly labels
     const cssVarLabels = {
         "--primary-color": "Tab Label Color",
-        "--header-bg-color": "None",
+        "--header-bg-color": "Header Background",
         "--sidebar-bg-color": "Side Bar Background",
         "--sidebar-menu-bg": "SideBar Menu Background",
         "--sidebar-menu-color": "SideBar Text Color"
@@ -492,7 +492,7 @@
     function buildThemeColorsSection(container) {
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedTheme.themeData || {};
-        const editableColors = ["--primary-color", "--primary-bg-color", "--sidebar-bg-color", "--sidebar-menu-bg", "--sidebar-menu-color",];
+        const editableColors = ["--primary-color", "--header-bg-color", "--sidebar-bg-color", "--sidebar-menu-bg", "--sidebar-menu-color",];
         editableColors.forEach(key => {
             const value = localStorage.getItem(key) || themeData[key] || "#000000";
             const picker = createColorPicker(key, key, key, (val) => {
