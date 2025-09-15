@@ -124,7 +124,6 @@
     display: flex;
     align-items: center;
     gap: 10px; /* space between input and code */
-    margin-bottom: 1px;
 }
 
 /* Label */
@@ -189,13 +188,6 @@
     }
 
 /* Optional styling for color pickers */
-.tb-color-picker-wrapper {
-  display: flex;
-  align-items: center;
-  margin-bottom: 8px;
-  gap: 8px;
-}
-
 .tb-color-picker-label {
   flex: 1;
 }
