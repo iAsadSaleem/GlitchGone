@@ -826,7 +826,9 @@
         title.textContent = "Profile Button Settings";
         profileWrapper.appendChild(title);
 
-        const profileBtn = document.querySelector(".hl_header--avatar .avatar_img");
+        const profileBtn = document.querySelector(
+            ".container-fluid .hl_header--controls .avatar .avatar_img"
+        );
         if (!profileBtn) {
             console.warn("Profile button not found");
             return;
@@ -896,15 +898,15 @@
 
         // === Pickers ===
         profileWrapper.appendChild(
-            makePicker("Icon Color", "--profile-icon-color", "#ffffff", (val) => {
+            makePicker("Icon Color", "--profile-icon-color", "#8d4e4e", (val) => {
                 profileBtn.style.color = val;
             })
         );
 
         profileWrapper.appendChild(
-            makePicker("Icon Hover Color", "--profile-icon-hover", "#cccccc", (val) => {
+            makePicker("Icon Hover Color", "--profile-icon-hover", "#aa6666", (val) => {
                 addDynamicHoverStyle(
-                    ".hl_header--avatar .avatar_img",
+                    ".container-fluid .hl_header--controls .avatar .avatar_img",
                     `color: ${val} !important;`,
                     "profile-icon-hover"
                 );
@@ -912,15 +914,15 @@
         );
 
         profileWrapper.appendChild(
-            makePicker("Background Color", "--profile-bg-color", "#9f75bd", (val) => {
+            makePicker("Background Color", "--profile-bg-color", "#344391", (val) => {
                 profileBtn.style.backgroundColor = val;
             })
         );
 
         profileWrapper.appendChild(
-            makePicker("Background Hover Color", "--profile-bg-hover", "#7a559e", (val) => {
+            makePicker("Background Hover Color", "--profile-bg-hover", "#1f2c66", (val) => {
                 addDynamicHoverStyle(
-                    ".hl_header--avatar .avatar_img",
+                    ".container-fluid .hl_header--controls .avatar .avatar_img",
                     `background-color: ${val} !important;`,
                     "profile-bg-hover"
                 );
