@@ -682,75 +682,125 @@
         header.textContent = "Header Controls";
         section.appendChild(header);
 
-        // === Gradient Controls Wrapper ===
+        // helper: themeData + label map (re-use your cssVarLabels if present)
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        const themeData = savedThemeObj.themeData || {};
+        const getLabel = (cssVar, fallback) => (typeof cssVarLabels !== "undefined" ? (cssVarLabels[cssVar] || fallback) : fallback);
+
+        // ========= Create color picker UI (WITHOUT saving) =========
+        function makePickerNoSave(labelText, cssVar, fallback = "#007bff") {
+            const wrapper = document.createElement("div");
+            wrapper.className = "tb-color-picker-wrapper";
+
+            const label = document.createElement("label");
+            label.className = "tb-color-picker-label";
+            label.textContent = getLabel(cssVar, labelText);
+
+            const input = document.createElement("input");
+            input.type = "color";
+            input.className = "tb-color-input";
+
+            // initial value: try themeData then computed style then fallback
+            let initial = (themeData[cssVar] || getComputedStyle(document.body).getPropertyValue(cssVar) || "").trim();
+            if (!initial) initial = fallback;
+            // ensure hex for color input: if initial includes rgba/other, fallback to provided
+            if (!/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(initial)) {
+                initial = fallback;
+            }
+            input.value = initial;
+
+            const code = document.createElement("span");
+            code.className = "tb-color-code";
+            code.textContent = initial;
+
+            // on input -> update css var and call preview updater
+            input.addEventListener("input", () => {
+                const c = input.value;
+                code.textContent = c;
+                document.body.style.setProperty(cssVar, c); // live only
+                updateGradientPreview();
+            });
+
+            wrapper.appendChild(label);
+            wrapper.appendChild(input);
+            wrapper.appendChild(code);
+
+            return { wrapper, input, code };
+        }
+
+        // ========= Build controls (declare first) =========
         const gradientWrapper = document.createElement("div");
         gradientWrapper.className = "tb-gradient-controls";
 
-        // 🌈 Use existing createColorPicker for consistent style
-        const startColor = createColorPicker(
-            "Color Start",
-            "headerColorStart",
-            "--header-gradient-start",
-            () => updateGradientPreview()
-        );
-        const endColor = createColorPicker(
-            "Color End",
-            "headerColorEnd",
-            "--header-gradient-end",
-            () => updateGradientPreview()
-        );
+        // color pickers (use same classes but NO localStorage writes here)
+        const startPicker = makePickerNoSave("Color Start", "--header-gradient-start", "#ff0000");
+        const endPicker = makePickerNoSave("Color End", "--header-gradient-end", "#0000ff");
 
-        gradientWrapper.appendChild(startColor);
-        gradientWrapper.appendChild(endColor);
-
-        // 📊 Color Stop (%)
+        // stop % input
         const stopWrapper = document.createElement("div");
         stopWrapper.className = "tb-input-wrapper";
         const stopLabel = document.createElement("label");
-        stopLabel.textContent = "Color Stop (%)";
         stopLabel.className = "tb-input-label";
+        stopLabel.textContent = "Color Stop (%)";
         const stopInput = document.createElement("input");
         stopInput.type = "number";
+        stopInput.className = "tb-number-input";
         stopInput.min = 0;
         stopInput.max = 100;
-        stopInput.value = localStorage.getItem("headerColorStop") || 50;
-        stopInput.className = "tb-number-input";
-        stopInput.addEventListener("input", updateGradientPreview);
+        // read initial (handle '50%' style or plain number)
+        (function setStopInitial() {
+            let raw = themeData["--header-gradient-stop"] || getComputedStyle(document.body).getPropertyValue("--header-gradient-stop") || "";
+            raw = ("" + raw).trim();
+            let n = parseInt(raw.replace("%", ""), 10);
+            if (!Number.isFinite(n)) n = 50;
+            stopInput.value = n;
+        })();
+
+        // angle input
+        const angleWrapper = document.createElement("div");
+        angleWrapper.className = "tb-input-wrapper";
+        const angleLabel = document.createElement("label");
+        angleLabel.className = "tb-input-label";
+        angleLabel.textContent = "Gradient Angle (deg)";
+        const angleInput = document.createElement("input");
+        angleInput.type = "number";
+        angleInput.className = "tb-number-input";
+        angleInput.min = 0;
+        angleInput.max = 360;
+        (function setAngleInitial() {
+            let raw = themeData["--header-gradient-angle"] || getComputedStyle(document.body).getPropertyValue("--header-gradient-angle") || "";
+            raw = ("" + raw).trim();
+            let n = parseInt(raw.replace("deg", ""), 10);
+            if (!Number.isFinite(n)) n = 90;
+            angleInput.value = n;
+        })();
+
+        // radio (toggleable) - labeled "Advanced Settings Background"
+        const radioWrapper = document.createElement("div");
+        radioWrapper.className = "tb-radio-wrapper";
+        const radioInput = document.createElement("input");
+        radioInput.type = "radio";
+        radioInput.className = "tb-radio";
+        radioInput.name = "tb-adv-header-bg";
+        const radioLabel = document.createElement("label");
+        radioLabel.className = "tb-radio-label";
+        radioLabel.textContent = "Advanced Settings Background";
+
+        // set initial radio state from saved flag or computed var
+        const enabledInit = (themeData["--header-main-bg-enabled"] || getComputedStyle(document.body).getPropertyValue("--header-main-bg-enabled") || "").trim();
+        radioInput.checked = (enabledInit === "1");
+
+        // ========= Append elements =========
+        gradientWrapper.appendChild(startPicker.wrapper);
+        gradientWrapper.appendChild(endPicker.wrapper);
+
         stopWrapper.appendChild(stopLabel);
         stopWrapper.appendChild(stopInput);
         gradientWrapper.appendChild(stopWrapper);
 
-        // 🔄 Gradient Angle
-        const angleWrapper = document.createElement("div");
-        angleWrapper.className = "tb-input-wrapper";
-        const angleLabel = document.createElement("label");
-        angleLabel.textContent = "Gradient Angle (deg)";
-        angleLabel.className = "tb-input-label";
-        const angleInput = document.createElement("input");
-        angleInput.type = "number";
-        angleInput.min = 0;
-        angleInput.max = 360;
-        angleInput.value = localStorage.getItem("headerGradientAngle") || 90;
-        angleInput.className = "tb-number-input";
-        angleInput.addEventListener("input", updateGradientPreview);
         angleWrapper.appendChild(angleLabel);
         angleWrapper.appendChild(angleInput);
         gradientWrapper.appendChild(angleWrapper);
-
-        // === Radio Button (Enable gradient for header) ===
-        const radioWrapper = document.createElement("div");
-        radioWrapper.className = "tb-radio-wrapper";
-
-        const radioLabel = document.createElement("label");
-        radioLabel.textContent = "Advanced Settings Background";
-        radioLabel.className = "tb-radio-label";
-
-        const radioInput = document.createElement("input");
-        radioInput.type = "radio";
-        radioInput.name = "advancedHeaderBackground";
-        radioInput.className = "tb-radio";
-
-        radioInput.addEventListener("change", updateGradientPreview);
 
         radioWrapper.appendChild(radioInput);
         radioWrapper.appendChild(radioLabel);
@@ -758,31 +808,69 @@
 
         section.appendChild(gradientWrapper);
 
-        // === Update Gradient Preview (live) ===
+        // ========= Update preview function (no localStorage writes) =========
         function updateGradientPreview() {
-            const start = document.body.style.getPropertyValue("--header-gradient-start") || "#ff0000";
-            const end = document.body.style.getPropertyValue("--header-gradient-end") || "#0000ff";
-            const stop = stopInput.value || 50;
-            const angle = angleInput.value || 90;
+            const start = startPicker.input.value;
+            const end = endPicker.input.value;
+            const stop = (stopInput.value && !isNaN(stopInput.value)) ? Math.max(0, Math.min(100, Number(stopInput.value))) : 50;
+            const angle = (angleInput.value && !isNaN(angleInput.value)) ? Math.max(0, Math.min(360, Number(angleInput.value))) : 90;
 
             const gradient = `linear-gradient(${angle}deg, ${start} ${stop}%, ${end} 100%)`;
 
-            // Save vars
+            // set individual css vars on body (live preview only)
+            document.body.style.setProperty("--header-gradient-start", start);
+            document.body.style.setProperty("--header-gradient-end", end);
             document.body.style.setProperty("--header-gradient-stop", stop + "%");
             document.body.style.setProperty("--header-gradient-angle", angle + "deg");
             document.body.style.setProperty("--header-main-bg-gradient", gradient);
 
-            // Live preview only if radio checked
-            const header = document.querySelector(".hl_header");
-            if (radioInput.checked && header) {
-                header.style.background = "none";
-                header.style.backgroundImage = "var(--header-main-bg-gradient)";
+            // also set enabled flag var so Apply will save it
+            document.body.style.setProperty("--header-main-bg-enabled", radioInput.checked ? "1" : "0");
+
+            // apply to header element only if radio is enabled
+            const headerEl = document.querySelector(".hl_header");
+            if (headerEl) {
+                if (radioInput.checked) {
+                    headerEl.style.background = "none";
+                    // use setProperty with priority 'important' to match your requirement
+                    headerEl.style.setProperty("background-image", "var(--header-main-bg-gradient)", "important");
+                } else {
+                    // remove inline background so stylesheet/defaults take effect
+                    headerEl.style.removeProperty("background-image");
+                    headerEl.style.removeProperty("background");
+                }
             }
         }
+
+        // ========= Event wiring (after all inputs are declared) =========
+        [stopInput, angleInput].forEach(inp => inp.addEventListener("input", updateGradientPreview));
+        // color pickers already call updateGradientPreview on input (inside makePickerNoSave)
+        // radio: make it toggleable (click to toggle on/off)
+        radioInput.addEventListener("click", function (e) {
+            e.preventDefault();               // prevent default radio single-selection behavior
+            radioInput.checked = !radioInput.checked;
+            updateGradientPreview();
+        });
+
+        // initial preview
+        updateGradientPreview();
+
+        // expose helper so other code could read settings (optional)
+        section.getHeaderGradientSettings = function () {
+            return {
+                start: document.body.style.getPropertyValue("--header-gradient-start").trim(),
+                end: document.body.style.getPropertyValue("--header-gradient-end").trim(),
+                stop: document.body.style.getPropertyValue("--header-gradient-stop").trim(),
+                angle: document.body.style.getPropertyValue("--header-gradient-angle").trim(),
+                gradient: document.body.style.getPropertyValue("--header-main-bg-gradient").trim(),
+                enabled: document.body.style.getPropertyValue("--header-main-bg-enabled").trim() === "1"
+            };
+        };
 
         container.appendChild(section);
         return section;
     }
+
 
     // Create Builder UI
     function createBuilderUI(controlsContainer) {
