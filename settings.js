@@ -835,7 +835,7 @@
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedThemeObj.themeData || {};
 
-        // helper: add/update <style> for hover states
+        // helper: add/update <style>
         function setStyle(id, rule) {
             let styleTag = document.getElementById("style-" + id);
             if (!styleTag) {
@@ -873,12 +873,10 @@
                 const val = input.value;
                 code.textContent = val;
 
-                // save in localStorage
                 savedThemeObj.themeData = savedThemeObj.themeData || {};
                 savedThemeObj.themeData[cssVar] = val;
                 localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
 
-                // apply live
                 applyFn(val);
             });
 
@@ -889,10 +887,10 @@
             return wrapper;
         }
 
-        // === Icon Color ===
+        // === Icon Color (default) ===
         profileWrapper.appendChild(
             makePicker("Icon Color", "--profile-icon-color", "#8d4e4e", (val) => {
-                profileBtn.style.color = val;
+                setStyle("profile-icon-default", `${selector} { color: ${val} !important; }`);
             })
         );
 
@@ -903,10 +901,10 @@
             })
         );
 
-        // === Background Color ===
+        // === Background Color (default) ===
         profileWrapper.appendChild(
             makePicker("Background Color", "--profile-bg-color", "#344391", (val) => {
-                profileBtn.style.backgroundColor = val;
+                setStyle("profile-bg-default", `${selector} { background-color: ${val} !important; }`);
             })
         );
 
