@@ -904,18 +904,21 @@
         );
 
         profileWrapper.appendChild(
-            makePicker("Icon Hover Color", "--profile-icon-hover", "#aa6666", (val) => {
-                addDynamicHoverStyle(
-                    ".container-fluid .hl_header--controls .avatar .avatar_img",
-                    `color: ${val} !important;`,
-                    "profile-icon-hover"
+            makePicker("Icon Color", "--profile-icon-color", "#8d4e4e", (val) => {
+                setImportantStyle(
+                    "profile-icon-color",
+                    `${selector} { color: ${val} !important; }`
                 );
             })
         );
 
+        // === Background Color ===
         profileWrapper.appendChild(
             makePicker("Background Color", "--profile-bg-color", "#344391", (val) => {
-                profileBtn.style.backgroundColor = val;
+                setImportantStyle(
+                    "profile-bg-color",
+                    `${selector} { background-color: ${val} !important; }`
+                );
             })
         );
 
