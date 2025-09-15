@@ -747,8 +747,8 @@
             parseInt(
                 (themeData["--header-gradient-stop"] ||
                     getComputedStyle(document.body).getPropertyValue("--header-gradient-stop") ||
-                    "50").replace("%", "")
-            ) || 50;
+                    "0").replace("%", "")
+            ) || 0;
         stopWrapper.appendChild(stopLabel);
         stopWrapper.appendChild(stopInput);
 
@@ -768,8 +768,8 @@
             parseInt(
                 (themeData["--header-gradient-angle"] ||
                     getComputedStyle(document.body).getPropertyValue("--header-gradient-angle") ||
-                    "90").replace("deg", "")
-            ) || 90;
+                    "0").replace("deg", "")
+            ) || 0;
         angleWrapper.appendChild(angleLabel);
         angleWrapper.appendChild(angleInput);
 
