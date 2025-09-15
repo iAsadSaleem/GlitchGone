@@ -683,21 +683,12 @@
         radioWrapper.className = "tb-radio-wrapper";
 
         const radioInput = document.createElement("input");
-        radioInput.type = "checkbox"; // toggle switch
+        radioInput.type = "checkbox"; // toggle
         radioInput.className = "tb-radio";
 
         const radioLabel = document.createElement("label");
         radioLabel.className = "tb-radio-label";
         radioLabel.textContent = "Enable Header Gradient";
-
-        // Load initial state
-        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        const themeData = savedThemeObj.themeData || {};
-        const enabledInit =
-            (themeData["--header-main-bg-enabled"] ||
-                getComputedStyle(document.body).getPropertyValue("--header-main-bg-enabled") ||
-                "").trim();
-        radioInput.checked = enabledInit === "1";
 
         radioWrapper.appendChild(radioInput);
         radioWrapper.appendChild(radioLabel);
@@ -712,7 +703,8 @@
         const gradientWrapper = document.createElement("div");
         gradientWrapper.className = "tb-gradient-controls";
 
-        function makePicker(labelText, cssVar, fallback = "#007bff") {
+        // Helpers
+        function makePicker(labelText, fallback = "#007bff") {
             const wrapper = document.createElement("div");
             wrapper.className = "tb-color-picker-wrapper";
 
@@ -723,18 +715,11 @@
             const input = document.createElement("input");
             input.type = "color";
             input.className = "tb-color-input";
-
-            let initial =
-                themeData[cssVar] ||
-                getComputedStyle(document.body).getPropertyValue(cssVar).trim() ||
-                fallback;
-
-            if (!initial.startsWith("#")) initial = fallback;
-            input.value = initial;
+            input.value = fallback;
 
             const code = document.createElement("span");
             code.className = "tb-color-code";
-            code.textContent = initial;
+            code.textContent = fallback;
 
             input.addEventListener("input", () => {
                 code.textContent = input.value;
@@ -748,70 +733,48 @@
             return { wrapper, input };
         }
 
-        // === Create Inputs ===
-        const startPicker = makePicker("Color Start", "--header-gradient-start", "#ff0000");
-        const endPicker = makePicker("Color End", "--header-gradient-end", "#0000ff");
+        const startPicker = makePicker("Color Start", "#ff0000");
+        const endPicker = makePicker("Color End", "#0000ff");
 
-        const stopWrapper = document.createElement("div");
-        stopWrapper.className = "tb-input-wrapper";
-        const stopLabel = document.createElement("label");
-        stopLabel.className = "tb-input-label";
-        stopLabel.textContent = "Color Stop (%)";
         const stopInput = document.createElement("input");
         stopInput.type = "number";
-        stopInput.className = "tb-number-input";
+        stopInput.value = 50;
         stopInput.min = 0;
         stopInput.max = 100;
-        stopInput.value =
-            parseInt(
-                (themeData["--header-gradient-stop"] ||
-                    getComputedStyle(document.body).getPropertyValue("--header-gradient-stop") ||
-                    "50").replace("%", "")
-            ) || 50;
-        stopWrapper.appendChild(stopLabel);
-        stopWrapper.appendChild(stopInput);
 
-        const angleWrapper = document.createElement("div");
-        angleWrapper.className = "tb-input-wrapper";
-        const angleLabel = document.createElement("label");
-        angleLabel.className = "tb-input-label";
-        angleLabel.textContent = "Gradient Angle (deg)";
         const angleInput = document.createElement("input");
         angleInput.type = "number";
-        angleInput.className = "tb-number-input";
+        angleInput.value = 90;
         angleInput.min = 0;
         angleInput.max = 360;
-        angleInput.value =
-            parseInt(
-                (themeData["--header-gradient-angle"] ||
-                    getComputedStyle(document.body).getPropertyValue("--header-gradient-angle") ||
-                    "90").replace("deg", "")
-            ) || 90;
-        angleWrapper.appendChild(angleLabel);
-        angleWrapper.appendChild(angleInput);
 
         // Append all controls
         gradientWrapper.appendChild(startPicker.wrapper);
         gradientWrapper.appendChild(endPicker.wrapper);
+
+        const stopWrapper = document.createElement("div");
+        stopWrapper.append("Color Stop (%)", stopInput);
         gradientWrapper.appendChild(stopWrapper);
+
+        const angleWrapper = document.createElement("div");
+        angleWrapper.append("Gradient Angle", angleInput);
         gradientWrapper.appendChild(angleWrapper);
+
         section.appendChild(gradientWrapper);
 
-        // === Save original header background before any changes ===
+        // === Save original header background ===
         const headerEl = document.querySelector(".hl_header");
         const originalHeaderBg = headerEl
             ? window.getComputedStyle(headerEl).getPropertyValue("background")
             : "";
 
-        // === Update Gradient Preview ===
         function updateGradientPreview() {
             if (!headerEl) return;
 
             if (!radioInput.checked) {
-                // Restore original header background
+                // Restore original background
                 headerEl.style.background = originalHeaderBg;
                 headerEl.style.removeProperty("background-image");
-                document.body.style.setProperty("--header-main-bg-enabled", "0");
                 return;
             }
 
@@ -821,33 +784,17 @@
             const angle = angleInput.value || 90;
 
             const gradient = `linear-gradient(${angle}deg, ${start} ${stop}%, ${end} 100%)`;
-
-            // Update CSS vars
-            document.body.style.setProperty("--header-gradient-start", start);
-            document.body.style.setProperty("--header-gradient-end", end);
-            document.body.style.setProperty("--header-gradient-stop", stop + "%");
-            document.body.style.setProperty("--header-gradient-angle", angle + "deg");
-            document.body.style.setProperty("--header-main-bg-gradient", gradient);
-            document.body.style.setProperty("--header-main-bg-enabled", "1");
-
-            // Apply live
-            headerEl.style.background = "none";
-            headerEl.style.setProperty("background-image", "var(--header-main-bg-gradient)", "important");
+            headerEl.style.background = gradient;
         }
 
-        // === Event Listeners ===
         [stopInput, angleInput, startPicker.input, endPicker.input].forEach((el) =>
             el.addEventListener("input", updateGradientPreview)
         );
         radioInput.addEventListener("change", updateGradientPreview);
 
-        // Initial Preview
-        updateGradientPreview();
-
         container.appendChild(section);
         return section;
     }
-
 
     // Create Builder UI
     function createBuilderUI(controlsContainer) {
