@@ -207,12 +207,22 @@
     }
 
     // Color picker creator
+    // 🌟 Mapping of CSS vars -> Human-friendly labels
+    const cssVarLabels = {
+        "--primary-color": "Tab Label Color",
+        "--primary-bg-color": "None",
+        "--sidebar-bg-color": "Side Bar Background",
+        "--sidebar-menu-bg": "SideBar Menu Background",
+        "--sidebar-menu-color": "SideBar Menu Color"
+    };
+
     function createColorPicker(labelText, storageKey, cssVar, applyFn) {
         const wrapper = document.createElement("div");
         wrapper.className = "tb-color-picker-wrapper";
 
         const label = document.createElement("label");
-        label.textContent = labelText;
+        // ✅ Use human-readable label if available
+        label.textContent = cssVarLabels[cssVar] || labelText;
         label.className = "tb-color-picker-label";
 
         // 1️⃣ Load current color from saved themeData or CSS variable
