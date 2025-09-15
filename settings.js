@@ -674,6 +674,75 @@
         return wrapper;
     }
 
+    function buildHeaderControlsSection(parentSection) {
+        const headerControlsWrapper = document.createElement("div");
+        headerControlsWrapper.className = "tb-subsection";
+
+        const headerTitle = document.createElement("h4");
+        headerTitle.textContent = "Header Controls Settings";
+        headerTitle.className = "tb-subsection-title";
+        headerControlsWrapper.appendChild(headerTitle);
+
+        // 🌈 Color Start
+        headerControlsWrapper.appendChild(
+            createColorPicker("Color Start", "headerColorStart", "--header-gradient-start")
+        );
+
+        // 🌈 Color End
+        headerControlsWrapper.appendChild(
+            createColorPicker("Color End", "headerColorEnd", "--header-gradient-end")
+        );
+
+        // 📊 Color Stop %
+        const stopWrapper = document.createElement("div");
+        stopWrapper.className = "tb-input-wrapper";
+
+        const stopLabel = document.createElement("label");
+        stopLabel.textContent = "Color Stop (%)";
+        stopLabel.className = "tb-input-label";
+
+        const stopInput = document.createElement("input");
+        stopInput.type = "number";
+        stopInput.min = 0;
+        stopInput.max = 100;
+        stopInput.value = localStorage.getItem("headerColorStop") || 50;
+        stopInput.className = "tb-number-input";
+        stopInput.addEventListener("input", () => {
+            localStorage.setItem("headerColorStop", stopInput.value);
+            document.body.style.setProperty("--header-gradient-stop", stopInput.value + "%");
+        });
+
+        stopWrapper.appendChild(stopLabel);
+        stopWrapper.appendChild(stopInput);
+        headerControlsWrapper.appendChild(stopWrapper);
+
+        // 🔄 Gradient Angle
+        const angleWrapper = document.createElement("div");
+        angleWrapper.className = "tb-input-wrapper";
+
+        const angleLabel = document.createElement("label");
+        angleLabel.textContent = "Gradient Angle (deg)";
+        angleLabel.className = "tb-input-label";
+
+        const angleInput = document.createElement("input");
+        angleInput.type = "number";
+        angleInput.min = 0;
+        angleInput.max = 360;
+        angleInput.value = localStorage.getItem("headerGradientAngle") || 90;
+        angleInput.className = "tb-number-input";
+        angleInput.addEventListener("input", () => {
+            localStorage.setItem("headerGradientAngle", angleInput.value);
+            document.body.style.setProperty("--header-gradient-angle", angleInput.value + "deg");
+        });
+
+        angleWrapper.appendChild(angleLabel);
+        angleWrapper.appendChild(angleInput);
+        headerControlsWrapper.appendChild(angleWrapper);
+
+        // Attach everything to parent section
+        parentSection.appendChild(headerControlsWrapper);
+    }
+
     // Create Builder UI
     function createBuilderUI(controlsContainer) {
         if (!controlsContainer || document.getElementById("hl_header--themebuilder-icon")) return;
@@ -753,6 +822,7 @@
 
             contentWrapper.appendChild(
                 createSection("Advance Settings", (section) => {
+                    buildHeaderControlsSection(section);
                     // Add more advanced options later
                 }, "🗄️")
             );
