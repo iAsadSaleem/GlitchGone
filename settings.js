@@ -808,9 +808,9 @@
             if (!headerEl) return;
 
             if (!radioInput.checked) {
-                // Restore original header background
-                headerEl.style.background = originalHeaderBg;
-                headerEl.style.removeProperty("background-image");
+                // Disable gradient → restore background color
+                headerEl.style.setProperty("background-image", "none", "important");
+                headerEl.style.setProperty("background", "var(--header-bg-color)", "important");
                 document.body.style.setProperty("--header-main-bg-enabled", "0");
                 return;
             }
@@ -830,8 +830,8 @@
             document.body.style.setProperty("--header-main-bg-gradient", gradient);
             document.body.style.setProperty("--header-main-bg-enabled", "1");
 
-            // Apply live
-            headerEl.style.background = "none";
+            // Enable gradient → remove solid background
+            headerEl.style.setProperty("background", "none", "important");
             headerEl.style.setProperty("background-image", "var(--header-main-bg-gradient)", "important");
         }
 
