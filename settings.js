@@ -925,6 +925,115 @@
         section.appendChild(profileWrapper);
     }
 
+    function buildHelpButtonControls(section) {
+        const helpWrapper = document.createElement("div");
+        helpWrapper.className = "tb-help-btn-controls";
+
+        const title = document.createElement("h4");
+        title.className = "tb-help-title";
+        title.textContent = "Help Button Settings";
+        helpWrapper.appendChild(title);
+
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        const themeData = savedThemeObj.themeData || {};
+
+        const selector = "#hl_header--help-icon"; // your Help button
+        const iconSelector = "#hl_header--help-icon i"; // the <i> tag for the ? icon
+
+        // helper: inject isolated CSS
+        function setImportantStyle(id, rule) {
+            let styleTag = document.getElementById("style-" + id);
+            if (!styleTag) {
+                styleTag = document.createElement("style");
+                styleTag.id = "style-" + id;
+                document.head.appendChild(styleTag);
+            }
+            styleTag.textContent = rule;
+        }
+
+        // helper: create color picker
+        function makePicker(labelText, key, fallback, applyFn) {
+            const wrapper = document.createElement("div");
+            wrapper.className = "tb-color-picker-wrapper";
+
+            const label = document.createElement("label");
+            label.className = "tb-color-picker-label";
+            label.textContent = labelText;
+
+            const input = document.createElement("input");
+            input.type = "color";
+            input.className = "tb-color-input";
+
+            let initial = themeData[key] || fallback;
+            input.value = initial;
+
+            const code = document.createElement("span");
+            code.className = "tb-color-code";
+            code.textContent = initial;
+
+            // Apply initial value
+            applyFn(initial);
+
+            input.addEventListener("input", () => {
+                const val = input.value;
+                code.textContent = val;
+
+                savedThemeObj.themeData = savedThemeObj.themeData || {};
+                savedThemeObj.themeData[key] = val;
+                localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+
+                applyFn(val);
+            });
+
+            wrapper.appendChild(label);
+            wrapper.appendChild(input);
+            wrapper.appendChild(code);
+
+            return wrapper;
+        }
+
+        // === Icon Color ===
+        helpWrapper.appendChild(
+            makePicker("Icon Color", "help-icon-color", "#ffffff", (val) => {
+                setImportantStyle(
+                    "help-icon-color",
+                    `${iconSelector} { color: ${val} !important; }`
+                );
+            })
+        );
+
+        // === Icon Hover Color ===
+        helpWrapper.appendChild(
+            makePicker("Icon Hover Color", "help-icon-hover", "#eeeeee", (val) => {
+                setImportantStyle(
+                    "help-icon-hover",
+                    `${selector}:hover i { color: ${val} !important; }`
+                );
+            })
+        );
+
+        // === Background Color ===
+        helpWrapper.appendChild(
+            makePicker("Background Color", "help-bg-color", "#188bf6", (val) => {
+                setImportantStyle(
+                    "help-bg-color",
+                    `${selector} { background-color: ${val} !important; }`
+                );
+            })
+        );
+
+        // === Background Hover Color ===
+        helpWrapper.appendChild(
+            makePicker("Background Hover Color", "help-bg-hover", "#146cc0", (val) => {
+                setImportantStyle(
+                    "help-bg-hover",
+                    `${selector}:hover { background-color: ${val} !important; }`
+                );
+            })
+        );
+
+        section.appendChild(helpWrapper);
+    }
 
     // Utility for hover styles
     function addDynamicHoverStyle(selector, styleContent, id) {
@@ -1019,6 +1128,7 @@
                 createSection("Advance Settings", (section) => {
                     buildHeaderControlsSection(section);
                     buildProfileButtonControls(section);   // Profile Button Color Controls
+                    buildHelpButtonControls(section);   // Profile Button Color Controls
 
                     // Add more advanced options later
                 }, "🗄️")
