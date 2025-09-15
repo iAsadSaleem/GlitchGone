@@ -825,18 +825,13 @@
         title.textContent = "Profile Button Settings";
         profileWrapper.appendChild(title);
 
-        const selector = ".container-fluid .hl_header--controls .avatar .avatar_img";
-        const profileBtn = document.querySelector(selector);
-        if (!profileBtn) {
-            console.warn("Profile button not found");
-            return;
-        }
-
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedThemeObj.themeData || {};
 
-        // helper: add/update <style>
-        function setStyle(id, rule) {
+        const selector = ".container-fluid .hl_header--controls .avatar .avatar_img";
+
+        // helper: inject isolated CSS for profile button only
+        function setImportantStyle(id, rule) {
             let styleTag = document.getElementById("style-" + id);
             if (!styleTag) {
                 styleTag = document.createElement("style");
@@ -847,7 +842,7 @@
         }
 
         // helper: color picker with consistent classes
-        function makePicker(labelText, cssVar, fallback, applyFn) {
+        function makePicker(labelText, key, fallback, applyFn) {
             const wrapper = document.createElement("div");
             wrapper.className = "tb-color-picker-wrapper";
 
@@ -859,7 +854,7 @@
             input.type = "color";
             input.className = "tb-color-input";
 
-            let initial = themeData[cssVar] || fallback;
+            let initial = themeData[key] || fallback;
             input.value = initial;
 
             const code = document.createElement("span");
@@ -874,7 +869,7 @@
                 code.textContent = val;
 
                 savedThemeObj.themeData = savedThemeObj.themeData || {};
-                savedThemeObj.themeData[cssVar] = val;
+                savedThemeObj.themeData[key] = val;
                 localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
 
                 applyFn(val);
@@ -887,31 +882,43 @@
             return wrapper;
         }
 
-        // === Icon Color (default) ===
+        // === Icon Color ===
         profileWrapper.appendChild(
-            makePicker("Icon Color", "--profile-icon-color", "#8d4e4e", (val) => {
-                setStyle("profile-icon-default", `${selector} { color: ${val} !important; }`);
+            makePicker("Icon Color", "profile-icon-color", "#8d4e4e", (val) => {
+                setImportantStyle(
+                    "profile-icon-color",
+                    `${selector} { color: ${val} !important; }`
+                );
             })
         );
 
         // === Icon Hover Color ===
         profileWrapper.appendChild(
-            makePicker("Icon Hover Color", "--profile-icon-hover", "#aa6666", (val) => {
-                setStyle("profile-icon-hover", `${selector}:hover { color: ${val} !important; }`);
+            makePicker("Icon Hover Color", "profile-icon-hover", "#aa6666", (val) => {
+                setImportantStyle(
+                    "profile-icon-hover",
+                    `${selector}:hover { color: ${val} !important; }`
+                );
             })
         );
 
-        // === Background Color (default) ===
+        // === Background Color ===
         profileWrapper.appendChild(
-            makePicker("Background Color", "--profile-bg-color", "#344391", (val) => {
-                setStyle("profile-bg-default", `${selector} { background-color: ${val} !important; }`);
+            makePicker("Background Color", "profile-bg-color", "#344391", (val) => {
+                setImportantStyle(
+                    "profile-bg-color",
+                    `${selector} { background-color: ${val} !important; }`
+                );
             })
         );
 
         // === Background Hover Color ===
         profileWrapper.appendChild(
-            makePicker("Background Hover Color", "--profile-bg-hover", "#1f2c66", (val) => {
-                setStyle("profile-bg-hover", `${selector}:hover { background-color: ${val} !important; }`);
+            makePicker("Background Hover Color", "profile-bg-hover", "#1f2c66", (val) => {
+                setImportantStyle(
+                    "profile-bg-hover",
+                    `${selector}:hover { background-color: ${val} !important; }`
+                );
             })
         );
 
