@@ -700,8 +700,8 @@
                 "").trim();
         radioInput.checked = enabledInit === "1";
 
-        radioWrapper.appendChild(radioInput);
         radioWrapper.appendChild(radioLabel);
+        radioWrapper.appendChild(radioInput);
         section.appendChild(radioWrapper);
 
         // === Section Title ===
