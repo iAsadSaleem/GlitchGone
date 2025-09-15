@@ -682,13 +682,14 @@
         const radioWrapper = document.createElement("div");
         radioWrapper.className = "tb-radio-wrapper";
 
+        const radioLabel = document.createElement("label");
+        radioLabel.className = "tb-radio-label";
+        radioLabel.textContent = "Advance Settings";
+
         const radioInput = document.createElement("input");
         radioInput.type = "checkbox"; // toggle switch
         radioInput.className = "tb-radio";
 
-        const radioLabel = document.createElement("label");
-        radioLabel.className = "tb-radio-label";
-        radioLabel.textContent = "Enable Header Gradient";
 
         // Load initial state
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
