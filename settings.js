@@ -683,7 +683,7 @@
         radioWrapper.className = "tb-radio-wrapper";
 
         const radioInput = document.createElement("input");
-        radioInput.type = "checkbox"; // 🔹 use checkbox (toggles on/off)
+        radioInput.type = "checkbox"; // toggle switch
         radioInput.className = "tb-radio";
 
         const radioLabel = document.createElement("label");
@@ -738,7 +738,6 @@
 
             input.addEventListener("input", () => {
                 code.textContent = input.value;
-                document.body.style.setProperty(cssVar, input.value);
                 updateGradientPreview();
             });
 
@@ -798,15 +797,20 @@
         gradientWrapper.appendChild(angleWrapper);
         section.appendChild(gradientWrapper);
 
+        // === Save original header background before any changes ===
+        const headerEl = document.querySelector(".hl_header");
+        const originalHeaderBg = headerEl
+            ? window.getComputedStyle(headerEl).getPropertyValue("background")
+            : "";
+
         // === Update Gradient Preview ===
         function updateGradientPreview() {
-            const headerEl = document.querySelector(".hl_header");
             if (!headerEl) return;
 
             if (!radioInput.checked) {
-                // Gradient disabled → reset header
+                // Restore original header background
+                headerEl.style.background = originalHeaderBg;
                 headerEl.style.removeProperty("background-image");
-                headerEl.style.removeProperty("background");
                 document.body.style.setProperty("--header-main-bg-enabled", "0");
                 return;
             }
@@ -832,7 +836,7 @@
         }
 
         // === Event Listeners ===
-        [stopInput, angleInput].forEach((el) =>
+        [stopInput, angleInput, startPicker.input, endPicker.input].forEach((el) =>
             el.addEventListener("input", updateGradientPreview)
         );
         radioInput.addEventListener("change", updateGradientPreview);
