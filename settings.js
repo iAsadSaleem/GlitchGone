@@ -667,6 +667,155 @@
         return wrapper;
     }
 
+    function buildHeaderControlsSection(container) {
+        const section = document.createElement("div");
+        section.className = "tb-controls-section";
+
+        // === Section Title ===
+        const header = document.createElement("h4");
+        header.className = "tb-header-controls";
+        header.textContent = "Header Background Color";
+        section.appendChild(header);
+
+        // === Gradient Controls Wrapper ===
+        const gradientWrapper = document.createElement("div");
+        gradientWrapper.className = "tb-gradient-controls";
+
+        // Color picker helper
+        function makePicker(labelText, cssVar, fallback = "#007bff") {
+            const wrapper = document.createElement("div");
+            wrapper.className = "tb-color-picker-wrapper";
+
+            const label = document.createElement("label");
+            label.className = "tb-color-picker-label";
+            label.textContent = labelText;
+
+            const input = document.createElement("input");
+            input.type = "color";
+            input.className = "tb-color-input";
+
+            let initial =
+                themeData[cssVar] ||
+                getComputedStyle(document.body).getPropertyValue(cssVar).trim() ||
+                fallback;
+
+            if (!initial.startsWith("#")) initial = fallback;
+            input.value = initial;
+
+            const code = document.createElement("span");
+            code.className = "tb-color-code";
+            code.textContent = initial;
+
+            input.addEventListener("input", () => {
+                code.textContent = input.value;
+                updateGradientPreview();
+            });
+
+            wrapper.appendChild(label);
+            wrapper.appendChild(input);
+            wrapper.appendChild(code);
+
+            return { wrapper, input };
+        }
+
+        // === Load saved state ===
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        const themeData = savedThemeObj.themeData || {};
+
+        // === Create Inputs ===
+        const startPicker = makePicker("Color Start", "--header-gradient-start", "#ff0000");
+        const endPicker = makePicker("Color End", "--header-gradient-end", "#0000ff");
+
+        const stopWrapper = document.createElement("div");
+        stopWrapper.className = "tb-input-wrapper";
+        const stopLabel = document.createElement("label");
+        stopLabel.className = "tb-input-label";
+        stopLabel.textContent = "Color Stop (%)";
+        const stopInput = document.createElement("input");
+        stopInput.type = "number";
+        stopInput.className = "tb-number-input";
+        stopInput.min = 0;
+        stopInput.max = 100;
+        stopInput.value =
+            parseInt(
+                (themeData["--header-gradient-stop"] ||
+                    getComputedStyle(document.body).getPropertyValue("--header-gradient-stop") ||
+                    "0").replace("%", "")
+            ) || 0;
+        stopWrapper.appendChild(stopLabel);
+        stopWrapper.appendChild(stopInput);
+
+        const angleWrapper = document.createElement("div");
+        angleWrapper.className = "tb-input-wrapper";
+        const angleLabel = document.createElement("label");
+        angleLabel.className = "tb-input-label";
+        angleLabel.textContent = "Gradient Angle (deg)";
+        const angleInput = document.createElement("input");
+        angleInput.type = "number";
+        angleInput.className = "tb-number-input";
+        angleInput.style.position = "relative";
+        angleInput.style.left = "41px";
+        angleInput.min = 0;
+        angleInput.max = 360;
+        angleInput.value =
+            parseInt(
+                (themeData["--header-gradient-angle"] ||
+                    getComputedStyle(document.body).getPropertyValue("--header-gradient-angle") ||
+                    "0").replace("deg", "")
+            ) || 0;
+        angleWrapper.appendChild(angleLabel);
+        angleWrapper.appendChild(angleInput);
+
+        // Append all controls
+        gradientWrapper.appendChild(startPicker.wrapper);
+        gradientWrapper.appendChild(endPicker.wrapper);
+        gradientWrapper.appendChild(stopWrapper);
+        gradientWrapper.appendChild(angleWrapper);
+        // === Instruction Comment ===
+        const instruction = document.createElement("p");
+        instruction.className = "tb-instruction-text";
+        instruction.textContent =
+            "💡 For Flat Color in Header: Choose the same color for Start & End, Stop %: 0, Gradient Angle: 0";
+        gradientWrapper.appendChild(instruction);
+
+        section.appendChild(gradientWrapper);
+
+        // === Update Gradient Preview ===
+        const headerEl = document.querySelector(".hl_header");
+        function updateGradientPreview() {
+            if (!headerEl) return;
+
+            const start = startPicker.input.value;
+            const end = endPicker.input.value;
+            const stop = stopInput.value;
+            const angle = angleInput.value;
+
+            const gradient = `linear-gradient(${angle}deg, ${start} ${stop}%, ${end} 100%)`;
+
+            // Update CSS vars
+            document.body.style.setProperty("--header-gradient-start", start);
+            document.body.style.setProperty("--header-gradient-end", end);
+            document.body.style.setProperty("--header-gradient-stop", stop + "%");
+            document.body.style.setProperty("--header-gradient-angle", angle + "deg");
+            document.body.style.setProperty("--header-main-bg-gradient", gradient);
+
+            // Apply live
+            headerEl.style.setProperty("background", "none", "important");
+            headerEl.style.setProperty("background-image", "var(--header-main-bg-gradient)", "important");
+        }
+
+        // === Event Listeners ===
+        [stopInput, angleInput, startPicker.input, endPicker.input].forEach((el) =>
+            el.addEventListener("input", updateGradientPreview)
+        );
+
+        // Initial Preview
+        updateGradientPreview();
+
+        container.appendChild(section);
+        return section;
+    }
+
     function buildProfileButtonControls(section) {
         const profileWrapper = document.createElement("div");
         profileWrapper.className = "tb-profile-btn-controls";
