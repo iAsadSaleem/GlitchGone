@@ -674,73 +674,105 @@
         return wrapper;
     }
 
-    function buildHeaderControlsSection(parentSection) {
-        const headerControlsWrapper = document.createElement("div");
-        headerControlsWrapper.className = "tb-subsection";
+    function buildHeaderControlsSection(container) {
+        const section = document.createElement("div");
+        section.className = "tb-controls-section";
 
-        const headerTitle = document.createElement("h4");
-        headerTitle.textContent = "Header Controls Settings";
-        headerTitle.className = "tb-subsection-title";
-        headerControlsWrapper.appendChild(headerTitle);
+        const header = document.createElement("h4");
+        header.textContent = "Header Controls";
+        section.appendChild(header);
 
-        // 🌈 Color Start
-        headerControlsWrapper.appendChild(
-            createColorPicker("Color Start", "headerColorStart", "--header-gradient-start")
-        );
+        // === Gradient Controls Wrapper ===
+        const gradientWrapper = document.createElement("div");
+        gradientWrapper.className = "tb-gradient-controls";
 
-        // 🌈 Color End
-        headerControlsWrapper.appendChild(
-            createColorPicker("Color End", "headerColorEnd", "--header-gradient-end")
-        );
+        // Helper function to create a control
+        function createControl(labelText, type, defaultValue) {
+            const wrapper = document.createElement("div");
+            wrapper.className = "tb-control";
 
-        // 📊 Color Stop %
-        const stopWrapper = document.createElement("div");
-        stopWrapper.className = "tb-input-wrapper";
+            const label = document.createElement("label");
+            label.textContent = labelText;
 
-        const stopLabel = document.createElement("label");
-        stopLabel.textContent = "Color Stop (%)";
-        stopLabel.className = "tb-input-label";
+            const input = document.createElement("input");
+            input.type = type;
+            input.value = defaultValue;
 
-        const stopInput = document.createElement("input");
-        stopInput.type = "number";
-        stopInput.min = 0;
-        stopInput.max = 100;
-        stopInput.value = localStorage.getItem("headerColorStop") || 50;
-        stopInput.className = "tb-number-input";
-        stopInput.addEventListener("input", () => {
-            localStorage.setItem("headerColorStop", stopInput.value);
-            document.body.style.setProperty("--header-gradient-stop", stopInput.value + "%");
-        });
+            wrapper.appendChild(label);
+            wrapper.appendChild(input);
 
-        stopWrapper.appendChild(stopLabel);
-        stopWrapper.appendChild(stopInput);
-        headerControlsWrapper.appendChild(stopWrapper);
+            // For color inputs → show hex code
+            if (type === "color") {
+                const codeDisplay = document.createElement("span");
+                codeDisplay.textContent = defaultValue;
+                codeDisplay.className = "tb-code-display";
 
-        // 🔄 Gradient Angle
-        const angleWrapper = document.createElement("div");
-        angleWrapper.className = "tb-input-wrapper";
+                input.addEventListener("input", () => {
+                    codeDisplay.textContent = input.value;
+                    updateGradientPreview();
+                });
 
-        const angleLabel = document.createElement("label");
-        angleLabel.textContent = "Gradient Angle (deg)";
-        angleLabel.className = "tb-input-label";
+                wrapper.appendChild(codeDisplay);
+            } else {
+                input.addEventListener("input", updateGradientPreview);
+            }
 
-        const angleInput = document.createElement("input");
-        angleInput.type = "number";
-        angleInput.min = 0;
-        angleInput.max = 360;
-        angleInput.value = localStorage.getItem("headerGradientAngle") || 90;
-        angleInput.className = "tb-number-input";
-        angleInput.addEventListener("input", () => {
-            localStorage.setItem("headerGradientAngle", angleInput.value);
-            document.body.style.setProperty("--header-gradient-angle", angleInput.value + "deg");
-        });
+            return { wrapper, input };
+        }
 
-        angleWrapper.appendChild(angleLabel);
-        angleWrapper.appendChild(angleInput);
-        headerControlsWrapper.appendChild(angleWrapper);
+        // === Create Inputs ===
+        const startColor = createControl("Color Start", "color", "#ff0000");
+        const endColor = createControl("Color End", "color", "#0000ff");
+        const stopPercent = createControl("Color Stop (%)", "number", "50");
+        stopPercent.input.min = 0;
+        stopPercent.input.max = 100;
 
-        // Attach everything to parent section
-        parentSection.appendChild(headerControlsWrapper);
+        const gradientAngle = createControl("Gradient Angle", "number", "90");
+        gradientAngle.input.min = 0;
+        gradientAngle.input.max = 360;
+
+        // Append all to wrapper
+        gradientWrapper.appendChild(startColor.wrapper);
+        gradientWrapper.appendChild(endColor.wrapper);
+        gradientWrapper.appendChild(stopPercent.wrapper);
+        gradientWrapper.appendChild(gradientAngle.wrapper);
+
+        section.appendChild(gradientWrapper);
+
+        // === Update Gradient Preview (live) ===
+        function updateGradientPreview() {
+            const start = startColor.input.value;
+            const end = endColor.input.value;
+            const stop = stopPercent.input.value || 50;
+            const angle = gradientAngle.input.value || 90;
+
+            const gradient = `linear-gradient(${angle}deg, ${start} ${stop}%, ${end} 100%)`;
+
+            // Save each value as a CSS var (for Apply button to pick up)
+            document.documentElement.style.setProperty("--header-gradient-start", start);
+            document.documentElement.style.setProperty("--header-gradient-end", end);
+            document.documentElement.style.setProperty("--header-gradient-stop", stop + "%");
+            document.documentElement.style.setProperty("--header-gradient-angle", angle + "deg");
+            document.documentElement.style.setProperty("--header-gradient", gradient);
+
+            // Live apply to header background
+            const headerEl = document.querySelector(".header");
+            if (headerEl) headerEl.style.background = gradient;
+        }
+
+
+        // Expose gradient save function
+        section.getGradientValue = function () {
+            const start = startColor.input.value;
+            const end = endColor.input.value;
+            const stop = stopPercent.input.value || 50;
+            const angle = gradientAngle.input.value || 90;
+
+            return `linear-gradient(${angle}deg, ${start} ${stop}%, ${end} 100%)`;
+        };
+
+        container.appendChild(section);
+        return section;
     }
 
     // Create Builder UI
