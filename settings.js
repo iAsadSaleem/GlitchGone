@@ -931,28 +931,14 @@
 
         const title = document.createElement("h4");
         title.className = "tb-help-title";
-        title.textContent = "Help Button";
+        title.textContent = "Help Button Settings";
         helpWrapper.appendChild(title);
 
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedThemeObj.themeData || {};
 
-        const selector = "#hl_header--help-icon"; // your Help button
-        const iconSelector = "#hl_header--help-icon i"; // the <i> tag for the ? icon
-
-        // helper: inject isolated CSS
-        function setImportantStyle(id, rule) {
-            let styleTag = document.getElementById("style-" + id);
-            if (!styleTag) {
-                styleTag = document.createElement("style");
-                styleTag.id = "style-" + id;
-                document.head.appendChild(styleTag);
-            }
-            styleTag.textContent = rule;
-        }
-
         // helper: create color picker
-        function makePicker(labelText, key, fallback, applyFn) {
+        function makePicker(labelText, key, fallback, cssVar) {
             const wrapper = document.createElement("div");
             wrapper.className = "tb-color-picker-wrapper";
 
@@ -971,8 +957,8 @@
             code.className = "tb-color-code";
             code.textContent = initial;
 
-            // Apply initial value
-            applyFn(initial);
+            // Apply immediately
+            document.body.style.setProperty(cssVar, initial);
 
             input.addEventListener("input", () => {
                 const val = input.value;
@@ -982,7 +968,7 @@
                 savedThemeObj.themeData[key] = val;
                 localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
 
-                applyFn(val);
+                document.body.style.setProperty(cssVar, val);
             });
 
             wrapper.appendChild(label);
@@ -994,42 +980,22 @@
 
         // === Icon Color ===
         helpWrapper.appendChild(
-            makePicker("Icon Color", "help-icon-color", "#ffffff", (val) => {
-                setImportantStyle(
-                    "help-icon-color",
-                    `${iconSelector} { color: ${val} !important; }`
-                );
-            })
+            makePicker("Icon Color", "help-icon-color", "#ffffff", "--header-icon-color")
         );
 
         // === Icon Hover Color ===
         helpWrapper.appendChild(
-            makePicker("Icon Hover Color", "help-icon-hover", "#eeeeee", (val) => {
-                setImportantStyle(
-                    "help-icon-hover",
-                    `${selector}:hover i { color: ${val} !important; }`
-                );
-            })
+            makePicker("Icon Hover Color", "help-icon-hover", "#eeeeee", "--header-icon-hover")
         );
 
         // === Background Color ===
         helpWrapper.appendChild(
-            makePicker("Background Color", "help-bg-color", "#188bf6", (val) => {
-                setImportantStyle(
-                    "help-bg-color",
-                    `${selector} { background-color: ${val} !important; }`
-                );
-            })
+            makePicker("Background Color", "help-bg-color", "#188bf6", "--header-icon-bg")
         );
 
         // === Background Hover Color ===
         helpWrapper.appendChild(
-            makePicker("Background Hover Color", "help-bg-hover", "#146cc0", (val) => {
-                setImportantStyle(
-                    "help-bg-hover",
-                    `${selector}:hover { background-color: ${val} !important; }`
-                );
-            })
+            makePicker("Background Hover Color", "help-bg-hover", "#146cc0", "--header-icon-hover-bg")
         );
 
         section.appendChild(helpWrapper);
