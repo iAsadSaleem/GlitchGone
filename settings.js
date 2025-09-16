@@ -1476,24 +1476,27 @@
 
                 // ✅ Save lock state inside themeData
                 toggleInput.addEventListener("change", () => {
+                    // Load current theme
                     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                     saved.themeData = saved.themeData || {};
 
-                    // Convert object to string
-                    let lockedMenus = saved.themeData["--lockedMenus"]
+                    // Parse existing locked menus or start new
+                    const lockedMenus = saved.themeData["--lockedMenus"]
                         ? JSON.parse(saved.themeData["--lockedMenus"])
                         : {};
 
+                    // Update locked menu state
                     if (toggleInput.checked) {
                         lockedMenus[menuId] = true;
                     } else {
                         delete lockedMenus[menuId];
                     }
 
-                    // Save back as string
+                    // Save back to themeData
                     saved.themeData["--lockedMenus"] = JSON.stringify(lockedMenus);
-
                     localStorage.setItem("userTheme", JSON.stringify(saved));
+
+                    // Apply the locks immediately
                     applyLockedMenus();
                 });
 
