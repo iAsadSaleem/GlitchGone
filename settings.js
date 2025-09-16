@@ -1110,7 +1110,7 @@
 
             const input = document.createElement("input");
             input.type = "color";
-            input.className = "tb-number-input";
+            input.className = "tb-color-input";
 
             let initial = themeData[key] || fallback;
             input.value = initial;
