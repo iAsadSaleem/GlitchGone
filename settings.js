@@ -1363,9 +1363,7 @@
 
     // === Usage ===
     waitForSidebarMenus(() => {
-        // Example: section is your Advanced Settings panel container
-        const section = document.querySelector("#your-settings-panel");
-        if (section) addSidebarMenuSettings(section);
+        addSidebarMenuSettings(section);
     });
 
     // Utility for hover styles
