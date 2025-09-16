@@ -5,6 +5,18 @@
     let headerObserver = null;
     const MAX_ATTEMPTS = 40;
 
+    (function () {
+        if (!document.querySelector('link[href*="font-awesome"]')) {
+            const link = document.createElement("link");
+            link.rel = "stylesheet";
+            link.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css";
+            link.crossOrigin = "anonymous";
+            link.referrerPolicy = "no-referrer";
+            document.head.appendChild(link);
+            console.log("[ThemeBuilder] Font Awesome loaded");
+        }
+    })();
+
     /**************************************
  * JC Confirm Modal Function
  **************************************/
@@ -1310,14 +1322,12 @@
             iconInput.value = savedData.icon || "";
             iconInput.placeholder = "FontAwesome class (e.g. fas fa-home)";
             iconInput.addEventListener("input", () => {
-                if (menuIconWrapper) {
-                    const newIcon = makeFontAwesomeIcon(iconInput.value);
-                    if (newIcon) {
-                        const existingIcon = menu.querySelector("img, i");
-                        if (existingIcon) existingIcon.replaceWith(newIcon);
-                        else menu.insertBefore(newIcon, menuLabel);
-                        saveMenuSetting(menuId, "icon", iconInput.value);
-                    }
+                const existingIcon = menu.querySelector("img, i"); // re-query each time
+                const newIcon = makeFontAwesomeIcon(iconInput.value);
+                if (newIcon) {
+                    if (existingIcon) existingIcon.replaceWith(newIcon);
+                    else menu.insertBefore(newIcon, menuLabel);
+                    saveMenuSetting(menuId, "icon", iconInput.value);
                 }
             });
             row.appendChild(iconInput);
