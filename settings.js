@@ -1527,11 +1527,76 @@
     }
 
     // Helper for blocking click
+    // Helper for blocking click
     function blockMenuClick(e) {
         e.preventDefault();
         e.stopPropagation();
-        alert("No access. Contact Owner.");
+
+        // If popup already exists, remove it first
+        const existing = document.getElementById("tb-lock-popup");
+        if (existing) existing.remove();
+
+        // Overlay (blurred background)
+        const overlay = document.createElement("div");
+        overlay.id = "tb-lock-popup";
+        overlay.style.position = "fixed";
+        overlay.style.top = "0";
+        overlay.style.left = "0";
+        overlay.style.width = "100%";
+        overlay.style.height = "100%";
+        overlay.style.background = "rgba(0,0,0,0.5)";
+        overlay.style.backdropFilter = "blur(3px)";
+        overlay.style.display = "flex";
+        overlay.style.alignItems = "center";
+        overlay.style.justifyContent = "center";
+        overlay.style.zIndex = "99999";
+
+        // Popup box
+        const popup = document.createElement("div");
+        popup.style.background = "#fff";
+        popup.style.padding = "20px 30px";
+        popup.style.borderRadius = "12px";
+        popup.style.maxWidth = "400px";
+        popup.style.textAlign = "center";
+        popup.style.boxShadow = "0 8px 24px rgba(0,0,0,0.3)";
+
+        // Title
+        const title = document.createElement("h3");
+        title.textContent = "Access Denied";
+        title.style.marginBottom = "12px";
+        title.style.fontSize = "20px";
+        title.style.color = "#333";
+
+        // Message
+        const msg = document.createElement("p");
+        msg.textContent = "No access. Please contact the Owner.";
+        msg.style.marginBottom = "20px";
+        msg.style.color = "#555";
+
+        // Ok button
+        const okBtn = document.createElement("button");
+        okBtn.textContent = "OK";
+        okBtn.style.padding = "8px 20px";
+        okBtn.style.border = "none";
+        okBtn.style.borderRadius = "6px";
+        okBtn.style.background = "#007bff";
+        okBtn.style.color = "#fff";
+        okBtn.style.cursor = "pointer";
+        okBtn.style.fontSize = "14px";
+
+        okBtn.addEventListener("click", () => {
+            overlay.remove();
+        });
+
+        // Build popup
+        popup.appendChild(title);
+        popup.appendChild(msg);
+        popup.appendChild(okBtn);
+        overlay.appendChild(popup);
+
+        document.body.appendChild(overlay);
     }
+
 
 
 
