@@ -536,3 +536,17 @@
     border: solid 1px #ffff;
     border-radius: 4px;
 }
+
+/* Scrollbar styling using variables */
+::-webkit-scrollbar {
+    width: var(--scroll-width, 7px); /* fallback 7px */
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--scroll-color, #344391); /* fallback color */
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}

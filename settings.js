@@ -1046,30 +1046,10 @@
         widthLabel.appendChild(widthInput);
         wrapper.appendChild(widthLabel);
 
-        // --- Inject style tag for scrollbar ---
-        let styleTag = document.getElementById("dynamic-scrollbar-style");
-        if (!styleTag) {
-            styleTag = document.createElement("style");
-            styleTag.id = "dynamic-scrollbar-style";
-            document.head.appendChild(styleTag);
-        }
-
+        // --- Update function ---
         function updateScrollbar() {
-            const color = colorInput.value;
-            const width = widthInput.value + "px";
-
-            styleTag.innerHTML = `
-      ::-webkit-scrollbar {
-        width: ${width};
-      }
-      ::-webkit-scrollbar-thumb {
-        background-color: ${color};
-        border-radius: 10px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #f1f1f1;
-      }
-    `;
+            document.documentElement.style.setProperty("--scroll-color", colorInput.value);
+            document.documentElement.style.setProperty("--scroll-width", widthInput.value + "px");
         }
 
         // --- Listeners ---
@@ -1082,6 +1062,7 @@
         // Add to ThemeBuilder container
         container.appendChild(wrapper);
     }
+
 
     // Utility for hover styles
     function addDynamicHoverStyle(selector, styleContent, id) {
