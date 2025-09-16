@@ -1425,50 +1425,82 @@
 
 
     function buildFeatureLockSection(section) {
-        // Lock Dashboard
-        const lockDashboard = document.createElement("div");
-        lockDashboard.className = "tb-setting-item";
-        lockDashboard.innerHTML = `
-        <label>
-            <input type="checkbox" id="lock-dashboard" />
-            Lock Dashboard Access
-        </label>
-    `;
-        section.appendChild(lockDashboard);
+        section.innerHTML = ""; // clear if rerender
 
-        // Hide Profile Button
-        const hideProfileBtn = document.createElement("div");
-        hideProfileBtn.className = "tb-setting-item";
-        hideProfileBtn.innerHTML = `
-        <label>
-            <input type="checkbox" id="hide-profile-btn" />
-            Hide Profile Button
-        </label>
-    `;
-        section.appendChild(hideProfileBtn);
+        const sidebarMenus = document.querySelectorAll(".hl_nav-header a");
+        if (!sidebarMenus.length) {
+            const msg = document.createElement("div");
+            msg.textContent = "No sidebar menus found.";
+            msg.style.color = "#888";
+            section.appendChild(msg);
+            return;
+        }
 
-        // Hide Help Button
-        const hideHelpBtn = document.createElement("div");
-        hideHelpBtn.className = "tb-setting-item";
-        hideHelpBtn.innerHTML = `
-        <label>
-            <input type="checkbox" id="hide-help-btn" />
-            Hide Help Button
-        </label>
-    `;
-        section.appendChild(hideHelpBtn);
+        sidebarMenus.forEach(menu => {
+            const menuId = menu.id || menu.getAttribute("meta") || menu.href;
+            const menuName = menu.querySelector(".nav-title")?.textContent.trim() || menuId;
 
-        // Lock Theme Builder
-        const lockThemeBuilder = document.createElement("div");
-        lockThemeBuilder.className = "tb-setting-item";
-        lockThemeBuilder.innerHTML = `
-        <label>
-            <input type="checkbox" id="lock-themebuilder" />
-            Lock Theme Builder
-        </label>
-    `;
-        section.appendChild(lockThemeBuilder);
+            // Wrapper
+            const itemWrapper = document.createElement("div");
+            itemWrapper.className = "tb-setting-item flex items-center justify-between";
+
+            // Label
+            const label = document.createElement("span");
+            label.textContent = menuName;
+
+            // Toggle
+            const toggleWrapper = document.createElement("div");
+            toggleWrapper.className = "toggle-switch";
+
+            const toggleInput = document.createElement("input");
+            toggleInput.type = "checkbox";
+            toggleInput.className = "toggle-input";
+            toggleInput.id = "lock-" + menuId;
+
+            const toggleLabel = document.createElement("label");
+            toggleLabel.className = "toggle-label";
+            toggleLabel.setAttribute("for", toggleInput.id);
+
+            toggleWrapper.appendChild(toggleInput);
+            toggleWrapper.appendChild(toggleLabel);
+
+            itemWrapper.appendChild(label);
+            itemWrapper.appendChild(toggleWrapper);
+            section.appendChild(itemWrapper);
+
+            // --- Lock logic ---
+            toggleInput.addEventListener("change", () => {
+                if (toggleInput.checked) {
+                    // Add lock icon
+                    if (!menu.querySelector(".tb-lock-icon")) {
+                        const lockIcon = document.createElement("span");
+                        lockIcon.textContent = "🔒";
+                        lockIcon.className = "tb-lock-icon";
+                        lockIcon.style.marginLeft = "6px";
+                        menu.appendChild(lockIcon);
+                    }
+
+                    // Disable click → show popup
+                    menu.addEventListener("click", blockMenuClick, true);
+                } else {
+                    // Remove lock icon
+                    const lockIcon = menu.querySelector(".tb-lock-icon");
+                    if (lockIcon) lockIcon.remove();
+
+                    // Re-enable click
+                    menu.removeEventListener("click", blockMenuClick, true);
+                }
+            });
+        });
     }
+
+    // Helper for blocking click
+    function blockMenuClick(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        alert("No access. Contact Owner.");
+    }
+
 
 
 
