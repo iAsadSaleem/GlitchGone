@@ -1302,14 +1302,16 @@
             row.appendChild(label);
 
             // Title Input
+            // Title Input
             const titleInput = document.createElement("input");
             titleInput.type = "text";
             titleInput.className = "tb-sidebar-title-input";
-            titleInput.value = savedData.title || (menuLabel ? menuLabel.textContent.trim() : "");
+            titleInput.value = savedData.title || (menuLabel ? menuLabel.innerText.trim() : "");
             titleInput.placeholder = "Enter menu name";
             titleInput.addEventListener("input", () => {
-                if (menuLabel) {
-                    menuLabel.textContent = titleInput.value;
+                const currentLabel = menu.querySelector(".nav-title, .nav-title span"); // re-query each time
+                if (currentLabel) {
+                    currentLabel.innerText = titleInput.value;
                     saveMenuSetting(menuId, "title", titleInput.value);
                 }
             });
