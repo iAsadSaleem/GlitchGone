@@ -1423,7 +1423,6 @@
         observer.observe(document.body, { childList: true, subtree: true });
     }
 
-
     function buildFeatureLockSection(container) {
         if (document.getElementById("tb-feature-lock-settings")) return;
 
@@ -1436,9 +1435,10 @@
         title.style.marginBottom = "12px";
         wrapper.appendChild(title);
 
-        // Load saved locked menus
+        // ✅ Load saved theme + locked menus from themeData
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        const lockedMenus = savedTheme.lockedMenus || {};
+        const themeData = savedTheme.themeData || {};
+        const lockedMenus = themeData.lockedMenus || {};
 
         // Wait until sidebar menus are loaded
         waitForSidebarMenus(() => {
@@ -1478,15 +1478,18 @@
                 toggleWrapper.appendChild(toggleInput);
                 toggleWrapper.appendChild(toggleLabel);
 
-                // Save lock state when toggled
+                // ✅ Save lock state inside themeData
                 toggleInput.addEventListener("change", () => {
                     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-                    saved.lockedMenus = saved.lockedMenus || {};
+                    saved.themeData = saved.themeData || {};
+                    saved.themeData.lockedMenus = saved.themeData.lockedMenus || {};
+
                     if (toggleInput.checked) {
-                        saved.lockedMenus[menuId] = true;
+                        saved.themeData.lockedMenus[menuId] = true;
                     } else {
-                        delete saved.lockedMenus[menuId];
+                        delete saved.themeData.lockedMenus[menuId];
                     }
+
                     localStorage.setItem("userTheme", JSON.stringify(saved));
                     applyLockedMenus();
                 });
@@ -1587,10 +1590,6 @@
         overlay.appendChild(popup);
         document.body.appendChild(overlay);
     }
-
-
-
-
 
     // Create Builder UI
     function createBuilderUI(controlsContainer) {
