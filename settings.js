@@ -1092,8 +1092,8 @@
         function applyGradient() {
             const start = themeData["--card-header-gradient-start"] || "#344391";
             const end = themeData["--card-header-gradient-end"] || "#1f2c66";
-            const stop = 85;   // fixed
-            const angle = 90;  // fixed
+            const stop = 85;
+            const angle = 90;
 
             const gradientValue = `linear-gradient(${angle}deg, ${start} 0%, ${end} ${stop}%)`;
 
@@ -1104,13 +1104,30 @@
             });
         }
 
+        function applyCardStyles() {
+            const bg = themeData["--card-body-bg-color"] || "#ffffff";
+            document.querySelectorAll("#location-dashboard .hl-card-content").forEach(el => {
+                el.style.backgroundColor = bg;
+            });
+        }
+
+        function applyTitleStyles() {
+            const titleColor = themeData["--card-title-font-color"] || "#000000";
+            const titleSize = themeData["--card-title-font-size"] || "16px";
+
+            document.querySelectorAll("#location-dashboard .hl-card-header .hl-text-md-medium").forEach(el => {
+                el.style.color = titleColor;
+                el.style.fontSize = titleSize;
+            });
+        }
+
         // === Gradient Controls Container ===
         const gradientControls = document.createElement("div");
         gradientControls.className = "tb-gradient-controls";
         wrapper.appendChild(gradientControls);
 
-        // === Create Gradient Inputs ===
-        function makePicker(labelText, cssVar, fallback) {
+        // === Input Generators ===
+        function makePicker(labelText, cssVar, fallback, onChange = null) {
             const pickerWrapper = document.createElement("div");
             pickerWrapper.className = "tb-color-picker-wrapper";
 
@@ -1123,7 +1140,7 @@
 
             input.addEventListener("input", () => {
                 saveVar(cssVar, input.value);
-                applyGradient();
+                onChange ? onChange() : applyGradient();
             });
 
             pickerWrapper.appendChild(label);
@@ -1131,18 +1148,56 @@
             return pickerWrapper;
         }
 
-        // Start Color
+        function makeNumberInput(labelText, cssVar, fallback, suffix = "px", onChange = null) {
+            const wrapperDiv = document.createElement("div");
+            wrapperDiv.className = "tb-number-input-wrapper";
+
+            const label = document.createElement("label");
+            label.textContent = labelText;
+
+            const input = document.createElement("input");
+            input.type = "number";
+            input.min = 8;
+            input.max = 48;
+            input.value = parseInt(themeData[cssVar] || fallback, 10);
+
+            input.addEventListener("input", () => {
+                saveVar(cssVar, input.value + suffix);
+                onChange && onChange();
+            });
+
+            wrapperDiv.appendChild(label);
+            wrapperDiv.appendChild(input);
+            return wrapperDiv;
+        }
+
+        // === Header Gradient Colors ===
         gradientControls.appendChild(
             makePicker("Start Color", "--card-header-gradient-start", "#344391")
         );
-
-        // End Color
         gradientControls.appendChild(
             makePicker("End Color", "--card-header-gradient-end", "#1f2c66")
         );
 
-        // === Initial Apply (if saved values exist) ===
+        // === Card Body Background ===
+        gradientControls.appendChild(
+            makePicker("Card Background", "--card-body-bg-color", "#ffffff", applyCardStyles)
+        );
+
+        // === Card Title Font Color ===
+        gradientControls.appendChild(
+            makePicker("Card Title Font Color", "--card-title-font-color", "#000000", applyTitleStyles)
+        );
+
+        // === Card Title Font Size ===
+        gradientControls.appendChild(
+            makeNumberInput("Card Title Font Size", "--card-title-font-size", "16px", "px", applyTitleStyles)
+        );
+
+        // === Initial Apply ===
         applyGradient();
+        applyCardStyles();
+        applyTitleStyles();
 
         // === Append to Settings Container ===
         container.appendChild(wrapper);
