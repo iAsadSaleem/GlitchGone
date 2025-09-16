@@ -1507,7 +1507,9 @@
     // Renders toggle UI once menus are available
     function applyLockedMenus() {
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        const lockedMenus = savedTheme.lockedMenus || {};
+        const themeData = savedTheme.themeData || {};
+        const lockedMenus = themeData.lockedMenus || {};
+
         const sidebarMenus = document.querySelectorAll(".hl_nav-header a");
 
         sidebarMenus.forEach(menu => {
@@ -1533,8 +1535,13 @@
                 menu.addEventListener("click", blockMenuClick, true);
             }
         });
-    }
 
+        // ✅ Sync toggle inputs
+        document.querySelectorAll(".toggle-input").forEach(toggle => {
+            const id = toggle.id.replace("lock-", "");
+            toggle.checked = !!lockedMenus[id];
+        });
+    }
     // Helper for blocking click
     function blockMenuClick(e) {
         e.preventDefault();
