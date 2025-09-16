@@ -1073,7 +1073,7 @@
 
         // === Title ===
         const title = document.createElement("h4");
-        title.className = "tb-dashboard-title";
+        title.className = "tb-section-title";
         title.innerText = "Dashboard Cards Settings";
         wrapper.appendChild(title);
 
@@ -1110,7 +1110,7 @@
 
             const input = document.createElement("input");
             input.type = "color";
-            input.className = "tb-color-input";
+            input.className = "tb-number-input";
 
             let initial = themeData[key] || fallback;
             input.value = initial;
