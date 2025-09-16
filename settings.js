@@ -1275,31 +1275,43 @@
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
         }
 
-        function safeApplyMenuSettings() {
+        // === MAIN APPLY FUNCTION (fixed) ===
+        function applyMenuSettings() {
             const sidebarMenus = document.querySelectorAll(".hl_nav-header a");
 
             sidebarMenus.forEach(menu => {
                 const menuId = menu.id || menu.getAttribute("meta") || menu.href;
-                const savedData = (window.menuSettings && window.menuSettings[menuId]) || {};
+                const savedData = (savedThemeObj.menuSettings && savedThemeObj.menuSettings[menuId]) || {};
 
-                // Apply custom title without removing original
-                if (savedData.title && !menu.querySelector(".tb-custom-title")) {
-                    const customTitle = document.createElement("span");
+                // === Apply title ===
+                let customTitle = menu.querySelector(".tb-custom-title");
+                if (!customTitle) {
+                    customTitle = document.createElement("span");
                     customTitle.className = "tb-custom-title";
                     customTitle.style.marginLeft = "4px";
+                    menu.appendChild(customTitle);
+                }
+                if (savedData.title) {
                     customTitle.textContent = savedData.title;
-                    menu.appendChild(customTitle); // append instead of replace
+                } else {
+                    customTitle.textContent = ""; // clear if empty
                 }
 
-                // Add custom icon
-                if (savedData.icon && !menu.querySelector(".tb-custom-icon")) {
-                    const iconEl = makeFontAwesomeIcon(savedData.icon);
-                    iconEl.classList.add("tb-custom-icon");
-                    menu.insertBefore(iconEl, menu.firstChild);
+                // === Apply icon ===
+                let customIcon = menu.querySelector(".tb-custom-icon");
+                if (!customIcon && savedData.icon) {
+                    customIcon = makeFontAwesomeIcon(savedData.icon);
+                    customIcon.classList.add("tb-custom-icon");
+                    menu.insertBefore(customIcon, menu.firstChild);
+                } else if (customIcon) {
+                    if (savedData.icon) {
+                        customIcon.querySelector("i").className = savedData.icon;
+                    } else {
+                        customIcon.remove();
+                    }
                 }
             });
         }
-
 
         // === Get All Sidebar Menus (build UI) ===
         const sidebarMenus = document.querySelectorAll(".hl_nav-header a");
@@ -1328,7 +1340,7 @@
             titleInput.placeholder = "Enter menu name";
             titleInput.addEventListener("input", () => {
                 saveMenuSetting(menuId, "title", titleInput.value);
-                applyMenuSettings(); // force reapply immediately
+                applyMenuSettings(); // now correctly calls the real function
             });
             row.appendChild(titleInput);
 
