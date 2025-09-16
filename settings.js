@@ -1423,6 +1423,55 @@
         observer.observe(document.body, { childList: true, subtree: true });
     }
 
+
+    function buildFeatureLockSection(section) {
+        // Lock Dashboard
+        const lockDashboard = document.createElement("div");
+        lockDashboard.className = "tb-setting-item";
+        lockDashboard.innerHTML = `
+        <label>
+            <input type="checkbox" id="lock-dashboard" />
+            Lock Dashboard Access
+        </label>
+    `;
+        section.appendChild(lockDashboard);
+
+        // Hide Profile Button
+        const hideProfileBtn = document.createElement("div");
+        hideProfileBtn.className = "tb-setting-item";
+        hideProfileBtn.innerHTML = `
+        <label>
+            <input type="checkbox" id="hide-profile-btn" />
+            Hide Profile Button
+        </label>
+    `;
+        section.appendChild(hideProfileBtn);
+
+        // Hide Help Button
+        const hideHelpBtn = document.createElement("div");
+        hideHelpBtn.className = "tb-setting-item";
+        hideHelpBtn.innerHTML = `
+        <label>
+            <input type="checkbox" id="hide-help-btn" />
+            Hide Help Button
+        </label>
+    `;
+        section.appendChild(hideHelpBtn);
+
+        // Lock Theme Builder
+        const lockThemeBuilder = document.createElement("div");
+        lockThemeBuilder.className = "tb-setting-item";
+        lockThemeBuilder.innerHTML = `
+        <label>
+            <input type="checkbox" id="lock-themebuilder" />
+            Lock Theme Builder
+        </label>
+    `;
+        section.appendChild(lockThemeBuilder);
+    }
+
+
+
     // Create Builder UI
     function createBuilderUI(controlsContainer) {
         if (!controlsContainer || document.getElementById("hl_header--themebuilder-icon")) return;
@@ -1510,6 +1559,12 @@
 
                     // Add more advanced options later
                 }, "🗄️")
+            );
+
+            contentWrapper.appendChild(
+                createSection("Feature Lock and Hide Settings", (section) => {
+                    buildFeatureLockSection(section);
+                }, "🔒")
             );
 
             // Append contentWrapper to card
