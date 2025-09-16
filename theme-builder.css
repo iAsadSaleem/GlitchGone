@@ -560,3 +560,10 @@ body::-webkit-scrollbar-track {
     border: solid 1px #ffff;
     border-radius: 4px;
 }
+.tb-sidebar-title-input {
+    font-size: 8px;
+    position: relative;
+    left: 10px;
+    border-radius: 15px;
+    width: 76px;
+}
