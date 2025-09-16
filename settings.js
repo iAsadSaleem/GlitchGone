@@ -1267,6 +1267,7 @@
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const menuSettings = savedThemeObj.menuSettings || {};
 
+        // === Helpers ===
         function saveMenuSetting(menuId, key, value) {
             savedThemeObj.menuSettings = savedThemeObj.menuSettings || {};
             savedThemeObj.menuSettings[menuId] = savedThemeObj.menuSettings[menuId] || {};
@@ -1274,37 +1275,33 @@
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
         }
 
-        // === Select all sidebar <a> links ===
+        // === Get All Sidebar Menus ===
         const sidebarMenus = document.querySelectorAll(".hl_nav-header a");
         console.log("Sidebar menus found:", sidebarMenus.length);
 
         sidebarMenus.forEach(menu => {
             const menuId = menu.id || menu.getAttribute("meta") || menu.href;
             const menuLabel = menu.querySelector(".nav-title");
-            let menuIconWrapper = menu.querySelector("img, .h-5.w-5, i");
+            const menuIconWrapper = menu.querySelector("img, .h-5.w-5, i");
 
-            // Restore saved data
+            // Restore saved data if available
             const savedData = menuSettings[menuId] || {};
             if (savedData.title && menuLabel) menuLabel.textContent = savedData.title;
-            if (savedData.icon) {
-                const newIcon = makeFontAwesomeIcon(savedData.icon);
-                if (newIcon) {
-                    if (menuIconWrapper) menuIconWrapper.replaceWith(newIcon);
-                    else menu.insertBefore(newIcon, menuLabel);
-                }
+            if (savedData.icon && menuIconWrapper) {
+                menuIconWrapper.replaceWith(makeFontAwesomeIcon(savedData.icon));
             }
 
-            // === Build settings row ===
+            // === Each Menu Setting Row ===
             const row = document.createElement("div");
             row.className = "tb-sidebar-menu-row";
 
-            // Static label for clarity
+            // Menu label (static text)
             const label = document.createElement("span");
             label.className = "tb-sidebar-menu-label";
             label.textContent = menuLabel ? menuLabel.textContent.trim() : menuId;
             row.appendChild(label);
 
-            // Title input
+            // Title Input
             const titleInput = document.createElement("input");
             titleInput.type = "text";
             titleInput.className = "tb-sidebar-title-input";
@@ -1318,16 +1315,16 @@
             });
             row.appendChild(titleInput);
 
-            // Icon input
+            // Icon Input
             const iconInput = document.createElement("input");
             iconInput.type = "text";
             iconInput.className = "tb-sidebar-icon-input";
             iconInput.value = savedData.icon || "";
             iconInput.placeholder = "FontAwesome class (e.g. fas fa-home)";
             iconInput.addEventListener("input", () => {
+                const existingIcon = menu.querySelector("img, i"); // re-query each time
                 const newIcon = makeFontAwesomeIcon(iconInput.value);
                 if (newIcon) {
-                    const existingIcon = menu.querySelector("img, i, .h-5.w-5");
                     if (existingIcon) existingIcon.replaceWith(newIcon);
                     else menu.insertBefore(newIcon, menuLabel);
                     saveMenuSetting(menuId, "icon", iconInput.value);
@@ -1340,7 +1337,7 @@
 
         container.appendChild(wrapper);
 
-        // === Helper: Create FA icon wrapper ===
+        // === Helper: Make FA Icon ===
         function makeFontAwesomeIcon(iconClass) {
             if (!iconClass) return null;
             const span = document.createElement("span");
@@ -1351,6 +1348,25 @@
             return span;
         }
     }
+
+    // === Wait until sidebar menus exist ===
+    function waitForSidebarMenus(callback) {
+        const observer = new MutationObserver(() => {
+            if (document.querySelectorAll(".hl_nav-header a").length > 0) {
+                observer.disconnect();
+                callback();
+            }
+        });
+
+        observer.observe(document.body, { childList: true, subtree: true });
+    }
+
+    // === Usage ===
+    waitForSidebarMenus(() => {
+        // Example: section is your Advanced Settings panel container
+        const section = document.querySelector("#your-settings-panel");
+        if (section) addSidebarMenuSettings(section);
+    });
 
     // Utility for hover styles
     function addDynamicHoverStyle(selector, styleContent, id) {
