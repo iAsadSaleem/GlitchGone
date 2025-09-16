@@ -1276,40 +1276,48 @@
         }
 
         function applyMenuSettings() {
-            const sidebarMenus = document.querySelectorAll(".hl_nav-header a");
+            try {
+                const sidebarMenus = document.querySelectorAll(".hl_nav-header a");
 
-            sidebarMenus.forEach(menu => {
-                const menuId = menu.id || menu.getAttribute("meta") || menu.href;
-                const savedData = menuSettings[menuId] || {};
+                sidebarMenus.forEach(menu => {
+                    try {
+                        const menuId = menu.id || menu.getAttribute("meta") || menu.href;
+                        const savedData = (window.menuSettings && window.menuSettings[menuId]) || {};
 
-                // Find existing label or create one
-                let menuLabel = menu.querySelector(".tb-custom-title");
-                if (!menuLabel) {
-                    const original = menu.querySelector(".nav-title, .nav-title span");
-                    if (original) {
-                        menuLabel = document.createElement("span");
-                        menuLabel.className = "tb-custom-title"; // we own this node
-                        menuLabel.style.display = "inline-block";
-                        menuLabel.style.flex = "1";
-                        original.replaceWith(menuLabel);
+                        // Find existing label or create one
+                        let menuLabel = menu.querySelector(".tb-custom-title");
+                        if (!menuLabel) {
+                            const original = menu.querySelector(".nav-title, .nav-title span");
+                            if (original && original.parentNode) {
+                                menuLabel = document.createElement("span");
+                                menuLabel.className = "tb-custom-title";
+                                menuLabel.style.display = "inline-block";
+                                menuLabel.style.flex = "1";
+                                original.replaceWith(menuLabel);
+                            }
+                        }
+
+                        // Apply title
+                        if (savedData.title && menuLabel) {
+                            menuLabel.textContent = savedData.title;
+                        }
+
+                        // Apply icon
+                        const existingIcon = menu.querySelector("img, .h-5.w-5, i");
+                        if (savedData.icon) {
+                            if (existingIcon) {
+                                existingIcon.replaceWith(makeFontAwesomeIcon(savedData.icon));
+                            } else if (menu.firstChild) {
+                                menu.insertBefore(makeFontAwesomeIcon(savedData.icon), menu.firstChild);
+                            }
+                        }
+                    } catch (err) {
+                        console.error("[applyMenuSettings] Error processing menu:", err);
                     }
-                }
-
-                // Apply title
-                if (savedData.title && menuLabel) {
-                    menuLabel.textContent = savedData.title;
-                }
-
-                // Apply icon
-                const existingIcon = menu.querySelector("img, .h-5.w-5, i");
-                if (savedData.icon) {
-                    if (existingIcon) {
-                        existingIcon.replaceWith(makeFontAwesomeIcon(savedData.icon));
-                    } else if (menu.firstChild) {
-                        menu.insertBefore(makeFontAwesomeIcon(savedData.icon), menu.firstChild);
-                    }
-                }
-            });
+                });
+            } catch (err) {
+                console.error("[applyMenuSettings] Failed:", err);
+            }
         }
 
         // === Get All Sidebar Menus (build UI) ===
