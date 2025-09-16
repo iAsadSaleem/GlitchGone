@@ -1490,7 +1490,6 @@
                     applyLockedMenus();
                 });
 
-
                 row.appendChild(label);
                 row.appendChild(toggleWrapper);
                 wrapper.appendChild(row);
