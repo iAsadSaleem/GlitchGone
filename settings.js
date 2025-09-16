@@ -1079,30 +1079,50 @@
 
         // === Saved Theme Data ===
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        const themeData = savedThemeObj.themeData || {};
+        savedThemeObj.themeData = savedThemeObj.themeData || {};
+        const themeData = savedThemeObj.themeData;
 
-        // === Helpers ===
-        function saveVar(key, value) {
-            savedThemeObj.themeData = savedThemeObj.themeData || {};
-            savedThemeObj.themeData[key] = value;
-            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
-            document.body.style.setProperty(key, value); // 👈 update variable directly
+        // helper to normalize storage key (use cssVar if provided, else prefix key)
+        function storageKeyFor(key, cssVar) {
+            if (cssVar) return cssVar;
+            if (key && key.startsWith("--")) return key;
+            return `--${key}`;
         }
 
+        // save helper
+        function saveVar(key, value) {
+            themeData[key] = value;
+            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            // also set live on body (so applyGradient/readComputed can pick it up)
+            document.body.style.setProperty(key, value);
+        }
+
+        // apply gradient — read freshest values either from saved themeData or computed style
         function applyGradient() {
-            const start = themeData["--card-header-gradient-start"] || "#344391";
-            const end = themeData["--card-header-gradient-end"] || "#1f2c66";
-            const stop = 85;
-            const angle = 90;
+            const startKey = "--card-header-gradient-start";
+            const endKey = "--card-header-gradient-end";
+            const start = (themeData[startKey] || getComputedStyle(document.body).getPropertyValue(startKey) || "#344391").toString().trim();
+            const end = (themeData[endKey] || getComputedStyle(document.body).getPropertyValue(endKey) || "#1f2c66").toString().trim();
+
+            const stop = 85;   // fixed as requested
+            const angle = 90;  // fixed as requested
 
             const gradientValue = `linear-gradient(${angle}deg, ${start} 0%, ${end} ${stop}%)`;
+
+            // set CSS var and apply to matching card headers
             saveVar("--card-header-bg-gradient", gradientValue);
+
+            document.querySelectorAll("#location-dashboard .hl-card-header").forEach(el => {
+                // apply inline background-image so it takes effect immediately
+                el.style.removeProperty("background"); // remove solid background if any
+                el.style.setProperty("background-image", gradientValue, ""); // no !important needed
+            });
         }
 
-        // === Input Generators ===
+        // color picker helper — uses cssVar (with --) as storage key
         function makePicker(labelText, key, fallback, cssVar, isGradient = false) {
-            const wrapper = document.createElement("div");
-            wrapper.className = "tb-color-picker-wrapper";
+            const wrapperDiv = document.createElement("div");
+            wrapperDiv.className = "tb-color-picker-wrapper";
 
             const label = document.createElement("label");
             label.className = "tb-color-picker-label";
@@ -1112,69 +1132,32 @@
             input.type = "color";
             input.className = "tb-color-input";
 
-            let initial = themeData[key] || fallback;
+            // determine which variable to read/write
+            const skey = storageKeyFor(key, cssVar);
+
+            // initial value: saved themeData -> computed style -> fallback
+            let initial = (themeData[skey] || getComputedStyle(document.body).getPropertyValue(skey) || fallback || "#000000").toString().trim();
+            // ensure color input accepts it (if computed value not hex, fallback)
+            if (!/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(initial)) initial = fallback;
+
             input.value = initial;
 
             const code = document.createElement("span");
             code.className = "tb-color-code";
             code.textContent = initial;
 
-            // Apply immediately
-            document.body.style.setProperty(cssVar, initial);
+            // apply immediately to CSS var (so other code using the var will pick it up)
+            document.body.style.setProperty(skey, initial);
 
             input.addEventListener("input", () => {
                 const val = input.value;
                 code.textContent = val;
 
-                savedThemeObj.themeData = savedThemeObj.themeData || {};
-                savedThemeObj.themeData[key] = val;
-                localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+                // save under the normalized css var key
+                saveVar(skey, val);
 
-                document.body.style.setProperty(cssVar, val);
-
+                // if this picker is part of gradient, recalc gradient
                 if (isGradient) applyGradient();
-            });
-
-            wrapper.appendChild(label);
-            wrapper.appendChild(input);
-            wrapper.appendChild(code);
-
-            return wrapper;
-        }
-
-        function makeNumberInput(labelText, key, fallback, cssVar, suffix = "px") {
-            const wrapperDiv = document.createElement("div");
-            wrapperDiv.className = "tb-number-input-wrapper";
-
-            const label = document.createElement("label");
-            label.className = "tb-number-label";
-            label.textContent = labelText;
-
-            const input = document.createElement("input");
-            input.type = "number";
-            input.className = "tb-number-input";
-            input.min = 8;
-            input.max = 48;
-
-            let initial = themeData[key] || fallback;
-            input.value = parseInt(initial, 10);
-
-            const code = document.createElement("span");
-            code.className = "tb-number-code";
-            code.textContent = input.value + suffix;
-
-            // Apply immediately
-            document.body.style.setProperty(cssVar, initial);
-
-            input.addEventListener("input", () => {
-                const val = input.value + suffix;
-                code.textContent = val;
-
-                savedThemeObj.themeData = savedThemeObj.themeData || {};
-                savedThemeObj.themeData[key] = val;
-                localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
-
-                document.body.style.setProperty(cssVar, val);
             });
 
             wrapperDiv.appendChild(label);
@@ -1183,20 +1166,79 @@
             return wrapperDiv;
         }
 
-        // === Settings ===
-        wrapper.appendChild(makePicker("Start Color", "card-header-gradient-start", "#344391", "--card-header-gradient-start", true));
-        wrapper.appendChild(makePicker("End Color", "card-header-gradient-end", "#1f2c66", "--card-header-gradient-end", true));
-        wrapper.appendChild(makePicker("Card Background", "card-body-bg-color", "#ffffff", "--card-body-bg-color"));
-        wrapper.appendChild(makePicker("Card Title Font Color", "card-title-font-color", "#000000", "--card-title-font-color"));
-        wrapper.appendChild(makeNumberInput("Card Title Font Size", "card-title-font-size", "16px", "--card-title-font-size"));
+        // === Controls ===
+        const gradientControls = document.createElement("div");
+        gradientControls.className = "tb-gradient-controls";
+        wrapper.appendChild(gradientControls);
 
-        // === Apply Gradient Initially ===
+        // Start Color (use css var --card-header-gradient-start)
+        gradientControls.appendChild(
+            makePicker("Start Color", "card-header-gradient-start", "#344391", "--card-header-gradient-start", true)
+        );
+
+        // End Color (use css var --card-header-gradient-end)
+        gradientControls.appendChild(
+            makePicker("End Color", "card-header-gradient-end", "#1f2c66", "--card-header-gradient-end", true)
+        );
+
+        // Additional card settings (body bg, title color, font-size) — use css vars
+        gradientControls.appendChild(
+            makePicker("Card Background", "card-body-bg-color", "#ffffff", "--card-body-bg-color", false)
+        );
+        gradientControls.appendChild(
+            makePicker("Card Title Font Color", "card-title-font-color", "#000000", "--card-title-font-color", false)
+        );
+
+        // Card Title Font Size (number input)
+        (function addTitleFontSize() {
+            const wrapperDiv = document.createElement("div");
+            wrapperDiv.className = "tb-number-input-wrapper";
+
+            const label = document.createElement("label");
+            label.className = "tb-number-label";
+            label.textContent = "Card Title Font Size (px)";
+
+            const input = document.createElement("input");
+            input.type = "number";
+            input.className = "tb-number-input";
+            input.min = 8;
+            input.max = 48;
+
+            const cssVar = "--card-title-font-size";
+            const saved = themeData[cssVar] || getComputedStyle(document.body).getPropertyValue(cssVar) || "16px";
+            const initialNumber = parseInt((saved + "").replace("px", ""), 10) || 16;
+            input.value = initialNumber;
+
+            const code = document.createElement("span");
+            code.className = "tb-number-code";
+            code.textContent = initialNumber + "px";
+
+            // apply initial
+            document.body.style.setProperty(cssVar, initialNumber + "px");
+
+            input.addEventListener("input", () => {
+                const val = (input.value || initialNumber) + "px";
+                code.textContent = val;
+                saveVar(cssVar, val);
+            });
+
+            wrapperDiv.appendChild(label);
+            wrapperDiv.appendChild(input);
+            wrapperDiv.appendChild(code);
+            gradientControls.appendChild(wrapperDiv);
+        })();
+
+        // initial application: if saved gradient pieces exist, rebuild gradient now
         applyGradient();
-        Object.keys(themeData).forEach(key => {
-            document.body.style.setProperty(key, themeData[key]);
+
+        // also reapply any other saved vars on body (keeps previous behavior)
+        Object.keys(themeData).forEach(k => {
+            try {
+                document.body.style.setProperty(k, themeData[k]);
+            } catch (e) { /* ignore invalid keys */ }
         });
 
-        // === Append ===
+        // append and return
         container.appendChild(wrapper);
     }
 
