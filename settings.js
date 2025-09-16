@@ -1499,9 +1499,9 @@
                     buildHelpButtonControls(section);   // Profile Button Color Controls
                     addScrollbarSettings(section);   // Profile Button Color Controls
                     addDashboardCardSettings(section)
-                    waitForSidebarMenus(() => {
-                        addSidebarMenuSettings(section);
-                    });
+                    //waitForSidebarMenus(() => {
+                    //    addSidebarMenuSettings(section);
+                    //});
 
                     // Add more advanced options later
                 }, "🗄️")
