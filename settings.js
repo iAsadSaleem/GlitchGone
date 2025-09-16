@@ -713,7 +713,7 @@
         // === Section Title ===
         const header = document.createElement("h4");
         header.className = "tb-header-controls";
-        header.textContent = "Header Background Color";
+        header.textContent = "Side Bar Gredient Color";
         section.appendChild(header);
 
         // === Gradient Controls Wrapper ===
