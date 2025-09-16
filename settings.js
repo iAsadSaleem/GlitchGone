@@ -1395,19 +1395,6 @@
         observer.observe(document.body, { childList: true, subtree: true });
     }
 
-  
-    // Utility for hover styles
-    function addDynamicHoverStyle(selector, styleContent, id) {
-        let styleTag = document.getElementById("style-" + id);
-        if (!styleTag) {
-            styleTag = document.createElement("style");
-            styleTag.id = "style-" + id;
-            document.head.appendChild(styleTag);
-        }
-        styleTag.textContent = `${selector}:hover { ${styleContent} }`;
-    }
-
-
     // Create Builder UI
     function createBuilderUI(controlsContainer) {
         if (!controlsContainer || document.getElementById("hl_header--themebuilder-icon")) return;
@@ -1492,9 +1479,6 @@
                     buildHelpButtonControls(section);   // Profile Button Color Controls
                     addScrollbarSettings(section);   // Profile Button Color Controls
                     addDashboardCardSettings(section)
-                    waitForSidebarMenus(() => {
-                        addSidebarMenuSettings(section);
-                    });
 
                     // Add more advanced options later
                 }, "🗄️")
