@@ -1275,7 +1275,7 @@
         }
 
         // === Select all sidebar <a> links ===
-        const sidebarMenus = document.querySelectorAll(".hl_nav-header nav a");
+        const sidebarMenus = document.querySelectorAll(".hl_nav-header a");
         console.log("Sidebar menus found:", sidebarMenus.length);
 
         sidebarMenus.forEach(menu => {
