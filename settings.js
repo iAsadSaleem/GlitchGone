@@ -1082,28 +1082,6 @@
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedThemeObj.themeData || {};
 
-        // === Gradient Enable Checkbox ===
-        const gradientToggleWrapper = document.createElement("div");
-        gradientToggleWrapper.className = "tb-toggle-wrapper";
-
-        const gradientToggle = document.createElement("input");
-        gradientToggle.type = "checkbox";
-        gradientToggle.id = "tb-card-gradient-toggle";
-        gradientToggle.checked = themeData["--card-gradient-enabled"] === "1";
-
-        const gradientLabel = document.createElement("label");
-        gradientLabel.setAttribute("for", "tb-card-gradient-toggle");
-        gradientLabel.innerText = "Enable Gradient";
-
-        gradientToggleWrapper.appendChild(gradientToggle);
-        gradientToggleWrapper.appendChild(gradientLabel);
-        wrapper.appendChild(gradientToggleWrapper);
-
-        // === Gradient Controls Container ===
-        const gradientControls = document.createElement("div");
-        gradientControls.className = "tb-gradient-controls";
-        wrapper.appendChild(gradientControls);
-
         // === Helpers ===
         function saveVar(key, value) {
             savedThemeObj.themeData = savedThemeObj.themeData || {};
@@ -1112,35 +1090,29 @@
         }
 
         function applyGradient() {
-            if (gradientToggle.checked) {
-                const start = themeData["--card-header-gradient-start"] || "#344391";
-                const end = themeData["--card-header-gradient-end"] || "#1f2c66";
-                const stop = themeData["--card-header-gradient-stop"] || "100";
-                const angle = themeData["--card-header-gradient-angle"] || "90";
+            const start = themeData["--card-header-gradient-start"] || "#344391";
+            const end = themeData["--card-header-gradient-end"] || "#1f2c66";
+            const stop = 85;   // fixed
+            const angle = 90;  // fixed
 
-                const gradientValue = `linear-gradient(${angle}deg, ${start} 0%, ${end} ${stop}%)`;
+            const gradientValue = `linear-gradient(${angle}deg, ${start} 0%, ${end} ${stop}%)`;
 
-                document.body.style.setProperty("--card-header-bg-gradient", gradientValue);
-                document.querySelectorAll("#location-dashboard .hl-card-header").forEach(el => {
-                    el.style.backgroundImage = gradientValue;
-                    el.style.background = "none";
-                });
-                saveVar("--card-gradient-enabled", "1");
-            } else {
-                const flat = themeData["--card-header-bg-color"] || "#344391";
-                document.body.style.setProperty("--card-header-bg-color", flat);
-                document.querySelectorAll("#location-dashboard .hl-card-header").forEach(el => {
-                    el.style.background = flat;
-                    el.style.backgroundImage = "none";
-                });
-                saveVar("--card-gradient-enabled", "0");
-            }
+            document.body.style.setProperty("--card-header-bg-gradient", gradientValue);
+            document.querySelectorAll("#location-dashboard .hl-card-header").forEach(el => {
+                el.style.backgroundImage = gradientValue;
+                el.style.background = "none";
+            });
         }
 
+        // === Gradient Controls Container ===
+        const gradientControls = document.createElement("div");
+        gradientControls.className = "tb-gradient-controls";
+        wrapper.appendChild(gradientControls);
+
         // === Create Gradient Inputs ===
-        function makePicker(labelText, cssVar, fallback, onChange) {
-            const wrapper = document.createElement("div");
-            wrapper.className = "tb-color-picker-wrapper";
+        function makePicker(labelText, cssVar, fallback) {
+            const pickerWrapper = document.createElement("div");
+            pickerWrapper.className = "tb-color-picker-wrapper";
 
             const label = document.createElement("label");
             label.textContent = labelText;
@@ -1151,71 +1123,25 @@
 
             input.addEventListener("input", () => {
                 saveVar(cssVar, input.value);
-                onChange(input.value);
                 applyGradient();
             });
 
-            wrapper.appendChild(label);
-            wrapper.appendChild(input);
-            return wrapper;
+            pickerWrapper.appendChild(label);
+            pickerWrapper.appendChild(input);
+            return pickerWrapper;
         }
 
         // Start Color
         gradientControls.appendChild(
-            makePicker("Start Color", "--card-header-gradient-start", "#344391", (v) => { })
+            makePicker("Start Color", "--card-header-gradient-start", "#344391")
         );
 
         // End Color
         gradientControls.appendChild(
-            makePicker("End Color", "--card-header-gradient-end", "#1f2c66", (v) => { })
+            makePicker("End Color", "--card-header-gradient-end", "#1f2c66")
         );
 
-        // Stop %
-        const stopWrapper = document.createElement("div");
-        stopWrapper.className = "tb-number-input-wrapper";
-
-        const stopLabel = document.createElement("label");
-        stopLabel.textContent = "Stop %";
-        const stopInput = document.createElement("input");
-        stopInput.type = "number";
-        stopInput.min = 0;
-        stopInput.max = 100;
-        stopInput.value = themeData["--card-header-gradient-stop"] || 100;
-
-        stopInput.addEventListener("input", () => {
-            saveVar("--card-header-gradient-stop", stopInput.value);
-            applyGradient();
-        });
-
-        stopWrapper.appendChild(stopLabel);
-        stopWrapper.appendChild(stopInput);
-        gradientControls.appendChild(stopWrapper);
-
-        // Angle
-        const angleWrapper = document.createElement("div");
-        angleWrapper.className = "tb-number-input-wrapper";
-
-        const angleLabel = document.createElement("label");
-        angleLabel.textContent = "Angle";
-        const angleInput = document.createElement("input");
-        angleInput.type = "number";
-        angleInput.min = 0;
-        angleInput.max = 360;
-        angleInput.value = themeData["--card-header-gradient-angle"] || 90;
-
-        angleInput.addEventListener("input", () => {
-            saveVar("--card-header-gradient-angle", angleInput.value);
-            applyGradient();
-        });
-
-        angleWrapper.appendChild(angleLabel);
-        angleWrapper.appendChild(angleInput);
-        gradientControls.appendChild(angleWrapper);
-
-        // === Event for Checkbox ===
-        gradientToggle.addEventListener("change", applyGradient);
-
-        // === Initial Apply ===
+        // === Initial Apply (if saved values exist) ===
         applyGradient();
 
         // === Append to Settings Container ===
