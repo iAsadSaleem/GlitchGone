@@ -1062,7 +1062,6 @@
         // Add to ThemeBuilder container
         container.appendChild(wrapper);
     }
-
     function addDashboardCardSettings(container) {
         if (document.getElementById("tb-dashboard-card-settings")) return;
 
@@ -1087,6 +1086,7 @@
             savedThemeObj.themeData = savedThemeObj.themeData || {};
             savedThemeObj.themeData[key] = value;
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            document.body.style.setProperty(key, value); // 👈 update variable directly
         }
 
         function applyGradient() {
@@ -1096,29 +1096,7 @@
             const angle = 90;
 
             const gradientValue = `linear-gradient(${angle}deg, ${start} 0%, ${end} ${stop}%)`;
-
-            document.body.style.setProperty("--card-header-bg-gradient", gradientValue);
-            document.querySelectorAll("#location-dashboard .hl-card-header").forEach(el => {
-                el.style.backgroundImage = gradientValue;
-                el.style.background = "none";
-            });
-        }
-
-        function applyCardStyles() {
-            const bg = themeData["--card-body-bg-color"] || "#ffffff";
-            document.querySelectorAll("#location-dashboard .hl-card-content").forEach(el => {
-                el.style.backgroundColor = bg;
-            });
-        }
-
-        function applyTitleStyles() {
-            const titleColor = themeData["--card-title-font-color"] || "#000000";
-            const titleSize = themeData["--card-title-font-size"] || "16px";
-
-            document.querySelectorAll("#location-dashboard .hl-card-header .hl-text-md-medium").forEach(el => {
-                el.style.color = titleColor;
-                el.style.fontSize = titleSize;
-            });
+            saveVar("--card-header-bg-gradient", gradientValue);
         }
 
         // === Gradient Controls Container ===
@@ -1127,7 +1105,7 @@
         wrapper.appendChild(gradientControls);
 
         // === Input Generators ===
-        function makePicker(labelText, cssVar, fallback, onChange = null) {
+        function makePicker(labelText, cssVar, fallback) {
             const pickerWrapper = document.createElement("div");
             pickerWrapper.className = "tb-color-picker-wrapper";
 
@@ -1140,7 +1118,9 @@
 
             input.addEventListener("input", () => {
                 saveVar(cssVar, input.value);
-                onChange ? onChange() : applyGradient();
+                if (cssVar.includes("gradient")) {
+                    applyGradient();
+                }
             });
 
             pickerWrapper.appendChild(label);
@@ -1148,7 +1128,7 @@
             return pickerWrapper;
         }
 
-        function makeNumberInput(labelText, cssVar, fallback, suffix = "px", onChange = null) {
+        function makeNumberInput(labelText, cssVar, fallback, suffix = "px") {
             const wrapperDiv = document.createElement("div");
             wrapperDiv.className = "tb-number-input-wrapper";
 
@@ -1163,7 +1143,6 @@
 
             input.addEventListener("input", () => {
                 saveVar(cssVar, input.value + suffix);
-                onChange && onChange();
             });
 
             wrapperDiv.appendChild(label);
@@ -1181,23 +1160,24 @@
 
         // === Card Body Background ===
         gradientControls.appendChild(
-            makePicker("Card Background", "--card-body-bg-color", "#ffffff", applyCardStyles)
+            makePicker("Card Background", "--card-body-bg-color", "#ffffff")
         );
 
         // === Card Title Font Color ===
         gradientControls.appendChild(
-            makePicker("Card Title Font Color", "--card-title-font-color", "#000000", applyTitleStyles)
+            makePicker("Card Title Font Color", "--card-title-font-color", "#000000")
         );
 
         // === Card Title Font Size ===
         gradientControls.appendChild(
-            makeNumberInput("Card Title Font Size", "--card-title-font-size", "16px", "px", applyTitleStyles)
+            makeNumberInput("Card Title Font Size", "--card-title-font-size", "16px", "px")
         );
 
         // === Initial Apply ===
         applyGradient();
-        applyCardStyles();
-        applyTitleStyles();
+        Object.keys(themeData).forEach(key => {
+            document.body.style.setProperty(key, themeData[key]);
+        });
 
         // === Append to Settings Container ===
         container.appendChild(wrapper);
