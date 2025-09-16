@@ -574,3 +574,7 @@ body::-webkit-scrollbar-track {
     border-radius: 15px;
     width: 85px;
 }
+.tb-sidebar-menu-label {
+    font-size: 10px;
+    font-weight: bold;
+}
