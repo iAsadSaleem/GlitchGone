@@ -1281,13 +1281,12 @@
         sidebarMenus.forEach(menu => {
             const menuId = menu.id || menu.getAttribute("meta") || menu.href;
             const menuLabel = menu.querySelector(".nav-title");
-            const menuIconWrapper = menu.querySelector("img, .h-5.w-5, i"); // img or <i> icon
+            const menuIconWrapper = menu.querySelector("img, .h-5.w-5, i"); // img or <i>
 
             // Restore saved data if available
             const savedData = menuSettings[menuId] || {};
             if (savedData.title && menuLabel) menuLabel.textContent = savedData.title;
             if (savedData.icon && menuIconWrapper) {
-                // Replace existing icon with FontAwesome
                 menuIconWrapper.replaceWith(makeFontAwesomeIcon(savedData.icon));
             }
 
@@ -1295,7 +1294,7 @@
             const row = document.createElement("div");
             row.className = "tb-sidebar-menu-row";
 
-            // Label
+            // Menu label (static text)
             const label = document.createElement("span");
             label.className = "tb-sidebar-menu-label";
             label.textContent = menuLabel ? menuLabel.textContent.trim() : menuId;
@@ -1337,7 +1336,7 @@
 
         container.appendChild(wrapper);
 
-        // === Helper to Make FA Icon Element ===
+        // === Helper: Make FA Icon ===
         function makeFontAwesomeIcon(iconClass) {
             if (!iconClass) return null;
             const span = document.createElement("span");
