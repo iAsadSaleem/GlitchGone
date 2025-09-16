@@ -565,5 +565,12 @@ body::-webkit-scrollbar-track {
     position: relative;
     left: 10px;
     border-radius: 15px;
-    width: 76px;
+    width: 7.5pc;
+}
+.tb-sidebar-icon-input {
+    font-size: 8px;
+    position: relative;
+    left: 14px;
+    border-radius: 15px;
+    width: 85px;
 }
