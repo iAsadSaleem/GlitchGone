@@ -1430,11 +1430,6 @@
         wrapper.id = "tb-feature-lock-settings";
         wrapper.className = "tb-feature-lock-settings";
 
-        const title = document.createElement("h4");
-        title.textContent = "🔒 Feature Lock & Hide Settings";
-        title.style.marginBottom = "12px";
-        wrapper.appendChild(title);
-
         // ✅ Load saved theme + locked menus from themeData
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedTheme.themeData || {};
