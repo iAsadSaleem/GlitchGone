@@ -1275,50 +1275,31 @@
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
         }
 
-        function applyMenuSettings() {
-            try {
-                const sidebarMenus = document.querySelectorAll(".hl_nav-header a");
+        function safeApplyMenuSettings() {
+            const sidebarMenus = document.querySelectorAll(".hl_nav-header a");
 
-                sidebarMenus.forEach(menu => {
-                    try {
-                        const menuId = menu.id || menu.getAttribute("meta") || menu.href;
-                        const savedData = (window.menuSettings && window.menuSettings[menuId]) || {};
+            sidebarMenus.forEach(menu => {
+                const menuId = menu.id || menu.getAttribute("meta") || menu.href;
+                const savedData = (window.menuSettings && window.menuSettings[menuId]) || {};
 
-                        // Find existing label or create one
-                        let menuLabel = menu.querySelector(".tb-custom-title");
-                        if (!menuLabel) {
-                            const original = menu.querySelector(".nav-title, .nav-title span");
-                            if (original && original.parentNode) {
-                                menuLabel = document.createElement("span");
-                                menuLabel.className = "tb-custom-title";
-                                menuLabel.style.display = "inline-block";
-                                menuLabel.style.flex = "1";
-                                original.replaceWith(menuLabel);
-                            }
-                        }
+                // Apply custom title without removing original
+                if (savedData.title && !menu.querySelector(".tb-custom-title")) {
+                    const customTitle = document.createElement("span");
+                    customTitle.className = "tb-custom-title";
+                    customTitle.style.marginLeft = "4px";
+                    customTitle.textContent = savedData.title;
+                    menu.appendChild(customTitle); // append instead of replace
+                }
 
-                        // Apply title
-                        if (savedData.title && menuLabel) {
-                            menuLabel.textContent = savedData.title;
-                        }
-
-                        // Apply icon
-                        const existingIcon = menu.querySelector("img, .h-5.w-5, i");
-                        if (savedData.icon) {
-                            if (existingIcon) {
-                                existingIcon.replaceWith(makeFontAwesomeIcon(savedData.icon));
-                            } else if (menu.firstChild) {
-                                menu.insertBefore(makeFontAwesomeIcon(savedData.icon), menu.firstChild);
-                            }
-                        }
-                    } catch (err) {
-                        console.error("[applyMenuSettings] Error processing menu:", err);
-                    }
-                });
-            } catch (err) {
-                console.error("[applyMenuSettings] Failed:", err);
-            }
+                // Add custom icon
+                if (savedData.icon && !menu.querySelector(".tb-custom-icon")) {
+                    const iconEl = makeFontAwesomeIcon(savedData.icon);
+                    iconEl.classList.add("tb-custom-icon");
+                    menu.insertBefore(iconEl, menu.firstChild);
+                }
+            });
         }
+
 
         // === Get All Sidebar Menus (build UI) ===
         const sidebarMenus = document.querySelectorAll(".hl_nav-header a");
@@ -1499,9 +1480,9 @@
                     buildHelpButtonControls(section);   // Profile Button Color Controls
                     addScrollbarSettings(section);   // Profile Button Color Controls
                     addDashboardCardSettings(section)
-                    //waitForSidebarMenus(() => {
-                    //    addSidebarMenuSettings(section);
-                    //});
+                    waitForSidebarMenus(() => {
+                        addSidebarMenuSettings(section);
+                    });
 
                     // Add more advanced options later
                 }, "🗄️")
