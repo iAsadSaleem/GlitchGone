@@ -1267,7 +1267,6 @@
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const menuSettings = savedThemeObj.menuSettings || {};
 
-        // === Helpers ===
         function saveMenuSetting(menuId, key, value) {
             savedThemeObj.menuSettings = savedThemeObj.menuSettings || {};
             savedThemeObj.menuSettings[menuId] = savedThemeObj.menuSettings[menuId] || {};
@@ -1275,32 +1274,37 @@
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
         }
 
-        // === Get All Sidebar Menus ===
+        // === Select all sidebar <a> links ===
         const sidebarMenus = document.querySelectorAll(".hl_nav-header nav a");
+        console.log("Sidebar menus found:", sidebarMenus.length);
 
         sidebarMenus.forEach(menu => {
             const menuId = menu.id || menu.getAttribute("meta") || menu.href;
             const menuLabel = menu.querySelector(".nav-title");
-            const menuIconWrapper = menu.querySelector("img, .h-5.w-5, i"); // img or <i>
+            let menuIconWrapper = menu.querySelector("img, .h-5.w-5, i");
 
-            // Restore saved data if available
+            // Restore saved data
             const savedData = menuSettings[menuId] || {};
             if (savedData.title && menuLabel) menuLabel.textContent = savedData.title;
-            if (savedData.icon && menuIconWrapper) {
-                menuIconWrapper.replaceWith(makeFontAwesomeIcon(savedData.icon));
+            if (savedData.icon) {
+                const newIcon = makeFontAwesomeIcon(savedData.icon);
+                if (newIcon) {
+                    if (menuIconWrapper) menuIconWrapper.replaceWith(newIcon);
+                    else menu.insertBefore(newIcon, menuLabel);
+                }
             }
 
-            // === Each Menu Setting Row ===
+            // === Build settings row ===
             const row = document.createElement("div");
             row.className = "tb-sidebar-menu-row";
 
-            // Menu label (static text)
+            // Static label for clarity
             const label = document.createElement("span");
             label.className = "tb-sidebar-menu-label";
             label.textContent = menuLabel ? menuLabel.textContent.trim() : menuId;
             row.appendChild(label);
 
-            // Title Input
+            // Title input
             const titleInput = document.createElement("input");
             titleInput.type = "text";
             titleInput.className = "tb-sidebar-title-input";
@@ -1314,16 +1318,16 @@
             });
             row.appendChild(titleInput);
 
-            // Icon Input
+            // Icon input
             const iconInput = document.createElement("input");
             iconInput.type = "text";
             iconInput.className = "tb-sidebar-icon-input";
             iconInput.value = savedData.icon || "";
             iconInput.placeholder = "FontAwesome class (e.g. fas fa-home)";
             iconInput.addEventListener("input", () => {
-                const existingIcon = menu.querySelector("img, i"); // re-query each time
                 const newIcon = makeFontAwesomeIcon(iconInput.value);
                 if (newIcon) {
+                    const existingIcon = menu.querySelector("img, i, .h-5.w-5");
                     if (existingIcon) existingIcon.replaceWith(newIcon);
                     else menu.insertBefore(newIcon, menuLabel);
                     saveMenuSetting(menuId, "icon", iconInput.value);
@@ -1336,7 +1340,7 @@
 
         container.appendChild(wrapper);
 
-        // === Helper: Make FA Icon ===
+        // === Helper: Create FA icon wrapper ===
         function makeFontAwesomeIcon(iconClass) {
             if (!iconClass) return null;
             const span = document.createElement("span");
