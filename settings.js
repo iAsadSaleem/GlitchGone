@@ -666,7 +666,6 @@
         wrapper.appendChild(input);
         return wrapper;
     }
-
     function buildHeaderControlsSection(container) {
         const section = document.createElement("div");
         section.className = "tb-controls-section";
@@ -815,7 +814,6 @@
         container.appendChild(section);
         return section;
     }
-
     function buildProfileButtonControls(section) {
         const profileWrapper = document.createElement("div");
         profileWrapper.className = "tb-profile-btn-controls";
@@ -924,7 +922,6 @@
 
         section.appendChild(profileWrapper);
     }
-
     function buildHelpButtonControls(section) {
         const helpWrapper = document.createElement("div");
         helpWrapper.className = "tb-help-btn-controls";
@@ -1000,8 +997,6 @@
 
         section.appendChild(helpWrapper);
     }
-
-
     function addScrollbarSettings(container) {
         if (document.getElementById("tb-scrollbar-color")) return; // prevent duplicate
 
@@ -1241,7 +1236,108 @@
         // append and return
         container.appendChild(wrapper);
     }
+    function addSidebarMenuSettings(container) {
+        if (document.getElementById("tb-sidebar-menu-settings")) return;
 
+        // === Wrapper ===
+        const wrapper = document.createElement("div");
+        wrapper.className = "tb-sidebar-menu-settings";
+        wrapper.id = "tb-sidebar-menu-settings";
+        wrapper.style.marginTop = "16px";
+
+        // === Title ===
+        const title = document.createElement("h4");
+        title.className = "tb-sidebar-title";
+        title.innerText = "Sidebar Menu Settings";
+        wrapper.appendChild(title);
+
+        // === Saved Theme Data ===
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        const menuSettings = savedThemeObj.menuSettings || {};
+
+        // === Helpers ===
+        function saveMenuSetting(menuId, key, value) {
+            savedThemeObj.menuSettings = savedThemeObj.menuSettings || {};
+            savedThemeObj.menuSettings[menuId] = savedThemeObj.menuSettings[menuId] || {};
+            savedThemeObj.menuSettings[menuId][key] = value;
+            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+        }
+
+        // === Get All Sidebar Menus ===
+        const sidebarMenus = document.querySelectorAll(".hl_nav-header nav a");
+
+        sidebarMenus.forEach(menu => {
+            const menuId = menu.id || menu.getAttribute("meta") || menu.href;
+            const menuLabel = menu.querySelector(".nav-title");
+            const menuIconWrapper = menu.querySelector("img, .h-5.w-5, i"); // img or <i> icon
+
+            // Restore saved data if available
+            const savedData = menuSettings[menuId] || {};
+            if (savedData.title && menuLabel) menuLabel.textContent = savedData.title;
+            if (savedData.icon && menuIconWrapper) {
+                // Replace existing icon with FontAwesome
+                menuIconWrapper.replaceWith(makeFontAwesomeIcon(savedData.icon));
+            }
+
+            // === Each Menu Setting Row ===
+            const row = document.createElement("div");
+            row.className = "tb-sidebar-menu-row";
+
+            // Label
+            const label = document.createElement("span");
+            label.className = "tb-sidebar-menu-label";
+            label.textContent = menuLabel ? menuLabel.textContent.trim() : menuId;
+            row.appendChild(label);
+
+            // Title Input
+            const titleInput = document.createElement("input");
+            titleInput.type = "text";
+            titleInput.className = "tb-sidebar-title-input";
+            titleInput.value = savedData.title || (menuLabel ? menuLabel.textContent.trim() : "");
+            titleInput.placeholder = "Enter menu name";
+            titleInput.addEventListener("input", () => {
+                if (menuLabel) {
+                    menuLabel.textContent = titleInput.value;
+                    saveMenuSetting(menuId, "title", titleInput.value);
+                }
+            });
+            row.appendChild(titleInput);
+
+            // Icon Input
+            const iconInput = document.createElement("input");
+            iconInput.type = "text";
+            iconInput.className = "tb-sidebar-icon-input";
+            iconInput.value = savedData.icon || "";
+            iconInput.placeholder = "FontAwesome class (e.g. fas fa-home)";
+            iconInput.addEventListener("input", () => {
+                if (menuIconWrapper) {
+                    const newIcon = makeFontAwesomeIcon(iconInput.value);
+                    if (newIcon) {
+                        const existingIcon = menu.querySelector("img, i");
+                        if (existingIcon) existingIcon.replaceWith(newIcon);
+                        else menu.insertBefore(newIcon, menuLabel);
+                        saveMenuSetting(menuId, "icon", iconInput.value);
+                    }
+                }
+            });
+            row.appendChild(iconInput);
+
+            wrapper.appendChild(row);
+        });
+
+        container.appendChild(wrapper);
+
+        // === Helper to Make FA Icon Element ===
+        function makeFontAwesomeIcon(iconClass) {
+            if (!iconClass) return null;
+            const span = document.createElement("span");
+            span.className = "h-5 w-5 mr-2 flex items-center justify-center";
+            const i = document.createElement("i");
+            i.className = iconClass;
+            span.appendChild(i);
+            return span;
+        }
+    }
 
     // Utility for hover styles
     function addDynamicHoverStyle(selector, styleContent, id) {
@@ -1339,6 +1435,7 @@
                     buildHelpButtonControls(section);   // Profile Button Color Controls
                     addScrollbarSettings(section);   // Profile Button Color Controls
                     addDashboardCardSettings(section)
+                    addSidebarMenuSettings(section)
 
                     // Add more advanced options later
                 }, "🗄️")
