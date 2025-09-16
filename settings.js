@@ -1476,27 +1476,26 @@
 
                 // ✅ Save lock state inside themeData
                 toggleInput.addEventListener("change", () => {
-                    // Load current theme
                     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                     saved.themeData = saved.themeData || {};
 
-                    // Parse existing locked menus or start new
+                    // Parse or create lockedMenus
                     const lockedMenus = saved.themeData["--lockedMenus"]
                         ? JSON.parse(saved.themeData["--lockedMenus"])
                         : {};
 
-                    // Update locked menu state
                     if (toggleInput.checked) {
                         lockedMenus[menuId] = true;
                     } else {
                         delete lockedMenus[menuId];
                     }
 
-                    // Save back to themeData
+                    // Save as string in localStorage for persistence
                     saved.themeData["--lockedMenus"] = JSON.stringify(lockedMenus);
+
                     localStorage.setItem("userTheme", JSON.stringify(saved));
 
-                    // Apply the locks immediately
+                    // Apply lock immediately
                     applyLockedMenus();
                 });
 
@@ -1737,6 +1736,15 @@
 
                         const themeData = collectThemeVars();
 
+                        // ✅ Include lockedMenus properly
+                        const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                        const lockedMenus = savedTheme.themeData?.["--lockedMenus"]
+                            ? JSON.parse(savedTheme.themeData["--lockedMenus"])
+                            : {};
+
+                        // Keep lockedMenus inside themeData
+                        themeData["--lockedMenus"] = JSON.stringify(lockedMenus);
+
                         const dbData = {
                             rlNo,
                             email,
@@ -1746,7 +1754,8 @@
                             updatedAt: new Date().toISOString(),
                         };
 
-                        localStorage.setItem("userTheme", JSON.stringify(dbData));
+                        // Save locally
+                        localStorage.setItem("userTheme", JSON.stringify({ ...savedTheme, themeData: themeData }));
 
                         try {
                             const res = await fetch("https://theme-builder-delta.vercel.app/api/theme", {
@@ -1775,6 +1784,7 @@
                     }
                 );
             });
+
 
             buttonsWrapper.appendChild(applyBtn);
             drawer.appendChild(buttonsWrapper); // Outside card
