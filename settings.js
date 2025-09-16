@@ -1394,11 +1394,7 @@
         observer.observe(document.body, { childList: true, subtree: true });
     }
 
-    // === Usage ===
-    waitForSidebarMenus(() => {
-        addSidebarMenuSettings(section);
-    });
-
+  
     // Utility for hover styles
     function addDynamicHoverStyle(selector, styleContent, id) {
         let styleTag = document.getElementById("style-" + id);
