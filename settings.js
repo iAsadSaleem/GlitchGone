@@ -1579,7 +1579,7 @@
         okBtn.style.padding = "8px 20px";
         okBtn.style.border = "none";
         okBtn.style.borderRadius = "6px";
-        okBtn.style.background = "#007bff";
+        okBtn.style.background = "#F54927";
         okBtn.style.color = "#fff";
         okBtn.style.cursor = "pointer";
         okBtn.style.fontSize = "14px";
