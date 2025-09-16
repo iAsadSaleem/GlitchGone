@@ -1506,32 +1506,43 @@
 
     // Renders toggle UI once menus are available
     function applyLockedMenus() {
-        const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        const lockedMenus = savedTheme.lockedMenus || {};
-        const sidebarMenus = document.querySelectorAll(".hl_nav-header a");
+        const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        const themeData = saved.themeData || {};
+        const lockedMenus = themeData.lockedMenus || {};
 
-        sidebarMenus.forEach(menu => {
+        // Remove previous locks first
+        document.querySelectorAll(".hl_nav-header a").forEach(menu => {
+            menu.classList.remove("tb-locked");
+            menu.removeEventListener("click", blockMenuClick);
+            const existingLockIcon = menu.querySelector(".tb-lock-icon");
+            if (existingLockIcon) existingLockIcon.remove();
+        });
+
+        // Apply new locks
+        document.querySelectorAll(".hl_nav-header a").forEach(menu => {
             const menuId = menu.id || menu.getAttribute("meta") || menu.href;
-
-            // Remove previous lock state
-            menu.classList.remove("tb-locked-menu");
-            menu.querySelector(".tb-lock-icon")?.remove();
-            menu.removeEventListener("click", blockMenuClick, true);
-
             if (lockedMenus[menuId]) {
-                // Add lock class
-                menu.classList.add("tb-locked-menu");
+                menu.classList.add("tb-locked");
 
-                // Add lock icon
+                // Insert lock icon if not already present
                 if (!menu.querySelector(".tb-lock-icon")) {
-                    const lockIcon = document.createElement("i");
-                    lockIcon.className = "tb-lock-icon fas fa-lock ml-2 text-red-500";
+                    const lockIcon = document.createElement("span");
+                    lockIcon.className = "tb-lock-icon";
+                    lockIcon.textContent = "🔒";
+                    lockIcon.style.marginLeft = "6px";
+                    lockIcon.style.color = "red";
                     menu.appendChild(lockIcon);
                 }
 
-                // Block click
-                menu.addEventListener("click", blockMenuClick, true);
+                // Block clicks
+                menu.addEventListener("click", blockMenuClick, { once: false });
             }
+        });
+
+        // ✅ Also sync toggle inputs in settings
+        document.querySelectorAll(".toggle-input").forEach(toggle => {
+            const id = toggle.id.replace("lock-", "");
+            toggle.checked = !!lockedMenus[id];
         });
     }
 
