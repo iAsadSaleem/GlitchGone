@@ -1048,8 +1048,8 @@
 
         // --- Update function ---
         function updateScrollbar() {
-            document.documentElement.style.setProperty("--scroll-color", colorInput.value);
-            document.documentElement.style.setProperty("--scroll-width", widthInput.value + "px");
+            document.body.style.setProperty("--scroll-color", colorInput.value);
+            document.body.style.setProperty("--scroll-width", widthInput.value + "px");
         }
 
         // --- Listeners ---

@@ -538,15 +538,15 @@
 }
 
 /* Scrollbar styling using variables */
-::-webkit-scrollbar {
-    width: var(--scroll-width, 7px); /* fallback 7px */
+body::-webkit-scrollbar {
+    width: var(--scroll-width, 7px);
 }
 
-::-webkit-scrollbar-thumb {
-    background-color: var(--scroll-color, #344391); /* fallback color */
+body::-webkit-scrollbar-thumb {
+    background-color: var(--scroll-color, #344391);
     border-radius: 10px;
 }
 
-::-webkit-scrollbar-track {
+body::-webkit-scrollbar-track {
     background: #f1f1f1;
 }
