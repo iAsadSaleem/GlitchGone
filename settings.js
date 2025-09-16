@@ -1424,119 +1424,122 @@
     }
 
 
-    function buildFeatureLockSection(section) {
-        section.innerHTML = ""; // clear if rerender
+    function buildFeatureLockSection(container) {
+        if (document.getElementById("tb-feature-lock-settings")) return;
 
-        // Show loading text while waiting
-        const loadingMsg = document.createElement("div");
-        loadingMsg.textContent = "Loading sidebar menus...";
-        loadingMsg.style.color = "#888";
-        section.appendChild(loadingMsg);
+        const wrapper = document.createElement("div");
+        wrapper.id = "tb-feature-lock-settings";
+        wrapper.className = "tb-feature-lock-settings";
 
-        // Polling function
-        const tryLoadMenus = () => {
+        const title = document.createElement("h4");
+        title.textContent = "🔒 Feature Lock & Hide Settings";
+        title.style.marginBottom = "12px";
+        wrapper.appendChild(title);
+
+        // Load saved locked menus
+        const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        const lockedMenus = savedTheme.lockedMenus || {};
+
+        // Wait until sidebar menus are loaded
+        waitForSidebarMenus(() => {
             const sidebarMenus = document.querySelectorAll(".hl_nav-header a");
-            if (sidebarMenus.length) {
-                renderSidebarLockControls(section, sidebarMenus);
-                return true;
-            }
-            return false;
-        };
+            console.log("[FeatureLock] Sidebar menus found:", sidebarMenus.length);
 
-        // Try immediately
-        if (tryLoadMenus()) return;
+            sidebarMenus.forEach(menu => {
+                const menuId = menu.id || menu.getAttribute("meta") || menu.href;
+                const labelText = menu.querySelector(".nav-title, .nav-title span")?.innerText.trim() || menuId;
 
-        // Try for 5 seconds with polling
-        let attempts = 0;
-        const interval = setInterval(() => {
-            attempts++;
-            if (tryLoadMenus() || attempts > 20) {
-                clearInterval(interval);
-            }
-        }, 250);
+                const row = document.createElement("div");
+                row.className = "tb-feature-row";
+                row.style.display = "flex";
+                row.style.alignItems = "center";
+                row.style.justifyContent = "space-between";
+                row.style.marginBottom = "8px";
 
-        // MutationObserver fallback (if menus are added dynamically after 5s)
-        const observer = new MutationObserver(() => {
-            if (tryLoadMenus()) {
-                observer.disconnect();
-            }
+                const label = document.createElement("span");
+                label.textContent = labelText;
+                label.style.flex = "1";
+                label.style.fontSize = "14px";
+
+                // Toggle
+                const toggleWrapper = document.createElement("div");
+                toggleWrapper.className = "toggle-switch";
+
+                const toggleInput = document.createElement("input");
+                toggleInput.type = "checkbox";
+                toggleInput.className = "toggle-input";
+                toggleInput.id = "lock-" + menuId;
+                toggleInput.checked = !!lockedMenus[menuId];
+
+                const toggleLabel = document.createElement("label");
+                toggleLabel.className = "toggle-label";
+                toggleLabel.setAttribute("for", "lock-" + menuId);
+
+                toggleWrapper.appendChild(toggleInput);
+                toggleWrapper.appendChild(toggleLabel);
+
+                // Save lock state when toggled
+                toggleInput.addEventListener("change", () => {
+                    const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                    saved.lockedMenus = saved.lockedMenus || {};
+                    if (toggleInput.checked) {
+                        saved.lockedMenus[menuId] = true;
+                    } else {
+                        delete saved.lockedMenus[menuId];
+                    }
+                    localStorage.setItem("userTheme", JSON.stringify(saved));
+                    applyLockedMenus();
+                });
+
+                row.appendChild(label);
+                row.appendChild(toggleWrapper);
+                wrapper.appendChild(row);
+            });
+
+            container.appendChild(wrapper);
+            applyLockedMenus(); // apply immediately
         });
-        observer.observe(document.body, { childList: true, subtree: true });
     }
 
     // Renders toggle UI once menus are available
-    function renderSidebarLockControls(section, sidebarMenus) {
-        section.innerHTML = ""; // clear loading msg
+    function applyLockedMenus() {
+        const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        const lockedMenus = savedTheme.lockedMenus || {};
+        const sidebarMenus = document.querySelectorAll(".hl_nav-header a");
 
         sidebarMenus.forEach(menu => {
             const menuId = menu.id || menu.getAttribute("meta") || menu.href;
-            const menuName = menu.querySelector(".nav-title")?.textContent.trim() || menuId;
 
-            // Wrapper
-            const itemWrapper = document.createElement("div");
-            itemWrapper.className = "tb-setting-item flex items-center justify-between";
+            // Remove previous lock state
+            menu.classList.remove("tb-locked-menu");
+            menu.querySelector(".tb-lock-icon")?.remove();
+            menu.removeEventListener("click", blockMenuClick, true);
 
-            // Label
-            const label = document.createElement("span");
-            label.textContent = menuName;
+            if (lockedMenus[menuId]) {
+                // Add lock class
+                menu.classList.add("tb-locked-menu");
 
-            // Toggle
-            const toggleWrapper = document.createElement("div");
-            toggleWrapper.className = "toggle-switch";
-
-            const toggleInput = document.createElement("input");
-            toggleInput.type = "checkbox";
-            toggleInput.className = "toggle-input";
-            toggleInput.id = "lock-" + btoa(menuId); // unique ID
-
-            const toggleLabel = document.createElement("label");
-            toggleLabel.className = "toggle-label";
-            toggleLabel.setAttribute("for", toggleInput.id);
-
-            toggleWrapper.appendChild(toggleInput);
-            toggleWrapper.appendChild(toggleLabel);
-
-            itemWrapper.appendChild(label);
-            itemWrapper.appendChild(toggleWrapper);
-            section.appendChild(itemWrapper);
-
-            // --- Lock logic ---
-            toggleInput.addEventListener("change", () => {
-                if (toggleInput.checked) {
-                    // Add lock icon
-                    if (!menu.querySelector(".tb-lock-icon")) {
-                        const lockIcon = document.createElement("span");
-                        lockIcon.textContent = "🔒";
-                        lockIcon.className = "tb-lock-icon";
-                        lockIcon.style.marginLeft = "6px";
-                        menu.appendChild(lockIcon);
-                    }
-
-                    // Block click → show popup
-                    menu.addEventListener("click", blockMenuClick, true);
-                } else {
-                    // Remove lock icon
-                    const lockIcon = menu.querySelector(".tb-lock-icon");
-                    if (lockIcon) lockIcon.remove();
-
-                    // Re-enable click
-                    menu.removeEventListener("click", blockMenuClick, true);
+                // Add lock icon
+                if (!menu.querySelector(".tb-lock-icon")) {
+                    const lockIcon = document.createElement("i");
+                    lockIcon.className = "tb-lock-icon fas fa-lock ml-2 text-red-500";
+                    menu.appendChild(lockIcon);
                 }
-            });
+
+                // Block click
+                menu.addEventListener("click", blockMenuClick, true);
+            }
         });
     }
 
-    // Helper for blocking click
     // Helper for blocking click
     function blockMenuClick(e) {
         e.preventDefault();
         e.stopPropagation();
 
-        // If popup already exists, remove it first
-        const existing = document.getElementById("tb-lock-popup");
-        if (existing) existing.remove();
+        // If popup already exists, remove it
+        document.getElementById("tb-lock-popup")?.remove();
 
-        // Overlay (blurred background)
         const overlay = document.createElement("div");
         overlay.id = "tb-lock-popup";
         overlay.style.position = "fixed";
@@ -1551,7 +1554,6 @@
         overlay.style.justifyContent = "center";
         overlay.style.zIndex = "99999";
 
-        // Popup box
         const popup = document.createElement("div");
         popup.style.background = "#fff";
         popup.style.padding = "20px 30px";
@@ -1560,20 +1562,14 @@
         popup.style.textAlign = "center";
         popup.style.boxShadow = "0 8px 24px rgba(0,0,0,0.3)";
 
-        // Title
         const title = document.createElement("h3");
         title.textContent = "Access Denied";
         title.style.marginBottom = "12px";
-        title.style.fontSize = "20px";
-        title.style.color = "#333";
 
-        // Message
         const msg = document.createElement("p");
         msg.textContent = "No access. Please contact the Owner.";
         msg.style.marginBottom = "20px";
-        msg.style.color = "#555";
 
-        // Ok button
         const okBtn = document.createElement("button");
         okBtn.textContent = "OK";
         okBtn.style.padding = "8px 20px";
@@ -1582,18 +1578,13 @@
         okBtn.style.background = "#F54927";
         okBtn.style.color = "#fff";
         okBtn.style.cursor = "pointer";
-        okBtn.style.fontSize = "14px";
 
-        okBtn.addEventListener("click", () => {
-            overlay.remove();
-        });
+        okBtn.addEventListener("click", () => overlay.remove());
 
-        // Build popup
         popup.appendChild(title);
         popup.appendChild(msg);
         popup.appendChild(okBtn);
         overlay.appendChild(popup);
-
         document.body.appendChild(overlay);
     }
 
