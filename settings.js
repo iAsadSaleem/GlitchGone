@@ -1073,8 +1073,8 @@
 
         // === Title ===
         const title = document.createElement("h4");
+        title.className = "tb-dashboard-title";
         title.innerText = "Dashboard Cards Settings";
-        title.className = "tb-section-title";
         wrapper.appendChild(title);
 
         // === Saved Theme Data ===
@@ -1099,103 +1099,104 @@
             saveVar("--card-header-bg-gradient", gradientValue);
         }
 
-        // === Gradient Controls Container ===
-        const gradientControls = document.createElement("div");
-        gradientControls.className = "tb-gradient-controls";
-        wrapper.appendChild(gradientControls);
-
         // === Input Generators ===
-        function makePicker(labelText, cssVar, fallback) {
-            const pickerWrapper = document.createElement("div");
-            pickerWrapper.className = "tb-setting-row tb-color-picker-wrapper";
+        function makePicker(labelText, key, fallback, cssVar, isGradient = false) {
+            const wrapper = document.createElement("div");
+            wrapper.className = "tb-color-picker-wrapper";
 
             const label = document.createElement("label");
+            label.className = "tb-color-picker-label";
             label.textContent = labelText;
-            label.className = "tb-label";
 
             const input = document.createElement("input");
             input.type = "color";
             input.className = "tb-color-input";
-            input.value = themeData[cssVar] || fallback;
 
-            const valueBox = document.createElement("span");
-            valueBox.textContent = input.value;
-            valueBox.className = "tb-color-value";
+            let initial = themeData[key] || fallback;
+            input.value = initial;
+
+            const code = document.createElement("span");
+            code.className = "tb-color-code";
+            code.textContent = initial;
+
+            // Apply immediately
+            document.body.style.setProperty(cssVar, initial);
 
             input.addEventListener("input", () => {
-                saveVar(cssVar, input.value);
-                valueBox.textContent = input.value;
-                if (cssVar.includes("gradient")) {
-                    applyGradient();
-                }
+                const val = input.value;
+                code.textContent = val;
+
+                savedThemeObj.themeData = savedThemeObj.themeData || {};
+                savedThemeObj.themeData[key] = val;
+                localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+
+                document.body.style.setProperty(cssVar, val);
+
+                if (isGradient) applyGradient();
             });
 
-            pickerWrapper.appendChild(label);
-            pickerWrapper.appendChild(input);
-            pickerWrapper.appendChild(valueBox);
-            return pickerWrapper;
+            wrapper.appendChild(label);
+            wrapper.appendChild(input);
+            wrapper.appendChild(code);
+
+            return wrapper;
         }
 
-        function makeNumberInput(labelText, cssVar, fallback, suffix = "px") {
+        function makeNumberInput(labelText, key, fallback, cssVar, suffix = "px") {
             const wrapperDiv = document.createElement("div");
-            wrapperDiv.className = "tb-setting-row tb-number-input-wrapper";
+            wrapperDiv.className = "tb-number-input-wrapper";
 
             const label = document.createElement("label");
+            label.className = "tb-number-label";
             label.textContent = labelText;
-            label.className = "tb-label";
 
             const input = document.createElement("input");
             input.type = "number";
             input.className = "tb-number-input";
             input.min = 8;
             input.max = 48;
-            input.value = parseInt(themeData[cssVar] || fallback, 10);
 
-            const valueBox = document.createElement("span");
-            valueBox.textContent = input.value + suffix;
-            valueBox.className = "tb-number-value";
+            let initial = themeData[key] || fallback;
+            input.value = parseInt(initial, 10);
+
+            const code = document.createElement("span");
+            code.className = "tb-number-code";
+            code.textContent = input.value + suffix;
+
+            // Apply immediately
+            document.body.style.setProperty(cssVar, initial);
 
             input.addEventListener("input", () => {
-                saveVar(cssVar, input.value + suffix);
-                valueBox.textContent = input.value + suffix;
+                const val = input.value + suffix;
+                code.textContent = val;
+
+                savedThemeObj.themeData = savedThemeObj.themeData || {};
+                savedThemeObj.themeData[key] = val;
+                localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+
+                document.body.style.setProperty(cssVar, val);
             });
 
             wrapperDiv.appendChild(label);
             wrapperDiv.appendChild(input);
-            wrapperDiv.appendChild(valueBox);
+            wrapperDiv.appendChild(code);
             return wrapperDiv;
         }
 
-        // === Header Gradient Colors ===
-        gradientControls.appendChild(
-            makePicker("Start Color", "--card-header-gradient-start", "#344391")
-        );
-        gradientControls.appendChild(
-            makePicker("End Color", "--card-header-gradient-end", "#1f2c66")
-        );
+        // === Settings ===
+        wrapper.appendChild(makePicker("Start Color", "card-header-gradient-start", "#344391", "--card-header-gradient-start", true));
+        wrapper.appendChild(makePicker("End Color", "card-header-gradient-end", "#1f2c66", "--card-header-gradient-end", true));
+        wrapper.appendChild(makePicker("Card Background", "card-body-bg-color", "#ffffff", "--card-body-bg-color"));
+        wrapper.appendChild(makePicker("Card Title Font Color", "card-title-font-color", "#000000", "--card-title-font-color"));
+        wrapper.appendChild(makeNumberInput("Card Title Font Size", "card-title-font-size", "16px", "--card-title-font-size"));
 
-        // === Card Body Background ===
-        gradientControls.appendChild(
-            makePicker("Card Background", "--card-body-bg-color", "#ffffff")
-        );
-
-        // === Card Title Font Color ===
-        gradientControls.appendChild(
-            makePicker("Card Title Font Color", "--card-title-font-color", "#000000")
-        );
-
-        // === Card Title Font Size ===
-        gradientControls.appendChild(
-            makeNumberInput("Card Title Font Size", "--card-title-font-size", "16px", "px")
-        );
-
-        // === Initial Apply ===
+        // === Apply Gradient Initially ===
         applyGradient();
         Object.keys(themeData).forEach(key => {
             document.body.style.setProperty(key, themeData[key]);
         });
 
-        // === Append to Settings Container ===
+        // === Append ===
         container.appendChild(wrapper);
     }
 
