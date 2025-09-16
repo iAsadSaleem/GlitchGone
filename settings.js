@@ -1427,14 +1427,46 @@
     function buildFeatureLockSection(section) {
         section.innerHTML = ""; // clear if rerender
 
-        const sidebarMenus = document.querySelectorAll(".hl_nav-header a");
-        if (!sidebarMenus.length) {
-            const msg = document.createElement("div");
-            msg.textContent = "No sidebar menus found.";
-            msg.style.color = "#888";
-            section.appendChild(msg);
-            return;
-        }
+        // Show loading text while waiting
+        const loadingMsg = document.createElement("div");
+        loadingMsg.textContent = "Loading sidebar menus...";
+        loadingMsg.style.color = "#888";
+        section.appendChild(loadingMsg);
+
+        // Polling function
+        const tryLoadMenus = () => {
+            const sidebarMenus = document.querySelectorAll(".hl_nav-header a");
+            if (sidebarMenus.length) {
+                renderSidebarLockControls(section, sidebarMenus);
+                return true;
+            }
+            return false;
+        };
+
+        // Try immediately
+        if (tryLoadMenus()) return;
+
+        // Try for 5 seconds with polling
+        let attempts = 0;
+        const interval = setInterval(() => {
+            attempts++;
+            if (tryLoadMenus() || attempts > 20) {
+                clearInterval(interval);
+            }
+        }, 250);
+
+        // MutationObserver fallback (if menus are added dynamically after 5s)
+        const observer = new MutationObserver(() => {
+            if (tryLoadMenus()) {
+                observer.disconnect();
+            }
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
+    }
+
+    // Renders toggle UI once menus are available
+    function renderSidebarLockControls(section, sidebarMenus) {
+        section.innerHTML = ""; // clear loading msg
 
         sidebarMenus.forEach(menu => {
             const menuId = menu.id || menu.getAttribute("meta") || menu.href;
@@ -1455,7 +1487,7 @@
             const toggleInput = document.createElement("input");
             toggleInput.type = "checkbox";
             toggleInput.className = "toggle-input";
-            toggleInput.id = "lock-" + menuId;
+            toggleInput.id = "lock-" + btoa(menuId); // unique ID
 
             const toggleLabel = document.createElement("label");
             toggleLabel.className = "toggle-label";
@@ -1480,7 +1512,7 @@
                         menu.appendChild(lockIcon);
                     }
 
-                    // Disable click → show popup
+                    // Block click → show popup
                     menu.addEventListener("click", blockMenuClick, true);
                 } else {
                     // Remove lock icon
