@@ -1478,13 +1478,20 @@
                 toggleInput.addEventListener("change", () => {
                     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                     saved.themeData = saved.themeData || {};
-                    saved.themeData["--lockedMenus"] = saved.themeData["--lockedMenus"] || {};
+
+                    // Convert object to string
+                    let lockedMenus = saved.themeData["--lockedMenus"]
+                        ? JSON.parse(saved.themeData["--lockedMenus"])
+                        : {};
 
                     if (toggleInput.checked) {
-                        saved.themeData["--lockedMenus"][menuId] = true;
+                        lockedMenus[menuId] = true;
                     } else {
-                        delete saved.themeData["--lockedMenus"][menuId];
+                        delete lockedMenus[menuId];
                     }
+
+                    // Save back as string
+                    saved.themeData["--lockedMenus"] = JSON.stringify(lockedMenus);
 
                     localStorage.setItem("userTheme", JSON.stringify(saved));
                     applyLockedMenus();
@@ -1504,13 +1511,18 @@
     function applyLockedMenus() {
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedTheme.themeData || {};
-        const lockedMenus = themeData["--lockedMenus"] || {}; // <-- use --lockedMenus
+
+        // Parse string back to object
+        const lockedMenus = themeData["--lockedMenus"]
+            ? JSON.parse(themeData["--lockedMenus"])
+            : {};
 
         const sidebarMenus = document.querySelectorAll(".hl_nav-header a");
 
         sidebarMenus.forEach(menu => {
             const menuId = menu.id || menu.getAttribute("meta") || menu.href;
 
+            // Remove previous locks
             menu.classList.remove("tb-locked-menu");
             menu.querySelector(".tb-lock-icon")?.remove();
             menu.removeEventListener("click", blockMenuClick, true);
@@ -1528,12 +1540,13 @@
             }
         });
 
-        // Sync toggles
+        // Sync toggle inputs
         document.querySelectorAll(".toggle-input").forEach(toggle => {
             const id = toggle.id.replace("lock-", "");
             toggle.checked = !!lockedMenus[id];
         });
     }
+
 
     // Helper for blocking click
     function blockMenuClick(e) {
