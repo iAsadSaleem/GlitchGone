@@ -1277,20 +1277,37 @@
 
         function applyMenuSettings() {
             const sidebarMenus = document.querySelectorAll(".hl_nav-header a");
+
             sidebarMenus.forEach(menu => {
                 const menuId = menu.id || menu.getAttribute("meta") || menu.href;
-                const menuLabel = menu.querySelector(".nav-title, .nav-title span");
-                const menuIconWrapper = menu.querySelector("img, .h-5.w-5, i");
                 const savedData = menuSettings[menuId] || {};
+
+                // Find existing label or create one
+                let menuLabel = menu.querySelector(".tb-custom-title");
+                if (!menuLabel) {
+                    const original = menu.querySelector(".nav-title, .nav-title span");
+                    if (original) {
+                        menuLabel = document.createElement("span");
+                        menuLabel.className = "tb-custom-title"; // we own this node
+                        menuLabel.style.display = "inline-block";
+                        menuLabel.style.flex = "1";
+                        original.replaceWith(menuLabel);
+                    }
+                }
 
                 // Apply title
                 if (savedData.title && menuLabel) {
-                    menuLabel.innerText = savedData.title;
+                    menuLabel.textContent = savedData.title;
                 }
 
                 // Apply icon
-                if (savedData.icon && menuIconWrapper) {
-                    menuIconWrapper.replaceWith(makeFontAwesomeIcon(savedData.icon));
+                const existingIcon = menu.querySelector("img, .h-5.w-5, i");
+                if (savedData.icon) {
+                    if (existingIcon) {
+                        existingIcon.replaceWith(makeFontAwesomeIcon(savedData.icon));
+                    } else if (menu.firstChild) {
+                        menu.insertBefore(makeFontAwesomeIcon(savedData.icon), menu.firstChild);
+                    }
                 }
             });
         }
