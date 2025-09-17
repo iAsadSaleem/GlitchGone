@@ -133,6 +133,30 @@
     }
 
     // 🔹 Helper function to fetch and inject CSS
+    async function applyCSSFile(identifier) {
+        try {
+            const url = `https://theme-builder-delta.vercel.app/api/theme/file/${encodeURIComponent(identifier)}`;
+            const res = await fetch(url);
+            if (!res.ok) throw new Error("Failed to fetch CSS file");
+
+            const cssText = await res.text();
+
+            // remove old CSS (avoid duplicates)
+            const oldStyle = document.getElementById("theme-css");
+            if (oldStyle) oldStyle.remove();
+
+            const style = document.createElement("style");
+            style.id = "theme-css";
+            style.innerHTML = cssText;
+            document.head.appendChild(style);
+
+        } catch (err) {
+            console.error("❌ Failed to apply external CSS:", err.message);
+        }
+    }
+
+    // Create collapsible sections
+    // Utility to create section with optional icon
     function createSection(title, contentBuilder, icon = null) {
         const section = document.createElement("div");
         section.className = "tb-section";
@@ -192,65 +216,6 @@
                 content.style.maxHeight = null;
                 content.style.overflowY = null;
                 toggleIcon.className = "fa-solid fa-angle-down tb-toggle-icon"; // 🔽
-            }
-        });
-
-        section.appendChild(header);
-        section.appendChild(content);
-        contentBuilder(content);
-
-        return section;
-    }
-
-
-    // Create collapsible sections
-    // Utility to create section with optional icon
-    function createSection(title, contentBuilder, icon = null) {
-        const section = document.createElement("div");
-        section.className = "tb-section";
-
-        const header = document.createElement("div");
-        header.className = "tb-section-header";
-        header.style.cursor = "pointer";
-
-        // If an icon is provided separately, add it
-        if (icon) {
-            const iconEl = document.createElement("span");
-            iconEl.className = "tb-section-icon";
-            iconEl.innerHTML = icon; // emoji or <i> from FontAwesome
-            iconEl.style.marginRight = "6px";
-            header.appendChild(iconEl);
-        }
-
-        const titleText = document.createElement("span");
-        titleText.className = "tb-section-title";
-        titleText.innerHTML = title;   // ✅ now HTML like <i> works
-        header.appendChild(titleText);
-
-        const content = document.createElement("div");
-        content.className = "tb-section-content";
-
-        header.addEventListener("click", () => {
-            const drawer = header.closest(".tb-drawer-content");
-
-            drawer.querySelectorAll(".tb-section-content.open").forEach(openContent => {
-                if (openContent !== content) {
-                    openContent.classList.remove("open");
-                    openContent.previousSibling.classList.remove("tb-section-header-open");
-                    openContent.style.maxHeight = null;
-                    openContent.style.overflowY = null;
-                }
-            });
-
-            content.classList.toggle("open");
-            header.classList.toggle("tb-section-header-open", content.classList.contains("open"));
-
-            if (content.classList.contains("open")) {
-                content.style.maxHeight = "200px";
-                content.style.overflowY = "auto";
-            } else {
-                content.style.maxHeight = null;
-                content.style.overflowY = null;
             }
         });
 

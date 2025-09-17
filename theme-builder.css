@@ -108,7 +108,10 @@
     top: -12px;
 }
 .tb-section-header {
-    padding: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
     background: var(--primary-color) !important;
     color: var(--sidebar-menu-color) !important;
     cursor: pointer;
@@ -659,3 +662,7 @@ body::-webkit-scrollbar-track {
         .toggle-switch.dark .toggle-input:checked + .toggle-label::before {
             transform: translateX(16px);
         }
+.tb-toggle-icon {
+    margin-left: auto;
+    font-size: 14px;
+}
