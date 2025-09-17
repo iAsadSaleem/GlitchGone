@@ -333,10 +333,6 @@
         .themeBtnInner{display:flex;align-items:center;gap:8px;width:100%}
         .themeBtnText{flex:1;text-align:left}
         .themeArrowIcon{width:28px;height:28px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;border:1px solid rgba(0,0,0,0.08);font-size:12px;cursor:pointer}
-        .themeDropdownBox{position:absolute;right:0;top:calc(100% + 8px);background:#fff;box-shadow:0 6px 20px rgba(0,0,0,0.08);border-radius:8px;display:none;z-index:10000;padding:6px;min-width:160px}
-        .themeDropdownBox.show{display:block}
-        .themeDropdownBox button{display:block;width:100%;padding:8px 10px;border:none;background:none;text-align:left;cursor:pointer;border-radius:6px}
-        .themeDropdownBox button:hover{background:#f2f2f2}
         `;
             document.head.appendChild(s);
         }
