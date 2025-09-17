@@ -1091,7 +1091,8 @@
         function saveVar(key, value) {
             themeData[key] = value;
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
-            document.body.style.setProperty(key, value); // live update
+            document.documentElement.style.setProperty(key, value);
+ // live update
         }
 
         // color picker helper
