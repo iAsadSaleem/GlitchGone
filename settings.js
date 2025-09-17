@@ -330,10 +330,9 @@
         themeBtn.textContent = "Select Theme";
         themeBtn.className = "tb-theme-cycle-btn";
 
-        // Arrow button
-        const arrowBtn = document.createElement("button");
-        arrowBtn.className = "themeArrowBtn";
-        arrowBtn.innerHTML = "&#9662;"; // ▼
+        // ✅ Circle icon instead of arrow button
+        const arrowIcon = document.createElement("i");
+        arrowIcon.className = "fa-solid fa-angle-down themeArrowIcon";
 
         // Dropdown box (hidden by default)
         const dropdownBox = document.createElement("div");
@@ -361,41 +360,33 @@
                 "--header-bg-color": "#74c691"
             },
             "BlueWhite Theme": {
-                "--primary-color": "#2563eb",          /* Bright blue */
-                "--second-color": "#3b82f6",           /* Softer blue */
-                "--dark-color": "#1e3a8a",             /* Deep navy for contrast */
-                "--grey-color": "#f9fafb",             /* Light grey background */
-                "--alert-color": "#dc2626",            /* Red for alerts */
-                "--app-bg-color": "#ffffff",           /* Pure white app background */
-                "--Acent-color": "#1d4ed8",            /* Strong accent blue */
-
-                /* Sidebar */
-                "--sidebar-bg-color": "#1e40af",       /* Deep sidebar blue */
-                "--sidebar-menu-bg": "#2563eb",        /* Menu background */
-                "--sidebar-menu-color": "#ffffff",     /* Menu text */
-                "--sidebar-menu-hover-bg": "#1d4ed8",  /* Hover state */
-                "--sidebar-menu-active-bg": "#1e3a8a", /* Active item */
+                "--primary-color": "#2563eb",
+                "--second-color": "#3b82f6",
+                "--dark-color": "#1e3a8a",
+                "--grey-color": "#f9fafb",
+                "--alert-color": "#dc2626",
+                "--app-bg-color": "#ffffff",
+                "--Acent-color": "#1d4ed8",
+                "--sidebar-bg-color": "#1e40af",
+                "--sidebar-menu-bg": "#2563eb",
+                "--sidebar-menu-color": "#ffffff",
+                "--sidebar-menu-hover-bg": "#1d4ed8",
+                "--sidebar-menu-active-bg": "#1e3a8a",
                 "--sidebar-menu-icon-color": "#e0f2fe",
                 "--sidebar-menu-icon-hover-color": "#bae6fd",
                 "--sidebar-menu-icon-active-color": "#60a5fa",
-                "--scroll-color":"#2563eb",
-
-                /* Header */
+                "--scroll-color": "#2563eb",
                 "--header-bg-color": "#1e40af",
                 "--header-icon-color": "#ffffff",
                 "--header-icon-hover-color": "#dbeafe",
                 "--header-icon-bg": "#2563eb",
                 "--header-icon-hover-bg": "#1e3a8a",
-
-                /* Cards */
-                "--card-body-bg-color": "#f0f9ff",     /* Soft blue-white bg */
-                "--card-body-font-color": "#1e293b",   /* Dark text */
-                "--card-title-font-color": "#0f172a",  /* Stronger title */
-                "--card-dec-font-color": "#334155",    /* Grey for description */
-                "--card-footer-bg-color": "#e0f2fe",   /* Light blue footer */
-                "--card-footer-font-color": "#1e3a8a", /* Footer text */
-
-                /* Top Navigation */
+                "--card-body-bg-color": "#f0f9ff",
+                "--card-body-font-color": "#1e293b",
+                "--card-title-font-color": "#0f172a",
+                "--card-dec-font-color": "#334155",
+                "--card-footer-bg-color": "#e0f2fe",
+                "--card-footer-font-color": "#1e3a8a",
                 "--top-nav-menu-bg": "#2563eb",
                 "--top-nav-menu-hover-bg": "#1d4ed8",
                 "--top-nav-menu-active-bg": "#1e3a8a",
@@ -404,48 +395,39 @@
                 "--top-nav-menu-active-color": "#ffffff"
             },
             "IndigoPurple Theme": {
-                "--primary-color": "#3B38A0",          /* Strong indigo */
-                "--second-color": "#7A85C1",           /* Softer purple-blue */
-                "--dark-color": "#1A2A80",             /* Deep navy base */
-                "--grey-color": "#f9fafb",             /* Light grey background */
-                "--alert-color": "#e11d48",            /* Pinkish red for alerts */
-                "--app-bg-color": "#ffffff",           /* White app background */
-                "--Acent-color": "#B2B0E8",            /* Soft accent lavender */
-
-                /* Sidebar */
-                "--sidebar-bg-color": "#1A2A80",       /* Deep sidebar */
-                "--sidebar-menu-bg": "#3B38A0",        /* Menu background */
-                "--sidebar-menu-color": "#ffffff",     /* Menu text */
-                "--sidebar-menu-hover-bg": "#2a2f7c",  /* Darker hover */
-                "--sidebar-menu-active-bg": "#7A85C1", /* Active item */
+                "--primary-color": "#3B38A0",
+                "--second-color": "#7A85C1",
+                "--dark-color": "#1A2A80",
+                "--grey-color": "#f9fafb",
+                "--alert-color": "#e11d48",
+                "--app-bg-color": "#ffffff",
+                "--Acent-color": "#B2B0E8",
+                "--sidebar-bg-color": "#1A2A80",
+                "--sidebar-menu-bg": "#3B38A0",
+                "--sidebar-menu-color": "#ffffff",
+                "--sidebar-menu-hover-bg": "#2a2f7c",
+                "--sidebar-menu-active-bg": "#7A85C1",
                 "--sidebar-menu-icon-color": "#e0e7ff",
                 "--sidebar-menu-icon-hover-color": "#c7d2fe",
                 "--sidebar-menu-icon-active-color": "#B2B0E8",
                 "--scroll-color": "#7A85C1",
-
-                /* Header */
                 "--header-bg-color": "#3B38A0",
                 "--header-icon-color": "#ffffff",
                 "--header-icon-hover-color": "#e0e7ff",
                 "--header-icon-bg": "#7A85C1",
                 "--header-icon-hover-bg": "#1A2A80",
-
-                /* Cards */
-                "--card-body-bg-color": "#f5f6ff",     /* Very light lavender */
-                "--card-body-font-color": "#1f2937",   /* Dark text */
-                "--card-title-font-color": "#111827",  /* Strong titles */
-                "--card-dec-font-color": "#374151",    /* Grey descriptions */
-                "--card-footer-bg-color": "#e0e7ff",   /* Soft footer */
-                "--card-footer-font-color": "#1A2A80", /* Footer text */
-
-                /* Top Navigation */
+                "--card-body-bg-color": "#f5f6ff",
+                "--card-body-font-color": "#1f2937",
+                "--card-title-font-color": "#111827",
+                "--card-dec-font-color": "#374151",
+                "--card-footer-bg-color": "#e0e7ff",
+                "--card-footer-font-color": "#1A2A80",
                 "--top-nav-menu-bg": "#3B38A0",
                 "--top-nav-menu-hover-bg": "#2a2f7c",
                 "--top-nav-menu-active-bg": "#1A2A80",
                 "--top-nav-menu-color": "#ffffff",
                 "--top-nav-menu-hover-color": "#c7d2fe",
                 "--top-nav-menu-active-color": "#ffffff",
-
             }
         };
 
@@ -462,7 +444,7 @@
                 }
             });
 
-            // Update main button text & color
+            // Update main button
             themeBtn.textContent = themeName;
             themeBtn.style.backgroundColor = vars["--primary-color"] || "#007bff";
             themeBtn.style.color = "#fff";
@@ -474,7 +456,7 @@
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
         }
 
-        // ✅ Restore saved theme
+        // Restore saved theme
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         if (savedThemeObj.selectedTheme) {
             applyTheme(savedThemeObj.selectedTheme, savedThemeObj.themeData);
@@ -489,8 +471,8 @@
             applyTheme(themeKeys[currentIndex]);
         });
 
-        // Arrow button = open dropdown
-        arrowBtn.addEventListener("click", (e) => {
+        // ✅ Arrow icon = open dropdown
+        arrowIcon.addEventListener("click", (e) => {
             e.stopPropagation();
             dropdownBox.classList.toggle("show");
         });
@@ -506,7 +488,7 @@
             dropdownBox.appendChild(optBtn);
         });
 
-        // Close dropdown when clicking outside
+        // Close dropdown outside click
         document.addEventListener("click", (e) => {
             if (!wrapper.contains(e.target)) {
                 dropdownBox.classList.remove("show");
@@ -515,7 +497,7 @@
 
         // Build structure
         wrapper.appendChild(themeBtn);
-        wrapper.appendChild(arrowBtn);
+        wrapper.appendChild(arrowIcon);
         wrapper.appendChild(dropdownBox);
         container.appendChild(wrapper);
     }

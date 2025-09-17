@@ -693,3 +693,20 @@ body::-webkit-scrollbar-track {
     border: solid 1px #ffff;
     border-radius: 4px;
 }
+.themeArrowIcon {
+    margin-left: 8px;
+    font-size: 14px;
+    border-radius: 50%;
+    background: #fff; /* White circle */
+    color: transparent; /* Transparent arrow */
+    -webkit-text-stroke: 1.5px #000; /* Arrow outline in black (or your theme color) */
+    padding: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .themeArrowIcon:hover {
+        background: #f0f0f0; /* light hover */
+    }
