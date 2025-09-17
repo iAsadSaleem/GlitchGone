@@ -486,7 +486,16 @@ tb-apply-btn
     align-items: center;
     gap: 10px;
 }
+/* Remove browser arrows */
+.tb-number-input::-webkit-outer-spin-button,
+.tb-number-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
 
+.tb-number-input {
+    -moz-appearance: textfield;
+}
 .tb-header-controls {
     font-size: 15px;
     top: 8px;
