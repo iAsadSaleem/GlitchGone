@@ -1797,7 +1797,7 @@
             );
 
             contentWrapper.appendChild(
-                createSection("Advance Settings", (section) => {
+                createSection('<i class="fa-solid fa-database"style="color:white;margin-right:6px;font-size:17px;"></i>Advance Settings', (section) => {
                     buildHeaderControlsSection(section);
                     buildProfileButtonControls(section);   // Profile Button Color Controls
                     buildHelpButtonControls(section);   // Profile Button Color Controls
@@ -1806,13 +1806,15 @@
                     addBackgroundGradientSettings(section)
 
                     // Add more advanced options later
-                }, "🗄️")
+                }, "", true
+                )
             );
 
             contentWrapper.appendChild(
-                createSection("Feature Lock and Hide Settings", (section) => {
+                createSection('<i class="fa-solid fa-lock"style="color:white;margin-right:6px;font-size:17px;"></i>Feature Lock', (section) => {
                     buildFeatureLockSection(section);
-                }, "🔒")
+                }, "", true
+                )
             );
 
             // Append contentWrapper to card
