@@ -507,12 +507,11 @@ tb-apply-btn
     font-size: 14px;
 }
 .tb-header-controls {
-    font-size: 16px;
+    font-size: 15px;
     top: 8px;
     position: relative;
-    color: #413939ad;
-    /* border-bottom: solid 1px; */
-    background: #0058ff9c;
+    color: #386be3;
+    background: #0058ff57;
     border: solid 1px #ffff;
     border-radius: 4px;
 }
@@ -522,11 +521,11 @@ tb-apply-btn
     font-size: 11px;
 }
 .tb-profile-title {
-    font-size: 16px;
+    font-size: 15px;
     top: 8px;
     position: relative;
-    color: #413939ad;
-    background: #0058ff9c;
+    color: #386be3;
+    background: #0058ff57;
     border: solid 1px #ffff;
     border-radius: 4px;
 }
