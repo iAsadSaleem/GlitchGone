@@ -1139,10 +1139,10 @@
 
         // Gradient pickers (already exist)
         gradientControls.appendChild(
-            makePicker("Start Color", "card-header-gradient-start", "#344391", "--card-header-gradient-start", true)
+            makePicker("Card Header Start Color", "card-header-gradient-start", "#344391", "--card-header-gradient-start", true)
         );
         gradientControls.appendChild(
-            makePicker("End Color", "card-header-gradient-end", "#1f2c66", "--card-header-gradient-end", true)
+            makePicker("Card Header End Color", "card-header-gradient-end", "#1f2c66", "--card-header-gradient-end", true)
         );
 
         // Card Background
