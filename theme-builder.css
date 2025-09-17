@@ -343,7 +343,11 @@
     border-radius: 8px !important;
     background: var(--sidebar-bg-color) !important;
     position: relative;
-    min-width: 316px;
+    min-width: 316px !important;
+    color: #fff;
+    border: 1px solid #55555500;
+    padding: 7px 4px;
+    cursor: pointer;
 }
 
 .tb-card {
@@ -383,13 +387,6 @@
     position: relative;
     display: flex;
     align-items: center;
-}
-
-.tb-theme-cycle-btn {
-    color: #fff;
-    border: 1px solid #55555500;
-    padding: 7px 4px;
-    cursor: pointer;
 }
 
 .themeArrowBtn {
