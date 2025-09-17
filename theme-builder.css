@@ -471,47 +471,15 @@ tb-apply-btn
     padding: 2px 1px 1px 1px;
 }
 .tb-number-input {
-    border: none;
-    background: transparent;
-    width: 50px;
-    text-align: center;
-    font-size: 12px;
-    color: #797979a3;
-    outline: none;
-}
-
-.tb-number-input-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 6px 0;
-}
-
-/* Label styling */
-.tb-number-label {
-    flex: 0 0 160px;
-    font-size: 12px;
-    color: #444;
-    text-align: right;
-    padding-right: 6px;
-}
-/* Static unit text */
-.tb-number-unit {
-    font-size: 12px;
-    color: #797979a3;
-    margin-left: 2px;
-}
-/* Code box styled same as .tb-color-code */
-.tb-number-code {
-    min-width: 65px;
-    padding: 2px 6px;
-    background: #f2f7fa;
-    border-radius: 6px;
+    padding: 8px;
+    width: 77px;
+    height: 30px;
     cursor: pointer;
-    color: #797979a3;
-    font-size: 12px;
-    border: solid 1px #2a313542;
-    text-align: center;
+    left: 65px;
+    position: relative;
+    border: solid 1px;
+    border-radius: 10px;
+    font-size: 14px;
 }
 .tb-header-controls {
     font-size: 15px;
