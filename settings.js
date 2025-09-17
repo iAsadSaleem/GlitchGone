@@ -1320,7 +1320,7 @@
             const end = themeData["--bg-gradient-end"] || "#e5e7eb";
             const gradient = `linear-gradient(90deg, ${start} 20%, ${end} 100%)`;
 
-            // apply directly to .bg-gray-50 class
+            // apply to .bg-gray-50 and .bg-gray-100
             const styleId = "tb-bg-gradient-style";
             let styleTag = document.getElementById(styleId);
             if (!styleTag) {
@@ -1328,7 +1328,10 @@
                 styleTag.id = styleId;
                 document.head.appendChild(styleTag);
             }
-            styleTag.innerHTML = `.bg-gray-50 { background: ${gradient} !important; }`;
+            styleTag.innerHTML = `
+            .bg-gray-50 { background: ${gradient} !important; }
+            .bg-gray-100 { background: ${gradient} !important; }
+        `;
 
             saveVar("--bg-gradient", gradient);
         }
