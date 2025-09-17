@@ -486,6 +486,7 @@ tb-apply-btn
     display: flex;
     align-items: center;
     gap: 10px;
+    padding-top: 4px;
 }
 /* Remove browser arrows */
 .tb-number-input::-webkit-outer-spin-button,
