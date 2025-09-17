@@ -1318,7 +1318,7 @@
         function updateGradient() {
             const start = themeData["--bg-gradient-start"] || "#f9fafb";
             const end = themeData["--bg-gradient-end"] || "#e5e7eb";
-            const gradient = `linear-gradient(90deg, ${start} 20%, ${end} 100%)`;
+            const gradient = `linear-gradient(90deg, ${start} 0%, ${end} 100%)`;
 
             // apply to .bg-gray-50 and .bg-gray-100
             const styleId = "tb-bg-gradient-style";
