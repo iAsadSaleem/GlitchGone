@@ -471,17 +471,13 @@ tb-apply-btn
     padding: 2px 1px 1px 1px;
 }
 .tb-number-input {
-    min-width: 65px;
-    height: 30px;
-    background: #f2f7fa;
-    border: solid 1px #2a313542;
-    border-radius: 6px;
-    color: #797979a3;
-    font-size: 12px;
+    border: none;
+    background: transparent;
+    width: 50px;
     text-align: center;
-    cursor: pointer;
-    box-sizing: border-box;
-    padding: 2px 6px;
+    font-size: 12px;
+    color: #797979a3;
+    outline: none;
 }
 
 .tb-number-input-wrapper {
@@ -493,24 +489,18 @@ tb-apply-btn
 
 /* Label styling */
 .tb-number-label {
-    flex: 0 0 160px; /* fixed width (adjust as needed) */
+    flex: 0 0 160px;
     font-size: 12px;
     color: #444;
-    text-align: right; /* aligns text to the right edge */
+    text-align: right;
     padding-right: 6px;
 }
-
-/* Remove default number arrows */
-.tb-number-input::-webkit-outer-spin-button,
-.tb-number-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+/* Static unit text */
+.tb-number-unit {
+    font-size: 12px;
+    color: #797979a3;
+    margin-left: 2px;
 }
-
-.tb-number-input {
-    -moz-appearance: textfield;
-}
-
 /* Code box styled same as .tb-color-code */
 .tb-number-code {
     min-width: 65px;
