@@ -1231,7 +1231,7 @@
 
             const input = document.createElement("input");
             input.type = "number";
-            input.className = "tb-number-input";
+            input.className = "tb-number-fond-input";
             input.min = 8;
             input.max = 48;
 
@@ -1269,7 +1269,7 @@
 
             const input = document.createElement("input");
             input.type = "number";
-            input.className = "tb-number-input";
+            input.className = "tb-number-radius-input";
             input.min = 0;
             input.max = 50;
 
