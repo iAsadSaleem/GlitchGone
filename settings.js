@@ -141,25 +141,23 @@
         header.className = "tb-section-header";
         header.style.cursor = "pointer";
 
-        // Optional left icon (emoji or FA)
+        // Optional left icon
         if (icon) {
             const iconEl = document.createElement("span");
             iconEl.className = "tb-section-icon";
-            iconEl.innerHTML = icon;   // can be emoji or FA markup
-            iconEl.style.marginRight = "6px";
+            iconEl.innerHTML = icon; // can be emoji or FA markup
             header.appendChild(iconEl);
         }
 
         // Title
         const titleText = document.createElement("span");
         titleText.className = "tb-section-title";
-        titleText.innerHTML = title;  // ✅ allows FA icons or text
+        titleText.innerHTML = title;
         header.appendChild(titleText);
 
-        // Toggle arrow (right side)
+        // Toggle arrow (always at right)
         const toggleIcon = document.createElement("i");
         toggleIcon.className = "fa-solid fa-angle-down tb-toggle-icon";
-        toggleIcon.style.marginLeft = "auto"; // push to right side
         header.appendChild(toggleIcon);
 
         // Section content
@@ -170,33 +168,30 @@
         header.addEventListener("click", () => {
             const drawer = header.closest(".tb-drawer-content");
 
-            // Close other sections
+            // Close others
             drawer.querySelectorAll(".tb-section-content.open").forEach(openContent => {
                 if (openContent !== content) {
                     openContent.classList.remove("open");
                     openContent.previousSibling.classList.remove("tb-section-header-open");
-
-                    // Reset toggle icon on closed section
                     const otherIcon = openContent.previousSibling.querySelector(".tb-toggle-icon");
                     if (otherIcon) otherIcon.className = "fa-solid fa-angle-down tb-toggle-icon";
-
                     openContent.style.maxHeight = null;
                     openContent.style.overflowY = null;
                 }
             });
 
-            // Toggle this section
+            // Toggle this one
             content.classList.toggle("open");
             header.classList.toggle("tb-section-header-open", content.classList.contains("open"));
 
             if (content.classList.contains("open")) {
-                content.style.maxHeight = "200px";   // 👈 scrollable area
+                content.style.maxHeight = "200px";
                 content.style.overflowY = "auto";
-                toggleIcon.className = "fa-solid fa-angle-up tb-toggle-icon"; // 🔼 when open
+                toggleIcon.className = "fa-solid fa-angle-up tb-toggle-icon"; // 🔼
             } else {
                 content.style.maxHeight = null;
                 content.style.overflowY = null;
-                toggleIcon.className = "fa-solid fa-angle-down tb-toggle-icon"; // 🔽 when closed
+                toggleIcon.className = "fa-solid fa-angle-down tb-toggle-icon"; // 🔽
             }
         });
 
@@ -206,6 +201,7 @@
 
         return section;
     }
+
 
     // Create collapsible sections
     // Utility to create section with optional icon
