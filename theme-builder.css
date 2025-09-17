@@ -141,21 +141,8 @@
     width: 40px;
     height: 30px;
     border: none;
-    padding: 0;
     cursor: pointer;
-    border-radius: 4px;
-    flex-shrink: 0;
-}
-
-/* Color code span */
-.tb-color-code {
-    padding: 2px 6px;
-    background: #f2f7fa;
-    border-radius: 4px;
-    cursor: pointer;
-    color: #797979;
-    font-size: 12px;
-    border: solid 1px #6071794d;
+    flex-shrink: 0; /* prevent shrinking */
 }
 
 .tb-section-header-open {
@@ -193,19 +180,21 @@
 .tb-color-picker-label {
   flex: 1;
 }
-
-.tb-color-input {
-  width: 40px;
-  height: 30px;
-  border: none;
-  cursor: pointer;
+.tb-color-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 6px; /* spacing between picker & code */
 }
-
 .tb-color-code {
-  padding: 2px 6px;
-  background: #f0f0f0;
-  border-radius: 4px;
-  cursor: pointer;
+    min-width: 60px; /* ✅ keeps it stable */
+    padding: 4px 8px;
+    background: #f2f7fa;
+    border-radius: 4px;
+    cursor: pointer;
+    color: #797979;
+    font-size: 12px;
+    border: solid 1px #6071794d;
+    text-align: center; /* ✅ centers hex text */
 }
 
 .tb-color-code.copied {
