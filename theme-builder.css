@@ -552,13 +552,10 @@ body::-webkit-scrollbar-track {
     background: #f1f1f1;
 }
 .tb-section-title {
-    font-size: 16px;
-    top: 8px;
-    position: relative;
     color: #413939ad;
-    background: #0058ff9c;
-    border: solid 1px #ffff;
-    border-radius: 4px;
+    text-align: center;
+    color: white;
+    font-size: 13px;
 }
 .tb-sidebar-title-input {
     font-size: 8px;
