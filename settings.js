@@ -133,26 +133,78 @@
     }
 
     // 🔹 Helper function to fetch and inject CSS
-    async function applyCSSFile(identifier) {
-        try {
-            const url = `https://theme-builder-delta.vercel.app/api/theme/file/${encodeURIComponent(identifier)}`;
-            const res = await fetch(url);
-            if (!res.ok) throw new Error("Failed to fetch CSS file");
+    function createSection(title, contentBuilder, icon = null) {
+        const section = document.createElement("div");
+        section.className = "tb-section";
 
-            const cssText = await res.text();
+        const header = document.createElement("div");
+        header.className = "tb-section-header";
+        header.style.cursor = "pointer";
 
-            // remove old CSS (avoid duplicates)
-            const oldStyle = document.getElementById("theme-css");
-            if (oldStyle) oldStyle.remove();
-
-            const style = document.createElement("style");
-            style.id = "theme-css";
-            style.innerHTML = cssText;
-            document.head.appendChild(style);
-
-        } catch (err) {
-            console.error("❌ Failed to apply external CSS:", err.message);
+        // Optional left icon (emoji or FA)
+        if (icon) {
+            const iconEl = document.createElement("span");
+            iconEl.className = "tb-section-icon";
+            iconEl.innerHTML = icon;
+            iconEl.style.marginRight = "6px";
+            header.appendChild(iconEl);
         }
+
+        // Title
+        const titleText = document.createElement("span");
+        titleText.className = "tb-section-title";
+        titleText.innerHTML = title;  // ✅ supports <i> or text
+        header.appendChild(titleText);
+
+        // Toggle arrow (right side)
+        const toggleIcon = document.createElement("i");
+        toggleIcon.className = "fa-solid fa-angle-down tb-toggle-icon";
+        toggleIcon.style.marginLeft = "auto"; // push it to the right
+        header.appendChild(toggleIcon);
+
+        // Section content
+        const content = document.createElement("div");
+        content.className = "tb-section-content";
+
+        // Click event
+        header.addEventListener("click", () => {
+            const drawer = header.closest(".tb-drawer-content");
+
+            // Close other sections
+            drawer.querySelectorAll(".tb-section-content.open").forEach(openContent => {
+                if (openContent !== content) {
+                    openContent.classList.remove("open");
+                    openContent.previousSibling.classList.remove("tb-section-header-open");
+
+                    // reset toggle icons
+                    const otherIcon = openContent.previousSibling.querySelector(".tb-toggle-icon");
+                    if (otherIcon) otherIcon.className = "fa-solid fa-angle-down tb-toggle-icon";
+
+                    openContent.style.maxHeight = null;
+                    openContent.style.overflowY = null;
+                }
+            });
+
+            // Toggle this section
+            content.classList.toggle("open");
+            header.classList.toggle("tb-section-header-open", content.classList.contains("open"));
+
+            if (content.classList.contains("open")) {
+                content.style.maxHeight = "200px";
+                content.style.overflowY = "auto";
+                toggleIcon.className = "fa-solid fa-angle-up tb-toggle-icon"; // 🔼
+            } else {
+                content.style.maxHeight = null;
+                content.style.overflowY = null;
+                toggleIcon.className = "fa-solid fa-angle-down tb-toggle-icon"; // 🔽
+            }
+        });
+
+        section.appendChild(header);
+        section.appendChild(content);
+        contentBuilder(content);
+
+        return section;
     }
 
     // Create collapsible sections
