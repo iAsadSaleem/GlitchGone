@@ -1030,13 +1030,13 @@
 
         // --- Title ---
         const title = document.createElement("h4");
-        title.innerText = "Scrollbar Settings";
+        title.textContent = "Scrollbar Settings";
         title.className = "tb-section-title";
         wrapper.appendChild(title);
 
         // --- Scrollbar Color ---
         const colorLabel = document.createElement("label");
-        colorLabel.innerText = "Scrollbar Color:";
+        colorLabel.textContent = "Scrollbar Color:";
         colorLabel.className = "tb-label";
 
         const colorInput = document.createElement("input");
@@ -1050,7 +1050,7 @@
 
         // --- Scrollbar Width ---
         const widthLabel = document.createElement("label");
-        widthLabel.innerText = "Scrollbar Width (px):";
+        widthLabel.textContent = "Scrollbar Width (px):";
         widthLabel.className = "tb-label";
 
         const widthInput = document.createElement("input");
