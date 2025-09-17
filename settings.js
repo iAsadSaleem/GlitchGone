@@ -1278,9 +1278,12 @@
             const initialNumber = parseInt((saved + "").replace("px", ""), 10) || 8;
             input.value = initialNumber;
 
-            const code = document.createElement("span");
-            code.className = "tb-number-code";
-            code.textContent = initialNumber + "px";
+            const inputBox = document.createElement("div");
+            inputBox.className = "tb-number-input-box";
+
+            const unit = document.createElement("span");
+            unit.className = "tb-number-unit";
+            unit.textContent = "px";
 
             document.body.style.setProperty(cssVar, initialNumber + "px");
 
@@ -1290,9 +1293,11 @@
                 saveVar(cssVar, val);
             });
 
+            inputBox.appendChild(input);
+            inputBox.appendChild(unit);
+
             wrapperDiv.appendChild(label);
-            wrapperDiv.appendChild(input);
-            wrapperDiv.appendChild(code);
+            wrapperDiv.appendChild(inputBox);
             gradientControls.appendChild(wrapperDiv);
         })();
 
