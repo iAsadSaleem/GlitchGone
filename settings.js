@@ -145,7 +145,7 @@
         if (icon) {
             const iconEl = document.createElement("span");
             iconEl.className = "tb-section-icon";
-            iconEl.innerHTML = icon;
+            iconEl.innerHTML = icon;   // can be emoji or FA markup
             iconEl.style.marginRight = "6px";
             header.appendChild(iconEl);
         }
@@ -153,13 +153,13 @@
         // Title
         const titleText = document.createElement("span");
         titleText.className = "tb-section-title";
-        titleText.innerHTML = title;  // ✅ supports <i> or text
+        titleText.innerHTML = title;  // ✅ allows FA icons or text
         header.appendChild(titleText);
 
         // Toggle arrow (right side)
         const toggleIcon = document.createElement("i");
         toggleIcon.className = "fa-solid fa-angle-down tb-toggle-icon";
-        toggleIcon.style.marginLeft = "auto"; // push it to the right
+        toggleIcon.style.marginLeft = "auto"; // push to right side
         header.appendChild(toggleIcon);
 
         // Section content
@@ -176,7 +176,7 @@
                     openContent.classList.remove("open");
                     openContent.previousSibling.classList.remove("tb-section-header-open");
 
-                    // reset toggle icons
+                    // Reset toggle icon on closed section
                     const otherIcon = openContent.previousSibling.querySelector(".tb-toggle-icon");
                     if (otherIcon) otherIcon.className = "fa-solid fa-angle-down tb-toggle-icon";
 
@@ -190,13 +190,13 @@
             header.classList.toggle("tb-section-header-open", content.classList.contains("open"));
 
             if (content.classList.contains("open")) {
-                content.style.maxHeight = "200px";
+                content.style.maxHeight = "200px";   // 👈 scrollable area
                 content.style.overflowY = "auto";
-                toggleIcon.className = "fa-solid fa-angle-up tb-toggle-icon"; // 🔼
+                toggleIcon.className = "fa-solid fa-angle-up tb-toggle-icon"; // 🔼 when open
             } else {
                 content.style.maxHeight = null;
                 content.style.overflowY = null;
-                toggleIcon.className = "fa-solid fa-angle-down tb-toggle-icon"; // 🔽
+                toggleIcon.className = "fa-solid fa-angle-down tb-toggle-icon"; // 🔽 when closed
             }
         });
 
