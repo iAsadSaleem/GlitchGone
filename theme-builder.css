@@ -482,6 +482,18 @@ tb-apply-btn
     color: #a1a0a0;
     border: solid 1px #716c6c5c;
 }
+.tb-number-scroll-input {
+    padding: 13px;
+    width: 70px;
+    height: 30px;
+    cursor: pointer;
+    left: 64px;
+    position: relative;
+    border-radius: 10px;
+    font-size: 11px;
+    color: #a1a0a0;
+    border: solid 1px #716c6c5c;
+}
 .tb-number-radius-input {
     padding: 13px;
     width: 70px;

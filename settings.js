@@ -1080,7 +1080,7 @@
         const widthInput = document.createElement("input");
         widthInput.type = "number";
         widthInput.id = "tb-scrollbar-width";
-        widthInput.className = "tb-number-input";
+        widthInput.className = "tb-number-scroll-input";
         widthInput.value = "7"; // default
         widthInput.min = "2";
         widthInput.max = "30";
