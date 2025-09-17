@@ -165,17 +165,18 @@
         header.className = "tb-section-header";
         header.style.cursor = "pointer";
 
-        // If an icon is provided, add it
+        // If an icon is provided separately, add it
         if (icon) {
             const iconEl = document.createElement("span");
             iconEl.className = "tb-section-icon";
-            iconEl.innerHTML = icon; // emoji or HTML icon
+            iconEl.innerHTML = icon; // emoji or <i> from FontAwesome
             iconEl.style.marginRight = "6px";
             header.appendChild(iconEl);
         }
 
         const titleText = document.createElement("span");
-        titleText.textContent = title;
+        titleText.className = "tb-section-title";
+        titleText.innerHTML = title;   // ✅ now HTML like <i> works
         header.appendChild(titleText);
 
         const content = document.createElement("div");
@@ -184,7 +185,6 @@
         header.addEventListener("click", () => {
             const drawer = header.closest(".tb-drawer-content");
 
-            // Close all other sections
             drawer.querySelectorAll(".tb-section-content.open").forEach(openContent => {
                 if (openContent !== content) {
                     openContent.classList.remove("open");
@@ -194,12 +194,11 @@
                 }
             });
 
-            // Toggle the clicked section
             content.classList.toggle("open");
             header.classList.toggle("tb-section-header-open", content.classList.contains("open"));
 
             if (content.classList.contains("open")) {
-                content.style.maxHeight = "200px"; // adjust if needed
+                content.style.maxHeight = "200px";
                 content.style.overflowY = "auto";
             } else {
                 content.style.maxHeight = null;
@@ -213,6 +212,7 @@
 
         return section;
     }
+
 
     // Tooltip helper
     function initTooltip(btn, text) {
