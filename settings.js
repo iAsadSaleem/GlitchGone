@@ -321,23 +321,59 @@
 
     // NEW: Theme Selector Section
     function buildThemeSelectorSection(container) {
-        // Wrapper for button + arrow
+        if (!container) return;
+
+        // inject minimal styles once
+        if (!document.getElementById("tb-theme-selector-styles")) {
+            const s = document.createElement("style");
+            s.id = "tb-theme-selector-styles";
+            s.textContent = `
+        .themeSelectWrapper{position:relative;display:inline-flex;align-items:center}
+        .tb-theme-cycle-btn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;border:none;cursor:pointer;font-weight:600;min-width:160px;justify-content:space-between}
+        .themeBtnInner{display:flex;align-items:center;gap:8px;width:100%}
+        .themeBtnText{flex:1;text-align:left}
+        .themeArrowIcon{width:28px;height:28px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;border:1px solid rgba(0,0,0,0.08);font-size:12px;cursor:pointer}
+        .themeDropdownBox{position:absolute;right:0;top:calc(100% + 8px);background:#fff;box-shadow:0 6px 20px rgba(0,0,0,0.08);border-radius:8px;display:none;z-index:10000;padding:6px;min-width:160px}
+        .themeDropdownBox.show{display:block}
+        .themeDropdownBox button{display:block;width:100%;padding:8px 10px;border:none;background:none;text-align:left;cursor:pointer;border-radius:6px}
+        .themeDropdownBox button:hover{background:#f2f2f2}
+        `;
+            document.head.appendChild(s);
+        }
+
+        // Build DOM
         const wrapper = document.createElement("div");
         wrapper.className = "themeSelectWrapper";
 
-        // Main button (keeps existing behavior: cycle themes)
         const themeBtn = document.createElement("button");
-        themeBtn.textContent = "Select Theme";
         themeBtn.className = "tb-theme-cycle-btn";
+        themeBtn.type = "button";
 
-        // ✅ Circle icon instead of arrow button
-        const arrowIcon = document.createElement("i");
-        arrowIcon.className = "fa-solid fa-angle-down themeArrowIcon";
+        const inner = document.createElement("div");
+        inner.className = "themeBtnInner";
 
-        // Dropdown box (hidden by default)
+        const textSpan = document.createElement("span");
+        textSpan.className = "themeBtnText";
+        textSpan.textContent = "Select Theme";
+
+        // circle icon (Font Awesome expected to be loaded separately)
+        const arrowIcon = document.createElement("span");
+        arrowIcon.className = "themeArrowIcon";
+        arrowIcon.innerHTML = '<i class="fa-solid fa-angle-down" aria-hidden="true"></i>';
+
+        // dropdown container
         const dropdownBox = document.createElement("div");
         dropdownBox.className = "themeDropdownBox";
 
+        inner.appendChild(textSpan);
+        inner.appendChild(arrowIcon);
+        themeBtn.appendChild(inner);
+
+        wrapper.appendChild(themeBtn);
+        wrapper.appendChild(dropdownBox);
+        container.appendChild(wrapper);
+
+        // Themes object (kept from your original)
         const themes = {
             "Default": {
                 "--primary-color": "#b7e4ba",
@@ -427,13 +463,14 @@
                 "--top-nav-menu-active-bg": "#1A2A80",
                 "--top-nav-menu-color": "#ffffff",
                 "--top-nav-menu-hover-color": "#c7d2fe",
-                "--top-nav-menu-active-color": "#ffffff",
+                "--top-nav-menu-active-color": "#ffffff"
             }
         };
 
-        let themeKeys = Object.keys(themes);
+        const themeKeys = Object.keys(themes);
         let currentIndex = -1;
 
+        // apply theme (merges theme vars into saved themeData to avoid overwriting other keys)
         function applyTheme(themeName, themeVars) {
             const vars = themeVars || themes[themeName];
             if (!vars) return;
@@ -444,19 +481,19 @@
                 }
             });
 
-            // Update main button
-            themeBtn.textContent = themeName;
+            // update UI
+            textSpan.textContent = themeName;
             themeBtn.style.backgroundColor = vars["--primary-color"] || "#007bff";
             themeBtn.style.color = "#fff";
 
-            // Save
+            // Save (merge so we don't drop other saved keys like --lockedMenus etc)
             const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-            savedThemeObj.themeData = vars;
+            savedThemeObj.themeData = { ...(savedThemeObj.themeData || {}), ...vars };
             savedThemeObj.selectedTheme = themeName;
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
         }
 
-        // Restore saved theme
+        // restore saved theme if exists
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         if (savedThemeObj.selectedTheme) {
             applyTheme(savedThemeObj.selectedTheme, savedThemeObj.themeData);
@@ -465,41 +502,50 @@
             }
         }
 
-        // Main button = cycle themes
-        themeBtn.addEventListener("click", () => {
+        // cycle themes when clicking main area of button (but not when clicking the arrow)
+        themeBtn.addEventListener("click", (e) => {
+            // if the click target is the arrow or inside it, ignore (arrow handles dropdown)
+            if (e.target.closest(".themeArrowIcon")) return;
             currentIndex = (currentIndex + 1) % themeKeys.length;
             applyTheme(themeKeys[currentIndex]);
         });
 
-        // ✅ Arrow icon = open dropdown
-        arrowIcon.addEventListener("click", (e) => {
-            e.stopPropagation();
-            dropdownBox.classList.toggle("show");
-        });
-
-        // Populate dropdown
+        // populate dropdown
         themeKeys.forEach(themeName => {
             const optBtn = document.createElement("button");
+            optBtn.type = "button";
             optBtn.textContent = themeName;
-            optBtn.addEventListener("click", () => {
+            optBtn.addEventListener("click", (ev) => {
+                ev.stopPropagation();
                 applyTheme(themeName);
                 dropdownBox.classList.remove("show");
+                arrowIcon.innerHTML = '<i class="fa-solid fa-angle-down" aria-hidden="true"></i>';
             });
             dropdownBox.appendChild(optBtn);
         });
 
-        // Close dropdown outside click
-        document.addEventListener("click", (e) => {
-            if (!wrapper.contains(e.target)) {
+        // arrow toggles dropdown
+        arrowIcon.addEventListener("click", (ev) => {
+            ev.stopPropagation();
+            const open = dropdownBox.classList.toggle("show");
+            arrowIcon.innerHTML = open ? '<i class="fa-solid fa-angle-up" aria-hidden="true"></i>' : '<i class="fa-solid fa-angle-down" aria-hidden="true"></i>';
+        });
+
+        // close when clicking outside
+        document.addEventListener("click", (ev) => {
+            if (!wrapper.contains(ev.target)) {
                 dropdownBox.classList.remove("show");
+                arrowIcon.innerHTML = '<i class="fa-solid fa-angle-down" aria-hidden="true"></i>';
             }
         });
 
-        // Build structure
-        wrapper.appendChild(themeBtn);
-        wrapper.appendChild(arrowIcon);
-        wrapper.appendChild(dropdownBox);
-        container.appendChild(wrapper);
+        // prevent accidental form submit if in a form
+        themeBtn.addEventListener("keydown", (ev) => {
+            if (ev.key === " " || ev.key === "Enter") {
+                ev.preventDefault();
+                themeBtn.click();
+            }
+        });
     }
 
     // Build theme colors section
