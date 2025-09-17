@@ -666,3 +666,30 @@ body::-webkit-scrollbar-track {
     margin-left: auto;
     font-size: 14px;
 }
+.tb-section-scroll-title {
+    font-size: 15px;
+    top: 8px;
+    position: relative;
+    color: #386be3;
+    background: #0058ff57;
+    border: solid 1px #ffff;
+    border-radius: 4px;
+}
+.tb-section-dashbaord-title {
+    font-size: 15px;
+    top: 8px;
+    position: relative;
+    color: #386be3;
+    background: #0058ff57;
+    border: solid 1px #ffff;
+    border-radius: 4px;
+}
+.tb-section-background-title {
+    font-size: 15px;
+    top: 8px;
+    position: relative;
+    color: #386be3;
+    background: #0058ff57;
+    border: solid 1px #ffff;
+    border-radius: 4px;
+}

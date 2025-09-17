@@ -1031,7 +1031,7 @@
         // --- Title ---
         const title = document.createElement("h4");
         title.textContent = "Scrollbar Settings";
-        title.className = "tb-section-title";
+        title.className = "tb-section-scroll-title";
         wrapper.appendChild(title);
 
         // --- Scrollbar Color ---
@@ -1091,7 +1091,7 @@
 
         // === Title ===
         const title = document.createElement("h4");
-        title.className = "tb-section-title";
+        title.className = "tb-section-dashbaord-title";
         title.innerText = "Dashboard Cards Settings";
         wrapper.appendChild(title);
 
@@ -1298,7 +1298,7 @@
 
         // === Title ===
         const title = document.createElement("h4");
-        title.className = "tb-section-title";
+        title.className = "tb-section-background-title";
         title.innerText = "Background Gradient Settings";
         wrapper.appendChild(title);
 
