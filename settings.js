@@ -1786,14 +1786,14 @@
             );
 
             contentWrapper.appendChild(
-                createSection("Login Page Settings", (section) => {
+                createSection('<i class="fa-solid fa-right-to-bracket" style="color:white;margin-right:6px;"></i> Login Page Settings', (section) => {
                     section.appendChild(createLoginColorPicker("Login Card BG Gradient", "--login-card-bg-gradient"));
                     section.appendChild(createLoginColorPicker("Login Link Text Color", "--login-link-text-color"));
                     section.appendChild(createLoginColorPicker("Login Button BG Gradient", "--login-button-bg-gradient"));
                     section.appendChild(createLoginColorPicker("Login Button BG Color", "--login-button-bg-color"));
                     section.appendChild(createLoginColorPicker("Login Card Backgroud Color", "--login-card-bg-color"));
                     section.appendChild(createLoginLogoInput("Logo URL", "--login-company-logo"));
-                }, "🚪")
+                }, "",true)
             );
 
             contentWrapper.appendChild(
