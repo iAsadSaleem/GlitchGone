@@ -1095,7 +1095,7 @@
         }
 
         // color picker helper
-        function makePicker(labelText, key, fallback, cssVar, isGradient = false) {
+        function makePicker(labelText, key, fallback, cssVar, isGradient = false, transparent20 = false) {
             const wrapperDiv = document.createElement("div");
             wrapperDiv.className = "tb-color-picker-wrapper";
 
@@ -1118,12 +1118,27 @@
             code.className = "tb-color-code";
             code.textContent = initial;
 
-            document.body.style.setProperty(skey, initial);
+            // Handle transparency if requested
+            function applyValue(val) {
+                let finalVal = val;
+                if (transparent20) {
+                    // Convert HEX to RGBA with 0.2 alpha
+                    const bigint = parseInt(val.slice(1), 16);
+                    const r = (bigint >> 16) & 255;
+                    const g = (bigint >> 8) & 255;
+                    const b = bigint & 255;
+                    finalVal = `rgba(${r}, ${g}, ${b}, 0.2)`;
+                }
+                document.body.style.setProperty(skey, finalVal);
+                saveVar(skey, finalVal);
+                code.textContent = val; // keep hex in code display
+            }
+
+            applyValue(initial);
 
             input.addEventListener("input", () => {
                 const val = input.value;
-                code.textContent = val;
-                saveVar(skey, val);
+                applyValue(val);
             });
 
             wrapperDiv.appendChild(label);
@@ -1153,6 +1168,11 @@
         // Card Title Font Color
         gradientControls.appendChild(
             makePicker("Card Title Font Color", "card-title-font-color", "#000000", "--card-title-font-color", false)
+        );
+
+        // ✅ New: Base Selection Color (20% transparent)
+        gradientControls.appendChild(
+            makePicker("Base Selection Color", "n-color", "#0000ff", "--n-color", false, true)
         );
 
         // Card Title Font Size
@@ -1245,6 +1265,7 @@
 
         container.appendChild(wrapper);
     }
+
     function addBackgroundGradientSettings(container) {
         if (document.getElementById("tb-bg-gradient-settings")) return;
 
