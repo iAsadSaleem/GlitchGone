@@ -1775,7 +1775,7 @@
             // Sections
             contentWrapper.appendChild(
                 createSection(
-                    '<i class="fa-solid fa-gear" style="color:white;margin-right:6px;"></i> General Settings',
+                    '<i class="fa-solid fa-gear" style="color:white;margin-right:6px;font-size:17px;"></i> General Settings',
                     (section) => {
                         buildThemeColorsSection(section);
                         buildFontFamilySelector(section);
@@ -1786,7 +1786,7 @@
             );
 
             contentWrapper.appendChild(
-                createSection('<i class="fa-solid fa-right-to-bracket" style="color:white;margin-right:6px;"></i> Login Page Settings', (section) => {
+                createSection('<i class="fa-solid fa-right-to-bracket" style="color:white;margin-right:6px;font-size:17px;"></i> Login Page Settings', (section) => {
                     section.appendChild(createLoginColorPicker("Login Card BG Gradient", "--login-card-bg-gradient"));
                     section.appendChild(createLoginColorPicker("Login Link Text Color", "--login-link-text-color"));
                     section.appendChild(createLoginColorPicker("Login Button BG Gradient", "--login-button-bg-gradient"));
