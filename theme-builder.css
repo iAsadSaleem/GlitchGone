@@ -180,21 +180,17 @@
 .tb-color-picker-label {
   flex: 1;
 }
-.tb-color-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 6px; /* spacing between picker & code */
-}
+
 .tb-color-code {
-    min-width: 60px; /* ✅ keeps it stable */
-    padding: 4px 8px;
+    min-width: 65px;
+    padding: 2px 6px;
     background: #f2f7fa;
     border-radius: 4px;
     cursor: pointer;
-    color: #797979;
-    font-size: 12px;
-    border: solid 1px #6071794d;
-    text-align: center; /* ✅ centers hex text */
+    color: #797979a3;
+    font-size: 11px;
+    border: solid 1px #2a313542;
+    text-align: center;
 }
 
 .tb-color-code.copied {
