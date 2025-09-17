@@ -507,11 +507,12 @@ tb-apply-btn
     font-size: 14px;
 }
 .tb-header-controls {
-    font-size: 15px;
+    font-size: 16px;
     top: 8px;
     position: relative;
-    color: #386be3;
-    background: #0058ff57;
+    color: #413939ad;
+    /* border-bottom: solid 1px; */
+    background: #0058ff9c;
     border: solid 1px #ffff;
     border-radius: 4px;
 }
@@ -521,21 +522,21 @@ tb-apply-btn
     font-size: 11px;
 }
 .tb-profile-title {
-    font-size: 15px;
+    font-size: 16px;
     top: 8px;
     position: relative;
-    color: #386be3;
-    background: #0058ff57;
+    color: #413939ad;
+    background: #0058ff9c;
     border: solid 1px #ffff;
     border-radius: 4px;
 }
 
 .tb-help-title {
-    font-size: 15px;
+    font-size: 16px;
     top: 8px;
     position: relative;
-    color: #386be3;
-    background: #0058ff57;
+    color: #413939ad;
+    background: #0058ff9c;
     border: solid 1px #ffff;
     border-radius: 4px;
 }
@@ -554,13 +555,10 @@ body::-webkit-scrollbar-track {
     background: #f1f1f1;
 }
 .tb-section-title {
-    font-size: 15px;
-    top: 8px;
-    position: relative;
-    color: #386be3;
-    background: #0058ff57;
-    border: solid 1px #ffff;
-    border-radius: 4px;
+    color: #413939ad;
+    text-align: center;
+    color: white;
+    font-size: 13px;
 }
 .tb-sidebar-title-input {
     font-size: 8px;
