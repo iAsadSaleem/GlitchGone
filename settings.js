@@ -1045,65 +1045,140 @@
         section.appendChild(helpWrapper);
     }
     function addScrollbarSettings(container) {
-        if (document.getElementById("tb-scrollbar-color")) return; // prevent duplicate
+        if (document.getElementById("tb-scrollbar-settings")) return; // prevent duplicate
 
-        // --- Wrapper ---
+        // === Wrapper ===
         const wrapper = document.createElement("div");
         wrapper.className = "tb-scrollbar-settings";
+        wrapper.id = "tb-scrollbar-settings";
         wrapper.style.marginTop = "16px";
 
-        // --- Title ---
+        // === Title ===
         const title = document.createElement("h4");
-        title.textContent = "Scrollbar Settings";
         title.className = "tb-section-scroll-title";
+        title.innerText = "Scrollbar Settings";
         wrapper.appendChild(title);
 
-        // --- Scrollbar Color ---
-        const colorLabel = document.createElement("label");
-        colorLabel.textContent = "Scrollbar Color:";
-        colorLabel.className = "tb-label";
+        // === Saved Theme Data ===
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        savedThemeObj.themeData = savedThemeObj.themeData || {};
+        const themeData = savedThemeObj.themeData;
 
-        const colorInput = document.createElement("input");
-        colorInput.type = "color";
-        colorInput.id = "tb-scrollbar-color";
-        colorInput.className = "tb-color-input";
-        colorInput.value = "#344391"; // default
-
-        colorLabel.appendChild(colorInput);
-        wrapper.appendChild(colorLabel);
-
-        // --- Scrollbar Width ---
-        const widthLabel = document.createElement("label");
-        widthLabel.textContent = "Scrollbar Width (px):";
-        widthLabel.className = "tb-label";
-
-        const widthInput = document.createElement("input");
-        widthInput.type = "number";
-        widthInput.id = "tb-scrollbar-width";
-        widthInput.className = "tb-number-scroll-input";
-        widthInput.value = "7"; // default
-        widthInput.min = "2";
-        widthInput.max = "30";
-
-        widthLabel.appendChild(widthInput);
-        wrapper.appendChild(widthLabel);
-
-        // --- Update function ---
-        function updateScrollbar() {
-            document.body.style.setProperty("--scroll-color", colorInput.value);
-            document.body.style.setProperty("--scroll-width", widthInput.value + "px");
+        // helper: normalize storage key
+        function storageKeyFor(key, cssVar) {
+            if (cssVar) return cssVar;
+            if (key && key.startsWith("--")) return key;
+            return `--${key}`;
         }
 
-        // --- Listeners ---
-        colorInput.addEventListener("input", updateScrollbar);
-        widthInput.addEventListener("input", updateScrollbar);
+        // save helper
+        function saveVar(key, value) {
+            themeData[key] = value;
+            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            document.body.style.setProperty(key, value);
+        }
 
-        // Initial apply
-        updateScrollbar();
+        // === Color Picker for Scrollbar ===
+        function makePicker(labelText, key, fallback, cssVar) {
+            const wrapperDiv = document.createElement("div");
+            wrapperDiv.className = "tb-color-picker-wrapper";
 
-        // Add to ThemeBuilder container
+            const label = document.createElement("label");
+            label.className = "tb-color-picker-label";
+            label.textContent = labelText;
+
+            const input = document.createElement("input");
+            input.type = "color";
+            input.className = "tb-color-input";
+
+            const skey = storageKeyFor(key, cssVar);
+
+            let initial = (themeData[skey] || getComputedStyle(document.body).getPropertyValue(skey) || fallback).toString().trim();
+            if (!/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(initial)) initial = fallback;
+
+            input.value = initial;
+
+            const code = document.createElement("span");
+            code.className = "tb-color-code";
+            code.textContent = initial;
+
+            function applyValue(val) {
+                document.body.style.setProperty(skey, val);
+                saveVar(skey, val);
+                code.textContent = val;
+            }
+
+            applyValue(initial);
+
+            input.addEventListener("input", () => {
+                const val = input.value;
+                applyValue(val);
+            });
+
+            wrapperDiv.appendChild(label);
+            wrapperDiv.appendChild(input);
+            wrapperDiv.appendChild(code);
+            return wrapperDiv;
+        }
+
+        // === Number Input for Scrollbar Width ===
+        function makeNumberInput(labelText, cssVar, fallback, min, max) {
+            const wrapperDiv = document.createElement("div");
+            wrapperDiv.className = "tb-number-input-wrapper";
+
+            const label = document.createElement("label");
+            label.className = "tb-number-label";
+            label.textContent = labelText;
+
+            const input = document.createElement("input");
+            input.type = "number";
+            input.className = "tb-number-scroll-input";
+            input.min = min;
+            input.max = max;
+
+            const saved = themeData[cssVar] || getComputedStyle(document.body).getPropertyValue(cssVar) || fallback;
+            const initialNumber = parseInt((saved + "").replace("px", ""), 10) || parseInt(fallback, 10);
+            input.value = initialNumber;
+
+            const code = document.createElement("span");
+            code.className = "tb-number-code";
+            code.textContent = initialNumber + "px";
+
+            document.body.style.setProperty(cssVar, initialNumber + "px");
+
+            input.addEventListener("input", () => {
+                const val = (input.value || initialNumber) + "px";
+                code.textContent = val;
+                saveVar(cssVar, val);
+            });
+
+            wrapperDiv.appendChild(label);
+            wrapperDiv.appendChild(input);
+            wrapperDiv.appendChild(code);
+            return wrapperDiv;
+        }
+
+        // === Controls ===
+        const controls = document.createElement("div");
+        controls.className = "tb-scrollbar-controls";
+        wrapper.appendChild(controls);
+
+        // Scrollbar Color
+        controls.appendChild(makePicker("Scrollbar Color", "scroll-color", "#344391", "--scroll-color"));
+
+        // Scrollbar Width
+        controls.appendChild(makeNumberInput("Scrollbar Width (px)", "--scroll-width", "7px", 2, 30));
+
+        // Reapply saved values
+        Object.keys(themeData).forEach(k => {
+            try {
+                document.body.style.setProperty(k, themeData[k]);
+            } catch (e) { }
+        });
+
         container.appendChild(wrapper);
     }
+
     function addDashboardCardSettings(container) {
         if (document.getElementById("tb-dashboard-card-settings")) return;
 
