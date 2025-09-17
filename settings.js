@@ -16,7 +16,14 @@
             console.log("[ThemeBuilder] Font Awesome loaded");
         }
     })();
-
+    (function loadFontAwesome() {
+        if (!document.querySelector('link[href*="font-awesome"]')) {
+            const link = document.createElement("link");
+            link.rel = "stylesheet";
+            link.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css";
+            document.head.appendChild(link);
+        }
+    })();
     /**************************************
  * JC Confirm Modal Function
  **************************************/
@@ -1754,10 +1761,15 @@
 
             // Sections
             contentWrapper.appendChild(
-                createSection("🎨 General Settings", (section) => {
-                    buildThemeColorsSection(section);
-                    buildFontFamilySelector(section);
-                }, "", true) // <-- true = open by default
+                createSection(
+                    '<i class="fa-solid fa-gear" style="color:white;margin-right:6px;"></i> General Settings',
+                    (section) => {
+                        buildThemeColorsSection(section);
+                        buildFontFamilySelector(section);
+                    },
+                    "",
+                    true
+                )
             );
 
             contentWrapper.appendChild(
