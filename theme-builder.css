@@ -343,6 +343,7 @@
     border-radius: 8px !important;
     background: var(--sidebar-bg-color) !important;
     position: relative;
+    min-width: 316px;
 }
 
 .tb-card {
