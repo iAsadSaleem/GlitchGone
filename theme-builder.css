@@ -562,7 +562,6 @@ body::-webkit-scrollbar-track {
     text-align: center;
     color: white;
     font-size: 13px;
-    font-weight: bold;
 }
 .tb-sidebar-title-input {
     font-size: 8px;
