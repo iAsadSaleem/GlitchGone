@@ -827,3 +827,21 @@ body::-webkit-scrollbar-track {
         font-size: 12px;
         color: #666;
     }
+.tb-icon-input {
+    position: relative;
+    width: 6.5rem;
+    font-size: 10px;
+    border-radius: 11px;
+    border-color: #60717957;
+    padding: 5px 0px 5px 4px;
+    left: 5px;
+}
+.tb-title-input {
+    position: relative;
+    width: 6.5rem;
+    font-size: 10px;
+    border-radius: 11px;
+    border-color: #60717957;
+    padding: 5px 0px 5px 4px;
+    left: 5px;
+}
