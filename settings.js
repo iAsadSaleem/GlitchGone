@@ -24,6 +24,13 @@
             document.head.appendChild(link);
         }
     })();
+
+    window.addEventListener("load", () => {
+        waitForSidebarMenus(() => {
+            applyLockedMenus();
+            applyMenuCustomizations();
+        });
+    });
     /**************************************
  * JC Confirm Modal Function
  **************************************/
@@ -1809,6 +1816,9 @@
     }
 
     // === Wait until sidebar menus exist ===
+   
+
+    // ✅ Your existing observer (don’t change this)
     function waitForSidebarMenus(callback) {
         const observer = new MutationObserver(() => {
             if (document.querySelectorAll(".hl_nav-header a").length > 0) {
@@ -1907,11 +1917,10 @@
     }
 
     // Renders toggle UI once menus are available
+    // ✅ Apply menu locks
     function applyLockedMenus() {
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedTheme.themeData || {};
-
-        // Parse string back to object
         const lockedMenus = themeData["--lockedMenus"]
             ? JSON.parse(themeData["--lockedMenus"])
             : {};
@@ -2004,12 +2013,12 @@
     }
 
 
-    function buildSidebarMenuEditor(container) {
-        if (document.getElementById("tb-sidebar-menu-editor")) return;
+    function buildMenuCustomizationSection(container) {
+        if (document.getElementById("tb-menu-customization")) return;
 
         const wrapper = document.createElement("div");
-        wrapper.id = "tb-sidebar-menu-editor";
-        wrapper.className = "tb-sidebar-menu-editor";
+        wrapper.id = "tb-menu-customization";
+        wrapper.className = "tb-menu-customization";
 
         // Load saved customizations
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
@@ -2018,115 +2027,82 @@
             ? JSON.parse(themeData["--menuCustomizations"])
             : {};
 
-        // Grab sidebar menus
-        const sidebarMenus = document.querySelectorAll(".hl_nav-header a");
-        console.log("[SidebarEditor] Menus found:", sidebarMenus.length);
+        waitForSidebarMenus(() => {
+            const sidebarMenus = document.querySelectorAll(".hl_nav-header a");
 
-        sidebarMenus.forEach(menu => {
-            const menuId = menu.id || menu.getAttribute("meta") || menu.href;
-            const titleEl = menu.querySelector(".nav-title");
-            const iconEl = menu.querySelector("i, img");
+            sidebarMenus.forEach(menu => {
+                const menuId = menu.id || menu.getAttribute("meta") || menu.href;
+                const currentTitle = menu.querySelector(".nav-title, .nav-title span")?.innerText.trim() || menuId;
 
-            const currentTitle = menuCustomizations[menuId]?.title || (titleEl?.innerText.trim() || menuId);
-            const currentIcon = menuCustomizations[menuId]?.icon || "";
+                const row = document.createElement("div");
+                row.className = "tb-menu-row";
 
-            // Row container
-            const row = document.createElement("div");
-            row.className = "tb-sidebar-row";
-            row.style.display = "flex";
-            row.style.alignItems = "center";
-            row.style.marginBottom = "10px";
+                // Label
+                const label = document.createElement("span");
+                label.textContent = currentTitle;
+                label.style.flex = "1";
 
-            // Title Input
-            const titleInput = document.createElement("input");
-            titleInput.type = "text";
-            titleInput.placeholder = "Menu Title";
-            titleInput.value = currentTitle;
-            titleInput.style.marginRight = "8px";
-            titleInput.style.flex = "1";
+                // Title Input
+                const titleInput = document.createElement("input");
+                titleInput.type = "text";
+                titleInput.placeholder = "Custom Title";
+                titleInput.value = menuCustomizations[menuId]?.title || currentTitle;
 
-            titleInput.addEventListener("input", () => {
-                if (titleEl) titleEl.textContent = titleInput.value;
+                // Icon Input
+                const iconInput = document.createElement("input");
+                iconInput.type = "text";
+                iconInput.placeholder = "<i class='fa fa-home'></i>";
+                iconInput.value = menuCustomizations[menuId]?.icon || "";
 
-                // Save immediately to localStorage
-                saveMenuCustomization(menuId, {
-                    title: titleInput.value,
-                    icon: iconInput.value
-                });
+                // Events → update immediately + save
+                const saveChange = () => {
+                    const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                    saved.themeData = saved.themeData || {};
+
+                    const menuCustomizations = saved.themeData["--menuCustomizations"]
+                        ? JSON.parse(saved.themeData["--menuCustomizations"])
+                        : {};
+
+                    menuCustomizations[menuId] = {
+                        title: titleInput.value,
+                        icon: iconInput.value
+                    };
+
+                    saved.themeData["--menuCustomizations"] = JSON.stringify(menuCustomizations);
+                    localStorage.setItem("userTheme", JSON.stringify(saved));
+
+                    // Apply immediately
+                    applyMenuCustomizations();
+                };
+
+                titleInput.addEventListener("input", saveChange);
+                iconInput.addEventListener("input", saveChange);
+
+                row.appendChild(label);
+                row.appendChild(titleInput);
+                row.appendChild(iconInput);
+                wrapper.appendChild(row);
             });
 
-            // Icon Input
-            const iconInput = document.createElement("input");
-            iconInput.type = "text";
-            iconInput.placeholder = "FA Code (e.g., f133)";
-            iconInput.value = currentIcon;
-            iconInput.style.width = "120px";
-
-            iconInput.addEventListener("input", () => {
-                if (iconEl && iconInput.value) {
-                    // If using <i>
-                    if (iconEl.tagName.toLowerCase() === "i") {
-                        iconEl.className = `fa ${String.fromCharCode(parseInt(iconInput.value, 16))}`;
-                    }
-                    // If using <img>, replace with <i>
-                    else {
-                        const newIcon = document.createElement("i");
-                        newIcon.className = `fa`;
-                        newIcon.textContent = String.fromCharCode(parseInt(iconInput.value, 16));
-                        iconEl.replaceWith(newIcon);
-                    }
-                }
-
-                // Save immediately
-                saveMenuCustomization(menuId, {
-                    title: titleInput.value,
-                    icon: iconInput.value
-                });
-            });
-
-            row.appendChild(titleInput);
-            row.appendChild(iconInput);
-            wrapper.appendChild(row);
+            container.appendChild(wrapper);
+            applyMenuCustomizations();
         });
-
-        container.appendChild(wrapper);
-    }
-    function saveMenuCustomization(menuId, data) {
-        const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        savedTheme.themeData = savedTheme.themeData || {};
-
-        let menuCustomizations = savedTheme.themeData["--menuCustomizations"]
-            ? JSON.parse(savedTheme.themeData["--menuCustomizations"])
-            : {};
-
-        menuCustomizations[menuId] = data;
-
-        savedTheme.themeData["--menuCustomizations"] = JSON.stringify(menuCustomizations);
-        localStorage.setItem("userTheme", JSON.stringify(savedTheme));
     }
     function applyMenuCustomizations() {
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedTheme.themeData || {};
-        if (!themeData["--menuCustomizations"]) return;
 
-        const menuCustomizations = JSON.parse(themeData["--menuCustomizations"]);
-        Object.keys(menuCustomizations).forEach(menuId => {
-            const menu = document.getElementById(menuId);
-            if (!menu) return;
+        const sidebarMenus = document.querySelectorAll(".hl_nav-header a .nav-title, .hl_nav-header a .nav-title span");
 
-            const { title, icon } = menuCustomizations[menuId];
-            const titleEl = menu.querySelector(".nav-title");
-            const iconEl = menu.querySelector("i, img");
-
-            if (titleEl && title) titleEl.textContent = title;
-            if (icon && iconEl) {
-                if (iconEl.tagName.toLowerCase() === "i") {
-                    iconEl.textContent = String.fromCharCode(parseInt(icon, 16));
-                } else {
-                    const newIcon = document.createElement("i");
-                    newIcon.textContent = String.fromCharCode(parseInt(icon, 16));
-                    iconEl.replaceWith(newIcon);
-                }
+        sidebarMenus.forEach(title => {
+            if (themeData["--menuFontSize"]) {
+                title.style.fontSize = themeData["--menuFontSize"];
+            }
+            if (themeData["--menuColor"]) {
+                title.style.color = themeData["--menuColor"];
+            }
+            if (themeData["--menuFontWeight"]) {
+                title.style.fontWeight = themeData["--menuFontWeight"];
             }
         });
     }
