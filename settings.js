@@ -25,12 +25,15 @@
         }
     })();
 
-    //window.addEventListener("load", () => {
-    //    waitForSidebarMenus(() => {
-    //        applyLockedMenus();
-    //        applyMenuCustomizations();
-    //    });
-    //});
+    window.addEventListener("load", () => {
+        // Small timeout ensures CSS is applied
+        setTimeout(() => {
+            waitForSidebarMenus(() => {
+                applyLockedMenus();
+                applyMenuCustomizations();
+            });
+        }, 50); // 50ms delay is usually enough, adjust if needed
+    });
     /**************************************
  * JC Confirm Modal Function
  **************************************/
@@ -1819,7 +1822,16 @@
    
 
     // ✅ Your existing observer (don’t change this)
-    
+    function waitForSidebarMenus(callback) {
+        const observer = new MutationObserver(() => {
+            if (document.querySelectorAll(".hl_nav-header a").length > 0) {
+                observer.disconnect();
+                callback();
+            }
+        });
+
+        observer.observe(document.body, { childList: true, subtree: true });
+    }
 
     function buildFeatureLockSection(container) {
         if (document.getElementById("tb-feature-lock-settings")) return;
@@ -2141,62 +2153,62 @@
             "sb_mobile": "--mobile-app-new-name"
         };
 
-        Object.keys(menuCustomizations).forEach(menuId => {
-            const custom = menuCustomizations[menuId];
-            const menuEl = document.getElementById(menuId);
-            if (!menuEl) return;
+       Object.keys(menuCustomizations).forEach(menuId => {
+    const custom = menuCustomizations[menuId];
+    const menuEl = document.getElementById(menuId);
+    if (!menuEl) return;
 
-            // ✅ Remove any <i> or <img> tags from DOM
-            menuEl.querySelectorAll("i, img").forEach(el => el.remove());
+    // ✅ Remove any <i> or <img> tags from DOM
+    menuEl.querySelectorAll("i, img").forEach(el => el.remove());
 
-            // ✅ Add class to hide CSS ::after pseudo-element
-            menuEl.classList.add("sidebar-no-icon");
+    // ✅ Add class to hide CSS ::after pseudo-element
+    menuEl.classList.add("sidebar-no-icon");
 
-            // ✅ Clear CSS variable icons (optional, can keep if you want)
-            const emptySvg = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E\")";
-            const cssPrefix = menuId.replace("sb_", "--sidebar-menu-icon-");
-            ["", "-hover", "-active"].forEach(suffix => {
-                document.documentElement.style.setProperty(
-                    cssPrefix + suffix,
-                    emptySvg,
-                    "important"
-                );
-            });
+    // ✅ Clear CSS variable icons (optional, can keep if you want)
+    const emptySvg = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E\")";
+    const cssPrefix = menuId.replace("sb_", "--sidebar-menu-icon-");
+    ["", "-hover", "-active"].forEach(suffix => {
+        document.documentElement.style.setProperty(
+            cssPrefix + suffix,
+            emptySvg,
+            "important"
+        );
+    });
 
-            // ✅ Update title variable
-            const cssVar = variableMap[menuId];
-            if (cssVar && custom.title) {
-                document.documentElement.style.setProperty(cssVar, `"${custom.title}"`);
-            }
+    // ✅ Update title variable
+    const cssVar = variableMap[menuId];
+    if (cssVar && custom.title) {
+        document.documentElement.style.setProperty(cssVar, `"${custom.title}"`);
+    }
 
-            // ✅ Insert new FontAwesome icon
-            if (custom.icon && custom.icon.trim() !== "") {
-                const navTitle = menuEl.querySelector(".nav-title");
-                let iconEl = document.createElement("i");
-                iconEl.style.marginRight = "8px";
+    // ✅ Insert new FontAwesome icon
+    if (custom.icon && custom.icon.trim() !== "") {
+        const navTitle = menuEl.querySelector(".nav-title");
+        let iconEl = document.createElement("i");
+        iconEl.style.marginRight = "8px";
 
-                if (/^[a-f0-9]{3,4}$/i.test(custom.icon.trim())) {
-                    iconEl.className = "fa-solid";
-                    iconEl.innerHTML = "&#x" + custom.icon.trim() + ";";
-                } else {
-                    iconEl.className = custom.icon.trim();
-                }
+        if (/^[a-f0-9]{3,4}$/i.test(custom.icon.trim())) {
+            iconEl.className = "fa-solid";
+            iconEl.innerHTML = "&#x" + custom.icon.trim() + ";";
+        } else {
+            iconEl.className = custom.icon.trim();
+        }
 
-                if (navTitle) {
-                    menuEl.insertBefore(iconEl, navTitle);
-                } else {
-                    menuEl.prepend(iconEl);
-                }
-            }
-        });
+        if (navTitle) {
+            menuEl.insertBefore(iconEl, navTitle);
+        } else {
+            menuEl.prepend(iconEl);
+        }
+    }
+});
 
     }
 
 
     // ✅ Call once after sidebar menus are ready
-    setTimeout(() => {
+    waitForSidebarMenus(() => {
         applyMenuCustomizations();
-    }, 100); // 100ms delay, adjust if needed
+    });
 
 
     // Create Builder UI
