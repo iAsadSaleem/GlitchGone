@@ -1929,7 +1929,7 @@
 
         sidebarMenus.forEach(menu => {
             const menuId = menu.id || menu.getAttribute("meta") || menu.href;
-
+            //<i class="fa-light fa-rocket"></i>
             // Remove previous locks
             menu.classList.remove("tb-locked-menu");
             menu.querySelector(".tb-lock-icon")?.remove();
@@ -2152,6 +2152,12 @@
 
         Object.keys(menuCustomizations).forEach(menuId => {
             const custom = menuCustomizations[menuId];
+            const menuEl = document.getElementById(menuId);
+
+            if (!menuEl) return;
+
+            // ✅ Remove ALL icons inside this menu
+            menuEl.querySelectorAll("i").forEach(el => el.remove());
 
             // Update CSS variable for title
             const cssVar = variableMap[menuId];
@@ -2159,19 +2165,26 @@
                 document.documentElement.style.setProperty(cssVar, `"${custom.title}"`);
             }
 
-            // Update icon (remove all existing <i> then add one)
-            const menuEl = document.getElementById(menuId);
-            if (menuEl) {
-                // Remove ALL existing icons
-                menuEl.querySelectorAll("i.fa").forEach(el => el.remove());
+            // ✅ Insert icon (new or default)
+            const navTitle = menuEl.querySelector(".nav-title");
 
-                if (custom.icon) {
+            if (custom.icon && custom.icon.trim() !== "") {
+                // user custom icon
+                const iconEl = document.createElement("i");
+                iconEl.className = custom.icon.trim();
+                iconEl.style.marginRight = "8px";
+                if (navTitle) {
+                    menuEl.insertBefore(iconEl, navTitle);
+                } else {
+                    menuEl.prepend(iconEl);
+                }
+            } else {
+                // fallback to DEFAULT icon (optional: detect from data attr)
+                const defaultIcon = menuEl.getAttribute("data-default-icon");
+                if (defaultIcon) {
                     const iconEl = document.createElement("i");
-                    iconEl.className = custom.icon; // e.g. "fa-solid fa-home"
+                    iconEl.className = defaultIcon;
                     iconEl.style.marginRight = "8px";
-
-                    // Insert before nav-title
-                    const navTitle = menuEl.querySelector(".nav-title");
                     if (navTitle) {
                         menuEl.insertBefore(iconEl, navTitle);
                     } else {
