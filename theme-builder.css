@@ -737,11 +737,7 @@ body::-webkit-scrollbar-track {
 */
 /* Wrapper */
 .tb-heading-settings {
-    background: #f9f9f9;
-    padding: 12px;
-    border-radius: 8px;
     margin-top: 16px;
-    border: 1px solid #ddd;
 }
 
     /* Title */

@@ -1635,6 +1635,44 @@
                 document.getElementById(tab.dataset.target).classList.add("active");
             });
         });
+
+        // --- Live update logic ---
+
+        // H1 Color
+        const h1ColorInput = wrapper.querySelector("#h1-color");
+        const h1ColorCode = wrapper.querySelector("#h1-color-code");
+        h1ColorInput.addEventListener("input", () => {
+            h1ColorCode.value = h1ColorInput.value;
+            document.querySelectorAll("h1").forEach(el => {
+                el.style.color = h1ColorInput.value;
+            });
+        });
+
+        // H1 Size
+        const h1SizeInput = wrapper.querySelector("#h1-size");
+        h1SizeInput.addEventListener("input", () => {
+            document.querySelectorAll("h1").forEach(el => {
+                el.style.fontSize = h1SizeInput.value + "px";
+            });
+        });
+
+        // H2 Color
+        const h2ColorInput = wrapper.querySelector("#h2-color");
+        const h2ColorCode = wrapper.querySelector("#h2-color-code");
+        h2ColorInput.addEventListener("input", () => {
+            h2ColorCode.value = h2ColorInput.value;
+            document.querySelectorAll("h2").forEach(el => {
+                el.style.color = h2ColorInput.value;
+            });
+        });
+
+        // H2 Size
+        const h2SizeInput = wrapper.querySelector("#h2-size");
+        h2SizeInput.addEventListener("input", () => {
+            document.querySelectorAll("h2").forEach(el => {
+                el.style.fontSize = h2SizeInput.value + "px";
+            });
+        });
     }
 
     function addSidebarMenuSettings(container) {
