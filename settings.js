@@ -2156,18 +2156,25 @@
 
             if (!menuEl) return;
 
-            // ✅ Remove ALL inline icons (<i> and <img>)
+            // ✅ Remove ALL icons (<i> and <img>)
             menuEl.querySelectorAll("i, img").forEach(el => el.remove());
 
-            // ✅ Clear CSS-based icons so default SVGs don’t appear
+            // ✅ Clear CSS icon variables so default SVGs don’t show
             const cssPrefix = menuId.replace("sb_", "--sidebar-menu-icon-");
             ["", "-hover", "-active"].forEach(suffix => {
                 document.documentElement.style.setProperty(cssPrefix + suffix, "none");
             });
 
-            // 🔑 Insert FA icon (only if provided)
+            // Update title variable
+            const cssVar = variableMap[menuId];
+            if (cssVar && custom.title) {
+                document.documentElement.style.setProperty(cssVar, `"${custom.title}"`);
+            }
+
+            // ✅ Insert FA icon
+            const navTitle = menuEl.querySelector(".nav-title");
+
             if (custom.icon && custom.icon.trim() !== "") {
-                const navTitle = menuEl.querySelector(".nav-title");
                 let iconEl = document.createElement("i");
                 iconEl.style.marginRight = "8px";
 
@@ -2176,7 +2183,7 @@
                     iconEl.className = "fa-solid";
                     iconEl.innerHTML = "&#x" + custom.icon.trim() + ";";
                 } else {
-                    // User entered full FA class like "fa-solid fa-rocket"
+                    // User entered full FA class name
                     iconEl.className = custom.icon.trim();
                 }
 
