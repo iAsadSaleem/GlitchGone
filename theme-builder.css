@@ -835,9 +835,8 @@ body::-webkit-scrollbar-track {
 }
 
     .tb-menu-row span {
-        flex: 0 0 120px; /* fixed width for labels */
         font-weight: 600;
-        font-size: 13px;
+        font-size: 10px;
         color: #333;
     }
 
