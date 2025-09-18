@@ -2110,11 +2110,11 @@
             const titleEl = menu.querySelector(".nav-title");
             if (!titleEl) return;
 
-            // Hide original text
-            titleEl.style.visibility = "hidden";
+            // Hide text without breaking layout
+            titleEl.style.color = "transparent";
             titleEl.style.position = "relative";
 
-            // Inject pseudo content
+            // Inject CSS overlay
             let customStyle = document.getElementById(`style-${menuId}`);
             if (!customStyle) {
                 customStyle = document.createElement("style");
@@ -2125,13 +2125,13 @@
             customStyle.textContent = `
           #${CSS.escape(menuId)} .nav-title::after {
             content: "${data.title || titleEl.textContent}";
-            visibility: visible;
             position: absolute;
             left: 0;
             top: 0;
             color: ${themeData["--menuColor"] || "inherit"};
             font-size: ${themeData["--menuFontSize"] || "inherit"};
             font-weight: ${themeData["--menuFontWeight"] || "inherit"};
+            white-space: nowrap;
           }
         `;
         });
