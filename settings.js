@@ -2103,50 +2103,37 @@
             ? JSON.parse(themeData["--menuCustomizations"])
             : {};
 
-        const sidebarMenus = document.querySelectorAll(".hl_nav-header a");
+        Object.entries(menuCustomizations).forEach(([menuId, data]) => {
+            const menu = document.querySelector(`#${CSS.escape(menuId)}`);
+            if (!menu) return;
 
-        sidebarMenus.forEach(menu => {
-            const menuId = menu.id || menu.getAttribute("meta") || menu.href;
-            const titleEl = menu.querySelector(".nav-title, .nav-title span");
-
+            const titleEl = menu.querySelector(".nav-title");
             if (!titleEl) return;
 
-            // Save original title
-            if (!menu.dataset.originalTitle) {
-                menu.dataset.originalTitle = titleEl.textContent.trim();
+            // Hide original text
+            titleEl.style.visibility = "hidden";
+            titleEl.style.position = "relative";
+
+            // Inject pseudo content
+            let customStyle = document.getElementById(`style-${menuId}`);
+            if (!customStyle) {
+                customStyle = document.createElement("style");
+                customStyle.id = `style-${menuId}`;
+                document.head.appendChild(customStyle);
             }
 
-            // Apply renamed title instantly
-            if (menuCustomizations[menuId]?.title) {
-                titleEl.textContent = menuCustomizations[menuId].title;
-            } else {
-                titleEl.textContent = menu.dataset.originalTitle;
-            }
-
-            // Apply icon
-            let iconEl = menu.querySelector(".tb-custom-icon");
-            if (menuCustomizations[menuId]?.icon) {
-                if (!iconEl) {
-                    iconEl = document.createElement("span");
-                    iconEl.className = "tb-custom-icon";
-                    iconEl.style.marginRight = "6px";
-                    menu.insertBefore(iconEl, menu.firstChild);
-                }
-                iconEl.innerHTML = menuCustomizations[menuId].icon;
-            } else if (iconEl) {
-                iconEl.remove();
-            }
-
-            // Apply styles
-            if (themeData["--menuFontSize"]) {
-                titleEl.style.fontSize = themeData["--menuFontSize"];
-            }
-            if (themeData["--menuColor"]) {
-                titleEl.style.color = themeData["--menuColor"];
-            }
-            if (themeData["--menuFontWeight"]) {
-                titleEl.style.fontWeight = themeData["--menuFontWeight"];
-            }
+            customStyle.textContent = `
+          #${CSS.escape(menuId)} .nav-title::after {
+            content: "${data.title || titleEl.textContent}";
+            visibility: visible;
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: ${themeData["--menuColor"] || "inherit"};
+            font-size: ${themeData["--menuFontSize"] || "inherit"};
+            font-weight: ${themeData["--menuFontWeight"] || "inherit"};
+          }
+        `;
         });
     }
 
