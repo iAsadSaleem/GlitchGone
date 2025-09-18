@@ -2156,28 +2156,34 @@
 
             if (!menuEl) return;
 
-            // ✅ Remove ALL icons (both <i> and <img>)
+            // ✅ Remove ALL icons (<i> and <img>)
             menuEl.querySelectorAll("i, img").forEach(el => el.remove());
 
-            // Update CSS variable for title
+            // ✅ Clear CSS icon variables so default SVGs don’t show
+            const cssPrefix = menuId.replace("sb_", "--sidebar-menu-icon-");
+            ["", "-hover", "-active"].forEach(suffix => {
+                document.documentElement.style.setProperty(cssPrefix + suffix, "none");
+            });
+
+            // Update title variable
             const cssVar = variableMap[menuId];
             if (cssVar && custom.title) {
                 document.documentElement.style.setProperty(cssVar, `"${custom.title}"`);
             }
 
-            // ✅ Insert icon
+            // ✅ Insert FA icon
             const navTitle = menuEl.querySelector(".nav-title");
 
             if (custom.icon && custom.icon.trim() !== "") {
                 let iconEl = document.createElement("i");
                 iconEl.style.marginRight = "8px";
 
-                // If user entered a unicode code like "f135"
                 if (/^[a-f0-9]{3,4}$/i.test(custom.icon.trim())) {
-                    iconEl.className = "fa-solid"; // default solid
+                    // User entered Unicode like "f135"
+                    iconEl.className = "fa-solid";
                     iconEl.innerHTML = "&#x" + custom.icon.trim() + ";";
                 } else {
-                    // Otherwise treat it as a class name like "fa-solid fa-rocket"
+                    // User entered full FA class name
                     iconEl.className = custom.icon.trim();
                 }
 
@@ -2185,19 +2191,6 @@
                     menuEl.insertBefore(iconEl, navTitle);
                 } else {
                     menuEl.prepend(iconEl);
-                }
-            } else {
-                // fallback to DEFAULT icon (if you stored it as data attr)
-                const defaultIcon = menuEl.getAttribute("data-default-icon");
-                if (defaultIcon) {
-                    const iconEl = document.createElement("i");
-                    iconEl.className = defaultIcon;
-                    iconEl.style.marginRight = "8px";
-                    if (navTitle) {
-                        menuEl.insertBefore(iconEl, navTitle);
-                    } else {
-                        menuEl.prepend(iconEl);
-                    }
                 }
             }
         });
