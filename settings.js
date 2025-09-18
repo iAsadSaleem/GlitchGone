@@ -2199,7 +2199,7 @@
                     addDashboardCardSettings(section)
                     addBackgroundGradientSettings(section)
                     buildHeadingSettings(section)
-                    buildSidebarMenuEditor(section)
+                    buildMenuCustomizationSection(section)
 
                     // Add more advanced options later
                 }, "", true
