@@ -2027,58 +2027,72 @@
             ? JSON.parse(themeData["--menuCustomizations"])
             : {};
 
+        // Map menu IDs to CSS variables
+        const variableMap = {
+            "sb_launchpad": "--launchpad-new-name",
+            "sb_dashboard": "--dashboard-new-name",
+            "sb_media": "--media-storage-new-name",
+            "sb_ai_agents": "--ai-agents-new-name",
+            "sb_conversations": "--conversations-new-name",
+            "sb_calendars": "--calendars-new-name",
+            "sb_contacts": "--contacts-new-name",
+            "sb_opportunities": "--opportunities-new-name",
+            "sb_payments": "--payments-new-name",
+            "sb_marketing": "--marketing-new-name",
+            "sb_automation": "--automation-new-name",
+            "sb_sites": "--sites-new-name",
+            "sb_memberships": "--memberships-new-name",
+            "sb_reputation": "--reputation-new-name",
+            "sb_reporting": "--reporting-new-name",
+            "sb_marketplace": "--app-marketplace-new-name",
+            "sb_mobile": "--mobile-app-new-name"
+        };
+
         waitForSidebarMenus(() => {
             const sidebarMenus = document.querySelectorAll(".hl_nav-header a");
 
             sidebarMenus.forEach(menu => {
                 const menuId = menu.id || menu.getAttribute("meta") || menu.href;
-                const currentTitle =
-                    menu.querySelector(".nav-title, .nav-title span")?.innerText.trim() ||
-                    menuId;
+                const currentTitle = menu.querySelector(".nav-title")?.innerText.trim() || menuId;
 
                 const row = document.createElement("div");
                 row.className = "tb-menu-row";
-                row.style.display = "flex";
-                row.style.alignItems = "center";
-                row.style.gap = "8px";
-                row.style.marginBottom = "6px";
 
-                // Label (for reference in settings panel)
+                // Label (readonly)
                 const label = document.createElement("span");
                 label.textContent = currentTitle;
                 label.style.flex = "1";
-                label.style.fontSize = "13px";
 
                 // Title Input
                 const titleInput = document.createElement("input");
                 titleInput.type = "text";
                 titleInput.placeholder = "Custom Title";
-                titleInput.value = menuCustomizations[menuId]?.title || "";
+                titleInput.value = menuCustomizations[menuId]?.title || currentTitle;
 
                 // Icon Input
                 const iconInput = document.createElement("input");
                 iconInput.type = "text";
-                iconInput.placeholder = "<i class='fa fa-home'></i>";
+                iconInput.placeholder = "fa-solid fa-home";
                 iconInput.value = menuCustomizations[menuId]?.icon || "";
 
-                // Save changes immediately
+                // Events → update immediately + save
                 const saveChange = () => {
                     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                     saved.themeData = saved.themeData || {};
 
-                    const menuCustomizations = saved.themeData["--menuCustomizations"]
+                    const customizations = saved.themeData["--menuCustomizations"]
                         ? JSON.parse(saved.themeData["--menuCustomizations"])
                         : {};
 
-                    menuCustomizations[menuId] = {
-                        title: titleInput.value.trim(),
-                        icon: iconInput.value.trim()
+                    customizations[menuId] = {
+                        title: titleInput.value,
+                        icon: iconInput.value
                     };
 
-                    saved.themeData["--menuCustomizations"] = JSON.stringify(menuCustomizations);
+                    saved.themeData["--menuCustomizations"] = JSON.stringify(customizations);
                     localStorage.setItem("userTheme", JSON.stringify(saved));
 
-                    // ✅ Reflect instantly
+                    // Apply immediately
                     applyMenuCustomizations();
                 };
 
@@ -2092,7 +2106,7 @@
             });
 
             container.appendChild(wrapper);
-            applyMenuCustomizations(); // apply on load
+            applyMenuCustomizations();
         });
     }
 
@@ -2103,37 +2117,51 @@
             ? JSON.parse(themeData["--menuCustomizations"])
             : {};
 
-        Object.entries(menuCustomizations).forEach(([menuId, data]) => {
-            const menu = document.querySelector(`#${CSS.escape(menuId)}`);
-            if (!menu) return;
+        const variableMap = {
+            "sb_launchpad": "--launchpad-new-name",
+            "sb_dashboard": "--dashboard-new-name",
+            "sb_media": "--media-storage-new-name",
+            "sb_ai_agents": "--ai-agents-new-name",
+            "sb_conversations": "--conversations-new-name",
+            "sb_calendars": "--calendars-new-name",
+            "sb_contacts": "--contacts-new-name",
+            "sb_opportunities": "--opportunities-new-name",
+            "sb_payments": "--payments-new-name",
+            "sb_marketing": "--marketing-new-name",
+            "sb_automation": "--automation-new-name",
+            "sb_sites": "--sites-new-name",
+            "sb_memberships": "--memberships-new-name",
+            "sb_reputation": "--reputation-new-name",
+            "sb_reporting": "--reporting-new-name",
+            "sb_marketplace": "--app-marketplace-new-name",
+            "sb_mobile": "--mobile-app-new-name"
+        };
 
-            const titleEl = menu.querySelector(".nav-title");
-            if (!titleEl) return;
+        Object.keys(menuCustomizations).forEach(menuId => {
+            const custom = menuCustomizations[menuId];
 
-            // Hide text without breaking layout
-            titleEl.style.color = "transparent";
-            titleEl.style.position = "relative";
-
-            // Inject CSS overlay
-            let customStyle = document.getElementById(`style-${menuId}`);
-            if (!customStyle) {
-                customStyle = document.createElement("style");
-                customStyle.id = `style-${menuId}`;
-                document.head.appendChild(customStyle);
+            // Update CSS variable for title
+            const cssVar = variableMap[menuId];
+            if (cssVar && custom.title) {
+                document.documentElement.style.setProperty(cssVar, `"${custom.title}"`);
             }
 
-            customStyle.textContent = `
-          #${CSS.escape(menuId)} .nav-title::after {
-            content: "${data.title || titleEl.textContent}";
-            position: absolute;
-            left: 0;
-            top: 0;
-            color: ${themeData["--menuColor"] || "inherit"};
-            font-size: ${themeData["--menuFontSize"] || "inherit"};
-            font-weight: ${themeData["--menuFontWeight"] || "inherit"};
-            white-space: nowrap;
-          }
-        `;
+            // Update icon (replace <img> with <i>)
+            const menuEl = document.getElementById(menuId);
+            if (menuEl) {
+                const img = menuEl.querySelector("img");
+                if (custom.icon) {
+                    if (img) img.remove();
+                    if (!menuEl.querySelector("i.fa")) {
+                        const iconEl = document.createElement("i");
+                        iconEl.className = custom.icon; // e.g. "fa-solid fa-home"
+                        iconEl.style.marginRight = "8px";
+                        menuEl.insertBefore(iconEl, menuEl.querySelector(".nav-title"));
+                    } else {
+                        menuEl.querySelector("i.fa").className = custom.icon;
+                    }
+                }
+            }
         });
     }
 
