@@ -1538,7 +1538,6 @@
 
         container.appendChild(wrapper);
     }
-
     function buildHeadingSettings(container) {
         // Wrapper
         const wrapper = document.createElement("div");
@@ -1674,7 +1673,6 @@
             });
         });
     }
-
     function addSidebarMenuSettings(container) {
         if (document.getElementById("tb-sidebar-menu-settings")) return;
 
@@ -2005,6 +2003,135 @@
         document.body.appendChild(overlay);
     }
 
+
+    function buildSidebarMenuEditor(container) {
+        if (document.getElementById("tb-sidebar-menu-editor")) return;
+
+        const wrapper = document.createElement("div");
+        wrapper.id = "tb-sidebar-menu-editor";
+        wrapper.className = "tb-sidebar-menu-editor";
+
+        // Load saved customizations
+        const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        const themeData = savedTheme.themeData || {};
+        const menuCustomizations = themeData["--menuCustomizations"]
+            ? JSON.parse(themeData["--menuCustomizations"])
+            : {};
+
+        // Grab sidebar menus
+        const sidebarMenus = document.querySelectorAll(".hl_nav-header a");
+        console.log("[SidebarEditor] Menus found:", sidebarMenus.length);
+
+        sidebarMenus.forEach(menu => {
+            const menuId = menu.id || menu.getAttribute("meta") || menu.href;
+            const titleEl = menu.querySelector(".nav-title");
+            const iconEl = menu.querySelector("i, img");
+
+            const currentTitle = menuCustomizations[menuId]?.title || (titleEl?.innerText.trim() || menuId);
+            const currentIcon = menuCustomizations[menuId]?.icon || "";
+
+            // Row container
+            const row = document.createElement("div");
+            row.className = "tb-sidebar-row";
+            row.style.display = "flex";
+            row.style.alignItems = "center";
+            row.style.marginBottom = "10px";
+
+            // Title Input
+            const titleInput = document.createElement("input");
+            titleInput.type = "text";
+            titleInput.placeholder = "Menu Title";
+            titleInput.value = currentTitle;
+            titleInput.style.marginRight = "8px";
+            titleInput.style.flex = "1";
+
+            titleInput.addEventListener("input", () => {
+                if (titleEl) titleEl.textContent = titleInput.value;
+
+                // Save immediately to localStorage
+                saveMenuCustomization(menuId, {
+                    title: titleInput.value,
+                    icon: iconInput.value
+                });
+            });
+
+            // Icon Input
+            const iconInput = document.createElement("input");
+            iconInput.type = "text";
+            iconInput.placeholder = "FA Code (e.g., f133)";
+            iconInput.value = currentIcon;
+            iconInput.style.width = "120px";
+
+            iconInput.addEventListener("input", () => {
+                if (iconEl && iconInput.value) {
+                    // If using <i>
+                    if (iconEl.tagName.toLowerCase() === "i") {
+                        iconEl.className = `fa ${String.fromCharCode(parseInt(iconInput.value, 16))}`;
+                    }
+                    // If using <img>, replace with <i>
+                    else {
+                        const newIcon = document.createElement("i");
+                        newIcon.className = `fa`;
+                        newIcon.textContent = String.fromCharCode(parseInt(iconInput.value, 16));
+                        iconEl.replaceWith(newIcon);
+                    }
+                }
+
+                // Save immediately
+                saveMenuCustomization(menuId, {
+                    title: titleInput.value,
+                    icon: iconInput.value
+                });
+            });
+
+            row.appendChild(titleInput);
+            row.appendChild(iconInput);
+            wrapper.appendChild(row);
+        });
+
+        container.appendChild(wrapper);
+    }
+    function saveMenuCustomization(menuId, data) {
+        const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        savedTheme.themeData = savedTheme.themeData || {};
+
+        let menuCustomizations = savedTheme.themeData["--menuCustomizations"]
+            ? JSON.parse(savedTheme.themeData["--menuCustomizations"])
+            : {};
+
+        menuCustomizations[menuId] = data;
+
+        savedTheme.themeData["--menuCustomizations"] = JSON.stringify(menuCustomizations);
+        localStorage.setItem("userTheme", JSON.stringify(savedTheme));
+    }
+    function applyMenuCustomizations() {
+        const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        const themeData = savedTheme.themeData || {};
+        if (!themeData["--menuCustomizations"]) return;
+
+        const menuCustomizations = JSON.parse(themeData["--menuCustomizations"]);
+        Object.keys(menuCustomizations).forEach(menuId => {
+            const menu = document.getElementById(menuId);
+            if (!menu) return;
+
+            const { title, icon } = menuCustomizations[menuId];
+            const titleEl = menu.querySelector(".nav-title");
+            const iconEl = menu.querySelector("i, img");
+
+            if (titleEl && title) titleEl.textContent = title;
+            if (icon && iconEl) {
+                if (iconEl.tagName.toLowerCase() === "i") {
+                    iconEl.textContent = String.fromCharCode(parseInt(icon, 16));
+                } else {
+                    const newIcon = document.createElement("i");
+                    newIcon.textContent = String.fromCharCode(parseInt(icon, 16));
+                    iconEl.replaceWith(newIcon);
+                }
+            }
+        });
+    }
+
+
     // Create Builder UI
     function createBuilderUI(controlsContainer) {
         if (!controlsContainer || document.getElementById("hl_header--themebuilder-icon")) return;
@@ -2096,6 +2223,7 @@
                     addDashboardCardSettings(section)
                     addBackgroundGradientSettings(section)
                     buildHeadingSettings(section)
+                    buildSidebarMenuEditor(section)
 
                     // Add more advanced options later
                 }, "", true
