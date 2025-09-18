@@ -1117,13 +1117,20 @@
                 saveVar(skey, finalVal);
                 code.textContent = val; // keep hex visible
 
-                // 🔥 If this is one of the card header gradient colors, apply inline style
+                // 🔥 If this is one of the card header gradient colors, rebuild the gradient variable
                 if (skey === "--card-header-gradient-start" || skey === "--card-header-gradient-end") {
                     const start = themeData["--card-header-gradient-start"] || "#344391";
                     const end = themeData["--card-header-gradient-end"] || "#1f2c66";
-                    document.querySelectorAll(".card-header").forEach(el => {
-                        el.style.background = `linear-gradient(90deg, ${start}, ${end})`;
-                    });
+
+                    // Build the gradient string
+                    const gradient = `linear-gradient(90deg, ${start}, ${end})`;
+
+                    // Apply it to the CSS var that your theme actually uses
+                    document.body.style.setProperty("--card-header-bg-gradient", gradient);
+
+                    // (optional) also save it in themeData
+                    themeData["--card-header-bg-gradient"] = gradient;
+                    localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
                 }
             }
 
