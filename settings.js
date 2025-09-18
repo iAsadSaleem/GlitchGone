@@ -26,14 +26,43 @@
     })();
 
     window.addEventListener("load", () => {
-        // Small timeout ensures CSS is applied
-        setTimeout(() => {
-            waitForSidebarMenus(() => {
-                applyLockedMenus();
-                applyMenuCustomizations();
+        waitForSidebarMenus(() => {
+            // ✅ Apply locked menus or other functions if needed
+            applyLockedMenus();
+
+            // ✅ Apply saved menu customizations (icons + titles)
+            const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+            const menuCustomizations = savedTheme.themeData?.["--menuCustomizations"]
+                ? JSON.parse(savedTheme.themeData["--menuCustomizations"])
+                : {};
+
+            Object.keys(menuCustomizations).forEach(menuId => {
+                const custom = menuCustomizations[menuId];
+                const menuEl = document.getElementById(menuId);
+                if (!menuEl) return;
+
+                // Remove old icons
+                menuEl.querySelectorAll("i, img").forEach(el => el.remove());
+
+                // Insert new icon
+                const navTitle = menuEl.querySelector(".nav-title");
+                if (custom.icon) {
+                    const iconEl = document.createElement("i");
+                    iconEl.className = custom.icon;
+                    iconEl.style.marginRight = "8px";
+                    if (navTitle) menuEl.insertBefore(iconEl, navTitle);
+                    else menuEl.prepend(iconEl);
+                }
+
+                // Update title
+                if (navTitle && custom.title) navTitle.textContent = custom.title;
             });
-        }, 4000); // 50ms delay is usually enough, adjust if needed
+
+            // ✅ Apply other theme customizations
+            applyMenuCustomizations();
+        });
     });
+
     /**************************************
  * JC Confirm Modal Function
  **************************************/
@@ -2322,6 +2351,38 @@
             // Append cardWrapper to drawer
             drawer.appendChild(cardWrapper);
 
+            const collectMenuCustomizations = () => {
+                const menuItems = document.querySelectorAll(".hl_nav-header a");
+                const customizations = {};
+
+                menuItems.forEach(menuEl => {
+                    const menuId = menuEl.id;
+                    if (!menuId) return;
+
+                    // Get title
+                    const navTitle = menuEl.querySelector(".nav-title");
+                    const title = navTitle ? navTitle.textContent.trim() : "";
+
+                    // Get icon (FontAwesome <i> tag)
+                    const iconEl = menuEl.querySelector("i");
+                    let icon = "";
+                    if (iconEl) {
+                        // If user typed full class name
+                        icon = iconEl.className.trim();
+
+                        // If using Unicode inside <i>, read innerHTML
+                        if (!icon && iconEl.innerHTML.trim()) {
+                            icon = iconEl.innerHTML.trim();
+                        }
+                    }
+
+                    customizations[menuId] = { title, icon };
+                });
+
+                return customizations;
+            };
+
+
             // ===== Apply Button Outside Card =====
             const buttonsWrapper = document.createElement("div");
             buttonsWrapper.className = "tb-buttons-wrapper";
@@ -2334,61 +2395,62 @@
                 showJCConfirm(
                     "Do you want to apply these changes? Press Yes to apply & reload the page. Press No to revert.",
                     async () => {
-                        const rlNo = localStorage.getItem("rlno") ? atob(localStorage.getItem("rlno")) : null;
-                        const email = localStorage.getItem("userEmail") ? atob(localStorage.getItem("userEmail")) : null;
-
-                        const collectThemeVars = () => {
-                            const bodyStyle = document.body.style;
-                            const themeVars = {};
-                            for (let i = 0; i < bodyStyle.length; i++) {
-                                const prop = bodyStyle[i];
-                                if (prop.startsWith("--")) {
-                                    themeVars[prop] = bodyStyle.getPropertyValue(prop).trim();
-                                }
-                            }
-                            return themeVars;
-                        };
-
-                        const themeData = collectThemeVars();
-
-                        // ✅ Include lockedMenus properly
-                        const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
-                        const lockedMenus = savedTheme.themeData?.["--lockedMenus"]
-                            ? JSON.parse(savedTheme.themeData["--lockedMenus"])
-                            : {};
-
-                        // Keep lockedMenus inside themeData
-                        themeData["--lockedMenus"] = JSON.stringify(lockedMenus);
-
-                        const dbData = {
-                            rlNo,
-                            email,
-                            themeData,
-                            selectedTheme: localStorage.getItem("selectedTheme") || "Custom",
-                            bodyFont: themeData["--body-font"] || "Arial, sans-serif",
-                            updatedAt: new Date().toISOString(),
-                        };
-
-                        // Save locally
-                        localStorage.setItem("userTheme", JSON.stringify({ ...savedTheme, themeData: themeData }));
-
                         try {
-                            const res = await fetch("https://theme-builder-delta.vercel.app/api/theme", {
+                            // 1️⃣ Collect current theme variables safely
+                            const themeData = collectThemeVars() || {};
+
+                            // 2️⃣ Preserve existing saved theme
+                            const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+
+                            // 3️⃣ Preserve lockedMenus safely
+                            const lockedMenus = savedTheme.themeData?.["--lockedMenus"]
+                                ? JSON.parse(savedTheme.themeData["--lockedMenus"])
+                                : {};
+                            themeData["--lockedMenus"] = JSON.stringify(lockedMenus);
+
+                            // 4️⃣ Collect menu customizations (title + icon)
+                            const menuCustomizations = collectMenuCustomizations();
+                            themeData["--menuCustomizations"] = JSON.stringify(menuCustomizations);
+
+                            // 5️⃣ Save to localStorage
+                            localStorage.setItem("userTheme", JSON.stringify({ ...savedTheme, themeData }));
+
+                            // 6️⃣ Prepare DB payload
+                            const rlNo = localStorage.getItem("rlno") ? atob(localStorage.getItem("rlno")) : null;
+                            const email = localStorage.getItem("userEmail") ? atob(localStorage.getItem("userEmail")) : null;
+
+                            const dbData = {
+                                rlNo,
+                                email,
+                                themeData,
+                                selectedTheme: localStorage.getItem("selectedTheme") || "Custom",
+                                bodyFont: themeData["--body-font"] || "Arial, sans-serif",
+                                updatedAt: new Date().toISOString(),
+                            };
+
+                            // 7️⃣ Send to API (non-blocking, errors logged)
+                            fetch("https://theme-builder-delta.vercel.app/api/theme", {
                                 method: "POST",
                                 headers: { "Content-Type": "application/json" },
                                 body: JSON.stringify(dbData),
-                            });
-                            if (!res.ok) {
-                                const result = await res.json();
-                                console.error("[ThemeBuilder] API error:", result);
-                            }
-                        } catch (err) {
-                            console.error("[ThemeBuilder] Network error:", err);
-                        }
+                            })
+                                .then(res => {
+                                    if (!res.ok) {
+                                        res.json().then(result => console.error("[ThemeBuilder] API error:", result));
+                                    }
+                                })
+                                .catch(err => console.error("[ThemeBuilder] Network error:", err));
 
-                        location.reload();
+                            // 8️⃣ Reload page to apply changes
+                            location.reload();
+
+                        } catch (err) {
+                            console.error("[ThemeBuilder] Error applying theme changes:", err);
+                            alert("Something went wrong while applying the theme changes. No data was lost.");
+                        }
                     },
                     () => {
+                        // Cancel callback: revert safely
                         const savedThemeStr = localStorage.getItem("userTheme");
                         if (savedThemeStr) {
                             const savedTheme = JSON.parse(savedThemeStr).themeData;
