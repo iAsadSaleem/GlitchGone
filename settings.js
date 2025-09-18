@@ -2156,8 +2156,8 @@
 
             if (!menuEl) return;
 
-            // ✅ Remove ALL icons inside this menu
-            menuEl.querySelectorAll("i").forEach(el => el.remove());
+            // ✅ Remove ALL icons (both <i> and <img>)
+            menuEl.querySelectorAll("i, img").forEach(el => el.remove());
 
             // Update CSS variable for title
             const cssVar = variableMap[menuId];
@@ -2165,21 +2165,29 @@
                 document.documentElement.style.setProperty(cssVar, `"${custom.title}"`);
             }
 
-            // ✅ Insert icon (new or default)
+            // ✅ Insert icon
             const navTitle = menuEl.querySelector(".nav-title");
 
             if (custom.icon && custom.icon.trim() !== "") {
-                // user custom icon
-                const iconEl = document.createElement("i");
-                iconEl.className = custom.icon.trim();
+                let iconEl = document.createElement("i");
                 iconEl.style.marginRight = "8px";
+
+                // If user entered a unicode code like "f135"
+                if (/^[a-f0-9]{3,4}$/i.test(custom.icon.trim())) {
+                    iconEl.className = "fa-solid"; // default solid
+                    iconEl.innerHTML = "&#x" + custom.icon.trim() + ";";
+                } else {
+                    // Otherwise treat it as a class name like "fa-solid fa-rocket"
+                    iconEl.className = custom.icon.trim();
+                }
+
                 if (navTitle) {
                     menuEl.insertBefore(iconEl, navTitle);
                 } else {
                     menuEl.prepend(iconEl);
                 }
             } else {
-                // fallback to DEFAULT icon (optional: detect from data attr)
+                // fallback to DEFAULT icon (if you stored it as data attr)
                 const defaultIcon = menuEl.getAttribute("data-default-icon");
                 if (defaultIcon) {
                     const iconEl = document.createElement("i");
@@ -2194,6 +2202,7 @@
             }
         });
     }
+
 
     // ✅ Call once after sidebar menus are ready
     waitForSidebarMenus(() => {
