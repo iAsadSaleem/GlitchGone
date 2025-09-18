@@ -1144,6 +1144,7 @@
             code.className = "tb-number-code";
             code.textContent = initialNumber + "px";
 
+            // ✅ Apply to variable (CSS uses it now)
             document.body.style.setProperty(cssVar, initialNumber + "px");
 
             input.addEventListener("input", () => {
@@ -1157,7 +1158,6 @@
             wrapperDiv.appendChild(code);
             return wrapperDiv;
         }
-
         // === Controls ===
         const controls = document.createElement("div");
         controls.className = "tb-scrollbar-controls";
