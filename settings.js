@@ -11,7 +11,7 @@
             link.rel = "stylesheet";
             link.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css";
             link.crossOrigin = "anonymous";
-            link.referrerPolicy = "no-referrer";asdf
+            link.referrerPolicy = "no-referrer";
             document.head.appendChild(link);
             console.log("[ThemeBuilder] Font Awesome loaded");
         }
