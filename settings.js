@@ -32,7 +32,7 @@
                 applyLockedMenus();
                 applyMenuCustomizations();
             });
-        }, 2000); // 50ms delay is usually enough, adjust if needed
+        }, 4000); // 50ms delay is usually enough, adjust if needed
     });
     /**************************************
  * JC Confirm Modal Function
