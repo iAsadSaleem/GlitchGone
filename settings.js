@@ -1079,7 +1079,8 @@
         }
 
         // === Color Picker for Scrollbar ===
-        function makePicker(labelText, key, fallback, cssVar) {
+        // color picker helper
+        function makePicker(labelText, key, fallback, cssVar, isGradient = false, transparent20 = false) {
             const wrapperDiv = document.createElement("div");
             wrapperDiv.className = "tb-color-picker-wrapper";
 
@@ -1103,9 +1104,27 @@
             code.textContent = initial;
 
             function applyValue(val) {
-                document.body.style.setProperty(skey, val);
-                saveVar(skey, val);
-                code.textContent = val;
+                let finalVal = val;
+                if (transparent20) {
+                    // Convert HEX to RGBA with 0.2 alpha
+                    const bigint = parseInt(val.slice(1), 16);
+                    const r = (bigint >> 16) & 255;
+                    const g = (bigint >> 8) & 255;
+                    const b = bigint & 255;
+                    finalVal = `rgba(${r}, ${g}, ${b}, 0.2)`;
+                }
+                document.body.style.setProperty(skey, finalVal);
+                saveVar(skey, finalVal);
+                code.textContent = val; // keep hex visible
+
+                // 🔥 If this is one of the card header gradient colors, apply inline style
+                if (skey === "--card-header-gradient-start" || skey === "--card-header-gradient-end") {
+                    const start = themeData["--card-header-gradient-start"] || "#344391";
+                    const end = themeData["--card-header-gradient-end"] || "#1f2c66";
+                    document.querySelectorAll(".card-header").forEach(el => {
+                        el.style.background = `linear-gradient(90deg, ${start}, ${end})`;
+                    });
+                }
             }
 
             applyValue(initial);
