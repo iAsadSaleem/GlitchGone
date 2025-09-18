@@ -2020,6 +2020,12 @@
         wrapper.id = "tb-menu-customization";
         wrapper.className = "tb-menu-customization";
 
+        // ✅ Section title (like in buildHeadingSettings)
+        const title = document.createElement("h4");
+        title.className = "tb-section-dashbaord-title";
+        title.innerText = "Side Menu — Customizer";
+        wrapper.appendChild(title);
+
         // Load saved customizations
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedTheme.themeData || {};
