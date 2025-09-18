@@ -2111,15 +2111,18 @@
 
             if (!titleEl) return;
 
-            // Restore default text if no customization
+            // Save original text if not saved already
+            if (!menu.dataset.originalTitle) {
+                menu.dataset.originalTitle = titleEl.textContent.trim();
+            }
+
+            // Apply custom title
             if (menuCustomizations[menuId]?.title) {
-                titleEl.innerText = menuCustomizations[menuId].title;
+                // ✅ Force update
+                titleEl.textContent = menuCustomizations[menuId].title;
             } else {
-                // fallback: restore original dataset if available
-                if (!menu.dataset.originalTitle) {
-                    menu.dataset.originalTitle = titleEl.innerText.trim();
-                }
-                titleEl.innerText = menu.dataset.originalTitle;
+                // Restore default
+                titleEl.textContent = menu.dataset.originalTitle;
             }
 
             // Apply custom icon
@@ -2133,10 +2136,10 @@
                 }
                 iconEl.innerHTML = menuCustomizations[menuId].icon;
             } else if (iconEl) {
-                iconEl.remove(); // remove if input cleared
+                iconEl.remove();
             }
 
-            // Apply font styling
+            // Apply styles (if set)
             if (themeData["--menuFontSize"]) {
                 titleEl.style.fontSize = themeData["--menuFontSize"];
             }
@@ -2149,16 +2152,23 @@
         });
     }
 
-    // Utility → Wait until sidebar menus exist
-    function waitForSidebarMenus(callback) {
+    // 🔄 Keep changes persistent even if sidebar re-renders
+    function observeSidebarForMenuUpdates() {
+        const sidebar = document.querySelector(".hl_nav-header");
+        if (!sidebar) return;
+
         const observer = new MutationObserver(() => {
-            if (document.querySelectorAll(".hl_nav-header a").length > 0) {
-                observer.disconnect();
-                callback();
-            }
+            applyMenuCustomizations(); // reapplies when DOM changes
         });
-        observer.observe(document.body, { childList: true, subtree: true });
+
+        observer.observe(sidebar, { childList: true, subtree: true });
     }
+
+    // Call after page load
+    waitForSidebarMenus(() => {
+        applyMenuCustomizations();
+        observeSidebarForMenuUpdates();
+    });
 
 
     // Create Builder UI
