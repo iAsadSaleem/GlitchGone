@@ -2159,19 +2159,23 @@
                 document.documentElement.style.setProperty(cssVar, `"${custom.title}"`);
             }
 
-            // Update icon (replace <img> with <i>)
+            // Update icon (remove all existing <i> then add one)
             const menuEl = document.getElementById(menuId);
             if (menuEl) {
-                const img = menuEl.querySelector("img");
+                // Remove ALL existing icons
+                menuEl.querySelectorAll("i.fa").forEach(el => el.remove());
+
                 if (custom.icon) {
-                    if (img) img.remove();
-                    if (!menuEl.querySelector("i.fa")) {
-                        const iconEl = document.createElement("i");
-                        iconEl.className = custom.icon; // e.g. "fa-solid fa-home"
-                        iconEl.style.marginRight = "8px";
-                        menuEl.insertBefore(iconEl, menuEl.querySelector(".nav-title"));
+                    const iconEl = document.createElement("i");
+                    iconEl.className = custom.icon; // e.g. "fa-solid fa-home"
+                    iconEl.style.marginRight = "8px";
+
+                    // Insert before nav-title
+                    const navTitle = menuEl.querySelector(".nav-title");
+                    if (navTitle) {
+                        menuEl.insertBefore(iconEl, navTitle);
                     } else {
-                        menuEl.querySelector("i.fa").className = custom.icon;
+                        menuEl.prepend(iconEl);
                     }
                 }
             }
