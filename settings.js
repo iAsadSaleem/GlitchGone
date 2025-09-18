@@ -2057,7 +2057,7 @@
                     addScrollbarSettings(section);   // Profile Button Color Controls
                     addDashboardCardSettings(section)
                     addBackgroundGradientSettings(section)
-                    buildHeadingSettings(document.getElementById(section))
+                    buildHeadingSettings(section)
 
                     // Add more advanced options later
                 }, "", true
