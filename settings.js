@@ -2153,37 +2153,35 @@
         Object.keys(menuCustomizations).forEach(menuId => {
             const custom = menuCustomizations[menuId];
             const menuEl = document.getElementById(menuId);
-
             if (!menuEl) return;
 
-            // ✅ Remove ALL icons (<i> and <img>)
+            // ✅ Remove inline <i> and <img>
             menuEl.querySelectorAll("i, img").forEach(el => el.remove());
 
-            // ✅ Clear CSS icon variables so default SVGs don’t show
+            // ✅ Reset CSS variable icons (default SVGs)
             const cssPrefix = menuId.replace("sb_", "--sidebar-menu-icon-");
             ["", "-hover", "-active"].forEach(suffix => {
-                document.documentElement.style.setProperty(cssPrefix + suffix, "none");
+                document.documentElement.style.setProperty(cssPrefix + suffix, "url('')");
             });
 
-            // Update title variable
+            // ✅ Update title if provided
             const cssVar = variableMap[menuId];
             if (cssVar && custom.title) {
                 document.documentElement.style.setProperty(cssVar, `"${custom.title}"`);
             }
 
-            // ✅ Insert FA icon
-            const navTitle = menuEl.querySelector(".nav-title");
-
+            // ✅ Insert new icon
             if (custom.icon && custom.icon.trim() !== "") {
+                const navTitle = menuEl.querySelector(".nav-title");
                 let iconEl = document.createElement("i");
                 iconEl.style.marginRight = "8px";
 
                 if (/^[a-f0-9]{3,4}$/i.test(custom.icon.trim())) {
-                    // User entered Unicode like "f135"
+                    // Unicode value e.g. "f135"
                     iconEl.className = "fa-solid";
                     iconEl.innerHTML = "&#x" + custom.icon.trim() + ";";
                 } else {
-                    // User entered full FA class name
+                    // Full FA class e.g. "fa-solid fa-rocket"
                     iconEl.className = custom.icon.trim();
                 }
 
