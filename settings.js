@@ -1819,16 +1819,7 @@
    
 
     // ✅ Your existing observer (don’t change this)
-    function waitForSidebarMenus(callback) {
-        const observer = new MutationObserver(() => {
-            if (document.querySelectorAll(".hl_nav-header a").length > 0) {
-                observer.disconnect();
-                callback();
-            }
-        });
-
-        observer.observe(document.body, { childList: true, subtree: true });
-    }
+    
 
     function buildFeatureLockSection(container) {
         if (document.getElementById("tb-feature-lock-settings")) return;
@@ -2203,9 +2194,9 @@
 
 
     // ✅ Call once after sidebar menus are ready
-    waitForSidebarMenus(() => {
+    setTimeout(() => {
         applyMenuCustomizations();
-    });
+    }, 100); // 100ms delay, adjust if needed
 
 
     // Create Builder UI
