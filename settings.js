@@ -2160,8 +2160,9 @@
 
             // ✅ Reset CSS variable icons (default SVGs)
             const cssPrefix = menuId.replace("sb_", "--sidebar-menu-icon-");
+            const emptySvg = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E\")";
             ["", "-hover", "-active"].forEach(suffix => {
-                document.documentElement.style.setProperty(cssPrefix + suffix, "url('')");
+                document.documentElement.style.setProperty(cssPrefix + suffix, emptySvg);
             });
 
             // ✅ Update title if provided
