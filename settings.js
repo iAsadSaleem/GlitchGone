@@ -2158,8 +2158,10 @@
             // ✅ Remove any <i> or <img> tags from DOM
             menuEl.querySelectorAll("i, img").forEach(el => el.remove());
 
-            // ✅ Clear CSS variable icons (for pseudo-element ::after)
-            // Use empty SVG and force !important to override existing !important
+            // ✅ Add class to hide CSS ::after pseudo-element
+            menuEl.classList.add("sidebar-no-icon");
+
+            // ✅ Clear CSS variable icons (optional, can keep if you want)
             const emptySvg = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E\")";
             const cssPrefix = menuId.replace("sb_", "--sidebar-menu-icon-");
             ["", "-hover", "-active"].forEach(suffix => {
@@ -2196,6 +2198,7 @@
                 }
             }
         });
+
     }
 
 
