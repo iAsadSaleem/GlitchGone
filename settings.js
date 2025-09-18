@@ -242,7 +242,7 @@
     // 🌟 Mapping of CSS vars -> Human-friendly labels
     const cssVarLabels = {
         "--primary-color": "Choose Primary Color",
-        "--header-bg-color": "Choose Second Color",
+        "--second-color": "Choose Second Color",  // ✅ replaced header-bg-color
         "--sidebar-bg-color": "Choose Sidebar BG Color",
         "--sidebar-menu-bg": "Choose Sidebar Menu BG Color",
         "--sidebar-menu-color": "Choose SideBar Text Color"
@@ -552,7 +552,7 @@
         // Editable colors
         const editableColors = [
             "--primary-color",
-            "--header-bg-color",
+            "--second-color",        // ✅ new color
             "--sidebar-bg-color",
             "--sidebar-menu-bg",
             "--sidebar-menu-color",
@@ -562,29 +562,23 @@
             const value = localStorage.getItem(key) || themeData[key] || "#000000";
 
             const picker = createColorPicker(key, key, key, (val) => {
+                // Apply chosen value to CSS variable
                 document.body.style.setProperty(key, val);
 
-                // --- Gradient Logic ---
-                if (key === "--header-bg-color" || key === "--sidebar-bg-color") {
-                    const headerColor = getComputedStyle(document.body).getPropertyValue("--header-bg-color").trim() || "#000000";
-                    const sidebarColor = getComputedStyle(document.body).getPropertyValue("--sidebar-bg-color").trim() || "#000000";
+                // ✅ Special handling for sidebar bg (direct background-color, no gradient)
+                if (key === "--sidebar-bg-color") {
+                    document.body.style.setProperty("--sidebar-bg-color", val);
+                }
 
-                    // Update gradient
-                    const gradient = `linear-gradient(to bottom, ${headerColor}, ${sidebarColor})`;
-                    document.body.style.setProperty("--sidebar-main-bg-gradient", gradient);
+                // ✅ Special handling for second color (just set variable, no gradient)
+                if (key === "--second-color") {
+                    document.body.style.setProperty("--second-color", val);
                 }
             });
 
             container.appendChild(picker);
         });
-
-        // --- Initial Gradient Apply ---
-        const headerColor = getComputedStyle(document.body).getPropertyValue("--header-bg-color").trim() || "#000000";
-        const sidebarColor = getComputedStyle(document.body).getPropertyValue("--sidebar-bg-color").trim() || "#000000";
-        const initialGradient = `linear-gradient(to bottom, ${headerColor}, ${sidebarColor})`;
-        document.body.style.setProperty("--sidebar-main-bg-gradient", initialGradient);
     }
-
 
     // Apply saved settings
     function applySavedSettings() {
