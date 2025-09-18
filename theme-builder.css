@@ -725,3 +725,7 @@ body::-webkit-scrollbar-track {
     .themeArrowIcon:hover {
         background: #f0f0f0; /* light hover */
     }
+
+.tb-number-code{
+    display: none;
+}
