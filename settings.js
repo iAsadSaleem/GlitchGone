@@ -2043,7 +2043,7 @@
                 row.style.gap = "8px";
                 row.style.marginBottom = "6px";
 
-                // Label
+                // Label (for reference in settings panel)
                 const label = document.createElement("span");
                 label.textContent = currentTitle;
                 label.style.flex = "1";
@@ -2078,7 +2078,7 @@
                     saved.themeData["--menuCustomizations"] = JSON.stringify(menuCustomizations);
                     localStorage.setItem("userTheme", JSON.stringify(saved));
 
-                    // Apply immediately
+                    // ✅ Reflect instantly
                     applyMenuCustomizations();
                 };
 
@@ -2111,9 +2111,15 @@
 
             if (!titleEl) return;
 
-            // Apply custom title
+            // Restore default text if no customization
             if (menuCustomizations[menuId]?.title) {
                 titleEl.innerText = menuCustomizations[menuId].title;
+            } else {
+                // fallback: restore original dataset if available
+                if (!menu.dataset.originalTitle) {
+                    menu.dataset.originalTitle = titleEl.innerText.trim();
+                }
+                titleEl.innerText = menu.dataset.originalTitle;
             }
 
             // Apply custom icon
@@ -2127,7 +2133,7 @@
                 }
                 iconEl.innerHTML = menuCustomizations[menuId].icon;
             } else if (iconEl) {
-                iconEl.remove(); // remove if empty
+                iconEl.remove(); // remove if input cleared
             }
 
             // Apply font styling
