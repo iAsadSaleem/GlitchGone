@@ -2155,34 +2155,37 @@
             const menuEl = document.getElementById(menuId);
             if (!menuEl) return;
 
-            // ✅ Remove inline <i> and <img>
+            // ✅ Remove any <i> or <img> tags from DOM
             menuEl.querySelectorAll("i, img").forEach(el => el.remove());
 
-            // ✅ Reset CSS variable icons (default SVGs)
-            const cssPrefix = menuId.replace("sb_", "--sidebar-menu-icon-");
+            // ✅ Clear CSS variable icons (for pseudo-element ::after)
+            // Use empty SVG and force !important to override existing !important
             const emptySvg = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E\")";
+            const cssPrefix = menuId.replace("sb_", "--sidebar-menu-icon-");
             ["", "-hover", "-active"].forEach(suffix => {
-                document.documentElement.style.setProperty(cssPrefix + suffix, emptySvg);
+                document.documentElement.style.setProperty(
+                    cssPrefix + suffix,
+                    emptySvg,
+                    "important"
+                );
             });
 
-            // ✅ Update title if provided
+            // ✅ Update title variable
             const cssVar = variableMap[menuId];
             if (cssVar && custom.title) {
                 document.documentElement.style.setProperty(cssVar, `"${custom.title}"`);
             }
 
-            // ✅ Insert new icon
+            // ✅ Insert new FontAwesome icon
             if (custom.icon && custom.icon.trim() !== "") {
                 const navTitle = menuEl.querySelector(".nav-title");
                 let iconEl = document.createElement("i");
                 iconEl.style.marginRight = "8px";
 
                 if (/^[a-f0-9]{3,4}$/i.test(custom.icon.trim())) {
-                    // Unicode value e.g. "f135"
                     iconEl.className = "fa-solid";
                     iconEl.innerHTML = "&#x" + custom.icon.trim() + ";";
                 } else {
-                    // Full FA class e.g. "fa-solid fa-rocket"
                     iconEl.className = custom.icon.trim();
                 }
 
