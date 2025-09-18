@@ -730,3 +730,104 @@ body::-webkit-scrollbar-track {
 .tb-number-code{
     display: none;
 }
+
+
+/*
+    For Heading (h1 and h2)
+*/
+/* Wrapper */
+.tb-heading-settings {
+    background: #f9f9f9;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 16px;
+    border: 1px solid #ddd;
+}
+
+    /* Title */
+    .tb-heading-settings .tb-section-dashbaord-title {
+        font-size: 15px;
+        font-weight: 600;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+/* Tabs */
+.tb-heading-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.tb-heading-tab {
+    flex: 1;
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    background: #f0f0f0;
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: 0.2s;
+}
+
+    .tb-heading-tab.active {
+        background: #007bff;
+        color: #fff;
+        border-color: #007bff;
+    }
+
+/* Content sections */
+.tb-heading-content {
+    display: none;
+}
+
+    .tb-heading-content.active {
+        display: block;
+    }
+
+/* Input rows */
+.tb-input-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 8px;
+}
+
+    .tb-input-row label {
+        min-width: 45px;
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+    .tb-input-row input[type="color"] {
+        width: 32px;
+        height: 28px;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+    }
+
+    .tb-input-row input[type="text"] {
+        width: 80px;
+        font-size: 12px;
+        padding: 4px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        text-align: center;
+        background: #fff;
+    }
+
+    .tb-input-row input[type="number"] {
+        width: 60px;
+        padding: 4px;
+        font-size: 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .tb-input-row span {
+        font-size: 12px;
+        color: #666;
+    }
