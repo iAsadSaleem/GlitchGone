@@ -1928,8 +1928,8 @@
             buttonsWrapper.className = "tb-buttons-wrapper";
 
             const applyBtn = document.createElement("button");
-            applyBtn.textContent = "Apply Changes";
             applyBtn.className = "tb-apply-btn";
+            applyBtn.innerHTML = `<i class="fa-solid fa-floppy-disk" style="margin-right:6px;"></i> Apply Changes`;
 
             applyBtn.addEventListener("click", () => {
                 showJCConfirm(
