@@ -2026,6 +2026,11 @@
         title.innerText = "Side Menu — Customizer";
         wrapper.appendChild(title);
 
+        // Optional separator
+        const separator = document.createElement("hr");
+        separator.className = "tb-section-separator";
+        wrapper.appendChild(separator);
+
         // Load saved customizations
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedTheme.themeData || {};
@@ -2074,12 +2079,14 @@
                 titleInput.type = "text";
                 titleInput.placeholder = "Custom Title";
                 titleInput.value = menuCustomizations[menuId]?.title || currentTitle;
+                titleInput.className = "tb-input tb-title-input"; // ✅ class added
 
                 // Icon Input
                 const iconInput = document.createElement("input");
                 iconInput.type = "text";
                 iconInput.placeholder = "fa-solid fa-home";
                 iconInput.value = menuCustomizations[menuId]?.icon || "";
+                iconInput.className = "tb-input tb-icon-input"; // ✅ class added
 
                 // Events → update immediately + save
                 const saveChange = () => {
