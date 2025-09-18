@@ -2130,60 +2130,28 @@
             ? JSON.parse(themeData["--menuCustomizations"])
             : {};
 
-        const variableMap = {
-            "sb_launchpad": "--launchpad-new-name",
-            "sb_dashboard": "--dashboard-new-name",
-            "sb_media": "--media-storage-new-name",
-            "sb_ai_agents": "--ai-agents-new-name",
-            "sb_conversations": "--conversations-new-name",
-            "sb_calendars": "--calendars-new-name",
-            "sb_contacts": "--contacts-new-name",
-            "sb_opportunities": "--opportunities-new-name",
-            "sb_payments": "--payments-new-name",
-            "sb_marketing": "--marketing-new-name",
-            "sb_automation": "--automation-new-name",
-            "sb_sites": "--sites-new-name",
-            "sb_memberships": "--memberships-new-name",
-            "sb_reputation": "--reputation-new-name",
-            "sb_reporting": "--reporting-new-name",
-            "sb_marketplace": "--app-marketplace-new-name",
-            "sb_mobile": "--mobile-app-new-name"
-        };
-
         Object.keys(menuCustomizations).forEach(menuId => {
             const custom = menuCustomizations[menuId];
             const menuEl = document.getElementById(menuId);
 
             if (!menuEl) return;
 
-            // ✅ Remove ALL icons (<i> and <img>)
+            // Remove old icons (safety)
             menuEl.querySelectorAll("i, img").forEach(el => el.remove());
 
-            // ✅ Clear CSS icon variables so default SVGs don’t show
-            const cssPrefix = menuId.replace("sb_", "--sidebar-menu-icon-");
-            ["", "-hover", "-active"].forEach(suffix => {
-                document.documentElement.style.setProperty(cssPrefix + suffix, "none");
-            });
-
-            // Update title variable
-            const cssVar = variableMap[menuId];
-            if (cssVar && custom.title) {
-                document.documentElement.style.setProperty(cssVar, `"${custom.title}"`);
-            }
-
-            // ✅ Insert FA icon
+            // Insert FA icon
             const navTitle = menuEl.querySelector(".nav-title");
 
             if (custom.icon && custom.icon.trim() !== "") {
-                let iconEl = document.createElement("i");
+                const iconEl = document.createElement("i");
                 iconEl.style.marginRight = "8px";
 
                 if (/^[a-f0-9]{3,4}$/i.test(custom.icon.trim())) {
-                    // User entered Unicode like "f135"
+                    // Hex code like "f135"
                     iconEl.className = "fa-solid";
                     iconEl.innerHTML = "&#x" + custom.icon.trim() + ";";
                 } else {
-                    // User entered full FA class name
+                    // FA full class name
                     iconEl.className = custom.icon.trim();
                 }
 
@@ -2195,6 +2163,7 @@
             }
         });
     }
+
 
 
     // ✅ Call once after sidebar menus are ready
