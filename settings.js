@@ -1345,9 +1345,9 @@
         gradientControls.appendChild(
             makePicker("Card Title Font Color", "card-title-font-color", "#000000", "--card-title-font-color", false)
         );
-        gradientControls.appendChild(
-            makePicker("Base Selection Color", "n-color", "#0000ff", "--n-color", false, true)
-        );
+        //gradientControls.appendChild(
+        //    makePicker("Base Selection Color", "n-color", "#0000ff", "--n-color", false, true)
+        //);
 
         // Card Title Font Size
         (function addTitleFontSize() {
@@ -1537,6 +1537,104 @@
         updateGradient();
 
         container.appendChild(wrapper);
+    }
+
+    function buildHeadingSettings(container) {
+        // Wrapper
+        const wrapper = document.createElement("div");
+        wrapper.className = "tb-heading-settings";
+
+        // Section title
+        const title = document.createElement("h4");
+        title.className = "tb-section-dashbaord-title";
+        title.innerText = "Heading — Settings";
+        wrapper.appendChild(title);
+
+        // Tabs
+        const tabs = document.createElement("div");
+        tabs.className = "tb-heading-tabs";
+
+        const tabH1 = document.createElement("button");
+        tabH1.className = "tb-heading-tab active";
+        tabH1.innerText = "Heading (h1)";
+        tabH1.dataset.target = "h1-settings";
+
+        const tabH2 = document.createElement("button");
+        tabH2.className = "tb-heading-tab";
+        tabH2.innerText = "Heading (h2)";
+        tabH2.dataset.target = "h2-settings";
+
+        tabs.appendChild(tabH1);
+        tabs.appendChild(tabH2);
+        wrapper.appendChild(tabs);
+
+        // --- H1 Settings ---
+        const h1Settings = document.createElement("div");
+        h1Settings.className = "tb-heading-content active";
+        h1Settings.id = "h1-settings";
+
+        // H1 Color
+        const h1ColorRow = document.createElement("div");
+        h1ColorRow.className = "tb-input-row";
+        h1ColorRow.innerHTML = `
+        <label>Color:</label>
+        <input type="color" id="h1-color" value="#111111">
+        <input type="text" id="h1-color-code" value="#111111" readonly>
+    `;
+        h1Settings.appendChild(h1ColorRow);
+
+        // H1 Size
+        const h1SizeRow = document.createElement("div");
+        h1SizeRow.className = "tb-input-row";
+        h1SizeRow.innerHTML = `
+        <label>Size:</label>
+        <input type="number" id="h1-size" value="22" min="10" max="72">
+        <span>px</span>
+    `;
+        h1Settings.appendChild(h1SizeRow);
+
+        wrapper.appendChild(h1Settings);
+
+        // --- H2 Settings ---
+        const h2Settings = document.createElement("div");
+        h2Settings.className = "tb-heading-content";
+        h2Settings.id = "h2-settings";
+
+        // H2 Color
+        const h2ColorRow = document.createElement("div");
+        h2ColorRow.className = "tb-input-row";
+        h2ColorRow.innerHTML = `
+        <label>Color:</label>
+        <input type="color" id="h2-color" value="#111111">
+        <input type="text" id="h2-color-code" value="#111111" readonly>
+    `;
+        h2Settings.appendChild(h2ColorRow);
+
+        // H2 Size
+        const h2SizeRow = document.createElement("div");
+        h2SizeRow.className = "tb-input-row";
+        h2SizeRow.innerHTML = `
+        <label>Size:</label>
+        <input type="number" id="h2-size" value="18" min="10" max="60">
+        <span>px</span>
+    `;
+        h2Settings.appendChild(h2SizeRow);
+
+        wrapper.appendChild(h2Settings);
+
+        // Append wrapper to container
+        container.appendChild(wrapper);
+
+        // --- Tab switching logic ---
+        [tabH1, tabH2].forEach(tab => {
+            tab.addEventListener("click", () => {
+                document.querySelectorAll(".tb-heading-tab").forEach(t => t.classList.remove("active"));
+                document.querySelectorAll(".tb-heading-content").forEach(c => c.classList.remove("active"));
+
+                tab.classList.add("active");
+                document.getElementById(tab.dataset.target).classList.add("active");
+            });
+        });
     }
 
     function addSidebarMenuSettings(container) {
@@ -1959,6 +2057,7 @@
                     addScrollbarSettings(section);   // Profile Button Color Controls
                     addDashboardCardSettings(section)
                     addBackgroundGradientSettings(section)
+                    buildHeadingSettings(section)
 
                     // Add more advanced options later
                 }, "", true
