@@ -1643,7 +1643,7 @@
         const h1ColorCode = wrapper.querySelector("#h1-color-code");
         h1ColorInput.addEventListener("input", () => {
             h1ColorCode.value = h1ColorInput.value;
-            document.querySelectorAll("h1").forEach(el => {
+            document.querySelectorAll(".hl-display-sm-medium").forEach(el => {
                 el.style.color = h1ColorInput.value;
             });
         });
@@ -1651,7 +1651,7 @@
         // H1 Size
         const h1SizeInput = wrapper.querySelector("#h1-size");
         h1SizeInput.addEventListener("input", () => {
-            document.querySelectorAll("h1").forEach(el => {
+            document.querySelectorAll(".hl-display-sm-medium").forEach(el => {
                 el.style.fontSize = h1SizeInput.value + "px";
             });
         });
