@@ -2032,21 +2032,28 @@
 
             sidebarMenus.forEach(menu => {
                 const menuId = menu.id || menu.getAttribute("meta") || menu.href;
-                const currentTitle = menu.querySelector(".nav-title, .nav-title span")?.innerText.trim() || menuId;
+                const currentTitle =
+                    menu.querySelector(".nav-title, .nav-title span")?.innerText.trim() ||
+                    menuId;
 
                 const row = document.createElement("div");
                 row.className = "tb-menu-row";
+                row.style.display = "flex";
+                row.style.alignItems = "center";
+                row.style.gap = "8px";
+                row.style.marginBottom = "6px";
 
                 // Label
                 const label = document.createElement("span");
                 label.textContent = currentTitle;
                 label.style.flex = "1";
+                label.style.fontSize = "13px";
 
                 // Title Input
                 const titleInput = document.createElement("input");
                 titleInput.type = "text";
                 titleInput.placeholder = "Custom Title";
-                titleInput.value = menuCustomizations[menuId]?.title || currentTitle;
+                titleInput.value = menuCustomizations[menuId]?.title || "";
 
                 // Icon Input
                 const iconInput = document.createElement("input");
@@ -2054,7 +2061,7 @@
                 iconInput.placeholder = "<i class='fa fa-home'></i>";
                 iconInput.value = menuCustomizations[menuId]?.icon || "";
 
-                // Events → update immediately + save
+                // Save changes immediately
                 const saveChange = () => {
                     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                     saved.themeData = saved.themeData || {};
@@ -2064,8 +2071,8 @@
                         : {};
 
                     menuCustomizations[menuId] = {
-                        title: titleInput.value,
-                        icon: iconInput.value
+                        title: titleInput.value.trim(),
+                        icon: iconInput.value.trim()
                     };
 
                     saved.themeData["--menuCustomizations"] = JSON.stringify(menuCustomizations);
@@ -2085,26 +2092,66 @@
             });
 
             container.appendChild(wrapper);
-            applyMenuCustomizations();
+            applyMenuCustomizations(); // apply on load
         });
     }
+
     function applyMenuCustomizations() {
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedTheme.themeData || {};
+        const menuCustomizations = themeData["--menuCustomizations"]
+            ? JSON.parse(themeData["--menuCustomizations"])
+            : {};
 
-        const sidebarMenus = document.querySelectorAll(".hl_nav-header a .nav-title, .hl_nav-header a .nav-title span");
+        const sidebarMenus = document.querySelectorAll(".hl_nav-header a");
 
-        sidebarMenus.forEach(title => {
+        sidebarMenus.forEach(menu => {
+            const menuId = menu.id || menu.getAttribute("meta") || menu.href;
+            const titleEl = menu.querySelector(".nav-title, .nav-title span");
+
+            if (!titleEl) return;
+
+            // Apply custom title
+            if (menuCustomizations[menuId]?.title) {
+                titleEl.innerText = menuCustomizations[menuId].title;
+            }
+
+            // Apply custom icon
+            let iconEl = menu.querySelector(".tb-custom-icon");
+            if (menuCustomizations[menuId]?.icon) {
+                if (!iconEl) {
+                    iconEl = document.createElement("span");
+                    iconEl.className = "tb-custom-icon";
+                    iconEl.style.marginRight = "6px";
+                    menu.insertBefore(iconEl, menu.firstChild);
+                }
+                iconEl.innerHTML = menuCustomizations[menuId].icon;
+            } else if (iconEl) {
+                iconEl.remove(); // remove if empty
+            }
+
+            // Apply font styling
             if (themeData["--menuFontSize"]) {
-                title.style.fontSize = themeData["--menuFontSize"];
+                titleEl.style.fontSize = themeData["--menuFontSize"];
             }
             if (themeData["--menuColor"]) {
-                title.style.color = themeData["--menuColor"];
+                titleEl.style.color = themeData["--menuColor"];
             }
             if (themeData["--menuFontWeight"]) {
-                title.style.fontWeight = themeData["--menuFontWeight"];
+                titleEl.style.fontWeight = themeData["--menuFontWeight"];
             }
         });
+    }
+
+    // Utility → Wait until sidebar menus exist
+    function waitForSidebarMenus(callback) {
+        const observer = new MutationObserver(() => {
+            if (document.querySelectorAll(".hl_nav-header a").length > 0) {
+                observer.disconnect();
+                callback();
+            }
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
     }
 
 
