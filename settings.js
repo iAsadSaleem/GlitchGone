@@ -2111,21 +2111,19 @@
 
             if (!titleEl) return;
 
-            // Save original text if not saved already
+            // Save original title
             if (!menu.dataset.originalTitle) {
                 menu.dataset.originalTitle = titleEl.textContent.trim();
             }
 
-            // Apply custom title
+            // Apply renamed title instantly
             if (menuCustomizations[menuId]?.title) {
-                // ✅ Force update
                 titleEl.textContent = menuCustomizations[menuId].title;
             } else {
-                // Restore default
                 titleEl.textContent = menu.dataset.originalTitle;
             }
 
-            // Apply custom icon
+            // Apply icon
             let iconEl = menu.querySelector(".tb-custom-icon");
             if (menuCustomizations[menuId]?.icon) {
                 if (!iconEl) {
@@ -2139,7 +2137,7 @@
                 iconEl.remove();
             }
 
-            // Apply styles (if set)
+            // Apply styles
             if (themeData["--menuFontSize"]) {
                 titleEl.style.fontSize = themeData["--menuFontSize"];
             }
@@ -2152,22 +2150,9 @@
         });
     }
 
-    // 🔄 Keep changes persistent even if sidebar re-renders
-    function observeSidebarForMenuUpdates() {
-        const sidebar = document.querySelector(".hl_nav-header");
-        if (!sidebar) return;
-
-        const observer = new MutationObserver(() => {
-            applyMenuCustomizations(); // reapplies when DOM changes
-        });
-
-        observer.observe(sidebar, { childList: true, subtree: true });
-    }
-
-    // Call after page load
+    // ✅ Call once after sidebar menus are ready
     waitForSidebarMenus(() => {
         applyMenuCustomizations();
-        observeSidebarForMenuUpdates();
     });
 
 
