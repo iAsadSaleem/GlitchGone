@@ -552,11 +552,19 @@
         // Editable colors
         const editableColors = [
             "--primary-color",
-            "--second-color",        // ✅ new color
+            "--second-color",
             "--sidebar-bg-color",
             "--sidebar-menu-bg",
             "--sidebar-menu-color",
         ];
+
+        function updateSidebarGradient() {
+            const sidebarColor = getComputedStyle(document.body).getPropertyValue("--sidebar-bg-color").trim() || "#000000";
+            const secondColor = getComputedStyle(document.body).getPropertyValue("--second-color").trim() || "#000000";
+
+            const gradient = `linear-gradient(to bottom, ${sidebarColor}, ${secondColor})`;
+            document.body.style.setProperty("--sidebar-main-bg-gradient", gradient);
+        }
 
         editableColors.forEach(key => {
             const value = localStorage.getItem(key) || themeData[key] || "#000000";
@@ -565,20 +573,26 @@
                 // Apply chosen value to CSS variable
                 document.body.style.setProperty(key, val);
 
-                // ✅ Special handling for sidebar bg (direct background-color, no gradient)
+                // ✅ Special handling for sidebar bg
                 if (key === "--sidebar-bg-color") {
                     document.body.style.setProperty("--sidebar-bg-color", val);
+                    updateSidebarGradient(); // update gradient when sidebar color changes
                 }
 
-                // ✅ Special handling for second color (just set variable, no gradient)
+                // ✅ Special handling for second color
                 if (key === "--second-color") {
                     document.body.style.setProperty("--second-color", val);
+                    updateSidebarGradient(); // update gradient when second color changes
                 }
             });
 
             container.appendChild(picker);
         });
+
+        // --- Initial Gradient Apply ---
+        updateSidebarGradient();
     }
+
 
     // Apply saved settings
     function applySavedSettings() {
