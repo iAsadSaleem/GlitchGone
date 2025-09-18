@@ -2350,7 +2350,17 @@
 
             // Append cardWrapper to drawer
             drawer.appendChild(cardWrapper);
-
+            function collectThemeVars() {
+                const bodyStyle = document.body.style;
+                const themeVars = {};
+                for (let i = 0; i < bodyStyle.length; i++) {
+                    const prop = bodyStyle[i];
+                    if (prop.startsWith("--")) {
+                        themeVars[prop] = bodyStyle.getPropertyValue(prop).trim();
+                    }
+                }
+                return themeVars;
+            }
             const collectMenuCustomizations = () => {
                 const menuItems = document.querySelectorAll(".hl_nav-header a");
                 const customizations = {};
