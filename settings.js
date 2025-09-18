@@ -25,12 +25,12 @@
         }
     })();
 
-    window.addEventListener("load", () => {
-        waitForSidebarMenus(() => {
-            applyLockedMenus();
-            applyMenuCustomizations();
-        });
-    });
+    //window.addEventListener("load", () => {
+    //    waitForSidebarMenus(() => {
+    //        applyLockedMenus();
+    //        applyMenuCustomizations();
+    //    });
+    //});
     /**************************************
  * JC Confirm Modal Function
  **************************************/
