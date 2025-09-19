@@ -2168,12 +2168,14 @@
             }
 
             // ---------------- Update Icon ----------------
-            if (custom.icon) {
-                // 1️⃣ Remove only existing icon for this menu
+            if (custom.icon && custom.icon.trim() !== "") {
+                const navTitle = menuEl.querySelector(".nav-title");
+
+                // ✅ Remove only existing icon for this menu
                 menuEl.querySelectorAll("i, img").forEach(el => el.remove());
                 menuEl.classList.remove("sidebar-no-icon");
 
-                // 2️⃣ Check if icon is FontAwesome class or SVG URL
+                // ✅ Insert new icon
                 if (/^fa-|^fas-|^far-|^fal-|^fab-/.test(custom.icon.trim())) {
                     const iconEl = document.createElement("i");
                     iconEl.className = custom.icon.trim();
