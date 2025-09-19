@@ -1847,9 +1847,6 @@
         }
     }
 
-    // === Wait until sidebar menus exist ===
-   
-
     // ✅ Your existing observer (don’t change this)
     function waitForSidebarMenus(callback) {
         const observer = new MutationObserver(() => {
@@ -1986,8 +1983,6 @@
             toggle.checked = !!lockedMenus[id];
         });
     }
-
-
     // Helper for blocking click
     function blockMenuClick(e) {
         e.preventDefault();
@@ -2043,8 +2038,6 @@
         overlay.appendChild(popup);
         document.body.appendChild(overlay);
     }
-
-
     function buildMenuCustomizationSection(container) {
         if (document.getElementById("tb-menu-customization")) return;
 
@@ -2154,7 +2147,6 @@
             applyMenuCustomizations();
         });
     }
-
     function applyMenuCustomizations() {
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedTheme.themeData || {};
@@ -2211,34 +2203,39 @@
     }
 
     // ✅ Insert new FontAwesome icon
-    if (custom.icon && custom.icon.trim() !== "") {
-        const navTitle = menuEl.querySelector(".nav-title");
-        let iconEl = document.createElement("i");
-        iconEl.style.marginRight = "8px";
+           // ✅ Insert new FontAwesome icon (replace instead of duplicate)
+           if (custom.icon && custom.icon.trim() !== "") {
+               const navTitle = menuEl.querySelector(".nav-title");
 
-        if (/^[a-f0-9]{3,4}$/i.test(custom.icon.trim())) {
-            iconEl.className = "fa-solid";
-            iconEl.innerHTML = "&#x" + custom.icon.trim() + ";";
-        } else {
-            iconEl.className = custom.icon.trim();
-        }
+               // 🔥 Remove any old icons (in case they came back dynamically)
+               menuEl.querySelectorAll("i, img").forEach(el => el.remove());
 
-        if (navTitle) {
-            menuEl.insertBefore(iconEl, navTitle);
-        } else {
-            menuEl.prepend(iconEl);
-        }
-    }
+               // ✅ Create new icon
+               let iconEl = document.createElement("i");
+               iconEl.style.marginRight = "8px";
+
+               if (/^[a-f0-9]{3,4}$/i.test(custom.icon.trim())) {
+                   iconEl.className = "fa-solid";
+                   iconEl.innerHTML = "&#x" + custom.icon.trim() + ";";
+               } else {
+                   iconEl.className = custom.icon.trim();
+               }
+
+               // ✅ Insert before the nav title
+               if (navTitle) {
+                   menuEl.insertBefore(iconEl, navTitle);
+               } else {
+                   menuEl.prepend(iconEl);
+               }
+           }
 });
 
     }
-
 
     // ✅ Call once after sidebar menus are ready
     waitForSidebarMenus(() => {
         applyMenuCustomizations();
     });
-
 
     // Create Builder UI
     function createBuilderUI(controlsContainer) {
