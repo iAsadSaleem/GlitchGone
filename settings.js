@@ -2174,61 +2174,41 @@
             "sb_mobile": "--mobile-app-new-name"
         };
 
-       Object.keys(menuCustomizations).forEach(menuId => {
-    const custom = menuCustomizations[menuId];
-    const menuEl = document.getElementById(menuId);
-    if (!menuEl) return;
+        Object.keys(menuCustomizations).forEach(menuId => {
+            const custom = menuCustomizations[menuId];
+            const menuEl = document.getElementById(menuId);
+            if (!menuEl) return;
 
-    // ✅ Remove any <i> or <img> tags from DOM
-    menuEl.querySelectorAll("i, img").forEach(el => el.remove());
+            const navTitle = menuEl.querySelector(".nav-title");
 
-    // ✅ Add class to hide CSS ::after pseudo-element
-    menuEl.classList.add("sidebar-no-icon");
+            // ✅ Only replace icon if a new icon is provided
+            if (custom.icon && custom.icon.trim() !== "") {
+                // Remove existing DOM icon(s)
+                menuEl.querySelectorAll("i, img").forEach(el => el.remove());
 
-    // ✅ Clear CSS variable icons (optional, can keep if you want)
-    const emptySvg = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E\")";
-    const cssPrefix = menuId.replace("sb_", "--sidebar-menu-icon-");
-    ["", "-hover", "-active"].forEach(suffix => {
-        document.documentElement.style.setProperty(
-            cssPrefix + suffix,
-            emptySvg,
-            "important"
-        );
-    });
+                // Hide CSS pseudo-element
+                menuEl.classList.add("sidebar-no-icon");
 
-    // ✅ Update title variable
-    const cssVar = variableMap[menuId];
-    if (cssVar && custom.title) {
-        document.documentElement.style.setProperty(cssVar, `"${custom.title}"`);
-    }
+                // Insert new FontAwesome icon
+                const iconEl = document.createElement("i");
+                iconEl.style.marginRight = "8px";
 
-    // ✅ Insert new FontAwesome icon
-           // ✅ Insert new FontAwesome icon (replace instead of duplicate)
-           if (custom.icon && custom.icon.trim() !== "") {
-               const navTitle = menuEl.querySelector(".nav-title");
+                if (/^[a-f0-9]{3,4}$/i.test(custom.icon.trim())) {
+                    iconEl.className = "fa-solid";
+                    iconEl.innerHTML = "&#x" + custom.icon.trim() + ";";
+                } else {
+                    iconEl.className = custom.icon.trim();
+                }
 
-               // ✅ Remove only the existing DOM icon, leave pseudo-element if no new icon
-               menuEl.querySelectorAll("i, img").forEach(el => el.remove());
+                if (navTitle) menuEl.insertBefore(iconEl, navTitle);
+                else menuEl.prepend(iconEl);
+            }
 
-               // ✅ Hide CSS pseudo-element for this menu item
-               menuEl.classList.add("sidebar-no-icon");
-
-               // ✅ Insert new icon
-               const iconEl = document.createElement("i");
-               iconEl.style.marginRight = "8px";
-
-               if (/^[a-f0-9]{3,4}$/i.test(custom.icon.trim())) {
-                   iconEl.className = "fa-solid";
-                   iconEl.innerHTML = "&#x" + custom.icon.trim() + ";";
-               } else {
-                   iconEl.className = custom.icon.trim();
-               }
-
-               if (navTitle) menuEl.insertBefore(iconEl, navTitle);
-               else menuEl.prepend(iconEl);
-           }
-});
-
+            // ✅ Update title if provided
+            if (custom.title && navTitle) {
+                navTitle.textContent = custom.title;
+            }
+        });
     }
 
     // ✅ Call once after sidebar menus are ready
