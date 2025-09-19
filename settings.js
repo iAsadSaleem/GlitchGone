@@ -123,76 +123,76 @@
     }
     loadThemeBuilderCSS();
 
-    //// NEW: Fetch user theme from DB and apply
-    //async function loadUserThemeFromDB(identifier, type = "rlno") {
-    //    try {
-    //        const res = await fetch(`https://theme-builder-delta.vercel.app/api/theme/${identifier}?type=${type}`);
-    //        if (!res.ok) throw new Error(`Failed to fetch theme for ${type}: ${identifier}`);
+    // NEW: Fetch user theme from DB and apply
+    async function loadUserThemeFromDB(identifier, type = "rlno") {
+        try {
+            const res = await fetch(`https://theme-builder-delta.vercel.app/api/theme/code/${identifier}?type=${type}`);
+            if (!res.ok) throw new Error(`Failed to fetch theme for ${type}: ${identifier}`);
 
-    //        const theme = await res.json();
-    //        if (!theme.isActive) return;
+            const theme = await res.json();
+            if (!theme.isActive) return;
 
-    //        // ✅ Apply inline theme variables
-    //        if (theme.themeData) {
-    //            Object.entries(theme.themeData).forEach(([key, value]) => {
-    //                if (value && value !== "undefined") {
-    //                    document.body.style.setProperty(key, value);
-    //                }
-    //            });
-    //        }
+            // ✅ Apply inline theme variables
+            if (theme.themeData) {
+                Object.entries(theme.themeData).forEach(([key, value]) => {
+                    if (value && value !== "undefined") {
+                        document.body.style.setProperty(key, value);
+                    }
+                });
+            }
 
-    //        localStorage.setItem("userTheme", JSON.stringify(theme));
+            localStorage.setItem("userTheme", JSON.stringify(theme));
 
-    //        // ✅ ALSO apply the CSS file from your encoded source
-    //        await applyCSSFile(identifier);
+            // ✅ ALSO apply the CSS file from your encoded source
+            await applyCSSFile(identifier);
 
-    //    } catch (err) {
-    //        console.error("[ThemeBuilder] Failed to load user theme:", err);
+        } catch (err) {
+            console.error("[ThemeBuilder] Failed to load user theme:", err);
 
-    //        // ✅ fallback from cache
-    //        const cached = localStorage.getItem("userTheme");
-    //        if (cached) {
-    //            const theme = JSON.parse(cached);
-    //            if (theme.themeData) {
-    //                Object.entries(theme.themeData).forEach(([key, value]) => {
-    //                    if (value && value !== "undefined") {
-    //                        document.body.style.setProperty(key, value);
-    //                    }
-    //                });
-    //            }
-    //            log("Applied cached theme from localStorage");
+            // ✅ fallback from cache
+            const cached = localStorage.getItem("userTheme");
+            if (cached) {
+                const theme = JSON.parse(cached);
+                if (theme.themeData) {
+                    Object.entries(theme.themeData).forEach(([key, value]) => {
+                        if (value && value !== "undefined") {
+                            document.body.style.setProperty(key, value);
+                        }
+                    });
+                }
+                log("Applied cached theme from localStorage");
 
-    //            // ✅ also try loading CSS file from identifier if cached
-    //            const cachedIdentifier = theme.email ? theme.email.toLowerCase() : theme.rlno;
-    //            if (cachedIdentifier) {
-    //                await applyCSSFile(cachedIdentifier);
-    //            }
-    //        }
-    //    }
-    //}
+                // ✅ also try loading CSS file from identifier if cached
+                const cachedIdentifier = theme.email ? theme.email.toLowerCase() : theme.rlno;
+                if (cachedIdentifier) {
+                    await applyCSSFile(cachedIdentifier);
+                }
+            }
+        }
+    }
 
-    //// 🔹 Helper function to fetch and inject CSS
-    //async function applyCSSFile(identifier) {
-    //    try {
-    //        const url = `https://theme-builder-delta.vercel.app/api/theme/file/${encodeURIComponent(identifier)}`;
-    //        const res = await fetch(url);
-    //        if (!res.ok) throw new Error("Failed to fetch CSS file");
+    // 🔹 Helper function to fetch and inject CSS
+    async function applyCSSFile(identifier) {
+        try {
+            const url = `https://theme-builder-delta.vercel.app/api/theme/file/code/${encodeURIComponent(identifier)}`;
+            const res = await fetch(url);
+            if (!res.ok) throw new Error("Failed to fetch CSS file");
 
-    //        const cssText = await res.text();
+            const cssText = await res.text();
 
-    //        // remove old CSS (avoid duplicates)
-    //        const oldStyle = document.getElementById("theme-css");
-    //        if (oldStyle) oldStyle.remove();
+            // remove old CSS (avoid duplicates)
+            const oldStyle = document.getElementById("theme-css");
+            if (oldStyle) oldStyle.remove();
 
-    //        const style = document.createElement("style");
-    //        style.id = "theme-css";
-    //        style.innerHTML = cssText;
-    //        document.head.appendChild(style);
+            const style = document.createElement("style");
+            style.id = "theme-css";
+            style.innerHTML = cssText;
+            document.head.appendChild(style);
 
-    //    } catch (err) {
-    //        console.error("❌ Failed to apply external CSS:", err.message);
-    //    }
-    //}
+        } catch (err) {
+            console.error("❌ Failed to apply external CSS:", err.message);
+        }
+    }
 
     // Create collapsible sections
     // Utility to create section with optional icon
