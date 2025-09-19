@@ -163,47 +163,47 @@
                 log("Applied cached theme from localStorage");
 
                 // ✅ also try loading CSS file from identifier if cached
-                const cachedIdentifier = theme.email ? theme.email.toLowerCase() : theme.rlno;
-                if (cachedIdentifier) {
-                    await applyCSSFile(cachedIdentifier);
-                }
+                //const cachedIdentifier = theme.email ? theme.email.toLowerCase() : theme.rlno;
+                //if (cachedIdentifier) {
+                //    await applyCSSFile(cachedIdentifier);
+                //}
             }
         }
     }
 
     // 🔹 Helper function to fetch and inject CSS from theme JSON
-    async function applyCSSFile(identifier) {
-        try {
-            const url = `https://theme-builder-delta.vercel.app/api/theme/code/${encodeURIComponent(identifier)}`;
-            const res = await fetch(url);
-            if (!res.ok) throw new Error("Failed to fetch theme JSON");
+    //async function applyCSSFile(identifier) {
+    //    try {
+    //        const url = `https://theme-builder-delta.vercel.app/api/theme/code/${encodeURIComponent(identifier)}`;
+    //        const res = await fetch(url);
+    //        if (!res.ok) throw new Error("Failed to fetch theme JSON");
 
-            const theme = await res.json();
-            if (!theme || !theme.themeData) throw new Error("No themeData found");
+    //        const theme = await res.json();
+    //        if (!theme || !theme.themeData) throw new Error("No themeData found");
 
-            // Convert themeData to CSS variables
-            let css = ":root {\n";
-            for (const [key, value] of Object.entries(theme.themeData)) {
-                if (key.startsWith("--") && value && value !== "undefined") {
-                    css += `  ${key}: ${value};\n`;
-                }
-            }
-            css += "}\n";
+    //        // Convert themeData to CSS variables
+    //        let css = ":root {\n";
+    //        for (const [key, value] of Object.entries(theme.themeData)) {
+    //            if (key.startsWith("--") && value && value !== "undefined") {
+    //                css += `  ${key}: ${value};\n`;
+    //            }
+    //        }
+    //        css += "}\n";
 
-            // remove old CSS (avoid duplicates)
-            const oldStyle = document.getElementById("theme-css");
-            if (oldStyle) oldStyle.remove();
+    //        // remove old CSS (avoid duplicates)
+    //        const oldStyle = document.getElementById("theme-css");
+    //        if (oldStyle) oldStyle.remove();
 
-            // inject new CSS
-            const style = document.createElement("style");
-            style.id = "theme-css";
-            style.innerHTML = css;
-            document.head.appendChild(style);
+    //        // inject new CSS
+    //        const style = document.createElement("style");
+    //        style.id = "theme-css";
+    //        style.innerHTML = css;
+    //        document.head.appendChild(style);
 
-        } catch (err) {
-            console.error("❌ Failed to apply CSS from theme JSON:", err.message);
-        }
-    }
+    //    } catch (err) {
+    //        console.error("❌ Failed to apply CSS from theme JSON:", err.message);
+    //    }
+    //}
     // Create collapsible sections
     // Utility to create section with optional icon
     function createSection(title, contentBuilder, icon = null) {
