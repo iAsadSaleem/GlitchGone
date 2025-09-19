@@ -2038,6 +2038,7 @@
         overlay.appendChild(popup);
         document.body.appendChild(overlay);
     }
+    // -------------------- Menu Customizations Section --------------------
     function buildMenuCustomizationSection(container) {
         if (document.getElementById("tb-menu-customization")) return;
 
@@ -2045,13 +2046,11 @@
         wrapper.id = "tb-menu-customization";
         wrapper.className = "tb-menu-customization";
 
-        // ✅ Section title (like in buildHeadingSettings)
         const title = document.createElement("h4");
         title.className = "tb-section-dashbaord-title";
         title.innerText = "Side Menu — Customizer";
         wrapper.appendChild(title);
 
-        // Optional separator
         const separator = document.createElement("hr");
         separator.className = "tb-section-separator";
         wrapper.appendChild(separator);
@@ -2063,7 +2062,6 @@
             ? JSON.parse(themeData["--menuCustomizations"])
             : {};
 
-        // Map menu IDs to CSS variables
         const variableMap = {
             "sb_launchpad": "--launchpad-new-name",
             "sb_dashboard": "--dashboard-new-name",
@@ -2088,7 +2086,8 @@
             const sidebarMenus = document.querySelectorAll(".hl_nav-header a");
 
             sidebarMenus.forEach(menu => {
-                const menuId = menu.id || menu.getAttribute("meta") || menu.href;
+                const menuId = menu.id;
+                if (!menuId) return;
                 const currentTitle = menu.querySelector(".nav-title")?.innerText.trim() || menuId;
 
                 const row = document.createElement("div");
@@ -2104,20 +2103,19 @@
                 titleInput.type = "text";
                 titleInput.placeholder = "Custom Title";
                 titleInput.value = menuCustomizations[menuId]?.title || currentTitle;
-                titleInput.className = "tb-input tb-title-input"; // ✅ class added
+                titleInput.className = "tb-input tb-title-input";
 
                 // Icon Input
                 const iconInput = document.createElement("input");
                 iconInput.type = "text";
-                iconInput.placeholder = "fa-solid fa-home";
+                iconInput.placeholder = "fa-solid fa-home OR SVG URL";
                 iconInput.value = menuCustomizations[menuId]?.icon || "";
-                iconInput.className = "tb-input tb-icon-input"; // ✅ class added
+                iconInput.className = "tb-input tb-icon-input";
 
-                // Events → update immediately + save
+                // Save & Apply
                 const saveChange = () => {
                     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                     saved.themeData = saved.themeData || {};
-
                     const customizations = saved.themeData["--menuCustomizations"]
                         ? JSON.parse(saved.themeData["--menuCustomizations"])
                         : {};
@@ -2130,7 +2128,6 @@
                     saved.themeData["--menuCustomizations"] = JSON.stringify(customizations);
                     localStorage.setItem("userTheme", JSON.stringify(saved));
 
-                    // Apply immediately
                     applyMenuCustomizations();
                 };
 
@@ -2147,6 +2144,7 @@
             applyMenuCustomizations();
         });
     }
+    // -------------------- Apply Menu Customizations --------------------
     function applyMenuCustomizations() {
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedTheme.themeData || {};
@@ -2181,39 +2179,54 @@
 
             const navTitle = menuEl.querySelector(".nav-title");
 
-            // ✅ Only replace icon if a new icon is provided
+            // ---------------- Update Title ----------------
+            const cssVar = variableMap[menuId];
+            if (cssVar && custom.title) {
+                document.documentElement.style.setProperty(cssVar, `"${custom.title}"`);
+            }
+            if (navTitle && custom.title) navTitle.textContent = custom.title;
+
+            // ---------------- Update Icon ----------------
+            // Remove existing DOM icons
+            menuEl.querySelectorAll("i, img").forEach(el => el.remove());
+
             if (custom.icon && custom.icon.trim() !== "") {
-                // Remove existing DOM icon(s)
-                menuEl.querySelectorAll("i, img").forEach(el => el.remove());
-
-                // Hide CSS pseudo-element
-                menuEl.classList.add("sidebar-no-icon");
-
-                // Insert new FontAwesome icon
                 const iconEl = document.createElement("i");
                 iconEl.style.marginRight = "8px";
 
-                if (/^[a-f0-9]{3,4}$/i.test(custom.icon.trim())) {
-                    iconEl.className = "fa-solid";
-                    iconEl.innerHTML = "&#x" + custom.icon.trim() + ";";
+                if (/^fa-|^fas-|^far-|^fal-|^fab-/.test(custom.icon.trim())) {
+                    // FontAwesome class
+                    iconEl.className = custom.icon.trim();
+                } else if (custom.icon.startsWith("url(")) {
+                    // SVG URL (CSS variable)
+                    const iconVar = `--sidebar-menu-icon-${menuId.replace("sb_", "")}`;
+                    document.documentElement.style.setProperty(iconVar, custom.icon.trim());
+                    document.documentElement.style.setProperty(iconVar + "-hover", custom.icon.trim());
+                    document.documentElement.style.setProperty(iconVar + "-active", custom.icon.trim());
+
+                    // Hide pseudo-element for DOM insert
+                    menuEl.classList.add("sidebar-no-icon");
+                    return; // done, no DOM icon needed
                 } else {
+                    // Fallback: treat as FontAwesome
                     iconEl.className = custom.icon.trim();
                 }
 
                 if (navTitle) menuEl.insertBefore(iconEl, navTitle);
                 else menuEl.prepend(iconEl);
-            }
 
-            // ✅ Update title if provided
-            if (custom.title && navTitle) {
-                navTitle.textContent = custom.title;
+                // Hide pseudo-element for DOM icons
+                menuEl.classList.add("sidebar-no-icon");
             }
         });
     }
 
-    // ✅ Call once after sidebar menus are ready
-    waitForSidebarMenus(() => {
-        applyMenuCustomizations();
+    // -------------------- Initialize on Load --------------------
+    window.addEventListener("load", () => {
+        waitForSidebarMenus(() => {
+            applyLockedMenus();       // if you have this
+            applyMenuCustomizations(); // titles & icons
+        });
     });
 
     // Create Builder UI
