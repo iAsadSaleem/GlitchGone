@@ -2038,7 +2038,7 @@
         overlay.appendChild(popup);
         document.body.appendChild(overlay);
     }
-    // -------------------- Menu Customizations Section --------------------
+    // ---------------- Build Menu Customizer UI ----------------
     function buildMenuCustomizationSection(container) {
         if (document.getElementById("tb-menu-customization")) return;
 
@@ -2055,45 +2055,22 @@
         separator.className = "tb-section-separator";
         wrapper.appendChild(separator);
 
-        // Load saved customizations
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedTheme.themeData || {};
         const menuCustomizations = themeData["--menuCustomizations"]
             ? JSON.parse(themeData["--menuCustomizations"])
             : {};
 
-        const variableMap = {
-            "sb_launchpad": "--launchpad-new-name",
-            "sb_dashboard": "--dashboard-new-name",
-            "sb_media": "--media-storage-new-name",
-            "sb_ai_agents": "--ai-agents-new-name",
-            "sb_conversations": "--conversations-new-name",
-            "sb_calendars": "--calendars-new-name",
-            "sb_contacts": "--contacts-new-name",
-            "sb_opportunities": "--opportunities-new-name",
-            "sb_payments": "--payments-new-name",
-            "sb_marketing": "--marketing-new-name",
-            "sb_automation": "--automation-new-name",
-            "sb_sites": "--sites-new-name",
-            "sb_memberships": "--memberships-new-name",
-            "sb_reputation": "--reputation-new-name",
-            "sb_reporting": "--reporting-new-name",
-            "sb_marketplace": "--app-marketplace-new-name",
-            "sb_mobile": "--mobile-app-new-name"
-        };
-
         waitForSidebarMenus(() => {
             const sidebarMenus = document.querySelectorAll(".hl_nav-header a");
 
             sidebarMenus.forEach(menu => {
-                const menuId = menu.id;
-                if (!menuId) return;
+                const menuId = menu.id || menu.getAttribute("meta") || menu.href;
                 const currentTitle = menu.querySelector(".nav-title")?.innerText.trim() || menuId;
 
                 const row = document.createElement("div");
                 row.className = "tb-menu-row";
 
-                // Label (readonly)
                 const label = document.createElement("span");
                 label.textContent = currentTitle;
                 label.style.flex = "1";
@@ -2108,14 +2085,14 @@
                 // Icon Input
                 const iconInput = document.createElement("input");
                 iconInput.type = "text";
-                iconInput.placeholder = "fa-solid fa-home OR SVG URL";
+                iconInput.placeholder = "fa-solid fa-home or url(...)";
                 iconInput.value = menuCustomizations[menuId]?.icon || "";
                 iconInput.className = "tb-input tb-icon-input";
 
-                // Save & Apply
                 const saveChange = () => {
                     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                     saved.themeData = saved.themeData || {};
+
                     const customizations = saved.themeData["--menuCustomizations"]
                         ? JSON.parse(saved.themeData["--menuCustomizations"])
                         : {};
@@ -2144,7 +2121,9 @@
             applyMenuCustomizations();
         });
     }
+
     // -------------------- Apply Menu Customizations --------------------
+    // ---------------- Apply Menu Customizations ----------------
     function applyMenuCustomizations() {
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedTheme.themeData || {};
@@ -2180,52 +2159,43 @@
             const navTitle = menuEl.querySelector(".nav-title");
 
             // ---------------- Update Title ----------------
-            const cssVar = variableMap[menuId];
-            if (cssVar && custom.title) {
-                document.documentElement.style.setProperty(cssVar, `"${custom.title}"`);
+            if (custom.title && navTitle) {
+                navTitle.textContent = custom.title;
+                const cssVar = variableMap[menuId];
+                if (cssVar) {
+                    document.documentElement.style.setProperty(cssVar, `"${custom.title}"`);
+                }
             }
-            if (navTitle && custom.title) navTitle.textContent = custom.title;
 
             // ---------------- Update Icon ----------------
-            // Remove existing DOM icons
-            menuEl.querySelectorAll("i, img").forEach(el => el.remove());
+            if (custom.icon) {
+                // 1️⃣ Remove only existing icon for this menu
+                menuEl.querySelectorAll("i, img").forEach(el => el.remove());
+                menuEl.classList.remove("sidebar-no-icon");
 
-            if (custom.icon && custom.icon.trim() !== "") {
-                const iconEl = document.createElement("i");
-                iconEl.style.marginRight = "8px";
-
+                // 2️⃣ Check if icon is FontAwesome class or SVG URL
                 if (/^fa-|^fas-|^far-|^fal-|^fab-/.test(custom.icon.trim())) {
-                    // FontAwesome class
+                    const iconEl = document.createElement("i");
                     iconEl.className = custom.icon.trim();
+                    iconEl.style.marginRight = "8px";
+                    if (navTitle) menuEl.insertBefore(iconEl, navTitle);
+                    else menuEl.prepend(iconEl);
                 } else if (custom.icon.startsWith("url(")) {
-                    // SVG URL (CSS variable)
                     const iconVar = `--sidebar-menu-icon-${menuId.replace("sb_", "")}`;
-                    document.documentElement.style.setProperty(iconVar, custom.icon.trim());
-                    document.documentElement.style.setProperty(iconVar + "-hover", custom.icon.trim());
-                    document.documentElement.style.setProperty(iconVar + "-active", custom.icon.trim());
-
-                    // Hide pseudo-element for DOM insert
-                    menuEl.classList.add("sidebar-no-icon");
-                    return; // done, no DOM icon needed
-                } else {
-                    // Fallback: treat as FontAwesome
-                    iconEl.className = custom.icon.trim();
+                    ["", "-hover", "-active"].forEach(suffix => {
+                        document.documentElement.style.setProperty(iconVar + suffix, custom.icon.trim());
+                    });
+                    menuEl.classList.add("sidebar-no-icon"); // hide pseudo-element if using SVG
                 }
-
-                if (navTitle) menuEl.insertBefore(iconEl, navTitle);
-                else menuEl.prepend(iconEl);
-
-                // Hide pseudo-element for DOM icons
-                menuEl.classList.add("sidebar-no-icon");
             }
         });
     }
 
-    // -------------------- Initialize on Load --------------------
+    // ---------------- Apply on Page Load ----------------
     window.addEventListener("load", () => {
         waitForSidebarMenus(() => {
-            applyLockedMenus();       // if you have this
-            applyMenuCustomizations(); // titles & icons
+            applyLockedMenus(); // optional
+            applyMenuCustomizations();
         });
     });
 
