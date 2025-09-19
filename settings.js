@@ -171,28 +171,28 @@
         }
     }
 
-    // 🔹 Helper function to fetch and inject CSS
-    async function applyCSSFile(identifier) {
-        try {
-            const url = `https://theme-builder-delta.vercel.app/api/theme/file/${encodeURIComponent(identifier)}`;
-            const res = await fetch(url);
-            if (!res.ok) throw new Error("Failed to fetch CSS file");
+    //// 🔹 Helper function to fetch and inject CSS
+    //async function applyCSSFile(identifier) {
+    //    try {
+    //        const url = `https://theme-builder-delta.vercel.app/api/theme/file/${encodeURIComponent(identifier)}`;
+    //        const res = await fetch(url);
+    //        if (!res.ok) throw new Error("Failed to fetch CSS file");
 
-            const cssText = await res.text();
+    //        const cssText = await res.text();
 
-            // remove old CSS (avoid duplicates)
-            const oldStyle = document.getElementById("theme-css");
-            if (oldStyle) oldStyle.remove();
+    //        // remove old CSS (avoid duplicates)
+    //        const oldStyle = document.getElementById("theme-css");
+    //        if (oldStyle) oldStyle.remove();
 
-            const style = document.createElement("style");
-            style.id = "theme-css";
-            style.innerHTML = cssText;
-            document.head.appendChild(style);
+    //        const style = document.createElement("style");
+    //        style.id = "theme-css";
+    //        style.innerHTML = cssText;
+    //        document.head.appendChild(style);
 
-        } catch (err) {
-            console.error("❌ Failed to apply external CSS:", err.message);
-        }
-    }
+    //    } catch (err) {
+    //        console.error("❌ Failed to apply external CSS:", err.message);
+    //    }
+    //}
 
     // Create collapsible sections
     // Utility to create section with optional icon
