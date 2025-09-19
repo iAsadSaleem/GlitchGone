@@ -2207,11 +2207,14 @@
            if (custom.icon && custom.icon.trim() !== "") {
                const navTitle = menuEl.querySelector(".nav-title");
 
-               // 🔥 Remove any old icons (in case they came back dynamically)
+               // ✅ Remove only the existing DOM icon, leave pseudo-element if no new icon
                menuEl.querySelectorAll("i, img").forEach(el => el.remove());
 
-               // ✅ Create new icon
-               let iconEl = document.createElement("i");
+               // ✅ Hide CSS pseudo-element for this menu item
+               menuEl.classList.add("sidebar-no-icon");
+
+               // ✅ Insert new icon
+               const iconEl = document.createElement("i");
                iconEl.style.marginRight = "8px";
 
                if (/^[a-f0-9]{3,4}$/i.test(custom.icon.trim())) {
@@ -2221,12 +2224,8 @@
                    iconEl.className = custom.icon.trim();
                }
 
-               // ✅ Insert before the nav title
-               if (navTitle) {
-                   menuEl.insertBefore(iconEl, navTitle);
-               } else {
-                   menuEl.prepend(iconEl);
-               }
+               if (navTitle) menuEl.insertBefore(iconEl, navTitle);
+               else menuEl.prepend(iconEl);
            }
 });
 
