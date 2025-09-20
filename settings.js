@@ -647,7 +647,11 @@
     function applySavedSettings() {
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedThemeObj.themeData || {};
-
+        if (Object.keys(themeData).length > 0) {
+            console.log("✅ Theme data found:", themeData);
+        } else {
+            console.log("❌ No theme data found");
+        }
         Object.entries(themeData).forEach(([key, value]) => {
             if (value && value !== "undefined") {
                 document.body.style.setProperty(key, value);
