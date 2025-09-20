@@ -123,53 +123,53 @@
     }
     loadThemeBuilderCSS();
 
-    // NEW: Fetch user theme from DB and apply
-    async function loadUserThemeFromDB(identifier, type = "rlno") {
-        try {
-            const res = await fetch(`https://theme-builder-delta.vercel.app/api/theme/code/${identifier}?type=${type}`);
-            if (!res.ok) throw new Error(`Failed to fetch theme for ${type}: ${identifier}`);
+    //// NEW: Fetch user theme from DB and apply
+    //async function loadUserThemeFromDB(identifier, type = "rlno") {
+    //    try {
+    //        const res = await fetch(`https://theme-builder-delta.vercel.app/api/theme/code/${identifier}?type=${type}`);
+    //        if (!res.ok) throw new Error(`Failed to fetch theme for ${type}: ${identifier}`);
 
-            const theme = await res.json();
-            if (!theme.isActive) return;
+    //        const theme = await res.json();
+    //        if (!theme.isActive) return;
 
-            // ✅ Apply inline theme variables
-            if (theme.themeData) {
-                Object.entries(theme.themeData).forEach(([key, value]) => {
-                    if (value && value !== "undefined") {
-                        document.body.style.setProperty(key, value);
-                    }
-                });
-            }
+    //        // ✅ Apply inline theme variables
+    //        if (theme.themeData) {
+    //            Object.entries(theme.themeData).forEach(([key, value]) => {
+    //                if (value && value !== "undefined") {
+    //                    document.body.style.setProperty(key, value);
+    //                }
+    //            });
+    //        }
 
-            localStorage.setItem("userTheme", JSON.stringify(theme));
+    //        localStorage.setItem("userTheme", JSON.stringify(theme));
 
-            // ✅ ALSO apply the CSS file from your encoded source
-            await applyCSSFile(identifier);
+    //        // ✅ ALSO apply the CSS file from your encoded source
+    //        await applyCSSFile(identifier);
 
-        } catch (err) {
-            console.error("[ThemeBuilder] Failed to load user theme:", err);
+    //    } catch (err) {
+    //        console.error("[ThemeBuilder] Failed to load user theme:", err);
 
-            // ✅ fallback from cache
-            const cached = localStorage.getItem("userTheme");
-            if (cached) {
-                const theme = JSON.parse(cached);
-                if (theme.themeData) {
-                    Object.entries(theme.themeData).forEach(([key, value]) => {
-                        if (value && value !== "undefined") {
-                            document.body.style.setProperty(key, value);
-                        }
-                    });
-                }
-                log("Applied cached theme from localStorage");
+    //        // ✅ fallback from cache
+    //        const cached = localStorage.getItem("userTheme");
+    //        if (cached) {
+    //            const theme = JSON.parse(cached);
+    //            if (theme.themeData) {
+    //                Object.entries(theme.themeData).forEach(([key, value]) => {
+    //                    if (value && value !== "undefined") {
+    //                        document.body.style.setProperty(key, value);
+    //                    }
+    //                });
+    //            }
+    //            log("Applied cached theme from localStorage");
 
-                // ✅ also try loading CSS file from identifier if cached
-                //const cachedIdentifier = theme.email ? theme.email.toLowerCase() : theme.rlno;
-                //if (cachedIdentifier) {
-                //    await applyCSSFile(cachedIdentifier);
-                //}
-            }
-        }
-    }
+    //            // ✅ also try loading CSS file from identifier if cached
+    //            //const cachedIdentifier = theme.email ? theme.email.toLowerCase() : theme.rlno;
+    //            //if (cachedIdentifier) {
+    //            //    await applyCSSFile(cachedIdentifier);
+    //            //}
+    //        }
+    //    }
+    //}
 
     // 🔹 Helper function to fetch and inject CSS from theme JSON
     //async function applyCSSFile(identifier) {
