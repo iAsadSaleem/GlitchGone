@@ -2275,6 +2275,7 @@
                     (section) => {
                         buildThemeColorsSection(section);
                         buildFontFamilySelector(section);
+                        buildHeaderControlsSection(section);
                     },
                     "",
                     true
