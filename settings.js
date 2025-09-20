@@ -862,8 +862,8 @@
         const themeData = savedThemeObj.themeData || {};
 
         // === Create Inputs ===
-        const startPicker = makePicker("Color Start", "--header-gradient-start", "#ff0000");
-        const endPicker = makePicker("Color End", "--header-gradient-end", "#0000ff");
+        const startPicker = makePicker("Choose Start Color For Header", "--header-gradient-start", "#ff0000");
+        const endPicker = makePicker("Choose End Color For Header", "--header-gradient-end", "#0000ff");
 
         // Append only color pickers (no stop/angle UI now)
         gradientWrapper.appendChild(startPicker.wrapper);

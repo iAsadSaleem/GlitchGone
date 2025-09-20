@@ -535,25 +535,26 @@ tb-apply-btn
 }
 
 .tb-instruction-text {
-    color: #9b9b9b73;
-    font-size: 11px;
+    font-style: italic;
+    color: #757575d6;
+    font-size: 10px;
 }
 .tb-profile-title {
-    font-size: 15px;
+    font-size: 13px;
     top: 8px;
     position: relative;
-    color: #386be3;
-    background: #0058ff57;
+    color: #2c323fe0;
+    background: #001dff26;
     border: solid 1px #ffff;
     border-radius: 4px;
 }
 
 .tb-help-title {
-    font-size: 15px;
+    font-size: 13px;
     top: 8px;
     position: relative;
-    color: #386be3;
-    background: #0058ff57;
+    color: #2c323fe0;
+    background: #001dff26;
     border: solid 1px #ffff;
     border-radius: 4px;
 }
@@ -684,29 +685,29 @@ body::-webkit-scrollbar-track {
     font-size: 14px;
 }
 .tb-section-scroll-title {
-    font-size: 15px;
+    font-size: 13px;
     top: 8px;
     position: relative;
-    color: #386be3;
-    background: #0058ff57;
+    color: #2c323fe0;
+    background: #001dff26;
     border: solid 1px #ffff;
     border-radius: 4px;
 }
 .tb-section-dashbaord-title {
-    font-size: 15px;
+    font-size: 13px;
     top: 8px;
     position: relative;
-    color: #386be3;
-    background: #0058ff57;
+    color: #2c323fe0;
+    background: #001dff26;
     border: solid 1px #ffff;
     border-radius: 4px;
 }
 .tb-section-background-title {
-    font-size: 15px;
+    font-size: 13px;
     top: 8px;
     position: relative;
-    color: #386be3;
-    background: #0058ff57;
+    color: #2c323fe0;
+    background: #001dff26;
     border: solid 1px #ffff;
     border-radius: 4px;
 }
@@ -743,12 +744,13 @@ body::-webkit-scrollbar-track {
 
     /* Title */
     .tb-heading-settings .tb-section-dashbaord-title {
-        font-size: 15px;
-        font-weight: 600;
-        margin-bottom: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+        font-size: 13px;
+        top: 8px;
+        position: relative;
+        color: #2c323fe0;
+        background: #001dff26;
+        border: solid 1px #ffff;
+        border-radius: 4px;
     }
 
 /* Tabs */
