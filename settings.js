@@ -295,7 +295,7 @@
         "--sidebar-bg-color": "Choose Sidebar BG Color",
         "--sidebar-menu-bg": "Choose Sidebar Menu BG Color",
         "--sidebar-menu-color": "Choose SideBar Text Color",
-        "--sidebar-menu-icon-active-color": "Choose SideBar Icon Color"
+        "--sidebar-menu-icon-color": "Choose SideBar Icon Color"
     };
 
     function createColorPicker(labelText, storageKey, cssVar, applyFn) {
