@@ -294,8 +294,9 @@
         "--second-color": "Choose Secondary Color",  // ✅ replaced header-bg-color
         "--sidebar-bg-color": "Choose Sidebar BG Color",
         "--sidebar-menu-bg": "Choose Sidebar Menu BG Color",
+        "--sidebar-menu-hover-bg": "Choose SideBar Menu Hover Color",
         "--sidebar-menu-color": "Choose SideBar Text Color",
-        "--sidebar-menu-icon-color": "Choose SideBar Icon Color"
+        "--sidebar-menu-icon-color": "Choose SideBar Icon Color",
     };
 
     function createColorPicker(labelText, storageKey, cssVar, applyFn) {
@@ -605,6 +606,7 @@
             "--second-color",
             "--sidebar-bg-color",
             "--sidebar-menu-bg",
+            "--sidebar-menu-hover-bg",
             "--sidebar-menu-color",
             "--sidebar-menu-icon-color"
         ];
