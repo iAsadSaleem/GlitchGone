@@ -2229,9 +2229,9 @@
         const email = localStorage.getItem("userEmail") ? atob(localStorage.getItem("userEmail")) : null;
 
         if (rlNo) {
-            loadUserThemeFromDB(rlNo, "rlno").then(() => applySavedSettings());
+            applySavedSettings();
         } else if (email) {
-            loadUserThemeFromDB(email, "email").then(() => applySavedSettings());
+             applySavedSettings();
         }
 
         if (!document.getElementById('themeBuilderDrawer')) {
