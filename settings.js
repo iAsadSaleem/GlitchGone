@@ -2274,8 +2274,8 @@
                     '<i class="fa-solid fa-gear" style="color:white;margin-right:6px;font-size:17px;"></i> General Settings',
                     (section) => {
                         buildThemeColorsSection(section);
-                        buildFontFamilySelector(section);
                         buildHeaderControlsSection(section);
+                        buildFontFamilySelector(section);
                     },
                     "",
                     true
