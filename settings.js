@@ -291,7 +291,7 @@
     // 🌟 Mapping of CSS vars -> Human-friendly labels
     const cssVarLabels = {
         "--primary-color": "Choose Primary Color",
-        "--second-color": "Choose Second Color",  // ✅ replaced header-bg-color
+        "--second-color": "Choose Secondary Color",  // ✅ replaced header-bg-color
         "--sidebar-bg-color": "Choose Sidebar BG Color",
         "--sidebar-menu-bg": "Choose Sidebar Menu BG Color",
         "--sidebar-menu-color": "Choose SideBar Text Color"
@@ -1503,7 +1503,7 @@
         // === Title ===
         const title = document.createElement("h4");
         title.className = "tb-section-background-title";
-        title.innerText = "Background Gradient Settings";
+        title.innerText = "Background Color";
         wrapper.appendChild(title);
 
         // === Saved Theme Data ===

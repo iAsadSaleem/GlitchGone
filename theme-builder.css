@@ -8,7 +8,7 @@
     height: 67%;
     /* 25% active color, 75% white */
     background: linear-gradient(to bottom, var(--sidebar-menu-active-bg) 25%, #ffffff 25%);
-    box-shadow: -2px 0 5px rgba(0,0,0,1);
+    box-shadow: -2px 0 5px rgb(199 180 180);
     transition: right 0.28s ease;
     z-index: 99999;
     padding: 16px 7px;
@@ -20,6 +20,7 @@
     #themeBuilderDrawer.open {
         border-radius: 8px;
         right: 10px;
+        border: solid 1px #dddddd00;
     }
 /* Drawer header */
     #themeBuilderDrawer > div:first-child {
