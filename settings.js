@@ -2509,7 +2509,6 @@
             }
             const response = await fetch(`https://theme-builder-delta.vercel.app/api/theme/${decodedEmail}`);
             const data = await response.json();
-            console.log('✅ API Response:', data);
             if (data.success) {
                 createBuilderUI(controlsContainer);
 
