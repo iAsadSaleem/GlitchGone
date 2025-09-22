@@ -308,54 +308,64 @@
         wrapper.className = "tb-color-picker-wrapper";
 
         const label = document.createElement("label");
-        // ✅ Use human-readable label if available
         label.textContent = cssVarLabels[cssVar] || labelText;
         label.className = "tb-color-picker-label";
 
-        // 1️⃣ Load current color from saved themeData or CSS variable
+        // 1️⃣ Load saved or fallback color
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedThemeObj.themeData || {};
         let storedColor = themeData[cssVar]
             || getComputedStyle(document.body).getPropertyValue(cssVar).trim()
-            || "#007bff"; // fallback
+            || "#007bff";
+
+        // ✅ Ensure it’s a valid hex code
+        if (!/^#[0-9A-F]{6}$/i.test(storedColor)) {
+            storedColor = "#007bff";
+        }
 
         const colorInput = document.createElement("input");
         colorInput.type = "color";
         colorInput.value = storedColor;
         colorInput.className = "tb-color-input";
 
-        const colorCode = document.createElement("span");
+        // 🔹 Make this an editable input field
+        const colorCode = document.createElement("input");
+        colorCode.type = "text";
         colorCode.className = "tb-color-code";
-        colorCode.textContent = storedColor;
+        colorCode.value = storedColor;
+        colorCode.maxLength = 7; // # + 6 hex chars
 
-        // Copy color code to clipboard on click
-        colorCode.addEventListener("click", () => {
-            navigator.clipboard.writeText(colorCode.textContent);
-            colorCode.style.background = "#c8e6c9";
-            setTimeout(() => (colorCode.style.background = "#f0f0f0"), 800);
-        });
+        // Helper to apply color everywhere
+        function applyColor(color) {
+            if (!/^#[0-9A-F]{6}$/i.test(color)) return; // only valid hex
+            colorInput.value = color;
+            colorCode.value = color;
 
-        // Apply color changes live
-        colorInput.addEventListener("input", () => {
-            const color = colorInput.value;
-            colorCode.textContent = color;
-
-            // Apply to CSS
             if (cssVar) document.body.style.setProperty(cssVar, color);
             if (applyFn) applyFn(color);
 
-            // Save to userTheme.themeData
+            // Save to localStorage
             savedThemeObj.themeData = savedThemeObj.themeData || {};
             savedThemeObj.themeData[cssVar] = color;
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
-
-            // Optional: also save separate key if needed
             if (storageKey) localStorage.setItem(storageKey, color);
+        }
+
+        // 🎨 When using color picker
+        colorInput.addEventListener("input", () => {
+            applyColor(colorInput.value);
         });
 
-        // Apply initial color
-        if (cssVar) document.body.style.setProperty(cssVar, storedColor);
-        if (applyFn) applyFn(storedColor);
+        // ⌨️ When typing/pasting hex code
+        colorCode.addEventListener("input", () => {
+            const val = colorCode.value.trim();
+            if (/^#[0-9A-F]{6}$/i.test(val)) {
+                applyColor(val);
+            }
+        });
+
+        // Initial apply
+        applyColor(storedColor);
 
         wrapper.appendChild(label);
         wrapper.appendChild(colorInput);

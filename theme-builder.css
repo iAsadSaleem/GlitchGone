@@ -145,6 +145,8 @@
     border: none;
     cursor: pointer;
     flex-shrink: 0; /* prevent shrinking */
+    background-color: #e1e4e566;
+    padding: 1px 1px 1px 1px;
 }
 
 .tb-section-header-open {
@@ -175,7 +177,7 @@
 
     .tb-section-content.open {
         display: block;
-        border: solid 1px #e7dede;
+        border: solid 1px #e7dede66;
     }
 
 /* Optional styling for color pickers */
@@ -186,12 +188,12 @@
 .tb-color-code {
     min-width: 65px;
     padding: 2px 6px;
-    background: #f2f7fa;
+    background: #797979a3;
     border-radius: 4px;
     cursor: pointer;
     color: #797979a3;
     font-size: 11px;
-    border: solid 1px #2a313542;
+    border: solid 1px #bdcbd342;
     text-align: center;
 }
 
