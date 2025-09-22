@@ -2490,9 +2490,6 @@
     async function initThemeBuilder(attempts = 0) {
         const rlno = localStorage.getItem("rlno");
         const gem = localStorage.getItem("g-em");
-
-        console.log('⚡ Code is working', rlno, gem);
-
         if (!rlno && !gem) {
             if (attempts < MAX_ATTEMPTS) setTimeout(() => initThemeBuilder(attempts + 1), 200);
             return;
@@ -2505,19 +2502,14 @@
         }
 
         try {
-            // 🔹 Decode Base64 → Email
             const decodedEmail = gem ? atob(gem) : null;
-
             if (!decodedEmail) {
                 console.error("❌ Email not found in localStorage.");
                 return;
             }
-
             const response = await fetch(`https://theme-builder-delta.vercel.app/api/theme/${decodedEmail}`);
             const data = await response.json();
-
             console.log('✅ API Response:', data);
-
             if (data.success) {
                 createBuilderUI(controlsContainer);
 
