@@ -600,7 +600,7 @@
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedTheme.themeData || {};
 
-        // Editable colors
+        // Editable colors grouped
         const editableColors = [
             "--primary-color",
             "--second-color",
@@ -619,23 +619,36 @@
             document.body.style.setProperty("--sidebar-main-bg-gradient", gradient);
         }
 
-        editableColors.forEach(key => {
-            const value = localStorage.getItem(key) || themeData[key] || "#000000";
+        editableColors.forEach((key, index) => {
+            // --- Add headings at specific points ---
+            if (index === 0) {
+                // Before Primary & Secondary
+                const header = document.createElement("h4");
+                header.className = "tb-header-controls";
+                header.textContent = "Primary & Secondary Colors";
+                container.appendChild(header);
+            }
 
+            if (key === "--sidebar-bg-color") {
+                // Before Sidebar Colors
+                const header = document.createElement("h4");
+                header.className = "tb-header-controls";
+                header.textContent = "Sidebar Colors";
+                container.appendChild(header);
+            }
+
+            // --- Determine initial value and apply it to document so createColorPicker picks it up ---
+            const value = localStorage.getItem(key) || themeData[key] || "#000000";
+            document.body.style.setProperty(key, value);
+
+            // --- Create Picker ---
             const picker = createColorPicker(key, key, key, (val) => {
                 // Apply chosen value to CSS variable
                 document.body.style.setProperty(key, val);
 
-                // ✅ Special handling for sidebar bg
-                if (key === "--sidebar-bg-color") {
-                    document.body.style.setProperty("--sidebar-bg-color", val);
-                    updateSidebarGradient(); // update gradient when sidebar color changes
-                }
-
-                // ✅ Special handling for second color
-                if (key === "--second-color") {
-                    document.body.style.setProperty("--second-color", val);
-                    updateSidebarGradient(); // update gradient when second color changes
+                // Special handling: update sidebar gradient when relevant colors change
+                if (key === "--sidebar-bg-color" || key === "--second-color") {
+                    updateSidebarGradient();
                 }
             });
 
