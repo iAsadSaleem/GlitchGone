@@ -2471,7 +2471,9 @@
                     },
                     "",
                     true
-                );
+                )
+
+            );
 
             contentWrapper.appendChild(
                 createSection('<i class="fa-solid fa-database"style="color:white;margin-right:6px;font-size:17px;"></i>Advance Settings', (section) => {
