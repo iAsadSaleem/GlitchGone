@@ -852,6 +852,10 @@
         const gradientWrapper = document.createElement("div");
         gradientWrapper.className = "tb-gradient-controls";
 
+        // === Load saved state ===
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        const themeData = savedThemeObj.themeData || {};
+
         // Color picker helper
         function makePicker(labelText, cssVar, fallback = "#007bff") {
             const wrapper = document.createElement("div");
@@ -861,43 +865,70 @@
             label.className = "tb-color-picker-label";
             label.textContent = labelText;
 
-            const input = document.createElement("input");
-            input.type = "color";
-            input.className = "tb-color-input";
-
+            // 1️⃣ Load initial color
             let initial =
                 themeData[cssVar] ||
                 getComputedStyle(document.body).getPropertyValue(cssVar).trim() ||
                 fallback;
 
-            if (!initial.startsWith("#")) initial = fallback;
-            input.value = initial;
+            if (!/^#[0-9A-F]{6}$/i.test(initial)) {
+                initial = fallback;
+            }
 
-            const code = document.createElement("span");
-            code.className = "tb-color-code";
-            code.textContent = initial;
+            // 🎨 Color input
+            const colorInput = document.createElement("input");
+            colorInput.type = "color";
+            colorInput.className = "tb-color-input";
+            colorInput.value = initial;
 
-            input.addEventListener("input", () => {
-                code.textContent = input.value;
+            // 🔹 Editable text input
+            const colorCode = document.createElement("input");
+            colorCode.type = "text";
+            colorCode.className = "tb-color-code";
+            colorCode.value = initial;
+            colorCode.maxLength = 7;
+
+            // ✅ Apply color function
+            function applyColor(color) {
+                if (!/^#[0-9A-F]{6}$/i.test(color)) return;
+
+                colorInput.value = color;
+                colorCode.value = color;
+
+                document.body.style.setProperty(cssVar, color);
+
+                // Save in localStorage
+                savedThemeObj.themeData = savedThemeObj.themeData || {};
+                savedThemeObj.themeData[cssVar] = color;
+                localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+
                 updateGradientPreview();
+            }
+
+            // Events
+            colorInput.addEventListener("input", () => applyColor(colorInput.value));
+            colorCode.addEventListener("input", () => {
+                const val = colorCode.value.trim();
+                if (/^#[0-9A-F]{6}$/i.test(val)) {
+                    applyColor(val);
+                }
             });
 
+            // Initial apply
+            applyColor(initial);
+
             wrapper.appendChild(label);
-            wrapper.appendChild(input);
-            wrapper.appendChild(code);
+            wrapper.appendChild(colorInput);
+            wrapper.appendChild(colorCode);
 
-            return { wrapper, input };
+            return { wrapper, input: colorInput, code: colorCode };
         }
-
-        // === Load saved state ===
-        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        const themeData = savedThemeObj.themeData || {};
 
         // === Create Inputs ===
         const startPicker = makePicker("Choose Start Color For Header", "--header-gradient-start", "#ff0000");
         const endPicker = makePicker("Choose End Color For Header", "--header-gradient-end", "#0000ff");
 
-        // Append only color pickers (no stop/angle UI now)
+        // Append only color pickers
         gradientWrapper.appendChild(startPicker.wrapper);
         gradientWrapper.appendChild(endPicker.wrapper);
 
@@ -919,7 +950,6 @@
             const start = startPicker.input.value;
             const end = endPicker.input.value;
 
-            // ✅ Hardcoded stop and angle
             const stop = 0;
             const angle = 90;
 
@@ -936,11 +966,6 @@
             headerEl.style.setProperty("background", "none", "important");
             headerEl.style.setProperty("background-image", "var(--header-main-bg-gradient)", "important");
         }
-
-        // === Event Listeners (only pickers) ===
-        [startPicker.input, endPicker.input].forEach((el) =>
-            el.addEventListener("input", updateGradientPreview)
-        );
 
         // Initial Preview
         updateGradientPreview();
