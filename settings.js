@@ -830,7 +830,10 @@
         // Defaults
         themeData[colorVar] = themeData[colorVar] || (isStart ? "#007bff" : "#00ff7f");
         themeData[otherColorVar] = themeData[otherColorVar] || (isStart ? "#00ff7f" : "#007bff");
-        themeData[targetCssVar] = themeData[targetCssVar] || `linear-gradient(90deg, ${themeData["--login-bg-start"]} 0%, ${themeData["--login-bg-end"]} 100%)`;
+
+        // Initialize gradient variable
+        const gradientVar = targetCssVar;
+        themeData[gradientVar] = `linear-gradient(90deg, ${themeData["--login-bg-start"]} 0%, ${themeData["--login-bg-end"]} 100%)`;
 
         const colorInput = document.createElement("input");
         colorInput.type = "color";
@@ -846,15 +849,21 @@
         function applyGradient(newColor) {
             themeData[colorVar] = newColor;
 
-            // Build the gradient from the latest start/end
-            const gradient = `linear-gradient(90deg, ${themeData["--login-bg-start"]} 0%, ${themeData["--login-bg-end"]} 100%)`;
-            themeData[targetCssVar] = gradient;
+            // Update gradient dynamically
+            const start = themeData["--login-bg-start"];
+            const end = themeData["--login-bg-end"];
+            const gradient = `linear-gradient(90deg, ${start} 0%, ${end} 100%)`;
 
-            // Update CSS variable
-            document.body.style.setProperty(targetCssVar, gradient);
+            themeData[gradientVar] = gradient;
 
-            // Save to localStorage
+            // Save to localStorage immediately
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+
+            // Update CSS
+            document.querySelectorAll(".hl_login").forEach(el => {
+                el.style.setProperty("--login-background-gradient-color", gradient);
+                el.style.background = gradient;
+            });
 
             // Update inputs
             colorInput.value = newColor;
@@ -2583,7 +2592,7 @@
                             // Update both themeData and savedTheme.themeData
                             themeData["--login-background-gradient-color"] = gradient;
                             savedTheme.themeData["--login-background-gradient-color"] = gradient;
-
+                            console.log('Here is background color', gradient);
                             // 4️⃣ Preserve lockedMenus safely
                             const lockedMenus = savedTheme.themeData?.["--lockedMenus"]
                                 ? JSON.parse(savedTheme.themeData["--lockedMenus"])
