@@ -823,42 +823,42 @@
         label.className = "tb-color-picker-label";
         wrapper.appendChild(label);
 
-        // Load current colors from themeData or defaults
+        // Load saved colors or defaults
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         savedThemeObj.themeData = savedThemeObj.themeData || {};
         const themeData = savedThemeObj.themeData;
 
-        let color = themeData[cssVar] || "#007bff";
-        let otherColor = themeData[otherCssVar] || "#00ff7f";
+        themeData[cssVar] = themeData[cssVar] || "#007bff";
+        themeData[otherCssVar] = themeData[otherCssVar] || "#00ff7f";
 
-        // 🎨 Color picker input
+        // Color input
         const colorInput = document.createElement("input");
         colorInput.type = "color";
-        colorInput.value = color;
-        colorInput.className = "tb-color-input";
+        colorInput.value = themeData[cssVar];
 
-        // ⌨️ Editable hex input
+        // Hex input
         const hexInput = document.createElement("input");
         hexInput.type = "text";
         hexInput.className = "tb-color-code";
-        hexInput.value = color;
+        hexInput.value = themeData[cssVar];
         hexInput.maxLength = 7;
 
         // Helper to apply gradient
         function applyGradient(newColor) {
-            color = newColor;
-            colorInput.value = color;
-            hexInput.value = color;
-
-            themeData[cssVar] = color;
+            // Update the correct variable
+            themeData[cssVar] = newColor;
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
 
-            const finalStart = cssVar === "--login-bg-start" ? color : otherColor;
-            const finalEnd = cssVar === "--login-bg-end" ? color : otherColor;
+            const start = themeData["--login-bg-start"];
+            const end = themeData["--login-bg-end"];
 
             document.querySelectorAll(targetSelector).forEach(el => {
-                el.style.background = `linear-gradient(90deg, ${finalStart} 0%, ${finalEnd} 100%)`;
+                el.style.background = `linear-gradient(90deg, ${start} 0%, ${end} 100%)`;
             });
+
+            // Update inputs
+            colorInput.value = themeData[cssVar];
+            hexInput.value = themeData[cssVar];
         }
 
         // Event listeners
@@ -869,9 +869,8 @@
         });
 
         // Initial apply
-        applyGradient(color);
+        applyGradient(themeData[cssVar]);
 
-        // Append to wrapper
         wrapper.appendChild(colorInput);
         wrapper.appendChild(hexInput);
 
@@ -2453,8 +2452,23 @@
                         header.textContent = "Background Gradient Color";
                         section.appendChild(header); // <-- append here, not contentWrapper
 
-                        section.appendChild(createLoginGradientSinglePicker("Login BG Gradient Start Color","--login-bg-start","--login-bg-end",".hl_login"));
-                        section.appendChild(createLoginGradientSinglePicker("Login BG Gradient End Color","--login-bg-end","--login-bg-start",".hl_login"));
+                        section.appendChild(
+                            createLoginGradientSinglePicker(
+                                "Login BG Gradient Start Color",
+                                "--login-bg-start",
+                                "--login-bg-end",
+                                ".hl_login"
+                            )
+                        );
+
+                        section.appendChild(
+                            createLoginGradientSinglePicker(
+                                "Login BG Gradient End Color",
+                                "--login-bg-end",
+                                "--login-bg-start",
+                                ".hl_login"
+                            )
+                        );
                         section.appendChild(createLoginColorPicker("Login Card BG Gradient", "--login-card-bg-gradient"));
                         section.appendChild(createLoginColorPicker("Login Link Text Color", "--login-link-text-color"));
                         section.appendChild(createLoginColorPicker("Login Button BG Gradient", "--login-button-bg-gradient"));
