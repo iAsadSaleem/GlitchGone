@@ -485,14 +485,14 @@ tb-apply-btn
     padding: 2px 1px 1px 1px;
 }
 .tb-number-fond-input {
-    padding: 13px;
+    padding: 14px;
     width: 70px;
-    height: 30px;
+    height: 28px;
     cursor: pointer;
     left: 68px;
     position: relative;
     border-radius: 10px;
-    font-size: 11px;
+    font-size: 10px;
     color: #a1a0a0;
     border: solid 1px #716c6c5c;
 }
@@ -509,14 +509,14 @@ tb-apply-btn
     border: solid 1px #716c6c5c;
 }
 .tb-number-radius-input {
-    padding: 13px;
+    padding: 12px;
     width: 70px;
-    height: 30px;
+    height: 28px;
     cursor: pointer;
     left: 64px;
     position: relative;
     border-radius: 10px;
-    font-size: 11px;
+    font-size: 10px;
     color: #a1a0a0;
     border: solid 1px #716c6c5c;
 }
