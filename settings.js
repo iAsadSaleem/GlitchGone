@@ -2461,7 +2461,7 @@
                         section.appendChild(startPicker);
                         section.appendChild(endPicker);
 
-                        // Other login color pickers (card bg, button, etc.) can remain as is
+                        // Other login color pickers
                         section.appendChild(createLoginColorPicker("Login Card BG Gradient", "--login-card-bg-gradient"));
                         section.appendChild(createLoginColorPicker("Login Link Text Color", "--login-link-text-color"));
                         section.appendChild(createLoginColorPicker("Login Button BG Gradient", "--login-button-bg-gradient"));
