@@ -2487,32 +2487,42 @@
     }
 
     // Initialize Theme Builder
-    function initThemeBuilder(attempts = 0) {
-        const rlno = localStorage.getItem('rlno');
-        const email = localStorage.getItem('userEmail');
+    async function initThemeBuilder(attempts = 0) {
+    const rlno = localStorage.getItem("rlno");
+    const email = localStorage.getItem("userEmail");
 
-        if (!rlno && !email) {
-            if (attempts < MAX_ATTEMPTS) setTimeout(() => initThemeBuilder(attempts + 1), 200);
-            return;
-        }
-
-        const controlsContainer = findControlsContainer();
-        if (!controlsContainer) {
-            if (attempts < MAX_ATTEMPTS) setTimeout(() => initThemeBuilder(attempts + 1), 200);
-            return;
-        }
-
-        createBuilderUI(controlsContainer);
-
-        const headerEl = document.querySelector('header.hl_header') || document.querySelector('header');
-        if (headerEl && !headerObserver) {
-            headerObserver = new MutationObserver(() => {
-                if (!document.getElementById('hl_header--themebuilder-icon'))
-                    setTimeout(() => initThemeBuilder(0), 200);
-            });
-            headerObserver.observe(headerEl, { childList: true, subtree: true });
-        }
+    if (!rlno && !email) {
+        if (attempts < MAX_ATTEMPTS) setTimeout(() => initThemeBuilder(attempts + 1), 200);
+        return;
     }
+
+    const controlsContainer = findControlsContainer();
+    if (!controlsContainer) {
+        if (attempts < MAX_ATTEMPTS) setTimeout(() => initThemeBuilder(attempts + 1), 200);
+        return;
+    }
+
+    try {
+        const response = await fetch(`https://theme-builder-delta.vercel.app/api/theme/${email}`);
+        const data = await response.json();
+
+        if (data.success) {
+            createBuilderUI(controlsContainer);
+            const headerEl = document.querySelector("header.hl_header") || document.querySelector("header");
+            if (headerEl && !headerObserver) {
+                headerObserver = new MutationObserver(() => {
+                    if (!document.getElementById("hl_header--themebuilder-icon")) {
+                        setTimeout(() => initThemeBuilder(0), 200);
+                    }
+                });
+                headerObserver.observe(headerEl, { childList: true, subtree: true });
+            }
+        } else {
+        }
+    } catch (err) {
+        console.error("❌ Error verifying user:", err);
+    }
+}
 
     document.addEventListener('DOMContentLoaded', () => setTimeout(() => initThemeBuilder(0), 50));
     setTimeout(() => initThemeBuilder(0), 50);
