@@ -2572,30 +2572,32 @@
                         try {
                             // 1️⃣ Collect current theme variables safely
                             const themeData = collectThemeVars() || {};
-                            // 1a️⃣ Ensure login gradient is built correctly
+
+                            // 2️⃣ Load saved theme first
+                            const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                            savedTheme.themeData = savedTheme.themeData || {};
+
+                            // 3️⃣ Ensure login gradient is built correctly
                             const gradient = `linear-gradient(90deg, ${themeData["--login-bg-start"] || "#007bff"} 0%, ${themeData["--login-bg-end"] || "#00ff7f"} 100%)`;
 
                             // Update both themeData and savedTheme.themeData
                             themeData["--login-background-gradient-color"] = gradient;
-                            savedTheme.themeData = savedTheme.themeData || {};
                             savedTheme.themeData["--login-background-gradient-color"] = gradient;
-                            // 2️⃣ Preserve existing saved theme
-                            const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
 
-                            // 3️⃣ Preserve lockedMenus safely
+                            // 4️⃣ Preserve lockedMenus safely
                             const lockedMenus = savedTheme.themeData?.["--lockedMenus"]
                                 ? JSON.parse(savedTheme.themeData["--lockedMenus"])
                                 : {};
                             themeData["--lockedMenus"] = JSON.stringify(lockedMenus);
 
-                            // 4️⃣ Collect menu customizations (title + icon)
+                            // 5️⃣ Collect menu customizations (title + icon)
                             const menuCustomizations = collectMenuCustomizations();
                             themeData["--menuCustomizations"] = JSON.stringify(menuCustomizations);
 
-                            // 5️⃣ Save to localStorage
+                            // 6️⃣ Save to localStorage
                             localStorage.setItem("userTheme", JSON.stringify({ ...savedTheme, themeData }));
 
-                            // 6️⃣ Prepare DB payload
+                            // 7️⃣ Prepare DB payload
                             const rlNo = localStorage.getItem("rlno") ? atob(localStorage.getItem("rlno")) : null;
                             const email = localStorage.getItem("userEmail") ? atob(localStorage.getItem("userEmail")) : null;
 
@@ -2608,7 +2610,7 @@
                                 updatedAt: new Date().toISOString(),
                             };
 
-                            // 7️⃣ Send to API (non-blocking, errors logged)
+                            // 8️⃣ Send to API (non-blocking, errors logged)
                             fetch("https://theme-builder-delta.vercel.app/api/theme", {
                                 method: "POST",
                                 headers: { "Content-Type": "application/json" },
@@ -2621,7 +2623,7 @@
                                 })
                                 .catch(err => console.error("[ThemeBuilder] Network error:", err));
 
-                            // 8️⃣ Reload page to apply changes
+                            // 9️⃣ Reload page to apply changes
                             location.reload();
 
                         } catch (err) {
