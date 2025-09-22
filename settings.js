@@ -1345,7 +1345,7 @@
         wrapper.appendChild(controls);
 
         controls.appendChild(makePicker("Scrollbar Color", "scroll-color", "#344391", "--scroll-color"));
-        controls.appendChild(makeNumberInput("Scrollbar Width (px)", "--scroll-width", "7px", 2, 30));
+        //controls.appendChild(makeNumberInput("Scrollbar Width (px)", "--scroll-width", "7px", 2, 30));
 
         Object.keys(themeData).forEach(k => {
             try { document.body.style.setProperty(k, themeData[k]); } catch (e) { }
