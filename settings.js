@@ -291,8 +291,12 @@
     // 🌟 Mapping of CSS vars -> Human-friendly labels
     const cssVarLabels = {
         "--primary-color": "Choose Primary Color",
-        "--second-color": "Choose Secondary Color",  // ✅ replaced header-bg-color
-        "--sidebar-bg-color": "Choose Sidebar BG Color",
+        "--second-color": "Choose Secondary Color",
+
+        // Sidebar gradient
+        "--sidebar-bg-color": "Choose Sidebar BG Start Color",
+        "--sidebar-bg-end-color": "Choose Sidebar BG End Color",
+
         "--sidebar-menu-bg": "Choose Sidebar Menu BG Color",
         "--sidebar-menu-hover-bg": "Choose Menu Hover Color",
         "--sidebar-menu-color": "Choose SideBar Text Color",
@@ -605,6 +609,7 @@
             "--primary-color",
             "--second-color",
             "--sidebar-bg-color",
+            "--sidebar-bg-end-color", // new: end color for sidebar gradient
             "--sidebar-menu-bg",
             "--sidebar-menu-hover-bg",
             "--sidebar-menu-color",
@@ -612,10 +617,10 @@
         ];
 
         function updateSidebarGradient() {
-            const sidebarColor = getComputedStyle(document.body).getPropertyValue("--sidebar-bg-color").trim() || "#000000";
-            const secondColor = getComputedStyle(document.body).getPropertyValue("--second-color").trim() || "#000000";
+            const sidebarStart = getComputedStyle(document.body).getPropertyValue("--sidebar-bg-color").trim() || "#000000";
+            const sidebarEnd = getComputedStyle(document.body).getPropertyValue("--sidebar-bg-end-color").trim() || sidebarStart;
 
-            const gradient = `linear-gradient(to bottom, ${sidebarColor}, ${secondColor})`;
+            const gradient = `linear-gradient(to bottom, ${sidebarStart}, ${sidebarEnd})`;
             document.body.style.setProperty("--sidebar-main-bg-gradient", gradient);
         }
 
@@ -642,12 +647,14 @@
             document.body.style.setProperty(key, value);
 
             // --- Create Picker ---
-            const picker = createColorPicker(key, key, key, (val) => {
-                // Apply chosen value to CSS variable
+            let label = key;
+            if (key === "--sidebar-bg-color") label = "Choose Sidebar BG Start Color";
+            if (key === "--sidebar-bg-end-color") label = "Choose Sidebar BG End Color";
+
+            const picker = createColorPicker(key, label, key, (val) => {
                 document.body.style.setProperty(key, val);
 
-                // Special handling: update sidebar gradient when relevant colors change
-                if (key === "--sidebar-bg-color" || key === "--second-color") {
+                if (key === "--sidebar-bg-color" || key === "--sidebar-bg-end-color") {
                     updateSidebarGradient();
                 }
             });
