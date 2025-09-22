@@ -761,40 +761,51 @@
             || getComputedStyle(document.body).getPropertyValue(cssVar).trim()
             || "#007bff"; // fallback
 
-        // ✅ Ensure it's a valid hex color (not a url(...))
-        let storedColor = /^#([0-9A-Fa-f]{3}){1,2}$/.test(storedValue) ? storedValue : "#007bff";
+        // ✅ Ensure it's a valid hex color
+        let storedColor = /^#([0-9A-Fa-f]{3}){1,2}$/i.test(storedValue) ? storedValue : "#007bff";
 
+        // 🎨 Color picker input
         const colorInput = document.createElement("input");
         colorInput.type = "color";
         colorInput.value = storedColor;
         colorInput.className = "tb-color-input";
 
-        const colorCode = document.createElement("span");
+        // 📝 Editable hex input
+        const colorCode = document.createElement("input");
+        colorCode.type = "text";
         colorCode.className = "tb-color-code";
-        colorCode.textContent = storedColor;
+        colorCode.value = storedColor;
+        colorCode.maxLength = 7; // # + 6 hex chars
 
-        // Copy to clipboard
-        colorCode.addEventListener("click", () => {
-            navigator.clipboard.writeText(colorCode.textContent);
-            colorCode.style.background = "#c8e6c9";
-            setTimeout(() => (colorCode.style.background = "#f0f0f0"), 800);
-        });
-
-        // Apply changes
-        colorInput.addEventListener("input", () => {
-            const color = colorInput.value;
-            colorCode.textContent = color;
+        // Helper to apply color
+        function applyColor(color) {
+            if (!/^#[0-9A-F]{6}$/i.test(color)) return; // only accept full hex
+            colorInput.value = color;
+            colorCode.value = color;
 
             document.body.style.setProperty(cssVar, color);
 
-            const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-            savedThemeObj.themeData = savedThemeObj.themeData || {};
-            savedThemeObj.themeData[cssVar] = color; // always hex
-            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+            savedTheme.themeData = savedTheme.themeData || {};
+            savedTheme.themeData[cssVar] = color;
+            localStorage.setItem("userTheme", JSON.stringify(savedTheme));
+        }
+
+        // 🎨 Color picker change
+        colorInput.addEventListener("input", () => {
+            applyColor(colorInput.value);
         });
 
-        // Apply initial color
-        document.body.style.setProperty(cssVar, storedColor);
+        // ⌨️ Manual hex typing
+        colorCode.addEventListener("input", () => {
+            const val = colorCode.value.trim();
+            if (/^#[0-9A-F]{6}$/i.test(val)) {
+                applyColor(val);
+            }
+        });
+
+        // Initial apply
+        applyColor(storedColor);
 
         wrapper.appendChild(label);
         wrapper.appendChild(colorInput);
@@ -802,6 +813,7 @@
 
         return wrapper;
     }
+
     function createLoginLogoInput(labelText, cssVar) {
         const wrapper = document.createElement("div");
         wrapper.className = "tb-color-picker-wrapper"; // you can reuse wrapper style
