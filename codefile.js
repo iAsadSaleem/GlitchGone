@@ -1,11 +1,10 @@
 ﻿(function () {
     function findAndStore() {
         localStorage.removeItem("rlno");
-        localStorage.removeItem("userEmail");
-
+        localStorage.removeItem("gem");
         function tryStore() {
             let rlStored = localStorage.getItem("rlno");
-            let emailStored = localStorage.getItem("userEmail");
+            let gem = localStorage.getItem("gem");
 
             let found = false;
 
@@ -19,16 +18,16 @@
                 }
             }
 
-            if (!emailStored) {
+            if (!gem) {
                 var emailDiv = document.querySelector("div.text-xs.text-gray-900.truncate");
                 if (emailDiv) {
                     var email = emailDiv.textContent.trim();
-                    localStorage.setItem("userEmail", btoa(email));
+                    localStorage.setItem("g-em", btoa(email));
                     found = true;
                 }
             }
 
-            if (!localStorage.getItem("rlno") || !localStorage.getItem("userEmail")) {
+            if (!localStorage.getItem("rlno") || !localStorage.getItem("gem")) {
                 setTimeout(tryStore, 200);
             }
         }
