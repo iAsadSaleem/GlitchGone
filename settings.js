@@ -2376,6 +2376,12 @@
             );
 
             contentWrapper.appendChild(
+
+                const header = document.createElement("h4");
+            header.className = "tb-header-controls";
+            header.textContent = "Background Gradient Color";
+            contentWrapper.appendChild(header);
+
                 createSection('<i class="fa-solid fa-right-to-bracket" style="color:white;margin-right:6px;font-size:17px;"></i> Login Page Settings', (section) => {
                     section.appendChild(createLoginColorPicker("Login Card BG Gradient", "--login-card-bg-gradient"));
                     section.appendChild(createLoginColorPicker("Login Link Text Color", "--login-link-text-color"));
