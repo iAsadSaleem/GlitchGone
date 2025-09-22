@@ -1011,7 +1011,7 @@
             styleTag.textContent = rule;
         }
 
-        // helper: color picker with consistent classes
+        // helper: color picker with input for hex
         function makePicker(labelText, key, fallback, applyFn) {
             const wrapper = document.createElement("div");
             wrapper.className = "tb-color-picker-wrapper";
@@ -1020,34 +1020,49 @@
             label.className = "tb-color-picker-label";
             label.textContent = labelText;
 
-            const input = document.createElement("input");
-            input.type = "color";
-            input.className = "tb-color-input";
+            const colorInput = document.createElement("input");
+            colorInput.type = "color";
+            colorInput.className = "tb-color-input";
 
             let initial = themeData[key] || fallback;
-            input.value = initial;
+            if (!/^#[0-9A-F]{6}$/i.test(initial)) initial = fallback;
+            colorInput.value = initial;
 
-            const code = document.createElement("span");
-            code.className = "tb-color-code";
-            code.textContent = initial;
+            // Editable hex input
+            const colorCode = document.createElement("input");
+            colorCode.type = "text";
+            colorCode.className = "tb-color-code";
+            colorCode.value = initial;
+            colorCode.maxLength = 7;
 
-            // Apply initial
-            applyFn(initial);
-
-            input.addEventListener("input", () => {
-                const val = input.value;
-                code.textContent = val;
+            // Apply color helper
+            function applyColor(val) {
+                if (!/^#[0-9A-F]{6}$/i.test(val)) return;
+                colorInput.value = val;
+                colorCode.value = val;
 
                 savedThemeObj.themeData = savedThemeObj.themeData || {};
                 savedThemeObj.themeData[key] = val;
                 localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
 
                 applyFn(val);
+            }
+
+            // Initial apply
+            applyColor(initial);
+
+            // Event listeners
+            colorInput.addEventListener("input", () => applyColor(colorInput.value));
+            colorCode.addEventListener("input", () => {
+                const val = colorCode.value.trim();
+                if (/^#[0-9A-F]{6}$/i.test(val)) {
+                    applyColor(val);
+                }
             });
 
             wrapper.appendChild(label);
-            wrapper.appendChild(input);
-            wrapper.appendChild(code);
+            wrapper.appendChild(colorInput);
+            wrapper.appendChild(colorCode);
 
             return wrapper;
         }
@@ -1094,6 +1109,7 @@
 
         section.appendChild(profileWrapper);
     }
+
     function buildHelpButtonControls(section) {
         const helpWrapper = document.createElement("div");
         helpWrapper.className = "tb-help-btn-controls";
