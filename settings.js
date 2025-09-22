@@ -891,15 +891,15 @@
         const end = getComputedStyle(document.body).getPropertyValue("--login-bg-end").trim() || "#007bff";
         const gradient = `linear-gradient(90deg, ${start} 0%, ${end} 100%)`;
 
-        // 1️⃣ Set the gradient CSS variable on :root (documentElement)
+        // ✅ Set globally on :root so it's picked up by Apply button
         document.documentElement.style.setProperty("--login-background-gradient-color", gradient);
 
-        // 2️⃣ Update .hl_login elements visually
+        // Update .hl_login elements visually
         document.querySelectorAll(".hl_login").forEach(el => {
             el.style.background = gradient;
         });
 
-        // 3️⃣ Update localStorage immediately
+        // Save in localStorage
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         savedTheme.themeData = savedTheme.themeData || {};
         savedTheme.themeData["--login-bg-start"] = start;
