@@ -186,16 +186,25 @@
 }
 
 .tb-color-code {
-    min-width: 65px;
+    width: 70px; /* fixed width instead of auto-expanding */
+    height: 24px; /* consistent with .tb-color-input */
     padding: 2px 6px;
-    background: #797979a3;
     border-radius: 4px;
-    cursor: pointer;
-    color: #797979a3;
-    font-size: 11px;
-    border: solid 1px #bdcbd342;
+    border: 1px solid #bdcbd342;
+    background: #2c2c2c; /* darker background */
+    color: #ffffff; /* visible text */
+    font-size: 12px;
+    font-family: monospace; /* hex code looks cleaner */
     text-align: center;
+    outline: none;
+    cursor: text;
 }
+
+    /* On focus highlight */
+    .tb-color-code:focus {
+        border-color: #4cafef;
+        background: #3a3a3a;
+    }
 
 .tb-color-code.copied {
   background: #c8e6c9;
