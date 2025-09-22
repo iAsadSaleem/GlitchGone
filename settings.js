@@ -814,7 +814,8 @@
         return wrapper;
     }
 
-    function createLoginGradientPicker(labelText, colorVar, otherColorVar, targetCssVar, isStart) {
+    // Function to create a simple color picker for login gradient
+    function createLoginGradientPicker(labelText, cssVar, initialColor, onChangeCallback) {
         const wrapper = document.createElement("div");
         wrapper.className = "tb-color-picker-wrapper";
 
@@ -823,85 +824,49 @@
         label.className = "tb-color-picker-label";
         wrapper.appendChild(label);
 
-        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        savedThemeObj.themeData = savedThemeObj.themeData || {};
-        const themeData = savedThemeObj.themeData;
-
-        // Defaults
-        themeData[colorVar] = themeData[colorVar] || (isStart ? "#007bff" : "#00ff7f");
-        themeData[otherColorVar] = themeData[otherColorVar] || (isStart ? "#00ff7f" : "#007bff");
-
-        // Initialize gradient variable
-        const gradientVar = targetCssVar;
-        themeData[gradientVar] = `linear-gradient(90deg, ${themeData["--login-bg-start"]} 0%, ${themeData["--login-bg-end"]} 100%)`;
-
         const colorInput = document.createElement("input");
         colorInput.type = "color";
-        colorInput.value = themeData[colorVar];
+        colorInput.value = initialColor || "#007bff";
         colorInput.className = "tb-color-input";
 
         const hexInput = document.createElement("input");
         hexInput.type = "text";
+        hexInput.value = initialColor || "#007bff";
         hexInput.className = "tb-color-code";
-        hexInput.value = themeData[colorVar];
         hexInput.maxLength = 7;
 
-        function applyGradient(newColor) {
-            themeData[colorVar] = newColor;
-
-            // Update gradient dynamically
-            const start = themeData["--login-bg-start"];
-            const end = themeData["--login-bg-end"];
-            const gradient = `linear-gradient(90deg, ${start} 0%, ${end} 100%)`;
-
-            themeData[gradientVar] = gradient;
-
-            // Save to localStorage immediately
-            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
-
-            // Update CSS
-            document.querySelectorAll(".hl_login").forEach(el => {
-                el.style.setProperty("--login-background-gradient-color", gradient);
-                el.style.background = gradient;
-            });
-
-            // Update inputs
+        function handleColorChange(newColor) {
             colorInput.value = newColor;
             hexInput.value = newColor;
+
+            if (onChangeCallback) onChangeCallback(newColor);
         }
 
-        colorInput.addEventListener("input", () => applyGradient(colorInput.value));
+        colorInput.addEventListener("input", () => handleColorChange(colorInput.value));
         hexInput.addEventListener("input", () => {
             const val = hexInput.value.trim();
-            if (/^#[0-9A-F]{6}$/i.test(val)) applyGradient(val);
+            if (/^#[0-9A-F]{6}$/i.test(val)) handleColorChange(val);
         });
-
-        // Initial apply
-        applyGradient(themeData[colorVar]);
 
         wrapper.appendChild(colorInput);
         wrapper.appendChild(hexInput);
-
         return wrapper;
     }
 
-
-    function updateLoginGradient() {
+    // Function to handle updates and save directly to localStorage
+    function saveLoginGradient(startColor, endColor) {
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         savedTheme.themeData = savedTheme.themeData || {};
 
-        const start = document.querySelector("#login-bg-start")?.value || "#007bff";
-        const end = document.querySelector("#login-bg-end")?.value || "#007bff";
-        const gradient = `linear-gradient(90deg, ${start} 0%, ${end} 100%)`;
+        // Save start & end colors
+        savedTheme.themeData["--login-bg-start"] = startColor;
+        savedTheme.themeData["--login-bg-end"] = endColor;
 
-        // Save values directly into themeData
-        savedTheme.themeData["--login-bg-start"] = start;
-        savedTheme.themeData["--login-bg-end"] = end;
-        savedTheme.themeData["--login-background-gradient-color"] = gradient;
+        // Compute gradient
+        savedTheme.themeData["--login-background-gradient-color"] = `linear-gradient(90deg, ${startColor} 0%, ${endColor} 100%)`;
 
+        // Save to localStorage immediately
         localStorage.setItem("userTheme", JSON.stringify(savedTheme));
-
-        // ⚠️ No need to update document.body for visual preview
     }
 
     function createLoginLogoInput(labelText, cssVar) {
@@ -2471,29 +2436,32 @@
                 createSection(
                     '<i class="fa-solid fa-right-to-bracket" style="color:white;margin-right:6px;font-size:17px;"></i> Login Page Settings',
                     (section) => {
-                        // Append header INSIDE the section
                         const header = document.createElement("h4");
                         header.className = "tb-header-controls";
                         header.textContent = "Background Gradient Color";
-                        section.appendChild(header); // <-- append here, not contentWrapper
+                        section.appendChild(header);
 
-                        const startPicker = createColorPicker(
-                            "Login BG Start",
-                            null,
-                            "--login-bg-start",
-                            updateLoginGradient
-                        );
+                        // Get saved values from localStorage
+                        const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                        const themeData = savedTheme.themeData || {};
+                        const startColor = themeData["--login-bg-start"] || "#007bff";
+                        const endColor = themeData["--login-bg-end"] || "#00ff7f";
 
-                        const endPicker = createColorPicker(
-                            "Login BG End",
-                            null,
-                            "--login-bg-end",
-                            updateLoginGradient
-                        );
+                        // Create pickers
+                        const startPicker = createLoginGradientPicker("Login BG Start", "--login-bg-start", startColor, (val) => {
+                            const currentEnd = themeData["--login-bg-end"] || endColor;
+                            saveLoginGradient(val, currentEnd);
+                        });
+
+                        const endPicker = createLoginGradientPicker("Login BG End", "--login-bg-end", endColor, (val) => {
+                            const currentStart = themeData["--login-bg-start"] || startColor;
+                            saveLoginGradient(currentStart, val);
+                        });
+
                         section.appendChild(startPicker);
                         section.appendChild(endPicker);
 
-
+                        // Other login color pickers (card bg, button, etc.) can remain as is
                         section.appendChild(createLoginColorPicker("Login Card BG Gradient", "--login-card-bg-gradient"));
                         section.appendChild(createLoginColorPicker("Login Link Text Color", "--login-link-text-color"));
                         section.appendChild(createLoginColorPicker("Login Button BG Gradient", "--login-button-bg-gradient"));
@@ -2503,9 +2471,7 @@
                     },
                     "",
                     true
-                )
-
-            );
+                );
 
             contentWrapper.appendChild(
                 createSection('<i class="fa-solid fa-database"style="color:white;margin-right:6px;font-size:17px;"></i>Advance Settings', (section) => {
