@@ -140,7 +140,7 @@
 
 /* Color input */
 .tb-color-input {
-    width: 40px;
+    width: 30px;
     height: 30px;
     border: none;
     cursor: pointer;
@@ -186,15 +186,15 @@
 }
 
 .tb-color-code {
-    width: 70px; /* fixed width instead of auto-expanding */
-    height: 24px; /* consistent with .tb-color-input */
+    width: 70px;
+    height: 24px;
     padding: 2px 6px;
     border-radius: 4px;
     border: 1px solid #bdcbd342;
-    background: #2c2c2c; /* darker background */
-    color: #ffffff; /* visible text */
+    background: #ffffff;
+    color: #898989;
     font-size: 12px;
-    font-family: monospace; /* hex code looks cleaner */
+    font-family: monospace;
     text-align: center;
     outline: none;
     cursor: text;

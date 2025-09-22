@@ -1583,19 +1583,16 @@
     function addBackgroundGradientSettings(container) {
         if (document.getElementById("tb-bg-gradient-settings")) return;
 
-        // === Wrapper ===
         const wrapper = document.createElement("div");
         wrapper.className = "tb-bg-gradient-settings";
         wrapper.id = "tb-bg-gradient-settings";
         wrapper.style.marginTop = "16px";
 
-        // === Title ===
         const title = document.createElement("h4");
         title.className = "tb-section-background-title";
         title.innerText = "Background Color";
         wrapper.appendChild(title);
 
-        // === Saved Theme Data ===
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         savedThemeObj.themeData = savedThemeObj.themeData || {};
         const themeData = savedThemeObj.themeData;
@@ -1606,12 +1603,10 @@
             document.body.style.setProperty(key, value);
         }
 
-        // === Gradient Controls ===
         const gradientControls = document.createElement("div");
         gradientControls.className = "tb-gradient-controls";
         wrapper.appendChild(gradientControls);
 
-        // Helper to make color picker
         function makePicker(labelText, cssVar, fallback) {
             const wrapperDiv = document.createElement("div");
             wrapperDiv.className = "tb-color-picker-wrapper";
@@ -1620,42 +1615,50 @@
             label.className = "tb-color-picker-label";
             label.textContent = labelText;
 
-            const input = document.createElement("input");
-            input.type = "color";
-            input.className = "tb-color-input";
+            const colorInput = document.createElement("input");
+            colorInput.type = "color";
+            colorInput.className = "tb-color-input";
+
+            const hexInput = document.createElement("input");
+            hexInput.type = "text";
+            hexInput.className = "tb-color-code";
+            hexInput.maxLength = 7;
 
             let initial = (themeData[cssVar] || getComputedStyle(document.body).getPropertyValue(cssVar) || fallback).trim();
             if (!/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(initial)) initial = fallback;
-            input.value = initial;
 
-            const code = document.createElement("span");
-            code.className = "tb-color-code";
-            code.textContent = initial;
+            colorInput.value = initial;
+            hexInput.value = initial;
 
-            input.addEventListener("input", () => {
-                const val = input.value;
-                code.textContent = val;
+            function applyValue(val) {
+                if (!/^#[0-9A-F]{6}$/i.test(val)) return;
                 saveVar(cssVar, val);
+                colorInput.value = val;
+                hexInput.value = val;
                 updateGradient();
+            }
+
+            colorInput.addEventListener("input", () => applyValue(colorInput.value));
+            hexInput.addEventListener("input", () => {
+                const val = hexInput.value.trim();
+                if (/^#[0-9A-F]{6}$/i.test(val)) applyValue(val);
             });
 
             wrapperDiv.appendChild(label);
-            wrapperDiv.appendChild(input);
-            wrapperDiv.appendChild(code);
+            wrapperDiv.appendChild(colorInput);
+            wrapperDiv.appendChild(hexInput);
+
             return wrapperDiv;
         }
 
-        // Create start & end pickers
         gradientControls.appendChild(makePicker("Background Start Color", "--bg-gradient-start", "#f9fafb"));
         gradientControls.appendChild(makePicker("Background End Color", "--bg-gradient-end", "#e5e7eb"));
 
-        // === Function to update gradient ===
         function updateGradient() {
             const start = themeData["--bg-gradient-start"] || "#f9fafb";
             const end = themeData["--bg-gradient-end"] || "#e5e7eb";
             const gradient = `linear-gradient(90deg, ${start} 0%, ${end} 100%)`;
 
-            // apply to .bg-gray-50 and .bg-gray-100
             const styleId = "tb-bg-gradient-style";
             let styleTag = document.getElementById(styleId);
             if (!styleTag) {
@@ -1664,18 +1667,18 @@
                 document.head.appendChild(styleTag);
             }
             styleTag.innerHTML = `
-            .bg-gray-50 { background: ${gradient} !important; }
-            .bg-gray-100 { background: ${gradient} !important; }
-        `;
+          .bg-gray-50 { background: ${gradient} !important; }
+          .bg-gray-100 { background: ${gradient} !important; }
+      `;
 
             saveVar("--bg-gradient", gradient);
         }
 
-        // Initial apply
         updateGradient();
 
         container.appendChild(wrapper);
     }
+
     function buildHeadingSettings(container) {
         // Wrapper
         const wrapper = document.createElement("div");
