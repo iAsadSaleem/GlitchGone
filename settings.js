@@ -885,15 +885,21 @@
         return wrapper;
     }
 
+
     function updateLoginGradient() {
         const start = getComputedStyle(document.body).getPropertyValue("--login-bg-start").trim() || "#007bff";
-        const end = getComputedStyle(document.body).getPropertyValue("--login-bg-end").trim() || "#00ff7f";
+        const end = getComputedStyle(document.body).getPropertyValue("--login-bg-end").trim() || "#007bff";
         const gradient = `linear-gradient(90deg, ${start} 0%, ${end} 100%)`;
 
-        document.body.style.setProperty("--login-background-gradient-color", gradient);
-        document.querySelectorAll(".hl_login").forEach(el => el.style.background = gradient);
+        // 1️⃣ Set the gradient CSS variable on :root (documentElement)
+        document.documentElement.style.setProperty("--login-background-gradient-color", gradient);
 
-        // Also update localStorage
+        // 2️⃣ Update .hl_login elements visually
+        document.querySelectorAll(".hl_login").forEach(el => {
+            el.style.background = gradient;
+        });
+
+        // 3️⃣ Update localStorage immediately
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         savedTheme.themeData = savedTheme.themeData || {};
         savedTheme.themeData["--login-bg-start"] = start;
@@ -2584,12 +2590,6 @@
                             const themeData = collectThemeVars() || {};
                             const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
                             savedTheme.themeData = savedTheme.themeData || {};
-
-                            // Ensure the gradient is included
-                            const loginGradient = savedTheme.themeData["--login-background-gradient-color"];
-                            if (loginGradient) {
-                                savedTheme.themeData["--login-background-gradient-color"] = loginGradient;
-                            }
 
                             // Merge collected vars
                             Object.keys(themeData).forEach(key => {
