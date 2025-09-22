@@ -856,8 +856,33 @@
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedThemeObj.themeData || {};
 
-        // Color picker helper
         const headerEl = document.querySelector(".hl_header");
+
+        // === Update Gradient Preview ===
+        function updateGradientPreview() {
+            if (!headerEl || !startPicker || !endPicker) return;
+
+            const start = startPicker.input.value;
+            const end = endPicker.input.value;
+
+            const stop = 0;
+            const angle = 90;
+
+            const gradient = `linear-gradient(${angle}deg, ${start} ${stop}%, ${end} 100%)`;
+
+            // Update CSS vars
+            document.body.style.setProperty("--header-gradient-start", start);
+            document.body.style.setProperty("--header-gradient-end", end);
+            document.body.style.setProperty("--header-gradient-stop", stop + "%");
+            document.body.style.setProperty("--header-gradient-angle", angle + "deg");
+            document.body.style.setProperty("--header-main-bg-gradient", gradient);
+
+            // Apply live
+            headerEl.style.setProperty("background", "none", "important");
+            headerEl.style.setProperty("background-image", "var(--header-main-bg-gradient)", "important");
+        }
+
+        // Color picker helper
         function makePicker(labelText, cssVar, fallback = "#007bff") {
             const wrapper = document.createElement("div");
             wrapper.className = "tb-color-picker-wrapper";
@@ -915,8 +940,8 @@
                 }
             });
 
-            // Initial apply
-            applyColor(initial);
+            // Initial apply AFTER both pickers exist
+            setTimeout(() => applyColor(initial), 0);
 
             wrapper.appendChild(label);
             wrapper.appendChild(colorInput);
@@ -941,31 +966,6 @@
         gradientWrapper.appendChild(instruction);
 
         section.appendChild(gradientWrapper);
-
-        // === Update Gradient Preview ===
-
-        function updateGradientPreview() {
-            if (!headerEl) return;
-
-            const start = startPicker.input.value;
-            const end = endPicker.input.value;
-
-            const stop = 0;
-            const angle = 90;
-
-            const gradient = `linear-gradient(${angle}deg, ${start} ${stop}%, ${end} 100%)`;
-
-            // Update CSS vars
-            document.body.style.setProperty("--header-gradient-start", start);
-            document.body.style.setProperty("--header-gradient-end", end);
-            document.body.style.setProperty("--header-gradient-stop", stop + "%");
-            document.body.style.setProperty("--header-gradient-angle", angle + "deg");
-            document.body.style.setProperty("--header-main-bg-gradient", gradient);
-
-            // Apply live
-            headerEl.style.setProperty("background", "none", "important");
-            headerEl.style.setProperty("background-image", "var(--header-main-bg-gradient)", "important");
-        }
 
         // Initial Preview
         updateGradientPreview();
