@@ -830,27 +830,27 @@
         // Defaults
         themeData[colorVar] = themeData[colorVar] || (isStart ? "#007bff" : "#00ff7f");
         themeData[otherColorVar] = themeData[otherColorVar] || (isStart ? "#00ff7f" : "#007bff");
-        themeData[targetCssVar] = themeData[targetCssVar] || `linear-gradient(90deg, ${themeData[colorVar]} 0%, ${themeData[otherColorVar]} 100%)`;
+        themeData[targetCssVar] = themeData[targetCssVar] || `linear-gradient(90deg, ${themeData["--login-bg-start"]} 0%, ${themeData["--login-bg-end"]} 100%)`;
 
-        // Color input
         const colorInput = document.createElement("input");
         colorInput.type = "color";
         colorInput.value = themeData[colorVar];
         colorInput.className = "tb-color-input";
 
-        // Hex input
         const hexInput = document.createElement("input");
         hexInput.type = "text";
         hexInput.className = "tb-color-code";
         hexInput.value = themeData[colorVar];
         hexInput.maxLength = 7;
 
-        // Update gradient
         function applyGradient(newColor) {
             themeData[colorVar] = newColor;
 
+            // Build the gradient from the latest start/end
             const gradient = `linear-gradient(90deg, ${themeData["--login-bg-start"]} 0%, ${themeData["--login-bg-end"]} 100%)`;
             themeData[targetCssVar] = gradient;
+
+            // Update CSS variable
             document.body.style.setProperty(targetCssVar, gradient);
 
             // Save to localStorage
