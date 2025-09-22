@@ -2585,6 +2585,12 @@
                             const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
                             savedTheme.themeData = savedTheme.themeData || {};
 
+                            // Ensure the gradient is included
+                            const loginGradient = savedTheme.themeData["--login-background-gradient-color"];
+                            if (loginGradient) {
+                                savedTheme.themeData["--login-background-gradient-color"] = loginGradient;
+                            }
+
                             // Merge collected vars
                             Object.keys(themeData).forEach(key => {
                                 savedTheme.themeData[key] = themeData[key];
