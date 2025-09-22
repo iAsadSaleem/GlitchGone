@@ -857,6 +857,7 @@
         const themeData = savedThemeObj.themeData || {};
 
         // Color picker helper
+        const headerEl = document.querySelector(".hl_header");
         function makePicker(labelText, cssVar, fallback = "#007bff") {
             const wrapper = document.createElement("div");
             wrapper.className = "tb-color-picker-wrapper";
@@ -942,7 +943,6 @@
         section.appendChild(gradientWrapper);
 
         // === Update Gradient Preview ===
-        const headerEl = document.querySelector(".hl_header");
 
         function updateGradientPreview() {
             if (!headerEl) return;
