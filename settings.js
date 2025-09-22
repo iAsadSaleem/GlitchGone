@@ -1204,38 +1204,32 @@
     function addScrollbarSettings(container) {
         if (document.getElementById("tb-scrollbar-settings")) return; // prevent duplicate
 
-        // === Wrapper ===
         const wrapper = document.createElement("div");
         wrapper.className = "tb-scrollbar-settings";
         wrapper.id = "tb-scrollbar-settings";
         wrapper.style.marginTop = "16px";
 
-        // === Title ===
         const title = document.createElement("h4");
         title.className = "tb-section-scroll-title";
         title.innerText = "Scrollbar Settings";
         wrapper.appendChild(title);
 
-        // === Saved Theme Data ===
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         savedThemeObj.themeData = savedThemeObj.themeData || {};
         const themeData = savedThemeObj.themeData;
 
-        // helper: normalize storage key
         function storageKeyFor(key, cssVar) {
             if (cssVar) return cssVar;
             if (key && key.startsWith("--")) return key;
             return `--${key}`;
         }
 
-        // save helper
         function saveVar(key, value) {
             themeData[key] = value;
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
             document.body.style.setProperty(key, value);
         }
 
-        // === Color Picker for Scrollbar ===
         function makePicker(labelText, key, fallback, cssVar, transparent20 = false) {
             const wrapperDiv = document.createElement("div");
             wrapperDiv.className = "tb-color-picker-wrapper";
@@ -1263,19 +1257,25 @@
 
             function applyValue(val) {
                 if (!/^#[0-9A-F]{6}$/i.test(val)) return;
+
                 let finalVal = val;
                 if (transparent20) {
-                    // Convert HEX to RGBA with 0.2 alpha
                     const bigint = parseInt(val.slice(1), 16);
                     const r = (bigint >> 16) & 255;
                     const g = (bigint >> 8) & 255;
                     const b = bigint & 255;
                     finalVal = `rgba(${r}, ${g}, ${b}, 0.2)`;
                 }
+
+                // Apply to CSS variable
                 document.body.style.setProperty(skey, finalVal);
                 saveVar(skey, finalVal);
+
+                // Sync both inputs
+                colorInput.value = val;
                 colorCode.value = val;
 
+                // Special case for card header gradient
                 if (skey === "--card-header-gradient-start" || skey === "--card-header-gradient-end") {
                     const start = themeData["--card-header-gradient-start"] || "#344391";
                     const end = themeData["--card-header-gradient-end"] || "#1f2c66";
@@ -1288,19 +1288,22 @@
 
             applyValue(initial);
 
+            // Event listeners
             colorInput.addEventListener("input", () => applyValue(colorInput.value));
             colorCode.addEventListener("input", () => {
                 const val = colorCode.value.trim();
-                if (/^#[0-9A-F]{6}$/i.test(val)) applyValue(val);
+                if (/^#[0-9A-F]{6}$/i.test(val)) {
+                    applyValue(val);
+                }
             });
 
             wrapperDiv.appendChild(label);
             wrapperDiv.appendChild(colorInput);
             wrapperDiv.appendChild(colorCode);
+
             return wrapperDiv;
         }
 
-        // === Number Input for Scrollbar Width ===
         function makeNumberInput(labelText, cssVar, fallback, min, max) {
             const wrapperDiv = document.createElement("div");
             wrapperDiv.className = "tb-number-input-wrapper";
@@ -1337,7 +1340,6 @@
             return wrapperDiv;
         }
 
-        // === Controls ===
         const controls = document.createElement("div");
         controls.className = "tb-scrollbar-controls";
         wrapper.appendChild(controls);
@@ -1345,7 +1347,6 @@
         controls.appendChild(makePicker("Scrollbar Color", "scroll-color", "#344391", "--scroll-color"));
         controls.appendChild(makeNumberInput("Scrollbar Width (px)", "--scroll-width", "7px", 2, 30));
 
-        // Reapply saved values
         Object.keys(themeData).forEach(k => {
             try { document.body.style.setProperty(k, themeData[k]); } catch (e) { }
         });
