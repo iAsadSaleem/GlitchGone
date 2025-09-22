@@ -2490,6 +2490,9 @@
                             "--login-bg-end",
                             updateLoginGradient
                         );
+                        section.appendChild(startPicker);
+                        section.appendChild(endPicker);
+
 
                         section.appendChild(createLoginColorPicker("Login Card BG Gradient", "--login-card-bg-gradient"));
                         section.appendChild(createLoginColorPicker("Login Link Text Color", "--login-link-text-color"));
