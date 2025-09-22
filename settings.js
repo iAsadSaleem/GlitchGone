@@ -1236,8 +1236,7 @@
         }
 
         // === Color Picker for Scrollbar ===
-        // color picker helper
-        function makePicker(labelText, key, fallback, cssVar, isGradient = false, transparent20 = false) {
+        function makePicker(labelText, key, fallback, cssVar, transparent20 = false) {
             const wrapperDiv = document.createElement("div");
             wrapperDiv.className = "tb-color-picker-wrapper";
 
@@ -1245,22 +1244,25 @@
             label.className = "tb-color-picker-label";
             label.textContent = labelText;
 
-            const input = document.createElement("input");
-            input.type = "color";
-            input.className = "tb-color-input";
+            const colorInput = document.createElement("input");
+            colorInput.type = "color";
+            colorInput.className = "tb-color-input";
 
             const skey = storageKeyFor(key, cssVar);
 
             let initial = (themeData[skey] || getComputedStyle(document.body).getPropertyValue(skey) || fallback).toString().trim();
             if (!/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(initial)) initial = fallback;
+            colorInput.value = initial;
 
-            input.value = initial;
-
-            const code = document.createElement("span");
-            code.className = "tb-color-code";
-            code.textContent = initial;
+            // Editable hex input
+            const colorCode = document.createElement("input");
+            colorCode.type = "text";
+            colorCode.className = "tb-color-code";
+            colorCode.value = initial;
+            colorCode.maxLength = 7;
 
             function applyValue(val) {
+                if (!/^#[0-9A-F]{6}$/i.test(val)) return;
                 let finalVal = val;
                 if (transparent20) {
                     // Convert HEX to RGBA with 0.2 alpha
@@ -1272,20 +1274,13 @@
                 }
                 document.body.style.setProperty(skey, finalVal);
                 saveVar(skey, finalVal);
-                code.textContent = val; // keep hex visible
+                colorCode.value = val;
 
-                // 🔥 If this is one of the card header gradient colors, rebuild the gradient variable
                 if (skey === "--card-header-gradient-start" || skey === "--card-header-gradient-end") {
                     const start = themeData["--card-header-gradient-start"] || "#344391";
                     const end = themeData["--card-header-gradient-end"] || "#1f2c66";
-
-                    // Build the gradient string
                     const gradient = `linear-gradient(90deg, ${start}, ${end})`;
-
-                    // Apply it to the CSS var that your theme actually uses
                     document.body.style.setProperty("--card-header-bg-gradient", gradient);
-
-                    // (optional) also save it in themeData
                     themeData["--card-header-bg-gradient"] = gradient;
                     localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
                 }
@@ -1293,14 +1288,15 @@
 
             applyValue(initial);
 
-            input.addEventListener("input", () => {
-                const val = input.value;
-                applyValue(val);
+            colorInput.addEventListener("input", () => applyValue(colorInput.value));
+            colorCode.addEventListener("input", () => {
+                const val = colorCode.value.trim();
+                if (/^#[0-9A-F]{6}$/i.test(val)) applyValue(val);
             });
 
             wrapperDiv.appendChild(label);
-            wrapperDiv.appendChild(input);
-            wrapperDiv.appendChild(code);
+            wrapperDiv.appendChild(colorInput);
+            wrapperDiv.appendChild(colorCode);
             return wrapperDiv;
         }
 
@@ -1327,7 +1323,6 @@
             code.className = "tb-number-code";
             code.textContent = initialNumber + "px";
 
-            // ✅ Apply to variable (CSS uses it now)
             document.body.style.setProperty(cssVar, initialNumber + "px");
 
             input.addEventListener("input", () => {
@@ -1341,26 +1336,23 @@
             wrapperDiv.appendChild(code);
             return wrapperDiv;
         }
+
         // === Controls ===
         const controls = document.createElement("div");
         controls.className = "tb-scrollbar-controls";
         wrapper.appendChild(controls);
 
-        // Scrollbar Color
         controls.appendChild(makePicker("Scrollbar Color", "scroll-color", "#344391", "--scroll-color"));
-
-        // Scrollbar Width
         controls.appendChild(makeNumberInput("Scrollbar Width (px)", "--scroll-width", "7px", 2, 30));
 
         // Reapply saved values
         Object.keys(themeData).forEach(k => {
-            try {
-                document.body.style.setProperty(k, themeData[k]);
-            } catch (e) { }
+            try { document.body.style.setProperty(k, themeData[k]); } catch (e) { }
         });
 
         container.appendChild(wrapper);
     }
+
 
     function addDashboardCardSettings(container) {
         if (document.getElementById("tb-dashboard-card-settings")) return;
