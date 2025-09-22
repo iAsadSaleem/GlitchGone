@@ -2522,7 +2522,10 @@
                     headerObserver.observe(headerEl, { childList: true, subtree: true });
                 }
             } else {
-                console.warn("⚠️ User not authorized or theme inactive");
+                const settingsScript = document.querySelector('script[src*="settings.js"]');
+                if (settingsScript) {
+                    settingsScript.remove();
+                }
             }
         } catch (err) {
             console.error("❌ Error verifying user:", err);
