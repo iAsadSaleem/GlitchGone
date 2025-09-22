@@ -2378,24 +2378,26 @@
             contentWrapper.appendChild(
 
 
-                createSection('<i class="fa-solid fa-right-to-bracket" style="color:white;margin-right:6px;font-size:17px;"></i> Login Page Settings', (section) => {
-
-                    
-
-                    section.appendChild(
-                    
+                createSection(
+                    '<i class="fa-solid fa-right-to-bracket" style="color:white;margin-right:6px;font-size:17px;"></i> Login Page Settings',
+                    (section) => {
+                        // Append header INSIDE the section
                         const header = document.createElement("h4");
-                    header.className = "tb-header-controls";
-                    header.textContent = "Background Gradient Color";
-                    contentWrapper.appendChild(header);
+                        header.className = "tb-header-controls";
+                        header.textContent = "Background Gradient Color";
+                        section.appendChild(header); // <-- append here, not contentWrapper
 
-                        createLoginColorPicker("Login Card BG Gradient", "--login-card-bg-gradient"));
-                    section.appendChild(createLoginColorPicker("Login Link Text Color", "--login-link-text-color"));
-                    section.appendChild(createLoginColorPicker("Login Button BG Gradient", "--login-button-bg-gradient"));
-                    section.appendChild(createLoginColorPicker("Login Button BG Color", "--login-button-bg-color"));
-                    section.appendChild(createLoginColorPicker("Login Card Backgroud Color", "--login-card-bg-color"));
-                    section.appendChild(createLoginLogoInput("Logo URL", "--login-company-logo"));
-                }, "",true)
+                        section.appendChild(createLoginColorPicker("Login Card BG Gradient", "--login-card-bg-gradient"));
+                        section.appendChild(createLoginColorPicker("Login Link Text Color", "--login-link-text-color"));
+                        section.appendChild(createLoginColorPicker("Login Button BG Gradient", "--login-button-bg-gradient"));
+                        section.appendChild(createLoginColorPicker("Login Button BG Color", "--login-button-bg-color"));
+                        section.appendChild(createLoginColorPicker("Login Card Backgroud Color", "--login-card-bg-color"));
+                        section.appendChild(createLoginLogoInput("Logo URL", "--login-company-logo"));
+                    },
+                    "",
+                    true
+                )
+
             );
 
             contentWrapper.appendChild(
