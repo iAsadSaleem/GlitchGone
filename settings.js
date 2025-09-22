@@ -329,14 +329,21 @@
         return wrapper;
     }
     function updateLoginBackgroundGradient() {
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        savedThemeObj.themeData = savedThemeObj.themeData || {};
+
         const start = getComputedStyle(document.body).getPropertyValue("--login-background-gradient-start").trim() || "#ffffff";
         const end = getComputedStyle(document.body).getPropertyValue("--login-background-gradient-end").trim() || start;
         const gradient = `linear-gradient(to bottom, ${start}, ${end})`;
+
+        // Apply to body
+        document.body.style.setProperty("--login-background-gradient-start", start);
+        document.body.style.setProperty("--login-background-gradient-end", end);
         document.body.style.setProperty("--login-background-gradient-color", gradient);
 
-        // Also save to localStorage
-        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        savedThemeObj.themeData = savedThemeObj.themeData || {};
+        // Save all three to localStorage
+        savedThemeObj.themeData["--login-background-gradient-start"] = start;
+        savedThemeObj.themeData["--login-background-gradient-end"] = end;
         savedThemeObj.themeData["--login-background-gradient-color"] = gradient;
         localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
     }
