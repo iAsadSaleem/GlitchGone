@@ -2491,6 +2491,8 @@
     const rlno = localStorage.getItem("rlno");
     const email = localStorage.getItem("userEmail");
 
+        console.log('COde is working', rlno, email);
+
     if (!rlno && !email) {
         if (attempts < MAX_ATTEMPTS) setTimeout(() => initThemeBuilder(attempts + 1), 200);
         return;
@@ -2505,7 +2507,7 @@
     try {
         const response = await fetch(`https://theme-builder-delta.vercel.app/api/theme/${email}`);
         const data = await response.json();
-
+        console.log('Data', data);
         if (data.success) {
             createBuilderUI(controlsContainer);
             const headerEl = document.querySelector("header.hl_header") || document.querySelector("header");
