@@ -332,21 +332,25 @@
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         savedThemeObj.themeData = savedThemeObj.themeData || {};
 
-        const start = getComputedStyle(document.body).getPropertyValue("--login-background-gradient-start").trim() || "#ffffff";
-        const end = getComputedStyle(document.body).getPropertyValue("--login-background-gradient-end").trim() || start;
+        const start = getComputedStyle(document.body).getPropertyValue("--login-background-gradient-start").trim() || "#3e0909";
+        const end = getComputedStyle(document.body).getPropertyValue("--login-background-gradient-end").trim() || "#11171d";
         const gradient = `linear-gradient(to bottom, ${start}, ${end})`;
 
-        // Apply to body
+        // Apply to CSS variables
         document.body.style.setProperty("--login-background-gradient-start", start);
         document.body.style.setProperty("--login-background-gradient-end", end);
         document.body.style.setProperty("--login-background-gradient-color", gradient);
 
-        // Save all three to localStorage
+        // Save to localStorage
         savedThemeObj.themeData["--login-background-gradient-start"] = start;
         savedThemeObj.themeData["--login-background-gradient-end"] = end;
         savedThemeObj.themeData["--login-background-gradient-color"] = gradient;
         localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+
+        // OPTIONAL: send to DB here if you have an API
+        // e.g., saveThemeToDB(savedThemeObj.themeData);
     }
+
 
     function createColorPicker(labelText, storageKey, cssVar, applyFn) {
         const wrapper = document.createElement("div");
