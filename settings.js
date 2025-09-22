@@ -301,7 +301,45 @@
         "--sidebar-menu-hover-bg": "Choose Menu Hover Color",
         "--sidebar-menu-color": "Choose SideBar Text Color",
         "--sidebar-menu-icon-color": "Choose SideBar Icon Color",
+
+        // Login page gradient
+        "--login-background-gradient-start": "Login Background Gradient Start Color",
+        "--login-background-gradient-end": "Login Background Gradient End Color"
     };
+
+    function createLoginGradientPicker() {
+        const wrapper = document.createElement("div");
+
+        // Start Color Picker
+        wrapper.appendChild(createColorPicker(
+            "Login Background Gradient Start Color",
+            null,
+            "--login-background-gradient-start",
+            updateLoginBackgroundGradient
+        ));
+
+        // End Color Picker
+        wrapper.appendChild(createColorPicker(
+            "Login Background Gradient End Color",
+            null,
+            "--login-background-gradient-end",
+            updateLoginBackgroundGradient
+        ));
+
+        return wrapper;
+    }
+    function updateLoginBackgroundGradient() {
+        const start = getComputedStyle(document.body).getPropertyValue("--login-background-gradient-start").trim() || "#ffffff";
+        const end = getComputedStyle(document.body).getPropertyValue("--login-background-gradient-end").trim() || start;
+        const gradient = `linear-gradient(to bottom, ${start}, ${end})`;
+        document.body.style.setProperty("--login-background-gradient-color", gradient);
+
+        // Also save to localStorage
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        savedThemeObj.themeData = savedThemeObj.themeData || {};
+        savedThemeObj.themeData["--login-background-gradient-color"] = gradient;
+        localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+    }
 
     function createColorPicker(labelText, storageKey, cssVar, applyFn) {
         const wrapper = document.createElement("div");
@@ -2385,6 +2423,9 @@
                         header.className = "tb-header-controls";
                         header.textContent = "Background Gradient Color";
                         section.appendChild(header);
+
+                        section.appendChild(createLoginGradientPicker());
+
 
                         section.appendChild(createLoginColorPicker("Login Card BG Gradient", "--login-card-bg-gradient"));
                         section.appendChild(createLoginColorPicker("Login Link Text Color", "--login-link-text-color"));
