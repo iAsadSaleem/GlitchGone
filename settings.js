@@ -892,7 +892,7 @@
         const gradient = `linear-gradient(90deg, ${start} 0%, ${end} 100%)`;
 
         // ✅ Set globally on :root so it's picked up by Apply button
-        document.documentElement.style.setProperty("--login-background-gradient-color", gradient);
+        document.body.style.setProperty("--login-background-gradient-color", gradient);
 
         // Update .hl_login elements visually
         document.querySelectorAll(".hl_login").forEach(el => {
