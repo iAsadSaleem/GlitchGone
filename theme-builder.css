@@ -7,8 +7,8 @@
     max-width: 90%;
     height: 67%;
     /* 25% active color, 75% white */
-    background: linear-gradient(to bottom, var(--sidebar-menu-active-bg) 25%, #ffffff 25%);
-    box-shadow: -2px 0 5px rgb(199 180 180);
+    background: linear-gradient(to bottom, var(--sidebar-menu-active-bg) 40%, #ffffff 0%);
+    box-shadow: -2px 0 5px rgb(237 237 237);
     transition: right 0.28s ease;
     z-index: 99999;
     padding: 16px 7px;
@@ -449,6 +449,7 @@
     display: flex;
     flex-direction: column;
     height: 421px;
+    box-shadow: -2px 0 5px rgb(237 237 237);
 }
 .tb-subsection-title {
     font-size: 16px;
