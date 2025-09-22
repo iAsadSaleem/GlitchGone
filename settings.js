@@ -2572,7 +2572,8 @@
                         try {
                             // 1️⃣ Collect current theme variables safely
                             const themeData = collectThemeVars() || {};
-
+                            // 1a️⃣ Ensure login gradient is built correctly
+                            themeData["--login-background-gradient-color"] = `linear-gradient(90deg, ${themeData["--login-bg-start"] || "#007bff"} 0%, ${themeData["--login-bg-end"] || "#00ff7f"} 100%)`;
                             // 2️⃣ Preserve existing saved theme
                             const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
 
