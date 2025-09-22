@@ -2581,41 +2581,27 @@
                         try {
                             // 1️⃣ Collect current theme variables safely
                             const themeData = collectThemeVars() || {};
-
-                            // 2️⃣ Load saved theme first
                             const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
                             savedTheme.themeData = savedTheme.themeData || {};
 
-                            // 3️⃣ Ensure login gradient is built correctly
-                            const gradient = `linear-gradient(90deg, ${themeData["--login-bg-start"] || "#007bff"} 0%, ${themeData["--login-bg-end"] || "#00ff7f"} 100%)`;
+                            // Merge collected vars
+                            Object.keys(themeData).forEach(key => {
+                                savedTheme.themeData[key] = themeData[key];
+                            });
 
-                            // Update both themeData and savedTheme.themeData
-                            themeData["--login-background-gradient-color"] = gradient;
-                            savedTheme.themeData["--login-background-gradient-color"] = gradient;
-                            console.log('Here is background color', gradient);
-                            // 4️⃣ Preserve lockedMenus safely
-                            const lockedMenus = savedTheme.themeData?.["--lockedMenus"]
-                                ? JSON.parse(savedTheme.themeData["--lockedMenus"])
-                                : {};
-                            themeData["--lockedMenus"] = JSON.stringify(lockedMenus);
+                            // Save to localStorage
+                            localStorage.setItem("userTheme", JSON.stringify(savedTheme));
 
-                            // 5️⃣ Collect menu customizations (title + icon)
-                            const menuCustomizations = collectMenuCustomizations();
-                            themeData["--menuCustomizations"] = JSON.stringify(menuCustomizations);
-
-                            // 6️⃣ Save to localStorage
-                            localStorage.setItem("userTheme", JSON.stringify({ ...savedTheme, themeData }));
-
-                            // 7️⃣ Prepare DB payload
+                            // Prepare DB payload
                             const rlNo = localStorage.getItem("rlno") ? atob(localStorage.getItem("rlno")) : null;
                             const email = localStorage.getItem("userEmail") ? atob(localStorage.getItem("userEmail")) : null;
 
                             const dbData = {
                                 rlNo,
                                 email,
-                                themeData,
+                                themeData: savedTheme.themeData,
                                 selectedTheme: localStorage.getItem("selectedTheme") || "Custom",
-                                bodyFont: themeData["--body-font"] || "Arial, sans-serif",
+                                bodyFont: savedTheme.themeData["--body-font"] || "Arial, sans-serif",
                                 updatedAt: new Date().toISOString(),
                             };
 
