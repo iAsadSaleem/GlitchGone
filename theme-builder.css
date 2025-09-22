@@ -202,8 +202,8 @@
 
     /* On focus highlight */
     .tb-color-code:focus {
-        border-color: #4cafef;
-        background: #3a3a3a;
+        border-color: #bdcbd342;
+        background: #ffffff;
     }
 
 .tb-color-code.copied {
@@ -283,7 +283,7 @@
 
 /* CSS */
 .tb-apply-btn {
-    background: var(--sidebar-bg-color) !important;
+    background: var(--sidebar-menu-active-bg) !important;
     border-radius: 10px;
     color: white;
     cursor: pointer;
@@ -331,7 +331,7 @@
     margin: 12px auto;
     top: -13px;
     border-radius: 8px !important;
-    background: var(--sidebar-bg-color) !important;
+    background: var(--sidebar-menu-active-bg) !important;
     position: relative;
     min-width: 316px !important;
     color: #fff;
@@ -370,8 +370,20 @@
     font-size: 14px;
 }
 .tb-logo-input {
-    width: 185px;
-    height: 40px;
+    top: 3px;
+    position: relative;
+    width: 110px;
+    height: 24px;
+    padding: 2px 5px;
+    border-radius: 4px;
+    border: 1px solid #bdcbd342;
+    background: #ffffff;
+    color: #898989;
+    font-size: 12px;
+    font-family: monospace;
+    text-align: center;
+    outline: none;
+    cursor: text;
 }
 .themeSelectWrapper {
     position: relative;
