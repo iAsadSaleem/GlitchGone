@@ -328,16 +328,25 @@
 
         return wrapper;
     }
+
     function updateLoginBackgroundGradient() {
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         savedThemeObj.themeData = savedThemeObj.themeData || {};
+
         const start = getComputedStyle(document.body).getPropertyValue("--login-background-gradient-start").trim() || "#ffffff";
         const end = getComputedStyle(document.body).getPropertyValue("--login-background-gradient-end").trim() || start;
         const gradient = `linear-gradient(to bottom, ${start} 0%, ${start} 20%, ${end} 100%)`;
-        document.body.style.setProperty("--login-background-gradient-color", gradient);
-        savedThemeObj.themeData["--login-background-gradient-color"] = gradient;
+
+        // ✅ Apply gradient
+        document.body.style.setProperty("--login-background-active", gradient);
+
+        // ✅ Save gradient
+        savedThemeObj.themeData["--login-background-active"] = gradient;
+
+        // ❌ Remove background image so it doesn’t conflict
         delete savedThemeObj.themeData["--login-background-image"];
-        document.body.style.removeProperty("--login-background-image");
+
+        // ✅ Save updated theme
         localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
     }
 
@@ -351,11 +360,9 @@
         label.textContent = "Login Background Image URL";
         label.className = "tb-color-picker-label";
 
-        // Get stored theme object
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         savedThemeObj.themeData = savedThemeObj.themeData || {};
 
-        // Use saved value or empty
         let storedImage = savedThemeObj.themeData["--login-background-image"] || "";
 
         const textInput = document.createElement("input");
@@ -366,23 +373,24 @@
 
         function applyImage(url) {
             if (url && url.trim() !== "") {
-                // Apply image, remove gradient
-                document.body.style.setProperty("--login-background-image", `url("${url}")`);
-                document.body.style.setProperty("--login-background-gradient-color", "none");
+                // ✅ Use image
+                const imageUrl = `url("${url}")`;
+                document.body.style.setProperty("--login-background-active", imageUrl);
 
-                savedThemeObj.themeData["--login-background-image"] = `url("${url}")`;
+                savedThemeObj.themeData["--login-background-active"] = imageUrl;
+                savedThemeObj.themeData["--login-background-image"] = imageUrl;
+
+                // Remove gradient so it doesn’t overlap
                 delete savedThemeObj.themeData["--login-background-gradient-color"];
             } else {
-                // Remove image, restore gradient
-                document.body.style.removeProperty("--login-background-image");
-
-                // Rebuild gradient from start/end
+                // ✅ Restore gradient from start/end if image is cleared
                 const start = getComputedStyle(document.body).getPropertyValue("--login-background-gradient-start").trim() || "#ffffff";
                 const end = getComputedStyle(document.body).getPropertyValue("--login-background-gradient-end").trim() || start;
                 const gradient = `linear-gradient(to bottom, ${start} 0%, ${start} 20%, ${end} 100%)`;
 
-                document.body.style.setProperty("--login-background-gradient-color", gradient);
-                savedThemeObj.themeData["--login-background-gradient-color"] = gradient;
+                document.body.style.setProperty("--login-background-active", gradient);
+
+                savedThemeObj.themeData["--login-background-active"] = gradient;
 
                 delete savedThemeObj.themeData["--login-background-image"];
             }
