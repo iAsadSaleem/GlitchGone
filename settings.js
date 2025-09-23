@@ -3190,6 +3190,13 @@
                     addScrollbarSettings(section);   // Profile Button Color Controls
                     addDashboardCardSettings(section);
                     addBackgroundGradientSettings(section);
+
+                    const instruction = document.createElement("p");
+                    instruction.className = "tb-instruction-text";
+                    instruction.textContent =
+                        "💡 For Flat Color: Choose the same color for Start & End";
+                    section.appendChild(instruction);
+
                     buildThemeColorsSection(section);
                     //buildHeadingSettings(section) //Commented Will see next time
                     // Add more advanced options later
