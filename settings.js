@@ -1290,6 +1290,10 @@
     function createLoginHeadingControls() {
         const wrapper = document.createElement("div");
 
+        // Shared savedThemeObj (only once!)
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        const themeData = savedThemeObj.themeData || {};
+
         // === Font Size Input ===
         const sizeWrapper = document.createElement("div");
         sizeWrapper.className = "tb-color-picker-wrapper";
@@ -1298,10 +1302,8 @@
         sizeLabel.textContent = "Login Heading Font Size (px)";
         sizeLabel.className = "tb-color-picker-label";
 
-        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        const themeData = savedThemeObj.themeData || {};
-
-        let storedSize = themeData["--login-headline-font-size"] ||
+        let storedSize =
+            themeData["--login-headline-font-size"] ||
             getComputedStyle(document.body).getPropertyValue("--login-headline-font-size").trim() ||
             "24px";
         let numericSize = parseInt(storedSize, 10) || 24;
@@ -1337,7 +1339,8 @@
         colorLabel.textContent = "Login Heading Text Color";
         colorLabel.className = "tb-color-picker-label";
 
-        let storedColor = themeData["--login-headline-text-color"] ||
+        let storedColor =
+            themeData["--login-headline-text-color"] ||
             getComputedStyle(document.body).getPropertyValue("--login-headline-text-color").trim() ||
             "#000000";
         if (!/^#[0-9A-F]{6}$/i.test(storedColor)) storedColor = "#000000";
@@ -1382,11 +1385,7 @@
         textLabel.textContent = "Login Heading Text";
         textLabel.className = "tb-color-picker-label";
 
-        // Pull from localStorage (userTheme) first, then fallback to DB/themeData, then fallback to default
-        let savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        savedThemeObj.themeData = savedThemeObj.themeData || {};
         let storedText =
-            savedThemeObj.themeData["--login-headline-text"] ||
             themeData["--login-headline-text"] ||
             "Sign into your account";
 
@@ -1403,12 +1402,10 @@
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
         }
 
-        // Save live while typing
         textInput.addEventListener("input", () => {
             applyText(textInput.value.trim());
         });
 
-        // Apply immediately when loading panel
         applyText(storedText);
 
         textWrapper.appendChild(textLabel);
