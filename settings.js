@@ -1395,18 +1395,28 @@
         textInput.value = storedText;
 
         function applyText(text) {
+            // 1️⃣ Apply to CSS variable
+            document.body.style.setProperty("--login-headline-text", text);
+
+            // 2️⃣ Apply to actual heading DOM if it exists
             const heading = document.querySelector(".hl_login .hl_login--body .login-card-heading h2");
             if (heading) heading.textContent = text;
 
+            // 3️⃣ Save in localStorage
             savedThemeObj.themeData["--login-headline-text"] = text;
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
         }
 
+        // Save live while typing
         textInput.addEventListener("input", () => {
             applyText(textInput.value.trim());
         });
 
+        // Apply immediately on load
         applyText(storedText);
+
+        textWrapper.appendChild(textLabel);
+        textWrapper.appendChild(textInput);
 
         textWrapper.appendChild(textLabel);
         textWrapper.appendChild(textInput);
