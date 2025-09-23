@@ -1176,7 +1176,8 @@
         return wrapper;
     }
 
-   
+
+ 
 
     /* ========== Link Text Color Picker ========== */
     function createLoginLinkTextColorPicker() {
@@ -1245,8 +1246,44 @@
         label.textContent = "Login Link Text Size (px)";
         label.className = "tb-input-label";
 
-        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") |
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        const themeData = savedThemeObj.themeData || {};
 
+        let storedSize = themeData["--login-link-text-size"] ||
+            getComputedStyle(document.body).getPropertyValue("--login-link-text-size").trim() ||
+            "14px";
+
+        // Ensure we only get the number
+        storedSize = storedSize.replace("px", "").trim();
+
+        const sizeInput = document.createElement("input");
+        sizeInput.type = "number";
+        sizeInput.min = 8;
+        sizeInput.max = 40;
+        sizeInput.value = storedSize;
+        sizeInput.className = "tb-number-input";
+
+        function applyLinkTextSize(size) {
+            if (!size || isNaN(size)) return;
+            const pxSize = size + "px";
+            sizeInput.value = size;
+
+            document.body.style.setProperty("--login-link-text-size", pxSize);
+
+            savedThemeObj.themeData = savedThemeObj.themeData || {};
+            savedThemeObj.themeData["--login-link-text-size"] = pxSize;
+            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+        }
+
+        sizeInput.addEventListener("input", () => applyLinkTextSize(sizeInput.value));
+
+        applyLinkTextSize(storedSize);
+
+        wrapper.appendChild(label);
+        wrapper.appendChild(sizeInput);
+
+        return wrapper;
+    }
 
     function createLoginLogoInput(labelText, cssVar) {
         const wrapper = document.createElement("div");
