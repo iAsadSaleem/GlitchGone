@@ -1176,6 +1176,78 @@
         return wrapper;
     }
 
+   
+
+    /* ========== Link Text Color Picker ========== */
+    function createLoginLinkTextColorPicker() {
+        const wrapper = document.createElement("div");
+        wrapper.className = "tb-color-picker-wrapper";
+
+        const label = document.createElement("label");
+        label.textContent = "Login Link Text Color";
+        label.className = "tb-color-picker-label";
+
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        const themeData = savedThemeObj.themeData || {};
+
+        let storedColor = themeData["--login-link-text-color"] ||
+            getComputedStyle(document.body).getPropertyValue("--login-link-text-color").trim() ||
+            "#2563eb"; // default blue
+
+        if (!/^#[0-9A-F]{6}$/i.test(storedColor)) {
+            storedColor = "#2563eb";
+        }
+
+        const colorInput = document.createElement("input");
+        colorInput.type = "color";
+        colorInput.value = storedColor;
+        colorInput.className = "tb-color-input";
+
+        const colorCode = document.createElement("input");
+        colorCode.type = "text";
+        colorCode.className = "tb-color-code";
+        colorCode.value = storedColor;
+        colorCode.maxLength = 7;
+
+        function applyLinkTextColor(color) {
+            if (!/^#[0-9A-F]{6}$/i.test(color)) return;
+            colorInput.value = color;
+            colorCode.value = color;
+
+            document.body.style.setProperty("--login-link-text-color", color);
+
+            savedThemeObj.themeData = savedThemeObj.themeData || {};
+            savedThemeObj.themeData["--login-link-text-color"] = color;
+            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+        }
+
+        colorInput.addEventListener("input", () => applyLinkTextColor(colorInput.value));
+        colorCode.addEventListener("input", () => {
+            const val = colorCode.value.trim();
+            if (/^#[0-9A-F]{6}$/i.test(val)) applyLinkTextColor(val);
+        });
+
+        applyLinkTextColor(storedColor);
+
+        wrapper.appendChild(label);
+        wrapper.appendChild(colorInput);
+        wrapper.appendChild(colorCode);
+
+        return wrapper;
+    }
+
+    /* ========== Link Text Font Size Input ========== */
+    function createLoginLinkTextSizeInput() {
+        const wrapper = document.createElement("div");
+        wrapper.className = "tb-input-wrapper";
+
+        const label = document.createElement("label");
+        label.textContent = "Login Link Text Size (px)";
+        label.className = "tb-input-label";
+
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") |
+
+
     function createLoginLogoInput(labelText, cssVar) {
         const wrapper = document.createElement("div");
         wrapper.className = "tb-color-picker-wrapper"; // you can reuse wrapper style
@@ -2769,9 +2841,15 @@
                         section.appendChild(createLoginButtonHoverBgColorPicker());
                         section.appendChild(createLoginButtonHoverTextColorPicker());
 
+                        const forgetpass = document.createElement("h4");
+                        forgetpass.className = "tb-header-controls";
+                        forgetpass.textContent = "Forget Password & Link Text Color";
+                        section.appendChild(forgetpass);
 
-                        section.appendChild(createLoginColorPicker("Login Link Text Color", "--login-link-text-color"));
-                        section.appendChild(createLoginColorPicker("Login Card Backgroud Color", "--login-card-bg-color"));
+
+                        // Append these after your login button hover settings
+                        section.appendChild(createLoginLinkTextColorPicker());
+                        section.appendChild(createLoginLinkTextSizeInput());
                         section.appendChild(createLoginLogoInput("Logo URL", "--login-company-logo"));
                     },
                     "",
