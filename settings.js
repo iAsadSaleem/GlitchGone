@@ -1239,13 +1239,14 @@
 
     /* ========== Link Text Font Size Input ========== */
     /* ========== Link Text Font Size Input ========== */
+    /* ========== Link Text Font Size Input (with same classes as Border Radius) ========== */
     function createLoginLinkTextSizeInput() {
         const wrapper = document.createElement("div");
-        wrapper.className = "tb-input-wrapper";
+        wrapper.className = "tb-color-picker-wrapper"; // ✅ same wrapper class
 
         const label = document.createElement("label");
         label.textContent = "Login Link Text Size (px)";
-        label.className = "tb-input-label";
+        label.className = "tb-color-picker-label"; // ✅ same label class
 
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedThemeObj.themeData || {};
@@ -1261,9 +1262,7 @@
         sizeInput.min = 8;
         sizeInput.max = 40;
         sizeInput.value = storedSize;
-
-        // 🔹 Use the same class as your login text size input
-        sizeInput.className = "tb-font-size-input";
+        sizeInput.className = "tb-color-code"; // ✅ same input class as radius
 
         function applyLinkTextSize(size) {
             if (!size || isNaN(size)) return;
@@ -1286,6 +1285,7 @@
 
         return wrapper;
     }
+
 
 
     function createLoginLogoInput(labelText, cssVar) {
