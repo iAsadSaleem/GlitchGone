@@ -373,17 +373,18 @@
 
         function applyImage(url) {
             if (url && url.trim() !== "") {
-                // ✅ Use image
-                const imageUrl = `url("${url}")`;
-                document.body.style.setProperty("--login-background-active", imageUrl);
+                // ✅ Use raw URL in storage
+                const rawUrl = url.trim();
+                const imageCss = `url("${rawUrl}")`;
 
-                savedThemeObj.themeData["--login-background-active"] = imageUrl;
-                savedThemeObj.themeData["--login-background-image"] = imageUrl;
+                // Apply to CSS
+                document.body.style.setProperty("--login-background-active", imageCss);
 
-                // Remove gradient so it doesn’t overlap
-                delete savedThemeObj.themeData["--login-background-gradient-color"];
+                // Save raw URL for input, CSS version for active background
+                savedThemeObj.themeData["--login-background-active"] = imageCss;
+                savedThemeObj.themeData["--login-background-image"] = rawUrl; // store plain url only
             } else {
-                // ✅ Restore gradient from start/end if image is cleared
+                // ✅ Restore gradient if image is cleared
                 const start = getComputedStyle(document.body).getPropertyValue("--login-background-gradient-start").trim() || "#ffffff";
                 const end = getComputedStyle(document.body).getPropertyValue("--login-background-gradient-end").trim() || start;
                 const gradient = `linear-gradient(to bottom, ${start} 0%, ${start} 20%, ${end} 100%)`;
@@ -973,7 +974,7 @@
 
         // Start Color Picker
         wrapper.appendChild(createColorPicker(
-            "Login Button Gradient Start Color",
+            "Button Gradient Start Color",
             null,
             "--login-button-gradient-start",
             updateLoginButtonGradient
@@ -981,7 +982,7 @@
 
         // End Color Picker
         wrapper.appendChild(createColorPicker(
-            "Login Button Gradient End Color",
+            "Button Gradient End Color",
             null,
             "--login-button-gradient-end",
             updateLoginButtonGradient
@@ -1022,7 +1023,7 @@
         wrapper.className = "tb-color-picker-wrapper";
 
         const label = document.createElement("label");
-        label.textContent = "Login Button Border Radius";
+        label.textContent = "Button Border Radius";
         label.className = "tb-color-picker-label";
 
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
@@ -1068,7 +1069,7 @@
         wrapper.className = "tb-color-picker-wrapper";
 
         const label = document.createElement("label");
-        label.textContent = "Login Button Font Color";
+        label.textContent = "Button Font Color";
         label.className = "tb-color-picker-label";
 
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
@@ -1130,7 +1131,7 @@
         wrapper.className = "tb-color-picker-wrapper";
 
         const label = document.createElement("label");
-        label.textContent = "Login Button Hover Background Color";
+        label.textContent = "Login Button Hover Color";
         label.className = "tb-color-picker-label";
 
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
@@ -1188,7 +1189,7 @@
         wrapper.className = "tb-color-picker-wrapper";
 
         const label = document.createElement("label");
-        label.textContent = "Login Button Hover Text Color";
+        label.textContent = "Button Hover Text Color";
         label.className = "tb-color-picker-label";
 
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
@@ -1245,7 +1246,7 @@
         wrapper.className = "tb-color-picker-wrapper";
 
         const label = document.createElement("label");
-        label.textContent = "Login Button Text";
+        label.textContent = "Button Text";
         label.className = "tb-color-picker-label";
 
         // Load saved value from localStorage or fallback
