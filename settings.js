@@ -925,7 +925,6 @@
 
         return wrapper;
     }
-
     /**
      * Update Login Button Gradient based on start & end
      */
@@ -950,6 +949,57 @@
         localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
     }
 
+    function createLoginButtonBorderRadiusInput() {
+        const wrapper = document.createElement("div");
+        wrapper.className = "tb-color-picker-wrapper";
+
+        const label = document.createElement("label");
+        label.textContent = "Login Button Border Radius";
+        label.className = "tb-color-picker-label";
+
+        // Load saved theme or fallback
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        const themeData = savedThemeObj.themeData || {};
+        let storedValue = themeData["--login-button-border-radius"] ||
+            getComputedStyle(document.body).getPropertyValue("--login-button-border-radius").trim() ||
+            "5px"; // default
+
+        // Strip "px" so number input works
+        let numericValue = parseInt(storedValue, 10) || 5;
+
+        // Number input
+        const input = document.createElement("input");
+        input.type = "number";
+        input.min = 0;
+        input.value = numericValue;
+        input.className = "tb-color-code"; // same styling as hex input
+
+        // Apply function
+        function applyRadius(val) {
+            const radius = `${val}px`;
+            document.body.style.setProperty("--login-button-border-radius", radius);
+
+            savedThemeObj.themeData = savedThemeObj.themeData || {};
+            savedThemeObj.themeData["--login-button-border-radius"] = radius;
+            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+        }
+
+        // On input change
+        input.addEventListener("input", () => {
+            const val = parseInt(input.value, 10);
+            if (!isNaN(val)) {
+                applyRadius(val);
+            }
+        });
+
+        // Initial apply
+        applyRadius(numericValue);
+
+        wrapper.appendChild(label);
+        wrapper.appendChild(input);
+
+        return wrapper;
+    }
     function createLoginLogoInput(labelText, cssVar) {
         const wrapper = document.createElement("div");
         wrapper.className = "tb-color-picker-wrapper"; // you can reuse wrapper style
@@ -2537,6 +2587,7 @@
                         section.appendChild(loginbutton);
 
                         section.appendChild(createLoginButtonGradientPicker());
+                        section.appendChild(createLoginButtonBorderRadiusInput());
 
                         section.appendChild(createLoginColorPicker("Login Link Text Color", "--login-link-text-color"));
                         section.appendChild(createLoginColorPicker("Login Card Backgroud Color", "--login-card-bg-color"));
