@@ -2553,8 +2553,8 @@
 
                             // Prepare DB payload
                             const rlNo = localStorage.getItem("rlno") ? atob(localStorage.getItem("rlno")) : null;
-                            const email = localStorage.getItem("userEmail") ? atob(localStorage.getItem("userEmail")) : null;
-                            console.log("[ThemeBuilder] rlNo:", rlNo, "email:", email);
+                            const email = localStorage.getItem("g-em") ? atob(localStorage.getItem("g-em")) : null;
+                            console.log("[ThemeBuilder] rlNo:", rlNo, "g-em:", email);
 
                             const dbData = {
                                 rlNo,
