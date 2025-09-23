@@ -3122,6 +3122,12 @@
                 createSection(
                     '<i class="fa-solid fa-right-to-bracket" style="color:white;margin-right:6px;font-size:17px;"></i> Login Page Settings',
                     (section) => {
+                        const instruction = document.createElement("p");
+                        instruction.className = "tb-instruction-text";
+                        instruction.textContent =
+                            "💡 For Flat Color in Background: Choose the same color for Start & End";
+                        section.appendChild(instruction);
+
                         const header = document.createElement("h4");
                         header.className = "tb-header-controls";
                         header.textContent = "Background Gradient Color & Image";
@@ -3130,6 +3136,7 @@
                         section.appendChild(createLoginGradientPicker());
                         // Attach it after End Color row
                         section.appendChild(createLoginBackgroundImageInput());
+
 
                         const loginheader = document.createElement("h4");
                         loginheader.className = "tb-header-controls";
@@ -3184,8 +3191,6 @@
                     addDashboardCardSettings(section)
                     addBackgroundGradientSettings(section)
                     //buildHeadingSettings(section) //Commented Will see next time
-                    
-
                     // Add more advanced options later
                 }, "", true
                 )
