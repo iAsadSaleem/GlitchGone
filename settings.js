@@ -3303,6 +3303,7 @@
                             // ✅ Ensure lockedMenus stays intact
                             const lockedMenus = JSON.parse(savedTheme.themeData["--lockedMenus"] || "{}");
                             savedTheme.themeData["--lockedMenus"] = JSON.stringify(lockedMenus);
+                            console.log("Before API send:", savedTheme.themeData["--lockedMenus"]);
 
                             // Save to localStorage
                             localStorage.setItem("userTheme", JSON.stringify(savedTheme));
