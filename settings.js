@@ -334,7 +334,7 @@
 
     const start = getComputedStyle(document.body).getPropertyValue("--login-background-gradient-start").trim() || "#ffffff";
     const end = getComputedStyle(document.body).getPropertyValue("--login-background-gradient-end").trim() || start;
-    const gradient = `linear-gradient(to bottom, ${start}, ${end})`;
+    const gradient = `linear-gradient(to bottom, ${start} 0%, ${start} 20%, ${end} 100%)`;
 
     // Apply to body
     //document.body.style.setProperty("--login-background-gradient-start", start);
