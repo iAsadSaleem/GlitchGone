@@ -859,6 +859,93 @@
 
         return wrapper;
     }
+    function    () {
+        const wrapper = document.createElement("div");
+        wrapper.className = "tb-color-picker-wrapper";
+
+        const label = document.createElement("label");
+        label.textContent = "Login Card BG Gradient";
+        label.className = "tb-color-picker-label";
+        wrapper.appendChild(label);
+
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        const themeData = savedThemeObj.themeData || {};
+
+        // Load saved start/end colors or defaults
+        let startColor = themeData["--login-card-bg-gradient-start"] || "#565bf0";
+        let endColor = themeData["--login-card-bg-gradient-end"] || "#072340";
+
+        // Validate hex
+        if (!/^#[0-9A-F]{6}$/i.test(startColor)) startColor = "#565bf0";
+        if (!/^#[0-9A-F]{6}$/i.test(endColor)) endColor = "#072340";
+
+        // Helper: build gradient, apply + save
+        function applyGradient() {
+            const gradient = `linear-gradient(to bottom, ${startColor}, ${endColor})`;
+
+            // Apply to body
+            document.body.style.setProperty("--login-card-bg-gradient", gradient);
+
+            // Save all pieces
+            const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+            savedTheme.themeData = savedTheme.themeData || {};
+            savedTheme.themeData["--login-card-bg-gradient-start"] = startColor;
+            savedTheme.themeData["--login-card-bg-gradient-end"] = endColor;
+            savedTheme.themeData["--login-card-bg-gradient"] = gradient;
+            localStorage.setItem("userTheme", JSON.stringify(savedTheme));
+        }
+
+        // Create picker + input pair
+        function makePicker(labelText, initialColor, onChange) {
+            const container = document.createElement("div");
+            container.className = "tb-color-picker-sub";
+
+            const subLabel = document.createElement("span");
+            subLabel.textContent = labelText;
+            subLabel.className = "tb-sub-label";
+
+            const colorInput = document.createElement("input");
+            colorInput.type = "color";
+            colorInput.value = initialColor;
+            colorInput.className = "tb-color-input";
+
+            const colorCode = document.createElement("input");
+            colorCode.type = "text";
+            colorCode.value = initialColor;
+            colorCode.className = "tb-color-code";
+            colorCode.maxLength = 7;
+
+            // sync changes
+            function applyColor(color) {
+                if (!/^#[0-9A-F]{6}$/i.test(color)) return;
+                colorInput.value = color;
+                colorCode.value = color;
+                onChange(color);
+                applyGradient();
+            }
+
+            colorInput.addEventListener("input", () => applyColor(colorInput.value));
+            colorCode.addEventListener("input", () => {
+                const val = colorCode.value.trim();
+                if (/^#[0-9A-F]{6}$/i.test(val)) applyColor(val);
+            });
+
+            container.appendChild(subLabel);
+            container.appendChild(colorInput);
+            container.appendChild(colorCode);
+            return container;
+        }
+
+        // Start Color
+        wrapper.appendChild(makePicker("Start Color", startColor, (val) => { startColor = val; }));
+        // End Color
+        wrapper.appendChild(makePicker("End Color", endColor, (val) => { endColor = val; }));
+
+        // Initial apply
+        applyGradient();
+
+        return wrapper;
+    }
 
     function createLoginLogoInput(labelText, cssVar) {
         const wrapper = document.createElement("div");
@@ -2439,7 +2526,7 @@
                         loginheader.textContent = "Login Card BG Gradient Color";
                         section.appendChild(loginheader);
 
-                        section.appendChild(createLoginColorPicker("Login Card BG Gradient", "--login-card-bg-gradient"));
+                        section.appendChild(createLoginCardGradientPicker());
                         section.appendChild(createLoginColorPicker("Login Link Text Color", "--login-link-text-color"));
                         section.appendChild(createLoginColorPicker("Login Button BG Gradient", "--login-button-bg-gradient"));
                         section.appendChild(createLoginColorPicker("Login Button BG Color", "--login-button-bg-color"));
