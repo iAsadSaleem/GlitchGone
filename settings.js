@@ -1386,7 +1386,7 @@
 
         const textInput = document.createElement("input");
         textInput.type = "text";
-        textInput.className = "tb-color-code"; // reuse styling
+        textInput.className = "tb-logo-input"; // reuse styling
         textInput.value = storedText;
 
         function applyText(text) {
