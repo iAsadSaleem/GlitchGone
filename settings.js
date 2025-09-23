@@ -360,38 +360,41 @@
         label.textContent = "Login Background Image URL";
         label.className = "tb-color-picker-label";
 
+        // Get stored theme object
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         savedThemeObj.themeData = savedThemeObj.themeData || {};
 
+        // Pull raw URL from storage
         let storedImage = savedThemeObj.themeData["--login-background-image"] || "";
 
         const textInput = document.createElement("input");
         textInput.type = "text";
         textInput.className = "tb-logo-input"; // reuse styling
         textInput.placeholder = "Enter image URL";
-        textInput.value = storedImage;
+        textInput.value = storedImage; // ✅ always raw url, no `url(...)`
 
-        function applyImage(url) {
-            if (url && url.trim() !== "") {
-                // ✅ Use raw URL in storage
-                const rawUrl = url.trim();
-                const imageCss = `url("${rawUrl}")`;
+        function applyImage(rawUrl) {
+            if (rawUrl && rawUrl.trim() !== "") {
+                const cleanUrl = rawUrl.trim();
 
-                // Apply to CSS
-                document.body.style.setProperty("--login-background-active", imageCss);
+                // ✅ Apply to CSS (wrapped once)
+                document.body.style.setProperty("--login-background-active", `url("${cleanUrl}")`);
 
-                // Save raw URL for input, CSS version for active background
-                savedThemeObj.themeData["--login-background-active"] = imageCss;
-                savedThemeObj.themeData["--login-background-image"] = rawUrl; // store plain url only
+                // ✅ Save raw url
+                savedThemeObj.themeData["--login-background-image"] = cleanUrl;
+
+                // Remove gradient
+                delete savedThemeObj.themeData["--login-background-gradient-color"];
             } else {
-                // ✅ Restore gradient if image is cleared
+                // ✅ No image → restore gradient
+                document.body.style.removeProperty("--login-background-active");
+
                 const start = getComputedStyle(document.body).getPropertyValue("--login-background-gradient-start").trim() || "#ffffff";
                 const end = getComputedStyle(document.body).getPropertyValue("--login-background-gradient-end").trim() || start;
                 const gradient = `linear-gradient(to bottom, ${start} 0%, ${start} 20%, ${end} 100%)`;
 
                 document.body.style.setProperty("--login-background-active", gradient);
-
-                savedThemeObj.themeData["--login-background-active"] = gradient;
+                savedThemeObj.themeData["--login-background-gradient-color"] = gradient;
 
                 delete savedThemeObj.themeData["--login-background-image"];
             }
@@ -403,7 +406,7 @@
             applyImage(textInput.value.trim());
         });
 
-        // Apply on load
+        // ✅ Apply on load
         applyImage(storedImage);
 
         wrapper.appendChild(label);
@@ -411,9 +414,6 @@
 
         return wrapper;
     }
-
-
-
     function createColorPicker(labelText, storageKey, cssVar, applyFn) {
         const wrapper = document.createElement("div");
         wrapper.className = "tb-color-picker-wrapper";
