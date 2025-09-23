@@ -1057,6 +1057,67 @@
 
         return wrapper;
     }
+    // Append this after font color picker
+
+    /* ========== Hover Background Color Picker ========== */
+    function createLoginButtonHoverBgColorPicker() {
+        const wrapper = document.createElement("div");
+        wrapper.className = "tb-color-picker-wrapper";
+
+        const label = document.createElement("label");
+        label.textContent = "Login Button Hover Background Color";
+        label.className = "tb-color-picker-label";
+
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        const themeData = savedThemeObj.themeData || {};
+
+        let storedColor = themeData["--login-button-hover-bg-color"] ||
+            getComputedStyle(document.body).getPropertyValue("--login-button-hover-bg-color").trim() ||
+            "#1d4ed8"; // default blue
+
+        if (!/^#[0-9A-F]{6}$/i.test(storedColor)) {
+            storedColor = "#1d4ed8";
+        }
+
+        // 🎨 Color picker
+        const colorInput = document.createElement("input");
+        colorInput.type = "color";
+        colorInput.value = storedColor;
+        colorInput.className = "tb-color-input";
+
+        // 📝 Hex code input
+        const colorCode = document.createElement("input");
+        colorCode.type = "text";
+        colorCode.className = "tb-color-code";
+        colorCode.value = storedColor;
+        colorCode.maxLength = 7;
+
+        function applyHoverBgColor(color) {
+            if (!/^#[0-9A-F]{6}$/i.test(color)) return;
+            colorInput.value = color;
+            colorCode.value = color;
+
+            document.body.style.setProperty("--login-button-hover-bg-color", color);
+
+            savedThemeObj.themeData = savedThemeObj.themeData || {};
+            savedThemeObj.themeData["--login-button-hover-bg-color"] = color;
+            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+        }
+
+        colorInput.addEventListener("input", () => applyHoverBgColor(colorInput.value));
+        colorCode.addEventListener("input", () => {
+            const val = colorCode.value.trim();
+            if (/^#[0-9A-F]{6}$/i.test(val)) applyHoverBgColor(val);
+        });
+
+        applyHoverBgColor(storedColor);
+
+        wrapper.appendChild(label);
+        wrapper.appendChild(colorInput);
+        wrapper.appendChild(colorCode);
+
+        return wrapper;
+    }
 
     function createLoginLogoInput(labelText, cssVar) {
         const wrapper = document.createElement("div");
@@ -2647,6 +2708,7 @@
                         section.appendChild(createLoginButtonGradientPicker());
                         section.appendChild(createLoginButtonBorderRadiusInput());
                         section.appendChild(createLoginButtonFontColorPicker());
+                        section.appendChild(createLoginButtonHoverBgColorPicker());
 
                         section.appendChild(createLoginColorPicker("Login Link Text Color", "--login-link-text-color"));
                         section.appendChild(createLoginColorPicker("Login Card Backgroud Color", "--login-card-bg-color"));
