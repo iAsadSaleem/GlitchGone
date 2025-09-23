@@ -3184,7 +3184,7 @@
                     addDashboardCardSettings(section)
                     addBackgroundGradientSettings(section)
                     buildHeadingSettings(section)
-                    buildMenuCustomizationSection(section)
+                    
 
                     // Add more advanced options later
                 }, "", true
