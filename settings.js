@@ -734,14 +734,6 @@
         });
         const sidebarText = localStorage.getItem("sidebarTextColor");
         if (sidebarText) applySidebarTextColor(sidebarText);
-
-        // ✅ Restore login headline text
-        if (themeData["--login-headline-text"]) {
-            const heading = document.querySelector(".hl_login .hl_login--body .login-card-heading h2");
-            if (heading) {
-                heading.textContent = themeData["--login-headline-text"];
-            }
-        }
     }
     // Find header controls container
     function findControlsContainer() {
@@ -1390,7 +1382,13 @@
         textLabel.textContent = "Login Heading Text";
         textLabel.className = "tb-color-picker-label";
 
-        let storedText = themeData["--login-headline-text"] || "Sign into your account";
+        // Pull from localStorage (userTheme) first, then fallback to DB/themeData, then fallback to default
+        let savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        savedThemeObj.themeData = savedThemeObj.themeData || {};
+        let storedText =
+            savedThemeObj.themeData["--login-headline-text"] ||
+            themeData["--login-headline-text"] ||
+            "Sign into your account";
 
         const textInput = document.createElement("input");
         textInput.type = "text";
@@ -1405,10 +1403,12 @@
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
         }
 
+        // Save live while typing
         textInput.addEventListener("input", () => {
             applyText(textInput.value.trim());
         });
 
+        // Apply immediately when loading panel
         applyText(storedText);
 
         textWrapper.appendChild(textLabel);
