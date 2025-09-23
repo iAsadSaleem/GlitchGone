@@ -2719,7 +2719,7 @@
         // Wait until sidebar menus are loaded
         waitForSidebarMenus(() => {
             const sidebarMenus = document.querySelectorAll(".hl_nav-header a");
-            console.log("[FeatureLock] Sidebar menus found:", sidebarMenus.length);
+            console.log("[FeatureLock] Sidebar menus found:", sidebarMenus);
 
             sidebarMenus.forEach(menu => {
                 const menuId = menu.id || menu.getAttribute("meta") || menu.href;
