@@ -1238,6 +1238,7 @@
     }
 
     /* ========== Link Text Font Size Input ========== */
+    /* ========== Link Text Font Size Input ========== */
     function createLoginLinkTextSizeInput() {
         const wrapper = document.createElement("div");
         wrapper.className = "tb-input-wrapper";
@@ -1253,7 +1254,6 @@
             getComputedStyle(document.body).getPropertyValue("--login-link-text-size").trim() ||
             "14px";
 
-        // Ensure we only get the number
         storedSize = storedSize.replace("px", "").trim();
 
         const sizeInput = document.createElement("input");
@@ -1261,7 +1261,9 @@
         sizeInput.min = 8;
         sizeInput.max = 40;
         sizeInput.value = storedSize;
-        sizeInput.className = "tb-number-input";
+
+        // 🔹 Use the same class as your login text size input
+        sizeInput.className = "tb-font-size-input";
 
         function applyLinkTextSize(size) {
             if (!size || isNaN(size)) return;
@@ -1284,6 +1286,7 @@
 
         return wrapper;
     }
+
 
     function createLoginLogoInput(labelText, cssVar) {
         const wrapper = document.createElement("div");
