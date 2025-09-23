@@ -1189,9 +1189,7 @@
         savedThemeObj.themeData = savedThemeObj.themeData || {};
 
         let storedText =
-            savedThemeObj.themeData["--login-button-text"] ||
-            themeData["--login-button-text"] ||
-            "Sign in";
+            savedThemeObj.themeData["--login-button-text"] || "Sign in";
 
         const input = document.createElement("input");
         input.type = "text";
