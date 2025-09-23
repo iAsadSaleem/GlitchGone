@@ -303,8 +303,8 @@
         "--sidebar-menu-icon-color": "Choose SideBar Icon Color",
 
         // Login page gradient
-        "--login-background-gradient-start": "Login Background Gradient Start Color",
-        "--login-background-gradient-end": "Login Background Gradient End Color"
+        "--login-background-gradient-start": "Login BG Gradient Start Color",
+        "--login-background-gradient-end": "Login BG Gradient End Color"
     };
 
     function createLoginGradientPicker() {
@@ -341,7 +341,8 @@
     //document.body.style.setProperty("--login-background-gradient-end", end);
     document.body.style.setProperty("--login-background-gradient-color", gradient);
 
-    // Save all three to localStorage
+       // Save all three to localStorageLogin Background Gradient End Color
+
     //savedThemeObj.themeData["--login-background-gradient-start"] = start;
     //savedThemeObj.themeData["--login-background-gradient-end"] = end;
     savedThemeObj.themeData["--login-background-gradient-color"] = gradient;
@@ -2433,6 +2434,10 @@
 
                         section.appendChild(createLoginGradientPicker());
 
+                        const header = document.createElement("h4");
+                        header.className = "tb-header-controls";
+                        header.textContent = "Login Card BG Gradient Color";
+                        section.appendChild(header);
 
                         section.appendChild(createLoginColorPicker("Login Card BG Gradient", "--login-card-bg-gradient"));
                         section.appendChild(createLoginColorPicker("Login Link Text Color", "--login-link-text-color"));
