@@ -1176,6 +1176,55 @@
         return wrapper;
     }
 
+    function createLoginButtonTextInput() {
+        const wrapper = document.createElement("div");
+        wrapper.className = "tb-color-picker-wrapper";
+
+        const label = document.createElement("label");
+        label.textContent = "Login Button Text";
+        label.className = "tb-color-picker-label";
+
+        // Load saved value from localStorage or fallback
+        let savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        savedThemeObj.themeData = savedThemeObj.themeData || {};
+
+        let storedText =
+            savedThemeObj.themeData["--login-button-text"] ||
+            themeData["--login-button-text"] ||
+            "Sign in";
+
+        const input = document.createElement("input");
+        input.type = "text";
+        input.className = "tb-logo-input";
+        input.value = storedText;
+
+        function applyButtonText(text) {
+            // 1️⃣ Apply to CSS variable
+            document.body.style.setProperty("--login-button-text", text);
+
+            // 2️⃣ Apply directly to login button
+            const loginBtn = document.querySelector(
+                ".hl_login .hl_login--body button.hl-btn"
+            );
+            if (loginBtn) loginBtn.textContent = text;
+
+            // 3️⃣ Save to localStorage
+            savedThemeObj.themeData["--login-button-text"] = text;
+            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+        }
+
+        // Live update
+        input.addEventListener("input", () => {
+            applyButtonText(input.value.trim());
+        });
+
+        // Apply immediately on load
+        applyButtonText(storedText);
+
+        wrapper.appendChild(label);
+        wrapper.appendChild(input);
+        return wrapper;
+    }
 
  
 
@@ -3023,7 +3072,7 @@
                         // Append these after your other login button settings
                         section.appendChild(createLoginButtonHoverBgColorPicker());
                         section.appendChild(createLoginButtonHoverTextColorPicker());
-
+                        section.appendChild(createLoginButtonTextInput());
                         const forgetpass = document.createElement("h4");
                         forgetpass.className = "tb-header-controls";
                         forgetpass.textContent = "Forget Password & Link Text Color";
