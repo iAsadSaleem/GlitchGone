@@ -123,88 +123,6 @@
     }
     loadThemeBuilderCSS();
 
-    //// NEW: Fetch user theme from DB and apply
-    //async function loadUserThemeFromDB(identifier, type = "rlno") {
-    //    try {
-    //        const res = await fetch(`https://theme-builder-delta.vercel.app/api/theme/code/${identifier}?type=${type}`);
-    //        if (!res.ok) throw new Error(`Failed to fetch theme for ${type}: ${identifier}`);
-
-    //        const theme = await res.json();
-    //        if (!theme.isActive) return;
-
-    //        // ✅ Apply inline theme variables
-    //        if (theme.themeData) {
-    //            Object.entries(theme.themeData).forEach(([key, value]) => {
-    //                if (value && value !== "undefined") {
-    //                    document.body.style.setProperty(key, value);
-    //                }
-    //            });
-    //        }
-
-    //        localStorage.setItem("userTheme", JSON.stringify(theme));
-
-    //        // ✅ ALSO apply the CSS file from your encoded source
-    //        await applyCSSFile(identifier);
-
-    //    } catch (err) {
-    //        console.error("[ThemeBuilder] Failed to load user theme:", err);
-
-    //        // ✅ fallback from cache
-    //        const cached = localStorage.getItem("userTheme");
-    //        if (cached) {
-    //            const theme = JSON.parse(cached);
-    //            if (theme.themeData) {
-    //                Object.entries(theme.themeData).forEach(([key, value]) => {
-    //                    if (value && value !== "undefined") {
-    //                        document.body.style.setProperty(key, value);
-    //                    }
-    //                });
-    //            }
-    //            log("Applied cached theme from localStorage");
-
-    //            // ✅ also try loading CSS file from identifier if cached
-    //            //const cachedIdentifier = theme.email ? theme.email.toLowerCase() : theme.rlno;
-    //            //if (cachedIdentifier) {
-    //            //    await applyCSSFile(cachedIdentifier);
-    //            //}
-    //        }
-    //    }
-    //}
-
-    // 🔹 Helper function to fetch and inject CSS from theme JSON
-    //async function applyCSSFile(identifier) {
-    //    try {
-    //        const url = `https://theme-builder-delta.vercel.app/api/theme/code/${encodeURIComponent(identifier)}`;
-    //        const res = await fetch(url);
-    //        if (!res.ok) throw new Error("Failed to fetch theme JSON");
-
-    //        const theme = await res.json();
-    //        if (!theme || !theme.themeData) throw new Error("No themeData found");
-
-    //        // Convert themeData to CSS variables
-    //        let css = ":root {\n";
-    //        for (const [key, value] of Object.entries(theme.themeData)) {
-    //            if (key.startsWith("--") && value && value !== "undefined") {
-    //                css += `  ${key}: ${value};\n`;
-    //            }
-    //        }
-    //        css += "}\n";
-
-    //        // remove old CSS (avoid duplicates)
-    //        const oldStyle = document.getElementById("theme-css");
-    //        if (oldStyle) oldStyle.remove();
-
-    //        // inject new CSS
-    //        const style = document.createElement("style");
-    //        style.id = "theme-css";
-    //        style.innerHTML = css;
-    //        document.head.appendChild(style);
-
-    //    } catch (err) {
-    //        console.error("❌ Failed to apply CSS from theme JSON:", err.message);
-    //    }
-    //}
-    // Create collapsible sections
     // Utility to create section with optional icon
     function createSection(title, contentBuilder, icon = null) {
         const section = document.createElement("div");
@@ -274,7 +192,6 @@
 
         return section;
     }
-
 
     // Tooltip helper
     function initTooltip(btn, text) {
@@ -800,7 +717,6 @@
         updateSidebarGradient();
     }
 
-
     // Apply saved settings
     function applySavedSettings() {
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
@@ -1027,9 +943,6 @@
         localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
     }
 
-    // Append both separately after gradient pickers
-
-
     /* ========== Border Radius Input ========== */
     function createLoginButtonBorderRadiusInput() {
         const wrapper = document.createElement("div");
@@ -1136,8 +1049,6 @@
         return wrapper;
     }
     
-    /* ========== Hover Background Color Picker ========== */
-
     /* ========== Hover Background Color Picker ========== */
     function createLoginButtonHoverBgColorPicker() {
         const wrapper = document.createElement("div");
@@ -1302,8 +1213,6 @@
         return wrapper;
     }
 
- 
-
     /* ========== Link Text Color Picker ========== */
     function createLoginLinkTextColorPicker() {
         const wrapper = document.createElement("div");
@@ -1362,8 +1271,6 @@
         return wrapper;
     }
 
-    /* ========== Link Text Font Size Input ========== */
-    /* ========== Link Text Font Size Input ========== */
     /* ========== Link Text Font Size Input (with same classes as Border Radius) ========== */
     function createLoginLinkTextSizeInput() {
         const wrapper = document.createElement("div");
@@ -1553,8 +1460,6 @@
 
         return wrapper;
     }
-
-    // Usage
 
     function createLoginLogoInput(labelText, cssVar) {
         const wrapper = document.createElement("div");
@@ -2421,276 +2326,6 @@
         container.appendChild(wrapper);
     }
 
-    function buildHeadingSettings(container) {
-        // Wrapper
-        const wrapper = document.createElement("div");
-        wrapper.className = "tb-heading-settings";
-
-        // Section title
-        const title = document.createElement("h4");
-        title.className = "tb-section-dashbaord-title";
-        title.innerText = "Heading — Settings";
-        wrapper.appendChild(title);
-
-        // Tabs
-        const tabs = document.createElement("div");
-        tabs.className = "tb-heading-tabs";
-
-        const tabH1 = document.createElement("button");
-        tabH1.className = "tb-heading-tab active";
-        tabH1.innerText = "Heading (h1)";
-        tabH1.dataset.target = "h1-settings";
-
-        const tabH2 = document.createElement("button");
-        tabH2.className = "tb-heading-tab";
-        tabH2.innerText = "Heading (h2)";
-        tabH2.dataset.target = "h2-settings";
-
-        tabs.appendChild(tabH1);
-        tabs.appendChild(tabH2);
-        wrapper.appendChild(tabs);
-
-        // --- H1 Settings ---
-        const h1Settings = document.createElement("div");
-        h1Settings.className = "tb-heading-content active";
-        h1Settings.id = "h1-settings";
-
-        // H1 Color
-        const h1ColorRow = document.createElement("div");
-        h1ColorRow.className = "tb-input-row";
-        h1ColorRow.innerHTML = `
-        <label>Color:</label>
-        <input type="color" id="h1-color" value="#111111">
-        <input type="text" id="h1-color-code" value="#111111" readonly>
-    `;
-        h1Settings.appendChild(h1ColorRow);
-
-        // H1 Size
-        const h1SizeRow = document.createElement("div");
-        h1SizeRow.className = "tb-input-row";
-        h1SizeRow.innerHTML = `
-        <label>Size:</label>
-        <input type="number" id="h1-size" value="22" min="10" max="72">
-        <span>px</span>
-    `;
-        h1Settings.appendChild(h1SizeRow);
-
-        wrapper.appendChild(h1Settings);
-
-        // --- H2 Settings ---
-        const h2Settings = document.createElement("div");
-        h2Settings.className = "tb-heading-content";
-        h2Settings.id = "h2-settings";
-
-        // H2 Color
-        const h2ColorRow = document.createElement("div");
-        h2ColorRow.className = "tb-input-row";
-        h2ColorRow.innerHTML = `
-        <label>Color:</label>
-        <input type="color" id="h2-color" value="#111111">
-        <input type="text" id="h2-color-code" value="#111111" readonly>
-    `;
-        h2Settings.appendChild(h2ColorRow);
-
-        // H2 Size
-        const h2SizeRow = document.createElement("div");
-        h2SizeRow.className = "tb-input-row";
-        h2SizeRow.innerHTML = `
-        <label>Size:</label>
-        <input type="number" id="h2-size" value="18" min="10" max="60">
-        <span>px</span>
-    `;
-        h2Settings.appendChild(h2SizeRow);
-
-        wrapper.appendChild(h2Settings);
-
-        // Append wrapper to container
-        container.appendChild(wrapper);
-
-        // --- Tab switching logic ---
-        [tabH1, tabH2].forEach(tab => {
-            tab.addEventListener("click", () => {
-                document.querySelectorAll(".tb-heading-tab").forEach(t => t.classList.remove("active"));
-                document.querySelectorAll(".tb-heading-content").forEach(c => c.classList.remove("active"));
-
-                tab.classList.add("active");
-                document.getElementById(tab.dataset.target).classList.add("active");
-            });
-        });
-
-        // --- Live update logic ---
-
-        // H1 Color
-        const h1ColorInput = wrapper.querySelector("#h1-color");
-        const h1ColorCode = wrapper.querySelector("#h1-color-code");
-        h1ColorInput.addEventListener("input", () => {
-            h1ColorCode.value = h1ColorInput.value;
-            document.querySelectorAll(".hl-display-sm-medium").forEach(el => {
-                el.style.color = h1ColorInput.value;
-            });
-        });
-
-        // H1 Size
-        const h1SizeInput = wrapper.querySelector("#h1-size");
-        h1SizeInput.addEventListener("input", () => {
-            document.querySelectorAll(".hl-display-sm-medium").forEach(el => {
-                el.style.fontSize = h1SizeInput.value + "px";
-            });
-        });
-
-        // H2 Color
-        const h2ColorInput = wrapper.querySelector("#h2-color");
-        const h2ColorCode = wrapper.querySelector("#h2-color-code");
-        h2ColorInput.addEventListener("input", () => {
-            h2ColorCode.value = h2ColorInput.value;
-            document.querySelectorAll("h2").forEach(el => {
-                el.style.color = h2ColorInput.value;
-            });
-        });
-
-        // H2 Size
-        const h2SizeInput = wrapper.querySelector("#h2-size");
-        h2SizeInput.addEventListener("input", () => {
-            document.querySelectorAll("h2").forEach(el => {
-                el.style.fontSize = h2SizeInput.value + "px";
-            });
-        });
-    }
-    function addSidebarMenuSettings(container) {
-        if (document.getElementById("tb-sidebar-menu-settings")) return;
-
-        // === Wrapper ===
-        const wrapper = document.createElement("div");
-        wrapper.className = "tb-sidebar-menu-settings";
-        wrapper.id = "tb-sidebar-menu-settings";
-        wrapper.style.marginTop = "16px";
-
-        // === Title ===
-        const title = document.createElement("h4");
-        title.className = "tb-sidebar-title";
-        title.innerText = "Sidebar Menu Settings";
-        wrapper.appendChild(title);
-
-        // === Saved Theme Data ===
-        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        const menuSettings = savedThemeObj.menuSettings || {};
-
-        // === Helpers ===
-        function saveMenuSetting(menuId, key, value) {
-            savedThemeObj.menuSettings = savedThemeObj.menuSettings || {};
-            savedThemeObj.menuSettings[menuId] = savedThemeObj.menuSettings[menuId] || {};
-            savedThemeObj.menuSettings[menuId][key] = value;
-            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
-        }
-
-        // === MAIN APPLY FUNCTION (fixed) ===
-        function applyMenuSettings() {
-            const sidebarMenus = document.querySelectorAll(".hl_nav-header a");
-
-            sidebarMenus.forEach(menu => {
-                const menuId = menu.id || menu.getAttribute("meta") || menu.href;
-                const savedData = (savedThemeObj.menuSettings && savedThemeObj.menuSettings[menuId]) || {};
-
-                // === Apply title ===
-                let customTitle = menu.querySelector(".tb-custom-title");
-                if (!customTitle) {
-                    customTitle = document.createElement("span");
-                    customTitle.className = "tb-custom-title";
-                    customTitle.style.marginLeft = "4px";
-                    menu.appendChild(customTitle);
-                }
-                if (savedData.title) {
-                    customTitle.textContent = savedData.title;
-                } else {
-                    customTitle.textContent = ""; // clear if empty
-                }
-
-                // === Apply icon ===
-                let customIcon = menu.querySelector(".tb-custom-icon");
-                if (!customIcon && savedData.icon) {
-                    customIcon = makeFontAwesomeIcon(savedData.icon);
-                    customIcon.classList.add("tb-custom-icon");
-                    menu.insertBefore(customIcon, menu.firstChild);
-                } else if (customIcon) {
-                    if (savedData.icon) {
-                        customIcon.querySelector("i").className = savedData.icon;
-                    } else {
-                        customIcon.remove();
-                    }
-                }
-            });
-        }
-
-        // === Get All Sidebar Menus (build UI) ===
-        const sidebarMenus = document.querySelectorAll(".hl_nav-header a");
-        console.log("Sidebar menus found:", sidebarMenus.length);
-
-        sidebarMenus.forEach(menu => {
-            const menuId = menu.id || menu.getAttribute("meta") || menu.href;
-            const menuLabel = menu.querySelector(".nav-title, .nav-title span");
-            const savedData = menuSettings[menuId] || {};
-
-            // === Each Menu Setting Row ===
-            const row = document.createElement("div");
-            row.className = "tb-sidebar-menu-row";
-
-            // Label (static)
-            const label = document.createElement("span");
-            label.className = "tb-sidebar-menu-label";
-            label.textContent = menuLabel ? menuLabel.innerText.trim() : menuId;
-            row.appendChild(label);
-
-            // Title Input
-            const titleInput = document.createElement("input");
-            titleInput.type = "text";
-            titleInput.className = "tb-sidebar-title-input";
-            titleInput.value = savedData.title || (menuLabel ? menuLabel.innerText.trim() : "");
-            titleInput.placeholder = "Enter menu name";
-            titleInput.addEventListener("input", () => {
-                saveMenuSetting(menuId, "title", titleInput.value);
-                applyMenuSettings(); // now correctly calls the real function
-            });
-            row.appendChild(titleInput);
-
-            // Icon Input
-            const iconInput = document.createElement("input");
-            iconInput.type = "text";
-            iconInput.className = "tb-sidebar-icon-input";
-            iconInput.value = savedData.icon || "";
-            iconInput.placeholder = "FontAwesome class (e.g. fas fa-home)";
-            iconInput.addEventListener("input", () => {
-                saveMenuSetting(menuId, "icon", iconInput.value);
-                applyMenuSettings();
-            });
-            row.appendChild(iconInput);
-
-            wrapper.appendChild(row);
-        });
-
-        container.appendChild(wrapper);
-
-        // === Observer to keep settings applied ===
-        const sidebar = document.querySelector(".hl_nav-header");
-        if (sidebar) {
-            const observer = new MutationObserver(() => applyMenuSettings());
-            observer.observe(sidebar, { childList: true, subtree: true });
-        }
-
-        // Initial apply
-        applyMenuSettings();
-
-        // === Helper: Make FA Icon ===
-        function makeFontAwesomeIcon(iconClass) {
-            if (!iconClass) return null;
-            const span = document.createElement("span");
-            span.className = "h-5 w-5 mr-2 flex items-center justify-center";
-            const i = document.createElement("i");
-            i.className = iconClass;
-            span.appendChild(i);
-            return span;
-        }
-    }
-
     // ✅ Your existing observer (don’t change this)
     function waitForSidebarMenus(callback) {
         const observer = new MutationObserver(() => {
@@ -2809,7 +2444,6 @@
         container.appendChild(wrapper);
         applyLockedMenus();
     }
-    // Renders toggle UI once menus are available
     // ✅ Apply menu locks
     function applyLockedMenus() {
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
