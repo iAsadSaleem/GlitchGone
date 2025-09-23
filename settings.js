@@ -865,7 +865,7 @@
 
         // Start Color Picker
         wrapper.appendChild(createColorPicker(
-            "Login Card BG Gradient Start Color",
+            "Card BG Gradient Start Color",
             null,
             "--login-card-bg-gradient-start",
             updateLoginCardBackgroundGradient
@@ -873,7 +873,7 @@
 
         // End Color Picker
         wrapper.appendChild(createColorPicker(
-            "Login Card BG Gradient End Color",
+            "Card BG Gradient End Color",
             null,
             "--login-card-bg-gradient-end",
             updateLoginCardBackgroundGradient
@@ -903,6 +903,53 @@
         savedThemeObj.themeData["--login-card-bg-gradient"] = gradient;
         localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
     }
+
+    function createLoginButtonGradientPicker() {
+        const wrapper = document.createElement("div");
+
+        // Start Color Picker
+        wrapper.appendChild(createColorPicker(
+            "Login Button Gradient Start Color",
+            null,
+            "--login-button-gradient-start",
+            updateLoginButtonGradient
+        ));
+
+        // End Color Picker
+        wrapper.appendChild(createColorPicker(
+            "Login Button Gradient End Color",
+            null,
+            "--login-button-gradient-end",
+            updateLoginButtonGradient
+        ));
+
+        return wrapper;
+    }
+
+    /**
+     * Update Login Button Gradient based on start & end
+     */
+    function updateLoginButtonGradient() {
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        savedThemeObj.themeData = savedThemeObj.themeData || {};
+
+        const start = getComputedStyle(document.body).getPropertyValue("--login-button-gradient-start").trim() || "#4f46e5";
+        const end = getComputedStyle(document.body).getPropertyValue("--login-button-gradient-end").trim() || start;
+
+        // Smooth gradient for button
+        const gradient = `linear-gradient(to right, ${start} 0%, ${end} 100%)`;
+
+        // Apply to CSS variable
+        document.body.style.setProperty("--login-button-bg-gradient", gradient);
+
+        // Save to localStorage
+        savedThemeObj.themeData["--login-button-gradient-start"] = start;
+        savedThemeObj.themeData["--login-button-gradient-end"] = end;
+        savedThemeObj.themeData["--login-button-bg-gradient"] = gradient;
+
+        localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+    }
+
     function createLoginLogoInput(labelText, cssVar) {
         const wrapper = document.createElement("div");
         wrapper.className = "tb-color-picker-wrapper"; // you can reuse wrapper style
@@ -2484,9 +2531,14 @@
 
                         section.appendChild(createLoginCardGradientPicker());
 
+                        const loginbutton = document.createElement("h4");
+                        loginbutton.className = "tb-header-controls";
+                        loginbutton.textContent = "Login Button Gradient Color";
+                        section.appendChild(loginbutton);
+
+                        section.appendChild(createLoginButtonGradientPicker());
+
                         section.appendChild(createLoginColorPicker("Login Link Text Color", "--login-link-text-color"));
-                        section.appendChild(createLoginColorPicker("Login Button BG Gradient", "--login-button-bg-gradient"));
-                        section.appendChild(createLoginColorPicker("Login Button BG Color", "--login-button-bg-color"));
                         section.appendChild(createLoginColorPicker("Login Card Backgroud Color", "--login-card-bg-color"));
                         section.appendChild(createLoginLogoInput("Logo URL", "--login-company-logo"));
                     },
