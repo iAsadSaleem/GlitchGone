@@ -3125,7 +3125,7 @@
                         const instruction = document.createElement("p");
                         instruction.className = "tb-instruction-text";
                         instruction.textContent =
-                            "💡 For Flat Color in Background: Choose the same color for Start & End";
+                            "💡 For Flat Color: Choose the same color for Start & End";
                         section.appendChild(instruction);
 
                         const header = document.createElement("h4");
