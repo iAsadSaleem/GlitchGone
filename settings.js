@@ -2434,10 +2434,10 @@
 
                         section.appendChild(createLoginGradientPicker());
 
-                        const header = document.createElement("h4");
-                        header.className = "tb-header-controls";
-                        header.textContent = "Login Card BG Gradient Color";
-                        section.appendChild(header);
+                        const loginheader = document.createElement("h4");
+                        loginheader.className = "tb-header-controls";
+                        loginheader.textContent = "Login Card BG Gradient Color";
+                        section.appendChild(loginheader);
 
                         section.appendChild(createLoginColorPicker("Login Card BG Gradient", "--login-card-bg-gradient"));
                         section.appendChild(createLoginColorPicker("Login Link Text Color", "--login-link-text-color"));
