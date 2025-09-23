@@ -3303,7 +3303,6 @@
                             // ✅ Ensure lockedMenus stays intact
                             const lockedMenus = JSON.parse(savedTheme.themeData["--lockedMenus"] || "{}");
                             savedTheme.themeData["--lockedMenus"] = JSON.stringify(lockedMenus);
-                            console.log("Before API send:", savedTheme.themeData["--lockedMenus"]);
 
                             // Save to localStorage
                             localStorage.setItem("userTheme", JSON.stringify(savedTheme));
@@ -3336,7 +3335,7 @@
                                 .catch(err => console.error("[ThemeBuilder] Network error:", err));
 
                             // 9️⃣ Reload page to apply changes
-                            //location.reload();
+                            location.reload();
 
                         } catch (err) {
                             console.error("[ThemeBuilder] Error applying theme changes:", err);
