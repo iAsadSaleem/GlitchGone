@@ -328,26 +328,19 @@
 
         return wrapper;
     }
-   function updateLoginBackgroundGradient() {
-    const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-    savedThemeObj.themeData = savedThemeObj.themeData || {};
+    function updateLoginBackgroundGradient() {
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        savedThemeObj.themeData = savedThemeObj.themeData || {};
+        const start = getComputedStyle(document.body).getPropertyValue("--login-background-gradient-start").trim() || "#ffffff";
+        const end = getComputedStyle(document.body).getPropertyValue("--login-background-gradient-end").trim() || start;
+        const gradient = `linear-gradient(to bottom, ${start} 0%, ${start} 20%, ${end} 100%)`;
+        document.body.style.setProperty("--login-background-gradient-color", gradient);
+        savedThemeObj.themeData["--login-background-gradient-color"] = gradient;
+        delete savedThemeObj.themeData["--login-background-image"];
+        document.body.style.removeProperty("--login-background-image");
+        localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+    }
 
-    const start = getComputedStyle(document.body).getPropertyValue("--login-background-gradient-start").trim() || "#ffffff";
-    const end = getComputedStyle(document.body).getPropertyValue("--login-background-gradient-end").trim() || start;
-    const gradient = `linear-gradient(to bottom, ${start} 0%, ${start} 20%, ${end} 100%)`;
-
-    // Apply to body
-    //document.body.style.setProperty("--login-background-gradient-start", start);
-    //document.body.style.setProperty("--login-background-gradient-end", end);
-    document.body.style.setProperty("--login-background-gradient-color", gradient);
-
-       // Save all three to localStorageLogin Background Gradient End Color
-
-    //savedThemeObj.themeData["--login-background-gradient-start"] = start;
-    //savedThemeObj.themeData["--login-background-gradient-end"] = end;
-    savedThemeObj.themeData["--login-background-gradient-color"] = gradient;
-    localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
-}
 
     // === Background Image Input ===
     function createLoginBackgroundImageInput() {
@@ -416,7 +409,7 @@
         const wrapper = document.createElement("div");
         wrapper.className = "tb-color-picker-wrapper";
 
-        const label = document.createElement("label");
+        const label = document.createElement("label"); updateLoginBackgroundGradient
         label.textContent = cssVarLabels[cssVar] || labelText;
         label.className = "tb-color-picker-label";
 
