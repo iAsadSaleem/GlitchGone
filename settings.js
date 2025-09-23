@@ -937,7 +937,7 @@
         const end = getComputedStyle(document.body).getPropertyValue("--login-button-gradient-end").trim() || start;
 
         // Smooth gradient for button
-        const gradient = `linear-gradient(to right, ${start} 0%, ${end} 100%)`;
+        const gradient = `linear-gradient(to bottom, ${start} 20%, ${end} 100%)`;
 
         // Apply to CSS variable
         document.body.style.setProperty("--login-button-bg-gradient", gradient);
