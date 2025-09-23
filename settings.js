@@ -750,7 +750,7 @@
                 // Before Primary & Secondary
                 const header = document.createElement("h4");
                 header.className = "tb-header-controls";
-                header.textContent = "Primary & Secondary Colors";
+                header.textContent = "Main Colors";
                 container.appendChild(header);
             }
 
@@ -3095,7 +3095,6 @@
                     '<i class="fa-solid fa-gear" style="color:white;margin-right:6px;font-size:17px;"></i> General Settings',
                     (section) => {
                         buildThemeColorsSection(section);
-                        buildHeaderControlsSection(section);
                         buildFontFamilySelector(section);
                     },
                     "",
@@ -3111,7 +3110,7 @@
                     (section) => {
                         const header = document.createElement("h4");
                         header.className = "tb-header-controls";
-                        header.textContent = "Background Gradient Color";
+                        header.textContent = "Background Gradient Color & Image";
                         section.appendChild(header);
 
                         section.appendChild(createLoginGradientPicker());
@@ -3120,7 +3119,7 @@
 
                         const loginheader = document.createElement("h4");
                         loginheader.className = "tb-header-controls";
-                        loginheader.textContent = "Login Card BG Gradient Color";
+                        loginheader.textContent = "Card BG Gradient Color";
                         section.appendChild(loginheader);
 
                         section.appendChild(createLoginCardGradientPicker());
@@ -3139,7 +3138,7 @@
                         section.appendChild(createLoginButtonTextInput());
                         const forgetpass = document.createElement("h4");
                         forgetpass.className = "tb-header-controls";
-                        forgetpass.textContent = "Forget Password & Link Text Color";
+                        forgetpass.textContent = "Forget Password & Policiy Link Color";
                         section.appendChild(forgetpass);
 
 
@@ -3150,7 +3149,7 @@
 
                         const heading = document.createElement("h4");
                         heading.className = "tb-header-controls";
-                        heading.textContent = "Login Card Heading Settings";
+                        heading.textContent = "Login Heading Card Settings";
                         section.appendChild(heading);
 
                         section.appendChild(createLoginHeadingControls());
