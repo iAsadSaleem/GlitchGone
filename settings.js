@@ -949,7 +949,6 @@
         localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
     }
 
-    section.appendChild(createLoginButtonBorderRadiusInput());
 
     function createLoginButtonBorderRadiusInput() {
         const wrapper = document.createElement("div");
