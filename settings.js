@@ -3183,7 +3183,7 @@
                     addScrollbarSettings(section);   // Profile Button Color Controls
                     addDashboardCardSettings(section)
                     addBackgroundGradientSettings(section)
-                    buildHeadingSettings(section)
+                    //buildHeadingSettings(section) //Commented Will see next time
                     
 
                     // Add more advanced options later
