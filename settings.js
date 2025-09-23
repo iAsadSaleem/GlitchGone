@@ -2713,7 +2713,7 @@
         // Load saved theme + locked menus
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedTheme.themeData || {};
-        const lockedMenus = themeData.lockedMenus || {};
+        const lockedMenus = themeData["--lockedMenus"] ? JSON.parse(themeData["--lockedMenus"]) : {};
 
         // Predefined sidebar menus
         const sidebarMenus = [
@@ -2885,6 +2885,74 @@
         overlay.appendChild(popup);
         document.body.appendChild(overlay);
     }
+    function applyMenuCustomizations() {
+        const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        const themeData = savedTheme.themeData || {};
+        const menuCustomizations = themeData["--menuCustomizations"]
+            ? JSON.parse(themeData["--menuCustomizations"])
+            : {};
+
+        const variableMap = {
+            "sb_launchpad": "--launchpad-new-name",
+            "sb_dashboard": "--dashboard-new-name",
+            "sb_media": "--media-storage-new-name",
+            "sb_ai_agents": "--ai-agents-new-name",
+            "sb_conversations": "--conversations-new-name",
+            "sb_calendars": "--calendars-new-name",
+            "sb_contacts": "--contacts-new-name",
+            "sb_opportunities": "--opportunities-new-name",
+            "sb_payments": "--payments-new-name",
+            "sb_marketing": "--marketing-new-name",
+            "sb_automation": "--automation-new-name",
+            "sb_sites": "--sites-new-name",
+            "sb_memberships": "--memberships-new-name",
+            "sb_reputation": "--reputation-new-name",
+            "sb_reporting": "--reporting-new-name",
+            "sb_marketplace": "--app-marketplace-new-name",
+            "sb_mobile": "--mobile-app-new-name"
+        };
+
+        Object.keys(menuCustomizations).forEach(menuId => {
+            const custom = menuCustomizations[menuId];
+            const menuEl = document.getElementById(menuId);
+            if (!menuEl) return;
+
+            const navTitle = menuEl.querySelector(".nav-title");
+
+            // ---------------- Update Title ----------------
+            if (custom.title && navTitle) {
+                navTitle.textContent = custom.title;
+                const cssVar = variableMap[menuId];
+                if (cssVar) {
+                    document.documentElement.style.setProperty(cssVar, `"${custom.title}"`);
+                }
+            }
+
+            // ---------------- Update Icon ----------------
+            if (custom.icon && custom.icon.trim() !== "") {
+                const navTitle = menuEl.querySelector(".nav-title");
+
+                // ✅ Remove only existing icon for this menu
+                menuEl.querySelectorAll("i, img").forEach(el => el.remove());
+                menuEl.classList.remove("sidebar-no-icon");
+
+                // ✅ Insert new icon
+                if (/^fa-|^fas-|^far-|^fal-|^fab-/.test(custom.icon.trim())) {
+                    const iconEl = document.createElement("i");
+                    iconEl.className = custom.icon.trim();
+                    iconEl.style.marginRight = "8px";
+                    if (navTitle) menuEl.insertBefore(iconEl, navTitle);
+                    else menuEl.prepend(iconEl);
+                } else if (custom.icon.startsWith("url(")) {
+                    const iconVar = `--sidebar-menu-icon-${menuId.replace("sb_", "")}`;
+                    ["", "-hover", "-active"].forEach(suffix => {
+                        document.documentElement.style.setProperty(iconVar + suffix, custom.icon.trim());
+                    });
+                    menuEl.classList.add("sidebar-no-icon"); // hide pseudo-element if using SVG
+                }
+            }
+        });
+    }
     // ---------------- Build Menu Customizer UI ----------------
     function buildMenuCustomizationSection(container) {
         if (document.getElementById("tb-menu-customization")) return;
@@ -2966,77 +3034,6 @@
 
             container.appendChild(wrapper);
             applyMenuCustomizations();
-        });
-    }
-
-    // -------------------- Apply Menu Customizations --------------------
-    // ---------------- Apply Menu Customizations ----------------
-    function applyMenuCustomizations() {
-        const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        const themeData = savedTheme.themeData || {};
-        const menuCustomizations = themeData["--menuCustomizations"]
-            ? JSON.parse(themeData["--menuCustomizations"])
-            : {};
-
-        const variableMap = {
-            "sb_launchpad": "--launchpad-new-name",
-            "sb_dashboard": "--dashboard-new-name",
-            "sb_media": "--media-storage-new-name",
-            "sb_ai_agents": "--ai-agents-new-name",
-            "sb_conversations": "--conversations-new-name",
-            "sb_calendars": "--calendars-new-name",
-            "sb_contacts": "--contacts-new-name",
-            "sb_opportunities": "--opportunities-new-name",
-            "sb_payments": "--payments-new-name",
-            "sb_marketing": "--marketing-new-name",
-            "sb_automation": "--automation-new-name",
-            "sb_sites": "--sites-new-name",
-            "sb_memberships": "--memberships-new-name",
-            "sb_reputation": "--reputation-new-name",
-            "sb_reporting": "--reporting-new-name",
-            "sb_marketplace": "--app-marketplace-new-name",
-            "sb_mobile": "--mobile-app-new-name"
-        };
-
-        Object.keys(menuCustomizations).forEach(menuId => {
-            const custom = menuCustomizations[menuId];
-            const menuEl = document.getElementById(menuId);
-            if (!menuEl) return;
-
-            const navTitle = menuEl.querySelector(".nav-title");
-
-            // ---------------- Update Title ----------------
-            if (custom.title && navTitle) {
-                navTitle.textContent = custom.title;
-                const cssVar = variableMap[menuId];
-                if (cssVar) {
-                    document.documentElement.style.setProperty(cssVar, `"${custom.title}"`);
-                }
-            }
-
-            // ---------------- Update Icon ----------------
-            if (custom.icon && custom.icon.trim() !== "") {
-                const navTitle = menuEl.querySelector(".nav-title");
-
-                // ✅ Remove only existing icon for this menu
-                menuEl.querySelectorAll("i, img").forEach(el => el.remove());
-                menuEl.classList.remove("sidebar-no-icon");
-
-                // ✅ Insert new icon
-                if (/^fa-|^fas-|^far-|^fal-|^fab-/.test(custom.icon.trim())) {
-                    const iconEl = document.createElement("i");
-                    iconEl.className = custom.icon.trim();
-                    iconEl.style.marginRight = "8px";
-                    if (navTitle) menuEl.insertBefore(iconEl, navTitle);
-                    else menuEl.prepend(iconEl);
-                } else if (custom.icon.startsWith("url(")) {
-                    const iconVar = `--sidebar-menu-icon-${menuId.replace("sb_", "")}`;
-                    ["", "-hover", "-active"].forEach(suffix => {
-                        document.documentElement.style.setProperty(iconVar + suffix, custom.icon.trim());
-                    });
-                    menuEl.classList.add("sidebar-no-icon"); // hide pseudo-element if using SVG
-                }
-            }
         });
     }
 
