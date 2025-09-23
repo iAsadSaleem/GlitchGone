@@ -3188,8 +3188,9 @@
                     buildProfileButtonControls(section);   // Profile Button Color Controls
                     buildHelpButtonControls(section);   // Profile Button Color Controls
                     addScrollbarSettings(section);   // Profile Button Color Controls
-                    addDashboardCardSettings(section)
-                    addBackgroundGradientSettings(section)
+                    addDashboardCardSettings(section);
+                    addBackgroundGradientSettings(section);
+                    buildThemeColorsSection(section);
                     //buildHeadingSettings(section) //Commented Will see next time
                     // Add more advanced options later
                 }, "", true
