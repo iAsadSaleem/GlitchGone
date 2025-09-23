@@ -1286,7 +1286,135 @@
         return wrapper;
     }
 
+    // Create Heading Controls
+    function createLoginHeadingControls() {
+        const wrapper = document.createElement("div");
 
+        // === Font Size Input ===
+        const sizeWrapper = document.createElement("div");
+        sizeWrapper.className = "tb-color-picker-wrapper";
+
+        const sizeLabel = document.createElement("label");
+        sizeLabel.textContent = "Login Heading Font Size (px)";
+        sizeLabel.className = "tb-color-picker-label";
+
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        const themeData = savedThemeObj.themeData || {};
+
+        let storedSize = themeData["--login-headline-font-size"] ||
+            getComputedStyle(document.body).getPropertyValue("--login-headline-font-size").trim() ||
+            "24px";
+        let numericSize = parseInt(storedSize, 10) || 24;
+
+        const sizeInput = document.createElement("input");
+        sizeInput.type = "number";
+        sizeInput.min = 10;
+        sizeInput.value = numericSize;
+        sizeInput.className = "tb-color-code"; // reuse design
+
+        function applySize(val) {
+            const size = `${val}px`;
+            document.body.style.setProperty("--login-headline-font-size", size);
+            savedThemeObj.themeData["--login-headline-font-size"] = size;
+            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+        }
+
+        sizeInput.addEventListener("input", () => {
+            const val = parseInt(sizeInput.value, 10);
+            if (!isNaN(val)) applySize(val);
+        });
+
+        applySize(numericSize);
+
+        sizeWrapper.appendChild(sizeLabel);
+        sizeWrapper.appendChild(sizeInput);
+
+        // === Color Picker ===
+        const colorWrapper = document.createElement("div");
+        colorWrapper.className = "tb-color-picker-wrapper";
+
+        const colorLabel = document.createElement("label");
+        colorLabel.textContent = "Login Heading Text Color";
+        colorLabel.className = "tb-color-picker-label";
+
+        let storedColor = themeData["--login-headline-text-color"] ||
+            getComputedStyle(document.body).getPropertyValue("--login-headline-text-color").trim() ||
+            "#000000";
+        if (!/^#[0-9A-F]{6}$/i.test(storedColor)) storedColor = "#000000";
+
+        const colorInput = document.createElement("input");
+        colorInput.type = "color";
+        colorInput.value = storedColor;
+        colorInput.className = "tb-color-input";
+
+        const colorCode = document.createElement("input");
+        colorCode.type = "text";
+        colorCode.className = "tb-color-code";
+        colorCode.value = storedColor;
+        colorCode.maxLength = 7;
+
+        function applyColor(color) {
+            if (!/^#[0-9A-F]{6}$/i.test(color)) return;
+            colorInput.value = color;
+            colorCode.value = color;
+            document.body.style.setProperty("--login-headline-text-color", color);
+            savedThemeObj.themeData["--login-headline-text-color"] = color;
+            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+        }
+
+        colorInput.addEventListener("input", () => applyColor(colorInput.value));
+        colorCode.addEventListener("input", () => {
+            const val = colorCode.value.trim();
+            if (/^#[0-9A-F]{6}$/i.test(val)) applyColor(val);
+        });
+
+        applyColor(storedColor);
+
+        colorWrapper.appendChild(colorLabel);
+        colorWrapper.appendChild(colorInput);
+        colorWrapper.appendChild(colorCode);
+
+        // === Heading Text Input ===
+        const textWrapper = document.createElement("div");
+        textWrapper.className = "tb-color-picker-wrapper";
+
+        const textLabel = document.createElement("label");
+        textLabel.textContent = "Login Heading Text";
+        textLabel.className = "tb-color-picker-label";
+
+        let storedText = themeData["--login-headline-text"] || "Sign into your account";
+
+        const textInput = document.createElement("input");
+        textInput.type = "text";
+        textInput.className = "tb-color-code"; // reuse styling
+        textInput.value = storedText;
+
+        function applyText(text) {
+            const heading = document.querySelector(".hl_login .hl_login--body .login-card-heading h2");
+            if (heading) heading.textContent = text;
+
+            savedThemeObj.themeData["--login-headline-text"] = text;
+            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+        }
+
+        textInput.addEventListener("input", () => {
+            applyText(textInput.value.trim());
+        });
+
+        applyText(storedText);
+
+        textWrapper.appendChild(textLabel);
+        textWrapper.appendChild(textInput);
+
+        // Put them together
+        wrapper.appendChild(sizeWrapper);
+        wrapper.appendChild(colorWrapper);
+        wrapper.appendChild(textWrapper);
+
+        return wrapper;
+    }
+
+    // Usage
 
     function createLoginLogoInput(labelText, cssVar) {
         const wrapper = document.createElement("div");
@@ -2891,6 +3019,14 @@
                         section.appendChild(createLoginLinkTextColorPicker());
                         section.appendChild(createLoginLinkTextSizeInput());
                         section.appendChild(createLoginLogoInput("Logo URL", "--login-company-logo"));
+
+                        const heading = document.createElement("h4");
+                        heading.className = "tb-header-controls";
+                        heading.textContent = "Login Card Heading Settings";
+                        section.appendChild(heading);
+
+                        section.appendChild(createLoginHeadingControls());
+
                     },
                     "",
                     true
