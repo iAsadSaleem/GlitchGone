@@ -2540,13 +2540,11 @@
                             const themeData = collectThemeVars() || {};
                             const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
                             savedTheme.themeData = savedTheme.themeData || {};
-                            console.log("[ThemeBuilder] Collected themeData:", themeData);
 
                             // Merge collected vars
                             Object.keys(themeData).forEach(key => {
                                 savedTheme.themeData[key] = themeData[key];
                             });
-                            console.log("[ThemeBuilder] SavedTheme after merge:", savedTheme);
 
                             // Save to localStorage
                             localStorage.setItem("userTheme", JSON.stringify(savedTheme));
@@ -2554,7 +2552,6 @@
                             // Prepare DB payload
                             const rlNo = localStorage.getItem("rlno") ? atob(localStorage.getItem("rlno")) : null;
                             const email = localStorage.getItem("g-em") ? atob(localStorage.getItem("g-em")) : null;
-                            console.log("[ThemeBuilder] rlNo:", rlNo, "g-em:", email);
 
                             const dbData = {
                                 rlNo,
@@ -2564,7 +2561,6 @@
                                 bodyFont: savedTheme.themeData["--body-font"] || "Arial, sans-serif",
                                 updatedAt: new Date().toISOString(),
                             };
-                            console.log("[ThemeBuilder] Payload being sent to API:", dbData);
 
                             // 8️⃣ Send to API (non-blocking, errors logged)
                             fetch("https://theme-builder-delta.vercel.app/api/theme", {
@@ -2574,7 +2570,6 @@
                             })
                                 .then(async (res) => {
                                     const result = await res.json().catch(() => null);
-                                    console.log("[ThemeBuilder] API response:", res.status, result);
                                     if (!res.ok) {
                                         console.error("[ThemeBuilder] API error:", result);
                                     }
