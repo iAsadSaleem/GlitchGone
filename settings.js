@@ -2710,85 +2710,88 @@
         wrapper.id = "tb-feature-lock-settings";
         wrapper.className = "tb-feature-lock-settings";
 
-
-        // ✅ Load saved theme + locked menus from themeData
+        // Load saved theme + locked menus
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedTheme.themeData || {};
         const lockedMenus = themeData.lockedMenus || {};
 
-        // Wait until sidebar menus are loaded
-        waitForSidebarMenus(() => {
-            const sidebarMenus = document.querySelectorAll(".hl_nav-header a");
-            console.log("[FeatureLock] Sidebar menus found:", sidebarMenus);
+        // Predefined sidebar menus
+        const sidebarMenus = [
+            { id: "sb_launchpad", label: "Launchpad" },
+            { id: "sb_dashboard", label: "Dashboard" },
+            { id: "sb_conversations", label: "Conversations" },
+            { id: "sb_calendars", label: "Calendars" },
+            { id: "sb_contacts", label: "Contacts" },
+            { id: "sb_opportunities", label: "Opportunities" },
+            { id: "sb_payments", label: "Payments" },
+            { id: "sb_email-marketing", label: "Email Marketing" },
+            { id: "sb_automation", label: "Automation" },
+            { id: "sb_sites", label: "Sites" },
+            { id: "sb_memberships", label: "Memberships" },
+            { id: "sb_app-media", label: "App Media" },
+            { id: "sb_reputation", label: "Reputation" },
+            { id: "sb_reporting", label: "Reporting" },
+            { id: "sb_app-marketplace", label: "App Marketplace" }
+        ];
 
-            sidebarMenus.forEach(menu => {
-                const menuId = menu.id || menu.getAttribute("meta") || menu.href;
-                const labelText = menu.querySelector(".nav-title, .nav-title span")?.innerText.trim() || menuId;
+        sidebarMenus.forEach(menu => {
+            const row = document.createElement("div");
+            row.className = "tb-feature-row";
+            row.style.display = "flex";
+            row.style.alignItems = "center";
+            row.style.justifyContent = "space-between";
+            row.style.marginBottom = "8px";
 
-                const row = document.createElement("div");
-                row.className = "tb-feature-row";
-                row.style.display = "flex";
-                row.style.alignItems = "center";
-                row.style.justifyContent = "space-between";
-                row.style.marginBottom = "8px";
+            const label = document.createElement("span");
+            label.textContent = menu.label;
+            label.style.flex = "1";
+            label.style.fontSize = "14px";
 
-                const label = document.createElement("span");
-                label.textContent = labelText;
-                label.style.flex = "1";
-                label.style.fontSize = "14px";
+            // Toggle
+            const toggleWrapper = document.createElement("div");
+            toggleWrapper.className = "toggle-switch";
 
-                // Toggle
-                const toggleWrapper = document.createElement("div");
-                toggleWrapper.className = "toggle-switch";
+            const toggleInput = document.createElement("input");
+            toggleInput.type = "checkbox";
+            toggleInput.className = "toggle-input";
+            toggleInput.id = "lock-" + menu.id;
+            toggleInput.checked = !!lockedMenus[menu.id];
 
-                const toggleInput = document.createElement("input");
-                toggleInput.type = "checkbox";
-                toggleInput.className = "toggle-input";
-                toggleInput.id = "lock-" + menuId;
-                toggleInput.checked = !!lockedMenus[menuId];
+            const toggleLabel = document.createElement("label");
+            toggleLabel.className = "toggle-label";
+            toggleLabel.setAttribute("for", "lock-" + menu.id);
 
-                const toggleLabel = document.createElement("label");
-                toggleLabel.className = "toggle-label";
-                toggleLabel.setAttribute("for", "lock-" + menuId);
+            toggleWrapper.appendChild(toggleInput);
+            toggleWrapper.appendChild(toggleLabel);
 
-                toggleWrapper.appendChild(toggleInput);
-                toggleWrapper.appendChild(toggleLabel);
+            // Save lock state
+            toggleInput.addEventListener("change", () => {
+                const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                saved.themeData = saved.themeData || {};
+                const lockedMenus = saved.themeData["--lockedMenus"]
+                    ? JSON.parse(saved.themeData["--lockedMenus"])
+                    : {};
 
-                // ✅ Save lock state inside themeData
-                toggleInput.addEventListener("change", () => {
-                    const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-                    saved.themeData = saved.themeData || {};
+                if (toggleInput.checked) {
+                    lockedMenus[menu.id] = true;
+                } else {
+                    delete lockedMenus[menu.id];
+                }
 
-                    // Parse or create lockedMenus
-                    const lockedMenus = saved.themeData["--lockedMenus"]
-                        ? JSON.parse(saved.themeData["--lockedMenus"])
-                        : {};
+                saved.themeData["--lockedMenus"] = JSON.stringify(lockedMenus);
+                localStorage.setItem("userTheme", JSON.stringify(saved));
 
-                    if (toggleInput.checked) {
-                        lockedMenus[menuId] = true;
-                    } else {
-                        delete lockedMenus[menuId];
-                    }
-
-                    // Save as string in localStorage for persistence
-                    saved.themeData["--lockedMenus"] = JSON.stringify(lockedMenus);
-
-                    localStorage.setItem("userTheme", JSON.stringify(saved));
-
-                    // Apply lock immediately
-                    applyLockedMenus();
-                });
-
-                row.appendChild(label);
-                row.appendChild(toggleWrapper);
-                wrapper.appendChild(row);
+                applyLockedMenus();
             });
 
-            container.appendChild(wrapper);
-            applyLockedMenus(); // apply immediately
+            row.appendChild(label);
+            row.appendChild(toggleWrapper);
+            wrapper.appendChild(row);
         });
-    }
 
+        container.appendChild(wrapper);
+        applyLockedMenus();
+    }
     // Renders toggle UI once menus are available
     // ✅ Apply menu locks
     function applyLockedMenus() {
