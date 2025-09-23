@@ -2704,6 +2704,13 @@
     }
 
     function buildFeatureLockSection(container) {
+
+        let savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        if (savedTheme.themeData && typeof savedTheme.themeData === "string") {
+            savedTheme.themeData = JSON.parse(savedTheme.themeData);
+            localStorage.setItem("userTheme", JSON.stringify(savedTheme));
+        }
+
         if (document.getElementById("tb-feature-lock-settings")) return;
 
         const wrapper = document.createElement("div");
@@ -2711,7 +2718,6 @@
         wrapper.className = "tb-feature-lock-settings";
 
         // Load saved theme + locked menus
-        const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedTheme.themeData || {};
         const lockedMenus = themeData["--lockedMenus"] ? JSON.parse(themeData["--lockedMenus"]) : {};
 
@@ -2768,19 +2774,30 @@
             toggleInput.addEventListener("change", () => {
                 const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                 saved.themeData = saved.themeData || {};
-                const lockedMenus = saved.themeData["--lockedMenus"]
-                    ? JSON.parse(saved.themeData["--lockedMenus"])
-                    : {};
 
+                // Fix if themeData is a string
+                if (typeof saved.themeData === "string") {
+                    try { saved.themeData = JSON.parse(saved.themeData); } catch (e) { saved.themeData = {}; }
+                }
+
+                // Parse lockedMenus safely
+                let lockedMenus = {};
+                if (saved.themeData["--lockedMenus"]) {
+                    try { lockedMenus = JSON.parse(saved.themeData["--lockedMenus"]); } catch (e) { lockedMenus = {}; }
+                }
+
+                // Update lock state
                 if (toggleInput.checked) {
                     lockedMenus[menu.id] = true;
                 } else {
                     delete lockedMenus[menu.id];
                 }
 
+                // Save back as string
                 saved.themeData["--lockedMenus"] = JSON.stringify(lockedMenus);
                 localStorage.setItem("userTheme", JSON.stringify(saved));
 
+                // Apply immediately
                 applyLockedMenus();
             });
 
