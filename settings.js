@@ -859,7 +859,7 @@
 
         return wrapper;
     }
-    function    () {
+    function createLoginCardGradientPicker() {
         const wrapper = document.createElement("div");
         wrapper.className = "tb-color-picker-wrapper";
 
