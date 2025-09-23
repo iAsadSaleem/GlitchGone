@@ -734,6 +734,14 @@
         });
         const sidebarText = localStorage.getItem("sidebarTextColor");
         if (sidebarText) applySidebarTextColor(sidebarText);
+
+        // ✅ Restore login headline text
+        if (themeData["--login-headline-text"]) {
+            const heading = document.querySelector(".hl_login .hl_login--body .login-card-heading h2");
+            if (heading) {
+                heading.textContent = themeData["--login-headline-text"];
+            }
+        }
     }
     // Find header controls container
     function findControlsContainer() {
