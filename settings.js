@@ -949,15 +949,17 @@
         localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
     }
 
+    // Append both separately after gradient pickers
 
+
+    /* ========== Border Radius Input ========== */
     function createLoginButtonBorderRadiusInput() {
         const wrapper = document.createElement("div");
         wrapper.className = "tb-color-picker-wrapper";
 
-        // ================= Border Radius =================
-        const radiusLabel = document.createElement("label");
-        radiusLabel.textContent = "Login Button Border Radius";
-        radiusLabel.className = "tb-color-picker-label";
+        const label = document.createElement("label");
+        label.textContent = "Login Button Border Radius";
+        label.className = "tb-color-picker-label";
 
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedThemeObj.themeData || {};
@@ -972,7 +974,7 @@
         radiusInput.type = "number";
         radiusInput.min = 0;
         radiusInput.value = numericValue;
-        radiusInput.className = "tb-color-code"; // reuse same styling
+        radiusInput.className = "tb-color-code"; // reuse styling
 
         function applyRadius(val) {
             const radius = `${val}px`;
@@ -990,13 +992,23 @@
 
         applyRadius(numericValue);
 
-        wrapper.appendChild(radiusLabel);
+        wrapper.appendChild(label);
         wrapper.appendChild(radiusInput);
 
-        // ================= Font Color =================
-        const colorLabel = document.createElement("label");
-        colorLabel.textContent = "Login Button Font Color";
-        colorLabel.className = "tb-color-picker-label";
+        return wrapper;
+    }
+
+    /* ========== Font Color Picker ========== */
+    function createLoginButtonFontColorPicker() {
+        const wrapper = document.createElement("div");
+        wrapper.className = "tb-color-picker-wrapper";
+
+        const label = document.createElement("label");
+        label.textContent = "Login Button Font Color";
+        label.className = "tb-color-picker-label";
+
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        const themeData = savedThemeObj.themeData || {};
 
         let storedColor = themeData["--login-button-text-color"] ||
             getComputedStyle(document.body).getPropertyValue("--login-button-text-color").trim() ||
@@ -1006,13 +1018,13 @@
             storedColor = "#ffffff";
         }
 
-        // Color picker
+        // 🎨 Color picker
         const colorInput = document.createElement("input");
         colorInput.type = "color";
         colorInput.value = storedColor;
         colorInput.className = "tb-color-input";
 
-        // Hex text input
+        // 📝 Hex code input
         const colorCode = document.createElement("input");
         colorCode.type = "text";
         colorCode.className = "tb-color-code";
@@ -1039,7 +1051,7 @@
 
         applyFontColor(storedColor);
 
-        wrapper.appendChild(colorLabel);
+        wrapper.appendChild(label);
         wrapper.appendChild(colorInput);
         wrapper.appendChild(colorCode);
 
@@ -2634,6 +2646,7 @@
 
                         section.appendChild(createLoginButtonGradientPicker());
                         section.appendChild(createLoginButtonBorderRadiusInput());
+                        section.appendChild(createLoginButtonFontColorPicker());
 
                         section.appendChild(createLoginColorPicker("Login Link Text Color", "--login-link-text-color"));
                         section.appendChild(createLoginColorPicker("Login Card Backgroud Color", "--login-card-bg-color"));
