@@ -2727,10 +2727,6 @@
     function buildMenuCustomizationSection(container) {
         if (document.getElementById("tb-menu-customization")) return;
 
-        const wrapper = document.createElement("div");
-        wrapper.id = "tb-menu-customization";
-        wrapper.className = "tb-menu-customization";
-
         // ✅ Predefined Menus (Same as buildFeatureLockSection)
         const subAccountMenus = [
             { id: "sb_launchpad", label: "Launchpad" },
