@@ -2423,22 +2423,20 @@
 
             const toggleWrapper = document.createElement("div");
             toggleWrapper.style.display = "flex";
-            toggleWrapper.style.gap = "15px";
+            toggleWrapper.style.gap = "20px";
+            toggleWrapper.style.alignItems = "center";
 
-            // 🔐 Lock toggle
+            // 🔐 Lock toggle + icon
             const lockWrapper = document.createElement("div");
             lockWrapper.style.display = "flex";
             lockWrapper.style.alignItems = "center";
             lockWrapper.style.gap = "6px";
 
-            // lock icon
             const lockIconEl = document.createElement("i");
             lockIconEl.className = "fas fa-lock";
             lockIconEl.style.color = "#d9534f";
             lockIconEl.style.fontSize = "16px";
-            lockIconEl.style.minWidth = "16px"; // keeps layout clean
 
-            // toggle switch
             const lockSwitch = document.createElement("div");
             lockSwitch.className = "toggle-switch";
 
@@ -2458,7 +2456,7 @@
             lockWrapper.appendChild(lockIconEl);
             lockWrapper.appendChild(lockSwitch);
 
-            // 👁️ Hide toggle
+            // 👁️ Hide toggle + icon
             const hideWrapper = document.createElement("div");
             hideWrapper.style.display = "flex";
             hideWrapper.style.alignItems = "center";
@@ -2468,7 +2466,6 @@
             eyeIconEl.className = "fas fa-eye";
             eyeIconEl.style.color = "#5bc0de";
             eyeIconEl.style.fontSize = "16px";
-            eyeIconEl.style.minWidth = "16px";
 
             const hideSwitch = document.createElement("div");
             hideSwitch.className = "toggle-switch";
@@ -2489,7 +2486,11 @@
             hideWrapper.appendChild(eyeIconEl);
             hideWrapper.appendChild(hideSwitch);
 
-            // 💾 Save lock state
+            // ✅ Add the wrappers (with icons) instead of switches directly
+            toggleWrapper.appendChild(lockWrapper);
+            toggleWrapper.appendChild(hideWrapper);
+
+            // Save lock state
             lockInput.addEventListener("change", () => {
                 const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                 saved.themeData = saved.themeData || {};
@@ -2503,9 +2504,8 @@
                 applyLockedMenus();
             });
 
-            // 💾 Save hide state
+            // Save hide state
             hideInput.addEventListener("change", () => {
-
                 let saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
 
                 if (saved.themeData && typeof saved.themeData === "string") {
@@ -2528,11 +2528,8 @@
                     }
                 }
 
-                if (hideInput.checked) {
-                    hidden[menu.id] = true;
-                } else {
-                    delete hidden[menu.id];
-                }
+                if (hideInput.checked) hidden[menu.id] = true;
+                else delete hidden[menu.id];
 
                 saved.themeData["--hiddenMenus"] = JSON.stringify(hidden);
                 localStorage.setItem("userTheme", JSON.stringify(saved));
@@ -2540,13 +2537,11 @@
                 applyLockedMenus();
             });
 
-            toggleWrapper.appendChild(lockSwitch);
-            toggleWrapper.appendChild(hideSwitch);
-
             row.appendChild(label);
             row.appendChild(toggleWrapper);
             parent.appendChild(row);
         }
+
     }
 
     function applyLockedMenus() {
