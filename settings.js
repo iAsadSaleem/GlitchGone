@@ -2476,25 +2476,43 @@
 
             // 💾 Save hide state
             hideInput.addEventListener("change", () => {
-                const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-                saved.themeData = saved.themeData || {};
-                let hidden = saved.themeData["--hiddenMenus"] ? JSON.parse(saved.themeData["--hiddenMenus"]) : {};
+                let saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
 
-                if (hideInput.checked) hidden[menu.id] = true;
-                else delete hidden[menu.id];
+                // ✅ Always parse themeData object safely
+                if (saved.themeData && typeof saved.themeData === "string") {
+                    try {
+                        saved.themeData = JSON.parse(saved.themeData);
+                    } catch (e) {
+                        saved.themeData = {};
+                    }
+                } else if (!saved.themeData) {
+                    saved.themeData = {};
+                }
 
+                // ✅ Always parse current hidden menus correctly
+                let hidden = {};
+                if (saved.themeData["--hiddenMenus"]) {
+                    try {
+                        hidden = JSON.parse(saved.themeData["--hiddenMenus"]);
+                    } catch (e) {
+                        hidden = {};
+                    }
+                }
+
+                // ✅ Update the key based on checkbox state
+                if (hideInput.checked) {
+                    hidden[menu.id] = true;
+                } else {
+                    delete hidden[menu.id];
+                }
+
+                // ✅ Save back cleanly
                 saved.themeData["--hiddenMenus"] = JSON.stringify(hidden);
                 localStorage.setItem("userTheme", JSON.stringify(saved));
+
+                console.log("💾 Updated hidden menus:", hidden);
                 applyLockedMenus();
             });
-
-            toggleWrapper.appendChild(lockSwitch);
-            toggleWrapper.appendChild(hideSwitch);
-
-            row.appendChild(label);
-            row.appendChild(toggleWrapper);
-            parent.appendChild(row);
-        }
     }
 
     function applyLockedMenus() {
