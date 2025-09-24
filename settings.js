@@ -2731,11 +2731,6 @@
         wrapper.id = "tb-menu-customization";
         wrapper.className = "tb-menu-customization";
 
-        const title = document.createElement("h4");
-        title.className = "tb-section-dashbaord-title";
-        title.innerText = "Side Menu — Customizer";
-        wrapper.appendChild(title);
-
         const separator = document.createElement("hr");
         separator.className = "tb-section-separator";
         wrapper.appendChild(separator);
