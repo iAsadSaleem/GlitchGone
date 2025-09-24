@@ -2430,7 +2430,7 @@
             const lockWrapper = document.createElement("div");
             lockWrapper.style.display = "flex";
             lockWrapper.style.alignItems = "center";
-            lockWrapper.style.gap = "6px";
+            lockWrapper.style.gap = "4px";
 
             const lockIconEl = document.createElement("i");
             lockIconEl.className = "fas fa-lock";
@@ -2460,7 +2460,7 @@
             const hideWrapper = document.createElement("div");
             hideWrapper.style.display = "flex";
             hideWrapper.style.alignItems = "center";
-            hideWrapper.style.gap = "6px";
+            hideWrapper.style.gap = "4px";
 
             const eyeIconEl = document.createElement("i");
             eyeIconEl.className = "fas fa-eye";
