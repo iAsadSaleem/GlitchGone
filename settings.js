@@ -2374,7 +2374,7 @@
 
         const mainTitle = document.createElement("h4");
         mainTitle.className = "tb-header-controls";
-        mainTitle.textContent = "Main Menu Lock & Hide";
+        mainTitle.textContent = "Sub-Account Level Lock & Hide";
         wrapper.appendChild(mainTitle);
 
         sidebarMenus.forEach(menu => createToggleRow(menu, lockedMenus, hiddenMenus, wrapper));
@@ -2398,7 +2398,7 @@
 
         const agencyTitle = document.createElement("h4");
         agencyTitle.className = "tb-header-controls";
-        agencyTitle.textContent = "Agency Menu Lock & Hide";
+        agencyTitle.textContent = "Agency Level Lock & Hide";
         agencyTitle.style.marginTop = "20px";
         wrapper.appendChild(agencyTitle);
 
@@ -2428,6 +2428,13 @@
             // 🔐 Lock toggle
             const lockSwitch = document.createElement("div");
             lockSwitch.className = "toggle-switch";
+            lockSwitch.style.display = "flex";
+            lockSwitch.style.alignItems = "center";
+            lockSwitch.style.gap = "6px";
+
+            const lockIconEl = document.createElement("i");
+            lockIconEl.className = "fas fa-lock";
+            lockIconEl.style.color = "#d9534f"; // red lock icon
 
             const lockInput = document.createElement("input");
             lockInput.type = "checkbox";
@@ -2439,12 +2446,20 @@
             lockLabel.className = "toggle-label";
             lockLabel.setAttribute("for", "lock-" + menu.id);
 
+            lockSwitch.appendChild(lockIconEl);
             lockSwitch.appendChild(lockInput);
             lockSwitch.appendChild(lockLabel);
 
             // 👁️ Hide toggle
             const hideSwitch = document.createElement("div");
             hideSwitch.className = "toggle-switch";
+            hideSwitch.style.display = "flex";
+            hideSwitch.style.alignItems = "center";
+            hideSwitch.style.gap = "6px";
+
+            const eyeIconEl = document.createElement("i");
+            eyeIconEl.className = "fas fa-eye";
+            eyeIconEl.style.color = "#5bc0de"; // light blue eye icon
 
             const hideInput = document.createElement("input");
             hideInput.type = "checkbox";
@@ -2456,6 +2471,7 @@
             hideLabel.className = "toggle-label";
             hideLabel.setAttribute("for", "hide-" + menu.id);
 
+            hideSwitch.appendChild(eyeIconEl);
             hideSwitch.appendChild(hideInput);
             hideSwitch.appendChild(hideLabel);
 
