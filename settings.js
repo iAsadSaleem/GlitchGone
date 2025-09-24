@@ -2513,6 +2513,14 @@
                 console.log("💾 Updated hidden menus:", hidden);
                 applyLockedMenus();
             });
+
+            toggleWrapper.appendChild(lockSwitch);
+            toggleWrapper.appendChild(hideSwitch);
+
+            row.appendChild(label);
+            row.appendChild(toggleWrapper);
+            parent.appendChild(row);
+        }
     }
 
     function applyLockedMenus() {
