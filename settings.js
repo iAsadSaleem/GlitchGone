@@ -2727,6 +2727,10 @@
     function buildMenuCustomizationSection(container) {
         if (document.getElementById("tb-menu-customization")) return;
 
+        const wrapper = document.createElement("div");
+        wrapper.id = "tb-menu-customization";
+        wrapper.className = "tb-menu-customization";
+
         // ✅ Predefined Menus (Same as buildFeatureLockSection)
         const subAccountMenus = [
             { id: "sb_launchpad", label: "Launchpad" },
@@ -2770,6 +2774,11 @@
 
         // 🔧 Helper to build each section
         const buildSection = (menus, sectionTitle) => {
+            const sectionHeading = document.createElement("h4");
+            sectionHeading.className = "tb-header-controls";
+            sectionHeading.textContent = sectionTitle;
+            sectionHeading.style.marginTop = "20px";
+            wrapper.appendChild(sectionHeading);
 
             menus.forEach(menu => {
                 const currentCustom = menuCustomizations[menu.id] || {};
