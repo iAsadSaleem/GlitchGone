@@ -2001,7 +2001,6 @@
         container.appendChild(wrapper);
     }
 
-
     function addDashboardCardSettings(container) {
         if (document.getElementById("tb-dashboard-card-settings")) return;
 
@@ -2338,25 +2337,8 @@
         observer.observe(document.body, { childList: true, subtree: true });
     }
 
-    function buildFeatureLockSection(container) {
-
-        let savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        if (savedTheme.themeData && typeof savedTheme.themeData === "string") {
-            savedTheme.themeData = JSON.parse(savedTheme.themeData);
-            localStorage.setItem("userTheme", JSON.stringify(savedTheme));
-        }
-
-        if (document.getElementById("tb-feature-lock-settings")) return;
-
-        const wrapper = document.createElement("div");
-        wrapper.id = "tb-feature-lock-settings";
-        wrapper.className = "tb-feature-lock-settings";
-
-        // Load saved theme + locked menus
-        const themeData = savedTheme.themeData || {};
-        const lockedMenus = themeData["--lockedMenus"] ? JSON.parse(themeData["--lockedMenus"]) : {};
-
-        // Predefined sidebar menus
+    function buildFeatureLockSection(section) {
+        // 🌐 1️⃣ Regular sidebar menus
         const sidebarMenus = [
             { id: "sb_launchpad", label: "Launchpad" },
             { id: "sb_dashboard", label: "Dashboard" },
@@ -2365,85 +2347,67 @@
             { id: "sb_contacts", label: "Contacts" },
             { id: "sb_opportunities", label: "Opportunities" },
             { id: "sb_payments", label: "Payments" },
-            { id: "sb_email-marketing", label: "Email Marketing" },
+            { id: "sb_marketing", label: "Marketing" },
             { id: "sb_automation", label: "Automation" },
             { id: "sb_sites", label: "Sites" },
             { id: "sb_memberships", label: "Memberships" },
-            { id: "sb_app-media", label: "App Media" },
-            { id: "sb_reputation", label: "Reputation" },
             { id: "sb_reporting", label: "Reporting" },
-            { id: "sb_app-marketplace", label: "App Marketplace" }
+            { id: "sb_applications", label: "Applications" },
+            { id: "sb_settings", label: "Settings" }
         ];
+
+        const sidebarWrapper = document.createElement("div");
+        sidebarWrapper.className = "tb-lock-section";
+        sidebarWrapper.innerHTML = `<h4 class="tb-header-controls">Main Menu Lock</h4>`;
+        section.appendChild(sidebarWrapper);
 
         sidebarMenus.forEach(menu => {
             const row = document.createElement("div");
-            row.className = "tb-feature-row";
-            row.style.display = "flex";
-            row.style.alignItems = "center";
-            row.style.justifyContent = "space-between";
-            row.style.marginBottom = "8px";
-
-            const label = document.createElement("span");
-            label.textContent = menu.label;
-            label.style.flex = "1";
-            label.style.fontSize = "14px";
-
-            // Toggle
-            const toggleWrapper = document.createElement("div");
-            toggleWrapper.className = "toggle-switch";
-
-            const toggleInput = document.createElement("input");
-            toggleInput.type = "checkbox";
-            toggleInput.className = "toggle-input";
-            toggleInput.id = "lock-" + menu.id;
-            toggleInput.checked = !!lockedMenus[menu.id];
-
-            const toggleLabel = document.createElement("label");
-            toggleLabel.className = "toggle-label";
-            toggleLabel.setAttribute("for", "lock-" + menu.id);
-
-            toggleWrapper.appendChild(toggleInput);
-            toggleWrapper.appendChild(toggleLabel);
-
-            // Save lock state
-            toggleInput.addEventListener("change", () => {
-                const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-                saved.themeData = saved.themeData || {};
-
-                // Fix if themeData is a string
-                if (typeof saved.themeData === "string") {
-                    try { saved.themeData = JSON.parse(saved.themeData); } catch (e) { saved.themeData = {}; }
-                }
-
-                // Parse lockedMenus safely
-                let lockedMenus = {};
-                if (saved.themeData["--lockedMenus"]) {
-                    try { lockedMenus = JSON.parse(saved.themeData["--lockedMenus"]); } catch (e) { lockedMenus = {}; }
-                }
-
-                // Update lock state
-                if (toggleInput.checked) {
-                    lockedMenus[menu.id] = true;
-                } else {
-                    delete lockedMenus[menu.id];
-                }
-
-                // Save back as string
-                saved.themeData["--lockedMenus"] = JSON.stringify(lockedMenus);
-                localStorage.setItem("userTheme", JSON.stringify(saved));
-
-                // Apply immediately
-                applyLockedMenus();
-            });
-
-            row.appendChild(label);
-            row.appendChild(toggleWrapper);
-            wrapper.appendChild(row);
+            row.className = "tb-lock-item";
+            row.innerHTML = `
+      <label>
+        <input type="checkbox" class="tb-lock-toggle" data-menu-id="${menu.id}" />
+        ${menu.label}
+      </label>
+    `;
+            sidebarWrapper.appendChild(row);
         });
 
-        container.appendChild(wrapper);
-        applyLockedMenus();
+        // 🏢 2️⃣ Agency-level sidebar menus with title
+        const agencyMenus = [
+            { id: "sb_agency-dashboard", label: "Agency Dashboard" },
+            { id: "sb_location-prospect", label: "Prospecting" },
+            { id: "sb_agency-accounts", label: "App Marketplace" },
+            { id: "sb_agency-account-reselling", label: "Reselling" },
+            { id: "sb_agency-marketplace", label: "Add-Ons" },
+            { id: "sb_agency-affiliate-portal", label: "Affiliate Portal" },
+            { id: "sb_agency-template-library", label: "Template Library" },
+            { id: "sb_agency-partners", label: "Partners" },
+            { id: "sb_agency-university", label: "University" },
+            { id: "sb_saas-education", label: "SaaS Education" },
+            { id: "sb_ghl-swag", label: "GHL Swag" },
+            { id: "sb_agency-ideas", label: "Ideas" },
+            { id: "sb_mobile-app-customiser", label: "Mobile App" }
+        ];
+
+        const agencyWrapper = document.createElement("div");
+        agencyWrapper.className = "tb-lock-section";
+        agencyWrapper.innerHTML = `<h4 class="tb-header-controls">Agency Menu Lock</h4>`;
+        section.appendChild(agencyWrapper);
+
+        agencyMenus.forEach(menu => {
+            const row = document.createElement("div");
+            row.className = "tb-lock-item";
+            row.innerHTML = `
+      <label>
+        <input type="checkbox" class="tb-lock-toggle" data-menu-id="${menu.id}" />
+        ${menu.label}
+      </label>
+    `;
+            agencyWrapper.appendChild(row);
+        });
     }
+
     // ✅ Apply menu locks
     function applyLockedMenus() {
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
