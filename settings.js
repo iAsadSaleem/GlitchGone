@@ -2543,7 +2543,6 @@
         }
 
     }
-
     function applyLockedMenus() {
         // 1️⃣ Load saved theme from localStorage
         let savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
@@ -2618,150 +2617,6 @@
 
     }
 
-
-    //function buildFeatureLockSection(container) {
-
-    //    let savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
-    //    if (savedTheme.themeData && typeof savedTheme.themeData === "string") {
-    //        savedTheme.themeData = JSON.parse(savedTheme.themeData);
-    //        localStorage.setItem("userTheme", JSON.stringify(savedTheme));
-    //    }
-
-    //    if (document.getElementById("tb-feature-lock-settings")) return;
-
-    //    const wrapper = document.createElement("div");
-    //    wrapper.id = "tb-feature-lock-settings";
-    //    wrapper.className = "tb-feature-lock-settings";
-
-    //    // Load saved theme + locked menus
-    //    const themeData = savedTheme.themeData || {};
-    //    const lockedMenus = themeData["--lockedMenus"] ? JSON.parse(themeData["--lockedMenus"]) : {};
-
-    //    // 📁 MAIN SIDEBAR MENUS
-    //    const sidebarMenus = [
-    //        { id: "sb_launchpad", label: "Launchpad" },
-    //        { id: "sb_dashboard", label: "Dashboard" },
-    //        { id: "sb_conversations", label: "Conversations" },
-    //        { id: "sb_calendars", label: "Calendars" },
-    //        { id: "sb_contacts", label: "Contacts" },
-    //        { id: "sb_opportunities", label: "Opportunities" },
-    //        { id: "sb_payments", label: "Payments" },
-    //        { id: "sb_email-marketing", label: "Email Marketing" },
-    //        { id: "sb_automation", label: "Automation" },
-    //        { id: "sb_sites", label: "Sites" },
-    //        { id: "sb_memberships", label: "Memberships" },
-    //        { id: "sb_app-media", label: "App Media" },
-    //        { id: "sb_reputation", label: "Reputation" },
-    //        { id: "sb_reporting", label: "Reporting" },
-    //        { id: "sb_app-marketplace", label: "App Marketplace" }
-    //    ];
-
-    //    // Add header for main menu
-    //    const mainTitle = document.createElement("h4");
-    //    mainTitle.className = "tb-header-controls";
-    //    mainTitle.textContent = "Main Menu Lock";
-    //    wrapper.appendChild(mainTitle);
-
-    //    // Create toggle rows for main menus
-    //    sidebarMenus.forEach(menu => createToggleRow(menu, lockedMenus, wrapper));
-
-    //    // 🏢 AGENCY SIDEBAR MENUS
-    //    const agencyMenus = [
-    //        { id: "sb_agency-dashboard", label: "Agency Dashboard" },
-    //        { id: "sb_location-prospect", label: "Prospecting" },
-    //        { id: "sb_agency-accounts", label: "Agency Accounts" },
-    //        { id: "sb_agency-account-reselling", label: "Account Reselling" },
-    //        { id: "sb_agency-marketplace", label: "Agency Marketplace" },
-    //        { id: "sb_agency-affiliate-portal", label: "Affiliate Portal" },
-    //        { id: "sb_agency-template-library", label: "Template Library" },
-    //        { id: "sb_agency-partners", label: "Partners" },
-    //        { id: "sb_agency-university", label: "University" },
-    //        { id: "sb_saas-education", label: "SaaS Education" },
-    //        { id: "sb_ghl-swag", label: "GHL Swag" },
-    //        { id: "sb_agency-ideas", label: "Agency Ideas" },
-    //        { id: "sb_mobile-app-customiser", label: "Mobile App Customiser" }
-    //    ];
-
-    //    // Add header for agency menu
-    //    const agencyTitle = document.createElement("h4");
-    //    agencyTitle.className = "tb-header-controls";
-    //    agencyTitle.textContent = "Agency Menu Lock";
-    //    agencyTitle.style.marginTop = "20px";
-    //    wrapper.appendChild(agencyTitle);
-
-    //    // Create toggle rows for agency menus
-    //    agencyMenus.forEach(menu => createToggleRow(menu, lockedMenus, wrapper));
-
-    //    // Append all to container
-    //    container.appendChild(wrapper);
-    //    applyLockedMenus();
-
-    //    // 🔧 Function to create each toggle row (reusable)
-    //    function createToggleRow(menu, lockedMenus, parent) {
-    //        const row = document.createElement("div");
-    //        row.className = "tb-feature-row";
-    //        row.style.display = "flex";
-    //        row.style.alignItems = "center";
-    //        row.style.justifyContent = "space-between";
-    //        row.style.marginBottom = "8px";
-
-    //        const label = document.createElement("span");
-    //        label.textContent = menu.label;
-    //        label.style.flex = "1";
-    //        label.style.fontSize = "14px";
-
-    //        const toggleWrapper = document.createElement("div");
-    //        toggleWrapper.className = "toggle-switch";
-
-    //        const toggleInput = document.createElement("input");
-    //        toggleInput.type = "checkbox";
-    //        toggleInput.className = "toggle-input";
-    //        toggleInput.id = "lock-" + menu.id;
-    //        toggleInput.checked = !!lockedMenus[menu.id];
-
-    //        const toggleLabel = document.createElement("label");
-    //        toggleLabel.className = "toggle-label";
-    //        toggleLabel.setAttribute("for", "lock-" + menu.id);
-
-    //        toggleWrapper.appendChild(toggleInput);
-    //        toggleWrapper.appendChild(toggleLabel);
-
-    //        toggleInput.addEventListener("change", () => {
-    //            const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-    //            saved.themeData = saved.themeData || {};
-
-    //            if (typeof saved.themeData === "string") {
-    //                try { saved.themeData = JSON.parse(saved.themeData); } catch (e) { saved.themeData = {}; }
-    //            }
-
-    //            let lockedMenus = {};
-    //            if (saved.themeData["--lockedMenus"]) {
-    //                try { lockedMenus = JSON.parse(saved.themeData["--lockedMenus"]); } catch (e) { lockedMenus = {}; }
-    //            }
-
-    //            if (toggleInput.checked) {
-    //                lockedMenus[menu.id] = true;
-    //            } else {
-    //                delete lockedMenus[menu.id];
-    //            }
-    //            console.log("Before save:", lockedMenus);
-    //            console.log("Saving lock for:", menu.id, " -> ", toggleInput.checked);
-    //            console.log("After save:", saved.themeData["--lockedMenus"]);
-
-    //            saved.themeData["--lockedMenus"] = JSON.stringify(lockedMenus);
-    //            localStorage.setItem("userTheme", JSON.stringify(saved));
-    //            applyLockedMenus();
-    //        });
-
-    //        row.appendChild(label);
-    //        row.appendChild(toggleWrapper);
-    //        parent.appendChild(row);
-    //    }
-    //}
-
-    // ✅ Apply menu locks
-
-    // Run once when DOM is ready
     document.addEventListener("DOMContentLoaded", applyLockedMenus);
 
     // Also run again after slight delay (in case agency menu loads later)
@@ -2828,67 +2683,46 @@
             ? JSON.parse(themeData["--menuCustomizations"])
             : {};
 
-        const variableMap = {
-            "sb_launchpad": "--launchpad-new-name",
-            "sb_dashboard": "--dashboard-new-name",
-            "sb_media": "--media-storage-new-name",
-            "sb_ai_agents": "--ai-agents-new-name",
-            "sb_conversations": "--conversations-new-name",
-            "sb_calendars": "--calendars-new-name",
-            "sb_contacts": "--contacts-new-name",
-            "sb_opportunities": "--opportunities-new-name",
-            "sb_payments": "--payments-new-name",
-            "sb_marketing": "--marketing-new-name",
-            "sb_automation": "--automation-new-name",
-            "sb_sites": "--sites-new-name",
-            "sb_memberships": "--memberships-new-name",
-            "sb_reputation": "--reputation-new-name",
-            "sb_reporting": "--reporting-new-name",
-            "sb_marketplace": "--app-marketplace-new-name",
-            "sb_mobile": "--mobile-app-new-name"
-        };
-
         Object.keys(menuCustomizations).forEach(menuId => {
             const custom = menuCustomizations[menuId];
             const menuEl = document.getElementById(menuId);
             if (!menuEl) return;
 
-            const navTitle = menuEl.querySelector(".nav-title");
-
             // ---------------- Update Title ----------------
+            const navTitle = menuEl.querySelector(".nav-title");
             if (custom.title && navTitle) {
                 navTitle.textContent = custom.title;
-                const cssVar = variableMap[menuId];
-                if (cssVar) {
-                    document.documentElement.style.setProperty(cssVar, `"${custom.title}"`);
-                }
             }
 
             // ---------------- Update Icon ----------------
             if (custom.icon && custom.icon.trim() !== "") {
-                const navTitle = menuEl.querySelector(".nav-title");
-
-                // ✅ Remove only existing icon for this menu
+                // Remove any existing icon
                 menuEl.querySelectorAll("i, img").forEach(el => el.remove());
                 menuEl.classList.remove("sidebar-no-icon");
 
-                // ✅ Insert new icon
                 if (/^fa-|^fas-|^far-|^fal-|^fab-/.test(custom.icon.trim())) {
                     const iconEl = document.createElement("i");
                     iconEl.className = custom.icon.trim();
                     iconEl.style.marginRight = "8px";
-                    if (navTitle) menuEl.insertBefore(iconEl, navTitle);
-                    else menuEl.prepend(iconEl);
+
+                    // Insert before text if possible
+                    const navTitle = menuEl.querySelector(".nav-title");
+                    if (navTitle) {
+                        menuEl.insertBefore(iconEl, navTitle);
+                    } else {
+                        menuEl.prepend(iconEl);
+                    }
                 } else if (custom.icon.startsWith("url(")) {
                     const iconVar = `--sidebar-menu-icon-${menuId.replace("sb_", "")}`;
                     ["", "-hover", "-active"].forEach(suffix => {
                         document.documentElement.style.setProperty(iconVar + suffix, custom.icon.trim());
                     });
-                    menuEl.classList.add("sidebar-no-icon"); // hide pseudo-element if using SVG
+                    menuEl.classList.add("sidebar-no-icon");
                 }
             }
         });
     }
+
     // ---------------- Build Menu Customizer UI ----------------
     function buildMenuCustomizationSection(container) {
         if (document.getElementById("tb-menu-customization")) return;
@@ -2906,38 +2740,81 @@
         separator.className = "tb-section-separator";
         wrapper.appendChild(separator);
 
+        // ✅ Predefined Menus (Same as buildFeatureLockSection)
+        const subAccountMenus = [
+            { id: "sb_launchpad", label: "Launchpad" },
+            { id: "sb_dashboard", label: "Dashboard" },
+            { id: "sb_conversations", label: "Conversations" },
+            { id: "sb_calendars", label: "Calendars" },
+            { id: "sb_contacts", label: "Contacts" },
+            { id: "sb_opportunities", label: "Opportunities" },
+            { id: "sb_payments", label: "Payments" },
+            { id: "sb_email-marketing", label: "Email Marketing" },
+            { id: "sb_automation", label: "Automation" },
+            { id: "sb_sites", label: "Sites" },
+            { id: "sb_memberships", label: "Memberships" },
+            { id: "sb_app-media", label: "App Media" },
+            { id: "sb_reputation", label: "Reputation" },
+            { id: "sb_reporting", label: "Reporting" },
+            { id: "sb_app-marketplace", label: "App Marketplace" }
+        ];
+
+        const agencyMenus = [
+            { id: "sb_agency-dashboard", label: "Agency Dashboard" },
+            { id: "sb_location-prospect", label: "Prospecting" },
+            { id: "sb_agency-accounts", label: "Agency Accounts" },
+            { id: "sb_agency-account-reselling", label: "Account Reselling" },
+            { id: "sb_agency-marketplace", label: "Agency Marketplace" },
+            { id: "sb_agency-affiliate-portal", label: "Affiliate Portal" },
+            { id: "sb_agency-template-library", label: "Template Library" },
+            { id: "sb_agency-partners", label: "Partners" },
+            { id: "sb_agency-university", label: "University" },
+            { id: "sb_saas-education", label: "SaaS Education" },
+            { id: "sb_ghl-swag", label: "GHL Swag" },
+            { id: "sb_agency-ideas", label: "Agency Ideas" },
+            { id: "sb_mobile-app-customiser", label: "Mobile App Customiser" }
+        ];
+
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedTheme.themeData || {};
         const menuCustomizations = themeData["--menuCustomizations"]
             ? JSON.parse(themeData["--menuCustomizations"])
             : {};
 
-        waitForSidebarMenus(() => {
-            const sidebarMenus = document.querySelectorAll(".hl_nav-header a");
+        // 🔧 Helper to build each section
+        const buildSection = (menus, sectionTitle) => {
+            const sectionHeading = document.createElement("h4");
+            sectionHeading.className = "tb-header-controls";
+            sectionHeading.textContent = sectionTitle;
+            sectionHeading.style.marginTop = "20px";
+            wrapper.appendChild(sectionHeading);
 
-            sidebarMenus.forEach(menu => {
-                const menuId = menu.id || menu.getAttribute("meta") || menu.href;
-                const currentTitle = menu.querySelector(".nav-title")?.innerText.trim() || menuId;
+            menus.forEach(menu => {
+                const currentCustom = menuCustomizations[menu.id] || {};
 
                 const row = document.createElement("div");
                 row.className = "tb-menu-row";
+                row.style.display = "flex";
+                row.style.alignItems = "center";
+                row.style.gap = "12px";
+                row.style.marginBottom = "10px";
 
                 const label = document.createElement("span");
-                label.textContent = currentTitle;
+                label.textContent = menu.label;
                 label.style.flex = "1";
 
-                // Title Input
+                // 📝 Title input
                 const titleInput = document.createElement("input");
                 titleInput.type = "text";
                 titleInput.placeholder = "Custom Title";
-                titleInput.value = menuCustomizations[menuId]?.title || currentTitle;
+                titleInput.value = currentCustom.title || menu.label;
                 titleInput.className = "tb-input tb-title-input";
 
-                // Icon Input
+                // 🖼️ Icon input
                 const iconInput = document.createElement("input");
                 iconInput.type = "text";
                 iconInput.placeholder = "fa-solid fa-home or url(...)";
-                iconInput.value = menuCustomizations[menuId]?.icon || "";
+                iconInput.value = currentCustom.icon || "";
                 iconInput.className = "tb-input tb-icon-input";
 
                 const saveChange = () => {
@@ -2948,7 +2825,7 @@
                         ? JSON.parse(saved.themeData["--menuCustomizations"])
                         : {};
 
-                    customizations[menuId] = {
+                    customizations[menu.id] = {
                         title: titleInput.value,
                         icon: iconInput.value
                     };
@@ -2967,11 +2844,16 @@
                 row.appendChild(iconInput);
                 wrapper.appendChild(row);
             });
+        };
 
-            container.appendChild(wrapper);
-            applyMenuCustomizations();
-        });
+        // Build both sections
+        buildSection(subAccountMenus, "Sub-Account Level Menu Customization");
+        buildSection(agencyMenus, "Agency Level Menu Customization");
+
+        container.appendChild(wrapper);
+        applyMenuCustomizations();
     }
+
 
     // ---------------- Apply on Page Load ----------------
     window.addEventListener("load", () => {
