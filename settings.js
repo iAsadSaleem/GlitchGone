@@ -2479,11 +2479,13 @@
 
     // ✅ Apply menu locks
     function applyLockedMenus() {
+
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedTheme.themeData || {};
         const lockedMenus = themeData["--lockedMenus"]
             ? JSON.parse(themeData["--lockedMenus"])
             : {};
+        console.log("Locked menus from DB:", lockedMenus);
 
         const sidebarMenus = document.querySelectorAll(".hl_nav-header a");
 
