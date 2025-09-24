@@ -2409,7 +2409,7 @@
         applyLockedMenus();
 
         // 🔧 Function to create each toggle row
-        function createToggleRow(menu, lockedMenus, hiddenMenus, parent) {
+        function createToggleRow(menu, lockedMenus, parent) {
             const row = document.createElement("div");
             row.className = "tb-feature-row";
             row.style.display = "flex";
@@ -2423,78 +2423,55 @@
             label.style.fontSize = "14px";
 
             const toggleWrapper = document.createElement("div");
-            toggleWrapper.style.display = "flex";
-            toggleWrapper.style.gap = "15px";
+            toggleWrapper.className = "toggle-switch";
 
-            // 🔐 Lock toggle
-            const lockSwitch = document.createElement("div");
-            lockSwitch.className = "toggle-switch";
+            const toggleInput = document.createElement("input");
+            toggleInput.type = "checkbox";
+            toggleInput.className = "toggle-input";
+            toggleInput.id = "lock-" + menu.id;
 
-            const lockInput = document.createElement("input");
-            lockInput.type = "checkbox";
-            lockInput.className = "toggle-input";
-            lockInput.id = "lock-" + menu.id;
-            lockInput.checked = !!lockedMenus[menu.id];
+            // ✅ checked means SHOW → variable is flex
+            toggleInput.checked = lockedMenus[menu.id] !== "d-none";
 
-            const lockLabel = document.createElement("label");
-            lockLabel.className = "toggle-label";
-            lockLabel.setAttribute("for", "lock-" + menu.id);
+            const toggleLabel = document.createElement("label");
+            toggleLabel.className = "toggle-label";
+            toggleLabel.setAttribute("for", "lock-" + menu.id);
 
-            lockSwitch.appendChild(lockInput);
-            lockSwitch.appendChild(lockLabel);
+            toggleWrapper.appendChild(toggleInput);
+            toggleWrapper.appendChild(toggleLabel);
 
-            // 👁️ Hide toggle
-            const hideSwitch = document.createElement("div");
-            hideSwitch.className = "toggle-switch";
-
-            const hideInput = document.createElement("input");
-            hideInput.type = "checkbox";
-            hideInput.className = "toggle-input";
-            hideInput.id = "hide-" + menu.id;
-            hideInput.checked = !!hiddenMenus[menu.id];
-
-            const hideLabel = document.createElement("label");
-            hideLabel.className = "toggle-label";
-            hideLabel.setAttribute("for", "hide-" + menu.id);
-
-            hideSwitch.appendChild(hideInput);
-            hideSwitch.appendChild(hideLabel);
-
-            // 💾 Save lock state
-            lockInput.addEventListener("change", () => {
+            toggleInput.addEventListener("change", () => {
                 const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                 saved.themeData = saved.themeData || {};
-                let locked = saved.themeData["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
 
-                if (lockInput.checked) locked[menu.id] = true;
-                else delete locked[menu.id];
+                if (typeof saved.themeData === "string") {
+                    try { saved.themeData = JSON.parse(saved.themeData); } catch (e) { saved.themeData = {}; }
+                }
 
-                saved.themeData["--lockedMenus"] = JSON.stringify(locked);
+                let lockedMenus = {};
+                if (saved.themeData["--lockedMenus"]) {
+                    try { lockedMenus = JSON.parse(saved.themeData["--lockedMenus"]); } catch (e) { lockedMenus = {}; }
+                }
+
+                // ✅ Save d-none or flex based on toggle state
+                if (toggleInput.checked) {
+                    lockedMenus[menu.id] = "flex"; // show
+                } else {
+                    lockedMenus[menu.id] = "d-none"; // hide
+                }
+
+                saved.themeData["--lockedMenus"] = JSON.stringify(lockedMenus);
                 localStorage.setItem("userTheme", JSON.stringify(saved));
+
+                // Re-apply CSS variables and UI
                 applyLockedMenus();
             });
-
-            // 💾 Save hide state
-            hideInput.addEventListener("change", () => {
-                const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-                saved.themeData = saved.themeData || {};
-                let hidden = saved.themeData["--hiddenMenus"] ? JSON.parse(saved.themeData["--hiddenMenus"]) : {};
-
-                if (hideInput.checked) hidden[menu.id] = true;
-                else delete hidden[menu.id];
-
-                saved.themeData["--hiddenMenus"] = JSON.stringify(hidden);
-                localStorage.setItem("userTheme", JSON.stringify(saved));
-                applyLockedMenus();
-            });
-
-            toggleWrapper.appendChild(lockSwitch);
-            toggleWrapper.appendChild(hideSwitch);
 
             row.appendChild(label);
             row.appendChild(toggleWrapper);
             parent.appendChild(row);
         }
+
     }
 
 
@@ -2641,66 +2618,66 @@
 
     // ✅ Apply menu locks
     function applyLockedMenus() {
-        // 1️⃣ Load saved theme from localStorage
         let savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         if (savedTheme.themeData && typeof savedTheme.themeData === "string") {
-            try {
-                savedTheme.themeData = JSON.parse(savedTheme.themeData);
-            } catch (e) {
-                savedTheme.themeData = {};
-            }
+            try { savedTheme.themeData = JSON.parse(savedTheme.themeData); } catch (e) { savedTheme.themeData = {}; }
         }
 
-        // 2️⃣ Parse lockedMenus JSON from theme data
         let lockedMenus = {};
         if (savedTheme.themeData && savedTheme.themeData["--lockedMenus"]) {
             try {
                 lockedMenus = JSON.parse(savedTheme.themeData["--lockedMenus"]);
             } catch (e) {
-                console.warn("⚠️ Failed to parse lockedMenus:", e);
+                console.warn("Failed to parse lockedMenus:", e);
             }
         }
 
-        // 3️⃣ Select all sidebar links (main + agency)
         const allMenus = document.querySelectorAll(".hl_nav-header a, nav.flex-1.w-full a");
 
         allMenus.forEach(menu => {
             const menuId = menu.id?.trim();
-            if (!menuId) return; // skip if no ID
+            if (!menuId) return;
 
-            // 🔄 Always remove previous lock icon first (avoid duplicates)
+            // Remove previous lock icon
             const existingLock = menu.querySelector(".tb-lock-icon");
             if (existingLock) existingLock.remove();
 
-            // 4️⃣ If this menu is locked → add the lock icon
-            if (lockedMenus[menuId]) {
+            // Reset display classes
+            menu.classList.remove("d-none");
+
+            const state = lockedMenus[menuId];
+
+            // ✅ Apply d-none or flex to CSS variable
+            if (state) {
+                const cssVarName = `--${menuId.replace("sb_", "").replace(/-/g, "_")}-display`;
+                document.documentElement.style.setProperty(cssVarName, state === "d-none" ? "none" : "flex");
+            }
+
+            // ✅ If hidden → add d-none
+            if (state === "d-none") {
+                menu.classList.add("d-none");
+            }
+
+            // 🔐 Lock icon logic (optional)
+            if (state === "locked") {
                 const lockIcon = document.createElement("i");
                 lockIcon.className = "tb-lock-icon fas fa-lock ml-2 text-red-500";
-
-                // ✅ Force icon styles (just like the working console code)
                 lockIcon.style.setProperty("display", "inline-block", "important");
                 lockIcon.style.setProperty("visibility", "visible", "important");
                 lockIcon.style.setProperty("opacity", "1", "important");
                 lockIcon.style.setProperty("position", "relative", "important");
                 lockIcon.style.setProperty("z-index", "9999", "important");
-
-                // 📍 Append the icon to the menu
                 menu.appendChild(lockIcon);
 
-                // 🛑 Visually disable locked menu
                 menu.style.opacity = "0.5";
                 menu.style.pointerEvents = "none";
                 menu.style.cursor = "not-allowed";
-            }
-            // 5️⃣ If menu is NOT locked → reset to default state
-            else {
+            } else {
                 menu.style.opacity = "";
                 menu.style.pointerEvents = "";
                 menu.style.cursor = "";
             }
         });
-
-        console.log("✅ Locked menus applied successfully!");
     }
 
     // Run once when DOM is ready
