@@ -2497,6 +2497,78 @@
         }
     }
 
+    function applyLockedMenus() {
+        // 1️⃣ Load saved theme from localStorage
+        let savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        if (savedTheme.themeData && typeof savedTheme.themeData === "string") {
+            try {
+                savedTheme.themeData = JSON.parse(savedTheme.themeData);
+            } catch (e) {
+                savedTheme.themeData = {};
+            }
+        }
+
+        // 2️⃣ Parse lockedMenus + hiddenMenus JSON from theme data
+        let lockedMenus = {};
+        let hiddenMenus = {};
+        if (savedTheme.themeData && savedTheme.themeData["--lockedMenus"]) {
+            try {
+                lockedMenus = JSON.parse(savedTheme.themeData["--lockedMenus"]);
+            } catch (e) {
+                console.warn("⚠️ Failed to parse lockedMenus:", e);
+            }
+        }
+        if (savedTheme.themeData && savedTheme.themeData["--hiddenMenus"]) {
+            try {
+                hiddenMenus = JSON.parse(savedTheme.themeData["--hiddenMenus"]);
+            } catch (e) {
+                console.warn("⚠️ Failed to parse hiddenMenus:", e);
+            }
+        }
+
+        // 3️⃣ Select all sidebar links (main + agency)
+        const allMenus = document.querySelectorAll(".hl_nav-header a, nav.flex-1.w-full a");
+
+        allMenus.forEach(menu => {
+            const menuId = menu.id?.trim();
+            if (!menuId) return; // skip if no ID
+
+            // 🔄 Always remove previous lock icon first (avoid duplicates)
+            const existingLock = menu.querySelector(".tb-lock-icon");
+            if (existingLock) existingLock.remove();
+
+            // ✅ If this menu is hidden → add `d-none`
+            if (hiddenMenus[menuId]) {
+                menu.classList.add("d-none");
+            } else {
+                menu.classList.remove("d-none");
+            }
+
+            // 🔐 If this menu is locked → show lock icon + disable
+            if (lockedMenus[menuId]) {
+                const lockIcon = document.createElement("i");
+                lockIcon.className = "tb-lock-icon fas fa-lock ml-2 text-red-500";
+
+                lockIcon.style.setProperty("display", "inline-block", "important");
+                lockIcon.style.setProperty("visibility", "visible", "important");
+                lockIcon.style.setProperty("opacity", "1", "important");
+                lockIcon.style.setProperty("position", "relative", "important");
+                lockIcon.style.setProperty("z-index", "9999", "important");
+
+                menu.appendChild(lockIcon);
+
+                menu.style.opacity = "0.5";
+                menu.style.pointerEvents = "none";
+                menu.style.cursor = "not-allowed";
+            } else {
+                menu.style.opacity = "";
+                menu.style.pointerEvents = "";
+                menu.style.cursor = "";
+            }
+        });
+
+        console.log("✅ Locked & Hidden menus applied successfully!");
+    }
 
 
     //function buildFeatureLockSection(container) {
@@ -2640,68 +2712,6 @@
     //}
 
     // ✅ Apply menu locks
-    function applyLockedMenus() {
-        // 1️⃣ Load saved theme from localStorage
-        let savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        if (savedTheme.themeData && typeof savedTheme.themeData === "string") {
-            try {
-                savedTheme.themeData = JSON.parse(savedTheme.themeData);
-            } catch (e) {
-                savedTheme.themeData = {};
-            }
-        }
-
-        // 2️⃣ Parse lockedMenus JSON from theme data
-        let lockedMenus = {};
-        if (savedTheme.themeData && savedTheme.themeData["--lockedMenus"]) {
-            try {
-                lockedMenus = JSON.parse(savedTheme.themeData["--lockedMenus"]);
-            } catch (e) {
-                console.warn("⚠️ Failed to parse lockedMenus:", e);
-            }
-        }
-
-        // 3️⃣ Select all sidebar links (main + agency)
-        const allMenus = document.querySelectorAll(".hl_nav-header a, nav.flex-1.w-full a");
-
-        allMenus.forEach(menu => {
-            const menuId = menu.id?.trim();
-            if (!menuId) return; // skip if no ID
-
-            // 🔄 Always remove previous lock icon first (avoid duplicates)
-            const existingLock = menu.querySelector(".tb-lock-icon");
-            if (existingLock) existingLock.remove();
-
-            // 4️⃣ If this menu is locked → add the lock icon
-            if (lockedMenus[menuId]) {
-                const lockIcon = document.createElement("i");
-                lockIcon.className = "tb-lock-icon fas fa-lock ml-2 text-red-500";
-
-                // ✅ Force icon styles (just like the working console code)
-                lockIcon.style.setProperty("display", "inline-block", "important");
-                lockIcon.style.setProperty("visibility", "visible", "important");
-                lockIcon.style.setProperty("opacity", "1", "important");
-                lockIcon.style.setProperty("position", "relative", "important");
-                lockIcon.style.setProperty("z-index", "9999", "important");
-
-                // 📍 Append the icon to the menu
-                menu.appendChild(lockIcon);
-
-                // 🛑 Visually disable locked menu
-                menu.style.opacity = "0.5";
-                menu.style.pointerEvents = "none";
-                menu.style.cursor = "not-allowed";
-            }
-            // 5️⃣ If menu is NOT locked → reset to default state
-            else {
-                menu.style.opacity = "";
-                menu.style.pointerEvents = "";
-                menu.style.cursor = "";
-            }
-        });
-
-        console.log("✅ Locked menus applied successfully!");
-    }
 
     // Run once when DOM is ready
     document.addEventListener("DOMContentLoaded", applyLockedMenus);
