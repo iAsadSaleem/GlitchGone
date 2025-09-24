@@ -2782,108 +2782,123 @@
             { id: "sb_mobile-app-customiser", label: "Mobile App Customiser" }
         ];
 
-        // 🧠 Load saved order (if exists)
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedTheme.themeData || {};
-        const savedOrder = themeData["--menuOrder"] ? JSON.parse(themeData["--menuOrder"]) : [];
+        const menuCustomizations = themeData["--menuCustomizations"]
+            ? JSON.parse(themeData["--menuCustomizations"])
+            : {};
+        const savedSubOrder = themeData["--subMenuOrder"] ? JSON.parse(themeData["--subMenuOrder"]) : [];
+        const savedAgencyOrder = themeData["--agencyMenuOrder"] ? JSON.parse(themeData["--agencyMenuOrder"]) : [];
 
-        // Merge menus and reorder based on saved order
-        let allMenus = [...subAccountMenus, ...agencyMenus];
-        if (savedOrder.length > 0) {
-            allMenus.sort((a, b) => savedOrder.indexOf(a.id) - savedOrder.indexOf(b.id));
-        }
+        // Helper to build section
+        const buildSection = (menus, sectionTitle, savedOrderKey) => {
+            const sectionHeading = document.createElement("h4");
+            sectionHeading.className = "tb-header-controls";
+            sectionHeading.textContent = sectionTitle;
+            sectionHeading.style.marginTop = "20px";
+            wrapper.appendChild(sectionHeading);
 
-        // Build container for draggable list
-        const listContainer = document.createElement("div");
-        listContainer.id = "tb-draggable-menu-list";
-
-        // 🧰 Build menu rows
-        allMenus.forEach(menu => {
-            const row = document.createElement("div");
-            row.className = "tb-menu-row";
-            row.dataset.id = menu.id;
-            row.style.display = "flex";
-            row.style.alignItems = "center";
-            row.style.gap = "12px";
-            row.style.marginBottom = "10px";
-            row.style.cursor = "grab";
-            row.style.border = "1px solid #ddd";
-            row.style.padding = "8px";
-            row.style.borderRadius = "6px";
-            row.style.background = "#f9f9f9";
-
-            const label = document.createElement("span");
-            label.textContent = menu.label;
-            label.style.flex = "1";
-
-            const titleInput = document.createElement("input");
-            titleInput.type = "text";
-            titleInput.placeholder = "Custom Title";
-            titleInput.className = "tb-input tb-title-input";
-
-            const iconInput = document.createElement("input");
-            iconInput.type = "text";
-            iconInput.placeholder = "fa-solid fa-home or url(...)";
-            iconInput.className = "tb-input tb-icon-input";
-
-            // Load saved customizations
-            const menuCustomizations = themeData["--menuCustomizations"] ? JSON.parse(themeData["--menuCustomizations"]) : {};
-            if (menuCustomizations[menu.id]) {
-                titleInput.value = menuCustomizations[menu.id].title || "";
-                iconInput.value = menuCustomizations[menu.id].icon || "";
-            } else {
-                titleInput.value = menu.label;
+            // Reorder menus if saved order exists
+            if (savedOrderKey.length > 0) {
+                menus.sort((a, b) => savedOrderKey.indexOf(a.id) - savedOrderKey.indexOf(b.id));
             }
 
-            // Save changes on input
-            const saveChange = () => {
-                const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-                saved.themeData = saved.themeData || {};
-                const customizations = saved.themeData["--menuCustomizations"]
-                    ? JSON.parse(saved.themeData["--menuCustomizations"])
-                    : {};
+            const listContainer = document.createElement("div");
+            listContainer.className = "tb-draggable-menu-list";
 
-                customizations[menu.id] = {
-                    title: titleInput.value,
-                    icon: iconInput.value
+            menus.forEach(menu => {
+                const row = document.createElement("div");
+                row.className = "tb-menu-row";
+                row.dataset.id = menu.id;
+                row.style.display = "flex";
+                row.style.alignItems = "center";
+                row.style.gap = "12px";
+                row.style.marginBottom = "10px";
+                row.style.cursor = "grab";
+                row.style.border = "1px solid #ddd";
+                row.style.padding = "8px";
+                row.style.borderRadius = "6px";
+                row.style.background = "#f9f9f9";
+
+                const label = document.createElement("span");
+                label.textContent = menu.label;
+                label.style.flex = "1";
+
+                const titleInput = document.createElement("input");
+                titleInput.type = "text";
+                titleInput.placeholder = "Custom Title";
+                titleInput.className = "tb-input tb-title-input";
+
+                const iconInput = document.createElement("input");
+                iconInput.type = "text";
+                iconInput.placeholder = "fa-solid fa-home or url(...)";
+                iconInput.className = "tb-input tb-icon-input";
+
+                // Load saved customizations
+                if (menuCustomizations[menu.id]) {
+                    titleInput.value = menuCustomizations[menu.id].title || menu.label;
+                    iconInput.value = menuCustomizations[menu.id].icon || "";
+                } else {
+                    titleInput.value = menu.label;
+                }
+
+                const saveChange = () => {
+                    const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                    saved.themeData = saved.themeData || {};
+                    const customizations = saved.themeData["--menuCustomizations"]
+                        ? JSON.parse(saved.themeData["--menuCustomizations"])
+                        : {};
+
+                    customizations[menu.id] = {
+                        title: titleInput.value,
+                        icon: iconInput.value
+                    };
+
+                    saved.themeData["--menuCustomizations"] = JSON.stringify(customizations);
+                    localStorage.setItem("userTheme", JSON.stringify(saved));
+                    applyMenuCustomizations();
                 };
 
-                saved.themeData["--menuCustomizations"] = JSON.stringify(customizations);
-                localStorage.setItem("userTheme", JSON.stringify(saved));
-                applyMenuCustomizations();
-            };
+                titleInput.addEventListener("input", saveChange);
+                iconInput.addEventListener("input", saveChange);
 
-            titleInput.addEventListener("input", saveChange);
-            iconInput.addEventListener("input", saveChange);
+                row.appendChild(label);
+                row.appendChild(titleInput);
+                row.appendChild(iconInput);
+                listContainer.appendChild(row);
+            });
 
-            row.appendChild(label);
-            row.appendChild(titleInput);
-            row.appendChild(iconInput);
-            listContainer.appendChild(row);
-        });
+            wrapper.appendChild(listContainer);
 
-        wrapper.appendChild(listContainer);
+            // Enable drag & drop for this section
+            Sortable.create(listContainer, {
+                animation: 150,
+                ghostClass: "tb-dragging",
+                onEnd: () => {
+                    const rows = listContainer.querySelectorAll(".tb-menu-row");
+                    const newOrder = [...rows].map(r => r.dataset.id);
+
+                    const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                    saved.themeData = saved.themeData || {};
+                    if (sectionTitle.includes("Sub-Account")) {
+                        saved.themeData["--subMenuOrder"] = JSON.stringify(newOrder);
+                    } else {
+                        saved.themeData["--agencyMenuOrder"] = JSON.stringify(newOrder);
+                    }
+                    localStorage.setItem("userTheme", JSON.stringify(saved));
+                    console.log(`✅ ${sectionTitle} order saved:`, newOrder);
+                }
+            });
+        };
+
+        // Build sections
+        buildSection(subAccountMenus, "Sub-Account Level Menu Customization", savedSubOrder);
+        buildSection(agencyMenus, "Agency Level Menu Customization", savedAgencyOrder);
+
         container.appendChild(wrapper);
-
-        // ✅ Enable drag & drop
-        Sortable.create(listContainer, {
-            animation: 150,
-            ghostClass: "tb-dragging",
-            onEnd: () => {
-                const rows = document.querySelectorAll(".tb-menu-row");
-                const newOrder = [...rows].map(r => r.dataset.id);
-
-                const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-                saved.themeData = saved.themeData || {};
-                saved.themeData["--menuOrder"] = JSON.stringify(newOrder);
-                localStorage.setItem("userTheme", JSON.stringify(saved));
-
-                console.log("✅ New order saved:", newOrder);
-            }
-        });
-
         applyMenuCustomizations();
     }
+
 
 
 
