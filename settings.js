@@ -13,7 +13,6 @@
             link.crossOrigin = "anonymous";
             link.referrerPolicy = "no-referrer";
             document.head.appendChild(link);
-            console.log("[ThemeBuilder] Font Awesome loaded");
         }
     })();
     (function loadFontAwesome() {
