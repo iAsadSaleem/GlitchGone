@@ -2479,43 +2479,57 @@
 
     // ✅ Apply menu locks
     function applyLockedMenus() {
+        let savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        if (savedTheme.themeData && typeof savedTheme.themeData === "string") {
+            try { savedTheme.themeData = JSON.parse(savedTheme.themeData); } catch (e) { savedTheme.themeData = {}; }
+        }
 
-        const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        const themeData = savedTheme.themeData || {};
-        const lockedMenus = themeData["--lockedMenus"]
-            ? JSON.parse(themeData["--lockedMenus"])
-            : {};
-        console.log("Locked menus from DB:", lockedMenus);
+        let lockedMenus = {};
+        if (savedTheme.themeData && savedTheme.themeData["--lockedMenus"]) {
+            try {
+                lockedMenus = JSON.parse(savedTheme.themeData["--lockedMenus"]);
+            } catch (e) {
+                console.warn("Failed to parse lockedMenus:", e);
+            }
+        }
 
-        const sidebarMenus = document.querySelectorAll(".hl_nav-header a");
+        console.log("🔐 Locked menus from DB:", lockedMenus);
 
-        sidebarMenus.forEach(menu => {
-            const menuId = menu.id || menu.getAttribute("meta") || menu.href;
-            //<i class="fa-light fa-rocket"></i>
-            // Remove previous locks
-            menu.classList.remove("tb-locked-menu");
-            menu.querySelector(".tb-lock-icon")?.remove();
-            menu.removeEventListener("click", blockMenuClick, true);
+        // Get ALL sidebar links (main + agency)
+        const allMenus = document.querySelectorAll(".hl_nav-header a, nav.flex-1.w-full a");
 
+        allMenus.forEach(menu => {
+            const menuId = menu.id?.trim();
+            if (!menuId) return;
+
+            // Remove any previous lock icon before adding a new one
+            const existingLock = menu.querySelector(".tb-lock-icon");
+            if (existingLock) existingLock.remove();
+
+            // Add lock icon if locked
             if (lockedMenus[menuId]) {
-                menu.classList.add("tb-locked-menu");
+                const lockIcon = document.createElement("i");
+                lockIcon.className = "tb-lock-icon fas fa-lock ml-2 text-red-500";
+                menu.appendChild(lockIcon);
 
-                if (!menu.querySelector(".tb-lock-icon")) {
-                    const lockIcon = document.createElement("i");
-                    lockIcon.className = "tb-lock-icon fas fa-lock ml-2 text-red-500";
-                    menu.appendChild(lockIcon);
-                }
-
-                menu.addEventListener("click", blockMenuClick, true);
+                // Optional: visually disable link if locked
+                menu.style.opacity = "0.5";
+                menu.style.pointerEvents = "none";
+                menu.style.cursor = "not-allowed";
+            } else {
+                // Reset style if unlocked
+                menu.style.opacity = "";
+                menu.style.pointerEvents = "";
+                menu.style.cursor = "";
             }
         });
-
-        // Sync toggle inputs
-        document.querySelectorAll(".toggle-input").forEach(toggle => {
-            const id = toggle.id.replace("lock-", "");
-            toggle.checked = !!lockedMenus[id];
-        });
     }
+
+    // Run once when DOM is ready
+    document.addEventListener("DOMContentLoaded", applyLockedMenus);
+
+    // Also run again after slight delay (in case agency menu loads later)
+    setTimeout(applyLockedMenus, 1500);
     // Helper for blocking click
     function blockMenuClick(e) {
         e.preventDefault();
