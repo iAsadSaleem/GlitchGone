@@ -2747,7 +2747,7 @@
         separator.className = "tb-section-separator";
         wrapper.appendChild(separator);
 
-        // ✅ Menu definitions
+        // ---------------- Menu definitions ----------------
         const subAccountMenus = [
             { id: "sb_launchpad", label: "Launchpad" },
             { id: "sb_dashboard", label: "Dashboard" },
@@ -2782,29 +2782,27 @@
             { id: "sb_mobile-app-customiser", label: "Mobile App Customiser" }
         ];
 
+        // Load saved theme
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedTheme.themeData || {};
-        const menuCustomizations = themeData["--menuCustomizations"]
-            ? JSON.parse(themeData["--menuCustomizations"])
-            : {};
-        const savedSubOrder = themeData["--subMenuOrder"] ? JSON.parse(themeData["--subMenuOrder"]) : [];
-        const savedAgencyOrder = themeData["--agencyMenuOrder"] ? JSON.parse(themeData["--agencyMenuOrder"]) : [];
 
-        // Helper to build section
-        const buildSection = (menus, sectionTitle, savedOrderKey) => {
+        // ---------------- Helper to build each section ----------------
+        const buildSection = (menus, sectionTitle, storageKey) => {
             const sectionHeading = document.createElement("h4");
             sectionHeading.className = "tb-header-controls";
             sectionHeading.textContent = sectionTitle;
             sectionHeading.style.marginTop = "20px";
             wrapper.appendChild(sectionHeading);
 
-            // Reorder menus if saved order exists
-            if (savedOrderKey.length > 0) {
-                menus.sort((a, b) => savedOrderKey.indexOf(a.id) - savedOrderKey.indexOf(b.id));
-            }
-
+            // Create container for drag & drop
             const listContainer = document.createElement("div");
             listContainer.className = "tb-draggable-menu-list";
+
+            // Reorder based on saved order
+            const savedOrder = themeData[storageKey] ? JSON.parse(themeData[storageKey]) : [];
+            if (savedOrder.length > 0) {
+                menus.sort((a, b) => savedOrder.indexOf(a.id) - savedOrder.indexOf(b.id));
+            }
 
             menus.forEach(menu => {
                 const row = document.createElement("div");
@@ -2834,14 +2832,18 @@
                 iconInput.placeholder = "fa-solid fa-home or url(...)";
                 iconInput.className = "tb-input tb-icon-input";
 
-                // Load saved customizations
+                // Load saved customization
+                const menuCustomizations = themeData["--menuCustomizations"]
+                    ? JSON.parse(themeData["--menuCustomizations"])
+                    : {};
                 if (menuCustomizations[menu.id]) {
-                    titleInput.value = menuCustomizations[menu.id].title || menu.label;
+                    titleInput.value = menuCustomizations[menu.id].title || "";
                     iconInput.value = menuCustomizations[menu.id].icon || "";
                 } else {
                     titleInput.value = menu.label;
                 }
 
+                // Save changes
                 const saveChange = () => {
                     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                     saved.themeData = saved.themeData || {};
@@ -2870,7 +2872,7 @@
 
             wrapper.appendChild(listContainer);
 
-            // Enable drag & drop for this section
+            // ---------------- Enable drag & drop ----------------
             Sortable.create(listContainer, {
                 animation: 150,
                 ghostClass: "tb-dragging",
@@ -2878,26 +2880,34 @@
                     const rows = listContainer.querySelectorAll(".tb-menu-row");
                     const newOrder = [...rows].map(r => r.dataset.id);
 
+                    // Save order in localStorage
                     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                     saved.themeData = saved.themeData || {};
-                    if (sectionTitle.includes("Sub-Account")) {
-                        saved.themeData["--subMenuOrder"] = JSON.stringify(newOrder);
-                    } else {
-                        saved.themeData["--agencyMenuOrder"] = JSON.stringify(newOrder);
-                    }
+                    saved.themeData[storageKey] = JSON.stringify(newOrder);
                     localStorage.setItem("userTheme", JSON.stringify(saved));
                     console.log(`✅ ${sectionTitle} order saved:`, newOrder);
+
+                    // ---------------- Update actual sidebar DOM ----------------
+                    newOrder.forEach(menuId => {
+                        const menuEl = document.getElementById(menuId);
+                        if (menuEl && menuEl.parentElement) {
+                            menuEl.parentElement.appendChild(menuEl);
+                        }
+                    });
+
+                    applyMenuCustomizations();
                 }
             });
         };
 
-        // Build sections
-        buildSection(subAccountMenus, "Sub-Account Level Menu Customization", savedSubOrder);
-        buildSection(agencyMenus, "Agency Level Menu Customization", savedAgencyOrder);
+        // Build both sections
+        buildSection(subAccountMenus, "Sub-Account Level Menu Customization", "--subMenuOrder");
+        buildSection(agencyMenus, "Agency Level Menu Customization", "--agencyMenuOrder");
 
         container.appendChild(wrapper);
         applyMenuCustomizations();
     }
+
 
 
 
