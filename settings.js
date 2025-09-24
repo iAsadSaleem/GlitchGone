@@ -3147,6 +3147,13 @@
                 )
             );
 
+            contentWrapper.appendChild(
+                createSection('<i class="fa-brands fa-intercom"style="color:white;margin-right:6px;font-size:17px;"></i>Menu Customizer', (section) => {
+                    buildMenuCustomizationSection(section);
+                }, "", true
+                )
+            );
+
             // Append contentWrapper to card
             cardWrapper.appendChild(contentWrapper);
 
