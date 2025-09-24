@@ -2493,7 +2493,6 @@
             }
         }
 
-        console.log("🔐 Locked menus from DB:", lockedMenus);
 
         // Get ALL sidebar links (main + agency)
         const allMenus = document.querySelectorAll(".hl_nav-header a, nav.flex-1.w-full a");
@@ -2510,14 +2509,23 @@
             if (lockedMenus[menuId]) {
                 const lockIcon = document.createElement("i");
                 lockIcon.className = "tb-lock-icon fas fa-lock ml-2 text-red-500";
-                menu.appendChild(lockIcon);
 
-                // Optional: visually disable link if locked
+                // ✅ insert icon immediately after the <span>
+                const titleSpan = menu.querySelector("span.nav-title");
+                if (titleSpan) {
+                    titleSpan.insertAdjacentElement("afterend", lockIcon);
+                } else {
+                    menu.appendChild(lockIcon); // fallback
+                }s
+
                 menu.style.opacity = "0.5";
                 menu.style.pointerEvents = "none";
                 menu.style.cursor = "not-allowed";
             } else {
-                // Reset style if unlocked
+                // remove lock if exists
+                const existingLock = menu.querySelector(".tb-lock-icon");
+                if (existingLock) existingLock.remove();
+
                 menu.style.opacity = "";
                 menu.style.pointerEvents = "";
                 menu.style.cursor = "";
