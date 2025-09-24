@@ -2408,7 +2408,7 @@
         container.appendChild(wrapper);
         applyLockedMenus();
 
-        // ✅ Create row with toggle switches
+        // 🔧 Function to create each toggle row
         function createToggleRow(menu, lockedMenus, hiddenMenus, parent) {
             const row = document.createElement("div");
             row.className = "tb-feature-row";
@@ -2424,39 +2424,43 @@
 
             const toggleWrapper = document.createElement("div");
             toggleWrapper.style.display = "flex";
-            toggleWrapper.style.gap = "20px";
+            toggleWrapper.style.gap = "15px";
 
             // 🔐 Lock toggle
-            const lockWrapper = document.createElement("label");
-            lockWrapper.className = "tb-switch"; // 🔄 Your original toggle switch class
+            const lockSwitch = document.createElement("div");
+            lockSwitch.className = "toggle-switch";
 
             const lockInput = document.createElement("input");
             lockInput.type = "checkbox";
-            lockInput.className = "tb-toggle";
+            lockInput.className = "toggle-input";
+            lockInput.id = "lock-" + menu.id;
             lockInput.checked = !!lockedMenus[menu.id];
 
-            const lockSlider = document.createElement("span");
-            lockSlider.className = "tb-slider";
+            const lockLabel = document.createElement("label");
+            lockLabel.className = "toggle-label";
+            lockLabel.setAttribute("for", "lock-" + menu.id);
 
-            lockWrapper.appendChild(lockInput);
-            lockWrapper.appendChild(lockSlider);
+            lockSwitch.appendChild(lockInput);
+            lockSwitch.appendChild(lockLabel);
 
             // 👁️ Hide toggle
-            const hideWrapper = document.createElement("label");
-            hideWrapper.className = "tb-switch";
+            const hideSwitch = document.createElement("div");
+            hideSwitch.className = "toggle-switch";
 
             const hideInput = document.createElement("input");
             hideInput.type = "checkbox";
-            hideInput.className = "tb-toggle";
+            hideInput.className = "toggle-input";
+            hideInput.id = "hide-" + menu.id;
             hideInput.checked = !!hiddenMenus[menu.id];
 
-            const hideSlider = document.createElement("span");
-            hideSlider.className = "tb-slider";
+            const hideLabel = document.createElement("label");
+            hideLabel.className = "toggle-label";
+            hideLabel.setAttribute("for", "hide-" + menu.id);
 
-            hideWrapper.appendChild(hideInput);
-            hideWrapper.appendChild(hideSlider);
+            hideSwitch.appendChild(hideInput);
+            hideSwitch.appendChild(hideLabel);
 
-            // 💾 Save lock toggle state
+            // 💾 Save lock state
             lockInput.addEventListener("change", () => {
                 const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                 saved.themeData = saved.themeData || {};
@@ -2470,7 +2474,7 @@
                 applyLockedMenus();
             });
 
-            // 💾 Save hide toggle state
+            // 💾 Save hide state
             hideInput.addEventListener("change", () => {
                 const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                 saved.themeData = saved.themeData || {};
@@ -2484,14 +2488,15 @@
                 applyLockedMenus();
             });
 
-            toggleWrapper.appendChild(lockWrapper);
-            toggleWrapper.appendChild(hideWrapper);
+            toggleWrapper.appendChild(lockSwitch);
+            toggleWrapper.appendChild(hideSwitch);
 
             row.appendChild(label);
             row.appendChild(toggleWrapper);
             parent.appendChild(row);
         }
     }
+
 
 
     //function buildFeatureLockSection(container) {
