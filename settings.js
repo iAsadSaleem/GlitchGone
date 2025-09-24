@@ -2509,15 +2509,15 @@
             if (lockedMenus[menuId]) {
                 const lockIcon = document.createElement("i");
                 lockIcon.className = "tb-lock-icon fas fa-lock ml-2 text-red-500";
+                // 🚨 Add these styles to force icon visibility despite global CSS
+                lockIcon.style.setProperty("display", "inline-block", "important");
+                lockIcon.style.setProperty("visibility", "visible", "important");
+                lockIcon.style.setProperty("opacity", "1", "important");
+                lockIcon.style.setProperty("position", "relative", "important");
+                lockIcon.style.setProperty("z-index", "9999", "important");
+                menu.appendChild(lockIcon);
 
-                // ✅ insert icon immediately after the <span>
-                const titleSpan = menu.querySelector("span.nav-title");
-                if (titleSpan) {
-                    titleSpan.insertAdjacentElement("afterend", lockIcon);
-                } else {
-                    menu.appendChild(lockIcon); // fallback
-                }s
-
+                // Optional: visually disable link if locked
                 menu.style.opacity = "0.5";
                 menu.style.pointerEvents = "none";
                 menu.style.cursor = "not-allowed";
