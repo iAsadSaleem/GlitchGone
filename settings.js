@@ -2731,10 +2731,6 @@
         wrapper.id = "tb-menu-customization";
         wrapper.className = "tb-menu-customization";
 
-        const separator = document.createElement("hr");
-        separator.className = "tb-section-separator";
-        wrapper.appendChild(separator);
-
         // ✅ Predefined Menus (Same as buildFeatureLockSection)
         const subAccountMenus = [
             { id: "sb_launchpad", label: "Launchpad" },
