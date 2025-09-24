@@ -2580,12 +2580,14 @@
                 menu.appendChild(lockIcon);
 
                 menu.style.opacity = "0.5";
-                menu.style.pointerEvents = "none";
                 menu.style.cursor = "not-allowed";
+
+                // 🔥 Add this:
+                menu.addEventListener("click", blockMenuClick, { once: true });
             } else {
                 menu.style.opacity = "";
-                menu.style.pointerEvents = "";
                 menu.style.cursor = "";
+                menu.removeEventListener("click", blockMenuClick); // Cleanup old listeners if unlocked
             }
         });
 
