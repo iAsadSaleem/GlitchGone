@@ -2426,15 +2426,21 @@
             toggleWrapper.style.gap = "15px";
 
             // 🔐 Lock toggle
-            const lockSwitch = document.createElement("div");
-            lockSwitch.className = "toggle-switch";
-            lockSwitch.style.display = "flex";
-            lockSwitch.style.alignItems = "center";
-            lockSwitch.style.gap = "6px";
+            const lockWrapper = document.createElement("div");
+            lockWrapper.style.display = "flex";
+            lockWrapper.style.alignItems = "center";
+            lockWrapper.style.gap = "6px";
 
+            // lock icon
             const lockIconEl = document.createElement("i");
             lockIconEl.className = "fas fa-lock";
-            lockIconEl.style.color = "#d9534f"; // red lock icon
+            lockIconEl.style.color = "#d9534f";
+            lockIconEl.style.fontSize = "16px";
+            lockIconEl.style.minWidth = "16px"; // keeps layout clean
+
+            // toggle switch
+            const lockSwitch = document.createElement("div");
+            lockSwitch.className = "toggle-switch";
 
             const lockInput = document.createElement("input");
             lockInput.type = "checkbox";
@@ -2446,20 +2452,26 @@
             lockLabel.className = "toggle-label";
             lockLabel.setAttribute("for", "lock-" + menu.id);
 
-            lockSwitch.appendChild(lockIconEl);
             lockSwitch.appendChild(lockInput);
             lockSwitch.appendChild(lockLabel);
 
+            lockWrapper.appendChild(lockIconEl);
+            lockWrapper.appendChild(lockSwitch);
+
             // 👁️ Hide toggle
-            const hideSwitch = document.createElement("div");
-            hideSwitch.className = "toggle-switch";
-            hideSwitch.style.display = "flex";
-            hideSwitch.style.alignItems = "center";
-            hideSwitch.style.gap = "6px";
+            const hideWrapper = document.createElement("div");
+            hideWrapper.style.display = "flex";
+            hideWrapper.style.alignItems = "center";
+            hideWrapper.style.gap = "6px";
 
             const eyeIconEl = document.createElement("i");
             eyeIconEl.className = "fas fa-eye";
-            eyeIconEl.style.color = "#5bc0de"; // light blue eye icon
+            eyeIconEl.style.color = "#5bc0de";
+            eyeIconEl.style.fontSize = "16px";
+            eyeIconEl.style.minWidth = "16px";
+
+            const hideSwitch = document.createElement("div");
+            hideSwitch.className = "toggle-switch";
 
             const hideInput = document.createElement("input");
             hideInput.type = "checkbox";
@@ -2471,9 +2483,11 @@
             hideLabel.className = "toggle-label";
             hideLabel.setAttribute("for", "hide-" + menu.id);
 
-            hideSwitch.appendChild(eyeIconEl);
             hideSwitch.appendChild(hideInput);
             hideSwitch.appendChild(hideLabel);
+
+            hideWrapper.appendChild(eyeIconEl);
+            hideWrapper.appendChild(hideSwitch);
 
             // 💾 Save lock state
             lockInput.addEventListener("change", () => {
