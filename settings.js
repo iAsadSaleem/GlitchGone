@@ -3141,7 +3141,7 @@
             );
 
             contentWrapper.appendChild(
-                createSection('<i class="fa-solid fa-lock"style="color:white;margin-right:6px;font-size:17px;"></i>Feature Lock', (section) => {
+                createSection('<i class="fa-solid fa-lock"style="color:white;margin-right:6px;font-size:17px;"></i>Feature Lock & Hide', (section) => {
                     buildFeatureLockSection(section);
                 }, "", true
                 )
