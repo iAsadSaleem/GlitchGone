@@ -2462,6 +2462,9 @@
                 } else {
                     delete lockedMenus[menu.id];
                 }
+                console.log("Before save:", lockedMenus);
+                console.log("Saving lock for:", menu.id, " -> ", toggleInput.checked);
+                console.log("After save:", saved.themeData["--lockedMenus"]);
 
                 saved.themeData["--lockedMenus"] = JSON.stringify(lockedMenus);
                 localStorage.setItem("userTheme", JSON.stringify(saved));
