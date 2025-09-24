@@ -2351,9 +2351,10 @@
         wrapper.id = "tb-feature-lock-settings";
         wrapper.className = "tb-feature-lock-settings";
 
-        // Load saved theme + locked menus
+        // Load saved theme + locked/hidden menus
         const themeData = savedTheme.themeData || {};
         const lockedMenus = themeData["--lockedMenus"] ? JSON.parse(themeData["--lockedMenus"]) : {};
+        const hiddenMenus = themeData["--hiddenMenus"] ? JSON.parse(themeData["--hiddenMenus"]) : {};
 
         // 📁 MAIN SIDEBAR MENUS
         const sidebarMenus = [
@@ -2374,16 +2375,14 @@
             { id: "sb_app-marketplace", label: "App Marketplace" }
         ];
 
-        // Add header for main menu
         const mainTitle = document.createElement("h4");
         mainTitle.className = "tb-header-controls";
-        mainTitle.textContent = "Main Menu Lock";
+        mainTitle.textContent = "Main Menu Lock & Hide";
         wrapper.appendChild(mainTitle);
 
-        // Create toggle rows for main menus
-        sidebarMenus.forEach(menu => createToggleRow(menu, lockedMenus, wrapper));
+        sidebarMenus.forEach(menu => createToggleRow(menu, lockedMenus, hiddenMenus, wrapper));
 
-        // 🏢 AGENCY SIDEBAR MENUS
+        // 🏢 AGENCY MENUS
         const agencyMenus = [
             { id: "sb_agency-dashboard", label: "Agency Dashboard" },
             { id: "sb_location-prospect", label: "Prospecting" },
@@ -2400,22 +2399,19 @@
             { id: "sb_mobile-app-customiser", label: "Mobile App Customiser" }
         ];
 
-        // Add header for agency menu
         const agencyTitle = document.createElement("h4");
         agencyTitle.className = "tb-header-controls";
-        agencyTitle.textContent = "Agency Menu Lock";
+        agencyTitle.textContent = "Agency Menu Lock & Hide";
         agencyTitle.style.marginTop = "20px";
         wrapper.appendChild(agencyTitle);
 
-        // Create toggle rows for agency menus
-        agencyMenus.forEach(menu => createToggleRow(menu, lockedMenus, wrapper));
+        agencyMenus.forEach(menu => createToggleRow(menu, lockedMenus, hiddenMenus, wrapper));
 
-        // Append all to container
         container.appendChild(wrapper);
         applyLockedMenus();
 
-        // 🔧 Function to create each toggle row (reusable)
-        function createToggleRow(menu, lockedMenus, parent) {
+        // ✅ Reusable row with two toggles
+        function createToggleRow(menu, lockedMenus, hiddenMenus, parent) {
             const row = document.createElement("div");
             row.className = "tb-feature-row";
             row.style.display = "flex";
@@ -2429,47 +2425,65 @@
             label.style.fontSize = "14px";
 
             const toggleWrapper = document.createElement("div");
-            toggleWrapper.className = "toggle-switch";
+            toggleWrapper.style.display = "flex";
+            toggleWrapper.style.gap = "10px";
 
-            const toggleInput = document.createElement("input");
-            toggleInput.type = "checkbox";
-            toggleInput.className = "toggle-input";
-            toggleInput.id = "lock-" + menu.id;
-            toggleInput.checked = !!lockedMenus[menu.id];
+            // 🔐 Lock toggle
+            const lockInput = document.createElement("input");
+            lockInput.type = "checkbox";
+            lockInput.className = "toggle-input";
+            lockInput.id = "lock-" + menu.id;
+            lockInput.checked = !!lockedMenus[menu.id];
 
-            const toggleLabel = document.createElement("label");
-            toggleLabel.className = "toggle-label";
-            toggleLabel.setAttribute("for", "lock-" + menu.id);
+            const lockLabel = document.createElement("label");
+            lockLabel.className = "toggle-label";
+            lockLabel.setAttribute("for", "lock-" + menu.id);
+            lockLabel.textContent = "🔒";
 
-            toggleWrapper.appendChild(toggleInput);
-            toggleWrapper.appendChild(toggleLabel);
+            // 👁️ Hide toggle
+            const hideInput = document.createElement("input");
+            hideInput.type = "checkbox";
+            hideInput.className = "toggle-input";
+            hideInput.id = "hide-" + menu.id;
+            hideInput.checked = !!hiddenMenus[menu.id];
 
-            toggleInput.addEventListener("change", () => {
+            const hideLabel = document.createElement("label");
+            hideLabel.className = "toggle-label";
+            hideLabel.setAttribute("for", "hide-" + menu.id);
+            hideLabel.textContent = "👁️‍🗨️";
+
+            // Save lock
+            lockInput.addEventListener("change", () => {
                 const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                 saved.themeData = saved.themeData || {};
+                let locked = saved.themeData["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
 
-                if (typeof saved.themeData === "string") {
-                    try { saved.themeData = JSON.parse(saved.themeData); } catch (e) { saved.themeData = {}; }
-                }
+                if (lockInput.checked) locked[menu.id] = true;
+                else delete locked[menu.id];
 
-                let lockedMenus = {};
-                if (saved.themeData["--lockedMenus"]) {
-                    try { lockedMenus = JSON.parse(saved.themeData["--lockedMenus"]); } catch (e) { lockedMenus = {}; }
-                }
-
-                if (toggleInput.checked) {
-                    lockedMenus[menu.id] = true;
-                } else {
-                    delete lockedMenus[menu.id];
-                }
-                console.log("Before save:", lockedMenus);
-                console.log("Saving lock for:", menu.id, " -> ", toggleInput.checked);
-                console.log("After save:", saved.themeData["--lockedMenus"]);
-
-                saved.themeData["--lockedMenus"] = JSON.stringify(lockedMenus);
+                saved.themeData["--lockedMenus"] = JSON.stringify(locked);
                 localStorage.setItem("userTheme", JSON.stringify(saved));
                 applyLockedMenus();
             });
+
+            // Save hide
+            hideInput.addEventListener("change", () => {
+                const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                saved.themeData = saved.themeData || {};
+                let hidden = saved.themeData["--hiddenMenus"] ? JSON.parse(saved.themeData["--hiddenMenus"]) : {};
+
+                if (hideInput.checked) hidden[menu.id] = true;
+                else delete hidden[menu.id];
+
+                saved.themeData["--hiddenMenus"] = JSON.stringify(hidden);
+                localStorage.setItem("userTheme", JSON.stringify(saved));
+                applyLockedMenus();
+            });
+
+            toggleWrapper.appendChild(lockInput);
+            toggleWrapper.appendChild(lockLabel);
+            toggleWrapper.appendChild(hideInput);
+            toggleWrapper.appendChild(hideLabel);
 
             row.appendChild(label);
             row.appendChild(toggleWrapper);
@@ -2477,60 +2491,209 @@
         }
     }
 
+
+    //function buildFeatureLockSection(container) {
+
+    //    let savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+    //    if (savedTheme.themeData && typeof savedTheme.themeData === "string") {
+    //        savedTheme.themeData = JSON.parse(savedTheme.themeData);
+    //        localStorage.setItem("userTheme", JSON.stringify(savedTheme));
+    //    }
+
+    //    if (document.getElementById("tb-feature-lock-settings")) return;
+
+    //    const wrapper = document.createElement("div");
+    //    wrapper.id = "tb-feature-lock-settings";
+    //    wrapper.className = "tb-feature-lock-settings";
+
+    //    // Load saved theme + locked menus
+    //    const themeData = savedTheme.themeData || {};
+    //    const lockedMenus = themeData["--lockedMenus"] ? JSON.parse(themeData["--lockedMenus"]) : {};
+
+    //    // 📁 MAIN SIDEBAR MENUS
+    //    const sidebarMenus = [
+    //        { id: "sb_launchpad", label: "Launchpad" },
+    //        { id: "sb_dashboard", label: "Dashboard" },
+    //        { id: "sb_conversations", label: "Conversations" },
+    //        { id: "sb_calendars", label: "Calendars" },
+    //        { id: "sb_contacts", label: "Contacts" },
+    //        { id: "sb_opportunities", label: "Opportunities" },
+    //        { id: "sb_payments", label: "Payments" },
+    //        { id: "sb_email-marketing", label: "Email Marketing" },
+    //        { id: "sb_automation", label: "Automation" },
+    //        { id: "sb_sites", label: "Sites" },
+    //        { id: "sb_memberships", label: "Memberships" },
+    //        { id: "sb_app-media", label: "App Media" },
+    //        { id: "sb_reputation", label: "Reputation" },
+    //        { id: "sb_reporting", label: "Reporting" },
+    //        { id: "sb_app-marketplace", label: "App Marketplace" }
+    //    ];
+
+    //    // Add header for main menu
+    //    const mainTitle = document.createElement("h4");
+    //    mainTitle.className = "tb-header-controls";
+    //    mainTitle.textContent = "Main Menu Lock";
+    //    wrapper.appendChild(mainTitle);
+
+    //    // Create toggle rows for main menus
+    //    sidebarMenus.forEach(menu => createToggleRow(menu, lockedMenus, wrapper));
+
+    //    // 🏢 AGENCY SIDEBAR MENUS
+    //    const agencyMenus = [
+    //        { id: "sb_agency-dashboard", label: "Agency Dashboard" },
+    //        { id: "sb_location-prospect", label: "Prospecting" },
+    //        { id: "sb_agency-accounts", label: "Agency Accounts" },
+    //        { id: "sb_agency-account-reselling", label: "Account Reselling" },
+    //        { id: "sb_agency-marketplace", label: "Agency Marketplace" },
+    //        { id: "sb_agency-affiliate-portal", label: "Affiliate Portal" },
+    //        { id: "sb_agency-template-library", label: "Template Library" },
+    //        { id: "sb_agency-partners", label: "Partners" },
+    //        { id: "sb_agency-university", label: "University" },
+    //        { id: "sb_saas-education", label: "SaaS Education" },
+    //        { id: "sb_ghl-swag", label: "GHL Swag" },
+    //        { id: "sb_agency-ideas", label: "Agency Ideas" },
+    //        { id: "sb_mobile-app-customiser", label: "Mobile App Customiser" }
+    //    ];
+
+    //    // Add header for agency menu
+    //    const agencyTitle = document.createElement("h4");
+    //    agencyTitle.className = "tb-header-controls";
+    //    agencyTitle.textContent = "Agency Menu Lock";
+    //    agencyTitle.style.marginTop = "20px";
+    //    wrapper.appendChild(agencyTitle);
+
+    //    // Create toggle rows for agency menus
+    //    agencyMenus.forEach(menu => createToggleRow(menu, lockedMenus, wrapper));
+
+    //    // Append all to container
+    //    container.appendChild(wrapper);
+    //    applyLockedMenus();
+
+    //    // 🔧 Function to create each toggle row (reusable)
+    //    function createToggleRow(menu, lockedMenus, parent) {
+    //        const row = document.createElement("div");
+    //        row.className = "tb-feature-row";
+    //        row.style.display = "flex";
+    //        row.style.alignItems = "center";
+    //        row.style.justifyContent = "space-between";
+    //        row.style.marginBottom = "8px";
+
+    //        const label = document.createElement("span");
+    //        label.textContent = menu.label;
+    //        label.style.flex = "1";
+    //        label.style.fontSize = "14px";
+
+    //        const toggleWrapper = document.createElement("div");
+    //        toggleWrapper.className = "toggle-switch";
+
+    //        const toggleInput = document.createElement("input");
+    //        toggleInput.type = "checkbox";
+    //        toggleInput.className = "toggle-input";
+    //        toggleInput.id = "lock-" + menu.id;
+    //        toggleInput.checked = !!lockedMenus[menu.id];
+
+    //        const toggleLabel = document.createElement("label");
+    //        toggleLabel.className = "toggle-label";
+    //        toggleLabel.setAttribute("for", "lock-" + menu.id);
+
+    //        toggleWrapper.appendChild(toggleInput);
+    //        toggleWrapper.appendChild(toggleLabel);
+
+    //        toggleInput.addEventListener("change", () => {
+    //            const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+    //            saved.themeData = saved.themeData || {};
+
+    //            if (typeof saved.themeData === "string") {
+    //                try { saved.themeData = JSON.parse(saved.themeData); } catch (e) { saved.themeData = {}; }
+    //            }
+
+    //            let lockedMenus = {};
+    //            if (saved.themeData["--lockedMenus"]) {
+    //                try { lockedMenus = JSON.parse(saved.themeData["--lockedMenus"]); } catch (e) { lockedMenus = {}; }
+    //            }
+
+    //            if (toggleInput.checked) {
+    //                lockedMenus[menu.id] = true;
+    //            } else {
+    //                delete lockedMenus[menu.id];
+    //            }
+    //            console.log("Before save:", lockedMenus);
+    //            console.log("Saving lock for:", menu.id, " -> ", toggleInput.checked);
+    //            console.log("After save:", saved.themeData["--lockedMenus"]);
+
+    //            saved.themeData["--lockedMenus"] = JSON.stringify(lockedMenus);
+    //            localStorage.setItem("userTheme", JSON.stringify(saved));
+    //            applyLockedMenus();
+    //        });
+
+    //        row.appendChild(label);
+    //        row.appendChild(toggleWrapper);
+    //        parent.appendChild(row);
+    //    }
+    //}
+
     // ✅ Apply menu locks
     function applyLockedMenus() {
+        // 1️⃣ Load saved theme from localStorage
         let savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         if (savedTheme.themeData && typeof savedTheme.themeData === "string") {
-            try { savedTheme.themeData = JSON.parse(savedTheme.themeData); } catch (e) { savedTheme.themeData = {}; }
+            try {
+                savedTheme.themeData = JSON.parse(savedTheme.themeData);
+            } catch (e) {
+                savedTheme.themeData = {};
+            }
         }
 
+        // 2️⃣ Parse lockedMenus JSON from theme data
         let lockedMenus = {};
         if (savedTheme.themeData && savedTheme.themeData["--lockedMenus"]) {
             try {
                 lockedMenus = JSON.parse(savedTheme.themeData["--lockedMenus"]);
             } catch (e) {
-                console.warn("Failed to parse lockedMenus:", e);
+                console.warn("⚠️ Failed to parse lockedMenus:", e);
             }
         }
 
-
-        // Get ALL sidebar links (main + agency)
+        // 3️⃣ Select all sidebar links (main + agency)
         const allMenus = document.querySelectorAll(".hl_nav-header a, nav.flex-1.w-full a");
 
         allMenus.forEach(menu => {
             const menuId = menu.id?.trim();
-            if (!menuId) return;
+            if (!menuId) return; // skip if no ID
 
-            // Remove any previous lock icon before adding a new one
+            // 🔄 Always remove previous lock icon first (avoid duplicates)
             const existingLock = menu.querySelector(".tb-lock-icon");
             if (existingLock) existingLock.remove();
 
-            // Add lock icon if locked
+            // 4️⃣ If this menu is locked → add the lock icon
             if (lockedMenus[menuId]) {
                 const lockIcon = document.createElement("i");
                 lockIcon.className = "tb-lock-icon fas fa-lock ml-2 text-red-500";
-                // 🚨 Add these styles to force icon visibility despite global CSS
+
+                // ✅ Force icon styles (just like the working console code)
                 lockIcon.style.setProperty("display", "inline-block", "important");
                 lockIcon.style.setProperty("visibility", "visible", "important");
                 lockIcon.style.setProperty("opacity", "1", "important");
                 lockIcon.style.setProperty("position", "relative", "important");
                 lockIcon.style.setProperty("z-index", "9999", "important");
+
+                // 📍 Append the icon to the menu
                 menu.appendChild(lockIcon);
 
-                // Optional: visually disable link if locked
+                // 🛑 Visually disable locked menu
                 menu.style.opacity = "0.5";
                 menu.style.pointerEvents = "none";
                 menu.style.cursor = "not-allowed";
-            } else {
-                // remove lock if exists
-                const existingLock = menu.querySelector(".tb-lock-icon");
-                if (existingLock) existingLock.remove();
-
+            }
+            // 5️⃣ If menu is NOT locked → reset to default state
+            else {
                 menu.style.opacity = "";
                 menu.style.pointerEvents = "";
                 menu.style.cursor = "";
             }
         });
+
+        console.log("✅ Locked menus applied successfully!");
     }
 
     // Run once when DOM is ready
