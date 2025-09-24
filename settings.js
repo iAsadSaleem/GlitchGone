@@ -4,6 +4,18 @@
 
     let headerObserver = null;
     const MAX_ATTEMPTS = 40;
+    // --- Dynamically load Sortable.js ---
+    (function loadSortable() {
+        if (!window.Sortable) { // Only load if not already loaded
+            const script = document.createElement('script');
+            script.src = "https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js";
+            script.onload = () => {
+                log("Sortable.js loaded successfully!");
+                // ✅ You can now initialize Sortable here or later in your code
+            };
+            document.head.appendChild(script);
+        }
+    })();
 
     (function () {
         if (!document.querySelector('link[href*="font-awesome"]')) {
@@ -2731,7 +2743,11 @@
         wrapper.id = "tb-menu-customization";
         wrapper.className = "tb-menu-customization";
 
-        // ✅ Predefined Menus (Same as buildFeatureLockSection)
+        const separator = document.createElement("hr");
+        separator.className = "tb-section-separator";
+        wrapper.appendChild(separator);
+
+        // ✅ Menu definitions
         const subAccountMenus = [
             { id: "sb_launchpad", label: "Launchpad" },
             { id: "sb_dashboard", label: "Dashboard" },
@@ -2766,84 +2782,109 @@
             { id: "sb_mobile-app-customiser", label: "Mobile App Customiser" }
         ];
 
+        // 🧠 Load saved order (if exists)
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedTheme.themeData || {};
-        const menuCustomizations = themeData["--menuCustomizations"]
-            ? JSON.parse(themeData["--menuCustomizations"])
-            : {};
+        const savedOrder = themeData["--menuOrder"] ? JSON.parse(themeData["--menuOrder"]) : [];
 
-        // 🔧 Helper to build each section
-        const buildSection = (menus, sectionTitle) => {
-            const sectionHeading = document.createElement("h4");
-            sectionHeading.className = "tb-header-controls";
-            sectionHeading.textContent = sectionTitle;
-            sectionHeading.style.marginTop = "20px";
-            wrapper.appendChild(sectionHeading);
+        // Merge menus and reorder based on saved order
+        let allMenus = [...subAccountMenus, ...agencyMenus];
+        if (savedOrder.length > 0) {
+            allMenus.sort((a, b) => savedOrder.indexOf(a.id) - savedOrder.indexOf(b.id));
+        }
 
-            menus.forEach(menu => {
-                const currentCustom = menuCustomizations[menu.id] || {};
+        // Build container for draggable list
+        const listContainer = document.createElement("div");
+        listContainer.id = "tb-draggable-menu-list";
 
-                const row = document.createElement("div");
-                row.className = "tb-menu-row";
-                row.style.display = "flex";
-                row.style.alignItems = "center";
-                row.style.gap = "12px";
-                row.style.marginBottom = "10px";
+        // 🧰 Build menu rows
+        allMenus.forEach(menu => {
+            const row = document.createElement("div");
+            row.className = "tb-menu-row";
+            row.dataset.id = menu.id;
+            row.style.display = "flex";
+            row.style.alignItems = "center";
+            row.style.gap = "12px";
+            row.style.marginBottom = "10px";
+            row.style.cursor = "grab";
+            row.style.border = "1px solid #ddd";
+            row.style.padding = "8px";
+            row.style.borderRadius = "6px";
+            row.style.background = "#f9f9f9";
 
-                const label = document.createElement("span");
-                label.textContent = menu.label;
-                label.style.flex = "1";
+            const label = document.createElement("span");
+            label.textContent = menu.label;
+            label.style.flex = "1";
 
-                // 📝 Title input
-                const titleInput = document.createElement("input");
-                titleInput.type = "text";
-                titleInput.placeholder = "Custom Title";
-                titleInput.value = currentCustom.title || menu.label;
-                titleInput.className = "tb-input tb-title-input";
+            const titleInput = document.createElement("input");
+            titleInput.type = "text";
+            titleInput.placeholder = "Custom Title";
+            titleInput.className = "tb-input tb-title-input";
 
-                // 🖼️ Icon input
-                const iconInput = document.createElement("input");
-                iconInput.type = "text";
-                iconInput.placeholder = "fa-solid fa-home or url(...)";
-                iconInput.value = currentCustom.icon || "";
-                iconInput.className = "tb-input tb-icon-input";
+            const iconInput = document.createElement("input");
+            iconInput.type = "text";
+            iconInput.placeholder = "fa-solid fa-home or url(...)";
+            iconInput.className = "tb-input tb-icon-input";
 
-                const saveChange = () => {
-                    const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-                    saved.themeData = saved.themeData || {};
+            // Load saved customizations
+            const menuCustomizations = themeData["--menuCustomizations"] ? JSON.parse(themeData["--menuCustomizations"]) : {};
+            if (menuCustomizations[menu.id]) {
+                titleInput.value = menuCustomizations[menu.id].title || "";
+                iconInput.value = menuCustomizations[menu.id].icon || "";
+            } else {
+                titleInput.value = menu.label;
+            }
 
-                    const customizations = saved.themeData["--menuCustomizations"]
-                        ? JSON.parse(saved.themeData["--menuCustomizations"])
-                        : {};
+            // Save changes on input
+            const saveChange = () => {
+                const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                saved.themeData = saved.themeData || {};
+                const customizations = saved.themeData["--menuCustomizations"]
+                    ? JSON.parse(saved.themeData["--menuCustomizations"])
+                    : {};
 
-                    customizations[menu.id] = {
-                        title: titleInput.value,
-                        icon: iconInput.value
-                    };
-
-                    saved.themeData["--menuCustomizations"] = JSON.stringify(customizations);
-                    localStorage.setItem("userTheme", JSON.stringify(saved));
-
-                    applyMenuCustomizations();
+                customizations[menu.id] = {
+                    title: titleInput.value,
+                    icon: iconInput.value
                 };
 
-                titleInput.addEventListener("input", saveChange);
-                iconInput.addEventListener("input", saveChange);
+                saved.themeData["--menuCustomizations"] = JSON.stringify(customizations);
+                localStorage.setItem("userTheme", JSON.stringify(saved));
+                applyMenuCustomizations();
+            };
 
-                row.appendChild(label);
-                row.appendChild(titleInput);
-                row.appendChild(iconInput);
-                wrapper.appendChild(row);
-            });
-        };
+            titleInput.addEventListener("input", saveChange);
+            iconInput.addEventListener("input", saveChange);
 
-        // Build both sections
-        buildSection(subAccountMenus, "Sub-Account Level Menu Customization");
-        buildSection(agencyMenus, "Agency Level Menu Customization");
+            row.appendChild(label);
+            row.appendChild(titleInput);
+            row.appendChild(iconInput);
+            listContainer.appendChild(row);
+        });
 
+        wrapper.appendChild(listContainer);
         container.appendChild(wrapper);
+
+        // ✅ Enable drag & drop
+        Sortable.create(listContainer, {
+            animation: 150,
+            ghostClass: "tb-dragging",
+            onEnd: () => {
+                const rows = document.querySelectorAll(".tb-menu-row");
+                const newOrder = [...rows].map(r => r.dataset.id);
+
+                const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                saved.themeData = saved.themeData || {};
+                saved.themeData["--menuOrder"] = JSON.stringify(newOrder);
+                localStorage.setItem("userTheme", JSON.stringify(saved));
+
+                console.log("✅ New order saved:", newOrder);
+            }
+        });
+
         applyMenuCustomizations();
     }
+
 
 
     // ---------------- Apply on Page Load ----------------
