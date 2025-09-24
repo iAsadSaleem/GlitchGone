@@ -2337,8 +2337,25 @@
         observer.observe(document.body, { childList: true, subtree: true });
     }
 
-    function buildFeatureLockSection(section) {
-        // 🌐 1️⃣ Regular sidebar menus
+    function buildFeatureLockSection(container) {
+
+        let savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        if (savedTheme.themeData && typeof savedTheme.themeData === "string") {
+            savedTheme.themeData = JSON.parse(savedTheme.themeData);
+            localStorage.setItem("userTheme", JSON.stringify(savedTheme));
+        }
+
+        if (document.getElementById("tb-feature-lock-settings")) return;
+
+        const wrapper = document.createElement("div");
+        wrapper.id = "tb-feature-lock-settings";
+        wrapper.className = "tb-feature-lock-settings";
+
+        // Load saved theme + locked menus
+        const themeData = savedTheme.themeData || {};
+        const lockedMenus = themeData["--lockedMenus"] ? JSON.parse(themeData["--lockedMenus"]) : {};
+
+        // 📁 MAIN SIDEBAR MENUS
         const sidebarMenus = [
             { id: "sb_launchpad", label: "Launchpad" },
             { id: "sb_dashboard", label: "Dashboard" },
@@ -2347,65 +2364,114 @@
             { id: "sb_contacts", label: "Contacts" },
             { id: "sb_opportunities", label: "Opportunities" },
             { id: "sb_payments", label: "Payments" },
-            { id: "sb_marketing", label: "Marketing" },
+            { id: "sb_email-marketing", label: "Email Marketing" },
             { id: "sb_automation", label: "Automation" },
             { id: "sb_sites", label: "Sites" },
             { id: "sb_memberships", label: "Memberships" },
+            { id: "sb_app-media", label: "App Media" },
+            { id: "sb_reputation", label: "Reputation" },
             { id: "sb_reporting", label: "Reporting" },
-            { id: "sb_applications", label: "Applications" },
-            { id: "sb_settings", label: "Settings" }
+            { id: "sb_app-marketplace", label: "App Marketplace" }
         ];
 
-        const sidebarWrapper = document.createElement("div");
-        sidebarWrapper.className = "tb-lock-section";
-        sidebarWrapper.innerHTML = `<h4 class="tb-header-controls">Main Menu Lock</h4>`;
-        section.appendChild(sidebarWrapper);
+        // Add header for main menu
+        const mainTitle = document.createElement("h4");
+        mainTitle.className = "tb-header-controls";
+        mainTitle.textContent = "Main Menu Lock";
+        wrapper.appendChild(mainTitle);
 
-        sidebarMenus.forEach(menu => {
-            const row = document.createElement("div");
-            row.className = "tb-lock-item";
-            row.innerHTML = `
-      <label>
-        <input type="checkbox" class="tb-lock-toggle" data-menu-id="${menu.id}" />
-        ${menu.label}
-      </label>
-    `;
-            sidebarWrapper.appendChild(row);
-        });
+        // Create toggle rows for main menus
+        sidebarMenus.forEach(menu => createToggleRow(menu, lockedMenus, wrapper));
 
-        // 🏢 2️⃣ Agency-level sidebar menus with title
+        // 🏢 AGENCY SIDEBAR MENUS
         const agencyMenus = [
             { id: "sb_agency-dashboard", label: "Agency Dashboard" },
             { id: "sb_location-prospect", label: "Prospecting" },
-            { id: "sb_agency-accounts", label: "App Marketplace" },
-            { id: "sb_agency-account-reselling", label: "Reselling" },
-            { id: "sb_agency-marketplace", label: "Add-Ons" },
+            { id: "sb_agency-accounts", label: "Agency Accounts" },
+            { id: "sb_agency-account-reselling", label: "Account Reselling" },
+            { id: "sb_agency-marketplace", label: "Agency Marketplace" },
             { id: "sb_agency-affiliate-portal", label: "Affiliate Portal" },
             { id: "sb_agency-template-library", label: "Template Library" },
             { id: "sb_agency-partners", label: "Partners" },
             { id: "sb_agency-university", label: "University" },
             { id: "sb_saas-education", label: "SaaS Education" },
             { id: "sb_ghl-swag", label: "GHL Swag" },
-            { id: "sb_agency-ideas", label: "Ideas" },
-            { id: "sb_mobile-app-customiser", label: "Mobile App" }
+            { id: "sb_agency-ideas", label: "Agency Ideas" },
+            { id: "sb_mobile-app-customiser", label: "Mobile App Customiser" }
         ];
 
-        const agencyWrapper = document.createElement("div");
-        agencyWrapper.className = "tb-lock-section";
-        agencyWrapper.innerHTML = `<h4 class="tb-header-controls">Agency Menu Lock</h4>`;
-        section.appendChild(agencyWrapper);
+        // Add header for agency menu
+        const agencyTitle = document.createElement("h4");
+        agencyTitle.className = "tb-header-controls";
+        agencyTitle.textContent = "Agency Menu Lock";
+        agencyTitle.style.marginTop = "20px";
+        wrapper.appendChild(agencyTitle);
 
-        agencyMenus.forEach(menu => {
+        // Create toggle rows for agency menus
+        agencyMenus.forEach(menu => createToggleRow(menu, lockedMenus, wrapper));
+
+        // Append all to container
+        container.appendChild(wrapper);
+        applyLockedMenus();
+
+        // 🔧 Function to create each toggle row (reusable)
+        function createToggleRow(menu, lockedMenus, parent) {
             const row = document.createElement("div");
-            row.className = "tb-lock-item";
-            row.innerHTML = `
-      <label>
-        <input type="checkbox" class="tb-lock-toggle" data-menu-id="${menu.id}" />
-        ${menu.label}
-      </label>
-    `;
-            agencyWrapper.appendChild(row);
-        });
+            row.className = "tb-feature-row";
+            row.style.display = "flex";
+            row.style.alignItems = "center";
+            row.style.justifyContent = "space-between";
+            row.style.marginBottom = "8px";
+
+            const label = document.createElement("span");
+            label.textContent = menu.label;
+            label.style.flex = "1";
+            label.style.fontSize = "14px";
+
+            const toggleWrapper = document.createElement("div");
+            toggleWrapper.className = "toggle-switch";
+
+            const toggleInput = document.createElement("input");
+            toggleInput.type = "checkbox";
+            toggleInput.className = "toggle-input";
+            toggleInput.id = "lock-" + menu.id;
+            toggleInput.checked = !!lockedMenus[menu.id];
+
+            const toggleLabel = document.createElement("label");
+            toggleLabel.className = "toggle-label";
+            toggleLabel.setAttribute("for", "lock-" + menu.id);
+
+            toggleWrapper.appendChild(toggleInput);
+            toggleWrapper.appendChild(toggleLabel);
+
+            toggleInput.addEventListener("change", () => {
+                const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                saved.themeData = saved.themeData || {};
+
+                if (typeof saved.themeData === "string") {
+                    try { saved.themeData = JSON.parse(saved.themeData); } catch (e) { saved.themeData = {}; }
+                }
+
+                let lockedMenus = {};
+                if (saved.themeData["--lockedMenus"]) {
+                    try { lockedMenus = JSON.parse(saved.themeData["--lockedMenus"]); } catch (e) { lockedMenus = {}; }
+                }
+
+                if (toggleInput.checked) {
+                    lockedMenus[menu.id] = true;
+                } else {
+                    delete lockedMenus[menu.id];
+                }
+
+                saved.themeData["--lockedMenus"] = JSON.stringify(lockedMenus);
+                localStorage.setItem("userTheme", JSON.stringify(saved));
+                applyLockedMenus();
+            });
+
+            row.appendChild(label);
+            row.appendChild(toggleWrapper);
+            parent.appendChild(row);
+        }
     }
 
     // ✅ Apply menu locks
