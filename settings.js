@@ -2476,41 +2476,46 @@
 
             // 💾 Save hide state
             hideInput.addEventListener("change", () => {
-                let saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                console.log("🔥 Hide toggle changed for:", menu.id, "Checked:", hideInput.checked);
 
-                // ✅ Always parse themeData object safely
+                let saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                console.log("📦 Before parse:", saved);
+
                 if (saved.themeData && typeof saved.themeData === "string") {
                     try {
                         saved.themeData = JSON.parse(saved.themeData);
                     } catch (e) {
+                        console.warn("❌ Failed to parse themeData:", e);
                         saved.themeData = {};
                     }
                 } else if (!saved.themeData) {
                     saved.themeData = {};
                 }
 
-                // ✅ Always parse current hidden menus correctly
                 let hidden = {};
                 if (saved.themeData["--hiddenMenus"]) {
                     try {
                         hidden = JSON.parse(saved.themeData["--hiddenMenus"]);
                     } catch (e) {
-                        hidden = {};
+                        console.warn("❌ Failed to parse --hiddenMenus:", e);
                     }
                 }
 
-                // ✅ Update the key based on checkbox state
+                console.log("👀 Before update:", hidden);
+
                 if (hideInput.checked) {
                     hidden[menu.id] = true;
                 } else {
                     delete hidden[menu.id];
                 }
 
-                // ✅ Save back cleanly
+                console.log("✅ After update:", hidden);
+
                 saved.themeData["--hiddenMenus"] = JSON.stringify(hidden);
                 localStorage.setItem("userTheme", JSON.stringify(saved));
 
-                console.log("💾 Updated hidden menus:", hidden);
+                console.log("💾 Saved:", saved);
+
                 applyLockedMenus();
             });
 
