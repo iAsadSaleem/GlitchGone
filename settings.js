@@ -2,17 +2,6 @@
     const DEBUG = true;
     const log = (...args) => { if (DEBUG) console.log('[ThemeBuilder]', ...args); };
 
-    (function () {
-        const originalSetItem = localStorage.setItem;
-        localStorage.setItem = function (key, value) {
-            if (key === "userTheme") {
-                console.log("⚠️ userTheme is being overwritten!", value);
-                console.trace(); // This will show the exact line of code doing it
-            }
-            return originalSetItem.apply(this, arguments);
-        };
-    })();
-
     let headerObserver = null;
     const MAX_ATTEMPTS = 40;
 
@@ -2601,7 +2590,6 @@
             }
         });
 
-        console.log("✅ Locked & Hidden menus applied successfully!");
     }
 
 
