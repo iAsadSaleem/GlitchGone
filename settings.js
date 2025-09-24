@@ -2487,10 +2487,8 @@
 
             // 💾 Save hide state
             hideInput.addEventListener("change", () => {
-                console.log("🔥 Hide toggle changed for:", menu.id, "Checked:", hideInput.checked);
 
                 let saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-                console.log("📦 Before parse:", saved);
 
                 if (saved.themeData && typeof saved.themeData === "string") {
                     try {
@@ -2512,20 +2510,14 @@
                     }
                 }
 
-                console.log("👀 Before update:", hidden);
-
                 if (hideInput.checked) {
                     hidden[menu.id] = true;
                 } else {
                     delete hidden[menu.id];
                 }
 
-                console.log("✅ After update:", hidden);
-
                 saved.themeData["--hiddenMenus"] = JSON.stringify(hidden);
                 localStorage.setItem("userTheme", JSON.stringify(saved));
-
-                console.log("💾 Saved:", saved);
 
                 applyLockedMenus();
             });
@@ -3208,16 +3200,22 @@
                             savedTheme.themeData = savedTheme.themeData || {};
 
                             // Merge collected vars
+                            // ✅ Preserve both --lockedMenus and --hiddenMenus
                             Object.keys(themeData).forEach(key => {
-                                // Preserve --lockedMenus
-                                if (key !== "--lockedMenus") savedTheme.themeData[key] = themeData[key];
+                                if (key !== "--lockedMenus" && key !== "--hiddenMenus") {
+                                    savedTheme.themeData[key] = themeData[key];
+                                }
                             });
 
-                            // ✅ Ensure lockedMenus stays intact
+                            // ✅ Reassign lockedMenus if exists
                             const lockedMenus = JSON.parse(savedTheme.themeData["--lockedMenus"] || "{}");
                             savedTheme.themeData["--lockedMenus"] = JSON.stringify(lockedMenus);
 
-                            // Save to localStorage
+                            // ✅ Reassign hiddenMenus if exists (prevent overwrite)
+                            const hiddenMenus = JSON.parse(savedTheme.themeData["--hiddenMenus"] || "{}");
+                            savedTheme.themeData["--hiddenMenus"] = JSON.stringify(hiddenMenus);
+
+                            // 💾 Save updated object
                             localStorage.setItem("userTheme", JSON.stringify(savedTheme));
 
                             // Prepare DB payload
