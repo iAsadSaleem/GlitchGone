@@ -888,3 +888,13 @@ body::-webkit-scrollbar-track {
     display: none !important;
     content: none !important;
 }
+.fa-eye:before {
+    right: 20px;
+    position: relative;
+    content: "\f06e";
+}
+.fa-lock:before {
+    position: relative;
+    right: 16px;
+    content: "\f023";
+}
