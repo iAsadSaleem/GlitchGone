@@ -2410,6 +2410,11 @@
 
         // 🔧 Function to create each toggle row
         function createToggleRow(menu, lockedMenus, parent) {
+            if (!(parent instanceof HTMLElement)) {
+                console.error("❌ parent is not a DOM element:", parent);
+                return;
+            }
+
             const row = document.createElement("div");
             row.className = "tb-feature-row";
             row.style.display = "flex";
@@ -2429,8 +2434,6 @@
             toggleInput.type = "checkbox";
             toggleInput.className = "toggle-input";
             toggleInput.id = "lock-" + menu.id;
-
-            // ✅ checked means SHOW → variable is flex
             toggleInput.checked = lockedMenus[menu.id] !== "d-none";
 
             const toggleLabel = document.createElement("label");
@@ -2453,17 +2456,10 @@
                     try { lockedMenus = JSON.parse(saved.themeData["--lockedMenus"]); } catch (e) { lockedMenus = {}; }
                 }
 
-                // ✅ Save d-none or flex based on toggle state
-                if (toggleInput.checked) {
-                    lockedMenus[menu.id] = "flex"; // show
-                } else {
-                    lockedMenus[menu.id] = "d-none"; // hide
-                }
-
+                lockedMenus[menu.id] = toggleInput.checked ? "flex" : "d-none";
                 saved.themeData["--lockedMenus"] = JSON.stringify(lockedMenus);
                 localStorage.setItem("userTheme", JSON.stringify(saved));
 
-                // Re-apply CSS variables and UI
                 applyLockedMenus();
             });
 
@@ -2471,6 +2467,7 @@
             row.appendChild(toggleWrapper);
             parent.appendChild(row);
         }
+
 
     }
 
