@@ -2378,7 +2378,7 @@
         mainTitle.textContent = "Main Menu Lock & Hide";
         wrapper.appendChild(mainTitle);
 
-        sidebarMenus.forEach(menu => createToggleRow(menu, lockedMenus, hiddenMenus, wrapper));
+        sidebarMenus.forEach(menu => createToggleRow(menu, lockedMenus, wrapper));
 
         // 🏢 AGENCY MENUS
         const agencyMenus = [
@@ -2403,7 +2403,7 @@
         agencyTitle.style.marginTop = "20px";
         wrapper.appendChild(agencyTitle);
 
-        agencyMenus.forEach(menu => createToggleRow(menu, lockedMenus, hiddenMenus, wrapper));
+        agencyMenus.forEach(menu => createToggleRow(menu, lockedMenus, wrapper));
 
         container.appendChild(wrapper);
         applyLockedMenus();
