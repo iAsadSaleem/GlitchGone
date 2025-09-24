@@ -2770,11 +2770,6 @@
 
         // 🔧 Helper to build each section
         const buildSection = (menus, sectionTitle) => {
-            const sectionHeading = document.createElement("h4");
-            sectionHeading.className = "tb-header-controls";
-            sectionHeading.textContent = sectionTitle;
-            sectionHeading.style.marginTop = "20px";
-            wrapper.appendChild(sectionHeading);
 
             menus.forEach(menu => {
                 const currentCustom = menuCustomizations[menu.id] || {};
