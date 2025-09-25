@@ -2888,7 +2888,11 @@
                         icon: iconInput.value
                     };
                     saved.themeData["--menuCustomizations"] = JSON.stringify(customizations);
+                    console.log("🧪 Before Saving:", saved);
+
                     localStorage.setItem("userTheme", JSON.stringify(saved));
+                    console.log("📦 After Saving:", JSON.parse(localStorage.getItem("userTheme")));
+
                     applyMenuCustomizations();
                 };
 
