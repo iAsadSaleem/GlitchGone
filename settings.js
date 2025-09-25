@@ -3252,7 +3252,6 @@
                             const themeData = collectThemeVars() || {};
                             const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
                             savedTheme.themeData = savedTheme.themeData || {};
-                            console.log("🚀 Final theme data being sent to DB:", savedTheme.themeData["--agencyMenuOrder"]);
 
                             // Merge collected vars
                             // ✅ Preserve both --lockedMenus and --hiddenMenus
@@ -3266,6 +3265,7 @@
                             // ✅ Preserve drag-and-drop order from localStorage (important!)
                             const localSaved = JSON.parse(localStorage.getItem("userTheme") || "{}");
 
+                            console.log("🚀 Final theme data being sent to DB:", savedTheme.themeData["--menuCustomizations"]);
                             // ✅ Include --menuCustomizations explicitly
                             if (localSaved.themeData["--menuCustomizations"]) {
                                 savedTheme.themeData["--menuCustomizations"] = localSaved.themeData["--menuCustomizations"];
