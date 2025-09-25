@@ -3412,36 +3412,40 @@
     }
 
     document.addEventListener("DOMContentLoaded", function () {
-        // ✅ Step 1: Initialize builder after DOM is ready
+        console.log("📦 DOM fully loaded, running init sequence...");
+
         setTimeout(() => {
+            console.log("⚙️ Running initThemeBuilder...");
             if (typeof initThemeBuilder === "function") {
                 initThemeBuilder(0);
             } else {
-                console.error("❌ initThemeBuilder() is not defined.");
+                console.error("❌ initThemeBuilder() is not defined");
             }
 
-            // ✅ Step 2: Apply locked menus if function exists
+            console.log("🔐 Applying locked menus...");
             if (typeof applyLockedMenus === "function") {
                 applyLockedMenus();
             } else {
-                console.warn("⚠️ applyLockedMenus() not found.");
+                console.warn("⚠️ applyLockedMenus() missing");
             }
 
-            // ✅ Step 3: Apply sidebar order if saved
             const orderJSON = localStorage.getItem("--agencyMenuOrder");
+            console.log("📁 orderJSON:", orderJSON);
+
             if (orderJSON) {
-                console.log("🔁 Reapplying saved menu order on load...");
+                console.log("🔁 Trying to apply sidebar order...");
                 setTimeout(() => {
                     if (typeof applySidebarOrder === "function") {
                         applySidebarOrder();
                     } else {
-                        console.error("❌ applySidebarOrder() is not defined.");
+                        console.error("❌ applySidebarOrder() is not defined");
                     }
                 }, 300);
             } else {
-                console.log("ℹ️ No saved menu order found in localStorage.");
+                console.log("ℹ️ No saved menu order found.");
             }
         }, 50);
     });
+
 
 })();
