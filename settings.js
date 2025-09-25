@@ -2910,23 +2910,12 @@
                     localStorage.setItem("userTheme", JSON.stringify(saved));
                     console.log(`✅ ${sectionTitle} order saved:`, newOrder);
 
-                    // ✅ Update sidebar DOM only if it exists and belongs to this section
-                    const sidebarContainer = document.querySelector(sidebarParentSelector);
-                    if (sidebarContainer) {
-                        newOrder.forEach(menuId => {
-                            // 🔥 Only append if this element exists inside this sidebar already
-                            const menuEl = sidebarContainer.querySelector(`#${menuId}`);
-                            if (menuEl) {
-                                sidebarContainer.appendChild(menuEl);
-                            }
-                        });
-                        console.log(`📁 Live menu order applied for ${sectionTitle}`);
-                    } else {
-                        console.log(`💾 Sidebar not found on this page. Changes saved for ${sectionTitle}.`);
-                    }
+                    // ✅ Apply sidebar update live (if sidebar exists on this page)
+                    applySidebarOrder(newOrder, sidebarParentSelector);
 
                     applyMenuCustomizations();
                 }
+
             });
         };
 
@@ -2977,7 +2966,24 @@
     }
 
 
+    function applySidebarOrder(orderArray, sidebarSelector) {
+        const sidebar = document.querySelector(sidebarSelector);
+        if (!sidebar) {
+            console.log("💾 Sidebar not found on this page. Changes saved for future loads.");
+            return;
+        }
 
+        // Create a DocumentFragment to reorder elements efficiently
+        const fragment = document.createDocumentFragment();
+
+        orderArray.forEach(menuId => {
+            const item = document.getElementById(menuId);
+            if (item) fragment.appendChild(item);
+        });
+
+        // Append back the reordered items
+        sidebar.appendChild(fragment);
+    }
 
 
 
