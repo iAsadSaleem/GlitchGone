@@ -3439,8 +3439,8 @@
                     instruction.className = "tb-instruction-text";
                     instruction.textContent =
                         "💡 For Flat Color: Choose the same color for Start & End";
-                    buildFeedbackForm(section);
                     section.appendChild(instruction);
+                    buildFeedbackForm(section);
 
                     //buildHeadingSettings(section) //Commented Will see next time
                     // Add more advanced options later
