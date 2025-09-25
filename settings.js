@@ -2843,55 +2843,23 @@
                 row.style.borderRadius = "6px";
                 row.style.background = "#f9f9f9";
 
+                // 🖼️ Add drag icon before label
+                const dragIcon = document.createElement("img");
+                dragIcon.src = "https://theme-builder-delta.vercel.app/images/drag-logo.png";
+                dragIcon.alt = "drag";
+                dragIcon.style.width = "20px";
+                dragIcon.style.height = "20px";
+                dragIcon.style.objectFit = "contain";
+                dragIcon.style.cursor = "grab";
+
                 const label = document.createElement("span");
                 label.textContent = menu.label;
                 label.style.flex = "1";
 
-                const titleInput = document.createElement("input");
-                titleInput.type = "text";
-                titleInput.placeholder = "Custom Title";
-                titleInput.className = "tb-input tb-title-input";
-
-                const iconInput = document.createElement("input");
-                iconInput.type = "text";
-                iconInput.placeholder = "fa-solid fa-home or url(...)";
-                iconInput.className = "tb-input tb-icon-input";
-
-                const menuCustomizations = themeData["--menuCustomizations"]
-                    ? JSON.parse(themeData["--menuCustomizations"])
-                    : {};
-                if (menuCustomizations[menu.id]) {
-                    titleInput.value = menuCustomizations[menu.id].title || "";
-                    iconInput.value = menuCustomizations[menu.id].icon || "";
-                } else {
-                    titleInput.value = menu.label;
-                }
-
-                const saveChange = () => {
-                    const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-                    saved.themeData = saved.themeData || {};
-                    const customizations = saved.themeData["--menuCustomizations"]
-                        ? JSON.parse(saved.themeData["--menuCustomizations"])
-                        : {};
-
-                    customizations[menu.id] = {
-                        title: titleInput.value,
-                        icon: iconInput.value
-                    };
-
-                    saved.themeData["--menuCustomizations"] = JSON.stringify(customizations);
-                    localStorage.setItem("userTheme", JSON.stringify(saved));
-                    applyMenuCustomizations();
-                };
-
-                titleInput.addEventListener("input", saveChange);
-                iconInput.addEventListener("input", saveChange);
-
+                // Append in order
+                row.appendChild(dragIcon);
                 row.appendChild(label);
-                row.appendChild(titleInput);
-                row.appendChild(iconInput);
-                listContainer.appendChild(row);
-            });
+
 
             wrapper.appendChild(listContainer);
 

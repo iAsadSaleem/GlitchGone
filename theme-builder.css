@@ -888,3 +888,12 @@ body::-webkit-scrollbar-track {
     display: none !important;
     content: none !important;
 }
+.tb-drag-handle {
+    cursor: grab;
+    user-select: none;
+    padding: 0 6px;
+}
+
+    .tb-drag-handle:active {
+        cursor: grabbing;
+    }
