@@ -2944,6 +2944,7 @@
                             menuEl.parentElement.appendChild(menuEl);
                         }
                     });
+                } // 👈 closes onEnd
             });
         };
 
