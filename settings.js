@@ -3409,6 +3409,24 @@
         }
     }
 
-    document.addEventListener('DOMContentLoaded', () => setTimeout(() => initThemeBuilder(0), 50));
-    setTimeout(() => initThemeBuilder(0), 50);
+    document.addEventListener("DOMContentLoaded", () => {
+        // 1️⃣ Initialize the theme builder
+        setTimeout(() => {
+            initThemeBuilder(0);
+
+            // 2️⃣ Apply locked menus (if required)
+            applyLockedMenus();
+
+            // 3️⃣ Try to reapply the order after sidebar is created
+            const orderJSON = localStorage.getItem("--agencyMenuOrder");
+            if (orderJSON) {
+                console.log("🔁 Reapplying saved menu order on load...");
+                setTimeout(() => {
+                    applySidebarOrder();
+                }, 300); // ⏱️ increase to 300ms to make sure sidebar DOM is ready
+            } else {
+                console.log("ℹ️ No saved menu order found in localStorage.");
+            }
+        }, 50);
+    });
 })();
