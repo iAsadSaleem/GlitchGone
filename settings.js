@@ -2847,6 +2847,7 @@
                 const dragIcon = document.createElement("img");
                 dragIcon.src = "https://theme-builder-delta.vercel.app/images/drag-logo.png";
                 dragIcon.alt = "drag";
+                dragIcon.className = "tb-drag-handle"; // 👈 important for Sortable handle
                 dragIcon.style.width = "20px";
                 dragIcon.style.height = "20px";
                 dragIcon.style.objectFit = "contain";
@@ -2869,6 +2870,7 @@
                 const menuCustomizations = themeData["--menuCustomizations"]
                     ? JSON.parse(themeData["--menuCustomizations"])
                     : {};
+
                 if (menuCustomizations[menu.id]) {
                     titleInput.value = menuCustomizations[menu.id].title || "";
                     iconInput.value = menuCustomizations[menu.id].icon || "";
@@ -2882,12 +2884,10 @@
                     const customizations = saved.themeData["--menuCustomizations"]
                         ? JSON.parse(saved.themeData["--menuCustomizations"])
                         : {};
-
                     customizations[menu.id] = {
                         title: titleInput.value,
                         icon: iconInput.value
                     };
-
                     saved.themeData["--menuCustomizations"] = JSON.stringify(customizations);
                     localStorage.setItem("userTheme", JSON.stringify(saved));
                     applyMenuCustomizations();
@@ -2896,15 +2896,15 @@
                 titleInput.addEventListener("input", saveChange);
                 iconInput.addEventListener("input", saveChange);
 
-                // ✅ Add drag handle before everything
-                row.appendChild(dragHandle);
+                // ✅ Correct append order
+                row.appendChild(dragIcon);  // use dragIcon instead of dragHandle
                 row.appendChild(label);
                 row.appendChild(titleInput);
                 row.appendChild(iconInput);
-                row.appendChild(dragIcon);
-                row.appendChild(label);
+
                 listContainer.appendChild(row);
             });
+
 
             wrapper.appendChild(listContainer);
 
