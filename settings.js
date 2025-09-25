@@ -2903,20 +2903,24 @@
                     const rows = listContainer.querySelectorAll(".tb-menu-row");
                     const newOrder = [...rows].map(r => r.dataset.id);
 
-                    // Save order
+                    // ✅ Save new order to localStorage (separate for each menu type)
                     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                     saved.themeData = saved.themeData || {};
                     saved.themeData[storageKey] = JSON.stringify(newOrder);
                     localStorage.setItem("userTheme", JSON.stringify(saved));
                     console.log(`✅ ${sectionTitle} order saved:`, newOrder);
 
-                    // ✅ Reorder DOM directly (works even if container ID is unknown)
-                    newOrder.forEach(menuId => {
-                        const menuEl = document.getElementById(menuId);
-                        if (menuEl && menuEl.parentElement) {
-                            menuEl.parentElement.appendChild(menuEl);
-                        }
-                    });
+                    // ✅ Apply immediately ONLY if sidebar exists on this page
+                    const sidebarContainer = document.querySelector(sidebarParentSelector);
+                    if (sidebarContainer) {
+                        newOrder.forEach(menuId => {
+                            const menuEl = document.getElementById(menuId);
+                            if (menuEl) sidebarContainer.appendChild(menuEl);
+                        });
+                        console.log(`📁 Live menu order applied on current page for ${sectionTitle}`);
+                    } else {
+                        console.log(`💾 Sidebar not found on this page. Changes saved and will apply on next load.`);
+                    }
 
                     applyMenuCustomizations();
                 }
@@ -2932,13 +2936,29 @@
         container.appendChild(wrapper);
         applyMenuCustomizations();
 
-        // ✅ Restore saved menu order to the website sidebar when ThemeBuilder loads
+        // ✅ Restore order ONLY if the sidebar exists on this page
         const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+
         if (saved.themeData?.["--subMenuOrder"]) {
-            updateWebsiteSidebar(JSON.parse(saved.themeData["--subMenuOrder"]), "#subAccountSidebar");
+            const order = JSON.parse(saved.themeData["--subMenuOrder"]);
+            const sidebar = document.querySelector("#subAccountSidebar");
+            if (sidebar) reorderMenu(order, "#subAccountSidebar");
         }
+
         if (saved.themeData?.["--agencyMenuOrder"]) {
-            updateWebsiteSidebar(JSON.parse(saved.themeData["--agencyMenuOrder"]), "#agencySidebar");
+            const order = JSON.parse(saved.themeData["--agencyMenuOrder"]);
+            const sidebar = document.querySelector("#agencySidebar");
+            if (sidebar) reorderMenu(order, "#agencySidebar");
+        }
+
+        // Helper function
+        function reorderMenu(order, containerSelector) {
+            const container = document.querySelector(containerSelector);
+            if (!container) return;
+            order.forEach(id => {
+                const el = container.querySelector(`#${id}`);
+                if (el) container.appendChild(el);
+            });
         }
     }
 
