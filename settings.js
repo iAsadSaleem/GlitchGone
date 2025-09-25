@@ -2697,17 +2697,17 @@
             ? JSON.parse(themeData["--menuCustomizations"])
             : {};
 
-        // Ensure Font Awesome is loaded
+        // ---------------- Load Font Awesome if not already ----------------
         if (!document.querySelector('link[href*="font-awesome"]')) {
             const link = document.createElement("link");
             link.rel = "stylesheet";
             link.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css";
-            document.head.appendChild(link);
             link.onload = () => applyMenuCustomizations(); // Retry after FA loads
-            return;
+            document.head.appendChild(link);
+            return; // Exit this run; will retry after FA is loaded
         }
 
-        // Loop over all sidebar menu items
+        // ---------------- Loop over all menu customizations ----------------
         Object.keys(menuCustomizations).forEach(menuId => {
             const menuData = menuCustomizations[menuId];
             const menuEl = document.getElementById(menuId);
@@ -2739,11 +2739,11 @@
                     // Unicode icon like "f015"
                     iconEl = document.createElement("i");
                     iconEl.className = "fa-solid";
-                    iconEl.innerHTML = `&#x${menuData.icon};`;
+                    iconEl.innerHTML = `&#x${menuData.icon};`; // Correct unicode rendering
                     iconEl.style.marginRight = "0.5rem";
                     iconEl.style.fontSize = "16px";
                 } else {
-                    // Font Awesome class
+                    // Font Awesome class names
                     const classes = menuData.icon.includes("fa-") ? menuData.icon : `fa-solid ${menuData.icon}`;
                     iconEl = document.createElement("i");
                     iconEl.className = classes;
@@ -2755,6 +2755,7 @@
             }
         });
     }
+
 
 
 
