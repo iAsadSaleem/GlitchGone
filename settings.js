@@ -2847,8 +2847,8 @@
                 dragIcon.src = "https://theme-builder-delta.vercel.app/images/drag-logo-2.png";
                 dragIcon.alt = "drag";
                 dragIcon.className = "tb-drag-handle"; // 👈 important for Sortable handle
-                dragIcon.style.width = "20px";
-                dragIcon.style.height = "20px";
+                dragIcon.style.width = "15px";
+                dragIcon.style.height = "15px";
                 dragIcon.style.objectFit = "contain";
                 dragIcon.style.cursor = "grab";
 
