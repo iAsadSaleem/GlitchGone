@@ -2735,6 +2735,33 @@
         });
     }
 
+    function updateWebsiteSidebar(newOrder, sidebarParentSelector) {
+        const sidebarParent = document.querySelector(sidebarParentSelector);
+        if (!sidebarParent) {
+            console.warn("⚠️ Sidebar container not found:", sidebarParentSelector);
+            return;
+        }
+
+        // Map all current sidebar items by their data-id
+        const allItems = Array.from(sidebarParent.children);
+        const map = {};
+        allItems.forEach(item => {
+            const id = item.getAttribute("data-id") || item.id;
+            if (id) map[id] = item;
+        });
+
+        // Rebuild sidebar DOM according to new order
+        sidebarParent.innerHTML = "";
+        newOrder.forEach(id => {
+            if (map[id]) {
+                sidebarParent.appendChild(map[id]);
+            }
+        });
+
+        console.log("✅ Sidebar order updated for:", sidebarParentSelector);
+    }
+
+
     // ---------------- Build Menu Customizer UI ----------------
     function buildMenuCustomizationSection(container) {
         if (document.getElementById("tb-menu-customization")) return;
@@ -2876,7 +2903,7 @@
                     const rows = listContainer.querySelectorAll(".tb-menu-row");
                     const newOrder = [...rows].map(r => r.dataset.id);
 
-                    // Save order in localStorage (CSS variable)
+                    // Save order in localStorage
                     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                     saved.themeData = saved.themeData || {};
                     saved.themeData[storageKey] = JSON.stringify(newOrder);
@@ -2884,17 +2911,10 @@
 
                     console.log(`✅ ${sectionTitle} order saved:`, newOrder);
 
-                    // Update only this section in the actual sidebar
-                    const sidebarParent = document.querySelector(sidebarParentSelector);
-                    if (sidebarParent) {
-                        newOrder.forEach(menuId => {
-                            const menuEl = document.getElementById(menuId);
-                            if (menuEl && menuEl.parentElement === sidebarParent) {
-                                sidebarParent.appendChild(menuEl);
-                            }
-                        });
-                    }
+                    // 🔥 Update the actual sidebar UI
+                    updateWebsiteSidebar(newOrder, sidebarParentSelector);
 
+                    // Apply titles/icons changes too
                     applyMenuCustomizations();
                 }
             });
@@ -2908,6 +2928,15 @@
 
         container.appendChild(wrapper);
         applyMenuCustomizations();
+
+        // ✅ Restore saved menu order to the website sidebar when ThemeBuilder loads
+        const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        if (saved.themeData?.["--subMenuOrder"]) {
+            updateWebsiteSidebar(JSON.parse(saved.themeData["--subMenuOrder"]), "#subAccountSidebar");
+        }
+        if (saved.themeData?.["--agencyMenuOrder"]) {
+            updateWebsiteSidebar(JSON.parse(saved.themeData["--agencyMenuOrder"]), "#agencySidebar");
+        }
     }
 
 
