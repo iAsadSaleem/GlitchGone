@@ -5,8 +5,6 @@
     let headerObserver = null;
     const MAX_ATTEMPTS = 40;
     // --- Dynamically load Sortable.js ---
-    console.log("✅ JS file loaded");
-
     (function loadSortable() {
         if (!window.Sortable) { // Only load if not already loaded
             const script = document.createElement('script');
@@ -2890,11 +2888,7 @@
                         icon: iconInput.value
                     };
                     saved.themeData["--menuCustomizations"] = JSON.stringify(customizations);
-                    console.log("🧪 Before Saving:", saved);
-
                     localStorage.setItem("userTheme", JSON.stringify(saved));
-                    console.log("📦 After Saving:", JSON.parse(localStorage.getItem("userTheme")));
-
                     applyMenuCustomizations();
                 };
 
@@ -2918,9 +2912,27 @@
                 animation: 150,
                 ghostClass: "tb-dragging",
                 handle: ".tb-drag-handle", // ✅ Only drag when grabbing the handle
-                onEnd: function () {
-                    saveNewOrder();
-                }// 👈 closes onEnd
+                onEnd: () => {
+                    const rows = listContainer.querySelectorAll(".tb-menu-row");
+                    const newOrder = [...rows].map(r => r.dataset.id);
+
+                    // Save order
+                    const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                    saved.themeData = saved.themeData || {};
+                    saved.themeData[storageKey] = JSON.stringify(newOrder);
+                    localStorage.setItem("userTheme", JSON.stringify(saved));
+                    console.log(`✅ ${sectionTitle} order saved:`, newOrder);
+
+                    // ✅ Reorder DOM directly (instant live update)
+                    newOrder.forEach(menuId => {
+                        const menuEl = document.getElementById(menuId);
+                        if (menuEl && menuEl.parentElement) {
+                            menuEl.parentElement.appendChild(menuEl);
+                        }
+                    });
+
+                    applyMenuCustomizations();
+                }
             });
         };
 
@@ -2953,49 +2965,25 @@
             });
         }
     }
-    function saveNewOrder() {
-        const items = document.querySelectorAll('.hl_nav-header nav a[id^="sb_"]');
-        const newOrder = Array.from(items).map(item => item.id);
-        console.log("🧪 New drag order:", newOrder);
 
-        const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        savedTheme.themeData = savedTheme.themeData || {};
-        savedTheme.themeData["--agencyMenuOrder"] = JSON.stringify(newOrder);
-        localStorage.setItem("userTheme", JSON.stringify(savedTheme));
 
-        localStorage.setItem("--agencyMenuOrder", JSON.stringify(newOrder));
-        console.log("✅ Saved new order to localStorage:", newOrder);
-
-        // 👇 Apply immediately to DOM
-        applySidebarOrder();
-    }
-
-    function applySidebarOrder() {
-        const orderJSON = localStorage.getItem("--agencyMenuOrder");
-        if (!orderJSON) {
-            console.warn("⚠️ No saved menu order found in localStorage.");
-            return;
-        }
-
-        const order = JSON.parse(orderJSON);
-        console.log("🔁 Applying saved order:", order);
-
-        const sidebar = document.querySelector('.hl_nav-header nav');
+    function applySidebarOrder(orderArray, sidebarSelector) {
+        const sidebar = document.querySelector(sidebarSelector);
         if (!sidebar) {
-            console.error("❌ Sidebar not found in DOM.");
+            console.log("💾 Sidebar not found on this page. Changes saved for future loads.");
             return;
         }
 
-        // Reorder DOM
+        // Create a DocumentFragment to reorder elements efficiently
         const fragment = document.createDocumentFragment();
-        order.forEach(id => {
-            const el = document.getElementById(id);
-            if (el) fragment.appendChild(el);
-            else console.warn(`⚠️ Element with ID "${id}" not found in DOM.`);
+
+        orderArray.forEach(menuId => {
+            const item = document.getElementById(menuId);
+            if (item) fragment.appendChild(item);
         });
 
+        // Append back the reordered items
         sidebar.appendChild(fragment);
-        console.log("✅ Sidebar order applied!");
     }
 
 
@@ -3259,21 +3247,11 @@
                             const lockedMenus = JSON.parse(savedTheme.themeData["--lockedMenus"] || "{}");
                             savedTheme.themeData["--lockedMenus"] = JSON.stringify(lockedMenus);
 
-                            // ✅ Reassign hiddenMenus if existss
+                            // ✅ Reassign hiddenMenus if exists (prevent overwrite)
                             const hiddenMenus = JSON.parse(savedTheme.themeData["--hiddenMenus"] || "{}");
                             savedTheme.themeData["--hiddenMenus"] = JSON.stringify(hiddenMenus);
 
-                            // ✅ Reassign menu orders before saving
-                            const latestOrder = localStorage.getItem("--agencyMenuOrder");
-                            if (latestOrder) {
-                                savedTheme.themeData["--agencyMenuOrder"] = latestOrder;
-                            }
-
-                            const subMenuOrder = savedTheme.themeData["--subMenuOrder"] || localStorage.getItem("--subMenuOrder");
-                            if (subMenuOrder) savedTheme.themeData["--subMenuOrder"] = subMenuOrder;
-
-
-                            // 💾 Save updated objectsaveNewOrder
+                            // 💾 Save updated object
                             localStorage.setItem("userTheme", JSON.stringify(savedTheme));
 
                             // Prepare DB payload
@@ -3411,41 +3389,6 @@
         }
     }
 
-    document.addEventListener("DOMContentLoaded", function () {
-        console.log("📦 DOM fully loaded, running init sequence...");
-
-        setTimeout(() => {
-            console.log("⚙️ Running initThemeBuilder...");
-            if (typeof initThemeBuilder === "function") {
-                initThemeBuilder(0);
-            } else {
-                console.error("❌ initThemeBuilder() is not defined");
-            }
-
-            console.log("🔐 Applying locked menus...");
-            if (typeof applyLockedMenus === "function") {
-                applyLockedMenus();
-            } else {
-                console.warn("⚠️ applyLockedMenus() missing");
-            }
-
-            const orderJSON = localStorage.getItem("--agencyMenuOrder");
-            console.log("📁 orderJSON:", orderJSON);
-
-            if (orderJSON) {
-                console.log("🔁 Trying to apply sidebar order...");
-                setTimeout(() => {
-                    if (typeof applySidebarOrder === "function") {
-                        applySidebarOrder();
-                    } else {
-                        console.error("❌ applySidebarOrder() is not defined");
-                    }
-                }, 300);
-            } else {
-                console.log("ℹ️ No saved menu order found.");
-            }
-        }, 50);
-    });
-
-
+    document.addEventListener('DOMContentLoaded', () => setTimeout(() => initThemeBuilder(0), 50));
+    setTimeout(() => initThemeBuilder(0), 50);
 })();
