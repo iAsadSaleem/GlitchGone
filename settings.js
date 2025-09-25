@@ -2697,53 +2697,49 @@
             ? JSON.parse(themeData["--menuCustomizations"])
             : {};
 
-        // ---------------- Load Font Awesome if not already ----------------
+        // Load Font Awesome if missing
         if (!document.querySelector('link[href*="font-awesome"]')) {
             const link = document.createElement("link");
             link.rel = "stylesheet";
             link.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css";
-            link.onload = () => applyMenuCustomizations(); // Retry after FA loads
+            link.onload = () => applyMenuCustomizations();
             document.head.appendChild(link);
-            return; // Exit this run; will retry after FA is loaded
+            return;
         }
 
-        // ---------------- Loop over all menu customizations ----------------
         Object.keys(menuCustomizations).forEach(menuId => {
             const menuData = menuCustomizations[menuId];
             const menuEl = document.getElementById(menuId);
             if (!menuEl) return;
 
-            // ---------------- Update Title ----------------
+            // Update Title
             const titleSpan = menuEl.querySelector(".nav-title");
-            if (titleSpan) {
-                titleSpan.textContent = menuData.title || menuEl.dataset.defaultLabel || "";
-            }
+            if (titleSpan) titleSpan.textContent = menuData.title || menuEl.dataset.defaultLabel || "";
 
-            // ---------------- Update Icon ----------------
-            // Remove existing icon (<img> or <i>)
-            const existingImg = menuEl.querySelector("img");
-            const existingI = menuEl.querySelector("i");
-            if (existingImg) existingImg.remove();
-            if (existingI) existingI.remove();
-
+            // ---------------- Replace Icon for THIS menu only ----------------
             if (menuData.icon) {
-                let iconEl;
+                // Remove only existing icon inside this menu
+                const existingImg = menuEl.querySelector("img");
+                const existingI = menuEl.querySelector("i");
+                if (existingImg) existingImg.remove();
+                if (existingI) existingI.remove();
 
-                if (menuData.icon.startsWith("http")) {
+                let iconEl;
+                if (/^https?:\/\//.test(menuData.icon)) {
                     // Image URL
                     iconEl = document.createElement("img");
                     iconEl.src = menuData.icon;
                     iconEl.alt = menuData.title || "icon";
                     iconEl.className = "md:mr-0 h-5 w-5 mr-2 lg:mr-2 xl:mr-2";
                 } else if (/^f[0-9a-f]+$/i.test(menuData.icon)) {
-                    // Unicode icon like "f015"
+                    // Unicode like "f015"
                     iconEl = document.createElement("i");
                     iconEl.className = "fa-solid";
-                    iconEl.innerHTML = `&#x${menuData.icon};`; // Correct unicode rendering
+                    iconEl.innerHTML = `&#x${menuData.icon};`;
                     iconEl.style.marginRight = "0.5rem";
                     iconEl.style.fontSize = "16px";
                 } else {
-                    // Font Awesome class names
+                    // Font Awesome class
                     const classes = menuData.icon.includes("fa-") ? menuData.icon : `fa-solid ${menuData.icon}`;
                     iconEl = document.createElement("i");
                     iconEl.className = classes;
@@ -2751,6 +2747,7 @@
                     iconEl.style.fontSize = "16px";
                 }
 
+                // Add new icon for this menu
                 menuEl.prepend(iconEl);
             }
         });
