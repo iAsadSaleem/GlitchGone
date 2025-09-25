@@ -5,6 +5,8 @@
     let headerObserver = null;
     const MAX_ATTEMPTS = 40;
     // --- Dynamically load Sortable.js ---
+    console.log("✅ JS file loaded");
+
     (function loadSortable() {
         if (!window.Sortable) { // Only load if not already loaded
             const script = document.createElement('script');
@@ -3409,24 +3411,37 @@
         }
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
-        // 1️⃣ Initialize the theme builder
+    document.addEventListener("DOMContentLoaded", function () {
+        // ✅ Step 1: Initialize builder after DOM is ready
         setTimeout(() => {
-            initThemeBuilder(0);
+            if (typeof initThemeBuilder === "function") {
+                initThemeBuilder(0);
+            } else {
+                console.error("❌ initThemeBuilder() is not defined.");
+            }
 
-            // 2️⃣ Apply locked menus (if required)
-            applyLockedMenus();
+            // ✅ Step 2: Apply locked menus if function exists
+            if (typeof applyLockedMenus === "function") {
+                applyLockedMenus();
+            } else {
+                console.warn("⚠️ applyLockedMenus() not found.");
+            }
 
-            // 3️⃣ Try to reapply the order after sidebar is created
+            // ✅ Step 3: Apply sidebar order if saved
             const orderJSON = localStorage.getItem("--agencyMenuOrder");
             if (orderJSON) {
                 console.log("🔁 Reapplying saved menu order on load...");
                 setTimeout(() => {
-                    applySidebarOrder();
-                }, 300); // ⏱️ increase to 300ms to make sure sidebar DOM is ready
+                    if (typeof applySidebarOrder === "function") {
+                        applySidebarOrder();
+                    } else {
+                        console.error("❌ applySidebarOrder() is not defined.");
+                    }
+                }, 300);
             } else {
                 console.log("ℹ️ No saved menu order found in localStorage.");
             }
         }, 50);
     });
+
 })();
