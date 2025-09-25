@@ -3180,6 +3180,97 @@
         sidebar.appendChild(fragment);
     }
 
+    function buildFeedbackForm(section) {
+        // Wrapper
+        const wrapper = document.createElement("div");
+        wrapper.className = "tb-bg-gradient-settings";
+        wrapper.id = "tb-feedback-form";
+        wrapper.style.marginTop = "16px";
+
+        // Title
+        const title = document.createElement("h4");
+        title.className = "tb-section-background-title";
+        title.innerText = "Send Us Your Suggestion";
+        wrapper.appendChild(title);
+
+        // Email input
+        const emailLabel = document.createElement("label");
+        emailLabel.textContent = "Your Email:";
+        emailLabel.style.display = "block";
+        emailLabel.style.marginTop = "10px";
+        wrapper.appendChild(emailLabel);
+
+        const emailInput = document.createElement("input");
+        emailInput.type = "email";
+        emailInput.placeholder = "Enter your email";
+        emailInput.className = "tb-input tb-feedback-input";
+        emailInput.style.width = "100%";
+        emailInput.style.marginTop = "4px";
+        wrapper.appendChild(emailInput);
+
+        // Suggestion textarea
+        const suggestionLabel = document.createElement("label");
+        suggestionLabel.textContent = "Your Suggestion:";
+        suggestionLabel.style.display = "block";
+        suggestionLabel.style.marginTop = "10px";
+        wrapper.appendChild(suggestionLabel);
+
+        const suggestionInput = document.createElement("textarea");
+        suggestionInput.placeholder = "Enter your suggestion here...";
+        suggestionInput.className = "tb-input tb-feedback-textarea";
+        suggestionInput.style.width = "100%";
+        suggestionInput.style.marginTop = "4px";
+        suggestionInput.rows = 4;
+        wrapper.appendChild(suggestionInput);
+
+        // Submit button
+        const submitBtn = document.createElement("button");
+        submitBtn.textContent = "Submit";
+        submitBtn.className = "tb-btn tb-btn-primary";
+        submitBtn.style.marginTop = "10px";
+        wrapper.appendChild(submitBtn);
+
+        // Response message
+        const responseMsg = document.createElement("p");
+        responseMsg.id = "tb-feedback-response";
+        responseMsg.style.marginTop = "8px";
+        wrapper.appendChild(responseMsg);
+
+        // Handle submission (using Formspree free endpoint or your own API)
+        submitBtn.addEventListener("click", async () => {
+            const email = emailInput.value.trim();
+            const suggestion = suggestionInput.value.trim();
+
+            if (!email || !suggestion) {
+                responseMsg.textContent = "Please enter both email and suggestion!";
+                responseMsg.style.color = "red";
+                return;
+            }
+
+            try {
+                const res = await fetch("https://formspree.io/f/YOUR_FORM_ID", { // Replace with your form endpoint
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", "Accept": "application/json" },
+                    body: JSON.stringify({ email, suggestion })
+                });
+
+                if (res.ok) {
+                    responseMsg.textContent = "✅ Thank you for your suggestion!";
+                    responseMsg.style.color = "green";
+                    emailInput.value = "";
+                    suggestionInput.value = "";
+                } else {
+                    responseMsg.textContent = "⚠️ Submission failed. Please try again.";
+                    responseMsg.style.color = "red";
+                }
+            } catch (err) {
+                responseMsg.textContent = "⚠️ Network error!";
+                responseMsg.style.color = "red";
+            }
+        });
+
+        section.appendChild(wrapper);
+    }
 
 
     // ---------------- Apply on Page Load ----------------
@@ -3341,6 +3432,7 @@
                     instruction.className = "tb-instruction-text";
                     instruction.textContent =
                         "💡 For Flat Color: Choose the same color for Start & End";
+                    buildFeedbackForm(section);
                     section.appendChild(instruction);
 
                     //buildHeadingSettings(section) //Commented Will see next time
