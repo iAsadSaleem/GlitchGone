@@ -2835,7 +2835,7 @@
                 row.dataset.id = menu.id;
                 row.style.display = "flex";
                 row.style.alignItems = "center";
-                row.style.gap = "12px";
+                row.style.gap = "8px";
                 row.style.marginBottom = "10px";
                 row.style.cursor = "grab";
                 row.style.border = "1px solid #ddd";
@@ -2843,13 +2843,14 @@
                 row.style.borderRadius = "6px";
                 row.style.background = "#f9f9f9";
 
-                // 🟡 Drag handle icon
-                const dragHandle = document.createElement("span");
-                dragHandle.className = "tb-drag-handle";
-                dragHandle.innerHTML = "☰"; // you can replace with icon font too
-                dragHandle.style.cursor = "grab";
-                dragHandle.style.fontSize = "18px";
-                dragHandle.style.color = "#666";
+                // 🖼️ Add drag icon before label
+                const dragIcon = document.createElement("img");
+                dragIcon.src = "https://theme-builder-delta.vercel.app/images/drag-logo.png";
+                dragIcon.alt = "drag";
+                dragIcon.style.width = "20px";
+                dragIcon.style.height = "20px";
+                dragIcon.style.objectFit = "contain";
+                dragIcon.style.cursor = "grab";
 
                 const label = document.createElement("span");
                 label.textContent = menu.label;
@@ -2900,6 +2901,8 @@
                 row.appendChild(label);
                 row.appendChild(titleInput);
                 row.appendChild(iconInput);
+                row.appendChild(dragIcon);
+                row.appendChild(label);
                 listContainer.appendChild(row);
             });
 
