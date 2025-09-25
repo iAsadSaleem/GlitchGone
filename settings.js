@@ -3196,8 +3196,7 @@
         // Email input
         const emailLabel = document.createElement("label");
         emailLabel.textContent = "Your Email:";
-        emailLabel.style.display = "block";
-        emailLabel.style.marginTop = "10px";
+        emailLabel.class = "em-title";
         wrapper.appendChild(emailLabel);
 
         const emailInput = document.createElement("input");
@@ -3211,8 +3210,7 @@
         // Suggestion textarea
         const suggestionLabel = document.createElement("label");
         suggestionLabel.textContent = "Your Suggestion:";
-        suggestionLabel.style.display = "block";
-        suggestionLabel.style.marginTop = "10px";
+        suggestionLabel.class = "em-title";
         wrapper.appendChild(suggestionLabel);
 
         const suggestionInput = document.createElement("textarea");

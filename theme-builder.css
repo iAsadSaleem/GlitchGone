@@ -896,24 +896,25 @@ body::-webkit-scrollbar-track {
 }
 .tb-submit-btn {
     background: var(--sidebar-menu-active-bg) !important;
-    border-radius: 10px;
+    border-radius: 6px;
     color: white;
     cursor: pointer;
     display: inline-block;
     font-family: CerebriSans-Regular, -apple-system, system-ui, Roboto, sans-serif;
-    padding: 7px 20px;
     text-align: center;
     text-decoration: none;
     transition: all 250ms;
     border: 0;
-    left: 14px;
-    position: relative;
-    font-size: 16px;
+    font-size: 14px;
     user-select: none;
-    -webkit-user-select: none;
     touch-action: manipulation;
-    width: 120px;
-    height: 47px;
+    width: 98px;
+    height: 34px;
+}
+.em-title {
+    width: 180px;
+    font-weight: 500;
+    font-size: 10px;
 }
 .tb-title-input {
     width: 70px;
