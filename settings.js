@@ -3247,11 +3247,15 @@
                 return;
             }
 
+            submitBtn.disabled = true;
+            responseMsg.textContent = "Sending...";
+            responseMsg.style.color = "black";
+
             try {
-                const res = await fetch("https://formspree.io/f/YOUR_FORM_ID", { // Replace with your form endpoint
+                const res = await fetch("https://formspree.io/f/xldpdogl", {
                     method: "POST",
                     headers: { "Content-Type": "application/json", "Accept": "application/json" },
-                    body: JSON.stringify({ email, suggestion })
+                    body: JSON.stringify({ email, message: suggestion }) // Use 'message' key
                 });
 
                 if (res.ok) {
@@ -3266,8 +3270,11 @@
             } catch (err) {
                 responseMsg.textContent = "⚠️ Network error!";
                 responseMsg.style.color = "red";
+            } finally {
+                submitBtn.disabled = false;
             }
         });
+
 
         section.appendChild(wrapper);
     }
