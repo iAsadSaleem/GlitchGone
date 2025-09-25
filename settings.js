@@ -3023,8 +3023,8 @@
         };
 
         // ✅ Build both sections
-        buildSection(subAccountMenus, "Sub-Account Level Menu Customization", "--subMenuOrder", "#subAccountSidebar");
         buildSection(agencyMenus, "Agency Level Menu Customization", "--agencyMenuOrder", "#agencySidebar");
+        buildSection(subAccountMenus, "Sub-Account Level Menu Customization", "--subMenuOrder", "#subAccountSidebar");
 
         container.appendChild(wrapper);
         applyMenuCustomizations();
