@@ -2920,11 +2920,21 @@
                     const rows = listContainer.querySelectorAll(".tb-menu-row");
                     const newOrder = [...rows].map(r => r.dataset.id);
 
+                    // 🧪 Debug log before saving
+                    console.log("🧪 New order ready to save:", newOrder);
+
                     // Save order
                     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                    console.log("📂 Before Save (raw):", saved);
+
                     saved.themeData = saved.themeData || {};
                     saved.themeData[storageKey] = JSON.stringify(newOrder);
+
                     localStorage.setItem("userTheme", JSON.stringify(saved));
+
+                    // 📦 Log after saving
+                    console.log("📦 After Save (from localStorage):", JSON.parse(localStorage.getItem("userTheme")));
+
                     console.log(`✅ ${sectionTitle} order saved:`, newOrder);
 
                     // ✅ Reorder DOM directly (instant live update)
@@ -2934,9 +2944,6 @@
                             menuEl.parentElement.appendChild(menuEl);
                         }
                     });
-
-                    applyMenuCustomizations();
-                }
             });
         };
 
