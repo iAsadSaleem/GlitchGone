@@ -3234,6 +3234,7 @@
                             const themeData = collectThemeVars() || {};
                             const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
                             savedTheme.themeData = savedTheme.themeData || {};
+                            console.log("🚀 Final theme data being sent to DB:", savedTheme.themeData["--agencyMenuOrder"]);
 
                             // Merge collected vars
                             // ✅ Preserve both --lockedMenus and --hiddenMenus
@@ -3242,6 +3243,15 @@
                                     savedTheme.themeData[key] = themeData[key];
                                 }
                             });
+
+                            // ✅ Preserve drag-and-drop order from localStorage (important!)
+                            const localSaved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                            if (localSaved.themeData["--agencyMenuOrder"]) {
+                                savedTheme.themeData["--agencyMenuOrder"] = localSaved.themeData["--agencyMenuOrder"];
+                            }
+                            if (localSaved.themeData["--subMenuOrder"]) {
+                                savedTheme.themeData["--subMenuOrder"] = localSaved.themeData["--subMenuOrder"];
+                            }
 
                             // ✅ Reassign lockedMenus if exists
                             const lockedMenus = JSON.parse(savedTheme.themeData["--lockedMenus"] || "{}");
