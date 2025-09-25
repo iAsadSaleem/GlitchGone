@@ -2697,6 +2697,16 @@
             ? JSON.parse(themeData["--menuCustomizations"])
             : {};
 
+        // Ensure Font Awesome is loaded
+        if (!document.querySelector('link[href*="font-awesome"]')) {
+            const link = document.createElement("link");
+            link.rel = "stylesheet";
+            link.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css";
+            document.head.appendChild(link);
+            link.onload = () => applyMenuCustomizations(); // Retry after FA loads
+            return;
+        }
+
         // Loop over all sidebar menu items
         Object.keys(menuCustomizations).forEach(menuId => {
             const menuData = menuCustomizations[menuId];
@@ -2718,23 +2728,34 @@
 
             if (menuData.icon) {
                 let iconEl;
+
                 if (menuData.icon.startsWith("http")) {
                     // Image URL
                     iconEl = document.createElement("img");
                     iconEl.src = menuData.icon;
                     iconEl.alt = menuData.title || "icon";
                     iconEl.className = "md:mr-0 h-5 w-5 mr-2 lg:mr-2 xl:mr-2";
-                } else {
-                    // Font Awesome icon
+                } else if (/^f[0-9a-f]+$/i.test(menuData.icon)) {
+                    // Unicode icon like "f015"
                     iconEl = document.createElement("i");
-                    iconEl.className = menuData.icon; // e.g., "fa-solid fa-home"
+                    iconEl.className = "fa-solid";
+                    iconEl.innerHTML = `&#x${menuData.icon};`;
                     iconEl.style.marginRight = "0.5rem";
-                    iconEl.style.fontSize = "16px"; // adjust size if needed
+                    iconEl.style.fontSize = "16px";
+                } else {
+                    // Font Awesome class
+                    const classes = menuData.icon.includes("fa-") ? menuData.icon : `fa-solid ${menuData.icon}`;
+                    iconEl = document.createElement("i");
+                    iconEl.className = classes;
+                    iconEl.style.marginRight = "0.5rem";
+                    iconEl.style.fontSize = "16px";
                 }
+
                 menuEl.prepend(iconEl);
             }
         });
     }
+
 
 
     //function applyMenuCustomizations() {
