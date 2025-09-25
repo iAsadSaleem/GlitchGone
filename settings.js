@@ -2881,6 +2881,7 @@
                     // 1️⃣ Load existing saved data
                     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                     saved.themeData = saved.themeData || {};
+                    console.log("💾 saveChange fired for menu:", menu.id, titleInput.value, iconInput.value);
 
                     // 2️⃣ Parse current menu customizations (or create new)
                     const customizations = saved.themeData["--menuCustomizations"]
@@ -2896,6 +2897,7 @@
                     // 4️⃣ Save back into themeData
                     const updatedCustomizations = JSON.stringify(customizations);
                     saved.themeData["--menuCustomizations"] = updatedCustomizations;
+                    console.log("📦 About to save to localStorage:", saved);
 
                     // 5️⃣ Save to localStorage
                     localStorage.setItem("userTheme", JSON.stringify(saved));
