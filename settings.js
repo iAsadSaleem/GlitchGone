@@ -2903,15 +2903,20 @@
                     const rows = listContainer.querySelectorAll(".tb-menu-row");
                     const newOrder = [...rows].map(r => r.dataset.id);
 
-                    // ✅ Save new order to localStorage
+                    // Save order
                     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                     saved.themeData = saved.themeData || {};
                     saved.themeData[storageKey] = JSON.stringify(newOrder);
                     localStorage.setItem("userTheme", JSON.stringify(saved));
                     console.log(`✅ ${sectionTitle} order saved:`, newOrder);
 
-                    // ✅ Apply sidebar update live (if sidebar exists on this page)
-                    applySidebarOrder(newOrder, sidebarParentSelector);
+                    // ✅ Reorder DOM directly (instant live update)
+                    newOrder.forEach(menuId => {
+                        const menuEl = document.getElementById(menuId);
+                        if (menuEl && menuEl.parentElement) {
+                            menuEl.parentElement.appendChild(menuEl);
+                        }
+                    });
 
                     applyMenuCustomizations();
                 }
@@ -2951,7 +2956,8 @@
         if (saved.themeData?.["--agencyMenuOrder"]) {
             const order = JSON.parse(saved.themeData["--agencyMenuOrder"]);
             const sidebar = document.querySelector("#agencySidebar");
-            if (sidebar) reorderMenu(order, "#agencySidebar");
+            if (sidebar) applySidebarOrder(order, "#agencySidebar");
+
         }
 
         // Helper function
