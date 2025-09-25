@@ -2830,35 +2830,30 @@
             }
 
             menus.forEach(menu => {
-                enus.forEach(menu => {
-                    const row = document.createElement("div");
-                    row.className = "tb-menu-row";
-                    row.dataset.id = menu.id;
-                    row.style.display = "flex";
-                    row.style.alignItems = "center";
-                    row.style.gap = "12px";
-                    row.style.marginBottom = "10px";
-                    row.style.cursor = "grab";
-                    row.style.border = "1px solid #ddd";
-                    row.style.padding = "8px";
-                    row.style.borderRadius = "6px";
-                    row.style.background = "#f9f9f9";
+                const row = document.createElement("div");
+                row.className = "tb-menu-row";
+                row.dataset.id = menu.id;
+                row.style.display = "flex";
+                row.style.alignItems = "center";
+                row.style.gap = "12px";
+                row.style.marginBottom = "10px";
+                row.style.cursor = "grab";
+                row.style.border = "1px solid #ddd";
+                row.style.padding = "8px";
+                row.style.borderRadius = "6px";
+                row.style.background = "#f9f9f9";
 
-                    // 🖼️ Add drag icon before label
-                    const dragIcon = document.createElement("img");
-                    dragIcon.src = "https://theme-builder-delta.vercel.app/images/drag-logo.png";
-                    dragIcon.alt = "drag";
-                    dragIcon.style.width = "20px";
-                    dragIcon.style.height = "20px";
-                    dragIcon.style.objectFit = "contain";
-                    dragIcon.style.cursor = "grab";
+                // 🟡 Drag handle icon
+                const dragHandle = document.createElement("span");
+                dragHandle.className = "tb-drag-handle";
+                dragHandle.innerHTML = "☰"; // you can replace with icon font too
+                dragHandle.style.cursor = "grab";
+                dragHandle.style.fontSize = "18px";
+                dragHandle.style.color = "#666";
 
-                    const label = document.createElement("span");
-                    label.textContent = menu.label;
-                    label.style.flex = "1";
-
-                    row.appendChild(dragIcon);
-                    row.appendChild(label);
+                const label = document.createElement("span");
+                label.textContent = menu.label;
+                label.style.flex = "1";
 
                 const titleInput = document.createElement("input");
                 titleInput.type = "text";
@@ -2900,6 +2895,8 @@
                 titleInput.addEventListener("input", saveChange);
                 iconInput.addEventListener("input", saveChange);
 
+                // ✅ Add drag handle before everything
+                row.appendChild(dragHandle);
                 row.appendChild(label);
                 row.appendChild(titleInput);
                 row.appendChild(iconInput);
@@ -2912,6 +2909,7 @@
             Sortable.create(listContainer, {
                 animation: 150,
                 ghostClass: "tb-dragging",
+                handle: ".tb-drag-handle", // ✅ Only drag when grabbing the handle
                 onEnd: () => {
                     const rows = listContainer.querySelectorAll(".tb-menu-row");
                     const newOrder = [...rows].map(r => r.dataset.id);
@@ -2933,47 +2931,29 @@
 
                     applyMenuCustomizations();
                 }
-
             });
         };
 
-        // ✅ Build Sub-Account Section (with sidebar selector)
-        buildSection(
-            subAccountMenus,
-            "Sub-Account Level Menu Customization",
-            "--subMenuOrder",
-            "#subAccountSidebar"
-        );
-
-        // ✅ Build Agency Section (with sidebar selector)
-        buildSection(
-            agencyMenus,
-            "Agency Level Menu Customization",
-            "--agencyMenuOrder",
-            "#agencySidebar"
-        );
-
+        // ✅ Build both sections
+        buildSection(subAccountMenus, "Sub-Account Level Menu Customization", "--subMenuOrder", "#subAccountSidebar");
+        buildSection(agencyMenus, "Agency Level Menu Customization", "--agencyMenuOrder", "#agencySidebar");
 
         container.appendChild(wrapper);
         applyMenuCustomizations();
 
-        // ✅ Restore order ONLY if the sidebar exists on this page
+        // ✅ Restore order if sidebar exists
         const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
 
         if (saved.themeData?.["--subMenuOrder"]) {
             const order = JSON.parse(saved.themeData["--subMenuOrder"]);
-            const sidebar = document.querySelector("#subAccountSidebar");
-            if (sidebar) reorderMenu(order, "#subAccountSidebar");
+            reorderMenu(order, "#subAccountSidebar");
         }
 
         if (saved.themeData?.["--agencyMenuOrder"]) {
             const order = JSON.parse(saved.themeData["--agencyMenuOrder"]);
-            const sidebar = document.querySelector("#agencySidebar");
-            if (sidebar) applySidebarOrder(order, "#agencySidebar");
-
+            reorderMenu(order, "#agencySidebar");
         }
 
-        // Helper function
         function reorderMenu(order, containerSelector) {
             const container = document.querySelector(containerSelector);
             if (!container) return;
