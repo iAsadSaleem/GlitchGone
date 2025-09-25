@@ -895,7 +895,22 @@ body::-webkit-scrollbar-track {
 }
 
 .tb-icon-input {
-    max-width: 180px;
+    width: 70px;
+    height: 24px;
+    padding: 2px 6px;
+    border: 1px solid #bdcbd342;
+    background: #ffffff;
+    color: #898989;
+    font-family: monospace;
+    text-align: center;
+    outline: none;
+    cursor: text;
+    flex: 1;
+    font-size: 10px;
+    border-radius: 8px;
+    border: 1px solid #60717957;
+    min-width: 80px;
+    max-width: 143px;
 }
 
 .sidebar-no-icon::after {
