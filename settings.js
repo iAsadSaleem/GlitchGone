@@ -2688,6 +2688,8 @@
         overlay.appendChild(popup);
         document.body.appendChild(overlay);
     }
+
+
     function applyMenuCustomizations() {
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedTheme.themeData || {};
@@ -2695,45 +2697,92 @@
             ? JSON.parse(themeData["--menuCustomizations"])
             : {};
 
+        // Loop over all sidebar menu items
         Object.keys(menuCustomizations).forEach(menuId => {
-            const custom = menuCustomizations[menuId];
+            const menuData = menuCustomizations[menuId];
             const menuEl = document.getElementById(menuId);
             if (!menuEl) return;
 
             // ---------------- Update Title ----------------
-            const navTitle = menuEl.querySelector(".nav-title");
-            if (custom.title && navTitle) {
-                navTitle.textContent = custom.title;
+            const titleSpan = menuEl.querySelector(".nav-title");
+            if (titleSpan) {
+                titleSpan.textContent = menuData.title || menuEl.dataset.defaultLabel || "";
             }
 
             // ---------------- Update Icon ----------------
-            if (custom.icon && custom.icon.trim() !== "") {
-                // Remove any existing icon
-                menuEl.querySelectorAll("i, img").forEach(el => el.remove());
-                menuEl.classList.remove("sidebar-no-icon");
+            // Remove existing icon (<img> or <i>)
+            const existingImg = menuEl.querySelector("img");
+            const existingI = menuEl.querySelector("i");
+            if (existingImg) existingImg.remove();
+            if (existingI) existingI.remove();
 
-                if (/^fa-|^fas-|^far-|^fal-|^fab-/.test(custom.icon.trim())) {
-                    const iconEl = document.createElement("i");
-                    iconEl.className = custom.icon.trim();
-                    iconEl.style.marginRight = "8px";
-
-                    // Insert before text if possible
-                    const navTitle = menuEl.querySelector(".nav-title");
-                    if (navTitle) {
-                        menuEl.insertBefore(iconEl, navTitle);
-                    } else {
-                        menuEl.prepend(iconEl);
-                    }
-                } else if (custom.icon.startsWith("url(")) {
-                    const iconVar = `--sidebar-menu-icon-${menuId.replace("sb_", "")}`;
-                    ["", "-hover", "-active"].forEach(suffix => {
-                        document.documentElement.style.setProperty(iconVar + suffix, custom.icon.trim());
-                    });
-                    menuEl.classList.add("sidebar-no-icon");
+            if (menuData.icon) {
+                let iconEl;
+                if (menuData.icon.startsWith("http")) {
+                    // Image URL
+                    iconEl = document.createElement("img");
+                    iconEl.src = menuData.icon;
+                    iconEl.alt = menuData.title || "icon";
+                    iconEl.className = "md:mr-0 h-5 w-5 mr-2 lg:mr-2 xl:mr-2";
+                } else {
+                    // Font Awesome icon
+                    iconEl = document.createElement("i");
+                    iconEl.className = menuData.icon; // e.g., "fa-solid fa-home"
+                    iconEl.style.marginRight = "0.5rem";
+                    iconEl.style.fontSize = "16px"; // adjust size if needed
                 }
+                menuEl.prepend(iconEl);
             }
         });
     }
+
+
+    //function applyMenuCustomizations() {
+    //    const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+    //    const themeData = savedTheme.themeData || {};
+    //    const menuCustomizations = themeData["--menuCustomizations"]
+    //        ? JSON.parse(themeData["--menuCustomizations"])
+    //        : {};
+
+    //    Object.keys(menuCustomizations).forEach(menuId => {
+    //        const custom = menuCustomizations[menuId];
+    //        const menuEl = document.getElementById(menuId);
+    //        if (!menuEl) return;
+
+    //        // ---------------- Update Title ----------------
+    //        const navTitle = menuEl.querySelector(".nav-title");
+    //        if (custom.title && navTitle) {
+    //            navTitle.textContent = custom.title;
+    //        }
+
+    //        // ---------------- Update Icon ----------------
+    //        if (custom.icon && custom.icon.trim() !== "") {
+    //            // Remove any existing icon
+    //            menuEl.querySelectorAll("i, img").forEach(el => el.remove());
+    //            menuEl.classList.remove("sidebar-no-icon");
+
+    //            if (/^fa-|^fas-|^far-|^fal-|^fab-/.test(custom.icon.trim())) {
+    //                const iconEl = document.createElement("i");
+    //                iconEl.className = custom.icon.trim();
+    //                iconEl.style.marginRight = "8px";
+
+    //                // Insert before text if possible
+    //                const navTitle = menuEl.querySelector(".nav-title");
+    //                if (navTitle) {
+    //                    menuEl.insertBefore(iconEl, navTitle);
+    //                } else {
+    //                    menuEl.prepend(iconEl);
+    //                }
+    //            } else if (custom.icon.startsWith("url(")) {
+    //                const iconVar = `--sidebar-menu-icon-${menuId.replace("sb_", "")}`;
+    //                ["", "-hover", "-active"].forEach(suffix => {
+    //                    document.documentElement.style.setProperty(iconVar + suffix, custom.icon.trim());
+    //                });
+    //                menuEl.classList.add("sidebar-no-icon");
+    //            }
+    //        }
+    //    });
+    //}
 
     function updateWebsiteSidebar(newOrder, sidebarParentSelector) {
         const sidebarParent = document.querySelector(sidebarParentSelector);
@@ -3265,7 +3314,6 @@
                             // ✅ Preserve drag-and-drop order from localStorage (important!)
                             const localSaved = JSON.parse(localStorage.getItem("userTheme") || "{}");
 
-                            console.log("🚀 Final theme data being sent to DB:", savedTheme.themeData["--menuCustomizations"]);
                             // ✅ Include --menuCustomizations explicitly
                             if (localSaved.themeData["--menuCustomizations"]) {
                                 savedTheme.themeData["--menuCustomizations"] = localSaved.themeData["--menuCustomizations"];
