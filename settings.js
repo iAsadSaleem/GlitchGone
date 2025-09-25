@@ -2837,7 +2837,6 @@
                 row.style.alignItems = "center";
                 row.style.gap = "8px";
                 row.style.marginBottom = "10px";
-                row.style.cursor = "grab";
                 row.style.border = "1px solid #ddd";
                 row.style.padding = "8px";
                 row.style.borderRadius = "6px";
