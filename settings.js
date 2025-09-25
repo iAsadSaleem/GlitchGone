@@ -2878,19 +2878,35 @@
                 }
 
                 const saveChange = () => {
+                    // 1️⃣ Load existing saved data
                     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                     saved.themeData = saved.themeData || {};
+
+                    // 2️⃣ Parse current menu customizations (or create new)
                     const customizations = saved.themeData["--menuCustomizations"]
                         ? JSON.parse(saved.themeData["--menuCustomizations"])
                         : {};
+
+                    // 3️⃣ Update this menu's customization
                     customizations[menu.id] = {
                         title: titleInput.value,
                         icon: iconInput.value
                     };
-                    saved.themeData["--menuCustomizations"] = JSON.stringify(customizations);
+
+                    // 4️⃣ Save back into themeData
+                    const updatedCustomizations = JSON.stringify(customizations);
+                    saved.themeData["--menuCustomizations"] = updatedCustomizations;
+
+                    // 5️⃣ Save to localStorage
                     localStorage.setItem("userTheme", JSON.stringify(saved));
+
+                    // 6️⃣ Also update CSS variable live (important!)
+                    document.documentElement.style.setProperty("--menuCustomizations", updatedCustomizations);
+
+                    // 7️⃣ Optionally re-apply theme
                     applyMenuCustomizations();
                 };
+
 
                 titleInput.addEventListener("input", saveChange);
                 iconInput.addEventListener("input", saveChange);
