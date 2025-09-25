@@ -2952,49 +2952,48 @@
         }
     }
     function saveNewOrder() {
-        // Select all sidebar links with id starting with sb_
         const items = document.querySelectorAll('.hl_nav-header nav a[id^="sb_"]');
-
-        console.log("📦 Found items:", items.length);
-        items.forEach(item => console.log("🔎 Found item ID:", item.id));
-
         const newOrder = Array.from(items).map(item => item.id);
         console.log("🧪 New drag order:", newOrder);
 
-        if (newOrder.length === 0) {
-            console.warn("⚠️ No items found! Check your selector again.");
-            return;
-        }
-
-        // Save to localStorage
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         savedTheme.themeData = savedTheme.themeData || {};
         savedTheme.themeData["--agencyMenuOrder"] = JSON.stringify(newOrder);
         localStorage.setItem("userTheme", JSON.stringify(savedTheme));
 
-        // Also store raw for debugging
         localStorage.setItem("--agencyMenuOrder", JSON.stringify(newOrder));
-
         console.log("✅ Saved new order to localStorage:", newOrder);
+
+        // 👇 Apply immediately to DOM
+        applySidebarOrder();
     }
 
-    function applySidebarOrder(orderArray, sidebarSelector) {
-        const sidebar = document.querySelector(sidebarSelector);
-        if (!sidebar) {
-            console.log("💾 Sidebar not found on this page. Changes saved for future loads.");
+    function applySidebarOrder() {
+        const orderJSON = localStorage.getItem("--agencyMenuOrder");
+        if (!orderJSON) {
+            console.warn("⚠️ No saved menu order found in localStorage.");
             return;
         }
 
-        // Create a DocumentFragment to reorder elements efficiently
-        const fragment = document.createDocumentFragment();
+        const order = JSON.parse(orderJSON);
+        console.log("🔁 Applying saved order:", order);
 
-        orderArray.forEach(menuId => {
-            const item = document.getElementById(menuId);
-            if (item) fragment.appendChild(item);
+        const sidebar = document.querySelector('.hl_nav-header nav');
+        if (!sidebar) {
+            console.error("❌ Sidebar not found in DOM.");
+            return;
+        }
+
+        // Reorder DOM
+        const fragment = document.createDocumentFragment();
+        order.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) fragment.appendChild(el);
+            else console.warn(`⚠️ Element with ID "${id}" not found in DOM.`);
         });
 
-        // Append back the reordered items
         sidebar.appendChild(fragment);
+        console.log("✅ Sidebar order applied!");
     }
 
 
