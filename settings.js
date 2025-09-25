@@ -3262,8 +3262,10 @@
                             savedTheme.themeData["--hiddenMenus"] = JSON.stringify(hiddenMenus);
 
                             // ✅ Reassign menu orders before saving
-                            const agencyMenuOrder = savedTheme.themeData["--agencyMenuOrder"] || localStorage.getItem("--agencyMenuOrder");
-                            if (agencyMenuOrder) savedTheme.themeData["--agencyMenuOrder"] = agencyMenuOrder;
+                            const latestOrder = localStorage.getItem("--agencyMenuOrder");
+                            if (latestOrder) {
+                                savedTheme.themeData["--agencyMenuOrder"] = latestOrder;
+                            }
 
                             const subMenuOrder = savedTheme.themeData["--subMenuOrder"] || localStorage.getItem("--subMenuOrder");
                             if (subMenuOrder) savedTheme.themeData["--subMenuOrder"] = subMenuOrder;
