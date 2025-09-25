@@ -3283,7 +3283,7 @@
                                 .catch(err => console.error("[ThemeBuilder] Network error:", err));
 
                             // 9️⃣ Reload page to apply changes
-                            location.reload();
+                            //location.reload();
 
                         } catch (err) {
                             console.error("[ThemeBuilder] Error applying theme changes:", err);
