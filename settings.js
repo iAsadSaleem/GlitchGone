@@ -590,7 +590,7 @@
                 "--sidebar-menu-bg": "#1b3d69",
                 "--sidebar-menu-color": "#ffffff",
                 "--sidebar-menu-hover-bg": "#497bdf",
-                "--sidebar-menu-active-bg": "#1e3a8a",
+                "--sidebar-menu-active-bg": "#ff66cc",
                 "--sidebar-menu-icon-color": "#e2acac",
                 "--sidebar-menu-icon-hover-color": "#bae6fd",
                 "--sidebar-menu-icon-active-color": "#60a5fa",
