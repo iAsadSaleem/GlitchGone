@@ -2845,7 +2845,7 @@
 
                 // 🖼️ Add drag icon before label
                 const dragIcon = document.createElement("img");
-                dragIcon.src = "https://theme-builder-delta.vercel.app/images/drag-logo.png";
+                dragIcon.src = "https://theme-builder-delta.vercel.app/images/drag-logo-2.png";
                 dragIcon.alt = "drag";
                 dragIcon.className = "tb-drag-handle"; // 👈 important for Sortable handle
                 dragIcon.style.width = "20px";
