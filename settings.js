@@ -3262,6 +3262,11 @@
                                 }
                             });
 
+                            // ✅ Include --menuCustomizations explicitly
+                            if (localSaved.themeData["--menuCustomizations"]) {
+                                savedTheme.themeData["--menuCustomizations"] = localSaved.themeData["--menuCustomizations"];
+                            }
+
                             // ✅ Preserve drag-and-drop order from localStorage (important!)
                             const localSaved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                             if (localSaved.themeData["--agencyMenuOrder"]) {
