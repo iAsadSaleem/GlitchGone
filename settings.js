@@ -3217,7 +3217,7 @@
 
         const suggestionInput = document.createElement("textarea");
         suggestionInput.placeholder = "Enter your suggestion here...";
-        suggestionInput.className = "tb-input tb-feedback-textarea";
+        suggestionInput.className = "tb-area-input tb-feedback-textarea";
         suggestionInput.style.width = "100%";
         suggestionInput.style.marginTop = "4px";
         suggestionInput.rows = 4;
@@ -3226,7 +3226,7 @@
         // Submit button
         const submitBtn = document.createElement("button");
         submitBtn.textContent = "Submit";
-        submitBtn.className = "tb-btn tb-btn-primary";
+        submitBtn.className = "tb-submit-btn tb-btn-primary";
         submitBtn.style.marginTop = "10px";
         wrapper.appendChild(submitBtn);
 

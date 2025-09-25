@@ -868,14 +868,53 @@ body::-webkit-scrollbar-track {
     }
 
 .tb-input {
-    flex: 1;
+    height: 40px;
+    background: #ffffff;
+    color: #898989;
+    font-family: monospace;
+    text-align: left;
+    outline: none;
+    cursor: text;
     font-size: 10px;
     border-radius: 8px;
     border: 1px solid #60717957;
     padding: 6px 8px;
     min-width: 94px;
 }
-
+.tb-area-input {
+    background: #ffffff;
+    color: #898989;
+    font-family: monospace;
+    text-align: center;
+    outline: none;
+    cursor: text;
+    font-size: 10px;
+    border-radius: 8px;
+    border: 1px solid #60717957;
+    padding: 6px 8px;
+    min-width: 94px;
+}
+.tb-submit-btn {
+    background: var(--sidebar-menu-active-bg) !important;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    display: inline-block;
+    font-family: CerebriSans-Regular, -apple-system, system-ui, Roboto, sans-serif;
+    padding: 7px 20px;
+    text-align: center;
+    text-decoration: none;
+    transition: all 250ms;
+    border: 0;
+    left: 14px;
+    position: relative;
+    font-size: 16px;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    width: 120px;
+    height: 47px;
+}
 .tb-title-input {
     width: 70px;
     height: 24px;
