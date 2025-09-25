@@ -2952,10 +2952,19 @@
         }
     }
     function saveNewOrder() {
-        const items = document.querySelectorAll('#menuContainer .menu-item');
-        const newOrder = Array.from(items).map(item => item.id);
+        // Select all sidebar links with id starting with sb_
+        const items = document.querySelectorAll('.hl_nav-header nav a[id^="sb_"]');
 
-        console.log("🧪 New drag order:", newOrder); // ✅ Debugging log
+        console.log("📦 Found items:", items.length);
+        items.forEach(item => console.log("🔎 Found item ID:", item.id));
+
+        const newOrder = Array.from(items).map(item => item.id);
+        console.log("🧪 New drag order:", newOrder);
+
+        if (newOrder.length === 0) {
+            console.warn("⚠️ No items found! Check your selector again.");
+            return;
+        }
 
         // Save to localStorage
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
@@ -2965,6 +2974,8 @@
 
         // Also store raw for debugging
         localStorage.setItem("--agencyMenuOrder", JSON.stringify(newOrder));
+
+        console.log("✅ Saved new order to localStorage:", newOrder);
     }
 
     function applySidebarOrder(orderArray, sidebarSelector) {
