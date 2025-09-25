@@ -2903,23 +2903,26 @@
                     const rows = listContainer.querySelectorAll(".tb-menu-row");
                     const newOrder = [...rows].map(r => r.dataset.id);
 
-                    // ✅ Save new order to localStorage (separate for each menu type)
+                    // ✅ Save new order to localStorage
                     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                     saved.themeData = saved.themeData || {};
                     saved.themeData[storageKey] = JSON.stringify(newOrder);
                     localStorage.setItem("userTheme", JSON.stringify(saved));
                     console.log(`✅ ${sectionTitle} order saved:`, newOrder);
 
-                    // ✅ Apply immediately ONLY if sidebar exists on this page
+                    // ✅ Update sidebar DOM only if it exists and belongs to this section
                     const sidebarContainer = document.querySelector(sidebarParentSelector);
                     if (sidebarContainer) {
                         newOrder.forEach(menuId => {
-                            const menuEl = document.getElementById(menuId);
-                            if (menuEl) sidebarContainer.appendChild(menuEl);
+                            // 🔥 Only append if this element exists inside this sidebar already
+                            const menuEl = sidebarContainer.querySelector(`#${menuId}`);
+                            if (menuEl) {
+                                sidebarContainer.appendChild(menuEl);
+                            }
                         });
-                        console.log(`📁 Live menu order applied on current page for ${sectionTitle}`);
+                        console.log(`📁 Live menu order applied for ${sectionTitle}`);
                     } else {
-                        console.log(`💾 Sidebar not found on this page. Changes saved and will apply on next load.`);
+                        console.log(`💾 Sidebar not found on this page. Changes saved for ${sectionTitle}.`);
                     }
 
                     applyMenuCustomizations();
@@ -2927,11 +2930,22 @@
             });
         };
 
-        // Build Sub-Account Section
-        buildSection(subAccountMenus, "Sub-Account Level Menu Customization", "--subMenuOrder", "#subAccountSidebar");
+        // ✅ Build Sub-Account Section (with sidebar selector)
+        buildSection(
+            subAccountMenus,
+            "Sub-Account Level Menu Customization",
+            "--subMenuOrder",
+            "#subAccountSidebar"
+        );
 
-        // Build Agency Section
-        buildSection(agencyMenus, "Agency Level Menu Customization", "--agencyMenuOrder", "#agencySidebar");
+        // ✅ Build Agency Section (with sidebar selector)
+        buildSection(
+            agencyMenus,
+            "Agency Level Menu Customization",
+            "--agencyMenuOrder",
+            "#agencySidebar"
+        );
+
 
         container.appendChild(wrapper);
         applyMenuCustomizations();
