@@ -2903,18 +2903,21 @@
                     const rows = listContainer.querySelectorAll(".tb-menu-row");
                     const newOrder = [...rows].map(r => r.dataset.id);
 
-                    // Save order in localStorage
+                    // Save order
                     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                     saved.themeData = saved.themeData || {};
                     saved.themeData[storageKey] = JSON.stringify(newOrder);
                     localStorage.setItem("userTheme", JSON.stringify(saved));
-
                     console.log(`✅ ${sectionTitle} order saved:`, newOrder);
 
-                    // 🔥 Update the actual sidebar UI
-                    updateWebsiteSidebar(newOrder, sidebarParentSelector);
+                    // ✅ Reorder DOM directly (works even if container ID is unknown)
+                    newOrder.forEach(menuId => {
+                        const menuEl = document.getElementById(menuId);
+                        if (menuEl && menuEl.parentElement) {
+                            menuEl.parentElement.appendChild(menuEl);
+                        }
+                    });
 
-                    // Apply titles/icons changes too
                     applyMenuCustomizations();
                 }
             });
