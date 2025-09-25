@@ -3259,9 +3259,17 @@
                             const lockedMenus = JSON.parse(savedTheme.themeData["--lockedMenus"] || "{}");
                             savedTheme.themeData["--lockedMenus"] = JSON.stringify(lockedMenus);
 
-                            // ✅ Reassign hiddenMenus if exists (prevent overwrite)
+                            // ✅ Reassign hiddenMenus if existss
                             const hiddenMenus = JSON.parse(savedTheme.themeData["--hiddenMenus"] || "{}");
                             savedTheme.themeData["--hiddenMenus"] = JSON.stringify(hiddenMenus);
+
+                            // ✅ Reassign menu orders before saving
+                            const agencyMenuOrder = savedTheme.themeData["--agencyMenuOrder"] || localStorage.getItem("--agencyMenuOrder");
+                            if (agencyMenuOrder) savedTheme.themeData["--agencyMenuOrder"] = agencyMenuOrder;
+
+                            const subMenuOrder = savedTheme.themeData["--subMenuOrder"] || localStorage.getItem("--subMenuOrder");
+                            if (subMenuOrder) savedTheme.themeData["--subMenuOrder"] = subMenuOrder;
+
 
                             // 💾 Save updated object
                             localStorage.setItem("userTheme", JSON.stringify(savedTheme));
