@@ -3262,13 +3262,15 @@
                                 }
                             });
 
+
+                            // ✅ Preserve drag-and-drop order from localStorage (important!)
+                            const localSaved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+
                             // ✅ Include --menuCustomizations explicitly
                             if (localSaved.themeData["--menuCustomizations"]) {
                                 savedTheme.themeData["--menuCustomizations"] = localSaved.themeData["--menuCustomizations"];
                             }
 
-                            // ✅ Preserve drag-and-drop order from localStorage (important!)
-                            const localSaved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                             if (localSaved.themeData["--agencyMenuOrder"]) {
                                 savedTheme.themeData["--agencyMenuOrder"] = localSaved.themeData["--agencyMenuOrder"];
                             }
