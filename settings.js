@@ -2994,7 +2994,6 @@
             const sectionHeading = document.createElement("h4");
             sectionHeading.className = "tb-header-controls";
             sectionHeading.textContent = sectionTitle;
-            sectionHeading.style.marginTop = "20px";
             wrapper.appendChild(sectionHeading);
 
             const listContainer = document.createElement("div");
