@@ -324,6 +324,7 @@
     }*/
 
 .tb-theme-cycle-btn {
+    box-shadow: -2px 6px 10px rgb(61 60 101);
     width: calc(115% - 24px);
     font-size: 15px;
     text-align: center;
