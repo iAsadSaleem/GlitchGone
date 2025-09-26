@@ -214,7 +214,6 @@
         btn.addEventListener("mouseenter", () => tooltip.classList.add("visible"));
         btn.addEventListener("mouseleave", () => tooltip.classList.remove("visible"));
     }
-
     // Color picker creator
     // 🌟 Mapping of CSS vars -> Human-friendly labels
     const cssVarLabels = {
@@ -904,74 +903,6 @@
         wrapper.appendChild(select);
     }
 
-    // Login Page settings
-    function createLoginColorPicker(labelText, cssVar) {
-        const wrapper = document.createElement("div");
-        wrapper.className = "tb-color-picker-wrapper";
-
-        const label = document.createElement("label");
-        label.textContent = labelText;
-        label.className = "tb-color-picker-label";
-
-        // Load current color from themeData or CSS variable
-        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        const themeData = savedThemeObj.themeData || {};
-        let storedValue = themeData[cssVar]
-            || getComputedStyle(document.body).getPropertyValue(cssVar).trim()
-            || "#007bff"; // fallback
-
-        // ✅ Ensure it's a valid hex color
-        let storedColor = /^#([0-9A-Fa-f]{3}){1,2}$/i.test(storedValue) ? storedValue : "#007bff";
-
-        // 🎨 Color picker input
-        const colorInput = document.createElement("input");
-        colorInput.type = "color";
-        colorInput.value = storedColor;
-        colorInput.className = "tb-color-input";
-
-        // 📝 Editable hex input
-        const colorCode = document.createElement("input");
-        colorCode.type = "text";
-        colorCode.className = "tb-color-code";
-        colorCode.value = storedColor;
-        colorCode.maxLength = 7; // # + 6 hex chars
-
-        // Helper to apply color
-        function applyColor(color) {
-            if (!/^#[0-9A-F]{6}$/i.test(color)) return; // only accept full hex
-            colorInput.value = color;
-            colorCode.value = color;
-
-            document.body.style.setProperty(cssVar, color);
-
-            const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
-            savedTheme.themeData = savedTheme.themeData || {};
-            savedTheme.themeData[cssVar] = color;
-            localStorage.setItem("userTheme", JSON.stringify(savedTheme));
-        }
-
-        // 🎨 Color picker change
-        colorInput.addEventListener("input", () => {
-            applyColor(colorInput.value);
-        });
-
-        // ⌨️ Manual hex typing
-        colorCode.addEventListener("input", () => {
-            const val = colorCode.value.trim();
-            if (/^#[0-9A-F]{6}$/i.test(val)) {
-                applyColor(val);
-            }
-        });
-
-        // Initial apply
-        applyColor(storedColor);
-
-        wrapper.appendChild(label);
-        wrapper.appendChild(colorInput);
-        wrapper.appendChild(colorCode);
-
-        return wrapper;
-    }
     // ⬇️ Create Login Card BG Gradient Picker (Start + End colors)
     function createLoginCardGradientPicker() {
         const wrapper = document.createElement("div");
@@ -2796,8 +2727,6 @@
         overlay.appendChild(popup);
         document.body.appendChild(overlay);
     }
-
-
     function applyMenuCustomizations() {
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedTheme.themeData || {};
@@ -2860,10 +2789,6 @@
             }
         });
     }
-
-
-
-
     //function applyMenuCustomizations() {
     //    const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
     //    const themeData = savedTheme.themeData || {};
@@ -3155,26 +3080,6 @@
         }
     }
 
-
-    function applySidebarOrder(orderArray, sidebarSelector) {
-        const sidebar = document.querySelector(sidebarSelector);
-        if (!sidebar) {
-            console.log("💾 Sidebar not found on this page. Changes saved for future loads.");
-            return;
-        }
-
-        // Create a DocumentFragment to reorder elements efficiently
-        const fragment = document.createDocumentFragment();
-
-        orderArray.forEach(menuId => {
-            const item = document.getElementById(menuId);
-            if (item) fragment.appendChild(item);
-        });
-
-        // Append back the reordered items
-        sidebar.appendChild(fragment);
-    }
-
     function buildFeedbackForm(section) {
         // Wrapper
         const wrapper = document.createElement("div");
@@ -3271,7 +3176,6 @@
 
         section.appendChild(wrapper);
     }
-
 
     // ---------------- Apply on Page Load ----------------
     window.addEventListener("load", () => {
