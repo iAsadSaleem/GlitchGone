@@ -2941,6 +2941,7 @@
                 row.style.padding = "8px";
                 row.style.borderRadius = "6px";
                 row.style.background = "#f9f9f9";
+                row.style.boxShadow = "-2px 2px 10px rgb(78 77 189 / 21%)";
 
                 // 🖼️ Add drag icon before label
                 const dragIcon = document.createElement("img");
