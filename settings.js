@@ -3568,7 +3568,7 @@
                                 bodyFont: savedTheme.themeData["--body-font"] || "Arial, sans-serif",
                                 updatedAt: new Date().toISOString(),
                             };
-
+                            console.log('Here is the Data Before saving into DB', dbData);
                             // 8️⃣ Send to API (non-blocking, errors logged)
                             fetch("https://theme-builder-delta.vercel.app/api/theme", {
                                 method: "POST",
