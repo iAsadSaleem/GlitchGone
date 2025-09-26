@@ -561,7 +561,7 @@ tb-apply-btn
     position: relative;
     color: #ffffff;
     background: #002a50c9;
-    border: solid 1px #ffff;
+    border: solid 1px #ffffff08;
     border-radius: 4px;
     box-shadow: -2px 2px 10px rgb(78 77 189 / 52%);
 }
@@ -578,7 +578,7 @@ tb-apply-btn
     font-size: 14px;
     color: #ffffff;
     background: #002a50c9;
-    border: solid 1px #ffff;
+    border: solid 1px #ffffff08;
     border-radius: 4px;
     top: 8px;
     position: relative;
@@ -592,7 +592,7 @@ tb-apply-btn
     font-size: 14px;
     color: #ffffff;
     background: #002a50c9;
-    border: solid 1px #ffff;
+    border: solid 1px #ffffff08;
     border-radius: 4px;
     top: 8px;
     position: relative;
@@ -731,7 +731,7 @@ body::-webkit-scrollbar-track {
     font-size: 14px;
     color: #ffffff;
     background: #002a50c9;
-    border: solid 1px #ffff;
+    border: solid 1px #ffffff08;
     border-radius: 4px;
     top: 8px;
     position: relative;
@@ -744,7 +744,7 @@ body::-webkit-scrollbar-track {
     font-size: 14px;
     color: #ffffff;
     background: #002a50c9;
-    border: solid 1px #ffff;
+    border: solid 1px #ffffff08;
     border-radius: 4px;
     top: 8px;
     position: relative;
