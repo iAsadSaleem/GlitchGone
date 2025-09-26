@@ -20,7 +20,7 @@
     #themeBuilderDrawer.open {
         border-radius: 8px;
         right: 10px;
-        border: solid 1px #dddddd00;
+        border: none ;
     }
 /* Drawer header */
     #themeBuilderDrawer > div:first-child {
