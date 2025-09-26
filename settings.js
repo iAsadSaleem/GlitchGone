@@ -2344,7 +2344,6 @@
 
         container.appendChild(wrapper);
     }
-    Agency Level Menu Customization
 
     function addBackgroundGradientSettings(container) {
         if (document.getElementById("tb-bg-gradient-settings")) return;
