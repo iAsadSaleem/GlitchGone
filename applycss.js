@@ -17,7 +17,6 @@
             .then(res => res.text())
             .then(cssText => {
                 try {
-                    console.log("✅ CSS loaded successfully");
                     var style = document.createElement("style");
                     style.innerHTML = cssText;  // ⬅️ no atob, directly inject
                     document.head.appendChild(style);
