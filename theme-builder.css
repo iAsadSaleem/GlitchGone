@@ -572,13 +572,16 @@ tb-apply-btn
     font-size: 10px;
 }
 .tb-profile-title {
-    font-size: 13px;
-    top: 8px;
-    position: relative;
-    color: #2c323fe0;
-    background: #001dff26;
+    padding: 4px 1px 1px 1px;
+    text-align: center;
+    height: 25px;
+    font-size: 14px;
+    color: #ffffff;
+    background: #002a50c9;
     border: solid 1px #ffff;
     border-radius: 4px;
+    top: 8px;
+    position: relative;
 }
 
 .tb-help-title {
