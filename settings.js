@@ -3072,13 +3072,34 @@
         }
 
         function reorderMenu(order, containerSelector) {
-            const container = document.querySelector(containerSelector);
+            // Try the exact selector first (keeps agency behavior unchanged)
+            let container = document.querySelector(containerSelector);
+
+            // If selector not found, attempt to infer the container from the first existing menu item
+            if (!container) {
+                for (let i = 0; i < order.length; i++) {
+                    const id = order[i];
+                    const el = document.getElementById(id);
+                    if (el && el.parentElement) {
+                        container = el.parentElement;
+                        break;
+                    }
+                }
+            }
+
+            // If still not found, try a common sub-account selector (safe fallback)
+            if (!container) {
+                container = document.querySelector(".hl_nav-header nav") || document.querySelector(".hl_nav-header");
+            }
+
             if (!container) return;
+
             order.forEach(id => {
-                const el = container.querySelector(`#${id}`);
+                const el = document.getElementById(id);
                 if (el) container.appendChild(el);
             });
         }
+
     }
 
     function buildFeedbackForm(section) {
