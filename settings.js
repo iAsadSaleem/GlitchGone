@@ -2926,7 +2926,11 @@
 
             const savedOrder = themeData[storageKey] ? JSON.parse(themeData[storageKey]) : [];
             if (savedOrder.length > 0) {
-                menus.sort((a, b) => savedOrder.indexOf(a.id) - savedOrder.indexOf(b.id));
+                const indexOf = id => {
+                    const idx = savedOrder.indexOf(id);
+                    return idx === -1 ? Number.MAX_SAFE_INTEGER : idx;
+                };
+                menus.sort((a, b) => indexOf(a.id) - indexOf(b.id));
             }
 
             menus.forEach(menu => {
