@@ -2866,7 +2866,6 @@
     // ---------------- Build Menu Customizer UI ----------------
     function buildMenuCustomizationSection(container) {
         if (document.getElementById("tb-menu-customization")) return;
-        console.log("✅ Menu Rearranger Script Loaded!");
 
         const wrapper = document.createElement("div");
         wrapper.id = "tb-menu-customization";
@@ -2911,9 +2910,7 @@
             { id: "sb_mobile-app-customiser", label: "Mobile App Customiser" }
         ];
         // ✅ Debug: check if your menus arrays are defined correctly
-        console.log("📂 Agency Menus:", agencyMenus.map(m => m.id));
-        console.log("📂 SubAccount Menus:", subAccountMenus.map(m => m.id));
-        // Load saved theme
+        // Load saved theme 
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedTheme.themeData || {};
 
@@ -3064,9 +3061,6 @@
 
         container.appendChild(wrapper);
         applyMenuCustomizations();
-        // ✅ Debug: Check subaccount container before reordering
-        const testSubContainer = document.querySelector(".hl_nav-header nav");
-        console.log("📁 SubAccount menu container found:", testSubContainer);
 
         // ✅ Restore order if sidebar exists
         const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
@@ -3101,7 +3095,6 @@
             if (!container) {
                 container = document.querySelector(".hl_nav-header nav") || document.querySelector(".hl_nav-header");
             }
-            console.log("📦 Final container used for reordering:", container);
 
             if (!container) return;
 
