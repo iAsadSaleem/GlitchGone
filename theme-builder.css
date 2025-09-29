@@ -7,8 +7,8 @@
     max-width: 90%;
     height: 67%;
     /* 25% active color, 75% white */
-    background: linear-gradient(to bottom, var(--sidebar-menu-active-bg) 40%, #ffffff 0%);
-    box-shadow: -4px 1px 30px var(--sidebar-menu-active-bg); /* ✅ Works */
+    background: linear-gradient(to bottom, var(--primary-color) 40%, #ffffff 0%);
+    box-shadow: -4px 1px 30px var(--primary-color); /* ✅ Works */
     transition: right 0.28s ease;
     z-index: 99999;
     padding: 16px 7px;
@@ -560,7 +560,7 @@ tb-apply-btn
     font-size: 14px;
     position: relative;
     color: #ffffff;
-    background: #002a50c9;
+    background: var(--primary-color);
     border: solid 1px #ffffff08;
     border-radius: 4px;
     box-shadow: -2px 2px 10px rgb(78 77 189 / 52%);
