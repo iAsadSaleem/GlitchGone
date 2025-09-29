@@ -2975,51 +2975,59 @@
                 }
 
                 const saveChange = () => {
-                    // 1️⃣ Load existing saved data
                     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                     saved.themeData = saved.themeData || {};
 
-                    // 2️⃣ Parse current menu customizations (or create new)
                     const customizations = saved.themeData["--menuCustomizations"]
                         ? JSON.parse(saved.themeData["--menuCustomizations"])
                         : {};
 
                     let iconValue = iconInput.value.trim();
+                    let isUnicode = false;
 
-                    // 3️⃣ If user typed only icon name (like "gear" or "house")
-                    if (iconValue && !iconValue.startsWith("fa-") && !iconValue.startsWith("http")) {
-                        iconValue = `fa-solid fa-${iconValue}`;
+                    // ✅ Detect if user pasted only Unicode like "f015"
+                    if (/^f[0-9a-fA-F]{3}$/i.test(iconValue)) {
+                        isUnicode = true;
                     }
 
-                    // 4️⃣ Update this menu's customization
                     customizations[menu.id] = {
                         title: titleInput.value,
                         icon: iconValue
                     };
 
-                    // 5️⃣ Save back into themeData
-                    const updatedCustomizations = JSON.stringify(customizations);
-                    saved.themeData["--menuCustomizations"] = updatedCustomizations;
-
-                    // 6️⃣ Save to localStorage
+                    saved.themeData["--menuCustomizations"] = JSON.stringify(customizations);
                     localStorage.setItem("userTheme", JSON.stringify(saved));
 
-                    // 7️⃣ Also update CSS variable live (important!)
-                    document.documentElement.style.setProperty("--menuCustomizations", updatedCustomizations);
-
-                    // 8️⃣ Update the actual menu item icon in the sidebar live
+                    // 🔄 Update icon live
                     const menuEl = document.getElementById(menu.id);
                     if (menuEl) {
-                        // Find existing <i> tag (icon) or create one
                         let iconEl = menuEl.querySelector("i");
                         if (!iconEl) {
                             iconEl = document.createElement("i");
-                            menuEl.prepend(iconEl); // Add icon to the start
+                            menuEl.prepend(iconEl);
                         }
-                        iconEl.className = iconValue; // Apply new class
+
+                        if (isUnicode) {
+                            // ✅ Convert "f015" to actual icon text
+                            const unicodeChar = String.fromCharCode(parseInt(iconValue, 16));
+
+                            // Set base Font Awesome class
+                            iconEl.className = "fa-solid";
+                            iconEl.textContent = unicodeChar;
+
+                            // Optional: Styling to ensure proper icon rendering
+                            iconEl.style.fontFamily = "Font Awesome 6 Free";
+                            iconEl.style.fontWeight = "900";
+                            iconEl.style.marginRight = "0.5rem";
+                            iconEl.style.fontSize = "16px";
+                        } else {
+                            // ✅ User entered a normal class or URL
+                            iconEl.textContent = "";
+                            iconEl.className = iconValue.includes("fa-") ? iconValue : `fa-solid ${iconValue}`;
+                            iconEl.style.fontFamily = "";
+                        }
                     }
 
-                    // 9️⃣ Optionally re-apply theme
                     applyMenuCustomizations();
                 };
 
