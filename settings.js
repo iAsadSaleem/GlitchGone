@@ -3042,7 +3042,22 @@
                         }
                     }
 
-                    applyMenuCustomizations();
+                    function waitForFontAwesome(cb) {
+                        const test = document.createElement("i");
+                        test.className = "fa-solid fa-house";
+                        document.body.appendChild(test);
+                        requestAnimationFrame(() => {
+                            const style = getComputedStyle(test).fontFamily;
+                            test.remove();
+                            if (style.includes("Font Awesome")) {
+                                cb();
+                            } else {
+                                setTimeout(() => waitForFontAwesome(cb), 100);
+                            }
+                        });
+                    }
+
+                    waitForFontAwesome(applyMenuCustomizations);
                 };
 
 
