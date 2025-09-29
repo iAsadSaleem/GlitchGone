@@ -2471,7 +2471,7 @@
             toggleWrapper.style.gap = "20px";
             toggleWrapper.style.alignItems = "center";
 
-            // 🔐 Lock toggle + icon
+            // 🔐 Lock toggle
             const lockWrapper = document.createElement("div");
             lockWrapper.style.display = "flex";
             lockWrapper.style.alignItems = "center";
@@ -2497,11 +2497,10 @@
 
             lockSwitch.appendChild(lockInput);
             lockSwitch.appendChild(lockLabel);
-
             lockWrapper.appendChild(lockIconEl);
             lockWrapper.appendChild(lockSwitch);
 
-            // 👁️ Hide toggle + icon
+            // 👁️ Hide toggle
             const hideWrapper = document.createElement("div");
             hideWrapper.style.display = "flex";
             hideWrapper.style.alignItems = "center";
@@ -2519,7 +2518,9 @@
             hideInput.type = "checkbox";
             hideInput.className = "toggle-input";
             hideInput.id = "hide-" + menu.id;
-            hideInput.checked = !!hiddenMenus[menu.id];
+
+            // ✅ Set initial state based on toggleChecked
+            hideInput.checked = hiddenMenus[menu.id] ? !!hiddenMenus[menu.id].toggleChecked : false;
 
             const hideLabel = document.createElement("label");
             hideLabel.className = "toggle-label";
@@ -2527,61 +2528,56 @@
 
             hideSwitch.appendChild(hideInput);
             hideSwitch.appendChild(hideLabel);
-
             hideWrapper.appendChild(eyeIconEl);
             hideWrapper.appendChild(hideSwitch);
 
-            // ✅ Add the wrappers (with icons) instead of switches directly
             toggleWrapper.appendChild(lockWrapper);
             toggleWrapper.appendChild(hideWrapper);
 
-            // Save lock state
+            // Lock toggle listener
             lockInput.addEventListener("change", () => {
                 const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                 saved.themeData = saved.themeData || {};
                 let locked = saved.themeData["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
-
                 if (lockInput.checked) locked[menu.id] = true;
                 else delete locked[menu.id];
-
                 saved.themeData["--lockedMenus"] = JSON.stringify(locked);
                 localStorage.setItem("userTheme", JSON.stringify(saved));
                 applyLockedMenus();
             });
 
-            // Save hide state
+            // Hide toggle listener
             hideInput.addEventListener("change", () => {
-                let saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                 saved.themeData = saved.themeData || {};
+                let hidden = saved.themeData["--hiddenMenus"] ? JSON.parse(saved.themeData["--hiddenMenus"]) : {};
 
-                let hidden = {};
-                if (saved.themeData["--hiddenMenus"]) {
-                    try { hidden = JSON.parse(saved.themeData["--hiddenMenus"]); }
-                    catch (e) { console.warn("❌ Failed to parse --hiddenMenus:", e); }
-                }
+                hidden[menu.id] = {
+                    hidden: hideInput.checked,           // true if toggle is ON
+                    display: hideInput.checked ? "none !important" : "flex !important",
+                    toggleChecked: hideInput.checked     // save toggle state
+                };
 
+                // Update menu display immediately
                 const menuEl = document.getElementById(menu.id);
+                if (menuEl) menuEl.style.setProperty("display", hidden[menu.id].hidden ? "none" : "flex", "important");
 
-                if (hideInput.checked) {
-                    hidden[menu.id] = { hidden: true, display: "none !important", toggleChecked: true };
-                    if (menuEl) menuEl.style.setProperty("display", "none", "important");
-                } else {
-                    hidden[menu.id] = { hidden: false, display: "flex !important", toggleChecked: false };
-                    if (menuEl) menuEl.style.setProperty("display", "flex", "important");
-                }
-
+                // Save back to localStorage
                 saved.themeData["--hiddenMenus"] = JSON.stringify(hidden);
                 localStorage.setItem("userTheme", JSON.stringify(saved));
             });
 
-
-          
-
-
             row.appendChild(label);
             row.appendChild(toggleWrapper);
             parent.appendChild(row);
+
+            // ✅ Ensure menu display is synced on initial load
+            const menuEl = document.getElementById(menu.id);
+            if (menuEl && hiddenMenus[menu.id]) {
+                menuEl.style.setProperty("display", hiddenMenus[menu.id].hidden ? "none" : "flex", "important");
+            }
         }
+
 
     }
     function applyLockedMenus() {
