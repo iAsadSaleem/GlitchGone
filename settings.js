@@ -2552,17 +2552,7 @@
             // Save hide state
             hideInput.addEventListener("change", () => {
                 let saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-
-                if (saved.themeData && typeof saved.themeData === "string") {
-                    try {
-                        saved.themeData = JSON.parse(saved.themeData);
-                    } catch (e) {
-                        console.warn("❌ Failed to parse themeData:", e);
-                        saved.themeData = {};
-                    }
-                } else if (!saved.themeData) {
-                    saved.themeData = {};
-                }
+                saved.themeData = saved.themeData || {};
 
                 let hidden = {};
                 if (saved.themeData["--hiddenMenus"]) {
@@ -2576,28 +2566,46 @@
                 const menuEl = document.getElementById(menu.id);
 
                 if (hideInput.checked) {
-                    // Save hidden state and display style
-                    hidden[menu.id] = { hidden: true, display: "none !important" };
-
-                    // Apply inline style immediately
-                    if (menuEl) {
-                        menuEl.style.setProperty("display", "none", "important");
-                    }
+                    hidden[menu.id] = { hidden: true, display: "none !important", toggleChecked: true };
+                    if (menuEl) menuEl.style.setProperty("display", "none", "important");
                 } else {
-                    // Remove from hidden
-                    hidden[menu.id] = { hidden: false, display: "flex !important" };
-
-                    // Restore display
-                    if (menuEl) {
-                        menuEl.style.setProperty("display", "flex", "important");
-                    }
+                    hidden[menu.id] = { hidden: false, display: "flex !important", toggleChecked: false };
+                    if (menuEl) menuEl.style.setProperty("display", "flex", "important");
                 }
 
                 saved.themeData["--hiddenMenus"] = JSON.stringify(hidden);
                 localStorage.setItem("userTheme", JSON.stringify(saved));
 
-                applyLockedMenus(); // optional, if you still need this for other things
+                // optional if you need it
+                applyLockedMenus();
             });
+            function restoreHiddenMenus() {
+                const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                if (!saved.themeData || !saved.themeData["--hiddenMenus"]) return;
+
+                let hidden = {};
+                try {
+                    hidden = JSON.parse(saved.themeData["--hiddenMenus"]);
+                } catch (e) {
+                    console.warn("❌ Failed to parse --hiddenMenus:", e);
+                    return;
+                }
+
+                Object.keys(hidden).forEach(menuId => {
+                    const menuEl = document.getElementById(menuId);
+                    const toggleEl = document.getElementById("hide-" + menuId);
+
+                    if (!menuEl || !toggleEl) return;
+
+                    // Restore inline display
+                    menuEl.style.setProperty("display", hidden[menuId].hidden ? "none" : "flex", "important");
+
+                    // Restore toggle button
+                    toggleEl.checked = hidden[menuId].toggleChecked;
+                });
+            }
+            restoreHiddenMenus();
+
 
             row.appendChild(label);
             row.appendChild(toggleWrapper);
