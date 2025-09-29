@@ -2767,6 +2767,14 @@
                     iconEl.innerHTML = `&#x${menuData.icon};`;
                     iconEl.style.marginRight = "0.5rem";
                     iconEl.style.fontSize = "16px";
+
+                    // 🔥 Most important part (missing before)
+                    iconEl.style.fontFamily = "Font Awesome 6 Free";
+                    iconEl.style.fontWeight = "900"; // solid icons need 900
+                    iconEl.style.fontStyle = "normal";
+                    iconEl.style.fontVariant = "normal";
+                    iconEl.style.textRendering = "auto";
+                    iconEl.style.lineHeight = "1";
                 } else {
                     // Font Awesome class
                     const classes = menuData.icon.includes("fa-") ? menuData.icon : `fa-solid ${menuData.icon}`;
