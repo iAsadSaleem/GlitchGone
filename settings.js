@@ -2551,35 +2551,21 @@
 
             // Save hide state
             hideInput.addEventListener("change", () => {
-                let saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                saved.themeData = saved.themeData || {};
 
-                if (saved.themeData && typeof saved.themeData === "string") {
-                    try {
-                        saved.themeData = JSON.parse(saved.themeData);
-                    } catch (e) {
-                        console.warn("❌ Failed to parse themeData:", e);
-                        saved.themeData = {};
-                    }
-                } else if (!saved.themeData) {
-                    saved.themeData = {};
+                let hidden = saved.themeData["--hiddenMenus"] ? JSON.parse(saved.themeData["--hiddenMenus"]) : {};
+
+                if (hideInput.checked) {
+                    hidden[menu.id] = true;
+                    menuEl.style.display = "none"; // hide menu
+                } else {
+                    delete hidden[menu.id];
+                    menuEl.style.display = "flex"; // show menu
                 }
-
-                let hidden = {};
-                if (saved.themeData["--hiddenMenus"]) {
-                    try {
-                        hidden = JSON.parse(saved.themeData["--hiddenMenus"]);
-                    } catch (e) {
-                        console.warn("❌ Failed to parse --hiddenMenus:", e);
-                    }
-                }
-
-                if (hideInput.checked) hidden[menu.id] = true;
-                else delete hidden[menu.id];
 
                 saved.themeData["--hiddenMenus"] = JSON.stringify(hidden);
                 localStorage.setItem("userTheme", JSON.stringify(saved));
-
-                applyLockedMenus();
             });
 
             row.appendChild(label);
