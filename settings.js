@@ -3008,16 +3008,18 @@
                         }
 
                         if (isUnicode) {
-                            // ✅ Convert "f015" to actual icon text
                             const unicodeChar = String.fromCharCode(parseInt(iconValue, 16));
 
-                            // Set base Font Awesome class
                             iconEl.className = "fa-solid";
                             iconEl.textContent = unicodeChar;
 
-                            // Optional: Styling to ensure proper icon rendering
+                            // 🔥 Force Font Awesome font to render correctly
                             iconEl.style.fontFamily = "Font Awesome 6 Free";
                             iconEl.style.fontWeight = "900";
+                            iconEl.style.fontStyle = "normal";
+                            iconEl.style.fontVariant = "normal";
+                            iconEl.style.textRendering = "auto";
+                            iconEl.style.lineHeight = "1";
                             iconEl.style.marginRight = "0.5rem";
                             iconEl.style.fontSize = "16px";
                         } else {
