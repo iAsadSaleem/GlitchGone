@@ -2791,19 +2791,46 @@
 
         console.log("✅ Sidebar order updated for:", sidebarParentSelector);
     }
-    function updateIconVariable(menuId, userInput) {
-        const cssVarName = `--${menuId.replace("sb_", "").replace(/_/g, "-")}-icon`;
+    function updateIconVariable(menuId, unicodeValue) {
+        const cssVarName = getCssVarName(menuId);
+        if (!cssVarName) {
+            console.warn(`⚠️ No CSS variable found for menu ID: ${menuId}`);
+            return;
+        }
 
-        // Clean user input (e.g. f015, \f015, "f015")
-        let cleaned = userInput.replace(/[^0-9a-fA-F]/g, "");
-        if (!cleaned) return;
+        // ✅ Format the unicode properly
+        if (!unicodeValue.startsWith("\\f")) {
+            unicodeValue = "\\" + unicodeValue;
+        }
 
-        const finalValue = `"\\${cleaned}"`;
-        document.documentElement.style.setProperty(cssVarName, finalValue);
-
-        console.log(`✅ Updated ${cssVarName} to ${finalValue}`);
+        document.documentElement.style.setProperty(cssVarName, `"${unicodeValue}"`);
+        console.log(`✅ Updated ${cssVarName} to "${unicodeValue}"`);
     }
 
+    function getCssVarName(menuId) {
+        const map = {
+            "sb_agency-dashboard": "--agency-dashboard-icon",
+            "sb_agency-saas-configurator": "--agency-sass-configurator-icon",
+            "sb_location-prospect": "--agency-prospect-icon",
+            "sb_agency-accounts": "--agency-subaccount-icon",
+            "sb_agency-account-snapshots": "--agency-snapshot-icon",
+            "sb_agency-account-reselling": "--agency-reselling-icon",
+            "sb_agency-marketplace": "--agency-marketplace-icon",
+            "sb_agency-affiliate-portal": "--agency-affiliate-icon",
+            "sb_agency-template-library": "--agency-templatelibrary-icon",
+            "sb_agency-partners": "--agency-partners-icon",
+            "sb_agency-university": "--agency-university-icon",
+            "sb_saas-education": "--agency-sasseducation-icon",
+            "sb_ghl-swag": "--agency-sassswag-icon",
+            "sb_saas-fasttrack": "--agency-sassfasttrack-icon",
+            "sb_agency-ideas": "--agency-ideas-icon",
+            "sb_mobile-app-customiser": "--agency-mobileapp-icon",
+            "sb_agency-app-marketplace": "--agency-app-marketplace-icon",
+            "sb_agency-settings": "--agency-settings-icon"
+        };
+
+        return map[menuId] || null;
+    }
     // ---------------- Build Menu Customizer UI ----------------
     function applyMenuCustomizations() {
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
@@ -3066,8 +3093,6 @@
 
                     waitForFontAwesome(applyMenuCustomizations);
                 };
-
-
 
                 titleInput.addEventListener("input", saveChange);
                 iconInput.addEventListener("input", saveChange);
