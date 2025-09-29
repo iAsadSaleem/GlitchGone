@@ -31,6 +31,8 @@
             const link = document.createElement("link");
             link.rel = "stylesheet";
             link.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css";
+            link.crossOrigin = "anonymous";
+            link.referrerPolicy = "no-referrer";
             document.head.appendChild(link);
         }
     })();
@@ -3588,7 +3590,7 @@
                                 })
                                 .catch(err => console.error("[ThemeBuilder] Network error:", err));
                             // 9️⃣ Reload page to apply changes
-                            //location.reload();
+                            location.reload();
 
                         } catch (err) {
                             console.error("[ThemeBuilder] Error applying theme changes:", err);
