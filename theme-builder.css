@@ -8,7 +8,7 @@
     height: 67%;
     /* 25% active color, 75% white */
     background: linear-gradient(to bottom, var(--sidebar-menu-active-bg) 40%, #ffffff 0%);
-    box-shadow: -2px 0 5px rgb(237 237 237);
+    box-shadow: -2px 0 5px var(--sidebar-menu-active-bg); /* ✅ Works */
     transition: right 0.28s ease;
     z-index: 99999;
     padding: 16px 7px;
