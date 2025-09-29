@@ -2563,48 +2563,32 @@
                     }
                 }
 
-                const menuEl = document.getElementById(menu.id);
-
                 if (hideInput.checked) {
-                    hidden[menu.id] = { hidden: true, display: "none !important", toggleChecked: true };
+                    hidden[menu.id] = {
+                        hidden: true,
+                        display: "none !important",
+                        toggleChecked: true // ✅ save the toggle state
+                    };
+
+                    // Hide immediately
+                    const menuEl = document.getElementById(menu.id);
                     if (menuEl) menuEl.style.setProperty("display", "none", "important");
                 } else {
-                    hidden[menu.id] = { hidden: false, display: "flex !important", toggleChecked: false };
+                    hidden[menu.id] = {
+                        hidden: false,
+                        display: "flex !important",
+                        toggleChecked: false // ✅ save toggle state
+                    };
+
+                    const menuEl = document.getElementById(menu.id);
                     if (menuEl) menuEl.style.setProperty("display", "flex", "important");
                 }
 
                 saved.themeData["--hiddenMenus"] = JSON.stringify(hidden);
                 localStorage.setItem("userTheme", JSON.stringify(saved));
-
-                // optional if you need it
-                applyLockedMenus();
             });
-            function restoreHiddenMenus() {
-                const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-                if (!saved.themeData || !saved.themeData["--hiddenMenus"]) return;
 
-                let hidden = {};
-                try {
-                    hidden = JSON.parse(saved.themeData["--hiddenMenus"]);
-                } catch (e) {
-                    console.warn("❌ Failed to parse --hiddenMenus:", e);
-                    return;
-                }
-
-                Object.keys(hidden).forEach(menuId => {
-                    const menuEl = document.getElementById(menuId);
-                    const toggleEl = document.getElementById("hide-" + menuId);
-
-                    if (!menuEl || !toggleEl) return;
-
-                    // Restore inline display
-                    menuEl.style.setProperty("display", hidden[menuId].hidden ? "none" : "flex", "important");
-
-                    // Restore toggle button
-                    toggleEl.checked = hidden[menuId].toggleChecked;
-                });
-            }
-            restoreHiddenMenus();
+          
 
 
             row.appendChild(label);
