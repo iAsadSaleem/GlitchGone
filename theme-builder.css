@@ -564,7 +564,7 @@ tb-apply-btn
     border: solid 1px #ffffff08;
     border-radius: 4px;
     box-shadow: -2px 2px 10px rgb(78 77 189 / 52%);
-    top: 0px;
+    top: 6px;
 }
 
 .tb-instruction-text {
