@@ -2573,13 +2573,30 @@
                     }
                 }
 
-                if (hideInput.checked) hidden[menu.id] = true;
-                else delete hidden[menu.id];
+                const menuEl = document.getElementById(menu.id);
+
+                if (hideInput.checked) {
+                    // Save hidden state and display style
+                    hidden[menu.id] = { hidden: true, display: "none !important" };
+
+                    // Apply inline style immediately
+                    if (menuEl) {
+                        menuEl.style.setProperty("display", "none", "important");
+                    }
+                } else {
+                    // Remove from hidden
+                    hidden[menu.id] = { hidden: false, display: "flex !important" };
+
+                    // Restore display
+                    if (menuEl) {
+                        menuEl.style.setProperty("display", "flex", "important");
+                    }
+                }
 
                 saved.themeData["--hiddenMenus"] = JSON.stringify(hidden);
                 localStorage.setItem("userTheme", JSON.stringify(saved));
 
-                applyLockedMenus();
+                applyLockedMenus(); // optional, if you still need this for other things
             });
 
             row.appendChild(label);
