@@ -2794,17 +2794,14 @@
     function updateIconVariable(menuId, unicodeValue) {
         const cssVarName = getCssVarName(menuId);
         if (!cssVarName) {
-            console.warn(`⚠️ No CSS variable found for menu ID: ${menuId}`);
             return;
         }
-
         // ✅ Format the unicode properly
         if (!unicodeValue.startsWith("\\f")) {
             unicodeValue = "\\" + unicodeValue;
         }
 
         document.documentElement.style.setProperty(cssVarName, `"${unicodeValue}"`);
-        console.log(`✅ Updated ${cssVarName} to "${unicodeValue}"`);
     }
 
     function getCssVarName(menuId) {
