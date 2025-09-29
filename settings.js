@@ -2625,7 +2625,7 @@
             if (existingLock) existingLock.remove();
 
             // ✅ If this menu is hidden → add `d-none`
-            if (hiddenMenus[menuId]) {
+            if (hiddenMenus[menuId]?.hidden) {
                 menu.classList.add("d-none");
             } else {
                 menu.classList.remove("d-none");
