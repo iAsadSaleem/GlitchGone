@@ -10,7 +10,7 @@
             const script = document.createElement('script');
             script.src = "https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js";
             script.onload = () => {
-                log("Sortable.js loaded successfully!");
+                //log("Sortable.js loaded successfully!");
                 // ✅ You can now initialize Sortable here or later in your code
             };
             document.head.appendChild(script);
@@ -2791,7 +2791,7 @@
             }
         });
 
-        console.log("✅ Sidebar order updated for:", sidebarParentSelector);
+        //console.log("✅ Sidebar order updated for:", sidebarParentSelector);
     }
     function updateIconVariable(menuId, unicodeValue) {
         const cssVarName = getCssVarName(menuId);
