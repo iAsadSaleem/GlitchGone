@@ -3007,7 +3007,7 @@
 
                 const iconInput = document.createElement("input");
                 iconInput.type = "text";
-                iconInput.placeholder = "fa-solid fa-home or url(...)";
+                iconInput.placeholder = "Font-Awsome Icon Code";
                 iconInput.className = "tb-input tb-icon-input";
 
                 const menuCustomizations = themeData["--menuCustomizations"]
