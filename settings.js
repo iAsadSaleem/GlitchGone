@@ -16,7 +16,6 @@
             document.head.appendChild(script);
         }
     })();
-
     (function () {
         if (!document.querySelector('link[href*="font-awesome"]')) {
             const link = document.createElement("link");
@@ -276,7 +275,6 @@
         // ✅ Save updated theme
         localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
     }
-
 
     // === Background Image Input ===
     function createLoginBackgroundImageInput() {
@@ -1682,7 +1680,6 @@
         container.appendChild(section);
         return section;
     }
-
     function buildProfileButtonControls(section) {
         const profileWrapper = document.createElement("div");
         profileWrapper.className = "tb-profile-btn-controls";
@@ -1806,7 +1803,6 @@
 
         section.appendChild(profileWrapper);
     }
-
     function buildHelpButtonControls(section) {
         const helpWrapper = document.createElement("div");
         helpWrapper.className = "tb-help-btn-controls";
@@ -1897,7 +1893,6 @@
 
         section.appendChild(helpWrapper);
     }
-
     function addScrollbarSettings(container) {
         if (document.getElementById("tb-scrollbar-settings")) return; // prevent duplicate
 
@@ -2050,7 +2045,6 @@
 
         container.appendChild(wrapper);
     }
-
     function addDashboardCardSettings(container) {
         if (document.getElementById("tb-dashboard-card-settings")) return;
 
@@ -2275,7 +2269,6 @@
 
         container.appendChild(wrapper);
     }
-
     function addBackgroundGradientSettings(container) {
         if (document.getElementById("tb-bg-gradient-settings")) return;
 
@@ -2386,7 +2379,6 @@
 
         observer.observe(document.body, { childList: true, subtree: true });
     }
-
     function buildFeatureLockSection(container) {
         let savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         if (savedTheme.themeData && typeof savedTheme.themeData === "string") {
@@ -2992,25 +2984,45 @@
                         ? JSON.parse(saved.themeData["--menuCustomizations"])
                         : {};
 
-                    // 3️⃣ Update this menu's customization
+                    let iconValue = iconInput.value.trim();
+
+                    // 3️⃣ If user typed only icon name (like "gear" or "house")
+                    if (iconValue && !iconValue.startsWith("fa-") && !iconValue.startsWith("http")) {
+                        iconValue = `fa-solid fa-${iconValue}`;
+                    }
+
+                    // 4️⃣ Update this menu's customization
                     customizations[menu.id] = {
                         title: titleInput.value,
-                        icon: iconInput.value
+                        icon: iconValue
                     };
 
-                    // 4️⃣ Save back into themeData
+                    // 5️⃣ Save back into themeData
                     const updatedCustomizations = JSON.stringify(customizations);
                     saved.themeData["--menuCustomizations"] = updatedCustomizations;
 
-                    // 5️⃣ Save to localStorage
+                    // 6️⃣ Save to localStorage
                     localStorage.setItem("userTheme", JSON.stringify(saved));
 
-                    // 6️⃣ Also update CSS variable live (important!)
+                    // 7️⃣ Also update CSS variable live (important!)
                     document.documentElement.style.setProperty("--menuCustomizations", updatedCustomizations);
 
-                    // 7️⃣ Optionally re-apply theme
+                    // 8️⃣ Update the actual menu item icon in the sidebar live
+                    const menuEl = document.getElementById(menu.id);
+                    if (menuEl) {
+                        // Find existing <i> tag (icon) or create one
+                        let iconEl = menuEl.querySelector("i");
+                        if (!iconEl) {
+                            iconEl = document.createElement("i");
+                            menuEl.prepend(iconEl); // Add icon to the start
+                        }
+                        iconEl.className = iconValue; // Apply new class
+                    }
+
+                    // 9️⃣ Optionally re-apply theme
                     applyMenuCustomizations();
                 };
+
 
 
                 titleInput.addEventListener("input", saveChange);
@@ -3105,7 +3117,6 @@
         }
 
     }
-
     function buildFeedbackForm(section) {
         // Wrapper
         const wrapper = document.createElement("div");
@@ -3202,7 +3213,6 @@
 
         section.appendChild(wrapper);
     }
-
     // ---------------- Apply on Page Load ----------------
     window.addEventListener("load", () => {
         waitForSidebarMenus(() => {
