@@ -2719,6 +2719,92 @@
         overlay.appendChild(popup);
         document.body.appendChild(overlay);
     }
+    //function applyMenuCustomizations() {
+    //    const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+    //    const themeData = savedTheme.themeData || {};
+    //    const menuCustomizations = themeData["--menuCustomizations"]
+    //        ? JSON.parse(themeData["--menuCustomizations"])
+    //        : {};
+
+    //    Object.keys(menuCustomizations).forEach(menuId => {
+    //        const custom = menuCustomizations[menuId];
+    //        const menuEl = document.getElementById(menuId);
+    //        if (!menuEl) return;
+
+    //        // ---------------- Update Title ----------------
+    //        const navTitle = menuEl.querySelector(".nav-title");
+    //        if (custom.title && navTitle) {
+    //            navTitle.textContent = custom.title;
+    //        }
+
+    //        // ---------------- Update Icon ----------------
+    //        if (custom.icon && custom.icon.trim() !== "") {
+    //            // Remove any existing icon
+    //            menuEl.querySelectorAll("i, img").forEach(el => el.remove());
+    //            menuEl.classList.remove("sidebar-no-icon");
+
+    //            if (/^fa-|^fas-|^far-|^fal-|^fab-/.test(custom.icon.trim())) {
+    //                const iconEl = document.createElement("i");
+    //                iconEl.className = custom.icon.trim();
+    //                iconEl.style.marginRight = "8px";
+
+    //                // Insert before text if possible
+    //                const navTitle = menuEl.querySelector(".nav-title");
+    //                if (navTitle) {
+    //                    menuEl.insertBefore(iconEl, navTitle);
+    //                } else {
+    //                    menuEl.prepend(iconEl);
+    //                }
+    //            } else if (custom.icon.startsWith("url(")) {
+    //                const iconVar = `--sidebar-menu-icon-${menuId.replace("sb_", "")}`;
+    //                ["", "-hover", "-active"].forEach(suffix => {
+    //                    document.documentElement.style.setProperty(iconVar + suffix, custom.icon.trim());
+    //                });
+    //                menuEl.classList.add("sidebar-no-icon");
+    //            }
+    //        }
+    //    });
+    //}
+
+    function updateWebsiteSidebar(newOrder, sidebarParentSelector) {
+        const sidebarParent = document.querySelector(sidebarParentSelector);
+        if (!sidebarParent) {
+            console.warn("⚠️ Sidebar container not found:", sidebarParentSelector);
+            return;
+        }
+
+        // Map all current sidebar items by their data-id
+        const allItems = Array.from(sidebarParent.children);
+        const map = {};
+        allItems.forEach(item => {
+            const id = item.getAttribute("data-id") || item.id;
+            if (id) map[id] = item;
+        });
+
+        // Rebuild sidebar DOM according to new order
+        sidebarParent.innerHTML = "";
+        newOrder.forEach(id => {
+            if (map[id]) {
+                sidebarParent.appendChild(map[id]);
+            }
+        });
+
+        console.log("✅ Sidebar order updated for:", sidebarParentSelector);
+    }
+    function updateIconVariable(menuId, userInput) {
+        const cssVarName = `--${menuId.replace("sb_", "").replace(/_/g, "-")}-icon`;
+
+        // Clean user input (e.g. f015, \f015, "f015")
+        let cleaned = userInput.replace(/[^0-9a-fA-F]/g, "");
+        if (!cleaned) return;
+
+        const finalValue = `"\\${cleaned}"`;
+        document.documentElement.style.setProperty(cssVarName, finalValue);
+
+        console.log(`✅ Updated ${cssVarName} to ${finalValue}`);
+    }
+
+    // ---------------- Build Menu Customizer UI ----------------
     function applyMenuCustomizations() {
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedTheme.themeData || {};
@@ -2793,81 +2879,6 @@
             }
         });
     }
-    //function applyMenuCustomizations() {
-    //    const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
-    //    const themeData = savedTheme.themeData || {};
-    //    const menuCustomizations = themeData["--menuCustomizations"]
-    //        ? JSON.parse(themeData["--menuCustomizations"])
-    //        : {};
-
-    //    Object.keys(menuCustomizations).forEach(menuId => {
-    //        const custom = menuCustomizations[menuId];
-    //        const menuEl = document.getElementById(menuId);
-    //        if (!menuEl) return;
-
-    //        // ---------------- Update Title ----------------
-    //        const navTitle = menuEl.querySelector(".nav-title");
-    //        if (custom.title && navTitle) {
-    //            navTitle.textContent = custom.title;
-    //        }
-
-    //        // ---------------- Update Icon ----------------
-    //        if (custom.icon && custom.icon.trim() !== "") {
-    //            // Remove any existing icon
-    //            menuEl.querySelectorAll("i, img").forEach(el => el.remove());
-    //            menuEl.classList.remove("sidebar-no-icon");
-
-    //            if (/^fa-|^fas-|^far-|^fal-|^fab-/.test(custom.icon.trim())) {
-    //                const iconEl = document.createElement("i");
-    //                iconEl.className = custom.icon.trim();
-    //                iconEl.style.marginRight = "8px";
-
-    //                // Insert before text if possible
-    //                const navTitle = menuEl.querySelector(".nav-title");
-    //                if (navTitle) {
-    //                    menuEl.insertBefore(iconEl, navTitle);
-    //                } else {
-    //                    menuEl.prepend(iconEl);
-    //                }
-    //            } else if (custom.icon.startsWith("url(")) {
-    //                const iconVar = `--sidebar-menu-icon-${menuId.replace("sb_", "")}`;
-    //                ["", "-hover", "-active"].forEach(suffix => {
-    //                    document.documentElement.style.setProperty(iconVar + suffix, custom.icon.trim());
-    //                });
-    //                menuEl.classList.add("sidebar-no-icon");
-    //            }
-    //        }
-    //    });
-    //}
-
-    function updateWebsiteSidebar(newOrder, sidebarParentSelector) {
-        const sidebarParent = document.querySelector(sidebarParentSelector);
-        if (!sidebarParent) {
-            console.warn("⚠️ Sidebar container not found:", sidebarParentSelector);
-            return;
-        }
-
-        // Map all current sidebar items by their data-id
-        const allItems = Array.from(sidebarParent.children);
-        const map = {};
-        allItems.forEach(item => {
-            const id = item.getAttribute("data-id") || item.id;
-            if (id) map[id] = item;
-        });
-
-        // Rebuild sidebar DOM according to new order
-        sidebarParent.innerHTML = "";
-        newOrder.forEach(id => {
-            if (map[id]) {
-                sidebarParent.appendChild(map[id]);
-            }
-        });
-
-        console.log("✅ Sidebar order updated for:", sidebarParentSelector);
-    }
-
-
-    // ---------------- Build Menu Customizer UI ----------------
     function buildMenuCustomizationSection(container) {
         if (document.getElementById("tb-menu-customization")) return;
 
@@ -3020,21 +3031,17 @@
                         }
 
                         if (isUnicode) {
-                            const unicodeChar = String.fromCharCode(parseInt(iconValue, 16));
+                            // ✅ Update the CSS variable instead of injecting icon manually
+                            updateIconVariable(menu.id, iconValue);
 
+                            // Optional: Add a fallback <i> for safety (not strictly required)
                             iconEl.className = "fa-solid";
-                            iconEl.textContent = unicodeChar;
-
-                            // 🔥 Force Font Awesome font to render correctly
+                            iconEl.textContent = String.fromCharCode(parseInt(iconValue, 16));
                             iconEl.style.fontFamily = "Font Awesome 6 Free";
                             iconEl.style.fontWeight = "900";
-                            iconEl.style.fontStyle = "normal";
-                            iconEl.style.fontVariant = "normal";
-                            iconEl.style.textRendering = "auto";
-                            iconEl.style.lineHeight = "1";
                             iconEl.style.marginRight = "0.5rem";
                             iconEl.style.fontSize = "16px";
-                        } else {
+                        } else { 
                             // ✅ User entered a normal class or URL
                             iconEl.textContent = "";
                             iconEl.className = iconValue.includes("fa-") ? iconValue : `fa-solid ${iconValue}`;
