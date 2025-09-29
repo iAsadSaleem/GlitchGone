@@ -2556,37 +2556,24 @@
 
                 let hidden = {};
                 if (saved.themeData["--hiddenMenus"]) {
-                    try {
-                        hidden = JSON.parse(saved.themeData["--hiddenMenus"]);
-                    } catch (e) {
-                        console.warn("❌ Failed to parse --hiddenMenus:", e);
-                    }
+                    try { hidden = JSON.parse(saved.themeData["--hiddenMenus"]); }
+                    catch (e) { console.warn("❌ Failed to parse --hiddenMenus:", e); }
                 }
 
-                if (hideInput.checked) {
-                    hidden[menu.id] = {
-                        hidden: true,
-                        display: "none !important",
-                        toggleChecked: true // ✅ save the toggle state
-                    };
+                const menuEl = document.getElementById(menu.id);
 
-                    // Hide immediately
-                    const menuEl = document.getElementById(menu.id);
+                if (hideInput.checked) {
+                    hidden[menu.id] = { hidden: true, display: "none !important", toggleChecked: true };
                     if (menuEl) menuEl.style.setProperty("display", "none", "important");
                 } else {
-                    hidden[menu.id] = {
-                        hidden: false,
-                        display: "flex !important",
-                        toggleChecked: false // ✅ save toggle state
-                    };
-
-                    const menuEl = document.getElementById(menu.id);
+                    hidden[menu.id] = { hidden: false, display: "flex !important", toggleChecked: false };
                     if (menuEl) menuEl.style.setProperty("display", "flex", "important");
                 }
 
                 saved.themeData["--hiddenMenus"] = JSON.stringify(hidden);
                 localStorage.setItem("userTheme", JSON.stringify(saved));
             });
+
 
           
 
