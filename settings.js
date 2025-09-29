@@ -2782,6 +2782,10 @@
                     iconEl.className = classes;
                     iconEl.style.marginRight = "0.5rem";
                     iconEl.style.fontSize = "16px";
+
+                    // Add this too (helps when classes are incomplete)
+                    iconEl.style.fontFamily = "Font Awesome 6 Free";
+                    iconEl.style.fontWeight = "900";
                 }
 
                 // Add new icon for this menu
