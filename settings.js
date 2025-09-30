@@ -3132,13 +3132,15 @@
         const instruction = document.createElement("p");
         instruction.className = "tb-instruction-text";
         instruction.innerHTML = `
-              💡 <strong>Tip:</strong> To add a custom icon, please visit the 
-              <a href="https://fontawesome.com/icons" target="_blank" style="color:#007bff; text-decoration:underline;">
-                Font Awesome Icons Library
-              </a>. 
-              Once there, choose your preferred icon, and on the <strong>top-right corner</strong> of the icon page you’ll see a <strong>“Copy Code”</strong> button. 
-              Click it to copy the icon’s code and then <strong>paste it into the relevant field</strong> here.
-            `;
+                      💡 <strong>How to Customize Your Menu:</strong><br><br>
+                      1️⃣ To add a custom icon for any menu item, please visit the 
+                      <a href="https://fontawesome.com/icons" target="_blank" style="color:#007bff; text-decoration:underline;">
+                        Font Awesome Icons Library
+                      </a>. Once there, select your preferred icon. On the <strong>top-right corner</strong> of the icon page, you’ll find a <strong>“Copy Code”</strong> button — click it and then <strong>paste the copied code into the relevant icon field</strong> here.<br><br>
+                      2️⃣ You can <strong>drag and drop the menu items</strong> to change their order. This helps you organize your dashboard according to your preferences or workflow.<br><br>
+                      3️⃣ To <strong>change the title of any menu item</strong>, simply edit the text in the <strong>relevant title field</strong>. This allows you to personalize your menu names for better clarity and easier navigation.<br><br>
+                      ✨ <em>Tip:</em> Use these customization options to design a navigation layout that’s tailored to your needs — improving productivity and making your workspace more intuitive.
+                    `;
         wrapper.appendChild(instruction);
         buildSection(agencyMenus, "Agency Level Menu Customization", "--agencyMenuOrder", "#agencySidebar");
         buildSection(subAccountMenus, "Sub-Account Level Menu Customization", "--subMenuOrder", "#subAccountSidebar");
