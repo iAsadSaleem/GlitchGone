@@ -898,28 +898,28 @@ body::-webkit-scrollbar-track {
 
 .tb-input {
     height: 40px;
-    background: #ffffff;
-    color: #898989;
+    background: #bfadeb38;
+    color: #353232;
     font-family: monospace;
     text-align: left;
     outline: none;
     cursor: text;
-    font-size: 10px;
+    font-size: 13px;
     border-radius: 8px;
-    border: 1px solid #60717957;
+    border: 1px solid #60717900;
     padding: 6px 8px;
     min-width: 94px;
 }
 .tb-area-input {
-    background: #ffffff;
+    background: #79a4db2b;
     color: #898989;
     font-family: monospace;
     text-align: center;
     outline: none;
     cursor: text;
-    font-size: 10px;
+    font-size: 13px;
     border-radius: 8px;
-    border: 1px solid #60717957;
+    border: 1px solid #60717900;
     padding: 6px 8px;
     min-width: 94px;
 }
