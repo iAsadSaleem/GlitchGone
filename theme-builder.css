@@ -934,10 +934,10 @@ body::-webkit-scrollbar-track {
     text-decoration: none;
     transition: all 250ms;
     border: 0;
-    font-size: 14px;
+    font-size: 10px;
     user-select: none;
     touch-action: manipulation;
-    width: 98px;
+    width: 100px;
     height: 34px;
 }
 .em-title {
