@@ -3218,89 +3218,41 @@
         title.innerText = "Send Us Your Suggestion";
         wrapper.appendChild(title);
 
-        // Email input
-        const emailLabel = document.createElement("label");
-        emailLabel.textContent = "Your Email:";
-        emailLabel.className = "em-title"; // ✅ FIXED
-        wrapper.appendChild(emailLabel);
+        // ✅ Embed iframe instead of custom form
+        const iframe = document.createElement("iframe");
+        iframe.src = "https://api.glitchgone.com/widget/form/lv8RbD6M9IzPnummFGHC";
+        iframe.style.width = "100%";
+        iframe.style.height = "100%";
+        iframe.style.border = "none";
+        iframe.style.borderRadius = "10px";
 
-        const emailInput = document.createElement("input");
-        emailInput.type = "email";
-        emailInput.placeholder = "Enter your email";
-        emailInput.className = "tb-input tb-feedback-input";
-        emailInput.style.width = "100%";
-        emailInput.style.marginTop = "4px";
-        wrapper.appendChild(emailInput);
+        // Copy over the data attributes if needed:
+        iframe.id = "inline-lv8RbD6M9IzPnummFGHC";
+        iframe.setAttribute("data-layout", "{'id':'INLINE'}");
+        iframe.setAttribute("data-trigger-type", "alwaysShow");
+        iframe.setAttribute("data-trigger-value", "");
+        iframe.setAttribute("data-activation-type", "alwaysActivated");
+        iframe.setAttribute("data-activation-value", "");
+        iframe.setAttribute("data-deactivation-type", "neverDeactivate");
+        iframe.setAttribute("data-deactivation-value", "");
+        iframe.setAttribute("data-form-name", "Theme Builder Feedback Form");
+        iframe.setAttribute("data-height", "534");
+        iframe.setAttribute("data-layout-iframe-id", "inline-lv8RbD6M9IzPnummFGHC");
+        iframe.setAttribute("data-form-id", "lv8RbD6M9IzPnummFGHC");
+        iframe.title = "Theme Builder Feedback Form";
 
-        // Suggestion textarea
-        const suggestionLabel = document.createElement("label");
-        suggestionLabel.textContent = "Your Suggestion:";
-        suggestionLabel.className = "em-title"; // ✅ FIXED
-        wrapper.appendChild(suggestionLabel);
+        wrapper.appendChild(iframe);
 
-        const suggestionInput = document.createElement("textarea");
-        suggestionInput.placeholder = "Enter your suggestion here...";
-        suggestionInput.className = "tb-area-input tb-feedback-textarea";
-        suggestionInput.style.width = "100%";
-        suggestionInput.style.marginTop = "4px";
-        suggestionInput.rows = 4;
-        wrapper.appendChild(suggestionInput);
+        // ✅ Dynamically load the script
+        const script = document.createElement("script");
+        script.src = "https://api.glitchgone.com/js/form_embed.js";
+        script.async = true;
+        wrapper.appendChild(script);
 
-        // Submit button
-        const submitBtn = document.createElement("button");
-        submitBtn.textContent = "Send Suggestion";
-        submitBtn.className = "tb-submit-btn tb-btn-primary";
-        submitBtn.style.marginTop = "10px";
-        wrapper.appendChild(submitBtn);
-
-        // Response message
-        const responseMsg = document.createElement("p");
-        responseMsg.id = "tb-feedback-response";
-        responseMsg.style.marginTop = "8px";
-        wrapper.appendChild(responseMsg);
-
-        // Handle submission (using Formspree free endpoint or your own API)
-        submitBtn.addEventListener("click", async () => {
-            const email = emailInput.value.trim();
-            const suggestion = suggestionInput.value.trim();
-
-            if (!email || !suggestion) {
-                responseMsg.textContent = "Please enter both email and suggestion!";
-                responseMsg.style.color = "red";
-                return;
-            }
-
-            submitBtn.disabled = true;
-            responseMsg.textContent = "Sending...";
-            responseMsg.style.color = "black";
-
-            try {
-                const res = await fetch("https://formspree.io/f/xldpdogl", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json", "Accept": "application/json" },
-                    body: JSON.stringify({ email, message: suggestion }) // Use 'message' key
-                });
-
-                if (res.ok) {
-                    responseMsg.textContent = "✅ Thank you for your suggestion!";
-                    responseMsg.style.color = "green";
-                    emailInput.value = "";
-                    suggestionInput.value = "";
-                } else {
-                    responseMsg.textContent = "⚠️ Submission failed. Please try again.";
-                    responseMsg.style.color = "red";
-                }
-            } catch (err) {
-                responseMsg.textContent = "⚠️ Network error!";
-                responseMsg.style.color = "red";
-            } finally {
-                submitBtn.disabled = false;
-            }
-        });
-
-
+        // Append wrapper to section
         section.appendChild(wrapper);
     }
+
     // ---------------- Apply on Page Load ----------------
     window.addEventListener("load", () => {
         waitForSidebarMenus(() => {
