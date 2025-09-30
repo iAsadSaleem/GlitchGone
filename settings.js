@@ -3220,10 +3220,8 @@
 
         // ✅ Add description paragraph below title
         const infoPara = document.createElement("p");
+        infoPara.className = "tb-instruction-text";
         infoPara.textContent = "If you have any suggestions for ThemeBuilder that need to be updated or changed, please send us your feedback using this form below.";
-        infoPara.style.marginTop = "8px";
-        infoPara.style.fontSize = "14px";
-        infoPara.style.color = "#555";
         wrapper.appendChild(infoPara);
 
         // ✅ Embed iframe instead of custom form
