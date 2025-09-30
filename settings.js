@@ -2421,7 +2421,6 @@
         const lockHideInfo = document.createElement("p");
         lockHideInfo.className = "tb-instruction-text";
         lockHideInfo.style.marginBottom = "15px";
-        lockHideInfo.style.fontSize = "14px";
         lockHideInfo.style.lineHeight = "1.6";
         lockHideInfo.innerHTML = `
               🔒 <strong>How the Lock & Hide Feature Works:</strong><br><br>
