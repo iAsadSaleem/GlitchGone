@@ -3215,8 +3215,16 @@
         // Title
         const title = document.createElement("h4");
         title.className = "tb-section-background-title";
-        title.innerText = "Send Us Your Suggestion";
+        title.innerText = "Send Us Your Feedback";
         wrapper.appendChild(title);
+
+        // ✅ Add description paragraph below title
+        const infoPara = document.createElement("p");
+        infoPara.textContent = "If you have any suggestions for ThemeBuilder that need to be updated or changed, please send us your feedback using this form below.";
+        infoPara.style.marginTop = "8px";
+        infoPara.style.fontSize = "14px";
+        infoPara.style.color = "#555";
+        wrapper.appendChild(infoPara);
 
         // ✅ Embed iframe instead of custom form
         const iframe = document.createElement("iframe");
