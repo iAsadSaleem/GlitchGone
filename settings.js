@@ -3134,7 +3134,11 @@
         instruction.className = "tb-instruction-text";
         instruction.textContent =
             "💡 For Flat Color in Header: Choose the same color for Start & End";
-        gradientWrapper.appendChild(instruction);
+
+        // 👇 append to the section returned by buildSection()
+        if (agencySection) {
+            agencySection.appendChild(instruction);
+        }
         buildSection(subAccountMenus, "Sub-Account Level Menu Customization", "--subMenuOrder", "#subAccountSidebar");
 
         container.appendChild(wrapper);
