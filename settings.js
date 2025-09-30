@@ -2474,12 +2474,12 @@
             row.style.display = "flex";
             row.style.alignItems = "center";
             row.style.justifyContent = "space-between";
-            row.style.marginBottom = "8px";
+            row.style.marginBottom = "-8px";
 
             const label = document.createElement("span");
             label.textContent = menu.label;
             label.style.flex = "1";
-            label.style.fontSize = "14px";
+            label.style.fontSize = "10px";
 
             const toggleWrapper = document.createElement("div");
             toggleWrapper.style.display = "flex";
