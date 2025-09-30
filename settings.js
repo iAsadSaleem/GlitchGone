@@ -3337,7 +3337,6 @@
                     true
                 )
             );
-
             contentWrapper.appendChild(
 
 
@@ -3403,7 +3402,6 @@
                 )
 
             );
-
             contentWrapper.appendChild(
                 createSection('<i class="fa-solid fa-database"style="color:white;margin-right:6px;font-size:17px;"></i>Advance Settings', (section) => {
                     buildHeaderControlsSection(section);
@@ -3426,14 +3424,12 @@
                 }, "", true
                 )
             );
-
             contentWrapper.appendChild(
                 createSection('<i class="fa-solid fa-lock"style="color:white;margin-right:6px;font-size:17px;"></i>Feature Lock & Hide', (section) => {
                     buildFeatureLockSection(section);
                 }, "", true
                 )
             );
-
             contentWrapper.appendChild(
                 createSection('<i class="fa-brands fa-intercom"style="color:white;margin-right:6px;font-size:17px;"></i>Menu Customizer', (section) => {
                     buildMenuCustomizationSection(section);
@@ -3463,37 +3459,6 @@
                 }
                 return themeVars;
             }
-            const collectMenuCustomizations = () => {
-                const menuItems = document.querySelectorAll(".hl_nav-header a");
-                const customizations = {};
-
-                menuItems.forEach(menuEl => {
-                    const menuId = menuEl.id;
-                    if (!menuId) return;
-
-                    // Get title
-                    const navTitle = menuEl.querySelector(".nav-title");
-                    const title = navTitle ? navTitle.textContent.trim() : "";
-
-                    // Get icon (FontAwesome <i> tag)
-                    const iconEl = menuEl.querySelector("i");
-                    let icon = "";
-                    if (iconEl) {
-                        // If user typed full class name
-                        icon = iconEl.className.trim();
-
-                        // If using Unicode inside <i>, read innerHTML
-                        if (!icon && iconEl.innerHTML.trim()) {
-                            icon = iconEl.innerHTML.trim();
-                        }
-                    }
-
-                    customizations[menuId] = { title, icon };
-                });
-
-                return customizations;
-            };
-
 
             // ===== Apply Button Outside Card =====
             const buttonsWrapper = document.createElement("div");
@@ -3593,7 +3558,6 @@
                     }
                 );
             });
-
 
             buttonsWrapper.appendChild(applyBtn);
             drawer.appendChild(buttonsWrapper); // Outside card
