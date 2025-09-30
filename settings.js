@@ -2417,6 +2417,22 @@
             { id: "sb_app-marketplace", label: "App Marketplace" }
         ];
 
+        // 📝 Instruction Paragraph for Lock & Hide Feature
+        const lockHideInfo = document.createElement("p");
+        lockHideInfo.className = "tb-instruction-text";
+        lockHideInfo.style.marginBottom = "15px";
+        lockHideInfo.style.fontSize = "14px";
+        lockHideInfo.style.lineHeight = "1.6";
+        lockHideInfo.innerHTML = `
+              🔒 <strong>How the Lock & Hide Feature Works:</strong><br><br>
+              1. Each menu item below comes with two toggle options — one for <strong>Lock</strong> and one for <strong>Hide</strong>.  
+              2. Turning the <strong>Lock</strong> toggle <em>on</em> will prevent users from accessing or interacting with that specific menu item. This is helpful if you want to restrict certain features based on user roles or permissions.  
+              3. Switching the <strong>Hide</strong> toggle <em>on</em> will completely remove the menu item from the sidebar view, creating a cleaner and more focused interface.  
+              4. You can use these toggles together or individually to customize the sidebar exactly the way you need — either by restricting access, hiding unused sections, or both.<br><br>
+              ✨ <em>Tip:</em> Use <strong>Lock</strong> to control access and <strong>Hide</strong> to simplify the user interface.
+            `;
+        wrapper.appendChild(lockHideInfo);
+
         const mainTitle = document.createElement("h4");
         mainTitle.className = "tb-header-controls";
         mainTitle.textContent = "Sub-Account Level Lock & Hide";
