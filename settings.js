@@ -3129,6 +3129,12 @@
 
         // ✅ Build both sections
         buildSection(agencyMenus, "Agency Level Menu Customization", "--agencyMenuOrder", "#agencySidebar");
+        // 💡 Add instruction paragraph after Agency section
+        const instruction = document.createElement("p");
+        instruction.className = "tb-instruction-text";
+        instruction.textContent =
+            "💡 For Flat Color in Header: Choose the same color for Start & End";
+        gradientWrapper.appendChild(instruction);
         buildSection(subAccountMenus, "Sub-Account Level Menu Customization", "--subMenuOrder", "#subAccountSidebar");
 
         container.appendChild(wrapper);
