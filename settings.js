@@ -3419,7 +3419,7 @@
                     instruction.textContent =
                         "💡 For Flat Color: Choose the same color for Start & End";
                     section.appendChild(instruction);
-                    buildFeedbackForm(section);
+                    //buildFeedbackForm(section);
 
                     //buildHeadingSettings(section) //Commented Will see next time
                     // Add more advanced options later
@@ -3437,6 +3437,12 @@
             contentWrapper.appendChild(
                 createSection('<i class="fa-brands fa-intercom"style="color:white;margin-right:6px;font-size:17px;"></i>Menu Customizer', (section) => {
                     buildMenuCustomizationSection(section);
+                }, "", true
+                )
+            );
+            contentWrapper.appendChild(
+                createSection('<i class="fa-solid fa-envelope"style="color:white;margin-right:6px;font-size:17px;"></i>Email Feedback', (section) => {
+                    buildFeedbackForm(section);
                 }, "", true
                 )
             );
