@@ -757,7 +757,7 @@ body::-webkit-scrollbar-track {
     height: 25px;
     font-size: 14px;
     color: #ffffff;
-    background: #002a50c9;
+    background: var(--primary-color);
     border: solid 1px #ffffff08;
     border-radius: 4px;
     top: 8px;
@@ -1000,14 +1000,4 @@ body::-webkit-scrollbar-track {
     font-weight: 500;
     font-size: 10px;
     color: #607179;
-}
-
-#tb-feedback-form iframe {
-    background-color: rgb(255, 255, 255);
-    border: 0px solid rgb(255, 255, 255);
-    border-radius: 10px;
-    max-width: 400px;
-    width: 100%;
-    padding: 10px 1px 2px;
-    box-shadow: rgba #57647e00 (87, 100, 126, 0) 0px 0px 0px 0px;
 }
