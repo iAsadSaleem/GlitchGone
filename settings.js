@@ -3248,7 +3248,7 @@
 
         // Submit button
         const submitBtn = document.createElement("button");
-        submitBtn.textContent = "Submit";
+        submitBtn.textContent = "Send Suggestion";
         submitBtn.className = "tb-submit-btn tb-btn-primary";
         submitBtn.style.marginTop = "10px";
         wrapper.appendChild(submitBtn);
