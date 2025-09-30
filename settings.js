@@ -3129,16 +3129,13 @@
 
         // ✅ Build both sections
         buildSection(agencyMenus, "Agency Level Menu Customization", "--agencyMenuOrder", "#agencySidebar");
-        // 💡 Add instruction paragraph after Agency section
+        // 💡 Add Instruction Paragraph under Agency Level Menu Customization
         const instruction = document.createElement("p");
         instruction.className = "tb-instruction-text";
-        instruction.textContent =
-            "💡 For Flat Color in Header: Choose the same color for Start & End";
+        instruction.textContent = "💡 For Flat Color in Header: Choose the same color for Start & End";
 
-        // 👇 append to the section returned by buildSection()
-        if (agencySection) {
-            agencySection.appendChild(instruction);
-        }
+        // Append this to the same main wrapper container
+        wrapper.appendChild(instruction);
         buildSection(subAccountMenus, "Sub-Account Level Menu Customization", "--subMenuOrder", "#subAccountSidebar");
 
         container.appendChild(wrapper);
