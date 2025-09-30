@@ -3128,7 +3128,6 @@
         };
 
         // ✅ Build both sections
-        buildSection(agencyMenus, "Agency Level Menu Customization", "--agencyMenuOrder", "#agencySidebar");
         // 💡 Add Instruction Paragraph under Agency Level Menu Customization
         const instruction = document.createElement("p");
         instruction.className = "tb-instruction-text";
@@ -3136,6 +3135,7 @@
 
         // Append this to the same main wrapper container
         wrapper.appendChild(instruction);
+        buildSection(agencyMenus, "Agency Level Menu Customization", "--agencyMenuOrder", "#agencySidebar");
         buildSection(subAccountMenus, "Sub-Account Level Menu Customization", "--subMenuOrder", "#subAccountSidebar");
 
         container.appendChild(wrapper);
