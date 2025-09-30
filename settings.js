@@ -3131,9 +3131,14 @@
         // 💡 Add Instruction Paragraph under Agency Level Menu Customization
         const instruction = document.createElement("p");
         instruction.className = "tb-instruction-text";
-        instruction.textContent = "💡 For Flat Color in Header: Choose the same color for Start & End";
-
-        // Append this to the same main wrapper container
+        instruction.innerHTML = `
+              💡 <strong>Tip:</strong> To add a custom icon, please visit the 
+              <a href="https://fontawesome.com/icons" target="_blank" style="color:#007bff; text-decoration:underline;">
+                Font Awesome Icons Library
+              </a>. 
+              Once there, choose your preferred icon, and on the <strong>top-right corner</strong> of the icon page you’ll see a <strong>“Copy Code”</strong> button. 
+              Click it to copy the icon’s code and then <strong>paste it into the relevant field</strong> here.
+            `;
         wrapper.appendChild(instruction);
         buildSection(agencyMenus, "Agency Level Menu Customization", "--agencyMenuOrder", "#agencySidebar");
         buildSection(subAccountMenus, "Sub-Account Level Menu Customization", "--subMenuOrder", "#subAccountSidebar");
