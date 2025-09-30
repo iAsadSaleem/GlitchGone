@@ -3437,7 +3437,7 @@
                 )
             );
             contentWrapper.appendChild(
-                createSection('<i class="fa-solid fa-envelope"style="color:white;margin-right:6px;font-size:17px;"></i>Email Feedback', (section) => {
+                createSection('<i class="fa-brands fa-wpforms"style="color:white;margin-right:6px;font-size:17px;"></i>Feedback', (section) => {
                     buildFeedbackForm(section);
                 }, "", true
                 )
