@@ -3090,8 +3090,21 @@
                         } else { 
                             // ✅ User entered a normal class or URL
                             iconEl.textContent = "";
-                            iconEl.className = iconValue.includes("fa-") ? iconValue : `fa-solid ${iconValue}`;
+
+                            // 🧠 Auto-correct class before assigning
+                            let finalClass = iconValue.trim();
+
+                            // Add style prefix if missing
+                            if (finalClass.startsWith("fa-") && !finalClass.includes("fa-solid") && !finalClass.includes("fa-regular") && !finalClass.includes("fa-brands")) {
+                                finalClass = `fa-solid ${finalClass}`;
+                            }
+                            if (!finalClass.startsWith("fa-")) {
+                                finalClass = `fa-solid fa-${finalClass}`;
+                            }
+
+                            iconEl.className = finalClass;
                             iconEl.style.fontFamily = "";
+
                         }
                     }
 
