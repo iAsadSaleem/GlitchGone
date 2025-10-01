@@ -3440,7 +3440,7 @@
                 )
             );
             contentWrapper.appendChild(
-                createSection('<img src="https://raw.githubusercontent.com/iAsadSaleem/GlitchGone/main/feedback-icon.png" class="icon-img" />Feedback', (section) => {
+                createSection('<img src="https://raw.githubusercontent.com/iAsadSaleem/GlitchGone/main/feedback_icon.png" class="icon-img" />Feedback', (section) => {
                     buildFeedbackForm(section);
                 }, "", true
                 )
