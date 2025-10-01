@@ -783,6 +783,7 @@
             "--sidebar-bg-end-color", // new: end color for sidebar gradient
             "--sidebar-menu-bg",
             "--sidebar-menu-hover-bg",
+            "--sidebar-menu-active-bg",
             "--sidebar-menu-color",
             "--sidebar-menu-icon-color"
         ];
