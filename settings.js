@@ -227,6 +227,8 @@
 
         "--sidebar-menu-bg": "Choose Sidebar Menu BG Color",
         "--sidebar-menu-hover-bg": "Choose Menu Hover Color",
+        "--sidebar-menu-active-bg": "Choose Menu Active BG Color",
+
         "--sidebar-menu-color": "Choose SideBar Text Color",
         "--sidebar-menu-icon-color": "Choose SideBar Icon Color",
 
