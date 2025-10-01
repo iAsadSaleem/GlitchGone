@@ -3440,7 +3440,7 @@
                 )
             );
             contentWrapper.appendChild(
-                createSection('<i class="fa-brands fa-wpforms"style="color:white;margin-right:6px;font-size:17px;"></i>Feedback', (section) => {
+                createSection('<img src="https://raw.githubusercontent.com/iAsadSaleem/GlitchGone/main/IMG_5287.png" style="width:20px;height:20px;margin-right:6px;vertical-align:middle;border-radius:4px;" />Feedback', (section) => {
                     buildFeedbackForm(section);
                 }, "", true
                 )
