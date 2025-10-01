@@ -1009,5 +1009,6 @@ body::-webkit-scrollbar-track {
     margin-right: 6px;
     vertical-align: middle;
     border-radius: 4px;
-    display: flex !important;
+    display: inline-block; /* ✅ inline, not flex */
+    object-fit: contain; /* optional: keeps image proportions */
 }
