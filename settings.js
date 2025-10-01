@@ -2865,7 +2865,7 @@
             // Update Title
             const titleSpan = menuEl.querySelector(".nav-title");
             if (titleSpan) titleSpan.textContent = menuData.title || menuEl.dataset.defaultLabel || "";
-
+            console.log("🔎 Replacing icon for:", menuId, "with:", menuData.icon);
             // ---------------- Replace Icon for THIS menu only ----------------
             if (menuData.icon) {
                 // Remove only existing icon inside this menu
@@ -2924,6 +2924,7 @@
                         iconEl.style.fontWeight = "900";
                     }
                 }
+            console.log("📌 Final icon element:", iconEl.outerHTML);
 
                 // Add new icon for this menu
                 menuEl.prepend(iconEl);
