@@ -2896,28 +2896,33 @@
                     iconEl.style.fontVariant = "normal";
                     iconEl.style.textRendering = "auto";
                     iconEl.style.lineHeight = "1";
-                } else {
-                    // 🛠️ Ensure icon always includes style prefix
-                    let classes = menuData.icon.trim();
+                }
+                else {
+                    let iconValue = menuData.icon.trim();
 
-                    // If user typed only "fa-house" or "fa-user", add "fa-solid"
-                    if (classes.startsWith("fa-") && !classes.includes("fa-solid") && !classes.includes("fa-regular") && !classes.includes("fa-brands")) {
-                        classes = `fa-solid ${classes}`;
+                    // 🧠 Auto-handle Font Awesome class logic
+                    if (/^f[0-9a-f]{3}$/i.test(iconValue)) {
+                        // If accidentally Unicode slipped here, treat it
+                        iconEl = document.createElement("i");
+                        iconEl.className = "fa-solid";
+                        iconEl.innerHTML = `&#x${iconValue};`;
+                        iconEl.style.fontFamily = "Font Awesome 6 Free";
+                        iconEl.style.fontWeight = "900";
+                    } else {
+                        // Normalize icon class
+                        if (iconValue.startsWith("fa-") && !iconValue.includes("fa-solid") && !iconValue.includes("fa-regular") && !iconValue.includes("fa-brands")) {
+                            iconValue = `fa-solid ${iconValue}`;
+                        } else if (!iconValue.startsWith("fa-")) {
+                            iconValue = `fa-solid fa-${iconValue}`;
+                        }
+
+                        iconEl = document.createElement("i");
+                        iconEl.className = iconValue;
+                        iconEl.style.marginRight = "0.5rem";
+                        iconEl.style.fontSize = "16px";
+                        iconEl.style.fontFamily = "Font Awesome 6 Free";
+                        iconEl.style.fontWeight = "900";
                     }
-
-                    // If user typed something like "house" (without "fa-"), also add prefix
-                    if (!classes.startsWith("fa-")) {
-                        classes = `fa-solid fa-${classes}`;
-                    }
-
-                    iconEl = document.createElement("i");
-                    iconEl.className = classes;
-                    iconEl.style.marginRight = "0.5rem";
-                    iconEl.style.fontSize = "16px";
-
-                    // Add this too (helps when classes are incomplete)
-                    iconEl.style.fontFamily = "Font Awesome 6 Free";
-                    iconEl.style.fontWeight = "900";
                 }
 
                 // Add new icon for this menu
