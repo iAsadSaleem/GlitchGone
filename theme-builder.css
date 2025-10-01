@@ -105,7 +105,7 @@
     border-radius: 6px;
     overflow: hidden;
     position: relative;
-    top: -12px;
+    top: -41px;
 }
 .tb-section-header {
     display: flex;
@@ -301,7 +301,7 @@
     touch-action: manipulation;
     width: 307px;
     height: 47px;
-    top: 22px;
+    top: 9px;
 }
 
 /* Reset Changes Button */
@@ -329,7 +329,7 @@
     font-size: 15px;
     text-align: center;
     margin: 12px auto;
-    top: -13px;
+    top: -32px;
     border-radius: 8px !important;
     background: var(--primary-color);
     position: relative;
