@@ -258,7 +258,6 @@
 
         return wrapper;
     }
-    s
     function updateLoginBackgroundGradient() {
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         savedThemeObj.themeData = savedThemeObj.themeData || {};
