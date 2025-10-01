@@ -2897,8 +2897,19 @@
                     iconEl.style.textRendering = "auto";
                     iconEl.style.lineHeight = "1";
                 } else {
-                    // Font Awesome class
-                    const classes = menuData.icon.includes("fa-") ? menuData.icon : `fa-solid ${menuData.icon}`;
+                    // 🛠️ Ensure icon always includes style prefix
+                    let classes = menuData.icon.trim();
+
+                    // If user typed only "fa-house" or "fa-user", add "fa-solid"
+                    if (classes.startsWith("fa-") && !classes.includes("fa-solid") && !classes.includes("fa-regular") && !classes.includes("fa-brands")) {
+                        classes = `fa-solid ${classes}`;
+                    }
+
+                    // If user typed something like "house" (without "fa-"), also add prefix
+                    if (!classes.startsWith("fa-")) {
+                        classes = `fa-solid fa-${classes}`;
+                    }
+
                     iconEl = document.createElement("i");
                     iconEl.className = classes;
                     iconEl.style.marginRight = "0.5rem";
