@@ -282,8 +282,8 @@
 
 /* CSS */
 .tb-apply-btn {
-    /*background: var(--sidebar-menu-bg) !important;*/
-    background-image: var(--sidebar-main-bg-gradient) !important;
+    background: var(--sidebar-menu-active-bg) !important;
+    /*background-image: var(--sidebar-main-bg-gradient) !important;*/
     border-radius: 10px;
     color: white;
     cursor: pointer;
@@ -302,7 +302,7 @@
     touch-action: manipulation;
     width: 307px;
     height: 47px;
-    top: 9px;
+    top: 24px;
 }
 
 /* Reset Changes Button */
@@ -332,8 +332,8 @@
     margin: 12px auto;
     top: -32px;
     border-radius: 8px !important;
-    /*background: var(--sidebar-menu-bg) !important;*/
-    background-image: var(--sidebar-main-bg-gradient) !important;
+    background: var(--sidebar-menu-active-bg) !important;
+    /*background-image: var(--sidebar-main-bg-gradient) !important;*/
     position: relative;
     min-width: 316px !important;
     color: #fff;
