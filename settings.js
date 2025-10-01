@@ -3099,16 +3099,25 @@
                             // 🧠 Auto-correct class before assigning
                             let finalClass = iconValue.trim();
 
-                            // Add style prefix if missing
-                            if (finalClass.startsWith("fa-") && !finalClass.includes("fa-solid") && !finalClass.includes("fa-regular") && !finalClass.includes("fa-brands")) {
-                                finalClass = `fa-solid ${finalClass}`;
-                            }
-                            if (!finalClass.startsWith("fa-")) {
-                                finalClass = `fa-solid fa-${finalClass}`;
-                            }
+                            // If accidentally Unicode, fallback
+                            if (/^f[0-9a-f]{3}$/i.test(finalClass)) {
+                                iconEl.className = "fa-solid";
+                                iconEl.textContent = String.fromCharCode(parseInt(finalClass, 16));
+                                iconEl.style.fontFamily = "Font Awesome 6 Free";
+                                iconEl.style.fontWeight = "900";
+                            } else {
+                                // Normalize normal icon class
+                                if (finalClass.startsWith("fa-") && !finalClass.includes("fa-solid") && !finalClass.includes("fa-regular") && !finalClass.includes("fa-brands")) {
+                                    finalClass = `fa-solid ${finalClass}`;
+                                } else if (!finalClass.startsWith("fa-")) {
+                                    finalClass = `fa-solid fa-${finalClass}`;
+                                }
 
-                            iconEl.className = finalClass;
-                            iconEl.style.fontFamily = "";
+                                iconEl.className = finalClass;
+                                iconEl.textContent = "";
+                                iconEl.style.fontFamily = "Font Awesome 6 Free";
+                                iconEl.style.fontWeight = "900";
+                            }
 
                         }
                     }
