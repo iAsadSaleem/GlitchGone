@@ -282,7 +282,7 @@
 
 /* CSS */
 .tb-apply-btn {
-    background: var(--primary-color);
+    background: var(--sidebar-menu-bg) !important;
     border-radius: 10px;
     color: white;
     cursor: pointer;
@@ -331,7 +331,7 @@
     margin: 12px auto;
     top: -32px;
     border-radius: 8px !important;
-    background: var(--primary-color);
+    background: var(--sidebar-menu-bg) !important;
     position: relative;
     min-width: 316px !important;
     color: #fff;
