@@ -3016,7 +3016,28 @@
             { id: "sb_app-media", label: "App Media" },
             { id: "sb_reputation", label: "Reputation" },
             { id: "sb_reporting", label: "Reporting" },
-            { id: "sb_app-marketplace", label: "App Marketplace" }
+            { id: "sb_app-marketplace", label: "App Marketplace" },
+            { id: "sb_custom-values", label: "Custom Values" },
+            { id: "sb_manage-scoring", label: "Manage Scoring" },
+            { id: "sb_domains-urlRedirects", label: "Domains & URL Redirects" },
+            { id: "sb_integrations", label: "Integrations" },
+            { id: "sb_undefined", label: "Private Integrations" },
+            { id: "sb_conversations_providers", label: "Conversation Providers" },
+            { id: "sb_tags", label: "Tags" },
+            { id: "sb_labs", label: "Labs" },
+            { id: "sb_audit-logs-location", label: "Audit Logs" },
+            { id: "sb_brand-boards", label: "Brand Boards" },
+            { id: "sb_business_info", label: "Business Profile" },
+            { id: "sb_saas-billing", label: "Billing" },
+            { id: "sb_my-staff", label: "My Staff" },
+            { id: "sb_Opportunities-Pipelines", label: "Opportunities & Pipelines" },
+            { id: "sb_", label: "Automation" },
+            { id: "sb_calendars", label: "Calendars" },
+            { id: "sb_location-email-services", label: "Email Services" },
+            { id: "sb_phone-number", label: "Phone Numbers" },
+            { id: "sb_whatsapp", label: "WhatsApp" },
+            { id: "sb_objects", label: "Objects" },
+            { id: "sb_custom-fields-settings", label: "Custom Fields" }
         ];
 
         const agencyMenus = [
