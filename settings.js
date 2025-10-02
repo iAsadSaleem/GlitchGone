@@ -3386,6 +3386,19 @@
             openBuilderBtn.textContent = "Open Theme Builder";
             welcomeContent.appendChild(openBuilderBtn);
 
+            // ✅ Add this here:
+            openBuilderBtn.addEventListener("click", () => {
+                // Hide Welcome Drawer
+                welcomeDrawer.style.display = "none";
+
+                // Show Theme Builder Drawer
+                const themeBuilderDrawer = document.getElementById("themeBuilderDrawer");
+                if (themeBuilderDrawer) {
+                    themeBuilderDrawer.style.display = "block"; // make visible
+                    themeBuilderDrawer.classList.add("open");    // ensure open class for CSS & draggable
+                }
+            });
+
             welcomeDrawer.appendChild(welcomeContent);
             document.body.appendChild(welcomeDrawer);
 
