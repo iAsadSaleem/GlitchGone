@@ -3341,84 +3341,11 @@
         if (rlNo) {
             applySavedSettings();
         } else if (email) {
-            applySavedSettings();
+             applySavedSettings();
         }
 
-        // ===== Welcome Drawer =====
-        let welcomeDrawer = document.getElementById('welcomeDrawer');
-        if (!welcomeDrawer) {
-            welcomeDrawer = document.createElement("div");
-            welcomeDrawer.id = "welcomeDrawer";
-            welcomeDrawer.className = "tb-drawer"; // do NOT add "open" here
-            welcomeDrawer.style.display = "none"; // hide initially
-
-            const welcomeTitleWrapper = document.createElement("div");
-            welcomeTitleWrapper.className = "tb-drawer-title-wrapper";
-
-            const welcomeTitle = document.createElement("div");
-            welcomeTitle.textContent = "Welcome to Theme Builder!";
-            welcomeTitle.className = "tb-title";
-
-            const welcomeCloseBtn = document.createElement("button");
-            welcomeCloseBtn.innerHTML = "&times;";
-            welcomeCloseBtn.className = "tb-drawer-close";
-
-            welcomeTitleWrapper.appendChild(welcomeTitle);
-            welcomeTitleWrapper.appendChild(welcomeCloseBtn);
-            welcomeDrawer.appendChild(welcomeTitleWrapper);
-
-            const welcomeContent = document.createElement("div");
-            welcomeContent.className = "tb-drawer-content";
-
-            // Example content
-            const exampleTitle = document.createElement("h3");
-            exampleTitle.textContent = "Get Started!";
-            welcomeContent.appendChild(exampleTitle);
-
-            const exampleParagraph = document.createElement("p");
-            exampleParagraph.textContent =
-                "Here you can customize your theme colors, fonts, and other settings. Click the button below to open the Theme Builder.";
-            welcomeContent.appendChild(exampleParagraph);
-
-            // Button to open Theme Builder Drawer
-            const openBuilderBtn = document.createElement("button");
-            openBuilderBtn.className = "tb-apply-btn";
-            openBuilderBtn.textContent = "Open Theme Builder";
-            welcomeContent.appendChild(openBuilderBtn);
-
-            // ✅ Add this here:
-            openBuilderBtn.addEventListener("click", () => {
-                // Hide Welcome Drawer
-                welcomeDrawer.style.display = "none";
-
-                // Show Theme Builder Drawer
-                const themeBuilderDrawer = document.getElementById("themeBuilderDrawer");
-                if (themeBuilderDrawer) {
-                    themeBuilderDrawer.style.display = "block"; // make visible
-                    themeBuilderDrawer.classList.add("open");    // ensure open class for CSS & draggable
-                }
-            });
-
-            welcomeDrawer.appendChild(welcomeContent);
-            document.body.appendChild(welcomeDrawer);
-
-            // Close button click
-            welcomeCloseBtn.addEventListener("click", () => {
-                welcomeDrawer.style.display = "none"; // hide immediately
-            });
-
-            // Open Theme Builder Drawer button click
-            openBuilderBtn.addEventListener("click", () => {
-                welcomeDrawer.style.display = "none";
-                const themeBuilderDrawer = document.getElementById("themeBuilderDrawer");
-                if (themeBuilderDrawer) themeBuilderDrawer.style.display = "block"; // show
-            });
-        }
-
-        // ===== Theme Builder Drawer =====
-        let drawer = document.getElementById('themeBuilderDrawer');
-        if (!drawer) {
-            drawer = document.createElement("div");
+        if (!document.getElementById('themeBuilderDrawer')) {
+            const drawer = document.createElement("div");
             drawer.id = "themeBuilderDrawer";
             drawer.className = "tb-drawer";
 
@@ -3438,16 +3365,19 @@
             drawerTitleWrapper.appendChild(closeBtn);
             drawer.appendChild(drawerTitleWrapper);
 
-            // ===== Card Wrapper & Sections (Your existing code stays the same) =====
+            // ===== Card Wrapper =====
             const cardWrapper = document.createElement('div');
             cardWrapper.className = "tb-drawer-card";
 
+            // Theme Selector
             const themeBtnWrapper = document.createElement("div");
             themeBtnWrapper.className = "tb-theme-btn-wrapper";
             buildThemeSelectorSection(themeBtnWrapper);
             cardWrapper.appendChild(themeBtnWrapper);
 
-            const contentWrapper = document.createElement('div')
+            // Content Wrapper (includes sections)
+            const contentWrapper = document.createElement('div');
+            contentWrapper.className = "tb-drawer-content";
 
             // Sections
             contentWrapper.appendChild(
@@ -3714,37 +3644,12 @@
 
             // Drawer toggle
             btn.addEventListener('click', () => {
-                const themeBuilderDrawer = document.getElementById('themeBuilderDrawer');
-                const welcomeDrawer = document.getElementById('welcomeDrawer');
-
-                // Close Theme Builder Drawer if open
-                if (themeBuilderDrawer && themeBuilderDrawer.style.display === "block") {
-                    themeBuilderDrawer.style.display = "none";
-                }
-
-                // Toggle Welcome Drawer
-                if (welcomeDrawer) {
-                    welcomeDrawer.style.display = (welcomeDrawer.style.display === "block") ? "none" : "block";
-                }
+                drawer.classList.toggle('open');
             });
 
-            // ===== Welcome Drawer Cross Button =====
-            const welcomeCloseBtn = document.querySelector('#welcomeDrawer .tb-drawer-close');
-            if (welcomeCloseBtn) {
-                welcomeCloseBtn.addEventListener('click', () => {
-                    const welcomeDrawer = document.getElementById('welcomeDrawer');
-                    if (welcomeDrawer) welcomeDrawer.classList.remove('open');
-                });
-            }
-
-            // ===== Theme Builder Drawer Cross Button =====
-            const themeBuilderCloseBtn = document.querySelector('#themeBuilderDrawer .tb-drawer-close');
-            if (themeBuilderCloseBtn) {
-                themeBuilderCloseBtn.addEventListener('click', () => {
-                    const drawer = document.getElementById('themeBuilderDrawer');
-                    if (drawer) drawer.classList.remove('open');
-                });
-            }
+            closeBtn.addEventListener('click', () => {
+                drawer.classList.remove('open');
+            });
         }
     }
 
