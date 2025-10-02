@@ -3701,15 +3701,36 @@
             // Drawer toggle
             btn.addEventListener('click', () => {
                 const themeBuilderDrawer = document.getElementById('themeBuilderDrawer');
+                const welcomeDrawer = document.getElementById('welcomeDrawer');
 
-                // If Theme Builder Drawer is open, close it
+                // Close Theme Builder Drawer if open
                 if (themeBuilderDrawer && themeBuilderDrawer.classList.contains('open')) {
                     themeBuilderDrawer.classList.remove('open');
                 }
 
                 // Toggle Welcome Drawer
-                welcomeDrawer.classList.toggle('open');
+                if (welcomeDrawer) {
+                    welcomeDrawer.classList.toggle('open');
+                }
             });
+
+            // ===== Welcome Drawer Cross Button =====
+            const welcomeCloseBtn = document.querySelector('#welcomeDrawer .tb-drawer-close');
+            if (welcomeCloseBtn) {
+                welcomeCloseBtn.addEventListener('click', () => {
+                    const welcomeDrawer = document.getElementById('welcomeDrawer');
+                    if (welcomeDrawer) welcomeDrawer.classList.remove('open');
+                });
+            }
+
+            // ===== Theme Builder Drawer Cross Button =====
+            const themeBuilderCloseBtn = document.querySelector('#themeBuilderDrawer .tb-drawer-close');
+            if (themeBuilderCloseBtn) {
+                themeBuilderCloseBtn.addEventListener('click', () => {
+                    const drawer = document.getElementById('themeBuilderDrawer');
+                    if (drawer) drawer.classList.remove('open');
+                });
+            }
         }
     }
 
