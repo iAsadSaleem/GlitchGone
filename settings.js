@@ -3690,11 +3690,20 @@
 
             // Drawer toggle
             btn.addEventListener('click', () => {
-                drawer.classList.toggle('open');
+                const drawer = document.getElementById("themeBuilderDrawer");
+                if (drawer.classList.contains("open")) {
+                    drawer.classList.remove("open");
+                } else {
+                    drawer.classList.add("open");
+                }
             });
 
-            closeBtn.addEventListener('click', () => {
-                drawer.classList.remove('open');
+            closeBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); // ⛔ stop bubbling so it doesn't re-open
+                const drawer = document.getElementById("themeBuilderDrawer");
+                drawer.classList.remove("open");
+                drawer.style.left = ""; // 🛠️ Reset position so drag state doesn’t break clicks
+                drawer.style.top = "";
             });
         }
     }
@@ -3744,6 +3753,15 @@
             console.error("❌ Error verifying user:", err);
         }
     }
+
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+            const drawer = document.getElementById("themeBuilderDrawer");
+            if (drawer && drawer.classList.contains("open")) {
+                drawer.classList.remove("open");
+            }
+        }
+    });
 
     document.addEventListener('DOMContentLoaded', () => setTimeout(() => initThemeBuilder(0), 50));
     setTimeout(() => initThemeBuilder(0), 50);
