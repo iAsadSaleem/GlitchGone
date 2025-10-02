@@ -2816,32 +2816,6 @@
     //        }
     //    });
     //}
-
-    function updateWebsiteSidebar(newOrder, sidebarParentSelector) {
-        const sidebarParent = document.querySelector(sidebarParentSelector);
-        if (!sidebarParent) {
-            console.warn("⚠️ Sidebar container not found:", sidebarParentSelector);
-            return;
-        }
-
-        // Map all current sidebar items by their data-id
-        const allItems = Array.from(sidebarParent.children);
-        const map = {};
-        allItems.forEach(item => {
-            const id = item.getAttribute("data-id") || item.id;
-            if (id) map[id] = item;
-        });
-
-        // Rebuild sidebar DOM according to new order
-        sidebarParent.innerHTML = "";
-        newOrder.forEach(id => {
-            if (map[id]) {
-                sidebarParent.appendChild(map[id]);
-            }
-        });
-
-        //console.log("✅ Sidebar order updated for:", sidebarParentSelector);
-    }
     function updateIconVariable(menuId, unicodeValue) {
         const cssVarName = getCssVarName(menuId);
         if (!cssVarName) {
@@ -2854,7 +2828,6 @@
 
         document.documentElement.style.setProperty(cssVarName, `"${unicodeValue}"`);
     }
-
     function getCssVarName(menuId) {
         const map = {
             "sb_agency-dashboard": "--agency-dashboard-icon",
@@ -3368,11 +3341,70 @@
         if (rlNo) {
             applySavedSettings();
         } else if (email) {
-             applySavedSettings();
+            applySavedSettings();
         }
 
-        if (!document.getElementById('themeBuilderDrawer')) {
-            const drawer = document.createElement("div");
+        // ===== Welcome Drawer =====
+        let welcomeDrawer = document.getElementById('welcomeDrawer');
+        if (!welcomeDrawer) {
+            welcomeDrawer = document.createElement("div");
+            welcomeDrawer.id = "welcomeDrawer";
+            welcomeDrawer.className = "tb-drawer";
+
+            const welcomeTitleWrapper = document.createElement("div");
+            welcomeTitleWrapper.className = "tb-drawer-title-wrapper";
+
+            const welcomeTitle = document.createElement("div");
+            welcomeTitle.textContent = "Welcome to Theme Builder!";
+            welcomeTitle.className = "tb-title";
+
+            const welcomeCloseBtn = document.createElement("button");
+            welcomeCloseBtn.innerHTML = "&times;";
+            welcomeCloseBtn.className = "tb-drawer-close";
+
+            welcomeTitleWrapper.appendChild(welcomeTitle);
+            welcomeTitleWrapper.appendChild(welcomeCloseBtn);
+            welcomeDrawer.appendChild(welcomeTitleWrapper);
+
+            const welcomeContent = document.createElement("div");
+            welcomeContent.className = "tb-drawer-content";
+
+            // Example content in Welcome Drawer
+            const exampleTitle = document.createElement("h3");
+            exampleTitle.textContent = "Get Started!";
+            welcomeContent.appendChild(exampleTitle);
+
+            const exampleParagraph = document.createElement("p");
+            exampleParagraph.textContent =
+                "Here you can customize your theme colors, fonts, and other settings. Click the button below to open the Theme Builder.";
+            welcomeContent.appendChild(exampleParagraph);
+
+            // Button to open Theme Builder Drawer
+            const openBuilderBtn = document.createElement("button");
+            openBuilderBtn.className = "tb-apply-btn";
+            openBuilderBtn.textContent = "Open Theme Builder";
+            welcomeContent.appendChild(openBuilderBtn);
+
+            welcomeDrawer.appendChild(welcomeContent);
+            document.body.appendChild(welcomeDrawer);
+
+            // Close button
+            welcomeCloseBtn.addEventListener("click", () => {
+                welcomeDrawer.classList.remove("open");
+            });
+
+            // Open Theme Builder from Welcome Drawer button
+            openBuilderBtn.addEventListener("click", () => {
+                welcomeDrawer.classList.remove("open");
+                const themeBuilderDrawer = document.getElementById("themeBuilderDrawer");
+                if (themeBuilderDrawer) themeBuilderDrawer.classList.add("open");
+            });
+        }
+
+        // ===== Theme Builder Drawer =====
+        let drawer = document.getElementById('themeBuilderDrawer');
+        if (!drawer) {
+            drawer = document.createElement("div");
             drawer.id = "themeBuilderDrawer";
             drawer.className = "tb-drawer";
 
@@ -3392,19 +3424,16 @@
             drawerTitleWrapper.appendChild(closeBtn);
             drawer.appendChild(drawerTitleWrapper);
 
-            // ===== Card Wrapper =====
+            // ===== Card Wrapper & Sections (Your existing code stays the same) =====
             const cardWrapper = document.createElement('div');
             cardWrapper.className = "tb-drawer-card";
 
-            // Theme Selector
             const themeBtnWrapper = document.createElement("div");
             themeBtnWrapper.className = "tb-theme-btn-wrapper";
             buildThemeSelectorSection(themeBtnWrapper);
             cardWrapper.appendChild(themeBtnWrapper);
 
-            // Content Wrapper (includes sections)
-            const contentWrapper = document.createElement('div');
-            contentWrapper.className = "tb-drawer-content";
+            const contentWrapper = document.createElement('div')
 
             // Sections
             contentWrapper.appendChild(
@@ -3671,11 +3700,15 @@
 
             // Drawer toggle
             btn.addEventListener('click', () => {
-                drawer.classList.toggle('open');
-            });
+                const themeBuilderDrawer = document.getElementById('themeBuilderDrawer');
 
-            closeBtn.addEventListener('click', () => {
-                drawer.classList.remove('open');
+                // If Theme Builder Drawer is open, close it
+                if (themeBuilderDrawer && themeBuilderDrawer.classList.contains('open')) {
+                    themeBuilderDrawer.classList.remove('open');
+                }
+
+                // Toggle Welcome Drawer
+                welcomeDrawer.classList.toggle('open');
             });
         }
     }
