@@ -3349,7 +3349,8 @@
         if (!welcomeDrawer) {
             welcomeDrawer = document.createElement("div");
             welcomeDrawer.id = "welcomeDrawer";
-            welcomeDrawer.className = "tb-drawer";
+            welcomeDrawer.className = "tb-drawer"; // do NOT add "open" here
+            welcomeDrawer.style.display = "none"; // hide initially
 
             const welcomeTitleWrapper = document.createElement("div");
             welcomeTitleWrapper.className = "tb-drawer-title-wrapper";
@@ -3369,7 +3370,7 @@
             const welcomeContent = document.createElement("div");
             welcomeContent.className = "tb-drawer-content";
 
-            // Example content in Welcome Drawer
+            // Example content
             const exampleTitle = document.createElement("h3");
             exampleTitle.textContent = "Get Started!";
             welcomeContent.appendChild(exampleTitle);
@@ -3388,16 +3389,16 @@
             welcomeDrawer.appendChild(welcomeContent);
             document.body.appendChild(welcomeDrawer);
 
-            // Close button
+            // Close button click
             welcomeCloseBtn.addEventListener("click", () => {
-                welcomeDrawer.classList.remove("open");
+                welcomeDrawer.style.display = "none"; // hide immediately
             });
 
-            // Open Theme Builder from Welcome Drawer button
+            // Open Theme Builder Drawer button click
             openBuilderBtn.addEventListener("click", () => {
-                welcomeDrawer.classList.remove("open");
+                welcomeDrawer.style.display = "none";
                 const themeBuilderDrawer = document.getElementById("themeBuilderDrawer");
-                if (themeBuilderDrawer) themeBuilderDrawer.classList.add("open");
+                if (themeBuilderDrawer) themeBuilderDrawer.style.display = "block"; // show
             });
         }
 
@@ -3704,13 +3705,13 @@
                 const welcomeDrawer = document.getElementById('welcomeDrawer');
 
                 // Close Theme Builder Drawer if open
-                if (themeBuilderDrawer && themeBuilderDrawer.classList.contains('open')) {
-                    themeBuilderDrawer.classList.remove('open');
+                if (themeBuilderDrawer && themeBuilderDrawer.style.display === "block") {
+                    themeBuilderDrawer.style.display = "none";
                 }
 
                 // Toggle Welcome Drawer
                 if (welcomeDrawer) {
-                    welcomeDrawer.classList.toggle('open');
+                    welcomeDrawer.style.display = (welcomeDrawer.style.display === "block") ? "none" : "block";
                 }
             });
 
