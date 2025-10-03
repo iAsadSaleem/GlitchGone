@@ -2744,7 +2744,6 @@
 
     }
     function applymenuReorder() {
-        console.log("🔄 [menuReorder] Running...");
 
         // 1️⃣ Load saved theme data from localStorage
         let savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
@@ -2763,7 +2762,6 @@
                 root.style.setProperty(varName, index);
             });
 
-            console.log("✅ [menuReorder] Submenu order applied:", order);
         }
 
         // 3️⃣ Handle SubMenu order
@@ -2776,7 +2774,6 @@
                 console.error("❌ Failed to parse --subMenuOrder:", e);
             }
         } else {
-            console.warn("ℹ️ No --subMenuOrder found in theme data.");
         }
 
         // 4️⃣ Handle Agency Menu order
@@ -2792,7 +2789,6 @@
             console.warn("ℹ️ No --agencyMenuOrder found in theme data.");
         }
 
-        console.log("✅ [menuReorder] Completed.");
     }
 
     document.addEventListener("DOMContentLoaded", applyLockedMenus);
@@ -3501,7 +3497,6 @@
 
         // 🛠️ If UI already exists, just rebind listeners and return
         if (existingIcon && existingDrawer) {
-            console.log("🔁 Rebinding ThemeBuilder listeners (icon & drawer exist)...");
             bindThemeBuilderEvents(existingIcon, existingDrawer);
             return;
         }
@@ -3873,9 +3868,7 @@
             });
         }
 
-        console.log("✅ ThemeBuilder listeners re-bound");
     }
-
 
     // Initialize Theme Builder
     async function initThemeBuilder(attempts = 0) {
