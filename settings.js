@@ -3482,19 +3482,49 @@
             applyMenuCustomizations();
             applymenuReorder();
 
-            const icon = document.getElementById("hl_header--themebuilder-icon");
-            const drawer = document.getElementById("themeBuilderDrawer");
+            // 🔁 Try binding click listener with retry logic
+            const tryBindClick = (attempt = 0) => {
+                const icon = document.getElementById("hl_header--themebuilder-icon");
+                const drawer = document.getElementById("themeBuilderDrawer");
 
-            if (!icon || !drawer) {
-                console.log("🔁 Reinitializing ThemeBuilder (icon or drawer missing)...");
-                initThemeBuilder(0);
-                setTimeout(bindThemeBuilderEvents, 500); // 🧠 Delay slightly so DOM finishes rendering
-            } else {
-                console.log("✅ Icon & drawer exist — ensuring click events are bound...");
-                bindThemeBuilderEvents();
-            }
+                if (!icon || !drawer) {
+                    console.log("⚠️ Icon or drawer missing, re-initializing...");
+                    initThemeBuilder(0);
+                    return;
+                }
+
+                // Check if a click listener already exists
+                const existingListeners = getEventListeners(icon);
+                const hasClickListener = existingListeners?.click?.length > 0;
+
+                if (!hasClickListener) {
+                    console.log("✅ Binding click listener to ThemeBuilder icon...");
+                    icon.addEventListener("click", () => {
+                        console.log("🎨 Icon clicked!");
+                        drawer.classList.toggle("open");
+                    });
+                } else {
+                    console.log("✅ Click listener already bound.");
+                }
+
+                // Re-bind close button too
+                const closeBtn = drawer.querySelector(".tb-drawer-close");
+                if (closeBtn) {
+                    closeBtn.addEventListener("click", (e) => {
+                        e.stopPropagation();
+                        drawer.classList.remove("open");
+                        drawer.style.left = "";
+                        drawer.style.top = "";
+                    });
+                }
+            };
+
+            // 🔁 Retry binding a few times to handle late DOM replacements
+            setTimeout(() => tryBindClick(1), 300);
+            setTimeout(() => tryBindClick(2), 1000);
         });
     }
+
     // --- 2️⃣ Detect URL changes in an SPA ---
     (function () {
         const pushState = history.pushState;
