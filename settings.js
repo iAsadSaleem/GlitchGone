@@ -3448,7 +3448,6 @@
         waitForSidebarMenus(() => {
             applyLockedMenus(); // optional
             applyMenuCustomizations();
-            createBuilderUI(controlsContainer);
             initThemeBuilder(0);
             applymenuReorder();
         });
@@ -3494,7 +3493,17 @@
     }
     // Create Builder UI
     function createBuilderUI(controlsContainer) {
-        if (!controlsContainer || document.getElementById("hl_header--themebuilder-icon")) return;
+        const existingIcon = document.getElementById("hl_header--themebuilder-icon");
+        const existingDrawer = document.getElementById("themeBuilderDrawer");
+
+        // 🛠️ If UI already exists, just rebind listeners and return
+        if (existingIcon && existingDrawer) {
+            console.log("🔁 Rebinding ThemeBuilder listeners (icon & drawer exist)...");
+            bindThemeBuilderEvents(existingIcon, existingDrawer);
+            return;
+        }
+
+        if (!controlsContainer) return;
 
         // Theme Builder Icon Button
         const btn = document.createElement("a");
@@ -3831,11 +3840,42 @@
                 drawer.style.left = ""; // 🛠️ Reset position so drag state doesn’t break clicks
                 drawer.style.top = "";
             });
+
+            bindThemeBuilderEvents(btn, drawer);
+
         }
     }
 
+    function bindThemeBuilderEvents(btn, drawer) {
+        if (!btn || !drawer) return;
+
+        // Remove any old listeners
+        const newBtn = btn.cloneNode(true);
+        btn.replaceWith(newBtn);
+
+        // Re-bind click to toggle drawer
+        newBtn.addEventListener("click", () => {
+            drawer.classList.toggle("open");
+            console.log("🎨 Drawer toggled:", drawer.classList.contains("open"));
+        });
+
+        // Re-bind close button
+        const closeBtn = drawer.querySelector(".tb-drawer-close");
+        if (closeBtn) {
+            closeBtn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                drawer.classList.remove("open");
+                drawer.style.left = "";
+                drawer.style.top = "";
+            });
+        }
+
+        console.log("✅ ThemeBuilder listeners re-bound");
+    }
+
+
     // Initialize Theme Builder
-        async function initThemeBuilder(attempts = 0) {
+    async function initThemeBuilder(attempts = 0) {
             const rlno = localStorage.getItem("rlno");
             const gem = localStorage.getItem("g-em");
             if (!rlno && !gem) {
