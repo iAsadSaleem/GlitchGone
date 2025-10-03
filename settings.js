@@ -3398,10 +3398,10 @@
 
     // --- 1️⃣ Create a helper to run your theme logic ---
     function reapplyThemeOnRouteChange() {
-        console.log("🔄 URL changed — reapplying theme logic...");
         waitForSidebarMenus(() => {
             applyLockedMenus(); // optional
             applyMenuCustomizations();
+            initThemeBuilder(0);
         });
     }
 
