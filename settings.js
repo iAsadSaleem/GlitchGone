@@ -837,18 +837,6 @@
         updateSidebarGradient();
     }
 
-    // Apply saved settings
-    function applySavedSettings() {
-        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        const themeData = savedThemeObj.themeData || {};
-        Object.entries(themeData).forEach(([key, value]) => {
-            if (value && value !== "undefined") {
-                document.body.style.setProperty(key, value);
-            }
-        });
-        const sidebarText = localStorage.getItem("sidebarTextColor");
-        if (sidebarText) applySidebarTextColor(sidebarText);
-    }
     // Find header controls container
     function findControlsContainer() {
         const header = document.querySelector('header.hl_header') || document.querySelector('header');
@@ -2900,6 +2888,8 @@
     // ---------------- Build Menu Customizer UI ----------------
     function applyMenuCustomizations() {
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        console.log("⚠️ [applyMenuCustomizations] Triggered");
+
         const themeData = savedTheme.themeData || {};
         const menuCustomizations = themeData["--menuCustomizations"]
             ? JSON.parse(themeData["--menuCustomizations"])
@@ -3406,6 +3396,20 @@
         });
     });
 
+    // Apply saved settings
+    function applySavedSettings() {
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        console.log("⚠️ [applySavedSettings] Triggered");
+
+        const themeData = savedThemeObj.themeData || {};
+        Object.entries(themeData).forEach(([key, value]) => {
+            if (value && value !== "undefined") {
+                document.body.style.setProperty(key, value);
+            }
+        });
+        const sidebarText = localStorage.getItem("sidebarTextColor");
+        if (sidebarText) applySidebarTextColor(sidebarText);
+    }
     // Create Builder UI
     function createBuilderUI(controlsContainer) {
         if (!controlsContainer || document.getElementById("hl_header--themebuilder-icon")) return;
