@@ -3446,10 +3446,17 @@
     // --- 1️⃣ Create a helper to run your theme logic ---
     function reapplyThemeOnRouteChange() {
         waitForSidebarMenus(() => {
-            applyLockedMenus(); // optional
+            applyLockedMenus();
             applyMenuCustomizations();
-            initThemeBuilder(0);
             applymenuReorder();
+
+            // ✅ Only re-init if icon disappeared (DOM got replaced)
+            if (!document.getElementById("hl_header--themebuilder-icon")) {
+                console.log("🔁 ThemeBuilder icon missing — reinitializing...");
+                initThemeBuilder(0);
+            } else {
+                console.log("✅ ThemeBuilder icon still present — no re-init needed.");
+            }
         });
     }
 
@@ -3834,60 +3841,60 @@
     }
 
     // Initialize Theme Builder
-    async function initThemeBuilder(attempts = 0) {
-        const rlno = localStorage.getItem("rlno");
-        const gem = localStorage.getItem("g-em");
-        if (!rlno && !gem) {
-            if (attempts < MAX_ATTEMPTS) setTimeout(() => initThemeBuilder(attempts + 1), 200);
-            return;
-        }
-
-        const controlsContainer = findControlsContainer();
-        if (!controlsContainer) {
-            if (attempts < MAX_ATTEMPTS) setTimeout(() => initThemeBuilder(attempts + 1), 200);
-            return;
-        }
-
-        try {
-            const decodedEmail = gem ? atob(gem) : null;
-            if (!decodedEmail) {
-                console.error("❌ Email not found in localStorage.");
+        async function initThemeBuilder(attempts = 0) {
+            const rlno = localStorage.getItem("rlno");
+            const gem = localStorage.getItem("g-em");
+            if (!rlno && !gem) {
+                if (attempts < MAX_ATTEMPTS) setTimeout(() => initThemeBuilder(attempts + 1), 200);
                 return;
             }
-            const response = await fetch(`https://theme-builder-delta.vercel.app/api/theme/${decodedEmail}`);
-            const data = await response.json();
-            if (data.success) {
-                createBuilderUI(controlsContainer);
 
-                const headerEl = document.querySelector("header.hl_header") || document.querySelector("header");
-                if (headerEl && !headerObserver) {
-                    headerObserver = new MutationObserver(() => {
-                        if (!document.getElementById("hl_header--themebuilder-icon")) {
-                            setTimeout(() => initThemeBuilder(0), 200);
-                        }
-                    });
-                    headerObserver.observe(headerEl, { childList: true, subtree: true });
+            const controlsContainer = findControlsContainer();
+            if (!controlsContainer) {
+                if (attempts < MAX_ATTEMPTS) setTimeout(() => initThemeBuilder(attempts + 1), 200);
+                return;
+            }
+
+            try {
+                const decodedEmail = gem ? atob(gem) : null;
+                if (!decodedEmail) {
+                    console.error("❌ Email not found in localStorage.");
+                    return;
                 }
-            } else {
-                const settingsScript = document.querySelector('script[src*="settings.js"]');
-                if (settingsScript) {
-                    settingsScript.remove();
+                const response = await fetch(`https://theme-builder-delta.vercel.app/api/theme/${decodedEmail}`);
+                const data = await response.json();
+                if (data.success) {
+                    createBuilderUI(controlsContainer);
+
+                    const headerEl = document.querySelector("header.hl_header") || document.querySelector("header");
+                    if (headerEl && !headerObserver) {
+                        headerObserver = new MutationObserver(() => {
+                            if (!document.getElementById("hl_header--themebuilder-icon")) {
+                                setTimeout(() => initThemeBuilder(0), 200);
+                            }
+                        });
+                        headerObserver.observe(headerEl, { childList: true, subtree: true });
+                    }
+                } else {
+                    const settingsScript = document.querySelector('script[src*="settings.js"]');
+                    if (settingsScript) {
+                        settingsScript.remove();
+                    }
+                }
+            } catch (err) {
+                console.error("❌ Error verifying user:", err);
+            }
+        }
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") {
+                const drawer = document.getElementById("themeBuilderDrawer");
+                if (drawer && drawer.classList.contains("open")) {
+                    drawer.classList.remove("open");
                 }
             }
-        } catch (err) {
-            console.error("❌ Error verifying user:", err);
-        }
-    }
+        });
 
-    document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") {
-            const drawer = document.getElementById("themeBuilderDrawer");
-            if (drawer && drawer.classList.contains("open")) {
-                drawer.classList.remove("open");
-            }
-        }
-    });
-
-    document.addEventListener('DOMContentLoaded', () => setTimeout(() => initThemeBuilder(0), 50));
-    setTimeout(() => initThemeBuilder(0), 50);
+        document.addEventListener('DOMContentLoaded', () => setTimeout(() => initThemeBuilder(0), 50));
+        setTimeout(() => initThemeBuilder(0), 50);
 })();
