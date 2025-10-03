@@ -3450,12 +3450,32 @@
             applyMenuCustomizations();
             applymenuReorder();
 
-            // ✅ Only re-init if icon disappeared (DOM got replaced)
-            if (!document.getElementById("hl_header--themebuilder-icon")) {
-                console.log("🔁 ThemeBuilder icon missing — reinitializing...");
+            const icon = document.getElementById("hl_header--themebuilder-icon");
+            const drawer = document.getElementById("themeBuilderDrawer");
+
+            // 🛠️ If icon or drawer is missing, re-init completely
+            if (!icon || !drawer) {
+                console.log("🔁 Reinitializing ThemeBuilder (icon or drawer missing)...");
                 initThemeBuilder(0);
             } else {
-                console.log("✅ ThemeBuilder icon still present — no re-init needed.");
+                console.log("✅ Icon & drawer exist — re-binding click listener just in case...");
+
+                // 🩹 Re-bind the click listener (SPA navigation often removes event listeners)
+                icon.onclick = () => {
+                    const drawer = document.getElementById("themeBuilderDrawer");
+                    drawer.classList.toggle("open");
+                };
+
+                // 🩹 Also re-bind the close button event (sometimes that gets lost too)
+                const closeBtn = drawer.querySelector(".tb-drawer-close");
+                if (closeBtn) {
+                    closeBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        drawer.classList.remove("open");
+                        drawer.style.left = "";
+                        drawer.style.top = "";
+                    };
+                }
             }
         });
     }
