@@ -2667,8 +2667,6 @@
                 menuEl.style.setProperty("display", hiddenMenus[menu.id].hidden ? "none" : "flex", "important");
             }
         }
-
-
     }
     function applyLockedMenus() {
         // 1️⃣ Load saved theme from localStorage
@@ -3916,7 +3914,7 @@
             }
         }
 
-        document.addEventListener("keydown", (e) => {
+    document.addEventListener("keydown", (e) => {
             if (e.key === "Escape") {
                 const drawer = document.getElementById("themeBuilderDrawer");
                 if (drawer && drawer.classList.contains("open")) {
@@ -3925,6 +3923,6 @@
             }
         });
 
-        document.addEventListener('DOMContentLoaded', () => setTimeout(() => initThemeBuilder(0), 50));
-        setTimeout(() => initThemeBuilder(0), 50);
+    document.addEventListener('DOMContentLoaded', () => setTimeout(() => initThemeBuilder(0), 50));
+    setTimeout(() => initThemeBuilder(0), 50);
 })();
