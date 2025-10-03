@@ -2733,12 +2733,12 @@
                 menu.style.opacity = "0.5";
                 menu.style.cursor = "not-allowed";
 
-                // 🔥 Add this:
-                menu.addEventListener("click", blockMenuClick, { once: true });
+                // 🔥 Important: use capture phase to block navigation before it happens
+                menu.addEventListener("click", blockMenuClick, true);
             } else {
                 menu.style.opacity = "";
                 menu.style.cursor = "";
-                menu.removeEventListener("click", blockMenuClick); // Cleanup old listeners if unlocked
+                menu.removeEventListener("click", blockMenuClick, true);
             }
         });
 
@@ -2802,7 +2802,7 @@
     // Helper for blocking click
     function blockMenuClick(e) {
         e.preventDefault();
-        e.stopPropagation();
+        e.stopImmediatePropagation();
 
         // If popup already exists, remove it
         document.getElementById("tb-lock-popup")?.remove();
@@ -2853,7 +2853,10 @@
         popup.appendChild(okBtn);
         overlay.appendChild(popup);
         document.body.appendChild(overlay);
+
+        return false; // 🔥 extra layer of safety
     }
+
     //function applyMenuCustomizations() {
     //    const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
     //    const themeData = savedTheme.themeData || {};
