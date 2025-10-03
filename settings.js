@@ -2730,28 +2730,28 @@
             }
 
             //// 🔐 If this menu is locked → show lock icon + disable
-            //if (lockedMenus[menuId]) {
-            //    const lockIcon = document.createElement("i");
-            //    lockIcon.className = "tb-lock-icon fas fa-lock ml-2 text-red-500";
+            if (lockedMenus[menuId]) {
+                const lockIcon = document.createElement("i");
+                lockIcon.className = "tb-lock-icon fas fa-lock ml-2 text-red-500";
 
-            //    lockIcon.style.setProperty("display", "inline-block", "important");
-            //    lockIcon.style.setProperty("visibility", "visible", "important");
-            //    lockIcon.style.setProperty("opacity", "1", "important");
-            //    lockIcon.style.setProperty("position", "relative", "important");
-            //    lockIcon.style.setProperty("z-index", "9999", "important");
+                lockIcon.style.setProperty("display", "inline-block", "important");
+                lockIcon.style.setProperty("visibility", "visible", "important");
+                lockIcon.style.setProperty("opacity", "1", "important");
+                lockIcon.style.setProperty("position", "relative", "important");
+                lockIcon.style.setProperty("z-index", "9999", "important");
 
-            //    menu.appendChild(lockIcon);
+                menu.appendChild(lockIcon);
 
-            //    menu.style.opacity = "0.5";
-            //    menu.style.cursor = "not-allowed";
+                menu.style.opacity = "0.5";
+                menu.style.cursor = "not-allowed";
 
-            //    // 🔥 Add this:
-            //    menu.addEventListener("click", blockMenuClick, { once: true });
-            //} else {
-            //    menu.style.opacity = "";
-            //    menu.style.cursor = "";
-            //    menu.removeEventListener("click", blockMenuClick); // Cleanup old listeners if unlocked
-            //}
+                // 🔥 Add this:
+                menu.addEventListener("click", blockMenuClick, { once: true });
+            } else {
+                menu.style.opacity = "";
+                menu.style.cursor = "";
+                menu.removeEventListener("click", blockMenuClick); // Cleanup old listeners if unlocked
+            }
         });
 
     }
