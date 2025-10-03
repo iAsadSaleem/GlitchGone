@@ -3389,12 +3389,37 @@
     }
 
     // ---------------- Apply on Page Load ----------------
-    window.addEventListener("load", () => {
+    //window.addEventListener("load", () => {
+    //    waitForSidebarMenus(() => {
+    //        applyLockedMenus(); // optional
+    //        applyMenuCustomizations();
+    //    });
+    //});
+
+    // --- 1️⃣ Create a helper to run your theme logic ---
+    function reapplyThemeOnRouteChange() {
+        console.log("🔄 URL changed — reapplying theme logic...");
         waitForSidebarMenus(() => {
             applyLockedMenus(); // optional
             applyMenuCustomizations();
         });
-    });
+    }
+
+    // --- 2️⃣ Detect URL changes in an SPA ---
+    (function () {
+        let lastUrl = location.href;
+
+        // Check every 500ms if URL changed
+        setInterval(() => {
+            if (location.href !== lastUrl) {
+                lastUrl = location.href;
+                reapplyThemeOnRouteChange();
+            }
+        }, 500);
+
+        // Also run it initially (first load)
+        reapplyThemeOnRouteChange();
+    })();
 
     // Apply saved settings
     function applySavedSettings() {
