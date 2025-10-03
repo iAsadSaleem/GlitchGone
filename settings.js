@@ -2695,7 +2695,7 @@
 
         // 2️⃣ Parse lockedMenus + hiddenMenus JSON from theme data
         //let lockedMenus = {};
-        //let hiddenMenus = {};
+        let hiddenMenus = {};
         //if (savedTheme.themeData && savedTheme.themeData["--lockedMenus"]) {
         //    try {
         //        lockedMenus = JSON.parse(savedTheme.themeData["--lockedMenus"]);
@@ -2703,13 +2703,13 @@
         //        console.warn("⚠️ Failed to parse lockedMenus:", e);
         //    }
         //}
-        //if (savedTheme.themeData && savedTheme.themeData["--hiddenMenus"]) {
-        //    try {
-        //        hiddenMenus = JSON.parse(savedTheme.themeData["--hiddenMenus"]);
-        //    } catch (e) {
-        //        console.warn("⚠️ Failed to parse hiddenMenus:", e);
-        //    }
-        //}
+        if (savedTheme.themeData && savedTheme.themeData["--hiddenMenus"]) {
+            try {
+                hiddenMenus = JSON.parse(savedTheme.themeData["--hiddenMenus"]);
+            } catch (e) {
+                console.warn("⚠️ Failed to parse hiddenMenus:", e);
+            }
+        }
 
         // 3️⃣ Select all sidebar links (main + agency)
         const allMenus = document.querySelectorAll(".hl_nav-header a, nav.flex-1.w-full a");
