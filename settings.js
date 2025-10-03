@@ -2888,7 +2888,6 @@
     // ---------------- Build Menu Customizer UI ----------------
     function applyMenuCustomizations() {
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        console.log("⚠️ [applyMenuCustomizations] Triggered");
 
         const themeData = savedTheme.themeData || {};
         const menuCustomizations = themeData["--menuCustomizations"]
@@ -2913,7 +2912,6 @@
             // Update Title
             const titleSpan = menuEl.querySelector(".nav-title");
             if (titleSpan) titleSpan.textContent = menuData.title || menuEl.dataset.defaultLabel || "";
-            console.log("🔎 Replacing icon for:", menuId, "with:", menuData.icon);
             // ---------------- Replace Icon for THIS menu only ----------------
             if (menuData.icon) {
                 // Remove only existing icon inside this menu
@@ -2972,7 +2970,6 @@
                         iconEl.style.fontWeight = "900";
                     }
                 }
-            console.log("📌 Final icon element:", iconEl.outerHTML);
 
                 // Add new icon for this menu
                 menuEl.prepend(iconEl);
@@ -3387,7 +3384,6 @@
         // Append wrapper to section
         section.appendChild(wrapper);
     }
-
     // ---------------- Apply on Page Load ----------------
     //window.addEventListener("load", () => {
     //    waitForSidebarMenus(() => {
@@ -3407,17 +3403,25 @@
 
     // --- 2️⃣ Detect URL changes in an SPA ---
     (function () {
-        let lastUrl = location.href;
+        const pushState = history.pushState;
+        const replaceState = history.replaceState;
 
-        // Check every 500ms if URL changed
-        setInterval(() => {
-            if (location.href !== lastUrl) {
-                lastUrl = location.href;
-                reapplyThemeOnRouteChange();
-            }
-        }, 500);
+        function onRouteChange() {
+            reapplyThemeOnRouteChange();
+        }
 
-        // Also run it initially (first load)
+        history.pushState = function () {
+            pushState.apply(this, arguments);
+            onRouteChange();
+        };
+        history.replaceState = function () {
+            replaceState.apply(this, arguments);
+            onRouteChange();
+        };
+
+        window.addEventListener("popstate", onRouteChange);
+
+        // Run on first load
         reapplyThemeOnRouteChange();
     })();
 
