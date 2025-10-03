@@ -3442,6 +3442,38 @@
     //        applyMenuCustomizations();
     //    });
     //});
+    function bindThemeBuilderEvents() {
+        const icon = document.getElementById("hl_header--themebuilder-icon");
+        const drawer = document.getElementById("themeBuilderDrawer");
+
+        if (!icon || !drawer) {
+            console.warn("⚠️ Cannot bind events — icon or drawer not found.");
+            return;
+        }
+
+        // Remove any existing click handlers first
+        icon.replaceWith(icon.cloneNode(true));
+        const newIcon = document.getElementById("hl_header--themebuilder-icon");
+
+        // ✅ Attach click handler
+        newIcon.addEventListener("click", () => {
+            const drawer = document.getElementById("themeBuilderDrawer");
+            drawer.classList.toggle("open");
+        });
+
+        // ✅ Attach close button event again
+        const closeBtn = drawer.querySelector(".tb-drawer-close");
+        if (closeBtn) {
+            closeBtn.onclick = (e) => {
+                e.stopPropagation();
+                drawer.classList.remove("open");
+                drawer.style.left = "";
+                drawer.style.top = "";
+            };
+        }
+
+        console.log("✅ ThemeBuilder icon click event re-bound.");
+    }
 
     // --- 1️⃣ Create a helper to run your theme logic ---
     function reapplyThemeOnRouteChange() {
@@ -3453,33 +3485,16 @@
             const icon = document.getElementById("hl_header--themebuilder-icon");
             const drawer = document.getElementById("themeBuilderDrawer");
 
-            // 🛠️ If icon or drawer is missing, re-init completely
             if (!icon || !drawer) {
                 console.log("🔁 Reinitializing ThemeBuilder (icon or drawer missing)...");
                 initThemeBuilder(0);
+                setTimeout(bindThemeBuilderEvents, 500); // 🧠 Delay slightly so DOM finishes rendering
             } else {
-                console.log("✅ Icon & drawer exist — re-binding click listener just in case...");
-
-                // 🩹 Re-bind the click listener (SPA navigation often removes event listeners)
-                icon.onclick = () => {
-                    const drawer = document.getElementById("themeBuilderDrawer");
-                    drawer.classList.toggle("open");
-                };
-
-                // 🩹 Also re-bind the close button event (sometimes that gets lost too)
-                const closeBtn = drawer.querySelector(".tb-drawer-close");
-                if (closeBtn) {
-                    closeBtn.onclick = (e) => {
-                        e.stopPropagation();
-                        drawer.classList.remove("open");
-                        drawer.style.left = "";
-                        drawer.style.top = "";
-                    };
-                }
+                console.log("✅ Icon & drawer exist — ensuring click events are bound...");
+                bindThemeBuilderEvents();
             }
         });
     }
-
     // --- 2️⃣ Detect URL changes in an SPA ---
     (function () {
         const pushState = history.pushState;
