@@ -2743,6 +2743,57 @@
         });
 
     }
+    function applymenuReorder() {
+        console.log("🔄 [menuReorder] Running...");
+
+        // 1️⃣ Load saved theme data from localStorage
+        let savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        let themeData = savedTheme.themeData || {};
+
+        // 2️⃣ Helper: Apply submenu order (CSS variable method)
+        function applySubMenuOrder(order) {
+            if (!Array.isArray(order)) {
+                console.warn("⚠️ No valid submenu order provided to applySubMenuOrder()");
+                return;
+            }
+
+            const root = document.documentElement;
+            order.forEach((menuId, index) => {
+                const varName = `--${menuId.replace("sb_", "")}-order`;
+                root.style.setProperty(varName, index);
+            });
+
+            console.log("✅ [menuReorder] Submenu order applied:", order);
+        }
+
+        // 3️⃣ Handle SubMenu order
+        if (themeData["--subMenuOrder"]) {
+            try {
+                let subOrder = JSON.parse(themeData["--subMenuOrder"]);
+                subOrder = subOrder.filter(menuId => menuId.trim() !== "sb_agency-accounts");
+                applySubMenuOrder(subOrder);
+            } catch (e) {
+                console.error("❌ Failed to parse --subMenuOrder:", e);
+            }
+        } else {
+            console.warn("ℹ️ No --subMenuOrder found in theme data.");
+        }
+
+        // 4️⃣ Handle Agency Menu order
+        if (themeData["--agencyMenuOrder"]) {
+            try {
+                let agencyOrder = JSON.parse(themeData["--agencyMenuOrder"]);
+                agencyOrder = agencyOrder.filter(menuId => menuId.trim() !== "sb_agency-accounts");
+                applySubMenuOrder(agencyOrder);
+            } catch (e) {
+                console.error("❌ Failed to parse --agencyMenuOrder:", e);
+            }
+        } else {
+            console.warn("ℹ️ No --agencyMenuOrder found in theme data.");
+        }
+
+        console.log("✅ [menuReorder] Completed.");
+    }
 
     document.addEventListener("DOMContentLoaded", applyLockedMenus);
 
@@ -3398,6 +3449,7 @@
             applyLockedMenus(); // optional
             applyMenuCustomizations();
             initThemeBuilder(0);
+            applymenuReorder();
         });
     }
 
