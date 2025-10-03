@@ -2934,7 +2934,7 @@
         return map[menuId] || null;
     }
     // ---------------- Build Menu Customizer UI ----------------
-
+    //old code working for Icon
     //function applyMenuCustomizations() {
     //    const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
 
@@ -3296,7 +3296,7 @@
                     }
                 };
 
-
+                //Old Code
                 //const saveChange = () => {
                 //    const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                 //    saved.themeData = saved.themeData || {};
