@@ -2694,15 +2694,15 @@
         }
 
         // 2️⃣ Parse lockedMenus + hiddenMenus JSON from theme data
-        //let lockedMenus = {};
+        let lockedMenus = {};
         let hiddenMenus = {};
-        //if (savedTheme.themeData && savedTheme.themeData["--lockedMenus"]) {
-        //    try {
-        //        lockedMenus = JSON.parse(savedTheme.themeData["--lockedMenus"]);
-        //    } catch (e) {
-        //        console.warn("⚠️ Failed to parse lockedMenus:", e);
-        //    }
-        //}
+        if (savedTheme.themeData && savedTheme.themeData["--lockedMenus"]) {
+            try {
+                lockedMenus = JSON.parse(savedTheme.themeData["--lockedMenus"]);
+            } catch (e) {
+                console.warn("⚠️ Failed to parse lockedMenus:", e);
+            }
+        }
         if (savedTheme.themeData && savedTheme.themeData["--hiddenMenus"]) {
             try {
                 hiddenMenus = JSON.parse(savedTheme.themeData["--hiddenMenus"]);
@@ -2729,29 +2729,29 @@
                 menu.classList.remove("d-none");
             }
 
-            // 🔐 If this menu is locked → show lock icon + disable
-            if (lockedMenus[menuId]) {
-                const lockIcon = document.createElement("i");
-                lockIcon.className = "tb-lock-icon fas fa-lock ml-2 text-red-500";
+            //// 🔐 If this menu is locked → show lock icon + disable
+            //if (lockedMenus[menuId]) {
+            //    const lockIcon = document.createElement("i");
+            //    lockIcon.className = "tb-lock-icon fas fa-lock ml-2 text-red-500";
 
-                lockIcon.style.setProperty("display", "inline-block", "important");
-                lockIcon.style.setProperty("visibility", "visible", "important");
-                lockIcon.style.setProperty("opacity", "1", "important");
-                lockIcon.style.setProperty("position", "relative", "important");
-                lockIcon.style.setProperty("z-index", "9999", "important");
+            //    lockIcon.style.setProperty("display", "inline-block", "important");
+            //    lockIcon.style.setProperty("visibility", "visible", "important");
+            //    lockIcon.style.setProperty("opacity", "1", "important");
+            //    lockIcon.style.setProperty("position", "relative", "important");
+            //    lockIcon.style.setProperty("z-index", "9999", "important");
 
-                menu.appendChild(lockIcon);
+            //    menu.appendChild(lockIcon);
 
-                menu.style.opacity = "0.5";
-                menu.style.cursor = "not-allowed";
+            //    menu.style.opacity = "0.5";
+            //    menu.style.cursor = "not-allowed";
 
-                // 🔥 Add this:
-                menu.addEventListener("click", blockMenuClick, { once: true });
-            } else {
-                menu.style.opacity = "";
-                menu.style.cursor = "";
-                menu.removeEventListener("click", blockMenuClick); // Cleanup old listeners if unlocked
-            }
+            //    // 🔥 Add this:
+            //    menu.addEventListener("click", blockMenuClick, { once: true });
+            //} else {
+            //    menu.style.opacity = "";
+            //    menu.style.cursor = "";
+            //    menu.removeEventListener("click", blockMenuClick); // Cleanup old listeners if unlocked
+            //}
         });
 
     }
