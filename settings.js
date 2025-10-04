@@ -2935,7 +2935,21 @@
             "sb_agency-ideas": "--agency-ideas-icon",
             "sb_mobile-app-customiser": "--agency-mobileapp-icon",
             "sb_agency-app-marketplace": "--agency-app-marketplace-icon",
-            "sb_agency-settings": "--agency-settings-icon"
+            "sb_agency-settings": "--agency-settings-icon",
+            "sb_launchpad":"--sidebar-menu-icon-lunchpad",
+            "sb_dashboard":"--sidebar-menu-icon-dashboard-active",
+            "sb_conversations":"--sidebar-menu-icon-conversations",
+            "sb_opportunities":"--sidebar-menu-icon-opportunities",
+            "sb_calendars":"--sidebar-menu-icon-calendars",
+            "sb_contacts":"--sidebar-menu-icon-contact",
+            "sb_payments":"--sidebar-menu-icon-payments",
+            "sb_reporting":"--sidebar-menu-icon-reporting",
+            "sb_email-marketing":"--sidebar-menu-icon-marketing",
+            "sb_automation":"--sidebar-menu-icon-automation",
+            "sb_sites":"--sidebar-menu-icon-site",
+            "sb_app-media":"--sidebar-menu-icon-media-storage",
+            "sb_memberships":"--sidebar-menu-icon-memberships-hover",
+            "sb_reputation":"--sidebar-menu-icon-reputation",
         };
 
         return map[menuId] || null;
