@@ -2706,8 +2706,8 @@
             if (!menuId) return; // skip if no ID
 
             // 🔄 Always remove previous lock icon first (avoid duplicates)
-            //const existingLock = menu.querySelector(".tb-lock-icon");
-            //if (existingLock) existingLock.remove();
+            const existingLock = menu.querySelector(".tb-lock-icon");
+            if (existingLock) existingLock.remove();
 
             // ✅ If this menu is hidden → add `d-none`
             if (hiddenMenus[menuId]?.hidden) {
