@@ -2901,6 +2901,8 @@
     //    });
     //}
 
+    // ---------------- Build Menu Customizer UI ----------------
+    //old code working for Icon
     function updateIconVariable(menuId, unicodeValue) {
         const cssVarName = getCssVarName(menuId);
         if (!cssVarName) {
@@ -2937,120 +2939,6 @@
 
         return map[menuId] || null;
     }
-    // ---------------- Build Menu Customizer UI ----------------
-    //old code working for Icon
-
-    function updateIconsFromCustomizations() {
-        // 1️⃣ Read saved theme data from localStorage
-        console.log("✅ updateIconsFromCustomizations() called");
-
-        const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        console.log("savedTheme:", savedTheme);
-        console.log(savedTheme?.themeData?.["--menuCustomizations"]);
-        const themeData = savedTheme.themeData || {};
-        const menuCustomizations = themeData["--menuCustomizations"]
-            ? JSON.parse(themeData["--menuCustomizations"])
-            : {};
-
-        // 2️⃣ Loop through each menu customization
-        Object.keys(menuCustomizations).forEach(menuId => {
-            const { icon } = menuCustomizations[menuId] || {};
-            if (!icon || icon.trim() === "") return; // Skip if no icon defined
-
-            const menuEl = document.getElementById(menuId);
-            if (!menuEl) return; // Skip if menu element doesn't exist
-
-            // 3️⃣ Remove any existing icon
-            const oldIconImg = menuEl.querySelector("img");
-            const oldIconI = menuEl.querySelector("i");
-            if (oldIconImg) oldIconImg.remove();
-            if (oldIconI) oldIconI.remove();
-
-            let newIconEl;
-
-            // 4️⃣ Create a new icon element based on the stored value
-            if (/^https?:\/\//.test(icon)) {
-                // Icon is an image URL
-                newIconEl = document.createElement("img");
-                newIconEl.src = icon;
-                newIconEl.alt = "icon";
-                newIconEl.className = "md:mr-0 h-5 w-5 mr-2 lg:mr-2 xl:mr-2";
-            } else if (/^f[0-9a-fA-F]+$/.test(icon)) {
-                // Icon is a Font Awesome Unicode like "f015"
-                newIconEl = document.createElement("i");
-                newIconEl.className = "fa-solid";
-                newIconEl.innerHTML = `&#x${icon};`;
-                newIconEl.style.marginRight = "0.5rem";
-                newIconEl.style.fontSize = "16px";
-                newIconEl.style.fontFamily = "Font Awesome 6 Free";
-                newIconEl.style.fontWeight = "900";
-                newIconEl.style.fontStyle = "normal";
-                newIconEl.style.fontVariant = "normal";
-                newIconEl.style.textRendering = "auto";
-                newIconEl.style.lineHeight = "1";
-            } else {
-                // Icon is a class name (like fa-user or fa-solid fa-user)
-                let finalClass = icon.trim();
-
-                if (finalClass.startsWith("fa-") && !finalClass.includes("fa-solid") && !finalClass.includes("fa-regular") && !finalClass.includes("fa-brands")) {
-                    finalClass = `fa-solid ${finalClass}`;
-                } else if (!finalClass.startsWith("fa-")) {
-                    finalClass = `fa-solid fa-${finalClass}`;
-                }
-
-                newIconEl = document.createElement("i");
-                newIconEl.className = finalClass;
-                newIconEl.style.marginRight = "0.5rem";
-                newIconEl.style.fontSize = "16px";
-                newIconEl.style.fontFamily = "Font Awesome 6 Free";
-                newIconEl.style.fontWeight = "900";
-            }
-
-            // 5️⃣ Add the new icon to the menu
-            menuEl.prepend(newIconEl);
-        });
-    }
-    function applyMenuIconCSS() {
-        const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        const customizations = savedTheme?.themeData?.["--menuCustomizations"];
-        if (!customizations) return;
-
-        let menuData;
-        try {
-            menuData = typeof customizations === "string" ? JSON.parse(customizations) : customizations;
-        } catch (e) {
-            console.warn("⚠️ Failed to parse menu customizations:", e);
-            return;
-        }
-
-        let cssRules = "";
-        Object.entries(menuData).forEach(([menuId, { icon }]) => {
-            if (!icon) return;
-
-            cssRules += `
-      #${menuId} i::before {
-        font-family: "Font Awesome 5 Free" !important;
-        font-weight: 900 !important;
-        content: "\\${icon}" !important;
-        margin-right: 0.5rem !important;
-        font-size: 16px !important;
-      }
-    `;
-        });
-
-        let styleTag = document.getElementById("custom-menu-icons-style");
-        if (!styleTag) {
-            styleTag = document.createElement("style");
-            styleTag.id = "custom-menu-icons-style";
-            document.head.appendChild(styleTag);
-        }
-        styleTag.innerHTML = cssRules;
-
-        console.log("✅ Icon CSS applied!");
-    }
-
-    applyMenuIconCSS();
-
     function applyMenuCustomizations() {
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
 
