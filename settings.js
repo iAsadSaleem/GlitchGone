@@ -3010,33 +3010,50 @@
             menuEl.prepend(newIconEl);
         });
     }
-    function keepUpdatingMenuIcon(menuId, newClass) {
-        function applyIcon() {
-            const icon = document.querySelector(`#${menuId} i`);
-            if (icon && !icon.classList.contains(newClass.split(" ")[1])) {
-                icon.className = newClass;
-                icon.style.marginRight = "0.5rem";
-                icon.style.fontSize = "16px";
-                console.log(`✅ Icon applied to #${menuId}`);
-            }
+    function updateIconsFromCustomizations() {
+        const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        const customizations = savedTheme?.themeData?.["--menuCustomizations"];
+        if (!customizations) return;
+
+        let menuData;
+        try {
+            menuData = typeof customizations === "string" ? JSON.parse(customizations) : customizations;
+        } catch (e) {
+            console.warn("⚠️ Failed to parse menu customizations:", e);
+            return;
         }
 
-        // Initial attempt
-        applyIcon();
+        function applyIcons() {
+            Object.entries(menuData).forEach(([menuId, { icon }]) => {
+                if (!icon) return;
+                const iconEl = document.querySelector(`#${menuId} i`);
+                if (iconEl) {
+                    iconEl.className = "fa-solid";
+                    iconEl.style.marginRight = "0.5rem";
+                    iconEl.style.fontSize = "16px";
+                    iconEl.style.fontWeight = "900";
+                    iconEl.style.fontFamily = "'Font Awesome 5 Free'";
+                    iconEl.innerHTML = `&#x${icon};`;
+                    console.log(`✅ Icon applied to #${menuId}`);
+                }
+            });
+        }
 
-        // Watch for DOM changes and re-apply automatically
-        const target = document.getElementById(menuId)?.parentNode;
-        if (!target) return console.warn("⚠️ Sidebar not found for MutationObserver");
+        // 🔄 Apply once immediately
+        applyIcons();
 
-        const observer = new MutationObserver(() => {
-            applyIcon();
-        });
-
-        observer.observe(target, { childList: true, subtree: true });
+        // 👁️ Watch the entire sidebar container for re-renders
+        const sidebar = document.querySelector('.hl_nav-header nav');
+        if (sidebar) {
+            const observer = new MutationObserver(() => {
+                applyIcons();
+            });
+            observer.observe(sidebar, { childList: true, subtree: true });
+        } else {
+            console.warn("⚠️ Sidebar container not found for observer.");
+        }
     }
 
-    // Usage:
-    keepUpdatingMenuIcon("sb_agency-dashboard", "fas fa-bolt");
     function applyMenuCustomizations() {
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
 
