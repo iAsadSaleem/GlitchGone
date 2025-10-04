@@ -3010,7 +3010,7 @@
             menuEl.prepend(newIconEl);
         });
     }
-    function updateIconsFromCustomizations() {
+    function applyMenuIconCSS() {
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const customizations = savedTheme?.themeData?.["--menuCustomizations"];
         if (!customizations) return;
@@ -3023,36 +3023,33 @@
             return;
         }
 
-        function applyIcons() {
-            Object.entries(menuData).forEach(([menuId, { icon }]) => {
-                if (!icon) return;
-                const iconEl = document.querySelector(`#${menuId} i`);
-                if (iconEl) {
-                    iconEl.className = "fa-solid";
-                    iconEl.style.marginRight = "0.5rem";
-                    iconEl.style.fontSize = "16px";
-                    iconEl.style.fontWeight = "900";
-                    iconEl.style.fontFamily = "'Font Awesome 5 Free'";
-                    iconEl.innerHTML = `&#x${icon};`;
-                    console.log(`✅ Icon applied to #${menuId}`);
-                }
-            });
-        }
+        let cssRules = "";
+        Object.entries(menuData).forEach(([menuId, { icon }]) => {
+            if (!icon) return;
 
-        // 🔄 Apply once immediately
-        applyIcons();
+            cssRules += `
+      #${menuId} i::before {
+        font-family: "Font Awesome 5 Free" !important;
+        font-weight: 900 !important;
+        content: "\\${icon}" !important;
+        margin-right: 0.5rem !important;
+        font-size: 16px !important;
+      }
+    `;
+        });
 
-        // 👁️ Watch the entire sidebar container for re-renders
-        const sidebar = document.querySelector('.hl_nav-header nav');
-        if (sidebar) {
-            const observer = new MutationObserver(() => {
-                applyIcons();
-            });
-            observer.observe(sidebar, { childList: true, subtree: true });
-        } else {
-            console.warn("⚠️ Sidebar container not found for observer.");
+        let styleTag = document.getElementById("custom-menu-icons-style");
+        if (!styleTag) {
+            styleTag = document.createElement("style");
+            styleTag.id = "custom-menu-icons-style";
+            document.head.appendChild(styleTag);
         }
+        styleTag.innerHTML = cssRules;
+
+        console.log("✅ Icon CSS applied!");
     }
+
+    applyMenuIconCSS();
 
     function applyMenuCustomizations() {
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
