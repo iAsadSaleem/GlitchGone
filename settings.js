@@ -2948,7 +2948,6 @@
         const rawCustomizations = themeData["--menuCustomizations"];
 
         if (!rawCustomizations) {
-            console.warn("⚠️ No --menuCustomizations found in themeData");
             return;
         }
 
@@ -2969,9 +2968,7 @@
                     cssVar,
                     `"\\${iconUnicode}"`
                 );
-                console.log(`✅ Updated ${menuId} → ${cssVar} = \\${iconUnicode}`);
             } else {
-                console.log(`ℹ️ Skipped ${menuId} (no CSS var or icon)`);
             }
         });
     }
