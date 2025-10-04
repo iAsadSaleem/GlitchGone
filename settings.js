@@ -2939,6 +2939,74 @@
     }
     // ---------------- Build Menu Customizer UI ----------------
     //old code working for Icon
+
+    function updateIconsFromCustomizations() {
+        // 1️⃣ Read saved theme data from localStorage
+        const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        const themeData = savedTheme.themeData || {};
+        const menuCustomizations = themeData["--menuCustomizations"]
+            ? JSON.parse(themeData["--menuCustomizations"])
+            : {};
+
+        // 2️⃣ Loop through each menu customization
+        Object.keys(menuCustomizations).forEach(menuId => {
+            const { icon } = menuCustomizations[menuId] || {};
+            if (!icon || icon.trim() === "") return; // Skip if no icon defined
+
+            const menuEl = document.getElementById(menuId);
+            if (!menuEl) return; // Skip if menu element doesn't exist
+
+            // 3️⃣ Remove any existing icon
+            const oldIconImg = menuEl.querySelector("img");
+            const oldIconI = menuEl.querySelector("i");
+            if (oldIconImg) oldIconImg.remove();
+            if (oldIconI) oldIconI.remove();
+
+            let newIconEl;
+
+            // 4️⃣ Create a new icon element based on the stored value
+            if (/^https?:\/\//.test(icon)) {
+                // Icon is an image URL
+                newIconEl = document.createElement("img");
+                newIconEl.src = icon;
+                newIconEl.alt = "icon";
+                newIconEl.className = "md:mr-0 h-5 w-5 mr-2 lg:mr-2 xl:mr-2";
+            } else if (/^f[0-9a-fA-F]+$/.test(icon)) {
+                // Icon is a Font Awesome Unicode like "f015"
+                newIconEl = document.createElement("i");
+                newIconEl.className = "fa-solid";
+                newIconEl.innerHTML = `&#x${icon};`;
+                newIconEl.style.marginRight = "0.5rem";
+                newIconEl.style.fontSize = "16px";
+                newIconEl.style.fontFamily = "Font Awesome 6 Free";
+                newIconEl.style.fontWeight = "900";
+                newIconEl.style.fontStyle = "normal";
+                newIconEl.style.fontVariant = "normal";
+                newIconEl.style.textRendering = "auto";
+                newIconEl.style.lineHeight = "1";
+            } else {
+                // Icon is a class name (like fa-user or fa-solid fa-user)
+                let finalClass = icon.trim();
+
+                if (finalClass.startsWith("fa-") && !finalClass.includes("fa-solid") && !finalClass.includes("fa-regular") && !finalClass.includes("fa-brands")) {
+                    finalClass = `fa-solid ${finalClass}`;
+                } else if (!finalClass.startsWith("fa-")) {
+                    finalClass = `fa-solid fa-${finalClass}`;
+                }
+
+                newIconEl = document.createElement("i");
+                newIconEl.className = finalClass;
+                newIconEl.style.marginRight = "0.5rem";
+                newIconEl.style.fontSize = "16px";
+                newIconEl.style.fontFamily = "Font Awesome 6 Free";
+                newIconEl.style.fontWeight = "900";
+            }
+
+            // 5️⃣ Add the new icon to the menu
+            menuEl.prepend(newIconEl);
+        });
+    }
+
     function applyMenuCustomizations() {
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
 
@@ -3029,92 +3097,6 @@
             }
         });
     }
-    //function applyMenuCustomizations() {
-    //    const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
-    //    const themeData = savedTheme.themeData || {};
-    //    const menuCustomizations = themeData["--menuCustomizations"]
-    //        ? JSON.parse(themeData["--menuCustomizations"])
-    //        : {};
-
-    //    // ✅ Load Font Awesome if missing
-    //    if (!document.querySelector('link[href*="font-awesome"]')) {
-    //        const link = document.createElement("link");
-    //        link.rel = "stylesheet";
-    //        link.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css";
-    //        link.onload = () => applyMenuCustomizations();
-    //        document.head.appendChild(link);
-    //        return;
-    //    }
-
-    //    Object.keys(menuCustomizations).forEach(menuId => {
-    //        const menuData = menuCustomizations[menuId];
-    //        const menuEl = document.getElementById(menuId);
-    //        if (!menuEl) return;
-
-    //        // Update Title
-    //        const titleSpan = menuEl.querySelector(".nav-title");
-    //        if (titleSpan) {
-    //            titleSpan.textContent = menuData.title || menuEl.dataset.defaultLabel || "";
-    //        }
-
-    //        // ✅ Render Icon (even after refresh)
-    //        if (menuData.icon) {
-    //            renderMenuIcon(menuEl, menuData.icon);
-    //        }
-    //    });
-    //}
-
-    ///**
-    // * ✅ Renders icon properly (works with Unicode, classes, or URLs)
-    // */
-    //function renderMenuIcon(menuEl, iconValue) {
-    //    // Remove existing icons
-    //    const existingImg = menuEl.querySelector("img");
-    //    const existingI = menuEl.querySelector("i");
-    //    if (existingImg) existingImg.remove();
-    //    if (existingI) existingI.remove();
-
-    //    let iconEl;
-
-    //    if (/^https?:\/\//.test(iconValue)) {
-    //        // 🌐 If it's an image URL
-    //        iconEl = document.createElement("img");
-    //        iconEl.src = iconValue;
-    //        iconEl.alt = "icon";
-    //        iconEl.className = "md:mr-0 h-5 w-5 mr-2 lg:mr-2 xl:mr-2";
-    //    }
-    //    else if (/^f[0-9a-f]{3,4}$/i.test(iconValue)) {
-    //        // 🔢 Unicode (like f015)
-    //        iconEl = document.createElement("i");
-    //        iconEl.className = "fa-solid";
-    //        iconEl.textContent = String.fromCharCode(parseInt(iconValue, 16));
-    //        iconEl.style.fontFamily = "Font Awesome 6 Free";
-    //        iconEl.style.fontWeight = "900";
-    //        iconEl.style.marginRight = "0.5rem";
-    //        iconEl.style.fontSize = "16px";
-    //    }
-    //    else {
-    //        // 🧠 Handle normal classes like `fa-home` or `fa-solid fa-house`
-    //        let finalClass = iconValue.trim();
-
-    //        if (finalClass.startsWith("fa-") && !finalClass.includes("fa-solid") && !finalClass.includes("fa-regular") && !finalClass.includes("fa-brands")) {
-    //            finalClass = `fa-solid ${finalClass}`;
-    //        } else if (!finalClass.startsWith("fa-")) {
-    //            finalClass = `fa-solid fa-${finalClass}`;
-    //        }
-
-    //        iconEl = document.createElement("i");
-    //        iconEl.className = finalClass;
-    //        iconEl.style.marginRight = "0.5rem";
-    //        iconEl.style.fontSize = "16px";
-    //        iconEl.style.fontFamily = "Font Awesome 6 Free";
-    //        iconEl.style.fontWeight = "900";
-    //    }
-
-    //    // ✅ Finally, prepend it
-    //    menuEl.prepend(iconEl);
-    //}
-
     function buildMenuCustomizationSection(container) {
         if (document.getElementById("tb-menu-customization")) return;
 
@@ -3272,33 +3254,6 @@
                 } else {
                     titleInput.value = menu.label;
                 }
-                //const saveChange = () => {
-                //    const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-                //    saved.themeData = saved.themeData || {};
-
-                //    const customizations = saved.themeData["--menuCustomizations"]
-                //        ? JSON.parse(saved.themeData["--menuCustomizations"])
-                //        : {};
-
-                //    let iconValue = iconInput.value.trim();
-
-                //    customizations[menu.id] = {
-                //        title: titleInput.value,
-                //        icon: iconValue
-                //    };
-
-                //    saved.themeData["--menuCustomizations"] = JSON.stringify(customizations);
-                //    localStorage.setItem("userTheme", JSON.stringify(saved));
-
-                //    // ✅ Instantly update UI without waiting
-                //    const menuEl = document.getElementById(menu.id);
-                //    if (menuEl) {
-                //        renderMenuIcon(menuEl, iconValue);
-                //        const titleSpan = menuEl.querySelector(".nav-title");
-                //        if (titleSpan) titleSpan.textContent = titleInput.value;
-                //    }
-                //};
-
                 //Old Code
                 const saveChange = () => {
                     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
@@ -3565,6 +3520,8 @@
             applyMenuCustomizations();
             initThemeBuilder(0);
             applymenuReorder();
+            updateIconsFromCustomizations();
+
         });
     }
 
