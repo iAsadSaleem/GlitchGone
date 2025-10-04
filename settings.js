@@ -2794,6 +2794,7 @@
 
     // Also run again after slight delay (in case agency menu loads later)
 
+   
     setTimeout(applyLockedMenus, 1500);
 
     // Helper for blocking click
@@ -2939,6 +2940,44 @@
 
         return map[menuId] || null;
     }
+
+    // 🔥 Core function: apply all saved icon customizations
+    function applyMenuIconCustomizations() {
+        const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        const themeData = savedTheme?.themeData || {};
+        const rawCustomizations = themeData["--menuCustomizations"];
+
+        if (!rawCustomizations) {
+            console.warn("⚠️ No --menuCustomizations found in themeData");
+            return;
+        }
+
+        // Parse string if needed
+        const customizations =
+            typeof rawCustomizations === "string"
+                ? JSON.parse(rawCustomizations)
+                : rawCustomizations;
+
+        // 🔁 Loop through each menu item and apply icon
+        Object.entries(customizations).forEach(([menuId, data]) => {
+            const cssVar = getCssVarName(menuId);
+            const iconUnicode = data?.icon;
+
+            if (cssVar && iconUnicode) {
+                // Make sure it’s formatted correctly for CSS content
+                document.documentElement.style.setProperty(
+                    cssVar,
+                    `"\\${iconUnicode}"`
+                );
+                console.log(`✅ Updated ${menuId} → ${cssVar} = \\${iconUnicode}`);
+            } else {
+                console.log(`ℹ️ Skipped ${menuId} (no CSS var or icon)`);
+            }
+        });
+    }
+
+    // 🚀 Run it
+   
     function applyMenuCustomizations() {
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
 
@@ -3452,7 +3491,7 @@
             applyMenuCustomizations();
             initThemeBuilder(0);
             applymenuReorder();
-            updateIconsFromCustomizations();
+            applyMenuIconCustomizations();
 
         });
     }
