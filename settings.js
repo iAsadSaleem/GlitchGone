@@ -2942,7 +2942,11 @@
 
     function updateIconsFromCustomizations() {
         // 1️⃣ Read saved theme data from localStorage
+        console.log("✅ updateIconsFromCustomizations() called");
+
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        console.log("savedTheme:", savedTheme);
+        console.log(savedTheme?.themeData?.["--menuCustomizations"]);
         const themeData = savedTheme.themeData || {};
         const menuCustomizations = themeData["--menuCustomizations"]
             ? JSON.parse(themeData["--menuCustomizations"])
@@ -3006,7 +3010,33 @@
             menuEl.prepend(newIconEl);
         });
     }
+    function keepUpdatingMenuIcon(menuId, newClass) {
+        function applyIcon() {
+            const icon = document.querySelector(`#${menuId} i`);
+            if (icon && !icon.classList.contains(newClass.split(" ")[1])) {
+                icon.className = newClass;
+                icon.style.marginRight = "0.5rem";
+                icon.style.fontSize = "16px";
+                console.log(`✅ Icon applied to #${menuId}`);
+            }
+        }
 
+        // Initial attempt
+        applyIcon();
+
+        // Watch for DOM changes and re-apply automatically
+        const target = document.getElementById(menuId)?.parentNode;
+        if (!target) return console.warn("⚠️ Sidebar not found for MutationObserver");
+
+        const observer = new MutationObserver(() => {
+            applyIcon();
+        });
+
+        observer.observe(target, { childList: true, subtree: true });
+    }
+
+    // Usage:
+    keepUpdatingMenuIcon("sb_agency-dashboard", "fas fa-bolt");
     function applyMenuCustomizations() {
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
 
