@@ -2706,8 +2706,8 @@
             if (!menuId) return; // skip if no ID
 
             // 🔄 Always remove previous lock icon first (avoid duplicates)
-            const existingLock = menu.querySelector(".tb-lock-icon");
-            if (existingLock) existingLock.remove();
+            //const existingLock = menu.querySelector(".tb-lock-icon");
+            //if (existingLock) existingLock.remove();
 
             // ✅ If this menu is hidden → add `d-none`
             if (hiddenMenus[menuId]?.hidden) {
@@ -2855,55 +2855,6 @@
         return false; // 🔥 extra layer of safety
     }
 
-    //function applyMenuCustomizations() {
-    //    const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
-    //    const themeData = savedTheme.themeData || {};
-    //    const menuCustomizations = themeData["--menuCustomizations"]
-    //        ? JSON.parse(themeData["--menuCustomizations"])
-    //        : {};
-
-    //    Object.keys(menuCustomizations).forEach(menuId => {
-    //        const custom = menuCustomizations[menuId];
-    //        const menuEl = document.getElementById(menuId);
-    //        if (!menuEl) return;
-
-    //        // ---------------- Update Title ----------------
-    //        const navTitle = menuEl.querySelector(".nav-title");
-    //        if (custom.title && navTitle) {
-    //            navTitle.textContent = custom.title;
-    //        }
-
-    //        // ---------------- Update Icon ----------------
-    //        if (custom.icon && custom.icon.trim() !== "") {
-    //            // Remove any existing icon
-    //            menuEl.querySelectorAll("i, img").forEach(el => el.remove());
-    //            menuEl.classList.remove("sidebar-no-icon");
-
-    //            if (/^fa-|^fas-|^far-|^fal-|^fab-/.test(custom.icon.trim())) {
-    //                const iconEl = document.createElement("i");
-    //                iconEl.className = custom.icon.trim();
-    //                iconEl.style.marginRight = "8px";
-
-    //                // Insert before text if possible
-    //                const navTitle = menuEl.querySelector(".nav-title");
-    //                if (navTitle) {
-    //                    menuEl.insertBefore(iconEl, navTitle);
-    //                } else {
-    //                    menuEl.prepend(iconEl);
-    //                }
-    //            } else if (custom.icon.startsWith("url(")) {
-    //                const iconVar = `--sidebar-menu-icon-${menuId.replace("sb_", "")}`;
-    //                ["", "-hover", "-active"].forEach(suffix => {
-    //                    document.documentElement.style.setProperty(iconVar + suffix, custom.icon.trim());
-    //                });
-    //                menuEl.classList.add("sidebar-no-icon");
-    //            }
-    //        }
-    //    });
-    //}
-
-    // ---------------- Build Menu Customizer UI ----------------
-    //old code working for Icon
     function updateIconVariable(menuId, unicodeValue) {
         const cssVarName = getCssVarName(menuId);
         if (!cssVarName) {
@@ -3498,7 +3449,7 @@
     // --- 1️⃣ Create a helper to run your theme logic ---
     function reapplyThemeOnRouteChange() {
         waitForSidebarMenus(() => {
-            applyLockedMenus(); // optional
+            //applyLockedMenus(); // optional
             applyMenuCustomizations();
             initThemeBuilder(0);
             applymenuReorder();
