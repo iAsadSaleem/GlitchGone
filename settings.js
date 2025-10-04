@@ -3449,7 +3449,7 @@
     // --- 1️⃣ Create a helper to run your theme logic ---
     function reapplyThemeOnRouteChange() {
         waitForSidebarMenus(() => {
-            //applyLockedMenus(); // optional
+            applyLockedMenus(); // optional
             applyMenuCustomizations();
             initThemeBuilder(0);
             applymenuReorder();
