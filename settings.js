@@ -3766,8 +3766,6 @@
                                 bodyFont: savedTheme.themeData["--body-font"] || "Arial, sans-serif",
                                 updatedAt: new Date().toISOString(),
                             };
-
-                            console.log('here is payload', dbData);
                             // 8️⃣ Send to API (non-blocking, errors logged)
                             fetch("https://theme-builder-delta.vercel.app/api/theme", {
                                 method: "POST",
@@ -3782,7 +3780,7 @@
                                 })
                                 .catch(err => console.error("[ThemeBuilder] Network error:", err));
                             // 9️⃣ Reload page to apply changes
-                            //location.reload();
+                            location.reload();
 
                         } catch (err) {
                             console.error("[ThemeBuilder] Error applying theme changes:", err);
