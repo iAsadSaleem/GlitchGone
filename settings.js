@@ -3759,7 +3759,7 @@
 
                             const dbData = {
                                 rlNo,
-                                email,
+                                email: email ? [email] : [], // ✅ convert single email into an array
                                 agencyId,
                                 themeData: savedTheme.themeData,
                                 selectedTheme: localStorage.getItem("selectedTheme") || "Custom",
