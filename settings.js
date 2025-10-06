@@ -3755,15 +3755,19 @@
                             // Prepare DB payload
                             const rlNo = localStorage.getItem("rlno") ? atob(localStorage.getItem("rlno")) : null;
                             const email = localStorage.getItem("g-em") ? atob(localStorage.getItem("g-em")) : null;
+                            const agencyId = localStorage.getItem("agn") ? atob(localStorage.getItem("agn")) : null;
 
                             const dbData = {
                                 rlNo,
                                 email,
+                                agencyId,
                                 themeData: savedTheme.themeData,
                                 selectedTheme: localStorage.getItem("selectedTheme") || "Custom",
                                 bodyFont: savedTheme.themeData["--body-font"] || "Arial, sans-serif",
                                 updatedAt: new Date().toISOString(),
                             };
+
+                            console.log('here is payload', dbData);
                             // 8️⃣ Send to API (non-blocking, errors logged)
                             fetch("https://theme-builder-delta.vercel.app/api/theme", {
                                 method: "POST",
