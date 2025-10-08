@@ -2521,6 +2521,7 @@
               4. You can use these toggles together or individually to customize the sidebar exactly the way you need — either by restricting access, hiding unused sections, or both.<br><br>
               ✨ <em>Tip:</em> Use <strong>Lock</strong> to control access and <strong>Hide</strong> to simplify the user interface.
             `;
+        wrapper.appendChild(lockHideInfo);
 
         const agencyTitle = document.createElement("h4");
         agencyTitle.className = "tb-header-controls";
@@ -2529,7 +2530,6 @@
         wrapper.appendChild(agencyTitle);
 
         agencyMenus.forEach(menu => createToggleRow(menu, lockedMenus, hiddenMenus, wrapper));
-        wrapper.appendChild(lockHideInfo);
 
         const mainTitle = document.createElement("h4");
         mainTitle.className = "tb-header-controls";
