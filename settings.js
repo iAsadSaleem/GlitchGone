@@ -2434,6 +2434,40 @@
         const lockedMenus = themeData["--lockedMenus"] ? JSON.parse(themeData["--lockedMenus"]) : {};
         const hiddenMenus = themeData["--hiddenMenus"] ? JSON.parse(themeData["--hiddenMenus"]) : {};
 
+        const agencyMenus = [
+            { id: "sb_agency-dashboard", label: "Agency Dashboard" },
+            { id: "sb_location-prospect", label: "Prospecting" },
+            { id: "sb_agency-accounts", label: "Agency Accounts" },
+            { id: "sb_agency-account-reselling", label: "Account Reselling" },
+            { id: "sb_agency-marketplace", label: "Agency Marketplace" },
+            { id: "sb_agency-affiliate-portal", label: "Affiliate Portal" },
+            { id: "sb_agency-template-library", label: "Template Library" },
+            { id: "sb_agency-partners", label: "Partners" },
+            { id: "sb_agency-university", label: "University" },
+            { id: "sb_saas-education", label: "SaaS Education" },
+            { id: "sb_ghl-swag", label: "GHL Swag" },
+            { id: "sb_agency-ideas", label: "Agency Ideas" },
+            { id: "sb_mobile-app-customiser", label: "Mobile App Customiser" },
+            //Settings menu
+            { id: "sb_agency-profile-settings", label: "My Profile" },
+            { id: "sb_agency-company-settings", label: "Company" },
+            { id: "sb_agency-team-settings", label: "Team" },
+            { id: "sb_agency-twilio-settings", label: "Phone Integration" },
+            { id: "sb_agency-email-settings", label: "Email Services" },
+            { id: "sb_system-emails-setting", label: "System Emails" },
+            { id: "sb_workflow-premium-actions-setting", label: "Workflow - Premium Features" },
+            { id: "sb_conversation-ai-setting", label: "AI Employee" },
+            { id: "sb_workflow-ai-setting", label: "Workflow - External AI Models" },
+            { id: "sb_domain-purchase-setting", label: "Domain Purchase" },
+            { id: "sb_undefined", label: "Private Integrations" },
+            { id: "sb_agency-affiliate-settings", label: "Affiliates" },
+            { id: "sb_agency-custom-link-settings", label: "Custom Menu Links" },
+            { id: "sb_agency-stripe-settings", label: "Stripe" },
+            { id: "sb_agency-api-keys-settings", label: "API Keys" },
+            { id: "sb_agency-compliance-settings", label: "Compliance" },
+            { id: "sb_agency-labs-settings", label: "Labs" },
+            { id: "sb_agency-audit-logs-settings", label: "Audit Logs" }
+        ];
         // 📁 MAIN SIDEBAR MENUS
         const sidebarMenus = [
             { id: "sb_launchpad", label: "Launchpad" },
@@ -2487,6 +2521,14 @@
               4. You can use these toggles together or individually to customize the sidebar exactly the way you need — either by restricting access, hiding unused sections, or both.<br><br>
               ✨ <em>Tip:</em> Use <strong>Lock</strong> to control access and <strong>Hide</strong> to simplify the user interface.
             `;
+
+        const agencyTitle = document.createElement("h4");
+        agencyTitle.className = "tb-header-controls";
+        agencyTitle.textContent = "Agency Level Lock & Hide";
+        agencyTitle.style.marginTop = "20px";
+        wrapper.appendChild(agencyTitle);
+
+        agencyMenus.forEach(menu => createToggleRow(menu, lockedMenus, hiddenMenus, wrapper));
         wrapper.appendChild(lockHideInfo);
 
         const mainTitle = document.createElement("h4");
@@ -2497,48 +2539,6 @@
         sidebarMenus.forEach(menu => createToggleRow(menu, lockedMenus, hiddenMenus, wrapper));
 
         // 🏢 AGENCY MENUS
-        const agencyMenus = [
-            { id: "sb_agency-dashboard", label: "Agency Dashboard" },
-            { id: "sb_location-prospect", label: "Prospecting" },
-            { id: "sb_agency-accounts", label: "Agency Accounts" },
-            { id: "sb_agency-account-reselling", label: "Account Reselling" },
-            { id: "sb_agency-marketplace", label: "Agency Marketplace" },
-            { id: "sb_agency-affiliate-portal", label: "Affiliate Portal" },
-            { id: "sb_agency-template-library", label: "Template Library" },
-            { id: "sb_agency-partners", label: "Partners" },
-            { id: "sb_agency-university", label: "University" },
-            { id: "sb_saas-education", label: "SaaS Education" },
-            { id: "sb_ghl-swag", label: "GHL Swag" },
-            { id: "sb_agency-ideas", label: "Agency Ideas" },
-            { id: "sb_mobile-app-customiser", label: "Mobile App Customiser" },
-            //Settings menu
-            { id: "sb_agency-profile-settings", label: "My Profile" },
-            { id: "sb_agency-company-settings", label: "Company" },
-            { id: "sb_agency-team-settings", label: "Team" },
-            { id: "sb_agency-twilio-settings", label: "Phone Integration" },
-            { id: "sb_agency-email-settings", label: "Email Services" },
-            { id: "sb_system-emails-setting", label: "System Emails" },
-            { id: "sb_workflow-premium-actions-setting", label: "Workflow - Premium Features" },
-            { id: "sb_conversation-ai-setting", label: "AI Employee" },
-            { id: "sb_workflow-ai-setting", label: "Workflow - External AI Models" },
-            { id: "sb_domain-purchase-setting", label: "Domain Purchase" },
-            { id: "sb_undefined", label: "Private Integrations" },
-            { id: "sb_agency-affiliate-settings", label: "Affiliates" },
-            { id: "sb_agency-custom-link-settings", label: "Custom Menu Links" },
-            { id: "sb_agency-stripe-settings", label: "Stripe" },
-            { id: "sb_agency-api-keys-settings", label: "API Keys" },
-            { id: "sb_agency-compliance-settings", label: "Compliance" },
-            { id: "sb_agency-labs-settings", label: "Labs" },
-            { id: "sb_agency-audit-logs-settings", label: "Audit Logs" }
-        ];
-
-        const agencyTitle = document.createElement("h4");
-        agencyTitle.className = "tb-header-controls";
-        agencyTitle.textContent = "Agency Level Lock & Hide";
-        agencyTitle.style.marginTop = "20px";
-        wrapper.appendChild(agencyTitle);
-
-        agencyMenus.forEach(menu => createToggleRow(menu, lockedMenus, hiddenMenus, wrapper));
 
         container.appendChild(wrapper);
         applyLockedMenus();
