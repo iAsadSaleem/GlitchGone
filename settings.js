@@ -2317,7 +2317,7 @@
 
         const title = document.createElement("h4");
         title.className = "tb-section-background-title";
-        title.innerText = "Background Color";
+        title.innerText = "Dashboard Background Color";
         wrapper.appendChild(title);
 
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
