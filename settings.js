@@ -1821,7 +1821,7 @@
 
         // === Background Color ===
         profileWrapper.appendChild(
-            makePicker("Background Color", "profile-bg-color", "#344391", (val) => {
+            makePicker("Dashboard Background Color", "profile-bg-color", "#344391", (val) => {
                 setImportantStyle(
                     "profile-bg-color",
                     `${selector} { background-color: ${val} !important; }`
@@ -3644,13 +3644,13 @@
             );
             contentWrapper.appendChild(
                 createSection('<i class="fa-solid fa-database"style="color:white;margin-right:6px;font-size:17px;"></i>Advance Settings', (section) => {
+                    buildThemeColorsSection(section); //Main Colors
                     buildHeaderControlsSection(section);
-                    buildProfileButtonControls(section);   // Profile Button Color Controls
                     buildHelpButtonControls(section);   // Profile Button Color Controls
+                    buildProfileButtonControls(section);   // Profile Button Color Controls
                     addScrollbarSettings(section);   // Profile Button Color Controls
                     addDashboardCardSettings(section);
                     addBackgroundGradientSettings(section);
-                    buildThemeColorsSection(section);
 
                     const instruction = document.createElement("p");
                     instruction.className = "tb-instruction-text";
