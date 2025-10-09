@@ -3561,8 +3561,7 @@
             drawer.id = "themeBuilderDrawer";
             drawer.className = "tb-drawer";
 
-            // ✅ Create loader overlay inside Theme Builder drawer
-            createTBLoader();
+         
             // ===== Title with Close Button =====
             const drawerTitleWrapper = document.createElement('div');
             drawerTitleWrapper.className = "tb-drawer-title-wrapper";
@@ -3823,7 +3822,8 @@
             buttonsWrapper.appendChild(applyBtn);
             drawer.appendChild(buttonsWrapper); // Outside card
             document.body.appendChild(drawer);
-
+            // ✅ Create loader overlay inside Theme Builder drawer
+            createTBLoader();
             // ===== Make Draggable =====
             (function makeDraggable(el, handle) {
                 let isDragging = false, offsetX = 0, offsetY = 0;
