@@ -3785,7 +3785,9 @@
                     showJCConfirm(
                         "Do you want to apply these changes? Press Yes to apply & reload the page. Press No to revert.",
                         async () => {
-                            loaderOverlay.style.display = "flex"; // show again on Yes
+                            // ✅ Show success GIF only
+                            const successOverlay = document.getElementById("tb-success-overlay");
+                            successOverlay.style.display = "flex";
 
                             setTimeout(async () => {
                                 try {
