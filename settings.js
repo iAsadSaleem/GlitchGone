@@ -3844,7 +3844,7 @@
                                         body: JSON.stringify(dbData),
                                     });
 
-                                    setTimeout(() => location.reload(), 900);
+                                    location.reload();
                                 } catch (error) {
                                     console.error(error);
                                     loaderOverlay.style.display = "none";
