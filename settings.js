@@ -84,7 +84,7 @@
 
         const overlay = document.createElement("div");
         overlay.id = "tb-loader-overlay";
-        overlay.style.display = "none";
+        overlay.style.display = "none"; // ✅ hidden by default
         overlay.style.position = "absolute";
         overlay.style.top = "0";
         overlay.style.left = "0";
@@ -92,16 +92,15 @@
         overlay.style.height = "100%";
         overlay.style.background = "rgba(0,0,0,0.6)";
         overlay.style.zIndex = "99999";
-        overlay.style.display = "flex";
         overlay.style.alignItems = "center";
         overlay.style.justifyContent = "center";
         overlay.style.borderRadius = "10px";
 
         const loader = document.createElement("div");
-        loader.className = "loader"; // ✅ Your CSS loader class continues working
+        loader.className = "loader";
         overlay.appendChild(loader);
 
-        drawer.appendChild(overlay); // ✅ Append inside Theme Builder only
+        drawer.appendChild(overlay);
     }
 
     /**************************************
