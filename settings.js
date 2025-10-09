@@ -180,7 +180,7 @@
             setTimeout(() => {
                 successOverlay.style.display = "none";
                 onYes && onYes(); // ✅ Continue original YES function
-            }, 1000); // 1 second delay
+            }, 1100); // 1 second delay
         });
 
         modal.querySelector("#jc-no-btn").addEventListener("click", () => {
