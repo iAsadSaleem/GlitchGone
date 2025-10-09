@@ -173,14 +173,17 @@
         modal.querySelector("#jc-yes-btn").addEventListener("click", () => {
             modal.style.display = "none";
 
-            // ✅ Show Success GIF
+            const yesBtn = modal.querySelector("#jc-yes-btn");
+            yesBtn.disabled = true; // ✅ Prevent double click
+
             const successOverlay = document.getElementById("tb-success-overlay");
             successOverlay.style.display = "flex";
 
             setTimeout(() => {
                 successOverlay.style.display = "none";
-                onYes && onYes(); // ✅ Continue original YES function
-            }, 1100); // 1 second delay
+                yesBtn.disabled = false; // Enable again if needed
+                onYes && onYes();
+            }, 3000);
         });
 
         modal.querySelector("#jc-no-btn").addEventListener("click", () => {
