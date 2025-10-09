@@ -99,7 +99,7 @@
 
         document.body.appendChild(overlay);
     }
-    createLoader();
+    //createLoader();
 
     /**************************************
     * JC Confirm Modal Function
