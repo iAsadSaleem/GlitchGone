@@ -123,7 +123,7 @@
         overlay.style.borderRadius = "10px";
 
         const successGif = document.createElement("img");
-        successGif.src = "https://theme-builder-delta.vercel.app/images/Success.gif";
+        successGif.src = "https://theme-builder-delta.vercel.app/images/check_mark.gif";
         successGif.style.width = "150px";
         successGif.style.height = "150px";
         successGif.style.objectFit = "contain";
