@@ -3734,89 +3734,97 @@
             applyBtn.innerHTML = `<i class="fa-solid fa-floppy-disk" style="margin-right:6px;"></i> Apply Changes`;
 
             applyBtn.addEventListener("click", () => {
-                const loaderOverlay = document.getElementById("loader-overlay");
-                loaderOverlay.style.display = "flex"; // show loader
+                showJCConfirm(
+                    "Do you want to apply these changes? Press Yes to apply & reload the page. Press No to revert.",
+                    async () => {
+                        try {
+                            // 1️⃣ Collect current theme variables safely
+                            const themeData = collectThemeVars() || {};
+                            const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                            savedTheme.themeData = savedTheme.themeData || {};
 
-                // ⏳ Show loader briefly before popup
-                setTimeout(() => {
-                    loaderOverlay.style.display = "none"; // hide before popup
-
-                    showJCConfirm(
-                        "Do you want to apply these changes? Press Yes to apply & reload the page. Press No to revert.",
-                        async () => {
-                            loaderOverlay.style.display = "flex"; // Show again on Yes
-
-                            setTimeout(async () => {
-                                try {
-
-                                    // ===== EXISTING APPLY LOGIC =====
-                                    const themeData = collectThemeVars() || {};
-                                    const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
-                                    savedTheme.themeData = savedTheme.themeData || {};
-
-                                    Object.keys(themeData).forEach(key => {
-                                        if (key !== "--lockedMenus" && key !== "--hiddenMenus") {
-                                            savedTheme.themeData[key] = themeData[key];
-                                        }
-                                    });
-
-                                    const localSaved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-
-                                    if (localSaved.themeData["--menuCustomizations"])
-                                        savedTheme.themeData["--menuCustomizations"] = localSaved.themeData["--menuCustomizations"];
-
-                                    if (localSaved.themeData["--agencyMenuOrder"])
-                                        savedTheme.themeData["--agencyMenuOrder"] = localSaved.themeData["--agencyMenuOrder"];
-
-                                    if (localSaved.themeData["--subMenuOrder"])
-                                        savedTheme.themeData["--subMenuOrder"] = localSaved.themeData["--subMenuOrder"];
-
-                                    const lockedMenus = JSON.parse(savedTheme.themeData["--lockedMenus"] || "{}");
-                                    savedTheme.themeData["--lockedMenus"] = JSON.stringify(lockedMenus);
-
-                                    const hiddenMenus = JSON.parse(savedTheme.themeData["--hiddenMenus"] || "{}");
-                                    savedTheme.themeData["--hiddenMenus"] = JSON.stringify(hiddenMenus);
-
-                                    localStorage.setItem("userTheme", JSON.stringify(savedTheme));
-
-                                    const rlNo = localStorage.getItem("rlno") ? atob(localStorage.getItem("rlno")) : null;
-                                    const email = localStorage.getItem("g-em") ? atob(localStorage.getItem("g-em")) : null;
-                                    const agencyId = localStorage.getItem("agn") ? atob(localStorage.getItem("agn")) : null;
-
-                                    const dbData = {
-                                        rlNo,
-                                        email: email ? [email] : [],
-                                        agencyId,
-                                        themeData: savedTheme.themeData,
-                                        selectedTheme: localStorage.getItem("selectedTheme") || "Custom",
-                                        bodyFont: savedTheme.themeData["--body-font"] || "Arial, sans-serif",
-                                        updatedAt: new Date().toISOString(),
-                                    };
-
-                                    await fetch("https://theme-builder-delta.vercel.app/api/theme", {
-                                        method: "POST",
-                                        headers: { "Content-Type": "application/json" },
-                                        body: JSON.stringify(dbData),
-                                    });
-
-                                    // Reload after delay
-                                    setTimeout(() => location.reload(), 1200);
-
-                                } catch (err) {
-                                    console.error(err);
-                                    alert("Something went wrong while applying changes.");
-                                    loaderOverlay.style.display = "none";
+                            // Merge collected vars
+                            // ✅ Preserve both --lockedMenus and --hiddenMenus
+                            Object.keys(themeData).forEach(key => {
+                                if (key !== "--lockedMenus" && key !== "--hiddenMenus") {
+                                    savedTheme.themeData[key] = themeData[key];
                                 }
-                            }, 1200); // loader duration on Yes
-                        },
-                        () => {
-                            loaderOverlay.style.display = "none"; // cancel
+                            });
+
+
+                            // ✅ Preserve drag-and-drop order from localStorage (important!)
+                            const localSaved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+
+                            // ✅ Include --menuCustomizations explicitly
+                            if (localSaved.themeData["--menuCustomizations"]) {
+                                savedTheme.themeData["--menuCustomizations"] = localSaved.themeData["--menuCustomizations"];
+                            }
+
+                            if (localSaved.themeData["--agencyMenuOrder"]) {
+                                savedTheme.themeData["--agencyMenuOrder"] = localSaved.themeData["--agencyMenuOrder"];
+                            }
+                            if (localSaved.themeData["--subMenuOrder"]) {
+                                savedTheme.themeData["--subMenuOrder"] = localSaved.themeData["--subMenuOrder"];
+                            }
+
+                            // ✅ Reassign lockedMenus if exists
+                            const lockedMenus = JSON.parse(savedTheme.themeData["--lockedMenus"] || "{}");
+                            savedTheme.themeData["--lockedMenus"] = JSON.stringify(lockedMenus);
+
+                            // ✅ Reassign hiddenMenus if exists (prevent overwrite)
+                            const hiddenMenus = JSON.parse(savedTheme.themeData["--hiddenMenus"] || "{}");
+                            savedTheme.themeData["--hiddenMenus"] = JSON.stringify(hiddenMenus);
+
+                            // 💾 Save updated object
+                            localStorage.setItem("userTheme", JSON.stringify(savedTheme));
+
+                            // Prepare DB payload
+                            const rlNo = localStorage.getItem("rlno") ? atob(localStorage.getItem("rlno")) : null;
+                            const email = localStorage.getItem("g-em") ? atob(localStorage.getItem("g-em")) : null;
+                            const agencyId = localStorage.getItem("agn") ? atob(localStorage.getItem("agn")) : null;
+
+                            const dbData = {
+                                rlNo,
+                                email: email ? [email] : [], // ✅ convert single email into an array
+                                agencyId,
+                                themeData: savedTheme.themeData,
+                                selectedTheme: localStorage.getItem("selectedTheme") || "Custom",
+                                bodyFont: savedTheme.themeData["--body-font"] || "Arial, sans-serif",
+                                updatedAt: new Date().toISOString(),
+                            };
+                            // 8️⃣ Send to API (non-blocking, errors logged)
+                            fetch("https://theme-builder-delta.vercel.app/api/theme", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify(dbData),
+                            })
+                                .then(async (res) => {
+                                    const result = await res.json().catch(() => null);
+                                    if (!res.ok) {
+                                        console.error("[ThemeBuilder] API error:", result);
+                                    }
+                                })
+                                .catch(err => console.error("[ThemeBuilder] Network error:", err));
+                            // 9️⃣ Reload page to apply changes
+                            location.reload();
+
+                        } catch (err) {
+                            console.error("[ThemeBuilder] Error applying theme changes:", err);
+                            alert("Something went wrong while applying the theme changes. No data was lost.");
                         }
-                    );
-
-                }, 1200); // loader duration before confirm
+                    },
+                    () => {
+                        // Cancel callback: revert safely
+                        const savedThemeStr = localStorage.getItem("userTheme");
+                        if (savedThemeStr) {
+                            const savedTheme = JSON.parse(savedThemeStr).themeData;
+                            Object.keys(savedTheme).forEach(varName => {
+                                document.body.style.setProperty(varName, savedTheme[varName]);
+                            });
+                        }
+                    }
+                );
             });
-
 
             buttonsWrapper.appendChild(applyBtn);
             drawer.appendChild(buttonsWrapper); // Outside card
