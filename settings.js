@@ -3561,6 +3561,8 @@
             drawer.id = "themeBuilderDrawer";
             drawer.className = "tb-drawer";
 
+            // ✅ Create loader overlay inside Theme Builder drawer
+            createTBLoader();
             // ===== Title with Close Button =====
             const drawerTitleWrapper = document.createElement('div');
             drawerTitleWrapper.className = "tb-drawer-title-wrapper";
