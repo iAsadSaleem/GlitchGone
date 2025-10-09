@@ -3910,70 +3910,8 @@
             });
 
             bindThemeBuilderEvents(btn, drawer);
-            createWelcomeDrawer();
-
-
         }
     }
-    function createWelcomeDrawer() {
-        // Show only first time
-        if (localStorage.getItem("tb_welcome_shown")) return;
-
-        const welcome = document.createElement("div");
-        welcome.id = "tb-welcome-drawer";
-        welcome.style.cssText = `
-        position: fixed;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 380px;
-        background: #1e1e1e;
-        color: white;
-        padding: 20px;
-        border-radius: 12px 12px 0 0;
-        box-shadow: 0px -2px 10px rgba(0,0,0,0.4);
-        text-align: center;
-        z-index: 99999;
-        font-family: Arial, sans-serif;
-    `;
-
-        welcome.innerHTML = `
-        <h2 style="margin-bottom:8px;">Welcome to Theme Builder 🎨</h2>
-        <p style="font-size:14px; color:#ccc; margin-bottom:16px;">
-            Customize your CRM theme easily without writing any code.
-        </p>
-        <button id="tb-welcome-btn" style="
-            padding: 10px 22px;
-            background: #5865F2;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 15px;
-        ">Continue</button>
-        <span id="tb-welcome-close" style="
-            position: absolute;
-            right: 10px;
-            top: 8px;
-            cursor: pointer;
-            font-size: 18px;
-        ">✖</span>
-    `;
-        document.body.appendChild(welcome);
-
-        // Button click - close drawer
-        document.getElementById("tb-welcome-btn").onclick = () => {
-            welcome.style.display = "none";
-            localStorage.setItem("tb_welcome_shown", "1");
-        };
-
-        // Close icon
-        document.getElementById("tb-welcome-close").onclick = () => {
-            welcome.style.display = "none";
-            localStorage.setItem("tb_welcome_shown", "1");
-        };
-    }
-
     function bindThemeBuilderEvents(btn, drawer) {
         if (!btn || !drawer) return;
 
