@@ -3850,13 +3850,13 @@
                                     loaderOverlay.style.display = "none";
                                     alert("Something went wrong while applying changes.");
                                 }
-                            }, 1500);
+                            }, 900);
                         },
                         () => {
                             loaderOverlay.style.display = "none"; // No button hides loader
                         }
                     );
-                }, 1500);
+                }, 900);
             });
 
 
