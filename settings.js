@@ -84,7 +84,7 @@
 
         const overlay = document.createElement("div");
         overlay.id = "tb-loader-overlay";
-        overlay.style.display = "none"; // ✅ hidden by default
+        overlay.style.display = "none"; // hidden by default
         overlay.style.position = "absolute";
         overlay.style.top = "0";
         overlay.style.left = "0";
@@ -96,10 +96,14 @@
         overlay.style.justifyContent = "center";
         overlay.style.borderRadius = "10px";
 
-        const loader = document.createElement("div");
-        loader.className = "loader";
-        overlay.appendChild(loader);
+        // ✅ Replace loader div with GIF
+        const successGif = document.createElement("img");
+        successGif.src = "https://theme-builder-delta.vercel.app/images/Success.gif";
+        successGif.style.width = "120px";  // adjust size
+        successGif.style.height = "120px";
+        successGif.style.objectFit = "contain";
 
+        overlay.appendChild(successGif);
         drawer.appendChild(overlay);
     }
 
