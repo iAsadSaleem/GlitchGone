@@ -183,7 +183,7 @@
                 successOverlay.style.display = "none";
                 yesBtn.disabled = false; // Enable again if needed
                 onYes && onYes();
-            }, 3000);
+            }, 900);
         });
 
         modal.querySelector("#jc-no-btn").addEventListener("click", () => {
