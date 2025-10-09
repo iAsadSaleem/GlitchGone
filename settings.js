@@ -84,7 +84,7 @@
 
         const overlay = document.createElement("div");
         overlay.id = "tb-loader-overlay";
-        overlay.style.display = "none"; // hidden by default
+        overlay.style.display = "none"; // ✅ hidden by default
         overlay.style.position = "absolute";
         overlay.style.top = "0";
         overlay.style.left = "0";
@@ -96,11 +96,36 @@
         overlay.style.justifyContent = "center";
         overlay.style.borderRadius = "10px";
 
-        // ✅ Replace loader div with GIF
+        const loader = document.createElement("div");
+        loader.className = "loader";
+        overlay.appendChild(loader);
+
+        drawer.appendChild(overlay);
+    }
+    function createSuccessGIF() {
+        if (document.getElementById("tb-success-overlay")) return;
+
+        const drawer = document.getElementById("themeBuilderDrawer");
+        if (!drawer) return;
+
+        const overlay = document.createElement("div");
+        overlay.id = "tb-success-overlay";
+        overlay.style.display = "none";
+        overlay.style.position = "absolute";
+        overlay.style.top = "0";
+        overlay.style.left = "0";
+        overlay.style.width = "100%";
+        overlay.style.height = "100%";
+        overlay.style.background = "rgba(0,0,0,0.6)";
+        overlay.style.zIndex = "100000";
+        overlay.style.alignItems = "center";
+        overlay.style.justifyContent = "center";
+        overlay.style.borderRadius = "10px";
+
         const successGif = document.createElement("img");
         successGif.src = "https://theme-builder-delta.vercel.app/images/Success.gif";
-        successGif.style.width = "120px";  // adjust size
-        successGif.style.height = "120px";
+        successGif.style.width = "150px";
+        successGif.style.height = "150px";
         successGif.style.objectFit = "contain";
 
         overlay.appendChild(successGif);
@@ -147,7 +172,15 @@
 
         modal.querySelector("#jc-yes-btn").addEventListener("click", () => {
             modal.style.display = "none";
-            onYes && onYes();
+
+            // ✅ Show Success GIF
+            const successOverlay = document.getElementById("tb-success-overlay");
+            successOverlay.style.display = "flex";
+
+            setTimeout(() => {
+                successOverlay.style.display = "none";
+                onYes && onYes(); // ✅ Continue original YES function
+            }, 1000); // 1 second delay
         });
 
         modal.querySelector("#jc-no-btn").addEventListener("click", () => {
@@ -3827,6 +3860,7 @@
             document.body.appendChild(drawer);
             // ✅ Create loader overlay inside Theme Builder drawer
             createTBLoader();
+            createSuccessGIF();  
             // ===== Make Draggable =====
             (function makeDraggable(el, handle) {
                 let isDragging = false, offsetX = 0, offsetY = 0;
