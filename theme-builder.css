@@ -18,7 +18,7 @@
 }
 
     #themeBuilderDrawer.open {
-        border-radius: 8px;
+        border-radius: 30px;
         right: 10px;
         border: none ;
     }
