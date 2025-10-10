@@ -507,6 +507,7 @@
     // NEW: Theme Selector Section
     function buildThemeSelectorSection(container) {
         if (!container) return;
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
 
         // inject minimal styles once
         if (!document.getElementById("tb-theme-selector-styles")) {
@@ -535,7 +536,7 @@
 
         const textSpan = document.createElement("span");
         textSpan.className = "themeBtnText";
-        textSpan.textContent = "Select Theme";
+        textSpan.textContent = savedThemeObj.selectedTheme || "Select Theme";
 
         // circle icon (Font Awesome expected to be loaded separately)
         const arrowIcon = document.createElement("span");
