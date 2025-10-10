@@ -1092,7 +1092,6 @@
         }
 
         // restore saved theme if exists
-        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         if (savedThemeObj.selectedTheme) {
             applyTheme(savedThemeObj.selectedTheme, savedThemeObj.themeData);
             if (themeKeys.includes(savedThemeObj.selectedTheme)) {
