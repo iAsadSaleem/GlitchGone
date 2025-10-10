@@ -1062,10 +1062,6 @@
                 "--lockedMenus": "{}",
                 "--body-font": "Poppins"
             }
-
-
-
-
         };
 
         const themeKeys = Object.keys(themes);
@@ -1108,7 +1104,7 @@
             // if the click target is the arrow or inside it, ignore (arrow handles dropdown)
             if (e.target.closest(".themeArrowIcon")) return;
             currentIndex = (currentIndex + 1) % themeKeys.length;
-            applyTheme(themeKeys[currentIndex]);
+            applyTheme(themeKeys[currentIndex], null);
         });
 
         // populate dropdown
@@ -1118,7 +1114,7 @@
             optBtn.textContent = themeName;
             optBtn.addEventListener("click", (ev) => {
                 ev.stopPropagation();
-                applyTheme(themeName);
+                applyTheme(themeName,null);
                 dropdownBox.classList.remove("show");
                 arrowIcon.innerHTML = '<i class="fa-solid fa-angle-down" aria-hidden="true"></i>';
             });
