@@ -3,9 +3,9 @@
     position: fixed;
     top: 50px;
     right: -420px;
-    width: 350px;
+    width: 328px;
     max-width: 90%;
-    height: 67%;
+    height: 66%;
     /* 25% active color, 75% white */
     background: linear-gradient(to bottom, var(--primary-color) 40%, #ffffff 0%);
     box-shadow: -4px 1px 30px var(--primary-color); /* ✅ Works */
@@ -111,7 +111,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 8px 12px;
+    padding: 6px 12px;
     background: var(--primary-color) !important;
     color: var(--sidebar-menu-color) !important;
     cursor: pointer;
@@ -300,9 +300,9 @@
     user-select: none;
     -webkit-user-select: none;
     touch-action: manipulation;
-    width: 307px;
+    width: 284px;
     height: 47px;
-    top: 24px;
+    top: 13px;
 }
 
 /* Reset Changes Button */
@@ -335,7 +335,7 @@
     background: var(--sidebar-menu-active-bg) !important;
     /*background-image: var(--sidebar-main-bg-gradient) !important;*/
     position: relative;
-    min-width: 316px !important;
+    min-width: 296px !important;
     color: #fff;
     border: 1px solid #55555500;
     padding: 7px 4px;
@@ -559,7 +559,7 @@ tb-apply-btn
     padding: 4px 1px 1px 1px;
     text-align: center;
     height: 25px;
-    font-size: 14px;
+    font-size: 12px;
     position: relative;
     color: #ffffff;
     background: var(--primary-color);
