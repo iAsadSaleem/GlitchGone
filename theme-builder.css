@@ -149,7 +149,7 @@
 }
 
 .tb-section-header-open {
-    background-color: #3BB273 !important; /* green for open section */
+    background: var(--sidebar-menu-active-bg) !important;
     color: #ffffff; /* white text */
     transition: background 0.3s, color 0.3s;
 }
