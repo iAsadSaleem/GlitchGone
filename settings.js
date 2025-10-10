@@ -869,7 +869,72 @@
                 "--card-body-border-radius": "24px",
                 "--lockedMenus": "{}",
                 "--body-font": "Roboto"
+            },
+            "Lilac Silver Theme": {
+                "--primary-color": "#826387",
+                "--second-color": "#A47DAB",
+                "--dark-color": "#332736",
+                "--grey-color": "#F7F2F8",
+                "--alert-color": "#E85D75",
+                "--app-bg-color": "#FBF8FC",
+                "--Acent-color": "#C0C0C0",
+
+                "--sidebar-bg-color": "#332736",
+                "--sidebar-menu-bg": "#2A212D",
+                "--sidebar-menu-color": "#FFFFFF",
+                "--sidebar-menu-hover-bg": "#5B455E",
+                "--sidebar-menu-active-bg": "#46364A",
+                "--sidebar-menu-icon-color": "#C0C0C0",
+                "--sidebar-menu-icon-hover-color": "#D9D9D9",
+                "--sidebar-menu-icon-active-color": "#FFFFFF",
+
+                "--scroll-color": "#C0C0C0",
+
+                "--header-bg-color": "#F7F2F8",
+                "--header-icon-color": "#5B455E",
+                "--header-icon-hover-color": "#C0C0C0",
+                "--header-icon-bg": "#E6DBEC",
+                "--header-icon-hover-bg": "#C0C0C0",
+
+                "--card-body-bg-color": "#FFFFFF",
+                "--card-body-font-color": "#403545",
+                "--card-title-font-color": "#332736",
+                "--card-dec-font-color": "#6F6173",
+                "--card-footer-bg-color": "#E6DBEC",
+                "--card-footer-font-color": "#332736",
+
+                "--top-nav-menu-bg": "#5B455E",
+                "--top-nav-menu-hover-bg": "#46364A",
+                "--top-nav-menu-active-bg": "#332736",
+                "--top-nav-menu-color": "#FFFFFF",
+                "--top-nav-menu-hover-color": "#C0C0C0",
+                "--top-nav-menu-active-color": "#FFFFFF",
+
+                "--card-header-gradient-start": "#826387",
+                "--card-header-bg-gradient": "linear-gradient(90deg, #826387 0%, #5B455E 50%, #C0C0C0 100%)",
+                "--card-header-gradient-end": "#C0C0C0",
+
+                "--card-body-border-color": "#C0C0C0",
+
+                "--bg-gradient": "linear-gradient(90deg, #FBF8FC 0%, #F7F2F8 60%, #E6DBEC 100%)",
+                "--sidebar-main-bg-gradient": "linear-gradient(to bottom, #332736, #5B455E 80%, #C0C0C0)",
+                "--login-card-bg-gradient": "linear-gradient(to bottom, #E6DBEC, #F7F2F8, #FFFFFF)",
+
+                "--login-link-text-color": "#826387",
+                "--login-button-bg-gradient": "linear-gradient(to right, #826387 0%, #5B455E 70%, #C0C0C0 100%)",
+                "--login-button-bg-color": "#826387",
+                "--login-card-bg-color": "#FFFFFF",
+
+                "--header-main-bg-gradient": "linear-gradient(90deg, #826387 0%, #5B455E 50%, #C0C0C0 100%)",
+                "--header-icon-hover": "#C0C0C0",
+
+                "--scroll-width": "7px",
+                "--card-title-font-size": "18px",
+                "--card-body-border-radius": "24px",
+                "--lockedMenus": "{}",
+                "--body-font": "Roboto"
             }
+
         };
 
         const themeKeys = Object.keys(themes);
