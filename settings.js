@@ -3551,7 +3551,7 @@
 
                 const iconInput = document.createElement("input");
                 iconInput.type = "text";
-                iconInput.placeholder = "Font-Awsome Icon Code";
+                iconInput.placeholder = "CODE";
                 iconInput.className = "tb-input tb-icon-input";
 
                 const menuCustomizations = themeData["--menuCustomizations"]

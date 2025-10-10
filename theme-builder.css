@@ -509,7 +509,7 @@ tb-apply-btn
     font-size: 12px;
     font-family: monospace;
     text-align: center;
-    left: 27px;
+    left: 8px;
     position: relative;
 }
 .tb-number-scroll-input {
@@ -536,7 +536,7 @@ tb-apply-btn
     font-family: monospace;
     text-align: center;
     
-    left: 27px;
+    left: 8px;
     position: relative;
 }
 .tb-number-input-wrapper {
@@ -980,7 +980,7 @@ body::-webkit-scrollbar-track {
     font-size: 10px;
     border-radius: 8px;
     border: 1px solid #60717957;
-    min-width: 80px;
+    min-width: 60px;
     max-width: 143px;
 }
 
