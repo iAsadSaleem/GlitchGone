@@ -4232,7 +4232,6 @@
         // Re-bind click to toggle drawer
         newBtn.addEventListener("click", () => {
             drawer.classList.toggle("open");
-            console.log("🎨 Drawer toggled:", drawer.classList.contains("open"));
         });
 
         // Re-bind close button
