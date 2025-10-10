@@ -508,6 +508,7 @@
     function buildThemeSelectorSection(container) {
         if (!container) return;
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        console.log('Here is savedThemeObj', savedThemeObj);
 
         // inject minimal styles once
         if (!document.getElementById("tb-theme-selector-styles")) {
@@ -537,7 +538,7 @@
         const textSpan = document.createElement("span");
         textSpan.className = "themeBtnText";
         textSpan.textContent = savedThemeObj.selectedTheme || "Select Theme";
-
+        console.log('Here is SelectedTheme', savedThemeObj.selectedTheme);
         // circle icon (Font Awesome expected to be loaded separately)
         const arrowIcon = document.createElement("span");
         arrowIcon.className = "themeArrowIcon";
