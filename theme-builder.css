@@ -778,6 +778,7 @@ body::-webkit-scrollbar-track {
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: -7px 4px 23px #000000;
 }
 
     .themeArrowIcon:hover {
