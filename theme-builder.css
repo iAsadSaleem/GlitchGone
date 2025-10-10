@@ -105,7 +105,7 @@
     border-radius: 6px;
     overflow: hidden;
     position: relative;
-    top: -41px;
+    top: -28px;
 }
 .tb-section-header {
     display: flex;
@@ -330,7 +330,7 @@
     font-size: 15px;
     text-align: center;
     margin: 12px auto;
-    top: -32px;
+    top: -30px;
     border-radius: 8px !important;
     background: var(--sidebar-menu-active-bg) !important;
     /*background-image: var(--sidebar-main-bg-gradient) !important;*/
