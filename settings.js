@@ -508,8 +508,7 @@
     function buildThemeSelectorSection(container) {
         if (!container) return;
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        console.log('Here is savedThemeObj', savedThemeObj);
-
+        const selectedtheme = localStorage.getItem("selectedtheme");
         // inject minimal styles once
         if (!document.getElementById("tb-theme-selector-styles")) {
             const s = document.createElement("style");
@@ -535,10 +534,12 @@
         const inner = document.createElement("div");
         inner.className = "themeBtnInner";
 
+
+
         const textSpan = document.createElement("span");
         textSpan.className = "themeBtnText";
-        textSpan.textContent = savedThemeObj.selectedTheme || "Select Theme";
-        console.log('Here is SelectedTheme', savedThemeObj.selectedTheme);
+        textSpan.textContent = selectedtheme || "Select Theme";
+
         // circle icon (Font Awesome expected to be loaded separately)
         const arrowIcon = document.createElement("span");
         arrowIcon.className = "themeArrowIcon";
@@ -1093,10 +1094,10 @@
         }
 
         // restore saved theme if exists
-        if (savedThemeObj.selectedTheme) {
-            applyTheme(savedThemeObj.selectedTheme, savedThemeObj.themeData);
-            if (themeKeys.includes(savedThemeObj.selectedTheme)) {
-                currentIndex = themeKeys.indexOf(savedThemeObj.selectedTheme);
+        if (selectedtheme) {
+            applyTheme(selectedtheme, savedThemeObj.themeData);
+            if (themeKeys.includes(selectedtheme)) {
+                currentIndex = themeKeys.indexOf(selectedtheme);
             }
         }
 
