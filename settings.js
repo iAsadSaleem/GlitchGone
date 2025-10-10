@@ -4141,7 +4141,7 @@
                                         email: email ? [email] : [],
                                         agencyId,
                                         themeData: savedTheme.themeData,
-                                        selectedTheme: localStorage.getItem("selectedTheme") || "Custom",
+                                        selectedTheme: savedTheme.selectedTheme,
                                         bodyFont: savedTheme.themeData["--body-font"] || "Arial, sans-serif",
                                         updatedAt: new Date().toISOString(),
                                     };
