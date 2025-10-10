@@ -872,7 +872,8 @@
                 "--card-body-border-radius": "24px",
                 "--lockedMenus": "{}",
                 "--body-font": "Roboto",
-                "--custom-cursor": "url('data:image/svg+xml,<svg xmlns=\\\"http://www.w3.org/2000/svg\\\" width=\\\"48\\\" height=\\\"48\\\" viewBox=\\\"0 0 24 24\\\"><path fill=\\\"%23000\\\" d=\\\"M4.5.79v22.42l6.56-6.57h9.29L4.5.79z\\\"></path></svg>')"
+                "--custom-cursor": url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"30\" viewBox=\"0 0 24 24\"><path fill=\"%23000\" d=\"M4.5.79v22.42l6.56-6.57h9.29L4.5.79z\"></path></svg>')
+
             },
             "Lilac Silver Theme": {
                 "--primary-color": "#826387",
