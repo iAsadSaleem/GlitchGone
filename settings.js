@@ -4279,7 +4279,7 @@
 
     }
 
-
+    console.log()
     function injectThemeBuilderMenu() {
         // Find the "Login As" element
         const loginAsItem = Array.from(document.querySelectorAll(".dropdown-item"))
@@ -4424,13 +4424,6 @@
             }
         });
 
-    document.addEventListener('DOMContentLoaded', () => {
-        setTimeout(() => {
-            injectThemeBuilderMenu();
-            if (typeof initThemeBuilder === "function") {
-                initThemeBuilder(0);
-            }
-        }, 500);
-    });
+    document.addEventListener('DOMContentLoaded', () => setTimeout(() => initThemeBuilder(0), injectThemeBuilderMenu(), 50)); setTimeout(() => initThemeBuilder(0), injectThemeBuilderMenu(), 50);
 
 })();
