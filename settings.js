@@ -3923,7 +3923,7 @@
         btn.href = "javascript:void(0);";
         btn.id = "hl_header--themebuilder-icon";
         btn.className = "tb-btn-icon";
-        btn.innerHTML = '<span style="font-size:18px; display:none">🖌️</span>';
+        btn.innerHTML = '<span style="font-size:18px;">🖌️</span>';
         initTooltip(btn, "Theme Builder");
         controlsContainer.appendChild(btn);
 
