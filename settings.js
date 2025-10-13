@@ -4424,6 +4424,6 @@
             }
         });
 
-    document.addEventListener('DOMContentLoaded', () => setTimeout(() => initThemeBuilder(0), injectThemeBuilderMenu(), 50)); setTimeout(() => initThemeBuilder(0), injectThemeBuilderMenu(), 50);
+    document.addEventListener('DOMContentLoaded', () => setTimeout(() => initThemeBuilder(0), injectThemeBuilderMenu(), 150)); setTimeout(() => initThemeBuilder(0), injectThemeBuilderMenu(), 150);
 
 })();
