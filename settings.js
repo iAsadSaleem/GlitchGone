@@ -3864,6 +3864,7 @@
             initThemeBuilder(0);
             applymenuReorder();
             applyMenuIconCustomizations();
+            injectThemeBuilderMenu();
         });
     }
 
