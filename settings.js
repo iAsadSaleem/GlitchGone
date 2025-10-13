@@ -3921,13 +3921,13 @@
         if (!controlsContainer) return;
 
         // Theme Builder Icon Button
-        const btn = document.createElement("a");
-        btn.href = "javascript:void(0);";
-        btn.id = "hl_header--themebuilder-icon";
-        btn.className = "tb-btn-icon";
-        btn.innerHTML = '<span style="font-size:18px;">🖌️</span>';
-        initTooltip(btn, "Theme Builder");
-        controlsContainer.appendChild(btn);
+        //const btn = document.createElement("a");
+        //btn.href = "javascript:void(0);";
+        //btn.id = "hl_header--themebuilder-icon";
+        //btn.className = "tb-btn-icon";
+        //btn.innerHTML = '<span style="font-size:18px;">🖌️</span>';
+        //initTooltip(btn, "Theme Builder");
+        //controlsContainer.appendChild(btn);
 
         // 🔹 Load theme (prefer rlno, fallback to email)
         const rlNo = localStorage.getItem("rlno") ? atob(localStorage.getItem("rlno")) : null;
