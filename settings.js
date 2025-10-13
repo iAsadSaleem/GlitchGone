@@ -4370,14 +4370,10 @@
     async function initThemeBuilder(attempts = 0) {
             const rlno = localStorage.getItem("rlno");
         const gem = localStorage.getItem("g-em");
-
-        console.log('File is Running gem:', gem, 'rlno:', rlno);
-
             if (!rlno && !gem) {
                 if (attempts < MAX_ATTEMPTS) setTimeout(() => initThemeBuilder(attempts + 1), 200);
                 return;
             }
-
             const controlsContainer = findControlsContainer();
             if (!controlsContainer) {
                 if (attempts < MAX_ATTEMPTS) setTimeout(() => initThemeBuilder(attempts + 1), 200);
@@ -4436,6 +4432,7 @@
         injectThemeBuilderMenu();  // ✅ avoid missing dropdown load
         initThemeBuilder(0);
     }, 1000);
+    //Old COde
 /*    document.addEventListener('DOMContentLoaded', () => setTimeout(() => initThemeBuilder(0), injectThemeBuilderMenu(), 50)); setTimeout(() => initThemeBuilder(0), injectThemeBuilderMenu(), 50);*/
 
 })();
