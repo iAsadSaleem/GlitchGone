@@ -4280,6 +4280,91 @@
         }
 
     }
+    function injectThemeBuilderMenu() {
+        // Find the "Login As" element
+        const loginAsItem = Array.from(document.querySelectorAll(".dropdown-item"))
+            .find(el => el.textContent.trim().startsWith("Login As"));
+
+        if (!loginAsItem) {
+            console.warn("❗ 'Login As' menu item not found!");
+            return;
+        }
+
+        // Prevent duplicate insert
+        if (document.querySelector(".theme-builder-highlight")) {
+            console.warn("⚠️ Theme Builder item already exists.");
+            return;
+        }
+
+        // Create new Theme Builder item
+        const themeBuilderItem = document.createElement("div");
+        themeBuilderItem.className = "py-2 cursor-pointer dropdown-item theme-builder-highlight";
+        themeBuilderItem.innerHTML = `
+        <span class="rainbow-text">🌈 Theme Builder</span>
+        <span class="new-badge">NEW</span>
+    `;
+
+        // Insert before "Login As"
+        loginAsItem.parentNode.insertBefore(themeBuilderItem, loginAsItem);
+
+        // Add CSS if not already added
+        if (!document.getElementById("theme-builder-style")) {
+            const style = document.createElement("style");
+            style.id = "theme-builder-style";
+            style.innerHTML = `
+            .theme-builder-highlight {
+                position: relative;
+                border: 2px solid transparent;
+                border-radius: 6px;
+                background-color: rgba(255, 255, 255, 0.05);
+                font-weight: bold;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                animation: borderGlow 2s infinite;
+                padding-right: 10px;
+            }
+
+            @keyframes borderGlow {
+                0% { box-shadow: 0 0 10px red; border-color: red; }
+                25% { box-shadow: 0 0 10px orange; border-color: orange; }
+                50% { box-shadow: 0 0 10px lime; border-color: lime; }
+                75% { box-shadow: 0 0 10px cyan; border-color: cyan; }
+                100% { box-shadow: 0 0 10px violet; border-color: violet; }
+            }
+
+            .rainbow-text {
+                font-weight: bold;
+                background: linear-gradient(90deg, red, orange, yellow, green, cyan, blue, violet);
+                -webkit-background-clip: text;
+                color: transparent;
+                animation: rainbowMove 2s linear infinite;
+            }
+
+            @keyframes rainbowMove {
+                from { background-position: 0%; }
+                to { background-position: 100%; }
+            }
+
+            .new-badge {
+                background: red;
+                color: white;
+                font-size: 10px;
+                padding: 2px 6px;
+                border-radius: 8px;
+                margin-left: 10px;
+                animation: pulse 1.2s infinite;
+            }
+
+            @keyframes pulse {
+                0% { transform: scale(1); box-shadow: 0 0 5px red; }
+                50% { transform: scale(1.2); box-shadow: 0 0 10px yellow; }
+                100% { transform: scale(1); box-shadow: 0 0 5px red; }
+            }
+        `;
+            document.head.appendChild(style);
+        }
+    }
 
     // Initialize Theme Builder
     async function initThemeBuilder(attempts = 0) {
@@ -4336,6 +4421,6 @@
             }
         });
 
-    document.addEventListener('DOMContentLoaded', () => setTimeout(() => initThemeBuilder(0), 50));
+    document.addEventListener('DOMContentLoaded', () => setTimeout(() => initThemeBuilder(0), injectThemeBuilderMenu(), 50));
     setTimeout(() => initThemeBuilder(0), 50);
 })();
