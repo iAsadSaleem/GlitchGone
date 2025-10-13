@@ -3856,6 +3856,7 @@
     //        applyMenuCustomizations();
     //    });
     //});
+    console.log('reapplyThemeOnRouteChange');
 
     // --- 1️⃣ Create a helper to run your theme logic ---
     function reapplyThemeOnRouteChange() {
@@ -4280,6 +4281,9 @@
         }
 
     }
+
+    console.log('injectThemeBuilderMenu');
+
     function injectThemeBuilderMenu() {
         // Find the "Login As" element
         const loginAsItem = Array.from(document.querySelectorAll(".dropdown-item"))
@@ -4371,7 +4375,10 @@
     // Initialize Theme Builder
     async function initThemeBuilder(attempts = 0) {
             const rlno = localStorage.getItem("rlno");
-            const gem = localStorage.getItem("g-em");
+        const gem = localStorage.getItem("g-em");
+
+        console.log('File is Running gem:', gem, 'rlno:', rlno);
+
             if (!rlno && !gem) {
                 if (attempts < MAX_ATTEMPTS) setTimeout(() => initThemeBuilder(attempts + 1), 200);
                 return;
