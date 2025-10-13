@@ -4282,7 +4282,6 @@
     }
     function injectThemeBuilderMenu() {
         // Find the "Login As" element
-        console.log('Execusted Code');
         const loginAsItem = Array.from(document.querySelectorAll(".dropdown-item"))
             .find(el => el.textContent.trim().startsWith("Login As"));
 
@@ -4293,7 +4292,6 @@
 
         // Prevent duplicate insert
         if (document.querySelector(".theme-builder-highlight")) {
-            console.warn("⚠️ Theme Builder item already exists.");
             return;
         }
 
@@ -4301,14 +4299,22 @@
         const themeBuilderItem = document.createElement("div");
         themeBuilderItem.className = "py-2 cursor-pointer dropdown-item theme-builder-highlight";
         themeBuilderItem.innerHTML = `
-        <span class="rainbow-text">Theme Builder</span>
+        <span class="rainbow-text">🌈 Theme Builder</span>
         <span class="new-badge">NEW</span>
     `;
+
+        // ✅ Add click: Open Theme Builder drawer
+        themeBuilderItem.addEventListener("click", function () {
+            console.log("✅ Theme Builder menu clicked");
+            let controlsContainer = document.querySelector(".hl_header--controls") || document.body;
+            createBuilderUI(controlsContainer); // <-- Calls your original UI builder
+            document.getElementById("themeBuilderDrawer")?.classList.add("open"); // Show drawer
+        });
 
         // Insert before "Login As"
         loginAsItem.parentNode.insertBefore(themeBuilderItem, loginAsItem);
 
-        // Add CSS if not already added
+        // Inject CSS (only once)
         if (!document.getElementById("theme-builder-style")) {
             const style = document.createElement("style");
             style.id = "theme-builder-style";
@@ -4325,7 +4331,6 @@
                 animation: borderGlow 2s infinite;
                 padding-right: 10px;
             }
-
             @keyframes borderGlow {
                 0% { box-shadow: 0 0 10px red; border-color: red; }
                 25% { box-shadow: 0 0 10px orange; border-color: orange; }
@@ -4333,7 +4338,6 @@
                 75% { box-shadow: 0 0 10px cyan; border-color: cyan; }
                 100% { box-shadow: 0 0 10px violet; border-color: violet; }
             }
-
             .rainbow-text {
                 font-weight: bold;
                 background: linear-gradient(90deg, red, orange, yellow, green, cyan, blue, violet);
@@ -4341,12 +4345,10 @@
                 color: transparent;
                 animation: rainbowMove 2s linear infinite;
             }
-
             @keyframes rainbowMove {
                 from { background-position: 0%; }
                 to { background-position: 100%; }
             }
-
             .new-badge {
                 background: red;
                 color: white;
@@ -4356,7 +4358,6 @@
                 margin-left: 10px;
                 animation: pulse 1.2s infinite;
             }
-
             @keyframes pulse {
                 0% { transform: scale(1); box-shadow: 0 0 5px red; }
                 50% { transform: scale(1.2); box-shadow: 0 0 10px yellow; }
@@ -4422,6 +4423,13 @@
             }
         });
 
-    document.addEventListener('DOMContentLoaded', () => setTimeout(() => initThemeBuilder(0), injectThemeBuilderMenu(), 50));
-    setTimeout(() => initThemeBuilder(0), injectThemeBuilderMenu(), 50);
+    document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+            injectThemeBuilderMenu();
+            if (typeof initThemeBuilder === "function") {
+                initThemeBuilder(0);
+            }
+        }, 500);
+    });
+
 })();
