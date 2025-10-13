@@ -4284,7 +4284,7 @@
         // Find the "Login As" element
         const loginAsItem = Array.from(document.querySelectorAll(".dropdown-item"))
             .find(el => el.textContent.trim().startsWith("Login As"));
-
+        console.log('Found:', loginAsItem);
         if (!loginAsItem) {
             console.warn("❗ 'Login As' menu item not found!");
             return;
