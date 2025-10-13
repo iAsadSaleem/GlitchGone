@@ -4424,6 +4424,18 @@
             }
         });
 
-    document.addEventListener('DOMContentLoaded', () => setTimeout(() => initThemeBuilder(0), injectThemeBuilderMenu(), 150)); setTimeout(() => initThemeBuilder(0), injectThemeBuilderMenu(), 150);
+    document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+            injectThemeBuilderMenu();  // ✅ runs late now
+            initThemeBuilder(0);
+        }, 500); // ⏳ delay so "Login As" exists
+    });
+
+    // Optional – if needed outside too
+    setTimeout(() => {
+        injectThemeBuilderMenu();  // ✅ avoid missing dropdown load
+        initThemeBuilder(0);
+    }, 1000);
+/*    document.addEventListener('DOMContentLoaded', () => setTimeout(() => initThemeBuilder(0), injectThemeBuilderMenu(), 50)); setTimeout(() => initThemeBuilder(0), injectThemeBuilderMenu(), 50);*/
 
 })();
