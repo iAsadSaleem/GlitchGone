@@ -5,7 +5,6 @@
     let headerObserver = null;
     const MAX_ATTEMPTS = 40;
     // --- Dynamically load Sortable.js ---
-    console.log('File is Running');
     (function loadSortable() {
         if (!window.Sortable) { // Only load if not already loaded
             const script = document.createElement('script');
@@ -3856,7 +3855,6 @@
     //        applyMenuCustomizations();
     //    });
     //});
-    console.log('reapplyThemeOnRouteChange');
 
     // --- 1️⃣ Create a helper to run your theme logic ---
     function reapplyThemeOnRouteChange() {
@@ -3896,7 +3894,6 @@
     // Apply saved settings
     function applySavedSettings() {
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        console.log("⚠️ [applySavedSettings] Triggered");
 
         const themeData = savedThemeObj.themeData || {};
         Object.entries(themeData).forEach(([key, value]) => {
@@ -4281,13 +4278,11 @@
 
     }
 
-    console.log('injectThemeBuilderMenu');
 
     function injectThemeBuilderMenu() {
         // Find the "Login As" element
         const loginAsItem = Array.from(document.querySelectorAll(".dropdown-item"))
             .find(el => el.textContent.trim().startsWith("Login As"));
-        console.log('Found:', loginAsItem);
         if (!loginAsItem) {
             console.warn("❗ 'Login As' menu item not found!");
             return;
@@ -4308,7 +4303,6 @@
 
         // ✅ Add click: Open Theme Builder drawer
         themeBuilderItem.addEventListener("click", function () {
-            console.log("✅ Theme Builder menu clicked");
             let controlsContainer = document.querySelector(".hl_header--controls") || document.body;
             createBuilderUI(controlsContainer); // <-- Calls your original UI builder
             document.getElementById("themeBuilderDrawer")?.classList.add("open"); // Show drawer
