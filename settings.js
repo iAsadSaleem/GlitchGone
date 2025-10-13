@@ -5,7 +5,7 @@
     let headerObserver = null;
     const MAX_ATTEMPTS = 40;
     // --- Dynamically load Sortable.js ---
-
+    console.log('File is Running');
     (function loadSortable() {
         if (!window.Sortable) { // Only load if not already loaded
             const script = document.createElement('script');
