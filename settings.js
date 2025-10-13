@@ -4337,6 +4337,9 @@
                 100% { box-shadow: 0 0 10px violet; border-color: violet; }
             }
             .rainbow-text {
+                position: relative;
+                left: 50px;
+                font-size: 20px;
                 font-weight: bold;
                 background: linear-gradient(90deg, red, orange, yellow, green, cyan, blue, violet);
                 -webkit-background-clip: text;
