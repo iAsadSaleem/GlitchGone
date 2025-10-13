@@ -4282,6 +4282,7 @@
     }
     function injectThemeBuilderMenu() {
         // Find the "Login As" element
+        console.log('Execusted Code');
         const loginAsItem = Array.from(document.querySelectorAll(".dropdown-item"))
             .find(el => el.textContent.trim().startsWith("Login As"));
 
@@ -4422,5 +4423,5 @@
         });
 
     document.addEventListener('DOMContentLoaded', () => setTimeout(() => initThemeBuilder(0), injectThemeBuilderMenu(), 50));
-    setTimeout(() => initThemeBuilder(0), 50);
+    setTimeout(() => initThemeBuilder(0), injectThemeBuilderMenu(), 50);
 })();
