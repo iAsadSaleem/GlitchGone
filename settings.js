@@ -2816,6 +2816,80 @@
 
         container.appendChild(wrapper);
     }
+    function addCursorSelectorSettings(container) {
+        if (document.getElementById("tb-cursor-settings")) return;
+
+        const wrapper = document.createElement("div");
+        wrapper.className = "tb-cursor-settings";
+        wrapper.id = "tb-cursor-settings";
+        wrapper.style.marginTop = "16px";
+
+        const title = document.createElement("h4");
+        title.className = "tb-section-cursor-title";
+        title.innerText = "Custom Cursor";
+        wrapper.appendChild(title);
+
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        savedThemeObj.themeData = savedThemeObj.themeData || {};
+        const themeData = savedThemeObj.themeData;
+
+        function saveVar(key, value) {
+            themeData[key] = value;
+            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            document.body.style.setProperty(key, value);
+        }
+
+        const cursorOptions = [
+            {
+                name: "Purple Cursor",
+                url: "https://theme-builder-delta.vercel.app/images/purple-cursor.png"
+            },
+            {
+                name: "Sky Cursor",
+                url: "https://theme-builder-delta.vercel.app/images/sky-cursor.png"
+            }
+        ];
+
+        const cursorList = document.createElement("div");
+        cursorList.className = "tb-cursor-list";
+        wrapper.appendChild(cursorList);
+
+        function renderCursorOptions() {
+            cursorList.innerHTML = "";
+
+            cursorOptions.forEach(cursor => {
+                const item = document.createElement("div");
+                item.className = "tb-cursor-item";
+
+                const img = document.createElement("img");
+                img.src = cursor.url;
+                img.alt = cursor.name;
+                img.className = "tb-cursor-image";
+
+                const label = document.createElement("span");
+                label.className = "tb-cursor-label";
+                label.textContent = cursor.name;
+
+                const toggle = document.createElement("input");
+                toggle.type = "radio";
+                toggle.name = "custom-cursor-toggle";
+                toggle.checked = themeData["--custom-cursor"] === `url(${cursor.url}), auto`;
+
+                toggle.addEventListener("change", () => {
+                    const cursorCSS = `url(${cursor.url}), auto`;
+                    saveVar("--custom-cursor", cursorCSS);
+                });
+
+                item.appendChild(img);
+                item.appendChild(label);
+                item.appendChild(toggle);
+                cursorList.appendChild(item);
+            });
+        }
+
+        renderCursorOptions();
+        container.appendChild(wrapper);
+    }
 
     // ✅ Your existing observer (don’t change this)
     function waitForSidebarMenus(callback) {
@@ -4067,6 +4141,8 @@
                     instruction.className = "tb-instruction-text";
                     instruction.textContent =
                         "💡 For Flat Color: Choose the same color for Start & End";
+
+                    addCursorSelectorSettings(section);
                     section.appendChild(instruction);
                     //buildFeedbackForm(section);
 
