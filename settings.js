@@ -4187,7 +4187,7 @@
                                         body: JSON.stringify(dbData),
                                     });
 
-                                    location.reload();
+                                    //location.reload();
                                 } catch (error) {
                                     console.error(error);
                                     loaderOverlay.style.display = "none";
