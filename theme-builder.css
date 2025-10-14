@@ -1013,3 +1013,54 @@ body::-webkit-scrollbar-track {
     display: inline-block; /* ✅ inline, not flex */
     object-fit: contain; /* optional: keeps image proportions */
 }
+/* Container styling for each cursor option */
+.tb-cursor-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    margin-bottom: 10px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    background: #ffffff;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.06);
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+    .tb-cursor-item:hover {
+        border-color: #6366f1;
+        box-shadow: 0px 3px 8px rgba(99, 102, 241, 0.15);
+        transform: translateY(-2px);
+    }
+
+/* Cursor preview image */
+.tb-cursor-image {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+}
+
+/* Title text */
+.tb-cursor-label {
+    flex: 1;
+    font-size: 15px;
+    font-weight: 500;
+    color: #374151;
+}
+
+/* Radio button styling */
+.tb-cursor-item input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #6366f1; /* Modern browsers support this */
+    cursor: pointer;
+}
+
+/* Layout */
+.tb-cursor-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+    
