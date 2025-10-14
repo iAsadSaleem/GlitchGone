@@ -2887,7 +2887,7 @@
             },
             {
                 name: "Purple Tail Cursor",
-                url: "https://theme-builder-delta.vercel.app/images/purpletail-cursor.png"
+                url: "https://theme-builder-delta.vercel.app/images/purpletail-cursor.gif"
             },
             {
                 name: "Half Sky Blue Cursor",
