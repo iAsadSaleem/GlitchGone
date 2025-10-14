@@ -2848,6 +2848,50 @@
             {
                 name: "Sky Cursor",
                 url: "https://theme-builder-delta.vercel.app/images/sky-cursor.png"
+            },
+            {
+                name: "Black Line Cursor",
+                url: "https://theme-builder-delta.vercel.app/images/blackline-cursor.png"
+            },
+            {
+                name: "Black Cursor",
+                url: "https://theme-builder-delta.vercel.app/images/black-cursor.png"
+            },
+            {
+                name: "Sky Blue Cursor",
+                url: "https://theme-builder-delta.vercel.app/images/skyblue-cursor.png"
+            },
+            {
+                name: "Blue Border Cursor",
+                url: "https://theme-builder-delta.vercel.app/images/blueborder-cursor.png"
+            },
+            {
+                name: "Grey Cursor",
+                url: "https://theme-builder-delta.vercel.app/images/grey-cursor.png"
+            },
+            {
+                name: "Light Grey Cursor",
+                url: "https://theme-builder-delta.vercel.app/images/lightgrey-cursor.png"
+            },
+            {
+                name: "Stylish Cursor",
+                url: "https://theme-builder-delta.vercel.app/images/stylish-cursor.png"
+            },
+            {
+                name: "Blueish Cursor",
+                url: "https://theme-builder-delta.vercel.app/images/blueish-cursor.png"
+            },
+            {
+                name: "Advance Blue Cursor",
+                url: "https://theme-builder-delta.vercel.app/images/advanceblue-cursor.png"
+            },
+            {
+                name: "Purple Tail Cursor",
+                url: "https://theme-builder-delta.vercel.app/images/purpletail-cursor.png"
+            },
+            {
+                name: "Half Sky Blue Cursor",
+                url: "https://theme-builder-delta.vercel.app/images/halfskyblue-cursor.png"
             }
         ];
 
