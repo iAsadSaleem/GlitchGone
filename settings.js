@@ -2874,10 +2874,13 @@
                 const toggle = document.createElement("input");
                 toggle.type = "radio";
                 toggle.name = "custom-cursor-toggle";
-                toggle.checked = themeData["--custom-cursor"] === `url(${cursor.url}), auto`;
+
+                // ✅ Keep radio selected after reload using CSS variable value
+                const savedCursor = themeData["--custom-cursor"];
+                const cursorCSS = `url("${cursor.url}") 0 0`;
+                toggle.checked = savedCursor === cursorCSS;
 
                 toggle.addEventListener("change", () => {
-                    const cursorCSS = `url("${cursor.url}") 0 0`;
                     saveVar("--custom-cursor", cursorCSS);
                 });
 
