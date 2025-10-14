@@ -368,7 +368,7 @@
         textInput.className = "tb-logo-input"; // reuse styling
         textInput.placeholder = "Enter image URL";
         textInput.value = storedImage; // ✅ always raw URL
-
+        console.log('Here is the Data:', storedImage );
         function applyImage(rawUrl) {
             // ✅ Strip accidental url("...") wrapper before saving
             const cleanUrl = rawUrl.replace(/^url\(["']?|["']?\)$/g, "").trim();
@@ -379,6 +379,7 @@
                     "--login-background-active",
                     `url("${cleanUrl}")`
                 );
+                console.log('Here is the cleanUrl:', cleanUrl);
 
                 // Save only the raw URL
                 savedThemeObj.themeData["--login-background-image"] = cleanUrl;
@@ -4278,8 +4279,6 @@
         }
 
     }
-
-    console.log()
     function injectThemeBuilderMenu() {
         // Find the "Login As" element
         const loginAsItem = Array.from(document.querySelectorAll(".dropdown-item"))
@@ -4429,7 +4428,6 @@
             initThemeBuilder(0);
         }, 500); // ⏳ delay so "Login As" exists
     });
-
     // Optional – if needed outside too
     setTimeout(() => {
         injectThemeBuilderMenu();  // ✅ avoid missing dropdown load
@@ -4437,5 +4435,4 @@
     }, 1000);
     //Old COde
 /*    document.addEventListener('DOMContentLoaded', () => setTimeout(() => initThemeBuilder(0), injectThemeBuilderMenu(), 50)); setTimeout(() => initThemeBuilder(0), injectThemeBuilderMenu(), 50);*/
-
 })();
