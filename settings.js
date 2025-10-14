@@ -4146,9 +4146,9 @@
                     instruction.textContent =
                         "💡 For Flat Color: Choose the same color for Start & End";
 
-                    addCursorSelectorSettings(section);
                     section.appendChild(instruction);
                     //buildFeedbackForm(section);
+                    addCursorSelectorSettings(section);
 
                     //buildHeadingSettings(section) //Commented Will see next time
                     // Add more advanced options later
