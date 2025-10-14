@@ -2837,6 +2837,7 @@
             themeData[key] = value;
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
             document.body.style.setProperty(key, value);
+            console.log('Cursor Set:', key, value);
         }
 
         const cursorOptions = [
