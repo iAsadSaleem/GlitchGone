@@ -2876,7 +2876,7 @@
                 toggle.checked = themeData["--custom-cursor"] === `url(${cursor.url}), auto`;
 
                 toggle.addEventListener("change", () => {
-                    const cursorCSS = `url(${cursor.url}), auto`;
+                    const cursorCSS = `url("${cursor.url}") 0 0`;
                     saveVar("--custom-cursor", cursorCSS);
                 });
 
