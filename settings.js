@@ -2859,7 +2859,7 @@
             },
             {
                 name: "Sky Blue Cursor",
-                url: "https://theme-builder-delta.vercel.app/images/skyblue-cursor.png"
+                url: "https://theme-builder-delta.vercel.app/images/skyblue-cusror.png"
             },
             {
                 name: "Blue Border Cursor",
