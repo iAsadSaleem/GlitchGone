@@ -2825,7 +2825,7 @@
         wrapper.style.marginTop = "16px";
 
         const title = document.createElement("h4");
-        title.className = "tb-section-cursor-title";
+        title.className = "tb-header-controls";
         title.innerText = "Custom Cursor";
         wrapper.appendChild(title);
 
