@@ -2917,7 +2917,7 @@
 
                 // ✅ Keep radio selected after reload using CSS variable value
                 const savedCursor = themeData["--custom-cursor"];
-                const cursorCSS = `url("${cursor.url}") 0 0`;
+                const cursorCSS = `url("${cursor.url}") 16 16`;
                 toggle.checked = savedCursor === cursorCSS;
 
                 toggle.addEventListener("change", () => {
@@ -3011,7 +3011,7 @@
                 toggle.name = "custom-pointer-toggle";
 
                 const savedPointer = themeData["--custom-pointer"];
-                const pointerCSS = `url("${pointer.url}") 0 0`;
+                const pointerCSS = `url("${pointer.url}") 16 16`;
                 toggle.checked = savedPointer === pointerCSS;
 
                 toggle.addEventListener("change", () => {
