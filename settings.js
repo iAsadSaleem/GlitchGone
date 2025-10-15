@@ -3011,7 +3011,7 @@
                 toggle.name = "custom-pointer-toggle";
 
                 const savedPointer = themeData["--custom-pointer"];
-                const pointerCSS = `url("${pointer.url}") 16 16 / 32px 32px, auto`;
+                const pointerCSS = `url("${pointer.url}") 16 16 auto / 32px 32px`;
                 toggle.checked = savedPointer === pointerCSS;
 
                 toggle.addEventListener("change", () => {
