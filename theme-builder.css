@@ -1054,7 +1054,7 @@ body::-webkit-scrollbar-track {
     width: 18px;
     height: 18px;
     accent-color: #6366f1; /* Modern browsers support this */
-    cursor: pointer;
+    cursor: var(--custom-pointer) !important;
 }
 
 /* Layout */
