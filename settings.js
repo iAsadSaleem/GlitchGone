@@ -2850,14 +2850,6 @@
                 url: "https://theme-builder-delta.vercel.app/images/sky-cursor.png"
             },
             {
-                name: "Black Line Cursor",
-                url: "https://theme-builder-delta.vercel.app/images/blackline-cursor.png"
-            },
-            {
-                name: "Black Cursor",
-                url: "https://theme-builder-delta.vercel.app/images/black-cursor.png"
-            },
-            {
                 name: "Sky Blue Cursor",
                 url: "https://theme-builder-delta.vercel.app/images/skyblue-cusror.png"
             },
