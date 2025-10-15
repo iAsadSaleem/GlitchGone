@@ -2934,6 +2934,95 @@
         renderCursorOptions();
         container.appendChild(wrapper);
     }
+    function addCursorPointerSelectorSettings(container) {
+        if (document.getElementById("tb-cursor-pointer-settings")) return;
+
+        const wrapper = document.createElement("div");
+        wrapper.className = "tb-cursor-settings";
+        wrapper.id = "tb-cursor-pointer-settings";
+        wrapper.style.marginTop = "16px";
+
+        const title = document.createElement("h4");
+        title.className = "tb-header-controls";
+        title.innerText = "Custom Cursor Pointer";
+        wrapper.appendChild(title);
+
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        savedThemeObj.themeData = savedThemeObj.themeData || {};
+        const themeData = savedThemeObj.themeData;
+
+        function saveVar(key, value) {
+            themeData[key] = value;
+            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            document.body.style.setProperty(key, value);
+            console.log("Pointer Set:", key, value);
+        }
+
+        const pointerOptions = [
+            {
+                name: "Orange Finger Pointer",
+                url: "https://theme-builder-delta.vercel.app/images/orangefinger-pointer.png"
+            },
+            {
+                name: "Black Finger Pointer",
+                url: "https://theme-builder-delta.vercel.app/images/blackfinger-pointer.png"
+            },
+            {
+                name: "Sky Blue Pointer",
+                url: "https://theme-builder-delta.vercel.app/images/skyblue-pointer.png"
+            },
+            {
+                name: "Purple Transparent Pointer",
+                url: "https://theme-builder-delta.vercel.app/images/purpletransperant-pointer.png"
+            },
+            {
+                name: "Sky Blue Transparent Pointer",
+                url: "https://theme-builder-delta.vercel.app/images/skybluetransperant-pointer.png"
+            }
+        ];
+
+        const pointerList = document.createElement("div");
+        pointerList.className = "tb-cursor-list";
+        wrapper.appendChild(pointerList);
+
+        function renderPointerOptions() {
+            pointerList.innerHTML = "";
+
+            pointerOptions.forEach(pointer => {
+                const item = document.createElement("div");
+                item.className = "tb-cursor-item";
+
+                const img = document.createElement("img");
+                img.src = pointer.url;
+                img.alt = pointer.name;
+                img.className = "tb-cursor-image";
+
+                const label = document.createElement("span");
+                label.className = "tb-cursor-label";
+                label.textContent = pointer.name;
+
+                const toggle = document.createElement("input");
+                toggle.type = "radio";
+                toggle.name = "custom-pointer-toggle";
+
+                const savedPointer = themeData["--custom-pointer"];
+                const pointerCSS = `url("${pointer.url}") 0 0`;
+                toggle.checked = savedPointer === pointerCSS;
+
+                toggle.addEventListener("change", () => {
+                    saveVar("--custom-pointer", pointerCSS);
+                });
+
+                item.appendChild(img);
+                item.appendChild(label);
+                item.appendChild(toggle);
+                pointerList.appendChild(item);
+            });
+        }
+
+        renderPointerOptions();
+        container.appendChild(wrapper);
+    }
 
     // ✅ Your existing observer (don’t change this)
     function waitForSidebarMenus(callback) {
@@ -4189,7 +4278,7 @@
                     section.appendChild(instruction);
                     //buildFeedbackForm(section);
                     addCursorSelectorSettings(section);
-
+                    addCursorPointerSelectorSettings(section);
                     //buildHeadingSettings(section) //Commented Will see next time
                     // Add more advanced options later
                 }, "", true
