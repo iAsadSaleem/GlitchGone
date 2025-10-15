@@ -142,7 +142,6 @@
     width: 30px;
     height: 30px;
     border: none;
-    cursor: var(--custom-pointer) !important;
     flex-shrink: 0; /* prevent shrinking */
     background-color: #e1e4e500;
     padding: 1px 1px 1px 1px;
