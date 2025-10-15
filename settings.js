@@ -368,7 +368,6 @@
         textInput.className = "tb-logo-input"; // reuse styling
         textInput.placeholder = "Enter image URL";
         textInput.value = storedImage; // ✅ always raw URL
-        console.log('Here is the Data:', storedImage );
         function applyImage(rawUrl) {
             // ✅ Strip accidental url("...") wrapper before saving
             const cleanUrl = rawUrl.replace(/^url\(["']?|["']?\)$/g, "").trim();
@@ -379,7 +378,6 @@
                     "--login-background-active",
                     `url("${cleanUrl}")`
                 );
-                console.log('Here is the cleanUrl:', cleanUrl);
 
                 // Save only the raw URL
                 savedThemeObj.themeData["--login-background-image"] = cleanUrl;
