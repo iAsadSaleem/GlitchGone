@@ -2861,35 +2861,41 @@
                 name: "Sky Blue Cursor",
                 url: "https://theme-builder-delta.vercel.app/images/skyblue-cusror.png"
             },
+            // ✅ New cursor options added below
             {
-                name: "Blue Border Cursor",
-                url: "https://theme-builder-delta.vercel.app/images/blueborder-cursor.png"
+                name: "Black New Cursor",
+                url: "https://theme-builder-delta.vercel.app/images/black-new.png"
             },
             {
-                name: "Grey Cursor",
-                url: "https://theme-builder-delta.vercel.app/images/grey-cursor.png"
+                name: "Mouse Cursor",
+                url: "https://theme-builder-delta.vercel.app/images/mouse-cursor.png"
             },
             {
-                name: "Light Grey Cursor",
-                url: "https://theme-builder-delta.vercel.app/images/lightgrey-cursor.png"
+                name: "Purple Gradient Cursor",
+                url: "https://theme-builder-delta.vercel.app/images/purplegradient-cursor.png"
             },
             {
-                name: "Stylish Cursor",
-                url: "https://theme-builder-delta.vercel.app/images/stylish-cursor.png"
+                name: "Yellow Orange Cursor",
+                url: "https://theme-builder-delta.vercel.app/images/yelloworange-cursor.png"
             },
             {
-                name: "Blueish Cursor",
-                url: "https://theme-builder-delta.vercel.app/images/blueish-cursor.png"
+                name: "Mouse Sharp Cursor",
+                url: "https://theme-builder-delta.vercel.app/images/mousesharp-cursor.png"
             },
             {
-                name: "Advance Blue Cursor",
-                url: "https://theme-builder-delta.vercel.app/images/advanceblue-cursor.png"
+                name: "Gradient Border Cursor",
+                url: "https://theme-builder-delta.vercel.app/images/gradientborder-cursor.png"
             },
             {
-                name: "Half Sky Blue Cursor",
-                url: "https://theme-builder-delta.vercel.app/images/halfskyblue-cursor.png"
+                name: "Transparent Cursor",
+                url: "https://theme-builder-delta.vercel.app/images/transperant-cursor.png"
+            },
+            {
+                name: "Classic Cursor",
+                url: "https://theme-builder-delta.vercel.app/images/cursor.png"
             }
         ];
+
 
         const cursorList = document.createElement("div");
         cursorList.className = "tb-cursor-list";
