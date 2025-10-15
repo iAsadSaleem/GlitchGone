@@ -2966,14 +2966,6 @@
                 url: "https://theme-builder-delta.vercel.app/images/orangefinger-pointer.png"
             },
             {
-                name: "Purple Transparent Pointer",
-                url: "https://theme-builder-delta.vercel.app/images/purpletransperant-pointer.png"
-            },
-            {
-                name: "Sky Blue Transparent Pointer",
-                url: "https://theme-builder-delta.vercel.app/images/skybluetransperant-pointer.png"
-            },
-            {
                 name: "Green Pointer",
                 url: "https://theme-builder-delta.vercel.app/images/green-pointer.png"
             },
@@ -2984,9 +2976,40 @@
             {
                 name: "Light Orange Pointer",
                 url: "https://theme-builder-delta.vercel.app/images/lightorange-pointer.png"
+            },
+            {
+                name: "Golden Hand Pointer",
+                url: "https://theme-builder-delta.vercel.app/images/goldenhand-pointer.png"
+            },
+            {
+                name: "Glow Hand Pointer",
+                url: "https://theme-builder-delta.vercel.app/images/glowhand-pointer.png"
+            },
+            {
+                name: "Orange R Pointer",
+                url: "https://theme-builder-delta.vercel.app/images/oranger-pointer.png"
+            },
+            {
+                name: "Sky Blue New Pointer",
+                url: "https://theme-builder-delta.vercel.app/images/skybluenew-pointer.png"
+            },
+            {
+                name: "Classic Blue Pointer",
+                url: "https://theme-builder-delta.vercel.app/images/classicblue-pointer.png"
+            },
+            {
+                name: "Black New Pointer",
+                url: "https://theme-builder-delta.vercel.app/images/blacknew-pointer.png"
+            },
+            {
+                name: "Yellow Orange Pointer",
+                url: "https://theme-builder-delta.vercel.app/images/yelloworange-pointer.png"
+            },
+            {
+                name: "Hand Pointer",
+                url: "https://theme-builder-delta.vercel.app/images/hand-pointer.png"
             }
         ];
-
 
         const pointerList = document.createElement("div");
         pointerList.className = "tb-cursor-list";
