@@ -2885,6 +2885,10 @@
             {
                 name: "Classic Cursor",
                 url: "https://theme-builder-delta.vercel.app/images/cursor.png"
+            },
+            {
+                name: "Target Cursor",
+                url: "https://theme-builder-delta.vercel.app/images/target-cursor.png"
             }
         ];
 
