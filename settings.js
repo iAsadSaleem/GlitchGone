@@ -2964,22 +2964,27 @@
                 url: "https://theme-builder-delta.vercel.app/images/orangefinger-pointer.png"
             },
             {
-                name: "Black Finger Pointer",
-                url: "https://theme-builder-delta.vercel.app/images/blackfinger-pointer.png"
-            },
-            {
-                name: "Sky Blue Pointer",
-                url: "https://theme-builder-delta.vercel.app/images/skyblue-pointer.png"
-            },
-            {
                 name: "Purple Transparent Pointer",
                 url: "https://theme-builder-delta.vercel.app/images/purpletransperant-pointer.png"
             },
             {
                 name: "Sky Blue Transparent Pointer",
                 url: "https://theme-builder-delta.vercel.app/images/skybluetransperant-pointer.png"
+            },
+            {
+                name: "Green Pointer",
+                url: "https://theme-builder-delta.vercel.app/images/green-pointer.png"
+            },
+            {
+                name: "Black Pointer",
+                url: "https://theme-builder-delta.vercel.app/images/black-pointer.png"
+            },
+            {
+                name: "Light Orange Pointer",
+                url: "https://theme-builder-delta.vercel.app/images/lightorange-pointer.png"
             }
         ];
+
 
         const pointerList = document.createElement("div");
         pointerList.className = "tb-cursor-list";
