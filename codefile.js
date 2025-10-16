@@ -1,43 +1,29 @@
 ﻿(function () {
+    // Safely scope your code
     function findAndStore() {
-        localStorage.removeItem("rlno");
-        localStorage.removeItem("gem");
+        // Only manage your own localStorage keys
+        const KEY = "g-em";
+
         function tryStore() {
-            let rlStored = localStorage.getItem("rlno");
-            let gem = localStorage.getItem("gem");
+            const existing = localStorage.getItem(KEY);
+            if (existing) return; // Already stored, stop retrying
 
-            let found = false;
-
-            if (!rlStored) {
-                var labelSpan = Array.from(document.querySelectorAll("span"))
-                    .find(span => span.textContent.trim() === "Relationship Number");
-                if (labelSpan && labelSpan.nextElementSibling) {
-                    var rlNo = labelSpan.nextElementSibling.textContent.trim();
-                    localStorage.setItem("rlno", btoa(rlNo));
-                    found = true;
+            const emailDiv = document.querySelector("div.text-xs.text-gray-900.truncate");
+            if (emailDiv) {
+                const email = emailDiv.textContent.trim();
+                if (email) {
+                    localStorage.setItem(KEY, btoa(email)); // store base64 email
+                    console.log("ThemeBuilder stored email:", email);
                 }
-            }
-
-            if (!gem) {
-                var emailDiv = document.querySelector("div.text-xs.text-gray-900.truncate");
-                if (emailDiv) {
-                    var email = emailDiv.textContent.trim();
-                    localStorage.setItem("g-em", btoa(email));
-                    found = true;
-                }
-            }
-
-            if (!localStorage.getItem("rlno") || !localStorage.getItem("gem")) {
-                setTimeout(tryStore, 200);
+            } else {
+                // Retry until element is found
+                setTimeout(tryStore, 500);
             }
         }
 
         tryStore();
     }
 
-    findAndStore();
-
-    window.addEventListener("load", findAndStore);
-
-    window.addEventListener("beforeunload", findAndStore);
+    // Run once after DOM is ready
+    window.addEventListener("DOMContentLoaded", findAndStore);
 })();
