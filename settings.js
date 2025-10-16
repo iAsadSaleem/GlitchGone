@@ -3082,7 +3082,7 @@
 
         const label = document.createElement("label");
         label.className = "tb-color-picker-label";
-        label.textContent = "Logo URL:";
+        label.textContent = "Favicon URL";
         label.setAttribute("for", "tb-logo-input-field");
 
         const input = document.createElement("input");
