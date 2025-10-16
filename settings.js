@@ -2954,129 +2954,6 @@
         renderCursorOptions();
         container.appendChild(wrapper);
     }
-
-
-
-    //function addCursorSelectorSettings(container) {
-    //    if (document.getElementById("tb-cursor-settings")) return;
-
-    //    const wrapper = document.createElement("div");
-    //    wrapper.className = "tb-cursor-settings";
-    //    wrapper.id = "tb-cursor-settings";
-    //    wrapper.style.marginTop = "16px";
-
-    //    const title = document.createElement("h4");
-    //    title.className = "tb-header-controls";
-    //    title.innerText = "Custom Cursor";
-    //    wrapper.appendChild(title);
-
-    //    const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-    //    savedThemeObj.themeData = savedThemeObj.themeData || {};
-    //    const themeData = savedThemeObj.themeData;
-
-    //    function saveVar(key, value) {
-    //        themeData[key] = value;
-    //        localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
-    //        document.body.style.setProperty(key, value);
-    //        console.log('Cursor Set:', key, value);
-    //    }
-
-    //    const cursorOptions = [
-    //        {
-    //            name: "Purple Cursor",
-    //            url: "https://theme-builder-delta.vercel.app/images/purple-cursor.png"
-    //        },
-    //        {
-    //            name: "Sky Cursor",
-    //            url: "https://theme-builder-delta.vercel.app/images/sky-cursor.png"
-    //        },
-    //        {
-    //            name: "Sky Blue Cursor",
-    //            url: "https://theme-builder-delta.vercel.app/images/skyblue-cusror.png"
-    //        },
-    //        // ✅ New cursor options added below
-    //        {
-    //            name: "Black New Cursor",
-    //            url: "https://theme-builder-delta.vercel.app/images/black-new.png"
-    //        },
-    //        {
-    //            name: "Mouse Cursor",
-    //            url: "https://theme-builder-delta.vercel.app/images/mouse-cursor.png"
-    //        },
-    //        {
-    //            name: "Purple Gradient Cursor",
-    //            url: "https://theme-builder-delta.vercel.app/images/purplegradient-cursor.png"
-    //        },
-    //        {
-    //            name: "Yellow Orange Cursor",
-    //            url: "https://theme-builder-delta.vercel.app/images/yelloworange-cursor.png"
-    //        },
-    //        {
-    //            name: "Mouse Sharp Cursor",
-    //            url: "https://theme-builder-delta.vercel.app/images/mousesharp-cursor.png"
-    //        },
-    //        {
-    //            name: "Gradient Border Cursor",
-    //            url: "https://theme-builder-delta.vercel.app/images/gradientborder-cursor.png"
-    //        },
-    //        {
-    //            name: "Transparent Cursor",
-    //            url: "https://theme-builder-delta.vercel.app/images/transperant-cursor.png"
-    //        },
-    //        {
-    //            name: "Classic Cursor",
-    //            url: "https://theme-builder-delta.vercel.app/images/cursor.png"
-    //        },
-    //        {
-    //            name: "Target Cursor",
-    //            url: "https://theme-builder-delta.vercel.app/images/target-cursor.png"
-    //        }
-    //    ];
-
-
-    //    const cursorList = document.createElement("div");
-    //    cursorList.className = "tb-cursor-list";
-    //    wrapper.appendChild(cursorList);
-
-    //    function renderCursorOptions() {
-    //        cursorList.innerHTML = "";
-
-    //        cursorOptions.forEach(cursor => {
-    //            const item = document.createElement("div");
-    //            item.className = "tb-cursor-item";
-
-    //            const img = document.createElement("img");
-    //            img.src = cursor.url;
-    //            img.alt = cursor.name;
-    //            img.className = "tb-cursor-image";
-
-    //            const label = document.createElement("span");
-    //            label.className = "tb-cursor-label";
-    //            label.textContent = cursor.name;
-
-    //            const toggle = document.createElement("input");
-    //            toggle.type = "radio";
-    //            toggle.name = "custom-cursor-toggle";
-
-    //            // ✅ Keep radio selected after reload using CSS variable value
-    //            const savedCursor = themeData["--custom-cursor"];
-    //            const cursorCSS = `url("${cursor.url}") 16 16`;
-    //            toggle.checked = savedCursor === cursorCSS;
-
-    //            toggle.addEventListener("change", () => {
-    //                saveVar("--custom-cursor", cursorCSS);
-    //            });
-
-    //            item.appendChild(img);
-    //            item.appendChild(label);
-    //            item.appendChild(toggle);
-    //            cursorList.appendChild(item);
-    //        });
-    //    }
-
-    //    renderCursorOptions();
-    //    container.appendChild(wrapper);
-    //}
     function addCursorPointerSelectorSettings(container) {
         if (document.getElementById("tb-cursor-pointer-settings")) return;
 
@@ -3090,6 +2967,35 @@
         title.innerText = "Custom Cursor Pointer";
         wrapper.appendChild(title);
 
+        // 🌀 Create Reset Button
+        const resetButton = document.createElement("button");
+        resetButton.innerText = "🖱️ Reset to Default Pointer";
+        resetButton.className = "tb-reset-pointer-btn";
+        resetButton.style.cssText = `
+        width: 268px;
+        display: inline-block;
+        background: linear-gradient(90deg, #ff9800, #ff5722);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 6px 16px;
+        font-size: 14px;
+        cursor: pointer;
+        margin-bottom: 12px;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    `;
+        resetButton.addEventListener("mouseenter", () => {
+            resetButton.style.transform = "scale(1.05)";
+            resetButton.style.boxShadow = "0 4px 12px rgba(255, 152, 0, 0.5)";
+        });
+        resetButton.addEventListener("mouseleave", () => {
+            resetButton.style.transform = "scale(1)";
+            resetButton.style.boxShadow = "0 2px 8px rgba(0,0,0,0.2)";
+        });
+
+        wrapper.appendChild(resetButton);
+
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         savedThemeObj.themeData = savedThemeObj.themeData || {};
         const themeData = savedThemeObj.themeData;
@@ -3101,55 +3007,47 @@
             console.log("Pointer Set:", key, value);
         }
 
+        // 🧹 Reset to Default Pointer functionality
+        resetButton.addEventListener("click", () => {
+            // Remove from themeData and DOM
+            delete themeData["--custom-pointer"];
+            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            document.body.style.removeProperty("--custom-pointer");
+            document.documentElement.style.removeProperty("--custom-pointer");
+
+            // Uncheck all radios
+            document.querySelectorAll('input[name="custom-pointer-toggle"]').forEach(radio => {
+                radio.checked = false;
+            });
+
+            // 🧾 Console log verification
+            console.clear();
+            console.log("%c🖱️ Pointer Reset to Default", "color: #ff9800; font-weight: bold; font-size: 14px;");
+
+            const cssVar = document.body.style.getPropertyValue("--custom-pointer") ||
+                document.documentElement.style.getPropertyValue("--custom-pointer");
+            const storedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+            const lsVar = storedTheme?.themeData?.["--custom-pointer"];
+
+            console.log("DOM variable check:", cssVar ? `❌ Still exists: ${cssVar}` : "✅ Removed from DOM");
+            console.log("LocalStorage check:", lsVar ? `❌ Still exists: ${lsVar}` : "✅ Removed from localStorage");
+            console.log("Full userTheme object:", storedTheme);
+        });
+
+        // 🎨 Pointer options
         const pointerOptions = [
-            {
-                name: "Orange Finger Pointer",
-                url: "https://theme-builder-delta.vercel.app/images/orangefinger-pointer.png"
-            },
-            {
-                name: "Green Pointer",
-                url: "https://theme-builder-delta.vercel.app/images/green-pointer.png"
-            },
-            {
-                name: "Black Pointer",
-                url: "https://theme-builder-delta.vercel.app/images/black-pointer.png"
-            },
-            {
-                name: "Light Orange Pointer",
-                url: "https://theme-builder-delta.vercel.app/images/lightorange-pointer.png"
-            },
-            {
-                name: "Golden Hand Pointer",
-                url: "https://theme-builder-delta.vercel.app/images/goldenhand-pointer.png"
-            },
-            {
-                name: "Glow Hand Pointer",
-                url: "https://theme-builder-delta.vercel.app/images/glowhand-pointer.png"
-            },
-            {
-                name: "Orange R Pointer",
-                url: "https://theme-builder-delta.vercel.app/images/oranger-pointer.png"
-            },
-            {
-                name: "Sky Blue New Pointer",
-                url: "https://theme-builder-delta.vercel.app/images/skybluenew-pointer.png"
-            },
-            {
-                name: "Classic Blue Pointer",
-                url: "https://theme-builder-delta.vercel.app/images/classicblue-pointer.png"
-            },
-            {
-                name: "Black New Pointer",
-                url: "https://theme-builder-delta.vercel.app/images/blacknew-pointer.png"
-            },
-            {
-                name: "Yellow Orange Pointer",
-                url: "https://theme-builder-delta.vercel.app/images/yelloworange-pointer.png"
-            },
-            {
-                name: "Hand Pointer",
-                url: "https://theme-builder-delta.vercel.app/images/hand-pointer.png"
-            }
+            { name: "Orange Finger Pointer", url: "https://theme-builder-delta.vercel.app/images/orangefinger-pointer.png" },
+            { name: "Green Pointer", url: "https://theme-builder-delta.vercel.app/images/green-pointer.png" },
+            { name: "Black Pointer", url: "https://theme-builder-delta.vercel.app/images/black-pointer.png" },
+            { name: "Light Orange Pointer", url: "https://theme-builder-delta.vercel.app/images/lightorange-pointer.png" },
+            { name: "Golden Hand Pointer", url: "https://theme-builder-delta.vercel.app/images/goldenhand-pointer.png" },
+            { name: "Glow Hand Pointer", url: "https://theme-builder-delta.vercel.app/images/glowhand-pointer.png" },
+            { name: "Orange R Pointer", url: "https://theme-builder-delta.vercel.app/images/oranger-pointer.png" },
+            { name: "Sky Blue New Pointer", url: "https://theme-builder-delta.vercel.app/images/skybluenew-pointer.png" },
+            { name: "Classic Blue Pointer", url: "https://theme-builder-delta.vercel.app/images/classicblue-pointer.png" },
+            { name: "Black New Pointer", url: "https://theme-builder-delta.vercel.app/images/blacknew-pointer.png" },
+            { name: "Yellow Orange Pointer", url: "https://theme-builder-delta.vercel.app/images/yelloworange-pointer.png" },
+            { name: "Hand Pointer", url: "https://theme-builder-delta.vercel.app/images/hand-pointer.png" }
         ];
 
         const pointerList = document.createElement("div");
@@ -3162,15 +3060,30 @@
             pointerOptions.forEach(pointer => {
                 const item = document.createElement("div");
                 item.className = "tb-cursor-item";
+                item.style.cssText = `
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                background: #f8f8f8;
+                border-radius: 8px;
+                padding: 8px 12px;
+                margin-bottom: 8px;
+                transition: background 0.3s;
+            `;
+                item.addEventListener("mouseenter", () => item.style.background = "#fff1e0");
+                item.addEventListener("mouseleave", () => item.style.background = "#f8f8f8");
 
                 const img = document.createElement("img");
                 img.src = pointer.url;
                 img.alt = pointer.name;
                 img.className = "tb-cursor-image";
+                img.style.width = "24px";
+                img.style.height = "24px";
 
                 const label = document.createElement("span");
                 label.className = "tb-cursor-label";
                 label.textContent = pointer.name;
+                label.style.flex = "1";
 
                 const toggle = document.createElement("input");
                 toggle.type = "radio";
