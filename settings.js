@@ -3051,6 +3051,76 @@
         renderPointerOptions();
         container.appendChild(wrapper);
     }
+    function addLogoUrlInputSetting(container) {
+        if (document.getElementById("tb-logo-url-setting")) return;
+
+        const wrapper = document.createElement("div");
+        wrapper.className = "tb-logo-url-settings";
+        wrapper.id = "tb-logo-url-setting";
+        wrapper.style.marginTop = "16px";
+
+        // Title / label
+        const title = document.createElement("h4");
+        title.className = "tb-header-controls";
+        title.innerText = "Custom Logo / Favicon URL";
+        wrapper.appendChild(title);
+
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        savedThemeObj.themeData = savedThemeObj.themeData || {};
+        const themeData = savedThemeObj.themeData;
+
+        function saveLogoVar(key, value) {
+            themeData[key] = value;
+            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            document.body.style.setProperty(key, value);
+            console.log("Logo URL set:", key, value);
+        }
+
+        // Create label + input elements
+        const fieldWrapper = document.createElement("div");
+        fieldWrapper.className = "tb-logo-field";
+
+        const label = document.createElement("label");
+        label.className = "tb-color-picker-label";
+        label.textContent = "Enter Logo / Favicon URL:";
+        label.setAttribute("for", "tb-logo-input-field");
+
+        const input = document.createElement("input");
+        input.type = "text";
+        input.id = "tb-logo-input-field";
+        input.className = "tb-logo-input";
+        input.placeholder = "https://example.com/favicon.ico";
+
+        // Pre-fill with saved value if any
+        const savedLogo = themeData["--custom-logo-url"];
+        if (savedLogo) {
+            input.value = savedLogo;
+        }
+
+        // When user changes input (on blur or on Enter), save the CSS variable
+        input.addEventListener("change", () => {
+            const url = input.value.trim();
+            if (url) {
+                // You may wrap it in CSS `url(...)` or leave raw, depending on how you will use it
+                const cssValue = `url("${url}")`;
+                saveLogoVar("--custom-logo-url", url);
+                saveLogoVar("--custom-logo-css", cssValue);
+            }
+        });
+
+        // Optionally you can also listen for "Enter" key
+        input.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                input.blur();  // trigger change event
+            }
+        });
+
+        fieldWrapper.appendChild(label);
+        fieldWrapper.appendChild(input);
+        wrapper.appendChild(fieldWrapper);
+
+        container.appendChild(wrapper);
+    }
 
     // ✅ Your existing observer (don’t change this)
     function waitForSidebarMenus(callback) {
@@ -4290,6 +4360,12 @@
             );
             contentWrapper.appendChild(
                 createSection('<i class="fa-solid fa-database"style="color:white;margin-right:6px;font-size:17px;"></i>Advance Settings', (section) => {
+                    const instruction = document.createElement("p");
+                    instruction.className = "tb-instruction-text";
+                    instruction.textContent =
+                        "💡 For Flat Color: Choose the same color for Start & End";
+
+                    section.appendChild(instruction);
                     buildThemeColorsSection(section); //Main Colors
                     buildHeaderControlsSection(section);
                     buildHelpButtonControls(section);   // Profile Button Color Controls
@@ -4298,15 +4374,10 @@
                     addDashboardCardSettings(section);
                     addBackgroundGradientSettings(section);
 
-                    const instruction = document.createElement("p");
-                    instruction.className = "tb-instruction-text";
-                    instruction.textContent =
-                        "💡 For Flat Color: Choose the same color for Start & End";
-
-                    section.appendChild(instruction);
                     //buildFeedbackForm(section);
                     addCursorSelectorSettings(section);
                     addCursorPointerSelectorSettings(section);
+                    addLogoUrlInputSetting(section);
                     //buildHeadingSettings(section) //Commented Will see next time
                     // Add more advanced options later
                 }, "", true
@@ -4413,7 +4484,7 @@
                                         email: email ? [email] : [],
                                         agencyId,
                                         themeData: savedTheme.themeData,
-                                        selectedTheme: localStorage.getItem("selectedtheme"),
+                                        selectedTheme: savedTheme.selectedTheme,
                                         bodyFont: savedTheme.themeData["--body-font"] || "Arial, sans-serif",
                                         updatedAt: new Date().toISOString(),
                                     };
