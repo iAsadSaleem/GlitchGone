@@ -4657,7 +4657,7 @@
         const themeBuilderItem = document.createElement("div");
         themeBuilderItem.className = "py-2 cursor-pointer dropdown-item theme-builder-highlight";
         themeBuilderItem.innerHTML = `
-        <span style="color: black"> Theme Builder</span>
+        <span class="rainbow-text"> Theme Builder</span>
         <span class="new-badge">NEW</span>
     `;
 
@@ -4700,9 +4700,8 @@
                 left: 50px;
                 font-size: 20px;
                 font-weight: bold;
-                background: linear-gradient(90deg, red, orange, yellow, green, cyan, blue, violet);
                 -webkit-background-clip: text;
-                color: transparent;
+                color: black;
                 animation: rainbowMove 2s linear infinite;
             }
             @keyframes rainbowMove {
