@@ -3059,7 +3059,6 @@
         wrapper.id = "tb-logo-url-setting";
         wrapper.style.marginTop = "16px";
 
-        // Title / label
         const title = document.createElement("h4");
         title.className = "tb-header-controls";
         title.innerText = "Custom Logo / Favicon URL";
@@ -3076,13 +3075,14 @@
             console.log("Logo URL set:", key, value);
         }
 
-        // Create label + input elements
-        const fieldWrapper = document.createElement("div");
-        fieldWrapper.className = "tb-logo-field";
+        // Create a "picker‑style" wrapper similar to color picker in scrollbar settings
+        const pickerWrapper = document.createElement("div");
+        pickerWrapper.className = "tb-color-picker-wrapper"; // reuse same wrapper class
+        // Note: in scrollbar settings, color picker wrapper contains a label + inputs side-by-side
 
         const label = document.createElement("label");
         label.className = "tb-color-picker-label";
-        label.textContent = "Enter Logo / Favicon URL:";
+        label.textContent = "Logo URL:";
         label.setAttribute("for", "tb-logo-input-field");
 
         const input = document.createElement("input");
@@ -3091,33 +3091,29 @@
         input.className = "tb-logo-input";
         input.placeholder = "https://example.com/favicon.ico";
 
-        // Pre-fill with saved value if any
         const savedLogo = themeData["--custom-logo-url"];
         if (savedLogo) {
             input.value = savedLogo;
         }
 
-        // When user changes input (on blur or on Enter), save the CSS variable
         input.addEventListener("change", () => {
             const url = input.value.trim();
             if (url) {
-                // You may wrap it in CSS `url(...)` or leave raw, depending on how you will use it
                 const cssValue = `url("${url}")`;
                 saveLogoVar("--custom-logo-url", url);
                 saveLogoVar("--custom-logo-css", cssValue);
             }
         });
 
-        // Optionally you can also listen for "Enter" key
-        input.addEventListener("keypress", (e) => {
+        input.addEventListener("keypress", e => {
             if (e.key === "Enter") {
-                input.blur();  // trigger change event
+                input.blur();
             }
         });
 
-        fieldWrapper.appendChild(label);
-        fieldWrapper.appendChild(input);
-        wrapper.appendChild(fieldWrapper);
+        pickerWrapper.appendChild(label);
+        pickerWrapper.appendChild(input);
+        wrapper.appendChild(pickerWrapper);
 
         container.appendChild(wrapper);
     }
