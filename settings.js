@@ -3350,7 +3350,6 @@
         allMenus.forEach(menu => {
             const menuId = menu.id?.trim();
             if (!menuId) return; // skip if no ID
-            console.log("🔐 Checking menu ID:", menuId, " | Element:", menu);
             // 🔄 Always remove previous lock icon first (avoid duplicates)
             const existingLock = menu.querySelector(".tb-lock-icon");
             if (existingLock) existingLock.remove();
