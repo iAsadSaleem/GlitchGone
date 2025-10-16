@@ -4413,7 +4413,7 @@
                                         email: email ? [email] : [],
                                         agencyId,
                                         themeData: savedTheme.themeData,
-                                        selectedTheme: savedTheme.selectedTheme,
+                                        selectedTheme: localStorage.getItem("selectedtheme"),
                                         bodyFont: savedTheme.themeData["--body-font"] || "Arial, sans-serif",
                                         updatedAt: new Date().toISOString(),
                                     };
