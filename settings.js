@@ -2833,12 +2833,13 @@
         resetButton.innerText = "🌀 Reset to Default Cursor";
         resetButton.className = "tb-reset-cursor-btn";
         resetButton.style.cssText = `
+        width: 268px;
         display: inline-block;
         background: linear-gradient(90deg, #7b2ff7, #f107a3);
         color: white;
         border: none;
         border-radius: 8px;
-        padding: 10px 16px;
+        padding: 6px 16px;
         font-size: 14px;
         cursor: pointer;
         margin-bottom: 12px;
