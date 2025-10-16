@@ -1,7 +1,4 @@
 (function () {
-    const DEBUG = true;
-    const log = (...args) => { if (DEBUG) console.log('[ThemeBuilder]', ...args); };
-
     let headerObserver = null;
     const MAX_ATTEMPTS = 40;
     // --- Dynamically load Sortable.js ---
@@ -4699,7 +4696,8 @@
                 position: relative;
                 left: 50px;
                 font-size: 20px;
-                font-weight: bold;
+                font-weight: 700;
+                font-family: 'Caveat', cursive;
                 -webkit-background-clip: text;
                 color: black;
                 animation: rainbowMove 2s linear infinite;
