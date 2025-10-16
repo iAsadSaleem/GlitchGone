@@ -4697,7 +4697,7 @@
                 left: 50px;
                 font-size: 20px;
                 font-weight: 700;
-                font-family: 'Caveat', cursive;
+                font-family: 'Caveat', cursive !important;
                 -webkit-background-clip: text;
                 color: black;
                 animation: rainbowMove 2s linear infinite;
