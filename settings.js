@@ -4664,6 +4664,7 @@
             style.id = "theme-builder-style";
             style.innerHTML = `
             .theme-builder-highlight {
+                height:50px;
                 position: relative;
                 border: 2px solid transparent;
                 border-radius: 6px;
@@ -4685,7 +4686,7 @@
             .rainbow-text {
                 position: relative;
                 left: 50px;
-                font-size: 20px;
+                font-size: 30px;
                 font-weight: 700;
                 font-family: 'Caveat', cursive !important;
                 -webkit-background-clip: text;
