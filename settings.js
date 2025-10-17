@@ -3068,7 +3068,7 @@
 
         // --- Cursor Options ---
         const cursorOptions = [
-            { name: "Default Cursor", url: "https://theme-builder-delta.vercel.app/images/defaultb-cursor.png" },
+            { name: "Default Cursor", url: "https://theme-builder-delta.vercel.app/images/defaultc-cursor.png" },
             { name: "Purple Cursor", url: "https://theme-builder-delta.vercel.app/images/purple-cursor.png" },
             { name: "Sky Cursor", url: "https://theme-builder-delta.vercel.app/images/sky-cursor.png" },
             { name: "Sky Blue Cursor", url: "https://theme-builder-delta.vercel.app/images/skyblue-cusror.png" },
@@ -4724,14 +4724,14 @@
                                         bodyFont: savedTheme.themeData["--body-font"] || "Arial, sans-serif",
                                         updatedAt: new Date().toISOString(),
                                     };
-                                    console.log('Here is the themeData:', dbData.themeData);
+                                    //console.log('Here is the themeData:', dbData.themeData);
                                     await fetch("https://theme-builder-delta.vercel.app/api/theme", {
                                         method: "POST",
                                         headers: { "Content-Type": "application/json" },
                                         body: JSON.stringify(dbData),
                                     });
 
-                                    //location.reload();
+                                    location.reload();
                                 } catch (error) {
                                     console.error(error);
                                     loaderOverlay.style.display = "none";
