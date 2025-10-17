@@ -4683,6 +4683,7 @@
                                     // ✅ Your existing apply code here (unchanged)
                                     const themeData = collectThemeVars() || {};
                                     const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                                    console.log('Here is the themeData:', savedtheme.themeData);
                                     savedTheme.themeData = savedTheme.themeData || {};
 
                                     Object.keys(themeData).forEach(key => {
@@ -4730,7 +4731,7 @@
                                         body: JSON.stringify(dbData),
                                     });
 
-                                    location.reload();
+                                    //location.reload();
                                 } catch (error) {
                                     console.error(error);
                                     loaderOverlay.style.display = "none";
