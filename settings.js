@@ -2819,31 +2819,61 @@
         title.innerText = "Custom Cursor";
         wrapper.appendChild(title);
 
+        // --- Create Reset Button ---
+        const resetButton = document.createElement("button");
+        resetButton.innerText = "🌀 Reset to Default Cursor";
+        resetButton.className = "tb-reset-cursor-btn";
+        resetButton.style.cssText = `
+        width: 268px;
+        display: inline-block;
+        background: linear-gradient(90deg, #7b2ff7, #f107a3);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 6px 16px;
+        font-size: 14px;
+        cursor: pointer;
+        margin-bottom: 12px;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    `;
+        resetButton.addEventListener("mouseenter", () => {
+            resetButton.style.transform = "scale(1.05)";
+            resetButton.style.boxShadow = "0 4px 12px rgba(123, 47, 247, 0.4)";
+        });
+        resetButton.addEventListener("mouseleave", () => {
+            resetButton.style.transform = "scale(1)";
+            resetButton.style.boxShadow = "0 2px 8px rgba(0,0,0,0.2)";
+        });
+
+        wrapper.appendChild(resetButton);
+
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         savedThemeObj.themeData = savedThemeObj.themeData || {};
         const themeData = savedThemeObj.themeData;
 
         function saveVar(key, value) {
-            if (value) {
-                themeData[key] = value;
-                localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
-                document.body.style.setProperty(key, value);
-                console.log("Cursor Set:", key, value);
-            } else {
-                delete themeData[key];
-                localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
-                document.body.style.removeProperty(key);
-                console.log("✅ Cursor Reset to Default");
-            }
+            themeData[key] = value;
+            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            document.body.style.setProperty(key, value);
+            console.log("Cursor Set:", key, value);
         }
 
-        // --- Cursor Options ---
+        // --- Reset to Default Functionality ---
+        resetButton.addEventListener("click", () => {
+            delete themeData["--custom-cursor"];
+            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            document.body.style.removeProperty("--custom-cursor");
+
+            // Reset all radio buttons
+            document.querySelectorAll('input[name="custom-cursor-toggle"]').forEach(radio => {
+                radio.checked = false;
+            });
+
+            console.log("✅ Cursor Reset to Default");
+        });
+
         const cursorOptions = [
-            {
-                name: "Default Cursor",
-                url: "", // no image for default
-                isDefault: true
-            },
             { name: "Purple Cursor", url: "https://theme-builder-delta.vercel.app/images/purple-cursor.png" },
             { name: "Sky Cursor", url: "https://theme-builder-delta.vercel.app/images/sky-cursor.png" },
             { name: "Sky Blue Cursor", url: "https://theme-builder-delta.vercel.app/images/skyblue-cusror.png" },
@@ -2865,8 +2895,6 @@
         function renderCursorOptions() {
             cursorList.innerHTML = "";
 
-            const savedCursor = themeData["--custom-cursor"];
-
             cursorOptions.forEach(cursor => {
                 const item = document.createElement("div");
                 item.className = "tb-cursor-item";
@@ -2880,20 +2908,15 @@
                 margin-bottom: 8px;
                 transition: background 0.3s;
             `;
-                item.addEventListener("mouseenter", () => (item.style.background = "#f0e6ff"));
-                item.addEventListener("mouseleave", () => (item.style.background = "#f8f8f8"));
+                item.addEventListener("mouseenter", () => item.style.background = "#f0e6ff");
+                item.addEventListener("mouseleave", () => item.style.background = "#f8f8f8");
 
                 const img = document.createElement("img");
+                img.src = cursor.url;
+                img.alt = cursor.name;
                 img.className = "tb-cursor-image";
                 img.style.width = "24px";
                 img.style.height = "24px";
-
-                if (cursor.isDefault) {
-                    img.src = "https://cdn-icons-png.flaticon.com/512/32/32379.png"; // default arrow icon
-                    img.style.opacity = "0.8";
-                } else {
-                    img.src = cursor.url;
-                }
 
                 const label = document.createElement("span");
                 label.className = "tb-cursor-label";
@@ -2904,20 +2927,12 @@
                 toggle.type = "radio";
                 toggle.name = "custom-cursor-toggle";
 
-                if (cursor.isDefault) {
-                    toggle.checked = !savedCursor;
-                } else {
-                    const cursorCSS = `url("${cursor.url}") 16 16`;
-                    toggle.checked = savedCursor === cursorCSS;
-                }
+                const savedCursor = themeData["--custom-cursor"];
+                const cursorCSS = `url("${cursor.url}") 16 16`;
+                toggle.checked = savedCursor === cursorCSS;
 
                 toggle.addEventListener("change", () => {
-                    if (cursor.isDefault) {
-                        saveVar("--custom-cursor", null);
-                    } else {
-                        const cursorCSS = `url("${cursor.url}") 16 16`;
-                        saveVar("--custom-cursor", cursorCSS);
-                    }
+                    saveVar("--custom-cursor", cursorCSS);
                 });
 
                 item.appendChild(img);
@@ -2930,7 +2945,6 @@
         renderCursorOptions();
         container.appendChild(wrapper);
     }
-
     function addCursorPointerSelectorSettings(container) {
         if (document.getElementById("tb-cursor-pointer-settings")) return;
 
