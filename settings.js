@@ -3155,35 +3155,6 @@
         title.innerText = "Custom Cursor Pointer";
         wrapper.appendChild(title);
 
-        // 🌀 Create Reset Button
-        const resetButton = document.createElement("button");
-        resetButton.innerText = "🖱️ Reset to Default Pointer";
-        resetButton.className = "tb-reset-pointer-btn";
-        resetButton.style.cssText = `
-        width: 268px;
-        display: inline-block;
-        background: linear-gradient(90deg, #ff9800, #ff5722);
-        color: white;
-        border: none;
-        border-radius: 8px;
-        padding: 6px 16px;
-        font-size: 14px;
-        cursor: pointer;
-        margin-bottom: 12px;
-        transition: all 0.3s ease;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    `;
-        resetButton.addEventListener("mouseenter", () => {
-            resetButton.style.transform = "scale(1.05)";
-            resetButton.style.boxShadow = "0 4px 12px rgba(255, 152, 0, 0.5)";
-        });
-        resetButton.addEventListener("mouseleave", () => {
-            resetButton.style.transform = "scale(1)";
-            resetButton.style.boxShadow = "0 2px 8px rgba(0,0,0,0.2)";
-        });
-
-        wrapper.appendChild(resetButton);
-
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         savedThemeObj.themeData = savedThemeObj.themeData || {};
         const themeData = savedThemeObj.themeData;
@@ -3195,35 +3166,9 @@
             console.log("Pointer Set:", key, value);
         }
 
-        // 🧹 Reset to Default Pointer functionality
-        resetButton.addEventListener("click", () => {
-            // Remove from themeData and DOM
-            delete themeData["--custom-pointer"];
-            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
-            document.body.style.removeProperty("--custom-pointer");
-            document.documentElement.style.removeProperty("--custom-pointer");
-
-            // Uncheck all radios
-            document.querySelectorAll('input[name="custom-pointer-toggle"]').forEach(radio => {
-                radio.checked = false;
-            });
-
-            // 🧾 Console log verification
-            console.clear();
-            console.log("%c🖱️ Pointer Reset to Default", "color: #ff9800; font-weight: bold; font-size: 14px;");
-
-            const cssVar = document.body.style.getPropertyValue("--custom-pointer") ||
-                document.documentElement.style.getPropertyValue("--custom-pointer");
-            const storedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
-            const lsVar = storedTheme?.themeData?.["--custom-pointer"];
-
-            console.log("DOM variable check:", cssVar ? `❌ Still exists: ${cssVar}` : "✅ Removed from DOM");
-            console.log("LocalStorage check:", lsVar ? `❌ Still exists: ${lsVar}` : "✅ Removed from localStorage");
-            console.log("Full userTheme object:", storedTheme);
-        });
-
         // 🎨 Pointer options
         const pointerOptions = [
+            { name: "Default Pointer", url: "https://theme-builder-delta.vercel.app/images/default-pointer.png", isDefault: true },
             { name: "Orange Finger Pointer", url: "https://theme-builder-delta.vercel.app/images/orangefinger-pointer.png" },
             { name: "Green Pointer", url: "https://theme-builder-delta.vercel.app/images/green-pointer.png" },
             { name: "Black Pointer", url: "https://theme-builder-delta.vercel.app/images/black-pointer.png" },
@@ -3244,6 +3189,8 @@
 
         function renderPointerOptions() {
             pointerList.innerHTML = "";
+
+            const savedPointer = themeData["--custom-pointer"];
 
             pointerOptions.forEach(pointer => {
                 const item = document.createElement("div");
@@ -3277,8 +3224,8 @@
                 toggle.type = "radio";
                 toggle.name = "custom-pointer-toggle";
 
-                const savedPointer = themeData["--custom-pointer"];
-                const pointerCSS = `url("${pointer.url}") 16 16`;
+                // ✅ Store "pointer" for default; URL for others
+                const pointerCSS = pointer.isDefault ? "pointer" : `url("${pointer.url}") 16 16`;
                 toggle.checked = savedPointer === pointerCSS;
 
                 toggle.addEventListener("change", () => {
@@ -3295,6 +3242,7 @@
         renderPointerOptions();
         container.appendChild(wrapper);
     }
+
     function addLogoUrlInputSetting(container) {
         if (document.getElementById("tb-logo-url-setting")) return;
 
