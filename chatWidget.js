@@ -1,4 +1,5 @@
-window.addEventListener('load', function() {
+window.addEventListener('load', function () {
+    console.log('File is running');
   const btn = document.createElement('button');
   btn.textContent = 'Chat with us';
   Object.assign(btn.style, {
