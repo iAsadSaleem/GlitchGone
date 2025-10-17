@@ -1062,4 +1062,6 @@ body::-webkit-scrollbar-track {
     flex-direction: column;
     gap: 10px;
 }
-    
+.tb-title{
+    font-weight: 700;
+}
