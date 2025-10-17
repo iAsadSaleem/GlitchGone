@@ -502,7 +502,6 @@
     function buildThemeSelectorSection(container) {
         if (!container) return;
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        const savedThemeObj = { themeData: vars, selectedTheme: themeName };
 
         // inject minimal styles once
         if (!document.getElementById("tb-theme-selector-styles")) {
