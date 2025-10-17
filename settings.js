@@ -3127,11 +3127,7 @@
                 toggle.checked = savedCursor === cursorCSS;
 
                 toggle.addEventListener("change", () => {
-                    if (cursor.name === "Default Cursor") {
-                        saveVar("--custom-cursor", null);
-                    } else {
                         saveVar("--custom-cursor", cursorCSS);
-                    }
                 });
 
                 item.appendChild(img);
