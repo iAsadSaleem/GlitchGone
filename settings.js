@@ -2946,94 +2946,218 @@
     //    container.appendChild(wrapper);
     //}
 
+    //function addCursorSelectorSettings(container) {
+    //    if (document.getElementById("tb-cursor-settings")) return;
+    //    const wrapper = document.createElement("div");
+    //    wrapper.className = "tb-cursor-settings";
+    //    wrapper.id = "tb-cursor-settings";
+    //    wrapper.style.marginTop = "16px";
+    //    const title = document.createElement("h4");
+    //    title.className = "tb-header-controls";
+    //    title.innerText = "Custom Cursor";
+    //    wrapper.appendChild(title);
+    //    const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+    //    savedThemeObj.themeData = savedThemeObj.themeData || {};
+    //    const themeData = savedThemeObj.themeData;
+
+    //    function saveVar(key, value) {
+    //        themeData[key] = value;
+    //        localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+    //        document.body.style.setProperty(key, value);
+    //        console.log('Cursor Set:', key, value);
+    //    }
+    //    const cursorOptions = [{
+    //        name: "Purple Cursor",
+    //        url: "https://theme-builder-delta.vercel.app/images/purple-cursor.png"
+    //    }, {
+    //        name: "Sky Cursor",
+    //        url: "https://theme-builder-delta.vercel.app/images/sky-cursor.png"
+    //    }, {
+    //        name: "Sky Blue Cursor",
+    //        url: "https://theme-builder-delta.vercel.app/images/skyblue-cusror.png"
+    //    }, {
+    //        name: "Black New Cursor",
+    //        url: "https://theme-builder-delta.vercel.app/images/black-new.png"
+    //    }, {
+    //        name: "Mouse Cursor",
+    //        url: "https://theme-builder-delta.vercel.app/images/mouse-cursor.png"
+    //    }, {
+    //        name: "Purple Gradient Cursor",
+    //        url: "https://theme-builder-delta.vercel.app/images/purplegradient-cursor.png"
+    //    }, {
+    //        name: "Yellow Orange Cursor",
+    //        url: "https://theme-builder-delta.vercel.app/images/yelloworange-cursor.png"
+    //    }, {
+    //        name: "Mouse Sharp Cursor",
+    //        url: "https://theme-builder-delta.vercel.app/images/mousesharp-cursor.png"
+    //    }, {
+    //        name: "Gradient Border Cursor",
+    //        url: "https://theme-builder-delta.vercel.app/images/gradientborder-cursor.png"
+    //    }, {
+    //        name: "Transparent Cursor",
+    //        url: "https://theme-builder-delta.vercel.app/images/transperant-cursor.png"
+    //    }, {
+    //        name: "Classic Cursor",
+    //        url: "https://theme-builder-delta.vercel.app/images/cursor.png"
+    //    }, {
+    //        name: "Target Cursor",
+    //        url: "https://theme-builder-delta.vercel.app/images/target-cursor.png"
+    //    }];
+    //    const cursorList = document.createElement("div");
+    //    cursorList.className = "tb-cursor-list";
+    //    wrapper.appendChild(cursorList);
+
+    //    function renderCursorOptions() {
+    //        cursorList.innerHTML = "";
+    //        cursorOptions.forEach(cursor => {
+    //            const item = document.createElement("div");
+    //            item.className = "tb-cursor-item";
+    //            const img = document.createElement("img");
+    //            img.src = cursor.url;
+    //            img.alt = cursor.name;
+    //            img.className = "tb-cursor-image";
+    //            const label = document.createElement("span");
+    //            label.className = "tb-cursor-label";
+    //            label.textContent = cursor.name;
+    //            const toggle = document.createElement("input");
+    //            toggle.type = "radio";
+    //            toggle.name = "custom-cursor-toggle";
+    //            const savedCursor = themeData["--custom-cursor"];
+    //            const cursorCSS = `url("${cursor.url}") 16 16`;
+    //            toggle.checked = savedCursor === cursorCSS;
+    //            toggle.addEventListener("change", () => {
+    //                saveVar("--custom-cursor", cursorCSS);
+    //            });
+    //            item.appendChild(img);
+    //            item.appendChild(label);
+    //            item.appendChild(toggle);
+    //            cursorList.appendChild(item);
+    //        });
+    //    }
+    //    renderCursorOptions();
+    //    container.appendChild(wrapper);
+    //}
     function addCursorSelectorSettings(container) {
         if (document.getElementById("tb-cursor-settings")) return;
+
         const wrapper = document.createElement("div");
         wrapper.className = "tb-cursor-settings";
         wrapper.id = "tb-cursor-settings";
         wrapper.style.marginTop = "16px";
+
         const title = document.createElement("h4");
         title.className = "tb-header-controls";
         title.innerText = "Custom Cursor";
         wrapper.appendChild(title);
+
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         savedThemeObj.themeData = savedThemeObj.themeData || {};
         const themeData = savedThemeObj.themeData;
 
         function saveVar(key, value) {
-            themeData[key] = value;
-            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
-            document.body.style.setProperty(key, value);
-            console.log('Cursor Set:', key, value);
+            if (value) {
+                themeData[key] = value;
+                localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+                document.body.style.setProperty(key, value);
+                console.log("Cursor Set:", key, value);
+            } else {
+                delete themeData[key];
+                localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+                document.body.style.removeProperty(key);
+                console.log("✅ Cursor Reset to Default");
+            }
         }
-        const cursorOptions = [{
-            name: "Purple Cursor",
-            url: "https://theme-builder-delta.vercel.app/images/purple-cursor.png"
-        }, {
-            name: "Sky Cursor",
-            url: "https://theme-builder-delta.vercel.app/images/sky-cursor.png"
-        }, {
-            name: "Sky Blue Cursor",
-            url: "https://theme-builder-delta.vercel.app/images/skyblue-cusror.png"
-        }, {
-            name: "Black New Cursor",
-            url: "https://theme-builder-delta.vercel.app/images/black-new.png"
-        }, {
-            name: "Mouse Cursor",
-            url: "https://theme-builder-delta.vercel.app/images/mouse-cursor.png"
-        }, {
-            name: "Purple Gradient Cursor",
-            url: "https://theme-builder-delta.vercel.app/images/purplegradient-cursor.png"
-        }, {
-            name: "Yellow Orange Cursor",
-            url: "https://theme-builder-delta.vercel.app/images/yelloworange-cursor.png"
-        }, {
-            name: "Mouse Sharp Cursor",
-            url: "https://theme-builder-delta.vercel.app/images/mousesharp-cursor.png"
-        }, {
-            name: "Gradient Border Cursor",
-            url: "https://theme-builder-delta.vercel.app/images/gradientborder-cursor.png"
-        }, {
-            name: "Transparent Cursor",
-            url: "https://theme-builder-delta.vercel.app/images/transperant-cursor.png"
-        }, {
-            name: "Classic Cursor",
-            url: "https://theme-builder-delta.vercel.app/images/cursor.png"
-        }, {
-            name: "Target Cursor",
-            url: "https://theme-builder-delta.vercel.app/images/target-cursor.png"
-        }];
+
+        // --- Cursor Options ---
+        const cursorOptions = [
+            {
+                name: "Default Cursor",
+                url: "", // no image for default
+                isDefault: true
+            },
+            { name: "Purple Cursor", url: "https://theme-builder-delta.vercel.app/images/purple-cursor.png" },
+            { name: "Sky Cursor", url: "https://theme-builder-delta.vercel.app/images/sky-cursor.png" },
+            { name: "Sky Blue Cursor", url: "https://theme-builder-delta.vercel.app/images/skyblue-cusror.png" },
+            { name: "Black New Cursor", url: "https://theme-builder-delta.vercel.app/images/black-new.png" },
+            { name: "Mouse Cursor", url: "https://theme-builder-delta.vercel.app/images/mouse-cursor.png" },
+            { name: "Purple Gradient Cursor", url: "https://theme-builder-delta.vercel.app/images/purplegradient-cursor.png" },
+            { name: "Yellow Orange Cursor", url: "https://theme-builder-delta.vercel.app/images/yelloworange-cursor.png" },
+            { name: "Mouse Sharp Cursor", url: "https://theme-builder-delta.vercel.app/images/mousesharp-cursor.png" },
+            { name: "Gradient Border Cursor", url: "https://theme-builder-delta.vercel.app/images/gradientborder-cursor.png" },
+            { name: "Transparent Cursor", url: "https://theme-builder-delta.vercel.app/images/transperant-cursor.png" },
+            { name: "Classic Cursor", url: "https://theme-builder-delta.vercel.app/images/cursor.png" },
+            { name: "Target Cursor", url: "https://theme-builder-delta.vercel.app/images/target-cursor.png" }
+        ];
+
         const cursorList = document.createElement("div");
         cursorList.className = "tb-cursor-list";
         wrapper.appendChild(cursorList);
 
         function renderCursorOptions() {
             cursorList.innerHTML = "";
+
+            const savedCursor = themeData["--custom-cursor"];
+
             cursorOptions.forEach(cursor => {
                 const item = document.createElement("div");
                 item.className = "tb-cursor-item";
+                item.style.cssText = `
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                background: #f8f8f8;
+                border-radius: 8px;
+                padding: 8px 12px;
+                margin-bottom: 8px;
+                transition: background 0.3s;
+            `;
+                item.addEventListener("mouseenter", () => (item.style.background = "#f0e6ff"));
+                item.addEventListener("mouseleave", () => (item.style.background = "#f8f8f8"));
+
                 const img = document.createElement("img");
-                img.src = cursor.url;
-                img.alt = cursor.name;
                 img.className = "tb-cursor-image";
+                img.style.width = "24px";
+                img.style.height = "24px";
+
+                if (cursor.isDefault) {
+                    img.src = "https://cdn-icons-png.flaticon.com/512/32/32379.png"; // default arrow icon
+                    img.style.opacity = "0.8";
+                } else {
+                    img.src = cursor.url;
+                }
+
                 const label = document.createElement("span");
                 label.className = "tb-cursor-label";
                 label.textContent = cursor.name;
+                label.style.flex = "1";
+
                 const toggle = document.createElement("input");
                 toggle.type = "radio";
                 toggle.name = "custom-cursor-toggle";
-                const savedCursor = themeData["--custom-cursor"];
-                const cursorCSS = `url("${cursor.url}") 16 16`;
-                toggle.checked = savedCursor === cursorCSS;
+
+                if (cursor.isDefault) {
+                    toggle.checked = !savedCursor;
+                } else {
+                    const cursorCSS = `url("${cursor.url}") 16 16`;
+                    toggle.checked = savedCursor === cursorCSS;
+                }
+
                 toggle.addEventListener("change", () => {
-                    saveVar("--custom-cursor", cursorCSS);
+                    if (cursor.isDefault) {
+                        saveVar("--custom-cursor", null);
+                    } else {
+                        const cursorCSS = `url("${cursor.url}") 16 16`;
+                        saveVar("--custom-cursor", cursorCSS);
+                    }
                 });
+
                 item.appendChild(img);
                 item.appendChild(label);
                 item.appendChild(toggle);
                 cursorList.appendChild(item);
             });
         }
+
         renderCursorOptions();
         container.appendChild(wrapper);
     }
