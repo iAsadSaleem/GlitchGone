@@ -3168,7 +3168,7 @@
 
         // 🎨 Pointer options
         const pointerOptions = [
-            { name: "Default Pointer", url: "https://theme-builder-delta.vercel.app/images/default-pointer.png", isDefault: true },
+            { name: "Default Pointer", url: "https://theme-builder-delta.vercel.app/images/default-pointer.png" },
             { name: "Orange Finger Pointer", url: "https://theme-builder-delta.vercel.app/images/orangefinger-pointer.png" },
             { name: "Green Pointer", url: "https://theme-builder-delta.vercel.app/images/green-pointer.png" },
             { name: "Black Pointer", url: "https://theme-builder-delta.vercel.app/images/black-pointer.png" },
