@@ -1083,9 +1083,9 @@
             themeBtn.style.color = "#fff";
 
             // Save (merge so we don't drop other saved keys like --lockedMenus etc)
-            const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-            savedThemeObj.themeData = { ...(savedThemeObj.themeData || {}), ...vars };
-            savedThemeObj.selectedTheme = themeName;
+            //const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+            //savedThemeObj.themeData = { ...(savedThemeObj.themeData || {}), ...vars };
+            //savedThemeObj.selectedTheme = themeName;
             const savedThemeObj = { themeData: vars, selectedTheme: themeName };
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
         }
