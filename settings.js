@@ -3138,7 +3138,7 @@
                 if (cursor.isDefault) {
                     toggle.checked = !savedCursor;
                 } else {
-                    const cursorCSS = `url("${cursor.url}") 16 16`;
+                    const cursorCSS = `url("${cursor.url}") 0 0, auto`;
                     toggle.checked = savedCursor === cursorCSS;
                 }
 
@@ -3146,7 +3146,7 @@
                     if (cursor.isDefault) {
                         saveVar("--custom-cursor", null);
                     } else {
-                        const cursorCSS = `url("${cursor.url}") 16 16`;
+                        const cursorCSS = `url("${cursor.url}") 0 0, auto`;
                         saveVar("--custom-cursor", cursorCSS);
                     }
                 });
