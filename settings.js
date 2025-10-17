@@ -3225,7 +3225,7 @@
                 toggle.name = "custom-pointer-toggle";
 
                 // ✅ Store "pointer" for default; URL for others
-                const pointerCSS = pointer.isDefault ? "pointer" : `url("${pointer.url}") 0 0`;
+                const pointerCSS = pointer.name === "Default Pointer"? "pointer": `url("${pointer.url}") 0 0, pointer`;
                 toggle.checked = savedPointer === pointerCSS;
 
                 toggle.addEventListener("change", () => {
