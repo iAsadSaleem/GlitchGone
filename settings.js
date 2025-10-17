@@ -197,6 +197,7 @@
             document.head.appendChild(link);
         }
     }
+
     loadThemeBuilderCSS();
 
     // Utility to create section with optional icon
@@ -300,7 +301,6 @@
         "--login-background-gradient-start": "Login BG Gradient Start Color",
         "--login-background-gradient-end": "Login BG Gradient End Color"
     };
-
     function createLoginGradientPicker() {
         const wrapper = document.createElement("div");
 
@@ -417,7 +417,6 @@
 
         return wrapper;
     }
-
     function createColorPicker(labelText, storageKey, cssVar, applyFn) {
         const wrapper = document.createElement("div");
         wrapper.className = "tb-color-picker-wrapper";
@@ -503,7 +502,8 @@
     function buildThemeSelectorSection(container) {
         if (!container) return;
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        const selectedtheme = localStorage.getItem("selectedtheme");
+        const savedThemeObj = { themeData: vars, selectedTheme: themeName };
+
         // inject minimal styles once
         if (!document.getElementById("tb-theme-selector-styles")) {
             const s = document.createElement("style");
@@ -1086,6 +1086,7 @@
             const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
             savedThemeObj.themeData = { ...(savedThemeObj.themeData || {}), ...vars };
             savedThemeObj.selectedTheme = themeName;
+            const savedThemeObj = { themeData: vars, selectedTheme: themeName };
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
         }
 
@@ -1210,7 +1211,6 @@
         // --- Initial Gradient Apply ---
         updateSidebarGradient();
     }
-
     // Find header controls container
     function findControlsContainer() {
         const header = document.querySelector('header.hl_header') || document.querySelector('header');
@@ -1219,7 +1219,6 @@
         if (!controls || !controls.length) return null;
         return Array.from(controls).sort((a, b) => b.childElementCount - a.childElementCount)[0];
     }
-
     function buildFontFamilySelector(wrapper) {
         const label = document.createElement("label");
         label.textContent = "Choose Font Family";
@@ -1344,7 +1343,6 @@
         savedThemeObj.themeData["--login-card-bg-gradient"] = gradient;
         localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
     }
-
     function createLoginButtonGradientPicker() {
         const wrapper = document.createElement("div");
 
@@ -1611,7 +1609,6 @@
 
         return wrapper;
     }
-
     function createLoginButtonTextInput() {
         const wrapper = document.createElement("div");
         wrapper.className = "tb-color-picker-wrapper";
@@ -2811,7 +2808,6 @@
 
         container.appendChild(wrapper);
     }
-
     function addCursorSelectorSettings(container) {
         if (document.getElementById("tb-cursor-settings")) return;
 
@@ -3558,7 +3554,6 @@
     document.addEventListener("DOMContentLoaded", applyLockedMenus);
 
     // Also run again after slight delay (in case agency menu loads later)
-
    
     setTimeout(applyLockedMenus, 1500);
 
@@ -3619,7 +3614,6 @@
 
         return false; // 🔥 extra layer of safety
     }
-
     function updateIconVariable(menuId, unicodeValue) {
         const cssVarName = getCssVarName(menuId);
         if (!cssVarName) {
@@ -3702,9 +3696,7 @@
             }
         });
     }
-
     // 🚀 Run it
-   
     function applyMenuCustomizations() {
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
 
