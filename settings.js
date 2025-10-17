@@ -502,7 +502,7 @@
     function buildThemeSelectorSection(container) {
         if (!container) return;
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-
+        const selectedtheme = localStorage.getItem("selectedtheme");
         // inject minimal styles once
         if (!document.getElementById("tb-theme-selector-styles")) {
             const s = document.createElement("style");
@@ -1082,10 +1082,9 @@
             themeBtn.style.color = "#fff";
 
             // Save (merge so we don't drop other saved keys like --lockedMenus etc)
-            //const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-            //savedThemeObj.themeData = { ...(savedThemeObj.themeData || {}), ...vars };
-            //savedThemeObj.selectedTheme = themeName;
-             savedThemeObj = { themeData: vars, selectedTheme: themeName };
+            const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+            savedThemeObj.themeData = { ...(savedThemeObj.themeData || {}), ...vars };
+            savedThemeObj.selectedTheme = themeName;
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
         }
 
