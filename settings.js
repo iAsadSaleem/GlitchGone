@@ -3023,7 +3023,7 @@
                 toggle.type = "radio";
                 toggle.name = "custom-cursor-toggle";
                 const savedCursor = themeData["--custom-cursor"];
-                const cursorCSS = 'url("${cursor.url}") 16 16';
+                const cursorCSS = `url("${cursor.url}") 16 16`;
                 toggle.checked = savedCursor === cursorCSS;
                 toggle.addEventListener("change", () => {
                     saveVar("--custom-cursor", cursorCSS);
