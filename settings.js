@@ -3120,7 +3120,7 @@
                 img.style.height = "24px";
 
                 if (cursor.isDefault) {
-                    img.src = "https://cdn-icons-png.flaticon.com/512/32/32379.png"; // default arrow icon
+                    img.src = "https://cdn-icons-png.flaticon.com/512/32/32355.png"; // default arrow icon
                     img.style.opacity = "0.8";
                 } else {
                     img.src = cursor.url;
