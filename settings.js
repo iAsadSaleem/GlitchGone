@@ -3068,7 +3068,7 @@
 
         // --- Cursor Options ---
         const cursorOptions = [
-            { name: "Default Cursor", url: "https://theme-builder-delta.vercel.app/images/defaultc-cursor.png" },
+            { name: "Default Cursor", url: "https://theme-builder-delta.vercel.app/images/defaultc-cursor.png", isDefault: true },
             { name: "Purple Cursor", url: "https://theme-builder-delta.vercel.app/images/purple-cursor.png" },
             { name: "Sky Cursor", url: "https://theme-builder-delta.vercel.app/images/sky-cursor.png" },
             { name: "Sky Blue Cursor", url: "https://theme-builder-delta.vercel.app/images/skyblue-cusror.png" },
@@ -3123,11 +3123,12 @@
                 toggle.type = "radio";
                 toggle.name = "custom-cursor-toggle";
 
-                const cursorCSS = `url("${cursor.url}") 0 0`;
+                // handle default cursor
+                let cursorCSS = cursor.isDefault ? "auto" : `url("${cursor.url}") 0 0`;
                 toggle.checked = savedCursor === cursorCSS;
 
                 toggle.addEventListener("change", () => {
-                        saveVar("--custom-cursor", cursorCSS);
+                    saveVar("--custom-cursor", cursorCSS);
                 });
 
                 item.appendChild(img);
