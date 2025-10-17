@@ -4683,8 +4683,8 @@
                                     // ✅ Your existing apply code here (unchanged)
                                     const themeData = collectThemeVars() || {};
                                     const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
-                                    console.log('Here is the themeData:', savedtheme.themeData);
                                     savedTheme.themeData = savedTheme.themeData || {};
+                                    
 
                                     Object.keys(themeData).forEach(key => {
                                         if (key !== "--lockedMenus" && key !== "--hiddenMenus") {
@@ -4724,7 +4724,7 @@
                                         bodyFont: savedTheme.themeData["--body-font"] || "Arial, sans-serif",
                                         updatedAt: new Date().toISOString(),
                                     };
-
+                                    console.log('Here is the themeData:', dbData.themeData);
                                     await fetch("https://theme-builder-delta.vercel.app/api/theme", {
                                         method: "POST",
                                         headers: { "Content-Type": "application/json" },
