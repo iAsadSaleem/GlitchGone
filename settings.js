@@ -3068,7 +3068,7 @@
 
         // --- Cursor Options ---
         const cursorOptions = [
-            { name: "Default Cursor", url: "https://theme-builder-delta.vercel.app/images/deafultb-cursor.png" },
+            { name: "Default Cursor", url: "https://theme-builder-delta.vercel.app/images/defaultb-cursor.png" },
             { name: "Purple Cursor", url: "https://theme-builder-delta.vercel.app/images/purple-cursor.png" },
             { name: "Sky Cursor", url: "https://theme-builder-delta.vercel.app/images/sky-cursor.png" },
             { name: "Sky Blue Cursor", url: "https://theme-builder-delta.vercel.app/images/skyblue-cusror.png" },
