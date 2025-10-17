@@ -550,7 +550,6 @@
         wrapper.appendChild(themeBtn);
         wrapper.appendChild(dropdownBox);
         container.appendChild(wrapper);
-
         // Themes object (kept from your original)
         const themes = {
             "Default": {
@@ -1061,7 +1060,6 @@
                 "--body-font": "Poppins"
             }
         };
-
         const themeKeys = Object.keys(themes);
         let currentIndex = -1;
 
@@ -3070,11 +3068,7 @@
 
         // --- Cursor Options ---
         const cursorOptions = [
-            {
-                name: "Default Cursor",
-                url: "", // no image for default
-                isDefault: true
-            },
+            { name: "Default Cursor", url: "https://theme-builder-delta.vercel.app/images/default-cursor.png" },
             { name: "Purple Cursor", url: "https://theme-builder-delta.vercel.app/images/purple-cursor.png" },
             { name: "Sky Cursor", url: "https://theme-builder-delta.vercel.app/images/sky-cursor.png" },
             { name: "Sky Blue Cursor", url: "https://theme-builder-delta.vercel.app/images/skyblue-cusror.png" },
@@ -3118,13 +3112,7 @@
                 img.className = "tb-cursor-image";
                 img.style.width = "24px";
                 img.style.height = "24px";
-
-                if (cursor.isDefault) {
-                    img.src = "https://cdn-icons-png.flaticon.com/512/32/32355.png"; // default arrow icon
-                    img.style.opacity = "0.8";
-                } else {
-                    img.src = cursor.url;
-                }
+                img.src = cursor.url;
 
                 const label = document.createElement("span");
                 label.className = "tb-cursor-label";
@@ -3135,18 +3123,13 @@
                 toggle.type = "radio";
                 toggle.name = "custom-cursor-toggle";
 
-                if (cursor.isDefault) {
-                    toggle.checked = !savedCursor;
-                } else {
-                    const cursorCSS = `url("${cursor.url}") 0 0`;
-                    toggle.checked = savedCursor === cursorCSS;
-                }
+                const cursorCSS = `url("${cursor.url}") 0 0`;
+                toggle.checked = savedCursor === cursorCSS;
 
                 toggle.addEventListener("change", () => {
-                    if (cursor.isDefault) {
+                    if (cursor.name === "Default Cursor") {
                         saveVar("--custom-cursor", null);
                     } else {
-                        const cursorCSS = `url("${cursor.url}") 0 0`;
                         saveVar("--custom-cursor", cursorCSS);
                     }
                 });
@@ -3161,6 +3144,7 @@
         renderCursorOptions();
         container.appendChild(wrapper);
     }
+
     function addCursorPointerSelectorSettings(container) {
         if (document.getElementById("tb-cursor-pointer-settings")) return;
 
