@@ -4927,5 +4927,5 @@
     //    initThemeBuilder(0);
     //}, 1000);
     //Old COde
-    document.addEventListener('DOMContentLoaded', () => setTimeout(() => initThemeBuilder(0), injectThemeBuilderMenu(), 1050)); setTimeout(() => initThemeBuilder(0), injectThemeBuilderMenu(), 1050);
+    document.addEventListener('DOMContentLoaded', () => setTimeout(() => initThemeBuilder(0), 1050)); setTimeout(() => initThemeBuilder(0), 1050);
 })();
