@@ -3141,7 +3141,6 @@
         renderCursorOptions();
         container.appendChild(wrapper);
     }
-
     function addCursorPointerSelectorSettings(container) {
         if (document.getElementById("tb-cursor-pointer-settings")) return;
 
@@ -3242,7 +3241,6 @@
         renderPointerOptions();
         container.appendChild(wrapper);
     }
-
     function addLogoUrlInputSetting(container) {
         if (document.getElementById("tb-logo-url-setting")) return;
 
@@ -4885,6 +4883,7 @@
                 const response = await fetch(`https://theme-builder-delta.vercel.app/api/theme/${decodedEmail}`);
                 const data = await response.json();
                 if (data.success) {
+                    injectThemeBuilderMenu(); 
                     createBuilderUI(controlsContainer);
 
                     const headerEl = document.querySelector("header.hl_header") || document.querySelector("header");
@@ -4918,7 +4917,7 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
-            injectThemeBuilderMenu();  // ✅ runs late now
+            // ✅ runs late now
             initThemeBuilder(0);
         }, 500); // ⏳ delay so "Login As" exists
     });
