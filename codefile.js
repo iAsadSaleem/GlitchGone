@@ -1,6 +1,5 @@
 ﻿(function () {
     function findAndStore() {
-        console.log('File is running');
         const KEY = "g-em";
 
         function tryStore() {
@@ -12,7 +11,6 @@
                 const email = emailDiv.textContent.trim();
                 if (email) {
                     localStorage.setItem(KEY, btoa(email));
-                    console.log("ThemeBuilder stored email:", email);
                 }
             } else {
                 setTimeout(tryStore, 500);
