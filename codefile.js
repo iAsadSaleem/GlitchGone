@@ -2,6 +2,7 @@
     // Safely scope your code
     function findAndStore() {
         // Only manage your own localStorage keys
+        console.log('File is running');
         const KEY = "g-em";
 
         function tryStore() {
