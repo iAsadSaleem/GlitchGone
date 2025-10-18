@@ -1,7 +1,6 @@
 (function () {
     let headerObserver = null;
     const MAX_ATTEMPTS = 40;
-    console.log('Working ');
     // --- Dynamically load Sortable.js ---
     (function loadSortable() {
         if (!window.Sortable) { // Only load if not already loaded
