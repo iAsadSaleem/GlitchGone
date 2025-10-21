@@ -3241,155 +3241,162 @@
         renderPointerOptions();
         container.appendChild(wrapper);
     }
-    function addLoaderSelectorSettings(container) {
-        if (document.getElementById("tb-loader-settings")) return;
+
+    async function addLoaderSelectorSettings(container) {
+        if (document.getElementById("tb-loader-selector-settings")) return;
 
         const wrapper = document.createElement("div");
         wrapper.className = "tb-loader-settings";
-        wrapper.id = "tb-loader-settings";
+        wrapper.id = "tb-loader-selector-settings";
         wrapper.style.marginTop = "16px";
 
         const title = document.createElement("h4");
         title.className = "tb-header-controls";
-        title.innerText = "Custom Loader";
+        title.innerText = "Custom Loader Selector";
         wrapper.appendChild(title);
 
         const loaderList = document.createElement("div");
         loaderList.className = "tb-loader-list";
         wrapper.appendChild(loaderList);
 
-        const loadingMessage = document.createElement("div");
-        loadingMessage.textContent = "Loading loaders...";
-        loadingMessage.style.textAlign = "center";
-        loadingMessage.style.padding = "20px";
-        loadingMessage.style.color = "#666";
-        loaderList.appendChild(loadingMessage);
+        // 🧠 Manage userTheme local storage
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        savedThemeObj.themeData = savedThemeObj.themeData || {};
+        const themeData = savedThemeObj.themeData;
 
-        // Function to fetch loaders from API
+        function saveVar(key, value) {
+            themeData[key] = value;
+            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            document.body.style.setProperty(key, value);
+            console.log("💾 Loader Saved:", key, value);
+        }
+
+        // 🧩 Get and decode agencyId from localStorage
+        let agencyId = null;
+        try {
+            const encodedAgn = localStorage.getItem("agn");
+            if (encodedAgn) {
+                agencyId = atob(encodedAgn); // Decode Base64
+                console.log("🏢 Decoded Agency ID:", agencyId);
+            } else {
+                console.error("❌ No 'agn' found in localStorage.");
+                loaderList.innerHTML =
+                    "<p style='color:red;'>Agency ID not found in localStorage.</p>";
+                return;
+            }
+        } catch (err) {
+            console.error("❌ Error decoding agencyId:", err);
+            loaderList.innerHTML =
+                "<p style='color:red;'>Invalid agency ID format.</p>";
+            return;
+        }
+
+        // 🔥 Fetch all loaders from API
         async function fetchLoaders() {
             try {
-                const response = await fetch('https://theme-builder-delta.vercel.app/api/theme/Get-loader-css?agencyId=igd618');
-                const loaders = await response.json();
-
-                loaderList.innerHTML = "";
-
-                if (loaders.length === 0) {
-                    const noLoadersMessage = document.createElement("div");
-                    noLoadersMessage.textContent = "No loaders available";
-                    noLoadersMessage.style.textAlign = "center";
-                    noLoadersMessage.style.padding = "20px";
-                    noLoadersMessage.style.color = "#666";
-                    loaderList.appendChild(noLoadersMessage);
-                    return;
-                }
-
-                renderLoaderOptions(loaders);
-            } catch (error) {
-                console.error("Error fetching loaders:", error);
-                loadingMessage.textContent = "Error loading loaders";
-                loadingMessage.style.color = "#ff0000";
+                const res = await fetch(
+                    `https://theme-builder-delta.vercel.app/api/theme/Get-loader-css?agencyId=${agencyId}`
+                );
+                if (!res.ok) throw new Error("Failed to fetch loaders");
+                const data = await res.json();
+                renderLoaderOptions(data?.loaders || []);
+            } catch (err) {
+                console.error("❌ Error fetching loaders:", err);
+                loaderList.innerHTML =
+                    "<p style='color:red;'>Failed to load loaders. Please try again.</p>";
             }
         }
 
-        // Function to render loader options
+        // 🧱 Render loader options
         function renderLoaderOptions(loaders) {
-            // Get currently saved loader from CSS variable
-            const savedLoader = getComputedStyle(document.documentElement).getPropertyValue('--loadercss').trim();
+            loaderList.innerHTML = "";
 
-            loaders.forEach(loader => {
+            const savedLoader = themeData["--loader-css"]
+                ? JSON.parse(themeData["--loader-css"])
+                : {};
+
+            loaders.forEach((loader) => {
                 const item = document.createElement("div");
                 item.className = "tb-loader-item";
                 item.style.cssText = `
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                background: #f8f8f8;
-                border-radius: 8px;
-                padding: 12px 16px;
-                margin-bottom: 8px;
-                transition: background 0.3s;
-                cursor: pointer;
-            `;
-                item.addEventListener("mouseenter", () => item.style.background = "#fff1e0");
-                item.addEventListener("mouseleave", () => item.style.background = "#f8f8f8");
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: #f8f8f8;
+        border-radius: 8px;
+        padding: 8px 12px;
+        margin-bottom: 8px;
+        transition: background 0.3s;
+      `;
+                item.addEventListener(
+                    "mouseenter",
+                    () => (item.style.background = "#fff1e0")
+                );
+                item.addEventListener(
+                    "mouseleave",
+                    () => (item.style.background = "#f8f8f8")
+                );
 
-                // Preview placeholder
-                const preview = document.createElement("div");
-                preview.className = "tb-loader-preview";
-                preview.style.cssText = `
-                width: 40px;
-                height: 40px;
-                border-radius: 6px;
-                background: linear-gradient(180deg, #0074f7 0%, #00c0f7 100%);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: white;
-                font-size: 12px;
-                font-weight: bold;
-            `;
-                preview.textContent = "Loader";
+                // 🖼️ Preview image
+                const img = document.createElement("img");
+                img.src =
+                    loader.previewImage ||
+                    "https://theme-builder-delta.vercel.app/images/loader-placeholder.png";
+                img.alt = loader.loaderName;
+                img.style.width = "40px";
+                img.style.height = "40px";
+                img.style.objectFit = "contain";
+                img.style.borderRadius = "6px";
 
-                // Loader name
                 const label = document.createElement("span");
-                label.className = "tb-loader-label";
                 label.textContent = loader.loaderName;
                 label.style.flex = "1";
-                label.style.fontWeight = "500";
 
-                // Checkbox for selection
-                const checkbox = document.createElement("input");
-                checkbox.type = "checkbox";
-                checkbox.name = "custom-loader-toggle";
+                const toggle = document.createElement("input");
+                toggle.type = "radio";
+                toggle.name = "custom-loader-toggle";
+                toggle.checked = loader.isActive || savedLoader._id === loader._id;
 
-                // Check if this loader is the active one
-                const isActive = savedLoader === loader._id;
-                checkbox.checked = isActive;
+                // ✅ On change: update localStorage + backend
+                toggle.addEventListener("change", async () => {
+                    const loaderData = { _id: loader._id, isActive: true };
 
-                // Apply active styling
-                if (isActive) {
-                    item.style.background = "#e8f5e8";
-                    item.style.border = "1px solid #4caf50";
-                }
+                    // Save to CSS var and localStorage
+                    saveVar("--loader-css", JSON.stringify(loaderData));
 
-                checkbox.addEventListener("change", () => {
-                    if (checkbox.checked) {
-                        // Uncheck all other checkboxes
-                        document.querySelectorAll('input[name="custom-loader-toggle"]').forEach(otherCheckbox => {
-                            if (otherCheckbox !== checkbox) {
-                                otherCheckbox.checked = false;
-                                // Remove active styling from other items
-                                otherCheckbox.closest('.tb-loader-item').style.background = "#f8f8f8";
-                                otherCheckbox.closest('.tb-loader-item').style.border = "none";
+                    // Deactivate others visually
+                    document
+                        .querySelectorAll("input[name='custom-loader-toggle']")
+                        .forEach((input) => (input.checked = false));
+                    toggle.checked = true;
+
+                    // 🔄 Update backend isActive status
+                    try {
+                        await fetch(
+                            "https://theme-builder-delta.vercel.app/api/theme/loader-css/status",
+                            {
+                                method: "PUT",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify(loaderData),
                             }
-                        });
-
-                        // Save to CSS variable
-                        document.documentElement.style.setProperty('--loadercss', loader._id);
-                        console.log("Loader saved to CSS variable:", loader._id);
-
-                        // Apply active styling
-                        item.style.background = "#e8f5e8";
-                        item.style.border = "1px solid #4caf50";
-                    } else {
-                        // If unchecking, clear the CSS variable
-                        document.documentElement.style.setProperty('--loadercss', '');
-                        item.style.background = "#f8f8f8";
-                        item.style.border = "none";
+                        );
+                        console.log("✅ Loader status updated:", loader.loaderName);
+                    } catch (err) {
+                        console.error("❌ Failed to update loader status:", err);
                     }
                 });
 
-                item.appendChild(preview);
+                item.appendChild(img);
                 item.appendChild(label);
-                item.appendChild(checkbox);
+                item.appendChild(toggle);
                 loaderList.appendChild(item);
             });
         }
 
-        // Initialize
-        fetchLoaders();
+        await fetchLoaders();
         container.appendChild(wrapper);
     }
+
 
     // Usage example:
     // addLoaderSelectorSettings(yourContainerElement);
