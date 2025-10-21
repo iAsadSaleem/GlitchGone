@@ -3292,6 +3292,7 @@
                 );
                 if (!res.ok) throw new Error("Failed to fetch loaders");
                 const data = await res.json();
+                console.log('here are loaders:',data);
                 renderLoaderOptions(data.loaders || []);
             } catch (err) {
                 console.error("❌ Error fetching loaders:", err);
