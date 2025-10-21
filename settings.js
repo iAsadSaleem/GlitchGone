@@ -3241,7 +3241,6 @@
         renderPointerOptions();
         container.appendChild(wrapper);
     }
-
     function addLoaderSelectorSettings(container) {
         if (document.getElementById("tb-loader-settings")) return;
 
@@ -3272,7 +3271,6 @@
                 const response = await fetch('https://theme-builder-delta.vercel.app/api/theme/Get-loader-css?agencyId=igd618');
                 const loaders = await response.json();
 
-                // Remove loading message
                 loaderList.innerHTML = "";
 
                 if (loaders.length === 0) {
@@ -3293,37 +3291,10 @@
             }
         }
 
-        // Function to set loader as active via API
-        async function setLoaderActive(loaderId, isActive) {
-            try {
-                const response = await fetch('https://theme-builder-delta.vercel.app/api/theme/loader-css/status', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        _id: loaderId,
-                        isActive: isActive
-                    })
-                });
-
-                if (response.ok) {
-                    console.log(`Loader ${loaderId} ${isActive ? 'activated' : 'deactivated'}`);
-                    return true;
-                } else {
-                    console.error('Failed to update loader status');
-                    return false;
-                }
-            } catch (error) {
-                console.error("Error updating loader status:", error);
-                return false;
-            }
-        }
-
         // Function to render loader options
         function renderLoaderOptions(loaders) {
-            // Find currently active loader
-            const activeLoader = loaders.find(loader => loader.isActive);
+            // Get currently saved loader from CSS variable
+            const savedLoader = getComputedStyle(document.documentElement).getPropertyValue('--loadercss').trim();
 
             loaders.forEach(loader => {
                 const item = document.createElement("div");
@@ -3342,7 +3313,7 @@
                 item.addEventListener("mouseenter", () => item.style.background = "#fff1e0");
                 item.addEventListener("mouseleave", () => item.style.background = "#f8f8f8");
 
-                // Preview image or placeholder
+                // Preview placeholder
                 const preview = document.createElement("div");
                 preview.className = "tb-loader-preview";
                 preview.style.cssText = `
@@ -3357,19 +3328,7 @@
                 font-size: 12px;
                 font-weight: bold;
             `;
-
-                if (loader.previewImage) {
-                    const img = document.createElement("img");
-                    img.src = loader.previewImage;
-                    img.alt = loader.loaderName;
-                    img.style.width = "100%";
-                    img.style.height = "100%";
-                    img.style.borderRadius = "6px";
-                    img.style.objectFit = "cover";
-                    preview.appendChild(img);
-                } else {
-                    preview.textContent = "Loader";
-                }
+                preview.textContent = "Loader";
 
                 // Loader name
                 const label = document.createElement("span");
@@ -3378,74 +3337,53 @@
                 label.style.flex = "1";
                 label.style.fontWeight = "500";
 
-                // Radio button for selection
-                const radio = document.createElement("input");
-                radio.type = "radio";
-                radio.name = "custom-loader-toggle";
-                radio.checked = loader.isActive;
+                // Checkbox for selection
+                const checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.name = "custom-loader-toggle";
 
-                radio.addEventListener("change", async () => {
-                    if (radio.checked) {
-                        // Uncheck all other radios
-                        document.querySelectorAll('input[name="custom-loader-toggle"]').forEach(otherRadio => {
-                            if (otherRadio !== radio) {
-                                otherRadio.checked = false;
-                            }
-                        });
+                // Check if this loader is the active one
+                const isActive = savedLoader === loader._id;
+                checkbox.checked = isActive;
 
-                        // Set this loader as active via API
-                        const success = await setLoaderActive(loader._id, true);
-
-                        if (success) {
-                            // Apply the loader CSS immediately
-                            applyLoaderCSS(loader.loaderCSS);
-
-                            // Update visual state
-                            item.style.background = "#e8f5e8";
-                            item.style.border = "1px solid #4caf50";
-
-                            // Reset other items
-                            document.querySelectorAll('.tb-loader-item').forEach(otherItem => {
-                                if (otherItem !== item) {
-                                    otherItem.style.background = "#f8f8f8";
-                                    otherItem.style.border = "none";
-                                }
-                            });
-                        } else {
-                            // Revert if API call failed
-                            radio.checked = false;
-                        }
-                    }
-                });
-
-                // Apply active styling if this is the active loader
-                if (loader.isActive) {
+                // Apply active styling
+                if (isActive) {
                     item.style.background = "#e8f5e8";
                     item.style.border = "1px solid #4caf50";
                 }
 
+                checkbox.addEventListener("change", () => {
+                    if (checkbox.checked) {
+                        // Uncheck all other checkboxes
+                        document.querySelectorAll('input[name="custom-loader-toggle"]').forEach(otherCheckbox => {
+                            if (otherCheckbox !== checkbox) {
+                                otherCheckbox.checked = false;
+                                // Remove active styling from other items
+                                otherCheckbox.closest('.tb-loader-item').style.background = "#f8f8f8";
+                                otherCheckbox.closest('.tb-loader-item').style.border = "none";
+                            }
+                        });
+
+                        // Save to CSS variable
+                        document.documentElement.style.setProperty('--loadercss', loader._id);
+                        console.log("Loader saved to CSS variable:", loader._id);
+
+                        // Apply active styling
+                        item.style.background = "#e8f5e8";
+                        item.style.border = "1px solid #4caf50";
+                    } else {
+                        // If unchecking, clear the CSS variable
+                        document.documentElement.style.setProperty('--loadercss', '');
+                        item.style.background = "#f8f8f8";
+                        item.style.border = "none";
+                    }
+                });
+
                 item.appendChild(preview);
                 item.appendChild(label);
-                item.appendChild(radio);
+                item.appendChild(checkbox);
                 loaderList.appendChild(item);
             });
-        }
-
-        // Function to apply loader CSS to the page
-        function applyLoaderCSS(css) {
-            // Remove existing custom loader style
-            const existingStyle = document.getElementById('custom-loader-style');
-            if (existingStyle) {
-                existingStyle.remove();
-            }
-
-            // Add new loader style
-            const style = document.createElement('style');
-            style.id = 'custom-loader-style';
-            style.textContent = css;
-            document.head.appendChild(style);
-
-            console.log("Loader CSS applied");
         }
 
         // Initialize
