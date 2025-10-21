@@ -3241,6 +3241,220 @@
         renderPointerOptions();
         container.appendChild(wrapper);
     }
+
+    function addLoaderSelectorSettings(container) {
+        if (document.getElementById("tb-loader-settings")) return;
+
+        const wrapper = document.createElement("div");
+        wrapper.className = "tb-loader-settings";
+        wrapper.id = "tb-loader-settings";
+        wrapper.style.marginTop = "16px";
+
+        const title = document.createElement("h4");
+        title.className = "tb-header-controls";
+        title.innerText = "Custom Loader";
+        wrapper.appendChild(title);
+
+        const loaderList = document.createElement("div");
+        loaderList.className = "tb-loader-list";
+        wrapper.appendChild(loaderList);
+
+        const loadingMessage = document.createElement("div");
+        loadingMessage.textContent = "Loading loaders...";
+        loadingMessage.style.textAlign = "center";
+        loadingMessage.style.padding = "20px";
+        loadingMessage.style.color = "#666";
+        loaderList.appendChild(loadingMessage);
+
+        // Function to fetch loaders from API
+        async function fetchLoaders() {
+            try {
+                const response = await fetch('https://theme-builder-delta.vercel.app/api/theme/Get-loader-css?agencyId=igd618');
+                const loaders = await response.json();
+
+                // Remove loading message
+                loaderList.innerHTML = "";
+
+                if (loaders.length === 0) {
+                    const noLoadersMessage = document.createElement("div");
+                    noLoadersMessage.textContent = "No loaders available";
+                    noLoadersMessage.style.textAlign = "center";
+                    noLoadersMessage.style.padding = "20px";
+                    noLoadersMessage.style.color = "#666";
+                    loaderList.appendChild(noLoadersMessage);
+                    return;
+                }
+
+                renderLoaderOptions(loaders);
+            } catch (error) {
+                console.error("Error fetching loaders:", error);
+                loadingMessage.textContent = "Error loading loaders";
+                loadingMessage.style.color = "#ff0000";
+            }
+        }
+
+        // Function to set loader as active via API
+        async function setLoaderActive(loaderId, isActive) {
+            try {
+                const response = await fetch('https://theme-builder-delta.vercel.app/api/theme/loader-css/status', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        _id: loaderId,
+                        isActive: isActive
+                    })
+                });
+
+                if (response.ok) {
+                    console.log(`Loader ${loaderId} ${isActive ? 'activated' : 'deactivated'}`);
+                    return true;
+                } else {
+                    console.error('Failed to update loader status');
+                    return false;
+                }
+            } catch (error) {
+                console.error("Error updating loader status:", error);
+                return false;
+            }
+        }
+
+        // Function to render loader options
+        function renderLoaderOptions(loaders) {
+            // Find currently active loader
+            const activeLoader = loaders.find(loader => loader.isActive);
+
+            loaders.forEach(loader => {
+                const item = document.createElement("div");
+                item.className = "tb-loader-item";
+                item.style.cssText = `
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                background: #f8f8f8;
+                border-radius: 8px;
+                padding: 12px 16px;
+                margin-bottom: 8px;
+                transition: background 0.3s;
+                cursor: pointer;
+            `;
+                item.addEventListener("mouseenter", () => item.style.background = "#fff1e0");
+                item.addEventListener("mouseleave", () => item.style.background = "#f8f8f8");
+
+                // Preview image or placeholder
+                const preview = document.createElement("div");
+                preview.className = "tb-loader-preview";
+                preview.style.cssText = `
+                width: 40px;
+                height: 40px;
+                border-radius: 6px;
+                background: linear-gradient(180deg, #0074f7 0%, #00c0f7 100%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-size: 12px;
+                font-weight: bold;
+            `;
+
+                if (loader.previewImage) {
+                    const img = document.createElement("img");
+                    img.src = loader.previewImage;
+                    img.alt = loader.loaderName;
+                    img.style.width = "100%";
+                    img.style.height = "100%";
+                    img.style.borderRadius = "6px";
+                    img.style.objectFit = "cover";
+                    preview.appendChild(img);
+                } else {
+                    preview.textContent = "Loader";
+                }
+
+                // Loader name
+                const label = document.createElement("span");
+                label.className = "tb-loader-label";
+                label.textContent = loader.loaderName;
+                label.style.flex = "1";
+                label.style.fontWeight = "500";
+
+                // Radio button for selection
+                const radio = document.createElement("input");
+                radio.type = "radio";
+                radio.name = "custom-loader-toggle";
+                radio.checked = loader.isActive;
+
+                radio.addEventListener("change", async () => {
+                    if (radio.checked) {
+                        // Uncheck all other radios
+                        document.querySelectorAll('input[name="custom-loader-toggle"]').forEach(otherRadio => {
+                            if (otherRadio !== radio) {
+                                otherRadio.checked = false;
+                            }
+                        });
+
+                        // Set this loader as active via API
+                        const success = await setLoaderActive(loader._id, true);
+
+                        if (success) {
+                            // Apply the loader CSS immediately
+                            applyLoaderCSS(loader.loaderCSS);
+
+                            // Update visual state
+                            item.style.background = "#e8f5e8";
+                            item.style.border = "1px solid #4caf50";
+
+                            // Reset other items
+                            document.querySelectorAll('.tb-loader-item').forEach(otherItem => {
+                                if (otherItem !== item) {
+                                    otherItem.style.background = "#f8f8f8";
+                                    otherItem.style.border = "none";
+                                }
+                            });
+                        } else {
+                            // Revert if API call failed
+                            radio.checked = false;
+                        }
+                    }
+                });
+
+                // Apply active styling if this is the active loader
+                if (loader.isActive) {
+                    item.style.background = "#e8f5e8";
+                    item.style.border = "1px solid #4caf50";
+                }
+
+                item.appendChild(preview);
+                item.appendChild(label);
+                item.appendChild(radio);
+                loaderList.appendChild(item);
+            });
+        }
+
+        // Function to apply loader CSS to the page
+        function applyLoaderCSS(css) {
+            // Remove existing custom loader style
+            const existingStyle = document.getElementById('custom-loader-style');
+            if (existingStyle) {
+                existingStyle.remove();
+            }
+
+            // Add new loader style
+            const style = document.createElement('style');
+            style.id = 'custom-loader-style';
+            style.textContent = css;
+            document.head.appendChild(style);
+
+            console.log("Loader CSS applied");
+        }
+
+        // Initialize
+        fetchLoaders();
+        container.appendChild(wrapper);
+    }
+
+    // Usage example:
+    // addLoaderSelectorSettings(yourContainerElement);
     function addLogoUrlInputSetting(container) {
         if (document.getElementById("tb-logo-url-setting")) return;
 
@@ -4559,6 +4773,7 @@
                     addCursorSelectorSettings(section);
                     addCursorPointerSelectorSettings(section);
                     addLogoUrlInputSetting(section);
+                    addLoaderSelectorSettings(section);
                     //buildHeadingSettings(section) //Commented Will see next time
                     // Add more advanced options later
                 }, "", true
