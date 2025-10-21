@@ -3329,7 +3329,7 @@
                 const img = document.createElement("img");
                 img.src =
                     loader.previewImage ||
-                    "https://theme-builder-delta.vercel.app/images/loader-placeholder.png";
+                    "https://theme-builder-delta.vercel.app/images/dotsloader.png";
                 img.alt = loader.loaderName;
                 img.style.width = "32px";
                 img.style.height = "32px";
