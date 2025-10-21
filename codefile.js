@@ -10,65 +10,61 @@
 //    document.head.appendChild(style);
 //})();
 
-// Wait for the DOM to be ready
-document.addEventListener('DOMContentLoaded', function () {
-    // Function to override loader styles
-    function overrideLoader() {
-        // Find loader elements
-        const loaderContainers = document.querySelectorAll('.hl-loader-container, .app-loader');
-
-        loaderContainers.forEach(container => {
-            // Apply styles directly to elements
-            container.style.cssText = `
-                position: fixed !important;
-                top: 0 !important;
-                left: 0 !important;
-                width: 100% !important;
-                height: 100vh !important;
-                background: linear-gradient(180deg, #0074f7 0%, #00c0f7 100%) !important;
-                display: flex !important;
-                justify-content: center !important;
-                align-items: center !important;
-                z-index: 999999 !important;
-                margin: 0 !important;
-                padding: 0 !important;
-            `;
-
-            // Hide any existing ring loaders
-            const ringLoaders = container.querySelectorAll('.lds-ring');
-            ringLoaders.forEach(ring => {
-                ring.style.display = 'none !important';
-            });
-
-            // Hide loader info text
-            const loaderInfo = container.querySelector('.hl-loader-info');
-            if (loaderInfo) {
-                loaderInfo.style.display = 'none !important';
-            }
-
-            // Create and append new loader if not exists
-            if (!container.querySelector('.custom-loader')) {
-                const newLoader = document.createElement('div');
-                newLoader.className = 'custom-loader';
-                newLoader.style.cssText = `
-                    width: 80px !important;
-                    height: 80px !important;
-                    border-radius: 50% !important;
-                    border: 6px solid #fff !important;
-                    border-top-color: transparent !important;
-                    animation: spinLoader 1s linear infinite !important;
-                `;
-                container.appendChild(newLoader);
-            }
+(function () {
+    // Function to hide the custom loader when page is loaded
+    function hideLoader() {
+        const customLoaders = document.querySelectorAll('#app + .app-loader, #app > .hl-loader-container');
+        customLoaders.forEach(loader => {
+            loader.style.display = 'none !important';
+            loader.style.opacity = '0 !important';
+            loader.style.visibility = 'hidden !important';
         });
     }
 
-    // Run immediately
-    overrideLoader();
+    // Method 1: Hide when window loads completely
+    window.addEventListener('load', function () {
+        setTimeout(hideLoader, 500); // Small delay to ensure everything is loaded
+    });
 
-    // Also run after a short delay to catch dynamically added loaders
-    setTimeout(overrideLoader, 100);
-});
+    // Method 2: Hide when DOM is ready and no network requests are pending
+    document.addEventListener('DOMContentLoaded', function () {
+        // Check if resources are still loading
+        if (document.readyState === 'complete') {
+            setTimeout(hideLoader, 300);
+        }
+    });
+
+    // Method 3: Fallback - hide after maximum time (8 seconds)
+    setTimeout(hideLoader, 8000);
+
+    // Method 4: Listen for GHL specific events
+    document.addEventListener('appLoaded', hideLoader);
+    document.addEventListener('pageRendered', hideLoader);
+
+    // Additional safety: periodically check if we should hide the loader
+    let checkCount = 0;
+    const maxChecks = 20; // Check for up to 10 seconds (20 * 500ms)
+
+    const interval = setInterval(function () {
+        checkCount++;
+
+        // If page is completely loaded and stable
+        if (document.readyState === 'complete' &&
+            document.querySelector('body') &&
+            !document.querySelector('.hl-loader-container:not([style*="display: none"])')) {
+
+            hideLoader();
+            clearInterval(interval);
+        }
+
+        // Stop checking after max attempts
+        if (checkCount >= maxChecks) {
+            hideLoader();
+            clearInterval(interval);
+        }
+    }, 500);
+
+})();
 
 // Add the spin animation to the document
 const style = document.createElement('style');
