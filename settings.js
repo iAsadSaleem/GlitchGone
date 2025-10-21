@@ -3246,7 +3246,7 @@
         if (document.getElementById("tb-loader-selector-settings")) return;
 
         const wrapper = document.createElement("div");
-        wrapper.className = "tb-loader-settings";
+        wrapper.className = "tb-cursor-settings";
         wrapper.id = "tb-loader-selector-settings";
         wrapper.style.marginTop = "16px";
 
@@ -3256,10 +3256,10 @@
         wrapper.appendChild(title);
 
         const loaderList = document.createElement("div");
-        loaderList.className = "tb-loader-list";
+        loaderList.className = "tb-cursor-list";
         wrapper.appendChild(loaderList);
 
-        // 🧠 Manage userTheme local storage
+        // 🧠 Manage userTheme storage
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         savedThemeObj.themeData = savedThemeObj.themeData || {};
         const themeData = savedThemeObj.themeData;
@@ -3268,30 +3268,23 @@
             themeData[key] = value;
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
             document.body.style.setProperty(key, value);
-            console.log("💾 Loader Saved:", key, value);
+            console.log("💾 Saved:", key, value);
         }
 
-        // 🧩 Get and decode agencyId from localStorage
+        // 🧩 Get and decode agencyId
         let agencyId = null;
         try {
             const encodedAgn = localStorage.getItem("agn");
-            if (encodedAgn) {
-                agencyId = atob(encodedAgn); // Decode Base64
-                console.log("🏢 Decoded Agency ID:", agencyId);
-            } else {
-                console.error("❌ No 'agn' found in localStorage.");
-                loaderList.innerHTML =
-                    "<p style='color:red;'>Agency ID not found in localStorage.</p>";
-                return;
-            }
+            if (encodedAgn) agencyId = atob(encodedAgn);
+            else throw new Error("agn not found");
         } catch (err) {
-            console.error("❌ Error decoding agencyId:", err);
+            console.error("❌ Agency ID error:", err);
             loaderList.innerHTML =
-                "<p style='color:red;'>Invalid agency ID format.</p>";
+                "<p style='color:red;'>Agency ID missing or invalid.</p>";
             return;
         }
 
-        // 🔥 Fetch all loaders from API
+        // 🔥 Fetch loaders
         async function fetchLoaders() {
             try {
                 const res = await fetch(
@@ -3299,25 +3292,24 @@
                 );
                 if (!res.ok) throw new Error("Failed to fetch loaders");
                 const data = await res.json();
-                renderLoaderOptions(data?.loaders || []);
+                renderLoaderOptions(data.loaders || []);
             } catch (err) {
                 console.error("❌ Error fetching loaders:", err);
                 loaderList.innerHTML =
-                    "<p style='color:red;'>Failed to load loaders. Please try again.</p>";
+                    "<p style='color:red;'>Failed to load loaders.</p>";
             }
         }
 
-        // 🧱 Render loader options
+        // 🎨 Render loaders like cursor list
         function renderLoaderOptions(loaders) {
             loaderList.innerHTML = "";
-
             const savedLoader = themeData["--loader-css"]
                 ? JSON.parse(themeData["--loader-css"])
                 : {};
 
             loaders.forEach((loader) => {
                 const item = document.createElement("div");
-                item.className = "tb-loader-item";
+                item.className = "tb-cursor-item";
                 item.style.cssText = `
         display: flex;
         align-items: center;
@@ -3328,24 +3320,16 @@
         margin-bottom: 8px;
         transition: background 0.3s;
       `;
-                item.addEventListener(
-                    "mouseenter",
-                    () => (item.style.background = "#fff1e0")
-                );
-                item.addEventListener(
-                    "mouseleave",
-                    () => (item.style.background = "#f8f8f8")
-                );
+                item.addEventListener("mouseenter", () => (item.style.background = "#fff1e0"));
+                item.addEventListener("mouseleave", () => (item.style.background = "#f8f8f8"));
 
-                // 🖼️ Preview image
                 const img = document.createElement("img");
                 img.src =
                     loader.previewImage ||
                     "https://theme-builder-delta.vercel.app/images/loader-placeholder.png";
                 img.alt = loader.loaderName;
-                img.style.width = "40px";
-                img.style.height = "40px";
-                img.style.objectFit = "contain";
+                img.style.width = "32px";
+                img.style.height = "32px";
                 img.style.borderRadius = "6px";
 
                 const label = document.createElement("span");
@@ -3355,35 +3339,12 @@
                 const toggle = document.createElement("input");
                 toggle.type = "radio";
                 toggle.name = "custom-loader-toggle";
-                toggle.checked = loader.isActive || savedLoader._id === loader._id;
+                toggle.checked = savedLoader._id === loader._id;
 
-                // ✅ On change: update localStorage + backend
-                toggle.addEventListener("change", async () => {
+                toggle.addEventListener("change", () => {
                     const loaderData = { _id: loader._id, isActive: true };
-
-                    // Save to CSS var and localStorage
                     saveVar("--loader-css", JSON.stringify(loaderData));
-
-                    // Deactivate others visually
-                    document
-                        .querySelectorAll("input[name='custom-loader-toggle']")
-                        .forEach((input) => (input.checked = false));
-                    toggle.checked = true;
-
-                    // 🔄 Update backend isActive status
-                    try {
-                        await fetch(
-                            "https://theme-builder-delta.vercel.app/api/theme/loader-css/status",
-                            {
-                                method: "PUT",
-                                headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify(loaderData),
-                            }
-                        );
-                        console.log("✅ Loader status updated:", loader.loaderName);
-                    } catch (err) {
-                        console.error("❌ Failed to update loader status:", err);
-                    }
+                    console.log("✅ Loader selected:", loader.loaderName);
                 });
 
                 item.appendChild(img);
