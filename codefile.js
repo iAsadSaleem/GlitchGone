@@ -38,11 +38,6 @@
     setTimeout(removeCustomLoader, 5000);
 
 })();
- //Create and show our custom loader immediately
-const loader = document.createElement('div');
-loader.id = 'custom-global-loader';
-document.body.prepend(loader);
-
 
 (function () {
     function findAndStore() {
