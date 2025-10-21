@@ -3252,14 +3252,14 @@
 
         const title = document.createElement("h4");
         title.className = "tb-header-controls";
-        title.innerText = "Custom Loader Selector";
+        title.innerText = "Custom Page Loader";
         wrapper.appendChild(title);
 
         const loaderList = document.createElement("div");
         loaderList.className = "tb-cursor-list";
         wrapper.appendChild(loaderList);
 
-        // 🧠 Manage userTheme storage
+        // 🌈 Get saved theme data
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         savedThemeObj.themeData = savedThemeObj.themeData || {};
         const themeData = savedThemeObj.themeData;
@@ -3271,20 +3271,23 @@
             console.log("💾 Saved:", key, value);
         }
 
-        // 🧩 Get and decode agencyId
+        // 🧩 Decode agencyId from localStorage
         let agencyId = null;
         try {
             const encodedAgn = localStorage.getItem("agn");
-            if (encodedAgn) agencyId = atob(encodedAgn);
-            else throw new Error("agn not found");
+            if (encodedAgn) {
+                agencyId = atob(encodedAgn);
+            } else {
+                throw new Error("agn not found in localStorage");
+            }
         } catch (err) {
-            console.error("❌ Agency ID error:", err);
+            console.error("❌ Agency ID decode error:", err);
             loaderList.innerHTML =
                 "<p style='color:red;'>Agency ID missing or invalid.</p>";
             return;
         }
 
-        // 🔥 Fetch loaders
+        // 🌍 Fetch loaders from API
         async function fetchLoaders() {
             try {
                 const res = await fetch(
@@ -3292,7 +3295,6 @@
                 );
                 if (!res.ok) throw new Error("Failed to fetch loaders");
                 const data = await res.json();
-                console.log('here are loaders:',data);
                 renderLoaderOptions(data.loaders || []);
             } catch (err) {
                 console.error("❌ Error fetching loaders:", err);
@@ -3301,12 +3303,12 @@
             }
         }
 
-        // 🎨 Render loaders like cursor list
+        // 🎨 Render loader options
         function renderLoaderOptions(loaders) {
             loaderList.innerHTML = "";
-            const savedLoader = themeData["--loader-css"]
-                ? JSON.parse(themeData["--loader-css"])
-                : {};
+
+            const savedLoader =
+                themeData["--loader-css"] && JSON.parse(themeData["--loader-css"]);
 
             loaders.forEach((loader) => {
                 const item = document.createElement("div");
@@ -3340,7 +3342,14 @@
                 const toggle = document.createElement("input");
                 toggle.type = "radio";
                 toggle.name = "custom-loader-toggle";
-                toggle.checked = savedLoader._id === loader._id;
+
+                // ✅ Check if this loader should be preselected
+                if (
+                    (savedLoader && savedLoader._id === loader._id) ||
+                    loader.isActive
+                ) {
+                    toggle.checked = true;
+                }
 
                 toggle.addEventListener("change", () => {
                     const loaderData = { _id: loader._id, isActive: true };
@@ -3358,7 +3367,6 @@
         await fetchLoaders();
         container.appendChild(wrapper);
     }
-
 
     // Usage example:
     // addLoaderSelectorSettings(yourContainerElement);
