@@ -3259,9 +3259,10 @@
         const instruction = document.createElement("p");
         instruction.className = "tb-instruction-text";
         instruction.textContent =
-            "💡 For Flat Color: Choose the same color for Start & End";
-
-        section.appendChild(instruction);
+            "ℹ️ How to use: You can either use your own company logo as the loader or choose one of the provided loaders below. " +
+            "If you enter a Company Logo URL, it will appear as the page loader with a smooth fade effect. " +
+            "To use the provided loaders again, simply remove the Company Logo URL.";
+        wrapper.appendChild(instruction);
 
         // 🖼️ === Company Logo URL Input ===
         const logoWrapper = document.createElement("div");
