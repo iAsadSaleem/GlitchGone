@@ -39,9 +39,9 @@
 
 //})();
  //Create and show our custom loader immediately
-const loader = document.createElement('div');
-loader.id = 'custom-global-loader';
-document.body.prepend(loader);
+//const loader = document.createElement('div');
+//loader.id = 'custom-global-loader';
+//document.body.prepend(loader);
 (function () {
     function findAndStore() {
         const KEY = "g-em";
