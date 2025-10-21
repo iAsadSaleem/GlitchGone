@@ -3256,6 +3256,13 @@
         title.innerText = "Custom Page Loader";
         wrapper.appendChild(title);
 
+        const instruction = document.createElement("p");
+        instruction.className = "tb-instruction-text";
+        instruction.textContent =
+            "💡 For Flat Color: Choose the same color for Start & End";
+
+        section.appendChild(instruction);
+
         // 🖼️ === Company Logo URL Input ===
         const logoWrapper = document.createElement("div");
         logoWrapper.className = "tb-company-logo-url";
