@@ -1,14 +1,14 @@
-﻿(function () {
-    const style = document.createElement("style");
-    style.textContent = `
-    .hl-loader-container {
-      display: none !important;
-      opacity: 0 !important;
-      visibility: hidden !important;
-    }
-  `;
-    document.head.appendChild(style);
-})();
+﻿//(function () {
+//    const style = document.createElement("style");
+//    style.textContent = `
+//    .hl-loader-container {
+//      display: none !important;
+//      opacity: 0 !important;
+//      visibility: hidden !important;
+//    }
+//  `;
+//    document.head.appendChild(style);
+//})();
 
 
 (function () {
