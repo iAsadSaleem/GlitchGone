@@ -4829,7 +4829,7 @@
             .rainbow-text {
                 position: relative;
                 left: 50px;
-                font-size: 20px;
+                font-size: 30px;
                 font-weight: 700;
                 font-family: 'Caveat', cursive !important;
                 -webkit-background-clip: text;
