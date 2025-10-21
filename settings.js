@@ -3250,20 +3250,70 @@
         wrapper.id = "tb-loader-selector-settings";
         wrapper.style.marginTop = "16px";
 
+        // 🏷️ Title
         const title = document.createElement("h4");
         title.className = "tb-header-controls";
         title.innerText = "Custom Page Loader";
         wrapper.appendChild(title);
 
-        const loaderList = document.createElement("div");
-        loaderList.className = "tb-cursor-list";
-        wrapper.appendChild(loaderList);
+        // 🖼️ === Company Logo URL Input ===
+        const logoWrapper = document.createElement("div");
+        logoWrapper.className = "tb-color-picker-wrapper";
 
-        // 🌈 Get saved theme data
+        const logoLabel = document.createElement("label");
+        logoLabel.textContent = "Company Logo URL";
+        logoLabel.className = "tb-color-picker-label";
+
+        // Load existing user theme
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         savedThemeObj.themeData = savedThemeObj.themeData || {};
         const themeData = savedThemeObj.themeData;
 
+        let storedLogoUrl = themeData["--loader-company-url"] || "";
+        storedLogoUrl = storedLogoUrl.replace(/^url\(["']?|["']?\)$/g, ""); // cleanup wrapper if any
+
+        const logoInput = document.createElement("input");
+        logoInput.type = "text";
+        logoInput.className = "tb-logo-input";
+        logoInput.placeholder = "Enter your company logo URL";
+        logoInput.value = storedLogoUrl;
+
+        // 💾 Save + apply function
+        function applyLogoUrl(rawUrl) {
+            const cleanUrl = rawUrl.replace(/^url\(["']?|["']?\)$/g, "").trim();
+
+            if (cleanUrl) {
+                // ✅ Apply and store logo URL
+                document.body.style.setProperty("--loader-company-url", `url("${cleanUrl}")`);
+                savedThemeObj.themeData["--loader-company-url"] = cleanUrl;
+            } else {
+                // ❌ Remove if empty
+                document.body.style.removeProperty("--loader-company-url");
+                delete savedThemeObj.themeData["--loader-company-url"];
+            }
+
+            // Save updated theme
+            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            console.log("💾 Saved Company Logo URL:", cleanUrl);
+        }
+
+        logoInput.addEventListener("input", () => {
+            applyLogoUrl(logoInput.value);
+        });
+
+        // Apply on load
+        applyLogoUrl(storedLogoUrl);
+
+        logoWrapper.appendChild(logoLabel);
+        logoWrapper.appendChild(logoInput);
+        wrapper.appendChild(logoWrapper);
+
+        // 🧱 Loader List
+        const loaderList = document.createElement("div");
+        loaderList.className = "tb-cursor-list";
+        wrapper.appendChild(loaderList);
+
+        // 🔧 Save var function (for loaders)
         function saveVar(key, value) {
             themeData[key] = value;
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
@@ -3314,15 +3364,15 @@
                 const item = document.createElement("div");
                 item.className = "tb-cursor-item";
                 item.style.cssText = `
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        background: #f8f8f8;
-        border-radius: 8px;
-        padding: 8px 12px;
-        margin-bottom: 8px;
-        transition: background 0.3s;
-      `;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                background: #f8f8f8;
+                border-radius: 8px;
+                padding: 8px 12px;
+                margin-bottom: 8px;
+                transition: background 0.3s;
+            `;
                 item.addEventListener("mouseenter", () => (item.style.background = "#fff1e0"));
                 item.addEventListener("mouseleave", () => (item.style.background = "#f8f8f8"));
 
@@ -3343,7 +3393,7 @@
                 toggle.type = "radio";
                 toggle.name = "custom-loader-toggle";
 
-                // ✅ Check if this loader should be preselected
+                // ✅ Preselect if active or saved
                 if (
                     (savedLoader && savedLoader._id === loader._id) ||
                     loader.isActive
