@@ -128,7 +128,12 @@
     align-items: center;
     gap: 10px; /* space between input and code */
 }
-
+.tb-company-logo-url {
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px; /* space between input and code */
+}
 /* Label */
 .tb-color-picker-label {
     flex-shrink: 0;

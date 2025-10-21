@@ -3258,7 +3258,7 @@
 
         // 🖼️ === Company Logo URL Input ===
         const logoWrapper = document.createElement("div");
-        logoWrapper.className = "tb-color-picker-wrapper";
+        logoWrapper.className = "tb-company-logo-url";
 
         const logoLabel = document.createElement("label");
         logoLabel.textContent = "Company Logo URL";
