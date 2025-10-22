@@ -3193,9 +3193,6 @@
         await fetchLoaders();
         container.appendChild(wrapper);
     }
-
-    // Usage example:
-    // addLoaderSelectorSettings(yourContainerElement);
     function addLogoUrlInputSetting(container) {
         if (document.getElementById("tb-logo-url-setting")) return;
 
@@ -3648,8 +3645,6 @@
     }
 
     document.addEventListener("DOMContentLoaded", applyLockedMenus);
-
-    // Also run again after slight delay (in case agency menu loads later)
    
     setTimeout(applyLockedMenus, 1500);
 
