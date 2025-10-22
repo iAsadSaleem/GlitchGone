@@ -3062,18 +3062,19 @@
         modeWrapper.appendChild(modeLabel);
         wrapper.appendChild(modeWrapper);
 
-        // 🧩 === Animation Type Card (Pulsating / Bouncing) ===
-        const animationCard = document.createElement("div");
-        animationCard.className = "tb-animation-card";
-        animationCard.style.cssText = `
+        // 🧩 === Combined Card: Animation Style + Company Logo ===
+        const logoCard = document.createElement("div");
+        logoCard.className = "tb-logo-card";
+        logoCard.style.cssText = `
         background: #fff;
         border: 1px solid #e0e0e0;
         border-radius: 10px;
-        padding: 12px 16px;
+        padding: 14px 16px;
         margin-top: 14px;
         box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     `;
 
+        // === Animation Section ===
         const animationTitle = document.createElement("h5");
         animationTitle.textContent = "Logo Animation Style";
         animationTitle.style.cssText = `
@@ -3082,13 +3083,14 @@
         margin-bottom: 10px;
         color: #333;
     `;
-        animationCard.appendChild(animationTitle);
+        logoCard.appendChild(animationTitle);
 
         const tabWrapper = document.createElement("div");
         tabWrapper.className = "tb-animation-tabs";
         tabWrapper.style.cssText = `
         display: flex;
         gap: 10px;
+        margin-bottom: 14px;
     `;
 
         const tabs = [
@@ -3115,22 +3117,24 @@
         `;
 
             btn.addEventListener("mouseenter", () => {
-                if (savedAnimation !== tab.value) btn.style.background = "#f0f0f0";
+                if (themeData["--animation-settings"] !== tab.value) btn.style.background = "#f0f0f0";
             });
             btn.addEventListener("mouseleave", () => {
-                if (savedAnimation !== tab.value) btn.style.background = "#f8f8f8";
+                if (themeData["--animation-settings"] !== tab.value) btn.style.background = "#f8f8f8";
             });
 
             btn.addEventListener("click", () => {
-                // Update visual state
+                // Reset other tabs
                 tabWrapper.querySelectorAll(".tb-animation-tab").forEach((b) => {
                     b.style.background = "#f8f8f8";
                     b.style.color = "#333";
                 });
+
+                // Highlight selected
                 btn.style.background = "#6366f1";
                 btn.style.color = "#fff";
 
-                // Save to localStorage and CSS
+                // Save to localStorage + CSS
                 themeData["--animation-settings"] = tab.value;
                 document.body.style.setProperty("--animation-settings", tab.value);
                 localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
@@ -3139,21 +3143,9 @@
             tabWrapper.appendChild(btn);
         });
 
-        animationCard.appendChild(tabWrapper);
-        wrapper.appendChild(animationCard);
+        logoCard.appendChild(tabWrapper);
 
-        // 🖼️ === Company Logo URL Card ===
-        const logoCard = document.createElement("div");
-        logoCard.className = "tb-logo-card";
-        logoCard.style.cssText = `
-        background: #fff;
-        border: 1px solid #e0e0e0;
-        border-radius: 10px;
-        padding: 12px 16px;
-        margin-top: 14px;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    `;
-
+        // === Company Logo Input ===
         const logoWrapper = document.createElement("div");
         logoWrapper.className = "tb-company-logo-url";
 
@@ -3185,6 +3177,7 @@
         logoWrapper.appendChild(logoLabel);
         logoWrapper.appendChild(logoInput);
         logoCard.appendChild(logoWrapper);
+
         wrapper.appendChild(logoCard);
 
         // 🔁 Enable/disable sections based on mode
@@ -3198,8 +3191,8 @@
             loaderList.style.opacity = loaderEnabled ? "1" : "0.5";
             loaderList.style.pointerEvents = loaderEnabled ? "auto" : "none";
             logoInput.style.opacity = loaderEnabled ? "0.5" : "1";
-            animationCard.style.opacity = loaderEnabled ? "0.5" : "1";
-            animationCard.style.pointerEvents = loaderEnabled ? "none" : "auto";
+            tabWrapper.style.opacity = loaderEnabled ? "0.5" : "1";
+            tabWrapper.style.pointerEvents = loaderEnabled ? "none" : "auto";
         }
 
         modeCheckbox.addEventListener("change", () => {
@@ -3237,7 +3230,9 @@
         // 🌍 Fetch loaders
         async function fetchLoaders() {
             try {
-                const res = await fetch(`https://theme-builder-delta.vercel.app/api/theme/Get-loader-css?agencyId=${agencyId}`);
+                const res = await fetch(
+                    `https://theme-builder-delta.vercel.app/api/theme/Get-loader-css?agencyId=${agencyId}`
+                );
                 if (!res.ok) throw new Error("Failed to fetch loaders");
                 const data = await res.json();
                 renderLoaderOptions(data.loaders || []);
@@ -3250,7 +3245,8 @@
         // 🎨 Render loader options
         function renderLoaderOptions(loaders) {
             loaderList.innerHTML = "";
-            const savedLoader = themeData["--loader-css"] && JSON.parse(themeData["--loader-css"]);
+            const savedLoader =
+                themeData["--loader-css"] && JSON.parse(themeData["--loader-css"]);
 
             loaders.forEach((loader) => {
                 const item = document.createElement("div");
@@ -3301,6 +3297,7 @@
         await fetchLoaders();
         container.appendChild(wrapper);
     }
+
     function addLogoUrlInputSetting(container) {
         if (document.getElementById("tb-logo-url-setting")) return;
 
