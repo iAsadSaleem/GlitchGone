@@ -1179,13 +1179,6 @@ body::-webkit-scrollbar-track {
         pointer-events: none;
     }
 
-.tb-color-picker-label {
-    font-weight: 500;
-    display: block;
-    margin-bottom: 8px;
-    font-size: 14px;
-}
-
 .tb-logo-input {
     width: 100%;
     padding: 8px 10px;
