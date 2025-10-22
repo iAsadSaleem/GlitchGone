@@ -3240,7 +3240,6 @@
         await fetchLoaders();
         container.appendChild(wrapper);
     }
-
     function addLogoUrlInputSetting(container) {
         if (document.getElementById("tb-logo-url-setting")) return;
 
@@ -3318,7 +3317,7 @@
         });
 
         observer.observe(document.body, { childList: true, subtree: true });
-    }
+    }s
     function buildFeatureLockSection(container) {
         let savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         if (savedTheme.themeData && typeof savedTheme.themeData === "string") {
