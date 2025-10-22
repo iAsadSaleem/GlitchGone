@@ -26,12 +26,12 @@
 
     // Method 1: Remove when window fully loads
     window.addEventListener('load', function () {
-        setTimeout(removeCustomLoader, 2000); // Small delay after load
+        setTimeout(removeCustomLoader, 3000); // Small delay after load
     });
 
     // Method 2: Remove when DOM is ready (fallback)
     if (document.readyState === 'complete') {
-        setTimeout(removeCustomLoader, 2000);
+        setTimeout(removeCustomLoader, 3000);
     }
 
     // Method 3: Fallback - remove after max 5 seconds
