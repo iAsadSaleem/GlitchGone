@@ -4632,7 +4632,7 @@
                                         // Get data from localStorage
                                         const userTheme = JSON.parse(localStorage.getItem("usertheme"));
                                         // Extract the --loader-css value
-                                        const loaderCSSRaw = savedTheme.themeData.["--loader-css"];
+                                        const loaderCSSRaw = savedTheme.themeData["--loader-css"];
                                         console.log('here is the loader detials:', loaderCSSRaw);
                                         if (loaderCSSRaw) {
                                             // Parse the string (e.g. "{\"_id\":\"68f7d1410aa198636134e673\",\"isActive\":true}")
