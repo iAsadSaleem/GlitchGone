@@ -3033,6 +3033,48 @@
             "To use the provided loaders again, simply remove the Company Logo URL.";
         wrapper.appendChild(instruction);
 
+        // 🖼️ === Company Logo URL Input ===
+        const logoWrapper = document.createElement("div");
+        logoWrapper.className = "tb-company-logo-url";
+
+        const logoLabel = document.createElement("label");
+        logoLabel.textContent = "Company Logo URL";
+        logoLabel.className = "tb-color-picker-label";
+
+        // 🧠 Load existing user theme
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        savedThemeObj.themeData = savedThemeObj.themeData || {};
+        const themeData = savedThemeObj.themeData;
+
+        let storedLogoUrl = themeData["--loader-company-url"] || "";
+        storedLogoUrl = storedLogoUrl.replace(/^url\(["']?|["']?\)$/g, "");
+
+        const logoInput = document.createElement("input");
+        logoInput.type = "text";
+        logoInput.className = "tb-logo-input";
+        logoInput.placeholder = "Enter your company logo URL";
+        logoInput.value = storedLogoUrl;
+
+        // 💾 Apply + Save logo
+        function applyLogoUrl(rawUrl) {
+            const cleanUrl = rawUrl.replace(/^url\(["']?|["']?\)$/g, "").trim();
+            if (cleanUrl) {
+                document.body.style.setProperty("--loader-company-url", `url("${cleanUrl}")`);
+                savedThemeObj.themeData["--loader-company-url"] = cleanUrl;
+            } else {
+                document.body.style.removeProperty("--loader-company-url");
+                delete savedThemeObj.themeData["--loader-company-url"];
+            }
+            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+        }
+
+        logoInput.addEventListener("input", () => applyLogoUrl(logoInput.value));
+        applyLogoUrl(storedLogoUrl);
+
+        logoWrapper.appendChild(logoLabel);
+        logoWrapper.appendChild(logoInput);
+        wrapper.appendChild(logoWrapper);
+
         // 🧩 === Mode Toggle (Logo vs Loader) ===
         const modeWrapper = document.createElement("div");
         modeWrapper.className = "tb-mode-toggle";
@@ -3044,7 +3086,6 @@
         modeCheckbox.type = "checkbox";
         modeCheckbox.className = "tb-toggle-checkbox";
 
-        // Check saved mode: if logo URL exists, then loader mode is OFF
         const isLoaderMode = !storedLogoUrl;
         modeCheckbox.checked = isLoaderMode;
 
@@ -3053,19 +3094,14 @@
         modeLabel.appendChild(modeCheckbox);
         modeLabel.appendChild(toggleText);
         modeWrapper.appendChild(modeLabel);
+        wrapper.insertBefore(modeWrapper, logoWrapper);
 
-        wrapper.appendChild(modeWrapper);
+        // 🧱 Loader List
+        const loaderList = document.createElement("div");
+        loaderList.className = "tb-cursor-list";
+        wrapper.appendChild(loaderList);
 
-
-        // 🖼️ === Company Logo URL Input ===
-        const logoWrapper = document.createElement("div");
-        logoWrapper.className = "tb-company-logo-url";
-
-        const logoLabel = document.createElement("label");
-        logoLabel.textContent = "Company Logo URL";
-        logoLabel.className = "tb-color-picker-label";
-
-        // 🔁 Enable/disable sections based on checkbox
+        // 🔁 Enable/disable sections based on mode
         function updateModeState() {
             const loaderEnabled = modeCheckbox.checked;
             logoInput.disabled = loaderEnabled;
@@ -3075,67 +3111,19 @@
         }
 
         modeCheckbox.addEventListener("change", () => {
+            const loaderEnabled = modeCheckbox.checked;
             updateModeState();
-            // Optionally clear logo URL when switching to loader mode
-            if (modeCheckbox.checked) {
-                applyLogoUrl(""); // clear logo
+
+            if (loaderEnabled) {
+                applyLogoUrl("");
                 logoInput.value = "";
             }
-            // Save mode in localStorage
+
             savedThemeObj.themeData["--loader-mode"] = loaderEnabled ? "loaders" : "logo";
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
         });
 
         updateModeState();
-
-
-        // Load existing user theme
-        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        savedThemeObj.themeData = savedThemeObj.themeData || {};
-        const themeData = savedThemeObj.themeData;
-
-        let storedLogoUrl = themeData["--loader-company-url"] || "";
-        storedLogoUrl = storedLogoUrl.replace(/^url\(["']?|["']?\)$/g, ""); // cleanup wrapper if any
-
-        const logoInput = document.createElement("input");
-        logoInput.type = "text";
-        logoInput.className = "tb-logo-input";
-        logoInput.placeholder = "Enter your company logo URL";
-        logoInput.value = storedLogoUrl;
-
-        // 💾 Save + apply function
-        function applyLogoUrl(rawUrl) {
-            const cleanUrl = rawUrl.replace(/^url\(["']?|["']?\)$/g, "").trim();
-
-            if (cleanUrl) {
-                // ✅ Apply and store logo URL
-                document.body.style.setProperty("--loader-company-url", `url("${cleanUrl}")`);
-                savedThemeObj.themeData["--loader-company-url"] = cleanUrl;
-            } else {
-                // ❌ Remove if empty
-                document.body.style.removeProperty("--loader-company-url");
-                delete savedThemeObj.themeData["--loader-company-url"];
-            }
-
-            // Save updated theme
-            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
-        }
-
-        logoInput.addEventListener("input", () => {
-            applyLogoUrl(logoInput.value);
-        });
-
-        // Apply on load
-        applyLogoUrl(storedLogoUrl);
-
-        logoWrapper.appendChild(logoLabel);
-        logoWrapper.appendChild(logoInput);
-        wrapper.appendChild(logoWrapper);
-
-        // 🧱 Loader List
-        const loaderList = document.createElement("div");
-        loaderList.className = "tb-cursor-list";
-        wrapper.appendChild(loaderList);
 
         // 🔧 Save var function (for loaders)
         function saveVar(key, value) {
@@ -3144,23 +3132,19 @@
             document.body.style.setProperty(key, value);
         }
 
-        // 🧩 Decode agencyId from localStorage
+        // 🧩 Decode agencyId
         let agencyId = null;
         try {
             const encodedAgn = localStorage.getItem("agn");
-            if (encodedAgn) {
-                agencyId = atob(encodedAgn);
-            } else {
-                throw new Error("agn not found in localStorage");
-            }
+            if (encodedAgn) agencyId = atob(encodedAgn);
+            else throw new Error("agn not found in localStorage");
         } catch (err) {
             console.error("❌ Agency ID decode error:", err);
-            loaderList.innerHTML =
-                "<p style='color:red;'>Agency ID missing or invalid.</p>";
+            loaderList.innerHTML = "<p style='color:red;'>Agency ID missing or invalid.</p>";
             return;
         }
 
-        // 🌍 Fetch loaders from API
+        // 🌍 Fetch loaders
         async function fetchLoaders() {
             try {
                 const res = await fetch(
@@ -3171,15 +3155,13 @@
                 renderLoaderOptions(data.loaders || []);
             } catch (err) {
                 console.error("❌ Error fetching loaders:", err);
-                loaderList.innerHTML =
-                    "<p style='color:red;'>Failed to load loaders.</p>";
+                loaderList.innerHTML = "<p style='color:red;'>Failed to load loaders.</p>";
             }
         }
 
         // 🎨 Render loader options
         function renderLoaderOptions(loaders) {
             loaderList.innerHTML = "";
-
             const savedLoader =
                 themeData["--loader-css"] && JSON.parse(themeData["--loader-css"]);
 
@@ -3200,9 +3182,7 @@
                 item.addEventListener("mouseleave", () => (item.style.background = "#f8f8f8"));
 
                 const img = document.createElement("img");
-                img.src =
-                    loader.previewImage ||
-                    "https://theme-builder-delta.vercel.app/images/dotsloader.png";
+                img.src = loader.previewImage || "https://theme-builder-delta.vercel.app/images/dotsloader.png";
                 img.alt = loader.loaderName;
                 img.style.width = "32px";
                 img.style.height = "32px";
@@ -3216,13 +3196,8 @@
                 toggle.type = "radio";
                 toggle.name = "custom-loader-toggle";
 
-                // ✅ Preselect if active or saved
-                if (
-                    (savedLoader && savedLoader._id === loader._id) ||
-                    loader.isActive
-                ) {
+                if ((savedLoader && savedLoader._id === loader._id) || loader.isActive)
                     toggle.checked = true;
-                }
 
                 toggle.addEventListener("change", () => {
                     const loaderData = { _id: loader._id, isActive: true };
@@ -3239,6 +3214,7 @@
         await fetchLoaders();
         container.appendChild(wrapper);
     }
+
     function addLogoUrlInputSetting(container) {
         if (document.getElementById("tb-logo-url-setting")) return;
 
