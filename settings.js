@@ -4629,8 +4629,6 @@
                                     });
                                     // --- Add new API call for loader-css status ---
                                     try {
-                                        // Get data from localStorage
-                                        const userTheme = JSON.parse(localStorage.getItem("usertheme"));
                                         // Extract the --loader-css value
                                         const loaderCSSRaw = savedTheme.themeData["--loader-css"];
                                         if (loaderCSSRaw) {
