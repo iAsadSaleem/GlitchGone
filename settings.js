@@ -3044,14 +3044,15 @@
             return;
         }
 
-        // 🧠 Load existing user theme
+        // 🧠 Load theme
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         savedThemeObj.themeData = savedThemeObj.themeData || {};
         const themeData = savedThemeObj.themeData;
+
         let storedLogoUrl = themeData["--loader-company-url"] || "";
         storedLogoUrl = storedLogoUrl.replace(/^url\(["']?|["']?\)$/g, "");
 
-        // 🧩 === Mode Toggle (Logo vs Loader) ===
+        // === Toggle (Mode Switch)
         const modeWrapper = document.createElement("div");
         modeWrapper.className = "tb-mode-toggle";
 
@@ -3072,11 +3073,16 @@
         modeWrapper.appendChild(modeLabel);
         wrapper.appendChild(modeWrapper);
 
-        // 💾 Save function
+        // 💾 Save helper
         function saveVar(key, value) {
-            themeData[key] = value;
+            if (!value) {
+                delete themeData[key];
+                document.body.style.removeProperty(key);
+            } else {
+                themeData[key] = value;
+                document.body.style.setProperty(key, value);
+            }
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
-            document.body.style.setProperty(key, value);
         }
 
         // 🖼️ === Company Logo Card ===
@@ -3096,19 +3102,16 @@
         function applyLogoUrl(rawUrl) {
             const cleanUrl = rawUrl.replace(/^url\(["']?|["']?\)$/g, "").trim();
             if (cleanUrl) {
-                document.body.style.setProperty("--loader-company-url", `url("${cleanUrl}")`);
-                savedThemeObj.themeData["--loader-company-url"] = cleanUrl;
+                saveVar("--loader-company-url", cleanUrl);
             } else {
-                document.body.style.removeProperty("--loader-company-url");
-                delete savedThemeObj.themeData["--loader-company-url"];
+                saveVar("--loader-company-url", "");
             }
-            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
         }
 
         logoInput.addEventListener("input", () => applyLogoUrl(logoInput.value));
         applyLogoUrl(storedLogoUrl);
 
-        // 🌀 === Animation Tabs ===
+        // 🌀 Animation Tabs
         const animationWrapper = document.createElement("div");
         animationWrapper.className = "tb-animation-tabs";
 
@@ -3139,37 +3142,43 @@
         animationWrapper.appendChild(pulsatingBtn);
         animationWrapper.appendChild(bouncingBtn);
 
-        // 🧩 Add to card
         card.appendChild(logoLabel);
         card.appendChild(logoInput);
         card.appendChild(animationWrapper);
         wrapper.appendChild(card);
 
-        // 🧱 Loader List
+        // === Loader List ===
         const loaderList = document.createElement("div");
         loaderList.className = "tb-loader-list";
         wrapper.appendChild(loaderList);
 
+        // 🔁 Mode toggle logic
         function updateModeState() {
             const loaderEnabled = modeCheckbox.checked;
+
+            // Enable / disable UI
             logoInput.disabled = loaderEnabled;
-            loaderList.classList.toggle("disabled", !loaderEnabled);
             card.classList.toggle("disabled", loaderEnabled);
-        }
+            loaderList.classList.toggle("disabled", !loaderEnabled);
 
-        modeCheckbox.addEventListener("change", () => {
-            const loaderEnabled = modeCheckbox.checked;
-            updateModeState();
-
+            // 🧹 Auto-clear inactive data
             if (loaderEnabled) {
-                applyLogoUrl("");
+                // ✅ Clear logo + animation data
+                saveVar("--loader-company-url", "");
+                saveVar("--animation-settings", "");
                 logoInput.value = "";
+                pulsatingBtn.classList.remove("active");
+                bouncingBtn.classList.remove("active");
+            } else {
+                // ✅ Clear built-in loader CSS variable
+                saveVar("--loader-css", "");
             }
 
-            savedThemeObj.themeData["--loader-mode"] = loaderEnabled ? "loaders" : "logo";
-            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
-        });
+            // Save mode type
+            saveVar("--loader-mode", loaderEnabled ? "loaders" : "logo");
+        }
 
+        modeCheckbox.addEventListener("change", updateModeState);
         updateModeState();
 
         // 🌍 Fetch loaders
@@ -3187,7 +3196,7 @@
             }
         }
 
-        // 🎨 Render loader options
+        // 🎨 Render loaders
         function renderLoaderOptions(loaders) {
             loaderList.innerHTML = "";
             const savedLoader =
@@ -3198,7 +3207,9 @@
                 item.className = "tb-loader-item";
 
                 const img = document.createElement("img");
-                img.src = loader.previewImage || "https://theme-builder-delta.vercel.app/images/dotsloader.png";
+                img.src =
+                    loader.previewImage ||
+                    "https://theme-builder-delta.vercel.app/images/dotsloader.png";
                 img.alt = loader.loaderName;
                 img.className = "tb-loader-img";
 
