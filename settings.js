@@ -3091,8 +3091,8 @@
 
         const toggleText = document.createElement("span");
         toggleText.textContent = "Use Built-in Loaders";
-        modeLabel.appendChild(modeCheckbox);
         modeLabel.appendChild(toggleText);
+        modeLabel.appendChild(modeCheckbox);
         modeWrapper.appendChild(modeLabel);
         wrapper.insertBefore(modeWrapper, logoWrapper);
 
