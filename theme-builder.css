@@ -1070,3 +1070,54 @@ body::-webkit-scrollbar-track {
 .tb-title{
     font-weight: 700;
 }
+
+/* === Loader Mode Toggle === */
+.tb-mode-toggle {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.tb-toggle-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    gap: 8px;
+    user-select: none;
+}
+
+/* Modern switch style */
+.tb-toggle-checkbox {
+    appearance: none;
+    width: 40px;
+    height: 20px;
+    background-color: #ccc;
+    border-radius: 20px;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    transition: background-color 0.3s ease;
+}
+
+    .tb-toggle-checkbox::before {
+        content: "";
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        top: 2px;
+        left: 2px;
+        background-color: #fff;
+        transition: transform 0.3s ease;
+    }
+
+    .tb-toggle-checkbox:checked {
+        background-color: #007bff;
+    }
+
+        .tb-toggle-checkbox:checked::before {
+            transform: translateX(20px);
+        }

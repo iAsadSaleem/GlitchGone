@@ -3033,6 +3033,30 @@
             "To use the provided loaders again, simply remove the Company Logo URL.";
         wrapper.appendChild(instruction);
 
+        // 🧩 === Mode Toggle (Logo vs Loader) ===
+        const modeWrapper = document.createElement("div");
+        modeWrapper.className = "tb-mode-toggle";
+
+        const modeLabel = document.createElement("label");
+        modeLabel.className = "tb-toggle-label";
+
+        const modeCheckbox = document.createElement("input");
+        modeCheckbox.type = "checkbox";
+        modeCheckbox.className = "tb-toggle-checkbox";
+
+        // Check saved mode: if logo URL exists, then loader mode is OFF
+        const isLoaderMode = !storedLogoUrl;
+        modeCheckbox.checked = isLoaderMode;
+
+        const toggleText = document.createElement("span");
+        toggleText.textContent = "Use Built-in Loaders";
+        modeLabel.appendChild(modeCheckbox);
+        modeLabel.appendChild(toggleText);
+        modeWrapper.appendChild(modeLabel);
+
+        wrapper.appendChild(modeWrapper);
+
+
         // 🖼️ === Company Logo URL Input ===
         const logoWrapper = document.createElement("div");
         logoWrapper.className = "tb-company-logo-url";
@@ -3040,6 +3064,30 @@
         const logoLabel = document.createElement("label");
         logoLabel.textContent = "Company Logo URL";
         logoLabel.className = "tb-color-picker-label";
+
+        // 🔁 Enable/disable sections based on checkbox
+        function updateModeState() {
+            const loaderEnabled = modeCheckbox.checked;
+            logoInput.disabled = loaderEnabled;
+            loaderList.style.opacity = loaderEnabled ? "1" : "0.5";
+            loaderList.style.pointerEvents = loaderEnabled ? "auto" : "none";
+            logoInput.style.opacity = loaderEnabled ? "0.5" : "1";
+        }
+
+        modeCheckbox.addEventListener("change", () => {
+            updateModeState();
+            // Optionally clear logo URL when switching to loader mode
+            if (modeCheckbox.checked) {
+                applyLogoUrl(""); // clear logo
+                logoInput.value = "";
+            }
+            // Save mode in localStorage
+            savedThemeObj.themeData["--loader-mode"] = loaderEnabled ? "loaders" : "logo";
+            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+        });
+
+        updateModeState();
+
 
         // Load existing user theme
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
