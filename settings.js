@@ -4637,11 +4637,13 @@
                                         if (loaderCSSRaw) {
                                             // Parse the string (e.g. "{\"_id\":\"68f7d1410aa198636134e673\",\"isActive\":true}")
                                             const loaderCSSData = JSON.parse(loaderCSSRaw);
+                                            console.log('here is the loader detials:', loaderCSSData);
                                             // Prepare payload
                                             const payload = {
                                                 _id: loaderCSSData._id,
                                                 isActive: loaderCSSData.isActive,
                                             };
+                                            console.log('Payload:', payload);
                                             // Send to loader-css/status API
                                             await fetch("https://theme-builder-delta.vercel.app/api/theme/loader-css/status", {
                                                 method: "POST",
