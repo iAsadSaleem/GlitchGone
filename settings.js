@@ -4633,6 +4633,7 @@
                                         const userTheme = JSON.parse(localStorage.getItem("usertheme"));
                                         // Extract the --loader-css value
                                         const loaderCSSRaw = userTheme?.themeData?.["--loader-css"];
+                                        console.log('here is the loader detials:', loaderCSSRaw);
                                         if (loaderCSSRaw) {
                                             // Parse the string (e.g. "{\"_id\":\"68f7d1410aa198636134e673\",\"isActive\":true}")
                                             const loaderCSSData = JSON.parse(loaderCSSRaw);
@@ -4652,7 +4653,7 @@
                                         console.error("Error sending loader-css status:", error);
                                     }
 
-                                    location.reload();
+                                    //location.reload();
                                 } catch (error) {
                                     console.error(error);
                                     loaderOverlay.style.display = "none";
