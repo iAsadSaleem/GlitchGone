@@ -4645,11 +4645,17 @@
                                             };
                                             console.log('Payload:', payload);
                                             // Send to loader-css/status API
-                                            await fetch("https://theme-builder-delta.vercel.app/api/theme/loader-css/status", {
-                                                method: "POST",
+                                            const response = await fetch("https://theme-builder-delta.vercel.app/api/theme/loader-css/status", {
+                                                method: "PUT",
                                                 headers: { "Content-Type": "application/json" },
                                                 body: JSON.stringify(payload),
                                             });
+                                            try {
+                                                const data = await response.json();
+                                                console.log("Response body:", data);
+                                            } catch (err) {
+                                                console.warn("No JSON response or failed to parse.");
+                                            }
                                         }
                                     } catch (error) {
                                         console.error("Error sending loader-css status:", error);
