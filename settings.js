@@ -3094,7 +3094,6 @@
             themeData[key] = value;
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
             document.body.style.setProperty(key, value);
-            console.log("💾 Saved:", key, value);
         }
 
         // 🧩 Decode agencyId from localStorage
@@ -3180,7 +3179,6 @@
                 toggle.addEventListener("change", () => {
                     const loaderData = { _id: loader._id, isActive: true };
                     saveVar("--loader-css", JSON.stringify(loaderData));
-                    console.log("✅ Loader selected:", loader.loaderName);
                 });
 
                 item.appendChild(img);
