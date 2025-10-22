@@ -1100,7 +1100,7 @@ body::-webkit-scrollbar-track {
 .tb-toggle-checkbox {
     appearance: none;
     width: 40px;
-    height: 20px;
+    height: 22px;
     background-color: #ccc;
     border-radius: 20px;
     position: relative;
@@ -1144,6 +1144,7 @@ body::-webkit-scrollbar-track {
 }
 
 .tb-toggle-label {
+    margin-top: 10px;
     display: flex;
     align-items: center;
     gap: 8px;
