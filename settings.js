@@ -4633,35 +4633,26 @@
                                         const userTheme = JSON.parse(localStorage.getItem("usertheme"));
                                         // Extract the --loader-css value
                                         const loaderCSSRaw = savedTheme.themeData["--loader-css"];
-                                        console.log('here is the loader detials:', loaderCSSRaw);
                                         if (loaderCSSRaw) {
                                             // Parse the string (e.g. "{\"_id\":\"68f7d1410aa198636134e673\",\"isActive\":true}")
                                             const loaderCSSData = JSON.parse(loaderCSSRaw);
-                                            console.log('here is the loader detials:', loaderCSSData);
                                             // Prepare payload
                                             const payload = {
                                                 _id: loaderCSSData._id,
                                                 isActive: loaderCSSData.isActive,
                                             };
-                                            console.log('Payload:', payload);
                                             // Send to loader-css/status API
-                                            const response = await fetch("https://theme-builder-delta.vercel.app/api/theme/loader-css/status", {
+                                             await fetch("https://theme-builder-delta.vercel.app/api/theme/loader-css/status", {
                                                 method: "PUT",
                                                 headers: { "Content-Type": "application/json" },
                                                 body: JSON.stringify(payload),
                                             });
-                                            try {
-                                                const data = await response.json();
-                                                console.log("Response body:", data);
-                                            } catch (err) {
-                                                console.warn("No JSON response or failed to parse.");
-                                            }
                                         }
                                     } catch (error) {
                                         console.error("Error sending loader-css status:", error);
                                     }
 
-                                    //location.reload();
+                                    location.reload();
                                 } catch (error) {
                                     console.error(error);
                                     loaderOverlay.style.display = "none";
