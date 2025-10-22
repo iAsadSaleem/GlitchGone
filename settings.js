@@ -4627,6 +4627,30 @@
                                         headers: { "Content-Type": "application/json" },
                                         body: JSON.stringify(dbData),
                                     });
+                                    // --- Add new API call for loader-css status ---
+                                    try {
+                                        // Get data from localStorage
+                                        const userTheme = JSON.parse(localStorage.getItem("usertheme"));
+                                        // Extract the --loader-css value
+                                        const loaderCSSRaw = userTheme?.themeData?.["--loader-css"];
+                                        if (loaderCSSRaw) {
+                                            // Parse the string (e.g. "{\"_id\":\"68f7d1410aa198636134e673\",\"isActive\":true}")
+                                            const loaderCSSData = JSON.parse(loaderCSSRaw);
+                                            // Prepare payload
+                                            const payload = {
+                                                _id: loaderCSSData._id,
+                                                isActive: loaderCSSData.isActive,
+                                            };
+                                            // Send to loader-css/status API
+                                            await fetch("https://theme-builder-delta.vercel.app/api/theme/loader-css/status", {
+                                                method: "POST",
+                                                headers: { "Content-Type": "application/json" },
+                                                body: JSON.stringify(payload),
+                                            });
+                                        }
+                                    } catch (error) {
+                                        console.error("Error sending loader-css status:", error);
+                                    }
 
                                     location.reload();
                                 } catch (error) {
