@@ -3033,14 +3033,6 @@
             "To use the provided loaders again, simply remove the Company Logo URL.";
         wrapper.appendChild(instruction);
 
-        // 🖼️ === Company Logo URL Input ===
-        const logoWrapper = document.createElement("div");
-        logoWrapper.className = "tb-company-logo-url";
-
-        const logoLabel = document.createElement("label");
-        logoLabel.textContent = "Company Logo URL";
-        logoLabel.className = "tb-color-picker-label";
-
         // 🧠 Load existing user theme
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         savedThemeObj.themeData = savedThemeObj.themeData || {};
@@ -3048,32 +3040,6 @@
 
         let storedLogoUrl = themeData["--loader-company-url"] || "";
         storedLogoUrl = storedLogoUrl.replace(/^url\(["']?|["']?\)$/g, "");
-
-        const logoInput = document.createElement("input");
-        logoInput.type = "text";
-        logoInput.className = "tb-logo-input";
-        logoInput.placeholder = "Enter your company logo URL";
-        logoInput.value = storedLogoUrl;
-
-        // 💾 Apply + Save logo
-        function applyLogoUrl(rawUrl) {
-            const cleanUrl = rawUrl.replace(/^url\(["']?|["']?\)$/g, "").trim();
-            if (cleanUrl) {
-                document.body.style.setProperty("--loader-company-url", `url("${cleanUrl}")`);
-                savedThemeObj.themeData["--loader-company-url"] = cleanUrl;
-            } else {
-                document.body.style.removeProperty("--loader-company-url");
-                delete savedThemeObj.themeData["--loader-company-url"];
-            }
-            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
-        }
-
-        logoInput.addEventListener("input", () => applyLogoUrl(logoInput.value));
-        applyLogoUrl(storedLogoUrl);
-
-        logoWrapper.appendChild(logoLabel);
-        logoWrapper.appendChild(logoInput);
-        wrapper.appendChild(logoWrapper);
 
         // 🧩 === Mode Toggle (Logo vs Loader) ===
         const modeWrapper = document.createElement("div");
@@ -3094,38 +3060,162 @@
         modeLabel.appendChild(toggleText);
         modeLabel.appendChild(modeCheckbox);
         modeWrapper.appendChild(modeLabel);
-        wrapper.insertBefore(modeWrapper, logoWrapper);
+        wrapper.appendChild(modeWrapper);
 
-        // 🧱 Loader List
+        // 🧩 === Animation Type Card (Pulsating / Bouncing) ===
+        const animationCard = document.createElement("div");
+        animationCard.className = "tb-animation-card";
+        animationCard.style.cssText = `
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        padding: 12px 16px;
+        margin-top: 14px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    `;
+
+        const animationTitle = document.createElement("h5");
+        animationTitle.textContent = "Logo Animation Style";
+        animationTitle.style.cssText = `
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 10px;
+        color: #333;
+    `;
+        animationCard.appendChild(animationTitle);
+
+        const tabWrapper = document.createElement("div");
+        tabWrapper.className = "tb-animation-tabs";
+        tabWrapper.style.cssText = `
+        display: flex;
+        gap: 10px;
+    `;
+
+        const tabs = [
+            { label: "Pulsating Logo", value: "PulsatingLogo" },
+            { label: "Bouncing Logo", value: "BouncingLogo" },
+        ];
+
+        const savedAnimation = themeData["--animation-settings"] || "PulsatingLogo";
+
+        tabs.forEach((tab) => {
+            const btn = document.createElement("button");
+            btn.textContent = tab.label;
+            btn.className = "tb-animation-tab";
+            btn.style.cssText = `
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background: ${savedAnimation === tab.value ? "#6366f1" : "#f8f8f8"};
+            color: ${savedAnimation === tab.value ? "#fff" : "#333"};
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        `;
+
+            btn.addEventListener("mouseenter", () => {
+                if (savedAnimation !== tab.value) btn.style.background = "#f0f0f0";
+            });
+            btn.addEventListener("mouseleave", () => {
+                if (savedAnimation !== tab.value) btn.style.background = "#f8f8f8";
+            });
+
+            btn.addEventListener("click", () => {
+                // Update visual state
+                tabWrapper.querySelectorAll(".tb-animation-tab").forEach((b) => {
+                    b.style.background = "#f8f8f8";
+                    b.style.color = "#333";
+                });
+                btn.style.background = "#6366f1";
+                btn.style.color = "#fff";
+
+                // Save to localStorage and CSS
+                themeData["--animation-settings"] = tab.value;
+                document.body.style.setProperty("--animation-settings", tab.value);
+                localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            });
+
+            tabWrapper.appendChild(btn);
+        });
+
+        animationCard.appendChild(tabWrapper);
+        wrapper.appendChild(animationCard);
+
+        // 🖼️ === Company Logo URL Card ===
+        const logoCard = document.createElement("div");
+        logoCard.className = "tb-logo-card";
+        logoCard.style.cssText = `
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        padding: 12px 16px;
+        margin-top: 14px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    `;
+
+        const logoWrapper = document.createElement("div");
+        logoWrapper.className = "tb-company-logo-url";
+
+        const logoLabel = document.createElement("label");
+        logoLabel.textContent = "Company Logo URL";
+        logoLabel.className = "tb-color-picker-label";
+
+        const logoInput = document.createElement("input");
+        logoInput.type = "text";
+        logoInput.className = "tb-logo-input";
+        logoInput.placeholder = "Enter your company logo URL";
+        logoInput.value = storedLogoUrl;
+
+        function applyLogoUrl(rawUrl) {
+            const cleanUrl = rawUrl.replace(/^url\(["']?|["']?\)$/g, "").trim();
+            if (cleanUrl) {
+                document.body.style.setProperty("--loader-company-url", `url("${cleanUrl}")`);
+                savedThemeObj.themeData["--loader-company-url"] = cleanUrl;
+            } else {
+                document.body.style.removeProperty("--loader-company-url");
+                delete savedThemeObj.themeData["--loader-company-url"];
+            }
+            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+        }
+
+        logoInput.addEventListener("input", () => applyLogoUrl(logoInput.value));
+        applyLogoUrl(storedLogoUrl);
+
+        logoWrapper.appendChild(logoLabel);
+        logoWrapper.appendChild(logoInput);
+        logoCard.appendChild(logoWrapper);
+        wrapper.appendChild(logoCard);
+
+        // 🔁 Enable/disable sections based on mode
         const loaderList = document.createElement("div");
         loaderList.className = "tb-cursor-list";
         wrapper.appendChild(loaderList);
 
-        // 🔁 Enable/disable sections based on mode
         function updateModeState() {
             const loaderEnabled = modeCheckbox.checked;
             logoInput.disabled = loaderEnabled;
             loaderList.style.opacity = loaderEnabled ? "1" : "0.5";
             loaderList.style.pointerEvents = loaderEnabled ? "auto" : "none";
             logoInput.style.opacity = loaderEnabled ? "0.5" : "1";
+            animationCard.style.opacity = loaderEnabled ? "0.5" : "1";
+            animationCard.style.pointerEvents = loaderEnabled ? "none" : "auto";
         }
 
         modeCheckbox.addEventListener("change", () => {
             const loaderEnabled = modeCheckbox.checked;
             updateModeState();
-
             if (loaderEnabled) {
                 applyLogoUrl("");
                 logoInput.value = "";
             }
-
             savedThemeObj.themeData["--loader-mode"] = loaderEnabled ? "loaders" : "logo";
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
         });
 
         updateModeState();
 
-        // 🔧 Save var function (for loaders)
+        // 🔧 Save var helper
         function saveVar(key, value) {
             themeData[key] = value;
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
@@ -3147,9 +3237,7 @@
         // 🌍 Fetch loaders
         async function fetchLoaders() {
             try {
-                const res = await fetch(
-                    `https://theme-builder-delta.vercel.app/api/theme/Get-loader-css?agencyId=${agencyId}`
-                );
+                const res = await fetch(`https://theme-builder-delta.vercel.app/api/theme/Get-loader-css?agencyId=${agencyId}`);
                 if (!res.ok) throw new Error("Failed to fetch loaders");
                 const data = await res.json();
                 renderLoaderOptions(data.loaders || []);
@@ -3162,8 +3250,7 @@
         // 🎨 Render loader options
         function renderLoaderOptions(loaders) {
             loaderList.innerHTML = "";
-            const savedLoader =
-                themeData["--loader-css"] && JSON.parse(themeData["--loader-css"]);
+            const savedLoader = themeData["--loader-css"] && JSON.parse(themeData["--loader-css"]);
 
             loaders.forEach((loader) => {
                 const item = document.createElement("div");
@@ -3214,7 +3301,6 @@
         await fetchLoaders();
         container.appendChild(wrapper);
     }
-
     function addLogoUrlInputSetting(container) {
         if (document.getElementById("tb-logo-url-setting")) return;
 
