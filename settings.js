@@ -3302,7 +3302,6 @@
 
             // Save updated theme
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
-            console.log("💾 Saved Company Logo URL:", cleanUrl);
         }
 
         logoInput.addEventListener("input", () => {
