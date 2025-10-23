@@ -5,7 +5,7 @@
     right: -420px;
     width: 328px;
     max-width: 90%;
-    height: 66%;
+    height: auto;
     /* 25% active color, 75% white */
     background: linear-gradient(to bottom, var(--primary-color) 40%, #ffffff 0%);
     box-shadow: -4px 1px 30px var(--primary-color); /* ✅ Works */
