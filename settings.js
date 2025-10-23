@@ -560,9 +560,11 @@
                 "--sidebar-menu-color": "#24352a",
                 "--sidebar-menu-hover-bg": "#52b776",
                 "--sidebar-menu-active-bg": "#40915d",
-                "--header-bg-color": "#b7e4ba"
+                "--header-bg-color": "#b7e4ba",
+                "--sidebar-top-right-radius": "16px",
+                "--sidebar-bottom-right-radius": "16px",
             },
-            "OceanMist Theme (White Header)": {
+            "OceanMist Theme (White Header Sidebar Radius 0)": {
                 "--primary-color": "#276678",
                 "--second-color": "#1687A7",
                 "--dark-color": "#1B3B4B",
@@ -647,6 +649,9 @@
                 "--sidebar-menu-icon-hover-color": "#CFFFDC",
                 "--sidebar-menu-icon-active-color": "#68BA7F",
 
+                "--sidebar-top-right-radius": "16px",
+                "--sidebar-bottom-right-radius": "16px",
+
                 "--scroll-color": "#68BA7F",
 
                 "--header-bg-color": "#F2FFF6",
@@ -726,7 +731,9 @@
                 "--top-nav-menu-active-bg": "#1e3a8a",
                 "--top-nav-menu-color": "#ffffff",
                 "--top-nav-menu-hover-color": "#bae6fd",
-                "--top-nav-menu-active-color": "#ffffff"
+                "--top-nav-menu-active-color": "#ffffff",
+                "--sidebar-top-right-radius": "16px",
+                "--sidebar-bottom-right-radius": "16px"
             },
             "IndigoPurple Theme": {
                 "--primary-color": "#3B38A0",
@@ -761,9 +768,11 @@
                 "--top-nav-menu-active-bg": "#1A2A80",
                 "--top-nav-menu-color": "#ffffff",
                 "--top-nav-menu-hover-color": "#c7d2fe",
-                "--top-nav-menu-active-color": "#ffffff"
+                "--top-nav-menu-active-color": "#ffffff",
+                "--sidebar-top-right-radius": "16px",
+                "--sidebar-bottom-right-radius": "16px"
             },
-            "BlushRose Theme": {
+            "BlushRose Theme (Sidebar Radius 0)": {
                 "--primary-color": "#ec4899",
                 "--second-color": "#fce7f3",
                 "--dark-color": "#9f1239",
@@ -814,7 +823,9 @@
                 "--card-title-font-size": "18px",
                 "--card-body-border-radius": "24px",
                 "--lockedMenus": "{}",
-                "--body-font": "Roboto"
+                "--body-font": "Roboto",
+                "--sidebar-top-right-radius": "0px",
+                "--sidebar-bottom-right-radius": "0px"
             },
             "RosePetal Theme": {
                 "--primary-color": "#BE5985",
@@ -867,9 +878,11 @@
                 "--card-title-font-size": "18px",
                 "--card-body-border-radius": "24px",
                 "--lockedMenus": "{}",
-                "--body-font": "Roboto"
+                "--body-font": "Roboto",
+                "--sidebar-top-right-radius": "16px",
+                "--sidebar-bottom-right-radius": "16px"
             },
-            "ForestGreen Gold Theme": {
+            "ForestGreen Gold Theme(SideBar Radius 0)": {
                 "--primary-color": "#2E6F40",
                 "--second-color": "#68BA7F",
                 "--dark-color": "#253D2C",
@@ -932,6 +945,8 @@
                 "--card-body-border-radius": "24px",
                 "--lockedMenus": "{}",
                 "--body-font": "Roboto",
+                "--sidebar-top-right-radius": "0px",
+                "--sidebar-bottom-right-radius": "0px"
 
             },
             "Lilac Silver Theme": {
@@ -996,7 +1011,9 @@
                 "--card-title-font-size": "18px",
                 "--card-body-border-radius": "24px",
                 "--lockedMenus": "{}",
-                "--body-font": "Roboto"
+                "--body-font": "Roboto",
+                "--sidebar-top-right-radius": "16px",
+                "--sidebar-bottom-right-radius": "16px"
             },
             "BurntOrange Copper Theme": {
                 "--primary-color": "#8C4C1F",
@@ -1060,7 +1077,10 @@
                 "--card-title-font-size": "18px",
                 "--card-body-border-radius": "24px",
                 "--lockedMenus": "{}",
-                "--body-font": "Roboto"
+                "--body-font": "Roboto",
+                "--sidebar-top-right-radius": "16px",
+                "--sidebar-bottom-right-radius": "16px"
+
             },
             "JetBlack Luxury Gold Theme": {
                 "--primary-color": "#545454",
@@ -1124,7 +1144,9 @@
                 "--card-title-font-size": "18px",
                 "--card-body-border-radius": "22px",
                 "--lockedMenus": "{}",
-                "--body-font": "Poppins"
+                "--body-font": "Poppins",
+                "--sidebar-top-right-radius": "16px",
+                "--sidebar-bottom-right-radius": "16px"
             }
         };
         const themeKeys = Object.keys(themes);
