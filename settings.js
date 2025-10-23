@@ -622,7 +622,7 @@
                 "--login-button-bg-color": "#276678",
                 "--login-card-bg-color": "#FFFFFF",
 
-                "--header-main-bg-gradient": "linear-gradient(90deg, #FFFFFF 0%, #D3E0EA 50%, #F6F5F5 100%)",
+                "--header-main-bg-gradient": "linear-gradient(90deg, #FFFFFF 0%, #FFFFFF 50%, #FFFFFF 100%)",
                 "--header-icon-hover": "#1687A7",
 
                 "--scroll-width": "7px",
