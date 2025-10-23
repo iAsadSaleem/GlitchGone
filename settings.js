@@ -4849,9 +4849,8 @@
             .rainbow-text {
                 position: relative;
                 left: 50px;
-                font-size: 30px;
+                font-size: 25px;
                 font-weight: 700;
-                font-family: 'Caveat', cursive !important;
                 -webkit-background-clip: text;
                 color: black;
                 animation: rainbowMove 2s linear infinite;
