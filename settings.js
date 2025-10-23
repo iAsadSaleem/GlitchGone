@@ -3317,7 +3317,7 @@
         });
 
         observer.observe(document.body, { childList: true, subtree: true });
-    }s
+    }
     function buildFeatureLockSection(container) {
         let savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         if (savedTheme.themeData && typeof savedTheme.themeData === "string") {
