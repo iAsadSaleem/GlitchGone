@@ -3121,7 +3121,6 @@
                 1️⃣ Toggle Mode – Turn ON “Use Built-in Loaders” to pick a ready-made loader, or OFF to use your own logo. 
                 2️⃣ Company Logo – Enter your logo URL and select an animation (Pulsating or Bouncing). 
                 3️⃣ Built-in Loaders – Choose one from the list below when enabled. 
-                4️⃣ Auto-Save – All changes save automatically and reapply on reload. 
                 ⚠️ Tip – Switching between Logo and Built-in modes automatically clears previous settings to avoid conflicts.
                 `;
         wrapper.appendChild(instruction);
