@@ -3184,7 +3184,7 @@
 
         const logoInput = document.createElement("input");
         logoInput.type = "text";
-        logoInput.className = "tb-logo-input";
+        logoInput.className = "tb-logo-input-loader";
         logoInput.placeholder = "Enter your company logo URL";
         logoInput.value = storedLogoUrl;
 

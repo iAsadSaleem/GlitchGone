@@ -1167,7 +1167,7 @@ body::-webkit-scrollbar-track {
         pointer-events: none;
     }
 
-.tb-logo-input {
+.tb-logo-input-loader {
     width: 100%;
     padding: 8px 10px;
     border-radius: 6px;
