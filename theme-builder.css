@@ -1520,3 +1520,28 @@ body::-webkit-scrollbar-track {
         transform: translateY(0);
     }
 }
+/* --- Back to Menu Button --- */
+.custom-back-btn {
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-bottom: 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+    .custom-back-btn:hover {
+        background: #1d4ed8;
+    }
+
+    /* --- Optional: Make “Back” button appear more professional --- */
+    .custom-back-btn::before {
+        content: "🏠";
+        font-size: 16px;
+    }
