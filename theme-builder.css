@@ -1247,3 +1247,81 @@ body::-webkit-scrollbar-track {
     font-size: 13px;
     margin-top: 10px;
 }
+/* --- Custom Sidebar Link --- */
+.custom-sidebar-link {
+    transition: opacity 0.3s ease;
+}
+
+    .custom-sidebar-link:hover {
+        opacity: 1 !important;
+    }
+
+.custom-sidebar-icon {
+    filter: drop-shadow(0 0 2px rgba(0,0,0,0.2));
+}
+
+/* --- App Container Overlay --- */
+.custom-app-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    z-index: 99999;
+    overflow: auto;
+    display: none;
+}
+
+    .custom-app-container.show {
+        display: block;
+        animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .custom-app-container.hidden {
+        display: none;
+    }
+
+/* --- Inner Wrapper --- */
+.custom-app-inner {
+    padding: 20px;
+    font-family: "Inter", sans-serif;
+}
+
+/* --- Close Button --- */
+.custom-app-close-btn {
+    background: #444;
+    color: #fff;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-bottom: 15px;
+    font-size: 14px;
+    transition: background 0.3s ease;
+}
+
+    .custom-app-close-btn:hover {
+        background: #000;
+    }
+
+/* --- Iframe --- */
+.custom-app-iframe {
+    width: 100%;
+    height: 90vh;
+    border: none;
+    border-radius: 10px;
+}
+
+/* --- Animation --- */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
