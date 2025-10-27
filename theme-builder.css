@@ -1372,19 +1372,30 @@ body::-webkit-scrollbar-track {
     background: none;
     border: none;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 24px; /* 🔥 Increased icon size */
     color: #6b7280;
-    transition: all 0.2s ease;
+    padding: 10px;
+    border-radius: 10px;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
+    /* Hover effect */
     .custom-tab-btn:hover {
         color: #2563eb;
-        transform: scale(1.1);
+        background: rgba(37, 99, 235, 0.1);
+        transform: scale(1.15);
     }
 
+
+    /* Active (selected) tab */
     .custom-tab-btn.active {
-        color: #2563eb;
-        text-shadow: 0 0 6px rgba(37, 99, 235, 0.5);
+        color: #fff;
+        background: #2563eb; /* Solid blue background for active state */
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        transform: scale(1.15);
     }
 
 /* === Close Button === */
