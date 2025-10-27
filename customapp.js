@@ -4,16 +4,14 @@
         if (!sidebar) return false;
 
         // Prevent duplicate injection
-        const existing = document.getElementById("sb_custom-app");
-        if (existing) return true;
+        if (document.getElementById("sb_custom-app")) return true;
 
-        // --- Create the new menu item (button for reliability) ---
+        // --- Create the new menu item (button) ---
         const newItem = document.createElement("button");
         newItem.id = "sb_custom-app";
         newItem.type = "button";
-        newItem.setAttribute("role", "menuitem");
         newItem.className =
-            "custom-sidebar-link w-full group px-3 flex items-center justify-start text-sm font-medium rounded-md cursor-pointer opacity-80 hover:opacity-100 py-2 md:py-2 bg-transparent border-none outline-none";
+            "custom-sidebar-link w-full group px-3 flex items-center justify-start text-sm font-medium rounded-md cursor-pointer opacity-80 hover:opacity-100 py-2 md:py-2";
         newItem.style.all = "unset";
         newItem.style.display = "flex";
         newItem.style.alignItems = "center";
@@ -33,47 +31,51 @@
 
         sidebar.appendChild(newItem);
 
-        // --- Create the app container ---
+        // --- Create the app container (hidden by default) ---
         let appContainer = document.getElementById("customAppContainer");
         if (!appContainer) {
             appContainer = document.createElement("div");
             appContainer.id = "customAppContainer";
             appContainer.className = "custom-app-container hidden";
             appContainer.style.cssText = `
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.65);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 9999;
-        transition: opacity 0.3s ease;
-      `;
+                position: fixed;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.65);
+                display: none; /* ⛔ Hidden by default */
+                justify-content: center;
+                align-items: center;
+                z-index: 9999;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            `;
             appContainer.innerHTML = `
-        <div style="background:#fff;width:90%;height:85vh;border-radius:12px;overflow:hidden;box-shadow:0 10px 25px rgba(0,0,0,0.3);position:relative;">
-          <button id="closeCustomApp" style="position:absolute;top:10px;right:10px;background:#222;color:#fff;padding:6px 10px;border:none;border-radius:6px;cursor:pointer;z-index:10;">
-            ✕ Close
-          </button>
-          <iframe src="https://your-app-dashboard-url.com" style="width:100%;height:100%;border:none;"></iframe>
-        </div>
-      `;
+                <div style="background:#fff;width:90%;height:85vh;border-radius:12px;overflow:hidden;box-shadow:0 10px 25px rgba(0,0,0,0.3);position:relative;">
+                    <button id="closeCustomApp" style="position:absolute;top:10px;right:10px;background:#222;color:#fff;padding:6px 10px;border:none;border-radius:6px;cursor:pointer;z-index:10;">
+                        ✕ Close
+                    </button>
+                    <iframe src="https://your-app-dashboard-url.com" style="width:100%;height:100%;border:none;"></iframe>
+                </div>
+            `;
             document.body.appendChild(appContainer);
         }
 
-        // --- Show / Hide logic ---
+        // --- Show App on click ---
         newItem.addEventListener("click", (e) => {
             e.preventDefault();
             e.stopPropagation();
-            appContainer.classList.remove("hidden");
-            appContainer.style.opacity = "1";
-            appContainer.style.pointerEvents = "auto";
+            appContainer.style.display = "flex"; // 👈 Show container
+            requestAnimationFrame(() => {
+                appContainer.style.opacity = "1";
+            });
         });
 
+        // --- Close App ---
         const closeBtn = appContainer.querySelector("#closeCustomApp");
         closeBtn.addEventListener("click", () => {
-            appContainer.classList.add("hidden");
             appContainer.style.opacity = "0";
-            appContainer.style.pointerEvents = "none";
+            setTimeout(() => {
+                appContainer.style.display = "none"; // 👈 Fully hide after fade
+            }, 300);
         });
 
         console.log("✅ Custom sidebar menu added successfully!");
@@ -102,10 +104,10 @@
     // --- Add blinking star animation ---
     const style = document.createElement("style");
     style.textContent = `
-    @keyframes blinkStar {
-      from { opacity: 0.3; transform: scale(0.9); }
-      to { opacity: 1; transform: scale(1.2); }
-    }
-  `;
+        @keyframes blinkStar {
+            from { opacity: 0.3; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1.2); }
+        }
+    `;
     document.head.appendChild(style);
 })();
