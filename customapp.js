@@ -13,13 +13,14 @@
         newItem.className =
             "custom-sidebar-link w-full group px-3 flex items-center justify-start lg:justify-start xl:justify-start text-sm font-medium rounded-md cursor-pointer opacity-70 hover:opacity-100 py-2 md:py-2";
         newItem.innerHTML = `
-      <img src="https://cdn-icons-png.flaticon.com/512/1828/1828884.png"
-           class="custom-sidebar-icon md:mr-0 h-5 w-5 mr-2 lg:mr-2 xl:mr-2"
-           alt="Custom App Icon">
-      <span class="hl_text-overflow sm:hidden md:hidden nav-title lg:block xl:block">
-        My Custom App
-      </span>
-    `;
+                  <img src="https://cdn-icons-png.flaticon.com/512/1828/1828884.png"
+                       class="custom-sidebar-icon md:mr-0 h-5 w-5 mr-2 lg:mr-2 xl:mr-2"
+                       alt="Custom App Icon">
+                  <span class="hl_text-overflow sm:hidden md:hidden nav-title lg:block xl:block">
+                    <span class="custom-star-icon">⭐</span>
+                    My Custom App
+                  </span>
+                `;
 
         sidebar.appendChild(newItem); // initial placement
 
