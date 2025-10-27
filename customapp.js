@@ -20,7 +20,8 @@
         My Custom App
       </span>
     `;
-        sidebar.appendChild(newItem);
+
+        sidebar.appendChild(newItem); // initial placement (will move below)
 
         // --- Create your app container (hidden by default) ---
         const appContainer = document.createElement("div");
@@ -40,19 +41,39 @@
             appContainer.classList.add("show");
         });
 
-        document
-            .getElementById("closeCustomApp")
-            .addEventListener("click", () => {
-                appContainer.classList.remove("show");
-                appContainer.classList.add("hidden");
-            });
+        document.getElementById("closeCustomApp").addEventListener("click", () => {
+            appContainer.classList.remove("show");
+            appContainer.classList.add("hidden");
+        });
 
         console.log("✅ Custom sidebar menu added successfully!");
         return true;
     }
 
-    // Keep checking until sidebar loads
+    function moveCustomAppLink() {
+        const nav = document.querySelector('nav[aria-label="header"]');
+        const customApp = document.querySelector("#sb_custom-app");
+        if (nav && customApp) {
+            const lastItem = nav.lastElementChild;
+            // 👇 Change this part if you want it at the very end or 2nd last
+            if (lastItem) {
+                nav.insertBefore(customApp, lastItem); // 👉 places it 2nd last
+                console.log("✅ Custom App moved to 2nd last");
+            } else {
+                nav.appendChild(customApp); // fallback
+            }
+        }
+    }
+
+    // Initial run to add the menu
     const interval = setInterval(() => {
-        if (addCustomSidebarLink()) clearInterval(interval);
+        if (addCustomSidebarLink()) {
+            clearInterval(interval);
+            moveCustomAppLink();
+        }
     }, 1000);
+
+    // React re-render watcher
+    const observer = new MutationObserver(() => moveCustomAppLink());
+    observer.observe(document.body, { childList: true, subtree: true });
 })();

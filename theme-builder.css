@@ -1249,15 +1249,24 @@ body::-webkit-scrollbar-track {
 }
 /* --- Custom Sidebar Link --- */
 .custom-sidebar-link {
-    transition: opacity 0.3s ease;
+    display: flex !important;
+    align-items: center;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-weight: 500;
+    opacity: 0.8;
+    transition: all 0.2s ease-in-out;
 }
 
     .custom-sidebar-link:hover {
-        opacity: 1 !important;
+        opacity: 1;
+        background-color: rgba(255, 255, 255, 0.05);
     }
 
 .custom-sidebar-icon {
-    filter: drop-shadow(0 0 2px rgba(0,0,0,0.2));
+    height: 20px;
+    width: 20px;
+    margin-right: 8px;
 }
 
 /* --- App Container Overlay --- */
