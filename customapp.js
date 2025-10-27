@@ -4,70 +4,92 @@
         if (!sidebar) return false;
 
         // Prevent duplicate injection
-        if (document.getElementById("sb_custom-app")) return true;
+        const existing = document.getElementById("sb_custom-app");
+        if (existing) return true;
 
-        // --- Create the new menu item (div, not <a>) ---
-        const newItem = document.createElement("div");
+        // --- Create the new menu item (button for reliability) ---
+        const newItem = document.createElement("button");
         newItem.id = "sb_custom-app";
+        newItem.type = "button";
+        newItem.setAttribute("role", "menuitem");
         newItem.className =
-            "custom-sidebar-link w-full group px-3 flex items-center justify-start lg:justify-start xl:justify-start text-sm font-medium rounded-md cursor-pointer opacity-70 hover:opacity-100 py-2 md:py-2";
+            "custom-sidebar-link w-full group px-3 flex items-center justify-start text-sm font-medium rounded-md cursor-pointer opacity-80 hover:opacity-100 py-2 md:py-2 bg-transparent border-none outline-none";
+        newItem.style.all = "unset";
+        newItem.style.display = "flex";
+        newItem.style.alignItems = "center";
+        newItem.style.gap = "8px";
+        newItem.style.cursor = "pointer";
+        newItem.style.padding = "8px 12px";
+        newItem.style.borderRadius = "6px";
+        newItem.style.color = "#fff";
+
         newItem.innerHTML = `
       <img src="https://cdn-icons-png.flaticon.com/512/1828/1828884.png"
-           class="custom-sidebar-icon md:mr-0 h-5 w-5 mr-2 lg:mr-2 xl:mr-2"
+           class="custom-sidebar-icon"
+           style="width:20px;height:20px;filter:drop-shadow(0 0 2px rgba(255,255,255,0.3));"
            alt="Custom App Icon">
-      <span class="hl_text-overflow sm:hidden md:hidden nav-title lg:block xl:block flex items-center gap-2">
-        <span class="custom-star-icon">⭐</span>
-        <span>My Custom App</span>
-        <span class="custom-new-tag">NEW</span>
+      <span style="display:flex;align-items:center;gap:6px;">
+        <span class="custom-star-icon" style="animation: blinkStar 1s infinite alternate;">⭐</span>
+        <span style="font-weight:500;">My Custom App</span>
+        <span class="custom-new-tag" style="background:#ffcc00;color:#000;font-size:10px;font-weight:600;padding:1px 4px;border-radius:4px;">NEW</span>
       </span>
     `;
 
         sidebar.appendChild(newItem);
 
-        // --- Create your app container (once) ---
+        // --- Create the app container ---
         let appContainer = document.getElementById("customAppContainer");
         if (!appContainer) {
             appContainer = document.createElement("div");
             appContainer.id = "customAppContainer";
             appContainer.className = "custom-app-container hidden";
+            appContainer.style.cssText = `
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.65);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        transition: opacity 0.3s ease;
+      `;
             appContainer.innerHTML = `
-        <div style="padding:20px; font-family:sans-serif;">
-          <button id="closeCustomApp" style="background:#444;color:#fff;padding:8px 12px;border:none;border-radius:6px;cursor:pointer;margin-bottom:15px;">
-            Close
+        <div style="background:#fff;width:90%;height:85vh;border-radius:12px;overflow:hidden;box-shadow:0 10px 25px rgba(0,0,0,0.3);position:relative;">
+          <button id="closeCustomApp" style="position:absolute;top:10px;right:10px;background:#222;color:#fff;padding:6px 10px;border:none;border-radius:6px;cursor:pointer;z-index:10;">
+            ✕ Close
           </button>
-          <iframe src="https://your-app-dashboard-url.com" 
-                  style="width:100%;height:90vh;border:none;border-radius:10px;"></iframe>
+          <iframe src="https://your-app-dashboard-url.com" style="width:100%;height:100%;border:none;"></iframe>
         </div>
       `;
             document.body.appendChild(appContainer);
         }
 
-        // --- Click handler ---
-        newItem.onclick = (e) => {
+        // --- Show / Hide logic ---
+        newItem.addEventListener("click", (e) => {
             e.preventDefault();
             e.stopPropagation();
             appContainer.classList.remove("hidden");
-            appContainer.classList.add("show");
-        };
+            appContainer.style.opacity = "1";
+            appContainer.style.pointerEvents = "auto";
+        });
 
         const closeBtn = appContainer.querySelector("#closeCustomApp");
-        if (closeBtn) {
-            closeBtn.onclick = () => {
-                appContainer.classList.remove("show");
-                appContainer.classList.add("hidden");
-            };
-        }
+        closeBtn.addEventListener("click", () => {
+            appContainer.classList.add("hidden");
+            appContainer.style.opacity = "0";
+            appContainer.style.pointerEvents = "none";
+        });
 
-        console.log("✅ Custom sidebar menu added and listener bound!");
+        console.log("✅ Custom sidebar menu added successfully!");
         return true;
     }
 
-    // Initial run
+    // Run every second until loaded
     const interval = setInterval(() => {
         if (addCustomSidebarLink()) clearInterval(interval);
     }, 1000);
 
-    // React re-render watcher — re-inject + re-bind on sidebar changes
+    // Re-run if GHL sidebar re-renders
     const observer = new MutationObserver((mutations) => {
         const sidebarChanged = mutations.some((m) =>
             [...m.addedNodes].some(
@@ -79,6 +101,15 @@
         );
         if (sidebarChanged) addCustomSidebarLink();
     });
-
     observer.observe(document.body, { childList: true, subtree: true });
+
+    // --- Add blinking star animation ---
+    const style = document.createElement("style");
+    style.textContent = `
+    @keyframes blinkStar {
+      from { opacity: 0.3; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1.2); }
+    }
+  `;
+    document.head.appendChild(style);
 })();
