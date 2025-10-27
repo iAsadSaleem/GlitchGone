@@ -1256,7 +1256,7 @@ body::-webkit-scrollbar-track {
     font-weight: 500;
     opacity: 0.8;
     transition: all 0.2s ease-in-out;
-}
+}   
 
     .custom-sidebar-link:hover {
         opacity: 1;
@@ -1332,5 +1332,40 @@ body::-webkit-scrollbar-track {
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+.custom-star-icon {
+    color: gold;
+    margin-right: 5px;
+    animation: blinkStar 1.2s infinite;
+    font-size: 14px;
+    display: inline-block;
+}
+
+@keyframes blinkStar {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.3;
+        transform: scale(1.2);
+    }
+}
+
+/* Optional: smoother transition when showing app */
+.custom-app-container.show {
+    display: block !important;
+    animation: fadeInApp 0.3s ease-in-out;
+}
+
+@keyframes fadeInApp {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
     }
 }
