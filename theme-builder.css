@@ -1331,3 +1331,105 @@ body::-webkit-scrollbar-track {
         opacity: 1;
     }
 }
+
+
+
+
+/*New Css Code For My Custom APp*/
+
+.custom-app-window {
+    background: #ffffff;
+    width: 90%;
+    height: 85vh;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: fadeIn 0.4s ease;
+    font-family: "Inter", sans-serif;
+}
+
+/* Header */
+.custom-app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(90deg, #0074f7, #00c0f7);
+    padding: 10px 20px;
+    color: #fff;
+}
+
+/* Icon Tabs */
+.custom-tab-container {
+    display: flex;
+    gap: 12px;
+}
+
+.custom-tab-btn {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    opacity: 0.7;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+    .custom-tab-btn:hover,
+    .custom-tab-btn.active {
+        opacity: 1;
+        transform: scale(1.15);
+    }
+
+/* Close Button */
+.custom-app-close-btn {
+    background: rgba(0, 0, 0, 0.2);
+    border: none;
+    color: white;
+    font-size: 16px;
+    border-radius: 8px;
+    padding: 4px 10px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+    .custom-app-close-btn:hover {
+        background: rgba(0, 0, 0, 0.4);
+    }
+
+/* Content */
+.custom-app-content {
+    flex: 1;
+    background: #f8f9fb;
+    padding: 20px 30px;
+    overflow-y: auto;
+}
+
+.custom-tab-content {
+    animation: fadeSlide 0.3s ease;
+}
+
+@keyframes fadeSlide {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
