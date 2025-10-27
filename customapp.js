@@ -23,71 +23,59 @@
       </span>
     `;
 
-        sidebar.appendChild(newItem); // initial placement
+        sidebar.appendChild(newItem);
 
-        // --- Create your app container (hidden by default) ---
-        const appContainer = document.createElement("div");
-        appContainer.id = "customAppContainer";
-        appContainer.className = "custom-app-container hidden";
-        appContainer.innerHTML = `
-      <div class="custom-app-inner">
-        <button id="closeCustomApp" class="custom-app-close-btn">Close</button>
-        <iframe src="https://your-app-dashboard-url.com" class="custom-app-iframe"></iframe>
-      </div>
-    `;
-        document.body.appendChild(appContainer);
+        // --- Create your app container (once) ---
+        let appContainer = document.getElementById("customAppContainer");
+        if (!appContainer) {
+            appContainer = document.createElement("div");
+            appContainer.id = "customAppContainer";
+            appContainer.className = "custom-app-container hidden";
+            appContainer.innerHTML = `
+        <div class="custom-app-inner">
+          <button id="closeCustomApp" class="custom-app-close-btn">Close</button>
+          <iframe src="https://your-app-dashboard-url.com" class="custom-app-iframe"></iframe>
+        </div>
+      `;
+            document.body.appendChild(appContainer);
+        }
 
-        // ✅ --- Fixed Click Handler ---
-        newItem.addEventListener("click", (e) => {
+        // --- Always (re)bind click handler ---
+        newItem.onclick = (e) => {
             e.preventDefault();
             e.stopPropagation();
             appContainer.classList.remove("hidden");
             appContainer.classList.add("show");
-        });
+        };
 
-        document.getElementById("closeCustomApp").addEventListener("click", () => {
-            appContainer.classList.remove("show");
-            appContainer.classList.add("hidden");
-        });
-
-        console.log("✅ Custom sidebar menu added successfully!");
-        return true;
-    }
-
-    let lastMoved = 0;
-    function moveCustomAppLink() {
-        const now = Date.now();
-        if (now - lastMoved < 2000) return; // prevent rapid repeat
-        lastMoved = now;
-
-        const nav = document.querySelector('nav[aria-label="header"]');
-        const customApp = document.querySelector("#sb_custom-app");
-        if (nav && customApp) {
-            const lastItem = nav.lastElementChild;
-            if (lastItem && customApp !== lastItem.previousElementSibling) {
-                nav.insertBefore(customApp, lastItem); // move to 2nd last
-                console.log("✅ Custom App moved to 2nd last");
-            }
+        const closeBtn = appContainer.querySelector("#closeCustomApp");
+        if (closeBtn) {
+            closeBtn.onclick = () => {
+                appContainer.classList.remove("show");
+                appContainer.classList.add("hidden");
+            };
         }
+
+        console.log("✅ Custom sidebar menu added and listener bound!");
+        return true;
     }
 
     // Initial run
     const interval = setInterval(() => {
-        if (addCustomSidebarLink()) {
-            clearInterval(interval);
-            moveCustomAppLink();
-        }
+        if (addCustomSidebarLink()) clearInterval(interval);
     }, 1000);
 
-    // React re-render observer (loop-safe)
+    // React re-render watcher — re-inject + re-bind on sidebar changes
     const observer = new MutationObserver((mutations) => {
-        // Only run when sidebar changes, not every DOM change
         const sidebarChanged = mutations.some((m) =>
             [...m.addedNodes].some(
-                (n) => n.nodeType === 1 && n.matches && n.matches('nav[aria-label="header"], nav[aria-label="header"] *')
+                (n) =>
+                    n.nodeType === 1 &&
+                    (n.matches?.("nav[aria-label='header']") ||
+                        n.querySelector?.("nav[aria-label='header']"))
             )
         );
-        if (sidebarChanged) moveCustomAppLink();
+        if (sidebarChanged) addCustomSidebarLink();
     });
 
     observer.observe(document.body, { childList: true, subtree: true });
