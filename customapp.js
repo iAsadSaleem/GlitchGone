@@ -70,7 +70,7 @@
             section.dataset.tab = tab.id;
             section.style.display = "none";
 
-            // “Back to Menu” button
+            // Back Button
             const backButton = document.createElement("button");
             backButton.className = "custom-back-btn";
             backButton.innerHTML = "← Back to Main Menu";
@@ -89,32 +89,50 @@
         appContainer.appendChild(appWindow);
         document.body.appendChild(appContainer);
 
-        // --- Event: Open a Tab from Home ---
-        homeScreen.addEventListener("click", (e) => {
-            const openBtn = e.target.closest("button[data-open-tab]");
-            if (!openBtn) return;
-            const tabId = openBtn.dataset.openTab;
-
-            homeScreen.style.display = "none";  
+        // --- Functions ---
+        function showTab(tabId) {
+            homeScreen.style.display = "none";
             document.querySelectorAll(".custom-tab-content").forEach((sec) => {
                 sec.style.display = sec.dataset.tab === tabId ? "block" : "none";
             });
-        });
 
-        // --- Event: Back to Home ---
-        content.addEventListener("click", (e) => {
-            if (!e.target.classList.contains("custom-back-btn")) return;
-            document.querySelectorAll(".custom-tab-content").forEach((sec) => (sec.style.display = "none"));
+            document.querySelectorAll(".custom-tab-btn").forEach((btn) => {
+                btn.classList.toggle("active", btn.dataset.tab === tabId);
+            });
+        }
+
+        function showHome() {
             homeScreen.style.display = "grid";
+            document.querySelectorAll(".custom-tab-content").forEach((sec) => (sec.style.display = "none"));
+            document.querySelectorAll(".custom-tab-btn").forEach((btn) => btn.classList.remove("active"));
+        }
+
+        // --- Header Icon Clicks ---
+        tabContainer.addEventListener("click", (e) => {
+            const btn = e.target.closest(".custom-tab-btn");
+            if (!btn) return;
+            showTab(btn.dataset.tab);
         });
 
-        // --- Show/Hide Functions ---
+        // --- Home Card Buttons ---
+        homeScreen.addEventListener("click", (e) => {
+            const openBtn = e.target.closest("button[data-open-tab]");
+            if (!openBtn) return;
+            showTab(openBtn.dataset.openTab);
+        });
+
+        // --- Back Button ---
+        content.addEventListener("click", (e) => {
+            if (e.target.classList.contains("custom-back-btn")) {
+                showHome();
+            }
+        });
+
+        // --- Show/Hide App ---
         function showApp() {
             appContainer.style.display = "flex";
             requestAnimationFrame(() => (appContainer.style.opacity = "1"));
-            // Always show home screen on open
-            homeScreen.style.display = "grid";
-            document.querySelectorAll(".custom-tab-content").forEach((sec) => (sec.style.display = "none"));
+            showHome(); // Always reset to home when opened
         }
 
         function hideApp() {
