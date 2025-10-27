@@ -3,58 +3,107 @@
         const sidebar = document.querySelector('nav[aria-label="header"]');
         if (!sidebar) return false;
 
-        // Prevent duplicate injection
+        // ✅ Prevent duplicate injection
         if (document.getElementById("sb_custom-app")) return true;
 
-        // --- Create the new menu item (button) ---
+        // --- Create button element ---
         const newItem = document.createElement("button");
         newItem.id = "sb_custom-app";
         newItem.type = "button";
         newItem.className =
-            "custom-sidebar-link w-full group px-3 flex items-center justify-start text-sm font-medium rounded-md cursor-pointer opacity-80 hover:opacity-100 py-2 md:py-2";
-        newItem.style.all = "unset";
-        newItem.style.display = "flex";
-        newItem.style.alignItems = "center";
-        newItem.style.gap = "8px";
-        newItem.style.cursor = "pointer";
-        newItem.style.padding = "8px 12px";
-        newItem.style.borderRadius = "6px";
-        newItem.style.color = "#fff";
+            "custom-sidebar-link w-full group flex items-center justify-start text-sm font-medium rounded-md cursor-pointer opacity-80 hover:opacity-100";
+        Object.assign(newItem.style, {
+            all: "unset",
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            cursor: "pointer",
+            padding: "8px 12px",
+            borderRadius: "6px",
+            color: "#fff",
+        });
 
-        newItem.innerHTML = `
-      <span style="display:flex;align-items:center;gap:6px;">
-        <span class="custom-star-icon" style="animation: blinkStar 1s infinite alternate;">⭐</span>
-        <span style="font-weight:500;">My Custom App</span>
-        <span class="custom-new-tag" style="background:#ffcc00;color:#000;font-size:10px;font-weight:600;padding:1px 4px;border-radius:4px;">NEW</span>
-      </span>
-    `;
+        // --- Create icon + text wrapper ---
+        const wrapper = document.createElement("span");
+        wrapper.style.display = "flex";
+        wrapper.style.alignItems = "center";
+        wrapper.style.gap = "6px";
 
+        const star = document.createElement("span");
+        star.className = "custom-star-icon";
+        star.textContent = "⭐";
+        star.style.animation = "blinkStar 1s infinite alternate";
+
+        const label = document.createElement("span");
+        label.style.fontWeight = "500";
+        label.textContent = "My Custom App";
+
+        const newTag = document.createElement("span");
+        newTag.className = "custom-new-tag";
+        Object.assign(newTag.style, {
+            background: "#ffcc00",
+            color: "#000",
+            fontSize: "10px",
+            fontWeight: "600",
+            padding: "1px 4px",
+            borderRadius: "4px",
+        });
+        newTag.textContent = "NEW";
+
+        // Append them together
+        wrapper.append(star, label, newTag);
+        newItem.appendChild(wrapper);
         sidebar.appendChild(newItem);
 
-        // --- Create the app container (hidden by default) ---
+        // --- Create App container ---
         let appContainer = document.getElementById("customAppContainer");
         if (!appContainer) {
             appContainer = document.createElement("div");
             appContainer.id = "customAppContainer";
             appContainer.className = "custom-app-container hidden";
-            appContainer.style.cssText = `
-                position: fixed;
-                inset: 0;
-                background: rgba(0, 0, 0, 0.65);
-                display: none; /* ⛔ Hidden by default */
-                justify-content: center;
-                align-items: center;
-                z-index: 9999;
-                opacity: 0;
-                transition: opacity 0.3s ease;
-            `;
-            appContainer.innerHTML = `
-                <div style="background:#fff;width:90%;height:85vh;border-radius:12px;overflow:hidden;box-shadow:0 10px 25px rgba(0,0,0,0.3);position:relative;">
-                    <button id="closeCustomApp" style="position:absolute;top:10px;right:10px;background:#222;color:#fff;padding:6px 10px;border:none;border-radius:6px;cursor:pointer;z-index:10;">
-                        ✕ Close
-                    </button>
-                </div>
-            `;
+            Object.assign(appContainer.style, {
+                position: "fixed",
+                inset: "0",
+                background: "rgba(0, 0, 0, 0.65)",
+                display: "none",
+                justifyContent: "center",
+                alignItems: "center",
+                zIndex: "9999",
+                opacity: "0",
+                transition: "opacity 0.3s ease",
+            });
+
+            // Inner app window
+            const appWindow = document.createElement("div");
+            Object.assign(appWindow.style, {
+                background: "#fff",
+                width: "90%",
+                height: "85vh",
+                borderRadius: "12px",
+                overflow: "hidden",
+                boxShadow: "0 10px 25px rgba(0,0,0,0.3)",
+                position: "relative",
+            });
+
+            // Close button
+            const closeBtn = document.createElement("button");
+            closeBtn.id = "closeCustomApp";
+            closeBtn.textContent = "✕ Close";
+            Object.assign(closeBtn.style, {
+                position: "absolute",
+                top: "10px",
+                right: "10px",
+                background: "#222",
+                color: "#fff",
+                padding: "6px 10px",
+                border: "none",
+                borderRadius: "6px",
+                cursor: "pointer",
+                zIndex: "10",
+            });
+
+            appWindow.appendChild(closeBtn);
+            appContainer.appendChild(appWindow);
             document.body.appendChild(appContainer);
         }
 
@@ -62,18 +111,18 @@
         newItem.addEventListener("click", (e) => {
             e.preventDefault();
             e.stopPropagation();
-            appContainer.style.display = "flex"; // 👈 Show container
+            appContainer.style.display = "flex";
             requestAnimationFrame(() => {
                 appContainer.style.opacity = "1";
             });
         });
 
-        // --- Close App ---
+        // --- Close App on click ---
         const closeBtn = appContainer.querySelector("#closeCustomApp");
         closeBtn.addEventListener("click", () => {
             appContainer.style.opacity = "0";
             setTimeout(() => {
-                appContainer.style.display = "none"; // 👈 Fully hide after fade
+                appContainer.style.display = "none";
             }, 300);
         });
 
@@ -86,7 +135,7 @@
         if (addCustomSidebarLink()) clearInterval(interval);
     }, 1000);
 
-    // Re-run if GHL sidebar re-renders
+    // Re-run if sidebar re-renders
     const observer = new MutationObserver((mutations) => {
         const sidebarChanged = mutations.some((m) =>
             [...m.addedNodes].some(
@@ -100,7 +149,7 @@
     });
     observer.observe(document.body, { childList: true, subtree: true });
 
-    // --- Add blinking star animation ---
+    // --- Add blinking animation ---
     const style = document.createElement("style");
     style.textContent = `
         @keyframes blinkStar {
