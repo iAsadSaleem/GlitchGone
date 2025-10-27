@@ -17,7 +17,7 @@
         header.className = "custom-app-header";
 
         const tabs = [
-            { id: "dashboard", icon: "fa-solid fa-gauge", label: "Dashboard" },
+            { id: "lockhide", icon: "fa-solid fa-gauge", label: "Lock & Hide" },
             { id: "settings", icon: "fa-solid fa-gear", label: "Settings" },
             { id: "analytics", icon: "fa-solid fa-chart-line", label: "Analytics" },
             { id: "support", icon: "fa-solid fa-headset", label: "Support" },
