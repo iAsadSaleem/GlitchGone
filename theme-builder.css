@@ -1337,83 +1337,91 @@ body::-webkit-scrollbar-track {
 
 /*New Css Code For My Custom APp*/
 
+/* === Custom App Layout === */
 .custom-app-window {
-    background: #ffffff;
+    background: #fff;
     width: 90%;
     height: 85vh;
-    border-radius: 16px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    position: relative;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
-    animation: fadeIn 0.4s ease;
-    font-family: "Inter", sans-serif;
 }
 
-/* Header */
+/* === Header === */
 .custom-app-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: center; /* 👈 centers the icons */
     align-items: center;
-    background: linear-gradient(90deg, #0074f7, #00c0f7);
-    padding: 10px 20px;
-    color: #fff;
+    position: relative;
+    background: #f7f9fc;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 12px 0;
 }
 
-/* Icon Tabs */
+/* === Tabs Container === */
 .custom-tab-container {
     display: flex;
-    gap: 12px;
+    gap: 20px;
 }
 
+/* === Tab Buttons === */
 .custom-tab-btn {
-    background: transparent;
+    background: none;
     border: none;
-    color: #fff;
-    font-size: 18px;
-    opacity: 0.7;
     cursor: pointer;
+    font-size: 18px;
+    color: #6b7280;
     transition: all 0.2s ease;
 }
 
-    .custom-tab-btn:hover,
-    .custom-tab-btn.active {
-        opacity: 1;
-        transform: scale(1.15);
+    .custom-tab-btn:hover {
+        color: #2563eb;
+        transform: scale(1.1);
     }
 
-/* Close Button */
+    .custom-tab-btn.active {
+        color: #2563eb;
+        text-shadow: 0 0 6px rgba(37, 99, 235, 0.5);
+    }
+
+/* === Close Button === */
 .custom-app-close-btn {
-    background: rgba(0, 0, 0, 0.2);
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: #111;
+    color: #fff;
     border: none;
-    color: white;
-    font-size: 16px;
-    border-radius: 8px;
-    padding: 4px 10px;
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 14px;
     cursor: pointer;
     transition: background 0.2s ease;
 }
 
     .custom-app-close-btn:hover {
-        background: rgba(0, 0, 0, 0.4);
+        background: #333;
     }
 
-/* Content */
+/* === Main Content === */
 .custom-app-content {
     flex: 1;
-    background: #f8f9fb;
-    padding: 20px 30px;
+    padding: 24px;
     overflow-y: auto;
+    background: #ffffff;
 }
 
 .custom-tab-content {
-    animation: fadeSlide 0.3s ease;
+    animation: fadeIn 0.3s ease;
 }
 
-@keyframes fadeSlide {
+@keyframes fadeIn {
     from {
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(5px);
     }
 
     to {
@@ -1422,14 +1430,3 @@ body::-webkit-scrollbar-track {
     }
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: scale(0.95);
-    }
-
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
