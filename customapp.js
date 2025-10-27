@@ -53,7 +53,6 @@
                     <button id="closeCustomApp" style="position:absolute;top:10px;right:10px;background:#222;color:#fff;padding:6px 10px;border:none;border-radius:6px;cursor:pointer;z-index:10;">
                         ✕ Close
                     </button>
-                    <iframe src="https://your-app-dashboard-url.com" style="width:100%;height:100%;border:none;"></iframe>
                 </div>
             `;
             document.body.appendChild(appContainer);
