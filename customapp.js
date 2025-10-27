@@ -6,9 +6,8 @@
         // Prevent duplicate injection
         if (document.getElementById("sb_custom-app")) return true;
 
-        // --- Create the new menu item ---
-        const newItem = document.createElement("a");
-        newItem.href = "javascript:void(0)";
+        // --- Create the new menu item (div, not <a>) ---
+        const newItem = document.createElement("div");
         newItem.id = "sb_custom-app";
         newItem.className =
             "custom-sidebar-link w-full group px-3 flex items-center justify-start lg:justify-start xl:justify-start text-sm font-medium rounded-md cursor-pointer opacity-70 hover:opacity-100 py-2 md:py-2";
@@ -32,15 +31,18 @@
             appContainer.id = "customAppContainer";
             appContainer.className = "custom-app-container hidden";
             appContainer.innerHTML = `
-        <div class="custom-app-inner">
-          <button id="closeCustomApp" class="custom-app-close-btn">Close</button>
-          <iframe src="https://your-app-dashboard-url.com" class="custom-app-iframe"></iframe>
+        <div style="padding:20px; font-family:sans-serif;">
+          <button id="closeCustomApp" style="background:#444;color:#fff;padding:8px 12px;border:none;border-radius:6px;cursor:pointer;margin-bottom:15px;">
+            Close
+          </button>
+          <iframe src="https://your-app-dashboard-url.com" 
+                  style="width:100%;height:90vh;border:none;border-radius:10px;"></iframe>
         </div>
       `;
             document.body.appendChild(appContainer);
         }
 
-        // --- Always (re)bind click handler ---
+        // --- Click handler ---
         newItem.onclick = (e) => {
             e.preventDefault();
             e.stopPropagation();
