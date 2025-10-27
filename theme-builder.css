@@ -1247,7 +1247,8 @@ body::-webkit-scrollbar-track {
     font-size: 13px;
     margin-top: 10px;
 }
-/* --- Custom Sidebar Link --- */
+/* ===== Custom App Sidebar Styles ===== */
+
 .custom-sidebar-link {
     display: flex !important;
     align-items: center;
@@ -1256,7 +1257,7 @@ body::-webkit-scrollbar-track {
     font-weight: 500;
     opacity: 0.8;
     transition: all 0.2s ease-in-out;
-}   
+}
 
     .custom-sidebar-link:hover {
         opacity: 1;
@@ -1269,74 +1270,10 @@ body::-webkit-scrollbar-track {
     margin-right: 8px;
 }
 
-/* --- App Container Overlay --- */
-.custom-app-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #fff;
-    z-index: 99999;
-    overflow: auto;
-    display: none;
-}
-
-    .custom-app-container.show {
-        display: block;
-        animation: fadeIn 0.3s ease-in-out;
-    }
-
-    .custom-app-container.hidden {
-        display: none;
-    }
-
-/* --- Inner Wrapper --- */
-.custom-app-inner {
-    padding: 20px;
-    font-family: "Inter", sans-serif;
-}
-
-/* --- Close Button --- */
-.custom-app-close-btn {
-    background: #444;
-    color: #fff;
-    padding: 8px 14px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    margin-bottom: 15px;
-    font-size: 14px;
-    transition: background 0.3s ease;
-}
-
-    .custom-app-close-btn:hover {
-        background: #000;
-    }
-
-/* --- Iframe --- */
-.custom-app-iframe {
-    width: 100%;
-    height: 90vh;
-    border: none;
-    border-radius: 10px;
-}
-
-/* --- Animation --- */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
+/* 🌟 Blinking Star Animation */
 .custom-star-icon {
     color: gold;
-    margin-right: 5px;
+    margin-right: 4px;
     animation: blinkStar 1.2s infinite;
     font-size: 14px;
     display: inline-block;
@@ -1354,7 +1291,33 @@ body::-webkit-scrollbar-track {
     }
 }
 
-/* Optional: smoother transition when showing app */
+/* 🟡 “NEW” Tag Style */
+.custom-new-tag {
+    background-color: #ffcc00;
+    color: #000;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 5px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    box-shadow: 0 0 4px rgba(255, 204, 0, 0.5);
+    animation: tagPulse 2s infinite;
+}
+
+@keyframes tagPulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 4px rgba(255, 204, 0, 0.5);
+    }
+
+    50% {
+        transform: scale(1.1);
+        box-shadow: 0 0 10px rgba(255, 204, 0, 0.8);
+    }
+}
+
+/* Optional: fade-in animation for app */
 .custom-app-container.show {
     display: block !important;
     animation: fadeInApp 0.3s ease-in-out;
