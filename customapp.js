@@ -24,10 +24,6 @@
         newItem.style.color = "#fff";
 
         newItem.innerHTML = `
-      <img src="https://cdn-icons-png.flaticon.com/512/1828/1828884.png"
-           class="custom-sidebar-icon"
-           style="width:20px;height:20px;filter:drop-shadow(0 0 2px rgba(255,255,255,0.3));"
-           alt="Custom App Icon">
       <span style="display:flex;align-items:center;gap:6px;">
         <span class="custom-star-icon" style="animation: blinkStar 1s infinite alternate;">⭐</span>
         <span style="font-weight:500;">My Custom App</span>
