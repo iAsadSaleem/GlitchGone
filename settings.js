@@ -655,12 +655,25 @@
                 "--card-footer-bg-color": "#CFFFDC",
                 "--card-footer-font-color": "#2E6F40",
 
+                /* 🌿 TOP NAV MENU COLORS */
                 "--top-nav-menu-bg": "#2E6F40",
                 "--top-nav-menu-hover-bg": "#253D2C",
                 "--top-nav-menu-active-bg": "#1E4A32",
                 "--top-nav-menu-color": "#FFFFFF",
                 "--top-nav-menu-hover-color": "#CFFFDC",
                 "--top-nav-menu-active-color": "#FFFFFF",
+
+                /* 🌿 ADDITIONAL TOP NAVBAR VARIABLES */
+                "--sidebar-topbar-height": "64px",
+                "--sidebar-horizontal-padding": "1rem",
+                "--sidebar-nav-gap": "1rem",
+                "--sidebar-link-padding": "12px",
+                "--sidebar-menu-opacity": "0.85",
+                "--sidebar-menu-radius": "6px",
+                "--sidebar-topbar-shadow": "0 2px 5px rgba(0, 0, 0, 0.25)",
+                "--sidebar-logo-height": "36px",
+                "--sidebar-icon-size": "16px",
+                "--sidebar-text-size": "14px",
 
                 "--card-header-gradient-start": "#68BA7F",
                 "--card-header-bg-gradient": "linear-gradient(90deg, #68BA7F 0%, #2E6F40 100%)",
@@ -685,7 +698,8 @@
                 "--card-body-border-radius": "24px",
                 "--lockedMenus": "{}",
                 "--body-font": "Roboto"
-            },
+            }
+,
             "BlushRose Theme (Sidebar Radius 0)": {
                 "--primary-color": "#ec4899",
                 "--second-color": "#fce7f3",
