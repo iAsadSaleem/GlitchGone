@@ -4726,30 +4726,6 @@
                 });
             })(drawer, drawerTitleWrapper);
 
-            //(function makeDraggable(el, handle) {
-            //    let isDragging = false, offsetX = 0, offsetY = 0;
-
-            //    handle.addEventListener("mousedown", (e) => {
-            //        isDragging = true;
-            //        offsetX = e.clientX - el.offsetLeft;
-            //        offsetY = e.clientY - el.offsetTop;
-            //        el.style.position = "absolute";
-            //        el.style.zIndex = 9999;
-            //        document.body.style.userSelect = "none";
-            //    });
-
-            //    document.addEventListener("mousemove", (e) => {
-            //        if (!isDragging) return;
-            //        el.style.left = (e.clientX - offsetX) + "px";
-            //        el.style.top = (e.clientY - offsetY) + "px";
-            //    });
-
-            //    document.addEventListener("mouseup", () => {
-            //        isDragging = false;
-            //        document.body.style.userSelect = "";
-            //    });
-            //})(drawer, drawerTitleWrapper);
-
             // Drawer toggle
             btn.addEventListener('click', () => {
                 const drawer = document.getElementById("themeBuilderDrawer");
