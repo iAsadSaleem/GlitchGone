@@ -4687,28 +4687,68 @@
             createSuccessGIF();  
             // ===== Make Draggable =====
             (function makeDraggable(el, handle) {
-                let isDragging = false, offsetX = 0, offsetY = 0;
+                let isDragging = false;
+                let startX = 0, startY = 0, offsetX = 0, offsetY = 0;
 
                 handle.addEventListener("mousedown", (e) => {
-                    isDragging = true;
+                    startX = e.clientX;
+                    startY = e.clientY;
                     offsetX = e.clientX - el.offsetLeft;
                     offsetY = e.clientY - el.offsetTop;
-                    el.style.position = "absolute";
-                    el.style.zIndex = 9999;
                     document.body.style.userSelect = "none";
-                });
 
-                document.addEventListener("mousemove", (e) => {
-                    if (!isDragging) return;
-                    el.style.left = (e.clientX - offsetX) + "px";
-                    el.style.top = (e.clientY - offsetY) + "px";
-                });
+                    const onMouseMove = (moveEvent) => {
+                        const dx = moveEvent.clientX - startX;
+                        const dy = moveEvent.clientY - startY;
 
-                document.addEventListener("mouseup", () => {
-                    isDragging = false;
-                    document.body.style.userSelect = "";
+                        // Only activate drag after a few pixels of movement
+                        if (!isDragging && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) {
+                            isDragging = true;
+                            el.style.position = "absolute";
+                            el.style.zIndex = "9999";
+                        }
+
+                        if (isDragging) {
+                            el.style.left = (moveEvent.clientX - offsetX) + "px";
+                            el.style.top = (moveEvent.clientY - offsetY) + "px";
+                        }
+                    };
+
+                    const onMouseUp = () => {
+                        document.removeEventListener("mousemove", onMouseMove);
+                        document.removeEventListener("mouseup", onMouseUp);
+                        document.body.style.userSelect = "";
+                        isDragging = false;
+                    };
+
+                    document.addEventListener("mousemove", onMouseMove);
+                    document.addEventListener("mouseup", onMouseUp);
                 });
             })(drawer, drawerTitleWrapper);
+
+            //(function makeDraggable(el, handle) {
+            //    let isDragging = false, offsetX = 0, offsetY = 0;
+
+            //    handle.addEventListener("mousedown", (e) => {
+            //        isDragging = true;
+            //        offsetX = e.clientX - el.offsetLeft;
+            //        offsetY = e.clientY - el.offsetTop;
+            //        el.style.position = "absolute";
+            //        el.style.zIndex = 9999;
+            //        document.body.style.userSelect = "none";
+            //    });
+
+            //    document.addEventListener("mousemove", (e) => {
+            //        if (!isDragging) return;
+            //        el.style.left = (e.clientX - offsetX) + "px";
+            //        el.style.top = (e.clientY - offsetY) + "px";
+            //    });
+
+            //    document.addEventListener("mouseup", () => {
+            //        isDragging = false;
+            //        document.body.style.userSelect = "";
+            //    });
+            //})(drawer, drawerTitleWrapper);
 
             // Drawer toggle
             btn.addEventListener('click', () => {
@@ -4726,6 +4766,8 @@
                 drawer.classList.remove("open");
                 drawer.style.left = ""; // 🛠️ Reset position so drag state doesn’t break clicks
                 drawer.style.top = "";
+                drawer.style.position = "";   // 🧩 Added
+                drawer.style.zIndex = "";     // 🧩 Added
             });
 
             bindThemeBuilderEvents(btn, drawer);
