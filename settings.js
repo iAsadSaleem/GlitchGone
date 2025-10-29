@@ -1018,8 +1018,31 @@
                 "--lockedMenus": "{}",
                 "--body-font": "Poppins",
                 "--sidebar-top-right-radius": "16px",
-                "--sidebar-bottom-right-radius": "16px"
+                "--sidebar-bottom-right-radius": "16px",
+
+                /* === Login Page Additions === */
+                "--login-bg-gradient": "linear-gradient(135deg, #0E0E0E 0%, #1A1A1A 50%, #2B2B2B 100%)",
+                "--login-card-width": "480px",
+                "--login-card-border-radius": "22px",
+                "--login-card-box-shadow": "0 8px 30px rgba(0, 0, 0, 0.4)",
+                "--login-input-border-color": "#333333",
+                "--login-input-bg-color": "#0E0E0E",
+                "--login-input-text-color": "#FFFFFF",
+                "--login-input-border-radius": "10px",
+                "--login-button-border-radius": "12px",
+                "--login-button-text-color": "#FFFFFF",
+                "--login-button-hover-bg-color": "#D4AF37",
+                "--login-button-hover-text-color": "#0E0E0E",
+                "--login-footer-text-color": "#BFA76B",
+                "--login-logo-space": "50px",
+                "--login-layout-padding-right": "8%",
+                "--login-company-logo": "url('https://msgsndr-private.storage.googleapis.com/companyPhotos/47b7e157-d197-4ce5-9a94-b697c258702a.png')",
+                "--login-logo-width": "140px",
+                "--login-logo-height": "70px",
+                "--login-logo-filter": "drop-shadow(0 2px 6px rgba(212,175,55,0.3))",
+                "--login-background-active":"linear-gradient(180deg, #0E0E0E 0%, #1A1A1A 50%, #2B2B2B 100%)"
             }
+
         };
         const themeKeys = Object.keys(themes);
         let currentIndex = -1;
