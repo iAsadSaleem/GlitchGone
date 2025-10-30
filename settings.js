@@ -632,7 +632,7 @@
                 "--sidebar-menu-bg": "transparent",
                 "--sidebar-menu-color": "#FFFFFF",
                 "--sidebar-menu-hover-bg": "#3B9DD3",
-                "--sidebar-menu-active-bg": "#FFFFFF",
+                "--sidebar-menu-active-bg": "#2692cb",
                 "--sidebar-menu-icon-color": "#B8D9F8",
                 "--sidebar-menu-icon-hover-color": "#FFFFFF",
                 "--sidebar-menu-icon-active-color": "#2A3E9B",
