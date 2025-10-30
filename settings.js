@@ -552,7 +552,7 @@
         // Themes object (kept from your original)
         const themes = {
             "Default Theme": {
-                "--primary-color": "#25AF60",
+                "--primary-color": "#0a6e35",
                 "--second-color": "#39C875",
                 "--dark-color": "#000000",
                 "--grey-color": "#E2E2E2",
@@ -563,7 +563,7 @@
                 "--sidebar-bg-color": "#000000",          /* Flat black sidebar background */
                 "--sidebar-menu-bg": "#000000",
                 "--sidebar-menu-color": "#FFFFFF",
-                "--sidebar-menu-hover-bg": "#25AF60",
+                "--sidebar-menu-hover-bg": "#0a6e35",
                 "--sidebar-menu-active-bg": "#39C875",
                 "--sidebar-menu-icon-color": "#A6DDBA",
                 "--sidebar-menu-icon-hover-color": "#FFFFFF",
@@ -572,11 +572,11 @@
                 "--sidebar-top-right-radius": "16px",
                 "--sidebar-bottom-right-radius": "16px",
 
-                "--scroll-color": "#25AF60",
+                "--scroll-color": "#0a6e35",
 
                 "--header-bg-color": "#000000",           /* Flat black header */
                 "--header-icon-color": "#FFFFFF",
-                "--header-icon-hover-color": "#25AF60",
+                "--header-icon-hover-color": "#0a6e35",
                 "--header-icon-bg": "#000000",
                 "--header-icon-hover-bg": "#111111",
 
@@ -591,12 +591,12 @@
                 "--top-nav-menu-hover-bg": "#111111",
                 "--top-nav-menu-active-bg": "#111111",
                 "--top-nav-menu-color": "#FFFFFF",
-                "--top-nav-menu-hover-color": "#25AF60",
+                "--top-nav-menu-hover-color": "#0a6e35",
                 "--top-nav-menu-active-color": "#39C875",
 
                 "--card-header-gradient-start": "#000000",
                 "--card-header-bg-gradient": "linear-gradient(38deg, rgba(0,0,0,1) 45%, rgba(57,200,117,1) 55%)",
-                "--card-header-gradient-end": "#25AF60",
+                "--card-header-gradient-end": "#0a6e35",
 
                 "--card-body-border-color": "#E2E2E2",
 
@@ -605,13 +605,13 @@
                 "--sidebar-main-bg-gradient": "#000000",   /* Flat black sidebar */
                 "--login-card-bg-gradient": "linear-gradient(38deg, rgba(0,0,0,1) 45%, rgba(57,200,117,1) 55%)",
 
-                "--login-link-text-color": "#25AF60",
+                "--login-link-text-color": "#0a6e35",
                 "--login-button-bg-gradient": "linear-gradient(38deg, rgba(0,0,0,1) 45%, rgba(57,200,117,1) 55%)",
-                "--login-button-bg-color": "#25AF60",
+                "--login-button-bg-color": "#0a6e35",
                 "--login-card-bg-color": "#FFFFFF",
 
                 "--header-main-bg-gradient": "linear-gradient(38deg, rgba(0,0,0,1) 45%, rgba(0,0,0,0) 55%)",
-                "--header-icon-hover": "#25AF60",
+                "--header-icon-hover": "#0a6e35",
 
                 "--scroll-width": "7px",
                 "--card-title-font-size": "18px",
