@@ -618,8 +618,7 @@
                 "--card-body-border-radius": "24px",
                 "--lockedMenus": "{}",
                 "--body-font": "Roboto"
-            }
-
+            },
             "GlitchGone Theme": {
                 "--primary-color": "#0B3D0B",
                 "--second-color": "#00A86B",
