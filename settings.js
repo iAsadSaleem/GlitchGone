@@ -1851,6 +1851,21 @@
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedThemeObj.themeData || {};
 
+        // ✅ If themeData has a gradient string, extract start & end colors
+        if (themeData["--header-main-bg-gradient"]) {
+            const gradient = themeData["--header-main-bg-gradient"];
+            // Match something like "linear-gradient(90deg, #2A3E9B 0%, #62C6F0 100%)"
+            const match = gradient.match(/#([0-9A-F]{6})/gi);
+            if (match && match.length >= 2) {
+                themeData["--header-gradient-start"] = match[0];
+                themeData["--header-gradient-end"] = match[1];
+            } else if (match && match.length === 1) {
+                // In case both colors are same (flat color header)
+                themeData["--header-gradient-start"] = match[0];
+                themeData["--header-gradient-end"] = match[0];
+            }
+        }
+
         const headerEl = document.querySelector(".hl_header");
 
         // === Update Gradient Preview ===
@@ -1878,6 +1893,7 @@
         }
 
         // Color picker helper
+        // === Color picker helper ===
         function makePicker(labelText, cssVar, fallback = "#007bff") {
             const wrapper = document.createElement("div");
             wrapper.className = "tb-color-picker-wrapper";
@@ -1944,7 +1960,6 @@
 
             return { wrapper, input: colorInput, code: colorCode };
         }
-
         // === Create Inputs ===
         const startPicker = makePicker("Choose Start Color For Header", "--header-gradient-start", "#ff0000");
         const endPicker = makePicker("Choose End Color For Header", "--header-gradient-end", "#0000ff");
