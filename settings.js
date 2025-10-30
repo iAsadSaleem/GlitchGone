@@ -502,7 +502,7 @@
     function buildThemeSelectorSection(container) {
         if (!container) return;
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        const selectedtheme = localStorage.getItem("selectedtheme");
+        const selectedtheme = localStorage.getItem("themebuilder_selectedTheme");
         // inject minimal styles once
         if (!document.getElementById("tb-theme-selector-styles")) {
             const s = document.createElement("style");
