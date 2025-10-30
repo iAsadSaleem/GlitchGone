@@ -528,13 +528,12 @@
         const inner = document.createElement("div");
         inner.className = "themeBtnInner";
 
-
-
         const textSpan = document.createElement("span");
         textSpan.className = "themeBtnText";
         textSpan.textContent = selectedtheme || "Select Theme";
 
         // circle icon (Font Awesome expected to be loaded separately)
+
         const arrowIcon = document.createElement("span");
         arrowIcon.className = "themeArrowIcon";
         arrowIcon.innerHTML = '<i class="fa-solid fa-angle-down" aria-hidden="true"></i>';
@@ -619,7 +618,6 @@
                 "--lockedMenus": "{}",
                 "--body-font": "Roboto"
             },
-
             "OceanMist Theme (White Header Sidebar Radius 0)": {
                 "--primary-color": "#276678",
                 "--second-color": "#1687A7",
