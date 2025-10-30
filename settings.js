@@ -619,6 +619,74 @@
                 "--lockedMenus": "{}",
                 "--body-font": "Roboto"
             },
+            "BlueWave Theme": {
+                "--primary-color": "#2A3E9B",
+                "--second-color": "#62C6F0",
+                "--dark-color": "#1B255E",
+                "--grey-color": "#E4E7EF",
+                "--alert-color": "#E63946",
+                "--app-bg-color": "#F7F9FC",
+                "--Acent-color": "#FFFFFF",
+
+                "--sidebar-bg-color": "linear-gradient(to bottom, #2A3E9B, #62C6F0)",
+                "--sidebar-menu-bg": "transparent",
+                "--sidebar-menu-color": "#FFFFFF",
+                "--sidebar-menu-hover-bg": "#3B9DD3",
+                "--sidebar-menu-active-bg": "#FFFFFF",
+                "--sidebar-menu-icon-color": "#B8D9F8",
+                "--sidebar-menu-icon-hover-color": "#FFFFFF",
+                "--sidebar-menu-icon-active-color": "#2A3E9B",
+
+                "--sidebar-top-right-radius": "16px",
+                "--sidebar-bottom-right-radius": "16px",
+
+                "--scroll-color": "#62C6F0",
+
+                "--header-bg-color": "transparent",
+                "--header-icon-color": "#FFFFFF",
+                "--header-icon-hover-color": "#62C6F0",
+                "--header-icon-bg": "transparent",
+                "--header-icon-hover-bg": "rgba(255,255,255,0.1)",
+
+                "--card-body-bg-color": "#FFFFFF",
+                "--card-body-font-color": "#1A1A1A",
+                "--card-title-font-color": "#2A3E9B",
+                "--card-dec-font-color": "#333333",
+                "--card-footer-bg-color": "#F0F6FC",
+                "--card-footer-font-color": "#000000",
+
+                "--top-nav-menu-bg": "transparent",
+                "--top-nav-menu-hover-bg": "rgba(255,255,255,0.1)",
+                "--top-nav-menu-active-bg": "rgba(255,255,255,0.2)",
+                "--top-nav-menu-color": "#FFFFFF",
+                "--top-nav-menu-hover-color": "#62C6F0",
+                "--top-nav-menu-active-color": "#FFFFFF",
+
+                "--card-header-gradient-start": "#2A3E9B",
+                "--card-header-bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
+                "--card-header-gradient-end": "#62C6F0",
+
+                "--card-body-border-color": "#E4E7EF",
+
+                "--bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
+
+                "--sidebar-main-bg-gradient": "linear-gradient(to bottom, #2A3E9B, #62C6F0)",
+                "--login-card-bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
+
+                "--login-link-text-color": "#2A3E9B",
+                "--login-button-bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
+                "--login-button-bg-color": "#2A3E9B",
+                "--login-card-bg-color": "#FFFFFF",
+
+                "--header-main-bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
+                "--header-icon-hover": "#62C6F0",
+
+                "--scroll-width": "7px",
+                "--card-title-font-size": "18px",
+                "--card-body-border-radius": "24px",
+                "--lockedMenus": "{}",
+                "--body-font": "Roboto"
+            },
             "GlitchGone Theme": {
                 "--primary-color": "#0B3D0B",
                 "--second-color": "#00A86B",
