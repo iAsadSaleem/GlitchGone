@@ -587,6 +587,9 @@
                 "--card-footer-bg-color": "#F0FFF6",
                 "--card-footer-font-color": "#000000",
 
+                "--sidebar-top-right-radius": "0px",
+                "--sidebar-bottom-right-radius": "0px",
+
                 "--top-nav-menu-bg": "#000000",
                 "--top-nav-menu-hover-bg": "#111111",
                 "--top-nav-menu-active-bg": "#111111",
