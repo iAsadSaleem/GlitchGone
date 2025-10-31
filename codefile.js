@@ -11,37 +11,6 @@
 //})();
 // Simple approach - remove all loaders and show ours
 
-(function loadSortable() {
-    if (!window.Sortable) { // Only load if not already loaded
-        const script = document.createElement('script');
-        script.src = "https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js";
-        script.onload = () => {
-            //log("Sortable.js loaded successfully!");
-            // ✅ You can now initialize Sortable here or later in your code
-        };
-        document.head.appendChild(script);
-    }
-})();
-(function () {
-    if (!document.querySelector('link[href*="font-awesome"]')) {
-        const link = document.createElement("link");
-        link.rel = "stylesheet";
-        link.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css";
-        link.crossOrigin = "anonymous";
-        link.referrerPolicy = "no-referrer";
-        document.head.appendChild(link);
-    }
-})();
-(function loadFontAwesome() {
-    if (!document.querySelector('link[href*="font-awesome"]')) {
-        const link = document.createElement("link");
-        link.rel = "stylesheet";
-        link.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css";
-        link.crossOrigin = "anonymous";
-        link.referrerPolicy = "no-referrer";
-        document.head.appendChild(link);
-    }
-})();
 (function () {
     // Create and show our custom loader immediately
     const loader = document.createElement('div');
