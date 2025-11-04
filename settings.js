@@ -937,7 +937,7 @@
             const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
             savedThemeObj.themeData = { ...(savedThemeObj.themeData || {}), ...vars };
             savedThemeObj.selectedTheme = themeName;
-            console.log(savedThemeObj);
+            console.log(themeName);
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
             localStorage.setItem("themebuilder_selectedTheme", themeName);
 
