@@ -4543,7 +4543,7 @@
                                         email: email ? [email] : [],
                                         agencyId,
                                         themeData: savedTheme.themeData,
-                                        selectedTheme: selectedTheme,
+                                        selectedTheme: selectedtheme,
                                         bodyFont: savedTheme.themeData["--body-font"] || "Arial, sans-serif",
                                         updatedAt: new Date().toISOString(),
                                     };
