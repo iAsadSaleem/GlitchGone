@@ -502,8 +502,7 @@
     function buildThemeSelectorSection(container) {
         if (!container) return;
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        const selectedthemename = localStorage.getItem("themebuilder_selectedTheme");
-        const selectedtheme = '';
+        const selectedtheme = localStorage.getItem("themebuilder_selectedTheme");
         // inject minimal styles once
         if (!document.getElementById("tb-theme-selector-styles")) {
             const s = document.createElement("style");
@@ -692,7 +691,7 @@
                 "--lockedMenus": "{}",
                 "--body-font": "Roboto"
             },
-           };
+        };
         const themeKeys = Object.keys(themes);
         let currentIndex = -1;
 
@@ -721,19 +720,13 @@
         }
 
         // restore saved theme if exists
-        //if (selectedthemename) {
-        //    applyTheme(selectedthemename, savedThemeObj.themeData);
-        //    if (themeKeys.includes(selectedthemename)) {
-        //        currentIndex = themeKeys.indexOf(selectedthemename);
-        //    }
-        //}
-
-        if (selectedthemename && themes[selectedthemename]) {
-            applyTheme(selectedthemename, themes[selectedthemename]);
-            if (themeKeys.includes(selectedthemename)) {
-                currentIndex = themeKeys.indexOf(selectedthemename);
+        if (selectedtheme && themes[selectedtheme]) {
+            applyTheme(selectedtheme, themes[selectedtheme]);
+            if (themeKeys.includes(selectedtheme)) {
+                currentIndex = themeKeys.indexOf(selectedtheme);
             }
         }
+
         // cycle themes when clicking main area of button (but not when clicking the arrow)
         themeBtn.addEventListener("click", (e) => {
             // if the click target is the arrow or inside it, ignore (arrow handles dropdown)
