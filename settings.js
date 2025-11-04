@@ -4504,6 +4504,8 @@
                                     // ✅ Your existing apply code here (unchanged)
                                     const themeData = collectThemeVars() || {};
                                     const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                                    const selectedtheme = localStorage.getItem("themebuilder_selectedTheme");
+
                                     savedTheme.themeData = savedTheme.themeData || {};
                                     
 
@@ -4541,7 +4543,7 @@
                                         email: email ? [email] : [],
                                         agencyId,
                                         themeData: savedTheme.themeData,
-                                        selectedTheme: savedTheme.selectedTheme,
+                                        selectedTheme: selectedTheme,
                                         bodyFont: savedTheme.themeData["--body-font"] || "Arial, sans-serif",
                                         updatedAt: new Date().toISOString(),
                                     };
