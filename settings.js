@@ -937,6 +937,7 @@
             const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
             savedThemeObj.themeData = { ...(savedThemeObj.themeData || {}), ...vars };
             savedThemeObj.selectedTheme = themeName;
+            console.log(savedThemeObj);
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
         }
 
@@ -4833,5 +4834,7 @@
         }, 500); // ⏳ delay so "Login As" exists
     });
    
-    document.addEventListener('DOMContentLoaded', () => setTimeout(() => initThemeBuilder(0), 1050)); setTimeout(() => initThemeBuilder(0), 1050);
+    document.addEventListener('DOMContentLoaded', () =>
+        setTimeout(() => initThemeBuilder(0), 1050));
+        setTimeout(() => initThemeBuilder(0), 1050);
 })();
