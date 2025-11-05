@@ -3984,6 +3984,9 @@
                     saved.themeData["--menuCustomizations"] = JSON.stringify(customizations);
                     localStorage.setItem("userTheme", JSON.stringify(saved));
 
+                    updateSubaccountMenuTitle(menu.id, titleInput.value);
+
+
                     // 🔄 Update icon live
                     const menuEl = document.getElementById(menu.id);
                     if (menuEl) {
@@ -4067,6 +4070,31 @@
 
             wrapper.appendChild(listContainer);
 
+            // 2️⃣ Live Subaccount Menu Title update
+            function updateSubaccountMenuTitle(metaKey, newTitle) {
+                const varName = `--${metaKey}-new-name`; // e.g. --dashboard-new-name
+                document.documentElement.style.setProperty(varName, `"${newTitle}"`);
+
+                // Instant visual feedback on sidebar
+                const el = document.querySelector(`a[meta="${metaKey}"] .nav-title`);
+                if (el) el.textContent = newTitle;
+            }
+
+            // ==========================
+            // Helper function (place at top or outside Sortable)
+            // ==========================
+            function updateSubaccountSidebarRuntime(newOrder) {
+                const sidebarNav = document.querySelector(
+                    '.hl_nav-header nav[aria-label="header"]'
+                );
+                if (!sidebarNav) return;
+
+                newOrder.forEach(metaKey => {
+                    const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
+                    if (el) sidebarNav.appendChild(el); // moves node in new order
+                });
+            }
+
             // ---------------- Drag & Drop ----------------
             Sortable.create(listContainer, {
                 animation: 150,
@@ -4081,6 +4109,8 @@
                     saved.themeData = saved.themeData || {};
                     saved.themeData[storageKey] = JSON.stringify(newOrder);
                     localStorage.setItem("userTheme", JSON.stringify(saved));
+
+                    updateSubaccountSidebarRuntime(newOrder);
 
                     newOrder.forEach(menuId => {
                         const menuEl = document.getElementById(menuId);
