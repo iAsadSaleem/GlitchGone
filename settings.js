@@ -3831,9 +3831,9 @@
         document.documentElement.style.setProperty(varName, `"${newLabel}"`);
         console.log("✅ Updated sidebar title:", metaKey, "→", newLabel);
 
-        const saved = JSON.parse(localStorage.getItem("themebuilder_sidebarTitles") || "{}");
+        const saved = JSON.parse(localStorage.getItem("--themebuilder_sidebarTitles") || "{}");
         saved[metaKey] = newLabel;
-        localStorage.setItem("themebuilder_sidebarTitles", JSON.stringify(saved));
+        localStorage.setItem("--themebuilder_sidebarTitles", JSON.stringify(saved));
     }
     // === Restore titles when page reloads ===
     function restoreSidebarTitles() {
