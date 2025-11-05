@@ -3813,19 +3813,19 @@
             const style = document.createElement("style");
             style.dataset.meta = metaKey;
             style.innerHTML = `
-      a[meta="${metaKey}"] .nav-title,
-      a#${metaKey} .nav-title {
-        visibility: hidden !important;
-        position: relative !important;
-      }
-      a[meta="${metaKey}"] .nav-title::after,
-      a#${metaKey} .nav-title::after {
-        content: var(${varName}, "${metaKey}");
-        visibility: visible !important;
-        position: absolute !important;
-        left: 0;
-      }
-    `;
+        a[meta="${metaKey}"] .nav-title,
+        a#${metaKey} .nav-title {
+          visibility: hidden !important;
+          position: relative !important;
+        }
+        a[meta="${metaKey}"] .nav-title::after,
+        a#${metaKey} .nav-title::after {
+          content: var(${varName}, "${metaKey}");
+          visibility: visible !important;
+          position: absolute !important;
+          left: 0;
+        }
+      `;
             document.head.appendChild(style);
         }
 
@@ -3833,32 +3833,84 @@
         document.documentElement.style.setProperty(varName, `"${newLabel}"`);
         console.log("✅ Updated sidebar title:", metaKey, "→", newLabel);
 
-        // ✅ Save structured data
+        // ✅ Save in flat key:value format
         const saved = JSON.parse(localStorage.getItem("--themebuilder_sidebarTitles") || "{}");
-        saved[metaKey] = {
-            varName,
-            value: newLabel,
-        };
+        saved[varName] = newLabel; // <--- clean flat storage
         localStorage.setItem("--themebuilder_sidebarTitles", JSON.stringify(saved));
     }
+
+    //function updateSidebarTitle(metaKey, newLabel) {
+    //    const varName = `--${metaKey}-new-name`;
+
+    //    // Inject CSS rule only once
+    //    if (!document.querySelector(`style[data-meta="${metaKey}"]`)) {
+    //        const style = document.createElement("style");
+    //        style.dataset.meta = metaKey;
+    //        style.innerHTML = `
+    //  a[meta="${metaKey}"] .nav-title,
+    //  a#${metaKey} .nav-title {
+    //    visibility: hidden !important;
+    //    position: relative !important;
+    //  }
+    //  a[meta="${metaKey}"] .nav-title::after,
+    //  a#${metaKey} .nav-title::after {
+    //    content: var(${varName}, "${metaKey}");
+    //    visibility: visible !important;
+    //    position: absolute !important;
+    //    left: 0;
+    //  }
+    //`;
+    //        document.head.appendChild(style);
+    //    }
+
+    //    // ✅ Apply the CSS variable live
+    //    document.documentElement.style.setProperty(varName, `"${newLabel}"`);
+    //    console.log("✅ Updated sidebar title:", metaKey, "→", newLabel);
+
+    //    // ✅ Save structured data
+    //    const saved = JSON.parse(localStorage.getItem("--themebuilder_sidebarTitles") || "{}");
+    //    saved[metaKey] = {
+    //        varName,
+    //        value: newLabel,
+    //    };
+    //    localStorage.setItem("--themebuilder_sidebarTitles", JSON.stringify(saved));
+    //}
     // === Restore titles when page reloads ===
+    //function restoreSidebarTitles() {
+    //    const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+    //    if (saved.themeData && saved.themeData["--sidebarTitles"]) {
+    //        try {
+    //            const titles = JSON.parse(saved.themeData["--sidebarTitles"]);
+    //            Object.entries(titles).forEach(([metaKey, { varName, value }]) => {
+    //                // Reapply the CSS variable and title
+    //                document.documentElement.style.setProperty(varName, `"${value}"`);
+    //                updateSidebarTitle(metaKey, value);
+    //            });
+    //        } catch (err) {
+    //            console.error("Failed to restore sidebar titles:", err);
+    //        }
+    //    }
+    //}
+
+    //restoreSidebarTitles();
     function restoreSidebarTitles() {
         const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
         if (saved.themeData && saved.themeData["--sidebarTitles"]) {
             try {
                 const titles = JSON.parse(saved.themeData["--sidebarTitles"]);
-                Object.entries(titles).forEach(([metaKey, { varName, value }]) => {
-                    // Reapply the CSS variable and title
+                Object.entries(titles).forEach(([varName, value]) => {
+                    // Reapply the variable directly
                     document.documentElement.style.setProperty(varName, `"${value}"`);
-                    updateSidebarTitle(metaKey, value);
+                    console.log("🔁 Restored:", varName, "→", value);
                 });
             } catch (err) {
-                console.error("Failed to restore sidebar titles:", err);
+                console.error("❌ Failed to restore sidebar titles:", err);
             }
         }
     }
 
     restoreSidebarTitles();
+
 
     function buildMenuCustomizationSection(container) {
         if (document.getElementById("tb-menu-customization")) return;
