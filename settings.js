@@ -3808,6 +3808,7 @@
     function updateSidebarTitle(metaKey, newLabel) {
         const varName = `--${metaKey}-new-name`;
 
+        // Inject CSS rule only once
         if (!document.querySelector(`style[data-meta="${metaKey}"]`)) {
             const style = document.createElement("style");
             style.dataset.meta = metaKey;
@@ -3828,11 +3829,16 @@
             document.head.appendChild(style);
         }
 
+        // ✅ Apply the CSS variable live
         document.documentElement.style.setProperty(varName, `"${newLabel}"`);
         console.log("✅ Updated sidebar title:", metaKey, "→", newLabel);
 
+        // ✅ Save structured data
         const saved = JSON.parse(localStorage.getItem("--themebuilder_sidebarTitles") || "{}");
-        saved[metaKey] = newLabel;
+        saved[metaKey] = {
+            varName,
+            value: newLabel,
+        };
         localStorage.setItem("--themebuilder_sidebarTitles", JSON.stringify(saved));
     }
     // === Restore titles when page reloads ===
