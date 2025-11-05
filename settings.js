@@ -3837,11 +3837,19 @@
     }
     // === Restore titles when page reloads ===
     function restoreSidebarTitles() {
-        const saved = JSON.parse(localStorage.getItem("themebuilder_sidebarTitles") || "{}");
-        for (const [metaKey, title] of Object.entries(saved)) {
-            updateSidebarTitle(metaKey, title);
+        const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        if (saved.themeData && saved.themeData["--sidebarTitles"]) {
+            try {
+                const titles = JSON.parse(saved.themeData["--sidebarTitles"]);
+                Object.entries(titles).forEach(([metaKey, newLabel]) => {
+                    updateSidebarTitle(metaKey, newLabel);
+                });
+            } catch (err) {
+                console.error("Failed to restore sidebar titles:", err);
+            }
         }
     }
+
     restoreSidebarTitles();
 
     function buildMenuCustomizationSection(container) {
@@ -4597,6 +4605,10 @@
 
                                     const hiddenMenus = JSON.parse(savedTheme.themeData["--hiddenMenus"] || "{}");
                                     savedTheme.themeData["--hiddenMenus"] = JSON.stringify(hiddenMenus);
+
+                                    // ✅ NEW: Save sidebar title changes
+                                    const sidebarTitles = JSON.parse(localStorage.getItem("--themebuilder_sidebarTitles") || "{}");
+                                    savedTheme.themeData["--sidebarTitles"] = JSON.stringify(sidebarTitles);
 
                                     localStorage.setItem("userTheme", JSON.stringify(savedTheme));
 
