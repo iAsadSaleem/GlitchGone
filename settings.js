@@ -3807,19 +3807,18 @@
     // === Dynamic Sidebar Title Update ===
     function updateSidebarTitle(metaKey, newLabel) {
         const varName = `--${metaKey}-new-name`;
-        console.log("Updating sidebar title:", metaKey, "→", newLabel);
 
-        // Inject style only if not already present
         if (!document.querySelector(`style[data-meta="${metaKey}"]`)) {
             const style = document.createElement("style");
             style.dataset.meta = metaKey;
             style.innerHTML = `
       a[meta="${metaKey}"] .nav-title,
-        a#${metaKey} .nav-title {
+      a#${metaKey} .nav-title {
         visibility: hidden !important;
         position: relative !important;
       }
-      a[meta="${metaKey}"] .nav-title::after {
+      a[meta="${metaKey}"] .nav-title::after,
+      a#${metaKey} .nav-title::after {
         content: var(${varName}, "${metaKey}");
         visibility: visible !important;
         position: absolute !important;
@@ -3829,15 +3828,13 @@
             document.head.appendChild(style);
         }
 
-        // Update the variable immediately
         document.documentElement.style.setProperty(varName, `"${newLabel}"`);
+        console.log("✅ Updated sidebar title:", metaKey, "→", newLabel);
 
-        // Save to localStorage
         const saved = JSON.parse(localStorage.getItem("themebuilder_sidebarTitles") || "{}");
         saved[metaKey] = newLabel;
         localStorage.setItem("themebuilder_sidebarTitles", JSON.stringify(saved));
     }
-
     // === Restore titles when page reloads ===
     function restoreSidebarTitles() {
         const saved = JSON.parse(localStorage.getItem("themebuilder_sidebarTitles") || "{}");
@@ -3990,10 +3987,7 @@
                 // 🔥 Live title update as user types
                 titleInput.addEventListener("input", (e) => {
                     const newLabel = e.target.value.trim();
-
-                    // Normalize metaKey — remove "sb_" if present
                     const rawKey = menu.id.startsWith("sb_") ? menu.id.replace(/^sb_/, "") : menu.id;
-
                     updateSidebarTitle(rawKey, newLabel || menu.label);
                 });
                 const iconInput = document.createElement("input");
