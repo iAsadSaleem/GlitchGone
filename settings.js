@@ -3959,101 +3959,101 @@
                 } else {
                     titleInput.value = menu.label;
                 }
-                //Old Code
-                const saveChange = () => {
-                    const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-                    saved.themeData = saved.themeData || {};
+                    //Old Code
+                    const saveChange = () => {
+                        const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                        saved.themeData = saved.themeData || {};
 
-                    const customizations = saved.themeData["--menuCustomizations"]
-                        ? JSON.parse(saved.themeData["--menuCustomizations"])
-                        : {};
+                        const customizations = saved.themeData["--menuCustomizations"]
+                            ? JSON.parse(saved.themeData["--menuCustomizations"])
+                            : {};
 
-                    let iconValue = iconInput.value.trim();
-                    let isUnicode = false;
+                        let iconValue = iconInput.value.trim();
+                        let isUnicode = false;
 
-                    // ✅ Detect if user pasted only Unicode like "f015"
-                    if (/^f[0-9a-fA-F]{3}$/i.test(iconValue)) {
-                        isUnicode = true;
-                    }
-
-                    customizations[menu.id] = {
-                        title: titleInput.value,
-                        icon: iconValue
-                    };
-
-                    saved.themeData["--menuCustomizations"] = JSON.stringify(customizations);
-                    localStorage.setItem("userTheme", JSON.stringify(saved));
-
-                    updateSubaccountMenuTitle(menu.id, titleInput.value);
-
-
-                    // 🔄 Update icon live
-                    const menuEl = document.getElementById(menu.id);
-                    if (menuEl) {
-                        let iconEl = menuEl.querySelector("i");
-                        if (!iconEl) {
-                            iconEl = document.createElement("i");
-                            menuEl.prepend(iconEl);
+                        // ✅ Detect if user pasted only Unicode like "f015"
+                        if (/^f[0-9a-fA-F]{3}$/i.test(iconValue)) {
+                            isUnicode = true;
                         }
 
-                        if (isUnicode) {
-                            // ✅ Update the CSS variable instead of injecting icon manually
-                            updateIconVariable(menu.id, iconValue);
+                        customizations[menu.id] = {
+                            title: titleInput.value,
+                            icon: iconValue
+                        };
 
-                            // Optional: Add a fallback <i> for safety (not strictly required)
-                            iconEl.className = "fa-solid";
-                            iconEl.textContent = String.fromCharCode(parseInt(iconValue, 16));
-                            iconEl.style.fontFamily = "Font Awesome 6 Free";
-                            iconEl.style.fontWeight = "900";
-                            iconEl.style.marginRight = "0.5rem";
-                            iconEl.style.fontSize = "16px";
-                        } else { 
-                            // ✅ User entered a normal class or URL
-                            iconEl.textContent = "";
+                        saved.themeData["--menuCustomizations"] = JSON.stringify(customizations);
+                        localStorage.setItem("userTheme", JSON.stringify(saved));
 
-                            // 🧠 Auto-correct class before assigning
-                            let finalClass = iconValue.trim();
+                        updateSubaccountMenuTitle(menu.id, titleInput.value);
 
-                            // If accidentally Unicode, fallback
-                            if (/^f[0-9a-f]{3}$/i.test(finalClass)) {
+
+                        // 🔄 Update icon live
+                        const menuEl = document.getElementById(menu.id);
+                        if (menuEl) {
+                            let iconEl = menuEl.querySelector("i");
+                            if (!iconEl) {
+                                iconEl = document.createElement("i");
+                                menuEl.prepend(iconEl);
+                            }
+
+                            if (isUnicode) {
+                                // ✅ Update the CSS variable instead of injecting icon manually
+                                updateIconVariable(menu.id, iconValue);
+
+                                // Optional: Add a fallback <i> for safety (not strictly required)
                                 iconEl.className = "fa-solid";
-                                iconEl.textContent = String.fromCharCode(parseInt(finalClass, 16));
+                                iconEl.textContent = String.fromCharCode(parseInt(iconValue, 16));
                                 iconEl.style.fontFamily = "Font Awesome 6 Free";
                                 iconEl.style.fontWeight = "900";
-                            } else {
-                                // Normalize normal icon class
-                                if (finalClass.startsWith("fa-") && !finalClass.includes("fa-solid") && !finalClass.includes("fa-regular") && !finalClass.includes("fa-brands")) {
-                                    finalClass = `fa-solid ${finalClass}`;
-                                } else if (!finalClass.startsWith("fa-")) {
-                                    finalClass = `fa-solid fa-${finalClass}`;
+                                iconEl.style.marginRight = "0.5rem";
+                                iconEl.style.fontSize = "16px";
+                            } else { 
+                                // ✅ User entered a normal class or URL
+                                iconEl.textContent = "";
+
+                                // 🧠 Auto-correct class before assigning
+                                let finalClass = iconValue.trim();
+
+                                // If accidentally Unicode, fallback
+                                if (/^f[0-9a-f]{3}$/i.test(finalClass)) {
+                                    iconEl.className = "fa-solid";
+                                    iconEl.textContent = String.fromCharCode(parseInt(finalClass, 16));
+                                    iconEl.style.fontFamily = "Font Awesome 6 Free";
+                                    iconEl.style.fontWeight = "900";
+                                } else {
+                                    // Normalize normal icon class
+                                    if (finalClass.startsWith("fa-") && !finalClass.includes("fa-solid") && !finalClass.includes("fa-regular") && !finalClass.includes("fa-brands")) {
+                                        finalClass = `fa-solid ${finalClass}`;
+                                    } else if (!finalClass.startsWith("fa-")) {
+                                        finalClass = `fa-solid fa-${finalClass}`;
+                                    }
+
+                                    iconEl.className = finalClass;
+                                    iconEl.textContent = "";
+                                    iconEl.style.fontFamily = "Font Awesome 6 Free";
+                                    iconEl.style.fontWeight = "900";
                                 }
 
-                                iconEl.className = finalClass;
-                                iconEl.textContent = "";
-                                iconEl.style.fontFamily = "Font Awesome 6 Free";
-                                iconEl.style.fontWeight = "900";
                             }
-
                         }
-                    }
 
-                    function waitForFontAwesome(cb) {
-                        const test = document.createElement("i");
-                        test.className = "fa-solid fa-house";
-                        document.body.appendChild(test);
-                        requestAnimationFrame(() => {
-                            const style = getComputedStyle(test).fontFamily;
-                            test.remove();
-                            if (style.includes("Font Awesome")) {
-                                cb();
-                            } else {
-                                setTimeout(() => waitForFontAwesome(cb), 100);
-                            }
-                        });
-                    }
+                        function waitForFontAwesome(cb) {
+                            const test = document.createElement("i");
+                            test.className = "fa-solid fa-house";
+                            document.body.appendChild(test);
+                            requestAnimationFrame(() => {
+                                const style = getComputedStyle(test).fontFamily;
+                                test.remove();
+                                if (style.includes("Font Awesome")) {
+                                    cb();
+                                } else {
+                                    setTimeout(() => waitForFontAwesome(cb), 100);
+                                }
+                            });
+                        }
 
-                    waitForFontAwesome(applyMenuCustomizations);
-                };
+                        waitForFontAwesome(applyMenuCustomizations);
+                    };
 
                 titleInput.addEventListener("input", saveChange);
                 iconInput.addEventListener("input", saveChange);
@@ -4072,24 +4072,36 @@
 
             // 2️⃣ Live Subaccount Menu Title update
             function updateSubaccountMenuTitle(metaKey, newTitle) {
-                const varName = `--${metaKey}-new-name`; // e.g. --dashboard-new-name
-                document.documentElement.style.setProperty(varName, newTitle || "");
+                // Safety: Ensure title is a string
+                const title = newTitle || "";
 
-                // 🧩 Try both possible sidebar structures (different GHL versions)
-                const selectors = [
-                    `a[meta="${metaKey}"] .nav-title`,
-                    `#${metaKey} .nav-title`,
-                    `.hl_nav-header [meta="${metaKey}"] span`,
-                    `.hl_nav-header #${metaKey} span`
-                ];
+                // 🔹 Update CSS variable (for stored theming logic)
+                const varName = `--${metaKey}-new-name`;
+                document.documentElement.style.setProperty(varName, title);
 
-                for (const sel of selectors) {
-                    const el = document.querySelector(sel);
+                // 🔹 Direct DOM update (React-safe retry logic)
+                const tryUpdate = () => {
+                    const el =
+                        document.querySelector(`a[meta="${metaKey}"] .nav-title`) ||
+                        document.querySelector(`#sb_${metaKey} .nav-title`);
+
                     if (el) {
-                        el.textContent = newTitle || "";
+                        el.textContent = title;
+                        return true; // success
                     }
+                    return false; // not found
+                };
+
+                // Try immediately
+                if (!tryUpdate()) {
+                    // If React re-renders after a delay, retry a few times
+                    let retries = 0;
+                    const interval = setInterval(() => {
+                        if (tryUpdate() || retries++ > 5) clearInterval(interval);
+                    }, 300);
                 }
             }
+
 
 
             // ==========================
