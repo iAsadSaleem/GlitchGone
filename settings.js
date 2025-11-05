@@ -3847,8 +3847,10 @@
         if (saved.themeData && saved.themeData["--sidebarTitles"]) {
             try {
                 const titles = JSON.parse(saved.themeData["--sidebarTitles"]);
-                Object.entries(titles).forEach(([metaKey, newLabel]) => {
-                    updateSidebarTitle(metaKey, newLabel);
+                Object.entries(titles).forEach(([metaKey, { varName, value }]) => {
+                    // Reapply the CSS variable and title
+                    document.documentElement.style.setProperty(varName, `"${value}"`);
+                    updateSidebarTitle(metaKey, value);
                 });
             } catch (err) {
                 console.error("Failed to restore sidebar titles:", err);
@@ -4612,9 +4614,18 @@
                                     const hiddenMenus = JSON.parse(savedTheme.themeData["--hiddenMenus"] || "{}");
                                     savedTheme.themeData["--hiddenMenus"] = JSON.stringify(hiddenMenus);
 
-                                    // ✅ NEW: Save sidebar title changes
-                                    const sidebarTitles = JSON.parse(localStorage.getItem("--themebuilder_sidebarTitles") || "{}");
-                                    savedTheme.themeData["--sidebarTitles"] = JSON.stringify(sidebarTitles);
+                                    const localSidebarTitles = JSON.parse(localStorage.getItem("--themebuilder_sidebarTitles") || "{}");
+                                    let existingSidebarTitles = {};
+                                    try {
+                                        if (savedTheme.themeData["--sidebarTitles"]) {
+                                            existingSidebarTitles = JSON.parse(savedTheme.themeData["--sidebarTitles"]);
+                                        }
+                                    } catch (e) {
+                                        console.warn("Invalid existing --sidebarTitles JSON, resetting.", e);
+                                        existingSidebarTitles = {};
+                                    }
+                                    const mergedSidebarTitles = { ...existingSidebarTitles, ...localSidebarTitles };
+                                    savedTheme.themeData["--sidebarTitles"] = JSON.stringify(mergedSidebarTitles);
 
                                     localStorage.setItem("userTheme", JSON.stringify(savedTheme));
 
