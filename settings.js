@@ -3804,6 +3804,58 @@
     }
     function buildMenuCustomizationSection(container) {
         if (document.getElementById("tb-menu-customization")) return;
+        // === Subaccount Sidebar Title Customization (React-safe) ===
+        (function injectSubaccountTitleStyles() {
+            const styleId = "tb-subaccount-title-style";
+            if (document.getElementById(styleId)) return;
+
+            const style = document.createElement("style");
+            style.id = styleId;
+
+            style.innerHTML = `
+                        /* Hide original titles & use CSS variables for each */
+                        a[meta="launchpad"] .nav-title { visibility: hidden; position: relative; }
+                        a[meta="launchpad"] .nav-title::after { content: var(--sb_launchpad-new-name, "Launchpad"); visibility: visible; position: absolute; left: 0; }
+
+                        a[meta="dashboard"] .nav-title { visibility: hidden; position: relative; }
+                        a[meta="dashboard"] .nav-title::after { content: var(--sb_dashboard-new-name, "Dashboard"); visibility: visible; position: absolute; left: 0; }
+
+                        a[meta="conversations"] .nav-title { visibility: hidden; position: relative; }
+                        a[meta="conversations"] .nav-title::after { content: var(--sb_conversations-new-name, "Conversations"); visibility: visible; position: absolute; left: 0; }
+
+                        a[meta="calendars"] .nav-title { visibility: hidden; position: relative; }
+                        a[meta="calendars"] .nav-title::after { content: var(--sb_calendars-new-name, "Calendars"); visibility: visible; position: absolute; left: 0; }
+
+                        a[meta="contacts"] .nav-title { visibility: hidden; position: relative; }
+                        a[meta="contacts"] .nav-title::after { content: var(--sb_contacts-new-name, "Contacts"); visibility: visible; position: absolute; left: 0; }
+
+                        a[meta="payments"] .nav-title { visibility: hidden; position: relative; }
+                        a[meta="payments"] .nav-title::after { content: var(--sb_payments-new-name, "Payments"); visibility: visible; position: absolute; left: 0; }
+
+                        a[meta="marketing"] .nav-title { visibility: hidden; position: relative; }
+                        a[meta="marketing"] .nav-title::after { content: var(--sb_marketing-new-name, "Marketing"); visibility: visible; position: absolute; left: 0; }
+
+                        a[meta="automation"] .nav-title { visibility: hidden; position: relative; }
+                        a[meta="automation"] .nav-title::after { content: var(--sb_automation-new-name, "Automation"); visibility: visible; position: absolute; left: 0; }
+
+                        a[meta="sites"] .nav-title { visibility: hidden; position: relative; }
+                        a[meta="sites"] .nav-title::after { content: var(--sb_sites-new-name, "Sites"); visibility: visible; position: absolute; left: 0; }
+
+                        a[meta="memberships"] .nav-title { visibility: hidden; position: relative; }
+                        a[meta="memberships"] .nav-title::after { content: var(--sb_memberships-new-name, "Memberships"); visibility: visible; position: absolute; left: 0; }
+
+                        a[meta="reputation"] .nav-title { visibility: hidden; position: relative; }
+                        a[meta="reputation"] .nav-title::after { content: var(--sb_reputation-new-name, "Reputation"); visibility: visible; position: absolute; left: 0; }
+
+                        a[meta="reporting"] .nav-title { visibility: hidden; position: relative; }
+                        a[meta="reporting"] .nav-title::after { content: var(--sb_reporting-new-name, "Reporting"); visibility: visible; position: absolute; left: 0; }
+
+                        a[meta="app-marketplace"] .nav-title { visibility: hidden; position: relative; }
+                        a[meta="app-marketplace"] .nav-title::after { content: var(--sb_app-marketplace-new-name, "App Marketplace"); visibility: visible; position: absolute; left: 0; }
+                      `;
+
+            document.head.appendChild(style);
+        })();
 
         const wrapper = document.createElement("div");
         wrapper.id = "tb-menu-customization";
@@ -3984,8 +4036,9 @@
                         saved.themeData["--menuCustomizations"] = JSON.stringify(customizations);
                         localStorage.setItem("userTheme", JSON.stringify(saved));
 
-                        updateSubaccountMenuTitle(menu.id, titleInput.value);
-
+                        // Apply title instantly via CSS variable
+                        const varName = `--${menu.id}-new-name`;
+                        document.documentElement.style.setProperty(varName, `"${titleInput.value || menu.label}"`);
 
                         // 🔄 Update icon live
                         const menuEl = document.getElementById(menu.id);
@@ -4036,7 +4089,6 @@
 
                             }
                         }
-
                         function waitForFontAwesome(cb) {
                             const test = document.createElement("i");
                             test.className = "fa-solid fa-house";
@@ -4067,43 +4119,8 @@
                 listContainer.appendChild(row);
             });
 
-
             wrapper.appendChild(listContainer);
-
-            // 2️⃣ Live Subaccount Menu Title update
-            function updateSubaccountMenuTitle(metaKey, newTitle) {
-                // Safety: Ensure title is a string
-                const title = newTitle || "";
-
-                // 🔹 Update CSS variable (for stored theming logic)
-                const varName = `--${metaKey}-new-name`;
-                document.documentElement.style.setProperty(varName, title);
-
-                // 🔹 Direct DOM update (React-safe retry logic)
-                const tryUpdate = () => {
-                    const el =
-                        document.querySelector(`a[meta="${metaKey}"] .nav-title`) ||
-                        document.querySelector(`#sb_${metaKey} .nav-title`);
-
-                    if (el) {
-                        el.textContent = title;
-                        return true; // success
-                    }
-                    return false; // not found
-                };
-
-                // Try immediately
-                if (!tryUpdate()) {
-                    // If React re-renders after a delay, retry a few times
-                    let retries = 0;
-                    const interval = setInterval(() => {
-                        if (tryUpdate() || retries++ > 5) clearInterval(interval);
-                    }, 300);
-                }
-            }
-
-
-
+                        
             // ==========================
             // Helper function (place at top or outside Sortable)
             // ==========================
@@ -4142,7 +4159,8 @@
                             menuEl.parentElement.appendChild(menuEl);
                         }
                     });
-
+                    
+                    injectSubaccountTitleStyles();
                     applyMenuCustomizations();
                 }
             });
