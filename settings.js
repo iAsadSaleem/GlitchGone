@@ -3852,7 +3852,6 @@
         wrapper.id = "tb-menu-customization";
         wrapper.className = "tb-menu-customization";
 
-        ensureSidebarTitleStyle();
         const separator = document.createElement("hr");
         separator.className = "tb-section-separator";
         wrapper.appendChild(separator);
