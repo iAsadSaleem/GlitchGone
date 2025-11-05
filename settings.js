@@ -3807,13 +3807,15 @@
     // === Dynamic Sidebar Title Update ===
     function updateSidebarTitle(metaKey, newLabel) {
         const varName = `--${metaKey}-new-name`;
+        console.log("Updating sidebar title:", metaKey, "→", newLabel);
 
         // Inject style only if not already present
         if (!document.querySelector(`style[data-meta="${metaKey}"]`)) {
             const style = document.createElement("style");
             style.dataset.meta = metaKey;
             style.innerHTML = `
-      a[meta="${metaKey}"] .nav-title {
+      a[meta="${metaKey}"] .nav-title,
+        a#${metaKey} .nav-title {
         visibility: hidden !important;
         position: relative !important;
       }
@@ -3988,10 +3990,12 @@
                 // 🔥 Live title update as user types
                 titleInput.addEventListener("input", (e) => {
                     const newLabel = e.target.value.trim();
-                    const metaKey = menu.meta || menu.id;
-                    updateSidebarTitle(metaKey, newLabel || menu.label);
-                });
 
+                    // Normalize metaKey — remove "sb_" if present
+                    const rawKey = menu.id.startsWith("sb_") ? menu.id.replace(/^sb_/, "") : menu.id;
+
+                    updateSidebarTitle(rawKey, newLabel || menu.label);
+                });
                 const iconInput = document.createElement("input");
                 iconInput.type = "text";
                 iconInput.placeholder = "CODE";
