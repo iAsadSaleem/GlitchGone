@@ -4038,7 +4038,7 @@
 
                         // Apply title instantly via CSS variable
                         const varName = `--${menu.id}-new-name`;
-                        document.documentElement.style.setProperty(varName, `"${titleInput.value || menu.label}"`);
+                        document.documentElement.style.setProperty(varName, titleInput.value || menu.label);
 
                         // 🔄 Update icon live
                         const menuEl = document.getElementById(menu.id);
