@@ -4073,12 +4073,24 @@
             // 2️⃣ Live Subaccount Menu Title update
             function updateSubaccountMenuTitle(metaKey, newTitle) {
                 const varName = `--${metaKey}-new-name`; // e.g. --dashboard-new-name
-                document.documentElement.style.setProperty(varName, `"${newTitle}"`);
+                document.documentElement.style.setProperty(varName, newTitle || "");
 
-                // Instant visual feedback on sidebar
-                const el = document.querySelector(`a[meta="${metaKey}"] .nav-title`);
-                if (el) el.textContent = newTitle;
+                // 🧩 Try both possible sidebar structures (different GHL versions)
+                const selectors = [
+                    `a[meta="${metaKey}"] .nav-title`,
+                    `#${metaKey} .nav-title`,
+                    `.hl_nav-header [meta="${metaKey}"] span`,
+                    `.hl_nav-header #${metaKey} span`
+                ];
+
+                for (const sel of selectors) {
+                    const el = document.querySelector(sel);
+                    if (el) {
+                        el.textContent = newTitle || "";
+                    }
+                }
             }
+
 
             // ==========================
             // Helper function (place at top or outside Sortable)
