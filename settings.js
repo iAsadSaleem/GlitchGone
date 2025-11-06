@@ -3739,6 +3739,67 @@
             const titleSpan = menuEl.querySelector(".nav-title");
             if (titleSpan) titleSpan.textContent = menuData.title || menuEl.dataset.defaultLabel || "";
             // ---------------- Replace Icon for THIS menu only ----------------
+            //if (menuData.icon) {
+            //    // Remove only existing icon inside this menu
+            //    const existingImg = menuEl.querySelector("img");
+            //    const existingI = menuEl.querySelector("i");
+            //    if (existingImg) existingImg.remove();
+            //    if (existingI) existingI.remove();
+
+            //    let iconEl;
+            //    if (/^https?:\/\//.test(menuData.icon)) {
+            //        // Image URL
+            //        iconEl = document.createElement("img");
+            //        iconEl.src = menuData.icon;
+            //        iconEl.alt = menuData.title || "icon";
+            //        iconEl.className = "md:mr-0 h-5 w-5 mr-2 lg:mr-2 xl:mr-2";
+            //    } else if (/^f[0-9a-f]+$/i.test(menuData.icon)) {
+            //        // Unicode like "f015"
+            //        iconEl = document.createElement("i");
+            //        iconEl.className = "fa-solid";
+            //        iconEl.innerHTML = `&#x${menuData.icon};`;
+            //        iconEl.style.marginRight = "0.5rem";
+            //        iconEl.style.fontSize = "16px";
+
+            //        // 🔥 Most important part (missing before)
+            //        iconEl.style.fontFamily = "Font Awesome 6 Free";
+            //        iconEl.style.fontWeight = "900"; // solid icons need 900
+            //        iconEl.style.fontStyle = "normal";
+            //        iconEl.style.fontVariant = "normal";
+            //        iconEl.style.textRendering = "auto";
+            //        iconEl.style.lineHeight = "1";
+            //    }
+            //    else {
+            //        let iconValue = menuData.icon.trim();
+
+            //        // 🧠 Auto-handle Font Awesome class logic
+            //        if (/^f[0-9a-f]{3}$/i.test(iconValue)) {
+            //            // If accidentally Unicode slipped here, treat it
+            //            iconEl = document.createElement("i");
+            //            iconEl.className = "fa-solid";
+            //            iconEl.innerHTML = `&#x${iconValue};`;
+            //            iconEl.style.fontFamily = "Font Awesome 6 Free";
+            //            iconEl.style.fontWeight = "900";
+            //        } else {
+            //            // Normalize icon class
+            //            if (iconValue.startsWith("fa-") && !iconValue.includes("fa-solid") && !iconValue.includes("fa-regular") && !iconValue.includes("fa-brands")) {
+            //                iconValue = `fa-solid ${iconValue}`;
+            //            } else if (!iconValue.startsWith("fa-")) {
+            //                iconValue = `fa-solid fa-${iconValue}`;
+            //            }
+
+            //            iconEl = document.createElement("i");
+            //            iconEl.className = iconValue;
+            //            iconEl.style.marginRight = "0.5rem";
+            //            iconEl.style.fontSize = "16px";
+            //            iconEl.style.fontFamily = "Font Awesome 6 Free";
+            //            iconEl.style.fontWeight = "900";
+            //        }
+            //    }
+
+            //    // Add new icon for this menu
+            //    menuEl.prepend(iconEl);
+            //}
             if (menuData.icon) {
                 // Remove only existing icon inside this menu
                 const existingImg = menuEl.querySelector("img");
@@ -3747,53 +3808,41 @@
                 if (existingI) existingI.remove();
 
                 let iconEl;
+
                 if (/^https?:\/\//.test(menuData.icon)) {
                     // Image URL
                     iconEl = document.createElement("img");
                     iconEl.src = menuData.icon;
                     iconEl.alt = menuData.title || "icon";
-                    iconEl.className = "md:mr-0 h-5 w-5 mr-2 lg:mr-2 xl:mr-2";
-                } else if (/^f[0-9a-f]+$/i.test(menuData.icon)) {
+                    iconEl.className = "tb-sidebar-icon-img"; // 🧩 CSS-based icon styling for image
+                }
+                else if (/^f[0-9a-f]+$/i.test(menuData.icon)) {
                     // Unicode like "f015"
                     iconEl = document.createElement("i");
-                    iconEl.className = "fa-solid";
+                    iconEl.className = "fa-solid tb-sidebar-icon"; // add shared CSS class
                     iconEl.innerHTML = `&#x${menuData.icon};`;
-                    iconEl.style.marginRight = "0.5rem";
-                    iconEl.style.fontSize = "16px";
-
-                    // 🔥 Most important part (missing before)
-                    iconEl.style.fontFamily = "Font Awesome 6 Free";
-                    iconEl.style.fontWeight = "900"; // solid icons need 900
-                    iconEl.style.fontStyle = "normal";
-                    iconEl.style.fontVariant = "normal";
-                    iconEl.style.textRendering = "auto";
-                    iconEl.style.lineHeight = "1";
                 }
                 else {
                     let iconValue = menuData.icon.trim();
 
                     // 🧠 Auto-handle Font Awesome class logic
                     if (/^f[0-9a-f]{3}$/i.test(iconValue)) {
-                        // If accidentally Unicode slipped here, treat it
                         iconEl = document.createElement("i");
-                        iconEl.className = "fa-solid";
+                        iconEl.className = "fa-solid tb-sidebar-icon";
                         iconEl.innerHTML = `&#x${iconValue};`;
-                        iconEl.style.fontFamily = "Font Awesome 6 Free";
-                        iconEl.style.fontWeight = "900";
                     } else {
                         // Normalize icon class
-                        if (iconValue.startsWith("fa-") && !iconValue.includes("fa-solid") && !iconValue.includes("fa-regular") && !iconValue.includes("fa-brands")) {
+                        if (iconValue.startsWith("fa-") &&
+                            !iconValue.includes("fa-solid") &&
+                            !iconValue.includes("fa-regular") &&
+                            !iconValue.includes("fa-brands")) {
                             iconValue = `fa-solid ${iconValue}`;
                         } else if (!iconValue.startsWith("fa-")) {
                             iconValue = `fa-solid fa-${iconValue}`;
                         }
 
                         iconEl = document.createElement("i");
-                        iconEl.className = iconValue;
-                        iconEl.style.marginRight = "0.5rem";
-                        iconEl.style.fontSize = "16px";
-                        iconEl.style.fontFamily = "Font Awesome 6 Free";
-                        iconEl.style.fontWeight = "900";
+                        iconEl.className = `${iconValue} tb-sidebar-icon`; // shared CSS class added
                     }
                 }
 
@@ -3802,116 +3851,6 @@
             }
         });
     }
-
-    // === Subaccount Sidebar Menu Title Support ===
-    // === Dynamic Sidebar Title Update ===
-    function updateSidebarTitle(metaKey, newLabel) {
-        const varName = `--${metaKey}-new-name`;
-
-        // Inject CSS rule only once
-        if (!document.querySelector(`style[data-meta="${metaKey}"]`)) {
-            const style = document.createElement("style");
-            style.dataset.meta = metaKey;
-            style.innerHTML = `
-        a[meta="${metaKey}"] .nav-title,
-        a#${metaKey} .nav-title {
-          visibility: hidden !important;
-          position: relative !important;
-        }
-        a[meta="${metaKey}"] .nav-title::after,
-        a#${metaKey} .nav-title::after {
-          content: var(${varName}, "${metaKey}");
-          visibility: visible !important;
-          position: absolute !important;
-          left: 0;
-        }
-      `;
-            document.head.appendChild(style);
-        }
-
-        // ✅ Apply the CSS variable live
-        document.documentElement.style.setProperty(varName, `"${newLabel}"`);
-        console.log("✅ Updated sidebar title:", metaKey, "→", newLabel);
-
-        // ✅ Save in flat key:value format
-        const saved = JSON.parse(localStorage.getItem("--themebuilder_sidebarTitles") || "{}");
-        saved[varName] = newLabel; // <--- clean flat storage
-        localStorage.setItem("--themebuilder_sidebarTitles", JSON.stringify(saved));
-    }
-
-    //function updateSidebarTitle(metaKey, newLabel) {
-    //    const varName = `--${metaKey}-new-name`;
-
-    //    // Inject CSS rule only once
-    //    if (!document.querySelector(`style[data-meta="${metaKey}"]`)) {
-    //        const style = document.createElement("style");
-    //        style.dataset.meta = metaKey;
-    //        style.innerHTML = `
-    //  a[meta="${metaKey}"] .nav-title,
-    //  a#${metaKey} .nav-title {
-    //    visibility: hidden !important;
-    //    position: relative !important;
-    //  }
-    //  a[meta="${metaKey}"] .nav-title::after,
-    //  a#${metaKey} .nav-title::after {
-    //    content: var(${varName}, "${metaKey}");
-    //    visibility: visible !important;
-    //    position: absolute !important;
-    //    left: 0;
-    //  }
-    //`;
-    //        document.head.appendChild(style);
-    //    }
-
-    //    // ✅ Apply the CSS variable live
-    //    document.documentElement.style.setProperty(varName, `"${newLabel}"`);
-    //    console.log("✅ Updated sidebar title:", metaKey, "→", newLabel);
-
-    //    // ✅ Save structured data
-    //    const saved = JSON.parse(localStorage.getItem("--themebuilder_sidebarTitles") || "{}");
-    //    saved[metaKey] = {
-    //        varName,
-    //        value: newLabel,
-    //    };
-    //    localStorage.setItem("--themebuilder_sidebarTitles", JSON.stringify(saved));
-    //}
-    // === Restore titles when page reloads ===
-    //function restoreSidebarTitles() {
-    //    const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-    //    if (saved.themeData && saved.themeData["--sidebarTitles"]) {
-    //        try {
-    //            const titles = JSON.parse(saved.themeData["--sidebarTitles"]);
-    //            Object.entries(titles).forEach(([metaKey, { varName, value }]) => {
-    //                // Reapply the CSS variable and title
-    //                document.documentElement.style.setProperty(varName, `"${value}"`);
-    //                updateSidebarTitle(metaKey, value);
-    //            });
-    //        } catch (err) {
-    //            console.error("Failed to restore sidebar titles:", err);
-    //        }
-    //    }
-    //}
-
-    //restoreSidebarTitles();
-    function restoreSidebarTitles() {
-        const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        if (saved.themeData && saved.themeData["--sidebarTitles"]) {
-            try {
-                const titles = JSON.parse(saved.themeData["--sidebarTitles"]);
-                Object.entries(titles).forEach(([varName, value]) => {
-                    // Reapply the variable directly
-                    document.documentElement.style.setProperty(varName, `"${value}"`);
-                    console.log("🔁 Restored:", varName, "→", value);
-                });
-            } catch (err) {
-                console.error("❌ Failed to restore sidebar titles:", err);
-            }
-        }
-    }
-
-    restoreSidebarTitles();
-
-
     function buildMenuCustomizationSection(container) {
         if (document.getElementById("tb-menu-customization")) return;
        
@@ -4291,6 +4230,57 @@
         }
 
     }
+
+    // === Subaccount Sidebar Menu Title Support ===
+    // === Dynamic Sidebar Title Update ===
+    function updateSidebarTitle(metaKey, newLabel) {
+        const varName = `--${metaKey}-new-name`;
+
+        // Inject CSS rule only once
+        if (!document.querySelector(`style[data-meta="${metaKey}"]`)) {
+            const style = document.createElement("style");
+            style.dataset.meta = metaKey;
+            style.innerHTML = `
+        a[meta="${metaKey}"] .nav-title,
+        a#${metaKey} .nav-title {
+          visibility: hidden !important;
+          position: relative !important;
+        }
+        a[meta="${metaKey}"] .nav-title::after,
+        a#${metaKey} .nav-title::after {
+          content: var(${varName}, "${metaKey}");
+          visibility: visible !important;
+          position: absolute !important;
+          left: 0;
+        }
+      `;
+            document.head.appendChild(style);
+        }
+
+        // ✅ Apply the CSS variable live
+        document.documentElement.style.setProperty(varName, `"${newLabel}"`);
+
+        // ✅ Save in flat key:value format
+        const saved = JSON.parse(localStorage.getItem("--themebuilder_sidebarTitles") || "{}");
+        saved[varName] = newLabel; // <--- clean flat storage
+        localStorage.setItem("--themebuilder_sidebarTitles", JSON.stringify(saved));
+    }
+    function restoreSidebarTitles() {
+        const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        if (saved.themeData && saved.themeData["--sidebarTitles"]) {
+            try {
+                const titles = JSON.parse(saved.themeData["--sidebarTitles"]);
+                Object.entries(titles).forEach(([varName, value]) => {
+                    // Reapply the variable directly
+                    document.documentElement.style.setProperty(varName, `"${value}"`);
+                });
+            } catch (err) {
+                console.error("❌ Failed to restore sidebar titles:", err);
+            }
+        }
+    }
+
+    restoreSidebarTitles();
     function buildFeedbackForm(section) {
         // Wrapper
         const wrapper = document.createElement("div");
@@ -4737,7 +4727,6 @@
                     );
                 }, 1500);
             });
-
 
             buttonsWrapper.appendChild(applyBtn);
             drawer.appendChild(buttonsWrapper); // Outside card
