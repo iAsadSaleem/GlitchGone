@@ -253,14 +253,31 @@
             header.classList.toggle("tb-section-header-open", content.classList.contains("open"));
 
             if (content.classList.contains("open")) {
-                content.style.maxHeight = "200px";
+                content.style.maxHeight = content.scrollHeight + "px";
                 content.style.overflowY = "auto";
                 toggleIcon.className = "fa-solid fa-angle-up tb-toggle-icon"; // 🔼
+
+                // Optional: Recalculate if content inside changes dynamically
+                const resizeObserver = new ResizeObserver(() => {
+                    if (content.classList.contains("open")) {
+                        content.style.maxHeight = content.scrollHeight + "px";
+                    }
+                });
+                resizeObserver.observe(content);
             } else {
-                content.style.maxHeight = null;
-                content.style.overflowY = null;
+                content.style.maxHeight = "0px";
+                content.style.overflowY = "hidden";
                 toggleIcon.className = "fa-solid fa-angle-down tb-toggle-icon"; // 🔽
             }
+            //if (content.classList.contains("open")) {
+            //    content.style.maxHeight = "200px";
+            //    content.style.overflowY = "auto";
+            //    toggleIcon.className = "fa-solid fa-angle-up tb-toggle-icon"; // 🔼
+            //} else {
+            //    content.style.maxHeight = null;
+            //    content.style.overflowY = null;
+            //    toggleIcon.className = "fa-solid fa-angle-down tb-toggle-icon"; // 🔽
+            //}
         });
 
         section.appendChild(header);

@@ -116,10 +116,15 @@
     color: var(--sidebar-menu-color) !important;
     cursor: pointer;
 }
-.tb-section-content {
+/*.tb-section-content {
     display: none;
     padding: 0px 1px 2px 4px;
     background: #fff;
+}*/
+.tb-section-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
 }
 
 /* Wrapper for color picker */
@@ -178,9 +183,12 @@
   border-top: 1px solid #ddd;
 }
 
-    .tb-section-content.open {
+    /*.tb-section-content.open {
         display: block;
         border: solid 1px #e7dede66;
+    }*/
+    .tb-section-content.open {
+        overflow-y: auto;
     }
 
 /* Optional styling for color pickers */
