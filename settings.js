@@ -255,23 +255,18 @@
             if (content.classList.contains("open")) {
                 // OPEN section
                 content.classList.add("open");
-                content.style.maxHeight = content.scrollHeight + "px";
+                content.style.maxHeight = "200px"; // Fixed open height
                 toggleIcon.className = "fa-solid fa-angle-up tb-toggle-icon"; // 🔼
-
-                // When transition ends, remove fixed height (so inner dynamic content works)
-                content.addEventListener("transitionend", function handler() {
-                    content.style.maxHeight = "none";
-                    content.removeEventListener("transitionend", handler);
-                });
 
             } else {
                 // CLOSE section
                 content.style.maxHeight = content.scrollHeight + "px"; // set current height first
-                content.offsetHeight; // force reflow (important for transition)
+                content.offsetHeight; // force reflow
                 content.style.maxHeight = "0px";
                 content.classList.remove("open");
                 toggleIcon.className = "fa-solid fa-angle-down tb-toggle-icon"; // 🔽
             }
+
 
             //if (content.classList.contains("open")) {
             //    content.style.maxHeight = "200px";
