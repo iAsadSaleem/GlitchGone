@@ -253,22 +253,26 @@
             header.classList.toggle("tb-section-header-open", content.classList.contains("open"));
 
             if (content.classList.contains("open")) {
+                // OPEN section
+                content.classList.add("open");
                 content.style.maxHeight = content.scrollHeight + "px";
-                content.style.overflowY = "auto";
                 toggleIcon.className = "fa-solid fa-angle-up tb-toggle-icon"; // 🔼
 
-                // Optional: Recalculate if content inside changes dynamically
-                const resizeObserver = new ResizeObserver(() => {
-                    if (content.classList.contains("open")) {
-                        content.style.maxHeight = content.scrollHeight + "px";
-                    }
+                // When transition ends, remove fixed height (so inner dynamic content works)
+                content.addEventListener("transitionend", function handler() {
+                    content.style.maxHeight = "none";
+                    content.removeEventListener("transitionend", handler);
                 });
-                resizeObserver.observe(content);
+
             } else {
+                // CLOSE section
+                content.style.maxHeight = content.scrollHeight + "px"; // set current height first
+                content.offsetHeight; // force reflow (important for transition)
                 content.style.maxHeight = "0px";
-                content.style.overflowY = "hidden";
+                content.classList.remove("open");
                 toggleIcon.className = "fa-solid fa-angle-down tb-toggle-icon"; // 🔽
             }
+
             //if (content.classList.contains("open")) {
             //    content.style.maxHeight = "200px";
             //    content.style.overflowY = "auto";

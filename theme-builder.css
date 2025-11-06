@@ -177,16 +177,22 @@
 .tb-radius-value { font-family: monospace; }
 
 /* Section content toggle */
-.tb-section-content {
+/*.tb-section-content {
   display: none;
   padding: 10px;
   border-top: 1px solid #ddd;
+}*/
+.tb-section-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
 }
 
     /*.tb-section-content.open {
         display: block;
         border: solid 1px #e7dede66;
     }*/
+
     .tb-section-content.open {
         overflow-y: auto;
     }
