@@ -3808,46 +3808,63 @@
                 if (existingI) existingI.remove();
 
                 let iconEl;
-
                 if (/^https?:\/\//.test(menuData.icon)) {
                     // Image URL
                     iconEl = document.createElement("img");
                     iconEl.src = menuData.icon;
                     iconEl.alt = menuData.title || "icon";
-                    iconEl.className = "tb-sidebar-icon-img"; // 🧩 CSS-based icon styling for image
-                }
-                else if (/^f[0-9a-f]+$/i.test(menuData.icon)) {
+                    iconEl.className = "md:mr-0 h-5 w-5 mr-2 lg:mr-2 xl:mr-2";
+                } else if (/^f[0-9a-f]+$/i.test(menuData.icon)) {
                     // Unicode like "f015"
                     iconEl = document.createElement("i");
-                    iconEl.className = "fa-solid tb-sidebar-icon"; // add shared CSS class
+                    iconEl.className = "fa-solid tb-sidebar-icon";
                     iconEl.innerHTML = `&#x${menuData.icon};`;
-                }
-                else {
+                    iconEl.style.fontFamily = "Font Awesome 6 Free";
+                    iconEl.style.fontWeight = "900";
+                    iconEl.style.fontStyle = "normal";
+                    iconEl.style.fontVariant = "normal";
+                    iconEl.style.textRendering = "auto";
+                    iconEl.style.lineHeight = "1";
+                    iconEl.style.fontSize = "16px";
+                    iconEl.style.marginRight = "0.5rem";
+                } else {
                     let iconValue = menuData.icon.trim();
 
-                    // 🧠 Auto-handle Font Awesome class logic
                     if (/^f[0-9a-f]{3}$/i.test(iconValue)) {
                         iconEl = document.createElement("i");
                         iconEl.className = "fa-solid tb-sidebar-icon";
                         iconEl.innerHTML = `&#x${iconValue};`;
+                        iconEl.style.fontFamily = "Font Awesome 6 Free";
+                        iconEl.style.fontWeight = "900";
                     } else {
-                        // Normalize icon class
-                        if (iconValue.startsWith("fa-") &&
+                        if (
+                            iconValue.startsWith("fa-") &&
                             !iconValue.includes("fa-solid") &&
                             !iconValue.includes("fa-regular") &&
-                            !iconValue.includes("fa-brands")) {
+                            !iconValue.includes("fa-brands")
+                        ) {
                             iconValue = `fa-solid ${iconValue}`;
                         } else if (!iconValue.startsWith("fa-")) {
                             iconValue = `fa-solid fa-${iconValue}`;
                         }
 
                         iconEl = document.createElement("i");
-                        iconEl.className = `${iconValue} tb-sidebar-icon`; // shared CSS class added
+                        iconEl.className = `${iconValue} tb-sidebar-icon`;
+                        iconEl.style.fontFamily = "Font Awesome 6 Free";
+                        iconEl.style.fontWeight = "900";
+                        iconEl.style.fontSize = "16px";
+                        iconEl.style.marginRight = "0.5rem";
                     }
                 }
 
                 // Add new icon for this menu
                 menuEl.prepend(iconEl);
+
+                // 🧠 If icon is added, shift title like default
+                const titleEl = menuEl.querySelector(".nav-title");
+                if (titleEl) {
+                    titleEl.style.right = "28px";
+                }
             }
         });
     }
