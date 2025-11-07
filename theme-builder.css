@@ -715,7 +715,7 @@ body::-webkit-scrollbar-track {
         position: absolute;
         top: 0;
         left: 0;
-        width: 50px;
+        width: 45px;
         height: 24px;
         background-color: #2196F3;
         border-radius: 34px;
@@ -743,7 +743,7 @@ body::-webkit-scrollbar-track {
     }
 
         .toggle-switch .toggle-input:checked + .toggle-label::before {
-            transform: translateX(16px);
+            transform: translateX(20px);
         }
 
     /* Light tema */
