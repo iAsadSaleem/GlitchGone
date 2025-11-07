@@ -4667,35 +4667,48 @@
             }
         };
     }
-    function applyTheme(mode) {
-        const themes = getPredefinedThemes(); // your method that returns both themes
-        const vars = themes[mode === "dark" ? "Dark Theme" : "Light Theme"];
+    function applyTheme(modeOrName, themeVars) {
+        const themes = getPredefinedThemes(); // assume you have this returning Light & Dark themes
+        const isMode = modeOrName === "dark" || modeOrName === "light";
+        const themeName = isMode ? (modeOrName === "dark" ? "Dark Theme" : "Light Theme") : modeOrName;
+
+        const vars = themeVars || themes[themeName];
         if (!vars) return;
 
-        // 1️⃣ Clear all old theme vars from body (to prevent leftover colors)
-        Object.keys(vars).forEach(key => {
-            document.body.style.removeProperty(key);
-        });
-
-        // 2️⃣ Apply new vars to body
+        // ✅ Apply all theme variables to the body
         Object.entries(vars).forEach(([key, value]) => {
             if (value && value !== "undefined") {
                 document.body.style.setProperty(key, value);
             }
         });
 
-        // 3️⃣ Save clean version in localStorage
-        let savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        savedThemeObj.themeData = { "--theme-mode": mode, ...vars };
+        // ✅ Update --theme-mode variable
+        const themeMode = isMode ? modeOrName : "light"; // default light if no explicit mode
+        document.body.style.setProperty("--theme-mode", themeMode);
+        document.body.classList.toggle("dark-mode", themeMode === "dark");
+
+        // ✅ Update theme name text & preview button (if UI exists)
+        if (typeof textSpan !== "undefined") textSpan.textContent = themeName;
+        if (typeof themeBtn !== "undefined") {
+            themeBtn.style.backgroundColor = vars["--primary-color"] || "#007bff";
+            themeBtn.style.color = "#fff";
+        }
+
+        // ✅ Merge & Save to LocalStorage (preserving previous ThemeBuilder data)
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        savedThemeObj.themeData = { ...(savedThemeObj.themeData || {}), ...vars, "--theme-mode": themeMode };
+        savedThemeObj.selectedTheme = themeName;
+
         localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+        localStorage.setItem("themebuilder_selectedTheme", themeName);
 
-        // 4️⃣ Update body class (for any dark/light styling)
-        document.body.classList.toggle("dark-mode", mode === "dark");
+        // ✅ Dispatch update event (used by your ThemeBuilder live updates)
+        window.dispatchEvent(new Event("themeChanged"));
 
-        console.log(`✅ Applied ${mode} theme and saved to localStorage`);
+        console.log(`✅ Applied ${themeMode} (${themeName}) theme and saved safely.`);
     }
 
-    // Apply saved settings
+    // Apply saved settingss
     function applySavedSettings() {
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
 
