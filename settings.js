@@ -4590,6 +4590,31 @@
             drawerTitleWrapper.appendChild(closeBtn);
             drawer.appendChild(drawerTitleWrapper);
 
+            // ===== Toggle Switch (Dark / Light Mode) =====
+            const toggleWrapper = document.createElement('div');
+            toggleWrapper.className = "tb-toggle-wrapper";
+
+            const toggleSwitch = document.createElement('div');
+            toggleSwitch.className = "toggle-switch";
+
+            const toggleInput = document.createElement('input');
+            toggleInput.type = "checkbox";
+            toggleInput.className = "toggle-input";
+            toggleInput.id = "tb-theme-toggle";
+
+            const toggleLabel = document.createElement('label');
+            toggleLabel.className = "toggle-label";
+            toggleLabel.setAttribute("for", "tb-theme-toggle");
+
+            toggleSwitch.appendChild(toggleInput);
+            toggleSwitch.appendChild(toggleLabel);
+            toggleWrapper.appendChild(toggleSwitch);
+
+            // Append toggle right next to close button
+            drawerTitleWrapper.appendChild(toggleWrapper);
+
+
+
             // ===== Card Wrapper =====
             const cardWrapper = document.createElement('div');
             cardWrapper.className = "tb-drawer-card";
