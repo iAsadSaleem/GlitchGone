@@ -515,662 +515,504 @@
     }
 
     // NEW: Theme Selector Section
-    function buildHeaderControlsSection(container) {
-        const section = document.createElement("div");
-        section.className = "tb-controls-section";
-
-        // === Section Title ===
-        const header = document.createElement("h4");
-        header.className = "tb-header-controls";
-        header.textContent = "Header Gradient Color";
-        section.appendChild(header);
-
-        // === Gradient Controls Wrapper ===
-        const gradientWrapper = document.createElement("div");
-        gradientWrapper.className = "tb-gradient-controls";
-
-        // === Load saved state ===
+    function buildThemeSelectorSection(container) {
+        if (!container) return;
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        const themeData = savedThemeObj.themeData || {};
-
-        // === ⛔ Disable this section for specific themes ===
-        const selectedTheme = localStorage.getItem("themebuilder_selectedTheme") || "";
-        const disabledThemes = ["BlueWave Theme", "OceanMist Theme"];
-
-        if (disabledThemes.includes(selectedTheme)) {
-            const disabledMsg = document.createElement("p");
-            disabledMsg.className = "tb-disabled-message";
-            disabledMsg.textContent = `⚠️ The "${selectedTheme}" uses a fixed header design. Custom gradient changes are disabled.`;
-            gradientWrapper.appendChild(disabledMsg);
-            gradientWrapper.style.opacity = "0.6";
-            gradientWrapper.style.pointerEvents = "none";
-            section.appendChild(gradientWrapper);
-            container.appendChild(section);
-            return section; // ⛔ Stop building further controls
+        const selectedtheme = localStorage.getItem("themebuilder_selectedTheme");
+        // inject minimal styles once
+        if (!document.getElementById("tb-theme-selector-styles")) {
+            const s = document.createElement("style");
+            s.id = "tb-theme-selector-styles";
+            s.textContent = `
+        .themeSelectWrapper{position:relative;display:inline-flex;align-items:center}
+        .tb-theme-cycle-btn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;border:none;cursor:pointer;font-weight:600;min-width:160px;justify-content:space-between}
+        .themeBtnInner{display:flex;align-items:center;gap:8px;width:100%}
+        .themeBtnText{flex:1;text-align:left}
+        .themeArrowIcon{width:28px;height:28px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;border:1px solid rgba(0,0,0,0.08);font-size:12px;cursor:pointer}
+        `;
+            document.head.appendChild(s);
         }
 
-        // ✅ If themeData has a gradient string, extract start & end colors
-        if (themeData["--header-main-bg-gradient"]) {
-            const gradient = themeData["--header-main-bg-gradient"];
-            const match = gradient.match(/#([0-9A-F]{6})/gi);
-            if (match && match.length >= 2) {
-                themeData["--header-gradient-start"] = match[0];
-                themeData["--header-gradient-end"] = match[1];
-            } else if (match && match.length === 1) {
-                themeData["--header-gradient-start"] = match[0];
-                themeData["--header-gradient-end"] = match[0];
+        // Build DOM
+        const wrapper = document.createElement("div");
+        wrapper.className = "themeSelectWrapper";
+
+        const themeBtn = document.createElement("button");
+        themeBtn.className = "tb-theme-cycle-btn";
+        themeBtn.type = "button";
+
+        const inner = document.createElement("div");
+        inner.className = "themeBtnInner";
+
+        const textSpan = document.createElement("span");
+        textSpan.className = "themeBtnText";
+        textSpan.textContent = selectedtheme || "Select Theme";
+
+        // circle icon (Font Awesome expected to be loaded separately)
+
+        const arrowIcon = document.createElement("span");
+        arrowIcon.className = "themeArrowIcon";
+        arrowIcon.innerHTML = '<i class="fa-solid fa-angle-down" aria-hidden="true"></i>';
+
+        // dropdown container
+        const dropdownBox = document.createElement("div");
+        dropdownBox.className = "themeDropdownBox";
+
+        inner.appendChild(textSpan);
+        inner.appendChild(arrowIcon);
+        themeBtn.appendChild(inner);
+
+        wrapper.appendChild(themeBtn);
+        wrapper.appendChild(dropdownBox);
+        container.appendChild(wrapper);
+        // Themes object (kept from your original)
+        const themes = {
+            "Default Theme": {
+                "--primary-color": "#0a6e35",
+                "--second-color": "#07a125",
+                "--dark-color": "#000000",
+                "--grey-color": "#E2E2E2",
+                "--alert-color": "#E63946",
+                "--app-bg-color": "#F9F9F9",
+                "--Acent-color": "#FFFFFF",
+
+                "--sidebar-bg-color": "#000000",          /* Flat black sidebar background */
+                "--sidebar-menu-bg": "#000000",
+                "--sidebar-menu-color": "#FFFFFF",
+                "--sidebar-menu-hover-bg": "#0a6e35",
+                "--sidebar-menu-active-bg": "#07a125",
+                "--sidebar-menu-icon-color": "#A6DDBA",
+                "--sidebar-menu-icon-hover-color": "#FFFFFF",
+                "--sidebar-menu-icon-active-color": "#FFFFFF",
+
+                "--sidebar-top-right-radius": "16px",
+                "--sidebar-bottom-right-radius": "16px",
+
+                "--scroll-color": "#0a6e35",
+
+                "--header-bg-color": "#000000",           /* Flat black header */
+                "--header-icon-color": "#FFFFFF",
+                "--header-icon-hover-color": "#0a6e35",
+                "--header-icon-bg": "#000000",
+                "--header-icon-hover-bg": "#111111",
+
+                "--card-body-bg-color": "#FFFFFF",
+                "--card-body-font-color": "#1A1A1A",
+                "--card-title-font-color": "#000000",
+                "--card-dec-font-color": "#333333",
+                "--card-footer-bg-color": "#F0FFF6",
+                "--card-footer-font-color": "#000000",
+
+                "--top-nav-menu-bg": "#000000",
+                "--top-nav-menu-hover-bg": "#111111",
+                "--top-nav-menu-active-bg": "#111111",
+                "--top-nav-menu-color": "#FFFFFF",
+                "--top-nav-menu-hover-color": "#0a6e35",
+                "--top-nav-menu-active-color": "#07a125",
+
+                "--card-header-gradient-start": "#000000",
+                "--card-header-bg-gradient": "linear-gradient(38deg, rgba(0,0,0,1) 45%, rgba(0,0,0,1) 55%)",
+                "--card-header-gradient-end": "#0a6e35",
+
+                "--card-body-border-color": "#E2E2E2",
+
+                "--bg-gradient": "linear-gradient(38deg, rgba(0,0,0,0.95) 45%, rgba(37,175,96,1) 55%)",
+
+                "--sidebar-main-bg-gradient": "#000000",   /* Flat black sidebar */
+                "--login-card-bg-gradient": "linear-gradient(38deg, rgba(0,0,0,1) 45%, rgba(57,200,117,1) 55%)",
+
+                "--login-link-text-color": "#0a6e35",
+                "--login-button-bg-gradient": "linear-gradient(38deg, rgba(0,0,0,1) 45%, rgba(57,200,117,1) 55%)",
+                "--login-button-bg-color": "#0a6e35",
+                "--login-card-bg-color": "#FFFFFF",
+
+                "--header-main-bg-gradient": "linear-gradient(38deg, #000000 0%, #000000 100%)",
+                "--header-icon-hover": "#0a6e35",
+
+                "--scroll-width": "7px",
+                "--card-title-font-size": "18px",
+                "--card-body-border-radius": "24px",
+                "--lockedMenus": "{}",
+                "--body-font": "Roboto",
+                "--loader-background-color":""
+            },
+            "BlueWave Theme": {
+                "--primary-color": "#2A3E9B",
+                "--second-color": "#62C6F0",
+                "--dark-color": "#1B255E",
+                "--grey-color": "#E4E7EF",
+                "--alert-color": "#E63946",
+                "--app-bg-color": "#F7F9FC",
+                "--Acent-color": "#FFFFFF",
+
+                "--sidebar-bg-color": "linear-gradient(to bottom, #2A3E9B, #62C6F0)",
+                "--sidebar-menu-bg": "transparent",
+                "--sidebar-menu-color": "#FFFFFF",
+                "--sidebar-menu-hover-bg": "#3B9DD3",
+                "--sidebar-menu-active-bg": "#2692cb",
+                "--sidebar-menu-icon-color": "#B8D9F8",
+                "--sidebar-menu-icon-hover-color": "#FFFFFF",
+                "--sidebar-menu-icon-active-color": "#2A3E9B",
+                "--sidebar-menu-border-radius":"0px",
+
+                "--sidebar-top-right-radius": "16px",
+                "--sidebar-bottom-right-radius": "16px",
+
+                "--scroll-color": "#62C6F0",
+
+                "--header-bg-color": "transparent",
+                "--header-icon-color": "#FFFFFF",
+                "--header-icon-hover-color": "#62C6F0",
+                "--header-icon-bg": "transparent",
+                "--header-icon-hover-bg": "rgba(255,255,255,0.1)",
+
+                "--card-body-bg-color": "#FFFFFF",
+                "--card-body-font-color": "#1A1A1A",
+                "--card-title-font-color": "#2A3E9B",
+                "--card-dec-font-color": "#333333",
+                "--card-footer-bg-color": "#F0F6FC",
+                "--card-footer-font-color": "#000000",
+
+                "--sidebar-top-right-radius": "0px",
+                "--sidebar-bottom-right-radius": "0px",
+
+                "--top-nav-menu-bg": "transparent",
+                "--top-nav-menu-hover-bg": "rgba(255,255,255,0.1)",
+                "--top-nav-menu-active-bg": "rgba(255,255,255,0.2)",
+                "--top-nav-menu-color": "#FFFFFF",
+                "--top-nav-menu-hover-color": "#62C6F0",
+                "--top-nav-menu-active-color": "#FFFFFF",
+
+                "--card-header-gradient-start": "#2A3E9B",
+                "--card-header-bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
+                "--card-header-gradient-end": "#62C6F0",
+
+                "--card-body-border-color": "#E4E7EF",
+
+                "--bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
+
+                "--sidebar-main-bg-gradient": "linear-gradient(to bottom, #2A3E9B, #62C6F0)",
+                "--login-card-bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
+
+                "--login-link-text-color": "#2A3E9B",
+                "--login-button-bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
+                "--login-button-bg-color": "#2A3E9B",
+                "--login-card-bg-color": "#FFFFFF",
+
+                "--header-main-bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
+                "--header-icon-hover": "#62C6F0",
+
+                "--scroll-width": "7px",
+                "--card-title-font-size": "18px",
+                "--card-body-border-radius": "24px",
+                "--lockedMenus": "{}",
+                "--body-font": "Roboto"
+            },
+            "GlitchGone Theme": {
+                "--primary-color": "#0B3D0B",
+                "--second-color": "#00A86B",
+                "--dark-color": "#000000",
+                "--grey-color": "#D9E2D9",
+                "--alert-color": "#E63946",
+                "--app-bg-color": "#F5F5F5",
+                "--Acent-color": "#FFFFFF",
+
+                "--sidebar-bg-color": "#000000",
+                "--sidebar-menu-bg": "#0B3D0B",
+                "--sidebar-menu-color": "#FFFFFF",
+                "--sidebar-menu-hover-bg": "#00A86B",
+                "--sidebar-menu-active-bg": "#0B3D0B",
+                "--sidebar-menu-icon-color": "#A0D6B4",
+                "--sidebar-menu-icon-hover-color": "#FFFFFF",
+                "--sidebar-menu-icon-active-color": "#FFFFFF",
+
+                "--sidebar-top-right-radius": "16px",
+                "--sidebar-bottom-right-radius": "16px",
+
+                "--scroll-color": "#00A86B",
+
+                "--header-bg-color": "#FFFFFF",
+                "--header-icon-color": "#000000",
+                "--header-icon-hover-color": "#00A86B",
+                "--header-icon-bg": "#F5F5F5",
+                "--header-icon-hover-bg": "#E8F5E9",
+
+                "--card-body-bg-color": "#FFFFFF",
+                "--card-body-font-color": "#1A1A1A",
+                "--card-title-font-color": "#000000",
+                "--card-dec-font-color": "#333333",
+                "--card-footer-bg-color": "#E8F5E9",
+                "--card-footer-font-color": "#000000",
+
+                "--top-nav-menu-bg": "#FFFFFF",
+                "--top-nav-menu-hover-bg": "#E8F5E9",
+                "--top-nav-menu-active-bg": "#F5F5F5",
+                "--top-nav-menu-color": "#000000",
+                "--top-nav-menu-hover-color": "#00A86B",
+                "--top-nav-menu-active-color": "#00A86B",
+
+                "--card-header-gradient-start": "#000000",
+                "--card-header-bg-gradient": "linear-gradient(38deg, rgba(0,0,0,0.95) 45%, rgba(255,255,255,1) 45%, rgba(255,255,255,1) 54%, rgba(0,168,107,1) 55%)",
+                "--card-header-gradient-end": "#00A86B",
+
+                "--card-body-border-color": "#D9E2D9",
+
+                "--bg-gradient": "linear-gradient(38deg, rgba(0,0,0,0.9) 45%, rgba(255,255,255,1) 45%, rgba(255,255,255,1) 54%, rgba(0,168,107,1) 55%)",
+                "--sidebar-main-bg-gradient": "linear-gradient(to bottom, rgba(0,0,0,0.95), rgba(0,168,107,1) 80%)",
+                "--login-card-bg-gradient": "linear-gradient(38deg, rgba(0,0,0,0.9) 45%, rgba(255,255,255,1) 45%, rgba(255,255,255,1) 54%, rgba(0,168,107,1) 55%)",
+
+                "--login-link-text-color": "#00A86B",
+                "--login-button-bg-gradient": "linear-gradient(38deg, rgba(0,0,0,1) 45%, rgba(255,255,255,1) 45%, rgba(255,255,255,1) 54%, rgba(0,168,107,1) 55%)",
+                "--login-button-bg-color": "#0B3D0B",
+                "--login-card-bg-color": "#FFFFFF",
+
+                "--header-main-bg-gradient": "linear-gradient(38deg, rgba(0,0,0,1) 45%, rgba(255,255,255,1) 45%, rgba(255,255,255,1) 54%, rgba(0,168,107,1) 55%)",
+                "--header-icon-hover": "#00A86B",
+
+                "--scroll-width": "7px",
+                "--card-title-font-size": "18px",
+                "--card-body-border-radius": "24px",
+                "--lockedMenus": "{}",
+                "--body-font": "Roboto"
+            },
+            "OceanMist Theme": {
+                "--primary-color": "#276678",
+                "--second-color": "#1687A7",
+                "--dark-color": "#1B3B4B",
+                "--grey-color": "#D3E0EA",
+                "--alert-color": "#E63946",
+                "--app-bg-color": "#F6F5F5",
+                "--Acent-color": "#FFFFFF",
+
+                "--sidebar-bg-color": "#276678",
+                "--sidebar-menu-bg": "#1E4E5E",
+                "--sidebar-menu-color": "#FFFFFF",
+                "--sidebar-menu-hover-bg": "#1687A7",
+                "--sidebar-menu-active-bg": "#1B3B4B",
+                "--sidebar-menu-icon-color": "#D3E0EA",
+                "--sidebar-menu-icon-hover-color": "#F6F5F5",
+                "--sidebar-menu-icon-active-color": "#FFFFFF",
+
+                "--sidebar-top-right-radius": "0px",
+                "--sidebar-bottom-right-radius": "0px",
+
+                "--scroll-color": "#1687A7",
+
+                "--header-bg-color": "#FFFFFF",
+                "--header-icon-color": "#276678",
+                "--header-icon-hover-color": "#1687A7",
+                "--header-icon-bg": "#F6F5F5",
+                "--header-icon-hover-bg": "#D3E0EA",
+
+                "--card-body-bg-color": "#FFFFFF",
+                "--card-body-font-color": "#333333",
+                "--card-title-font-color": "#1B3B4B",
+                "--card-dec-font-color": "#4B5563",
+                "--card-footer-bg-color": "#D3E0EA",
+                "--card-footer-font-color": "#1B3B4B",
+
+                "--top-nav-menu-bg": "#FFFFFF",
+                "--top-nav-menu-hover-bg": "#D3E0EA",
+                "--top-nav-menu-active-bg": "#F6F5F5",
+                "--top-nav-menu-color": "#276678",
+                "--top-nav-menu-hover-color": "#1687A7",
+                "--top-nav-menu-active-color": "#1687A7",
+
+                "--card-header-gradient-start": "#1687A7",
+                "--card-header-bg-gradient": "linear-gradient(90deg, #1687A7 0%, #276678 50%, #D3E0EA 100%)",
+                "--card-header-gradient-end": "#D3E0EA",
+
+                "--card-body-border-color": "#D3E0EA",
+
+                "--bg-gradient": "linear-gradient(90deg, #F6F5F5 0%, #D3E0EA 60%, #FFFFFF 100%)",
+                "--sidebar-main-bg-gradient": "linear-gradient(to bottom, #1E4E5E, #276678 70%, #1687A7)",
+                "--login-card-bg-gradient": "linear-gradient(to bottom, #D3E0EA, #F6F5F5, #FFFFFF)",
+
+                "--login-link-text-color": "#1687A7",
+                "--login-button-bg-gradient": "linear-gradient(to right, #276678 0%, #1687A7 60%, #D3E0EA 100%)",
+                "--login-button-bg-color": "#276678",
+                "--login-card-bg-color": "#FFFFFF",
+
+                "--header-main-bg-gradient": "linear-gradient(90deg, #FFFFFF 0%, #FFFFFF 50%, #FFFFFF 100%)",
+                "--header-icon-hover": "#1687A7",
+
+                "--scroll-width": "7px",
+                "--card-title-font-size": "18px",
+                "--card-body-border-radius": "24px",
+                "--lockedMenus": "{}",
+                "--body-font": "Roboto"
+            },
+            "JetBlack Luxury Gold Theme": {
+                "--primary-color": "#545454",
+                "--second-color": "#7D7D7D",
+                "--dark-color": "#0E0E0E",
+                "--grey-color": "#CFCFCF",
+                "--alert-color": "#FF4B4B",
+                "--app-bg-color": "#1A1A1A",
+                "--Acent-color": "#D4AF37",
+
+                "--sidebar-bg-color": "#0E0E0E",
+                "--sidebar-menu-bg": "#1A1A1A",
+                "--sidebar-menu-color": "#E6E6E6",
+                "--sidebar-menu-hover-bg": "#2A2A2A",
+                "--sidebar-menu-active-bg": "#333333",
+                "--sidebar-menu-icon-color": "#BFA76B",
+                "--sidebar-menu-icon-hover-color": "#D4AF37",
+                "--sidebar-menu-icon-active-color": "#EEDC82",
+
+                "--scroll-color": "#D4AF37",
+
+                "--header-bg-color": "#1F1F1F",
+                "--header-icon-color": "#CFCFCF",
+                "--header-icon-hover-color": "#D4AF37",
+                "--header-icon-bg": "#2A2A2A",
+                "--header-icon-hover-bg": "#3B2E07",
+
+                "--card-body-bg-color": "#121212",
+                "--card-body-font-color": "#D9D9D9",
+                "--card-title-font-color": "#FFFFFF",
+                "--card-dec-font-color": "#B2B2B2",
+                "--card-footer-bg-color": "#2D2D2D",
+                "--card-footer-font-color": "#D4AF37",
+
+                "--top-nav-menu-bg": "#1A1A1A",
+                "--top-nav-menu-hover-bg": "#2D2D2D",
+                "--top-nav-menu-active-bg": "#3B3B3B",
+                "--top-nav-menu-color": "#FFFFFF",
+                "--top-nav-menu-hover-color": "#D4AF37",
+                "--top-nav-menu-active-color": "#EEDC82",
+
+                "--card-header-gradient-start": "#3A3A3A",
+                "--card-header-bg-gradient": "linear-gradient(135deg, #3A3A3A 0%, #1A1A1A 40%, #D4AF37 100%)",
+                "--card-header-gradient-end": "#D4AF37",
+
+                "--card-body-border-color": "#D4AF37",
+
+                "--bg-gradient": "linear-gradient(180deg, #0E0E0E 0%, #1A1A1A 50%, #2B2B2B 100%)",
+                "--sidebar-main-bg-gradient": "linear-gradient(to bottom, #0E0E0E, #1A1A1A 60%, #D4AF37 150%)",
+                "--login-card-bg-gradient": "linear-gradient(145deg, rgba(255,255,255,0.05), rgba(0,0,0,0.9))",
+
+                "--login-link-text-color": "#D4AF37",
+                "--login-button-bg-gradient": "linear-gradient(to right, #2D2D2D 0%, #3E3E3E 50%, #D4AF37 100%)",
+                "--login-button-bg-color": "#2D2D2D",
+                "--login-card-bg-color": "rgba(18,18,18,0.9)",
+
+                "--header-main-bg-gradient": "linear-gradient(90deg, #1A1A1A 0%, #2A2A2A 60%, #D4AF37 100%)",
+                "--header-icon-hover": "#D4AF37",
+
+                "--scroll-width": "7px",
+                "--card-title-font-size": "18px",
+                "--card-body-border-radius": "22px",
+                "--lockedMenus": "{}",
+                "--body-font": "Poppins",
+                "--sidebar-top-right-radius": "16px",
+                "--sidebar-bottom-right-radius": "16px",
+
+                /* === Login Page Additions === */
+                "--login-bg-gradient": "linear-gradient(135deg, #0E0E0E 0%, #1A1A1A 50%, #2B2B2B 100%)",
+                "--login-card-width": "480px",
+                "--login-card-border-radius": "22px",
+                "--login-card-box-shadow": "0 8px 30px rgba(0, 0, 0, 0.4)",
+                "--login-input-border-color": "#333333",
+                "--login-input-bg-color": "#0E0E0E",
+                "--login-input-text-color": "#FFFFFF",
+                "--login-input-border-radius": "10px",
+                "--login-button-border-radius": "12px",
+                "--login-button-text-color": "#FFFFFF",
+                "--login-button-hover-bg-color": "#D4AF37",
+                "--login-button-hover-text-color": "#0E0E0E",
+                "--login-footer-text-color": "#BFA76B",
+                "--login-logo-space": "50px",
+                "--login-layout-padding-right": "8%",
+                "--login-company-logo": "url('https://msgsndr-private.storage.googleapis.com/companyPhotos/47b7e157-d197-4ce5-9a94-b697c258702a.png')",
+                "--login-logo-width": "140px",
+                "--login-logo-height": "70px",
+                "--login-logo-filter": "drop-shadow(0 2px 6px rgba(212,175,55,0.3))",
+                "--login-background-active":"linear-gradient(180deg, #0E0E0E 0%, #1A1A1A 50%, #2B2B2B 100%)"
             }
-        }
+        };
+        const themeKeys = Object.keys(themes);
+        let currentIndex = -1;
 
-        const headerEl = document.querySelector(".hl_header");
+        // apply theme (merges theme vars into saved themeData to avoid overwriting other keys)
+        function applyTheme(themeName, themeVars) {
+            const vars = themeVars || themes[themeName];
+            if (!vars) return;
 
-        // === Update Gradient Preview ===
-        function updateGradientPreview() {
-            if (!headerEl || !startPicker || !endPicker) return;
-
-            const start = startPicker.input.value;
-            const end = endPicker.input.value;
-
-            const stop = 0;
-            const angle = 90;
-
-            const gradient = `linear-gradient(${angle}deg, ${start} ${stop}%, ${end} 100%)`;
-
-            // Update CSS vars
-            document.body.style.setProperty("--header-gradient-start", start);
-            document.body.style.setProperty("--header-gradient-end", end);
-            document.body.style.setProperty("--header-gradient-stop", stop + "%");
-            document.body.style.setProperty("--header-gradient-angle", angle + "deg");
-            document.body.style.setProperty("--header-main-bg-gradient", gradient);
-
-            // Apply live
-            headerEl.style.setProperty("background", "none", "important");
-            headerEl.style.setProperty("background-image", "var(--header-main-bg-gradient)", "important");
-        }
-
-        // === Color picker helper ===
-        function makePicker(labelText, cssVar, fallback = "#007bff") {
-            const wrapper = document.createElement("div");
-            wrapper.className = "tb-color-picker-wrapper";
-
-            const label = document.createElement("label");
-            label.className = "tb-color-picker-label";
-            label.textContent = labelText;
-
-            // Load initial color
-            let initial =
-                themeData[cssVar] ||
-                getComputedStyle(document.body).getPropertyValue(cssVar).trim() ||
-                fallback;
-
-            if (!/^#[0-9A-F]{6}$/i.test(initial)) {
-                initial = fallback;
-            }
-
-            const colorInput = document.createElement("input");
-            colorInput.type = "color";
-            colorInput.className = "tb-color-input";
-            colorInput.value = initial;
-
-            const colorCode = document.createElement("input");
-            colorCode.type = "text";
-            colorCode.className = "tb-color-code";
-            colorCode.value = initial;
-            colorCode.maxLength = 7;
-
-            function applyColor(color) {
-                if (!/^#[0-9A-F]{6}$/i.test(color)) return;
-
-                colorInput.value = color;
-                colorCode.value = color;
-
-                document.body.style.setProperty(cssVar, color);
-
-                savedThemeObj.themeData = savedThemeObj.themeData || {};
-                savedThemeObj.themeData[cssVar] = color;
-                localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
-
-                updateGradientPreview();
-            }
-
-            colorInput.addEventListener("input", () => applyColor(colorInput.value));
-            colorCode.addEventListener("input", () => {
-                const val = colorCode.value.trim();
-                if (/^#[0-9A-F]{6}$/i.test(val)) {
-                    applyColor(val);
+            Object.entries(vars).forEach(([key, value]) => {
+                if (value && value !== "undefined") {
+                    document.body.style.setProperty(key, value);
                 }
             });
 
-            setTimeout(() => applyColor(initial), 0);
+            // update UI
+            textSpan.textContent = themeName;
+            themeBtn.style.backgroundColor = vars["--primary-color"] || "#007bff";
+            themeBtn.style.color = "#fff";
 
-            wrapper.appendChild(label);
-            wrapper.appendChild(colorInput);
-            wrapper.appendChild(colorCode);
+            // Save (merge so we don't drop other saved keys like --lockedMenus etc)
+            const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+            savedThemeObj.themeData = { ...(savedThemeObj.themeData || {}), ...vars };
+            savedThemeObj.selectedTheme = themeName;
+            console.log(themeName);
+            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            localStorage.setItem("themebuilder_selectedTheme", themeName);
 
-            return { wrapper, input: colorInput, code: colorCode };
         }
 
-        // === Create Inputs ===
-        const startPicker = makePicker("Choose Start Color For Header", "--header-gradient-start", "#ff0000");
-        const endPicker = makePicker("Choose End Color For Header", "--header-gradient-end", "#0000ff");
+        // restore saved theme if exists
+        if (selectedtheme) {
+            applyTheme(selectedtheme, savedThemeObj.themeData);
+            if (themeKeys.includes(selectedtheme)) {
+                currentIndex = themeKeys.indexOf(selectedtheme);
+            }
+        }
 
-        gradientWrapper.appendChild(startPicker.wrapper);
-        gradientWrapper.appendChild(endPicker.wrapper);
+        // cycle themes when clicking main area of button (but not when clicking the arrow)
+        themeBtn.addEventListener("click", (e) => {
+            // if the click target is the arrow or inside it, ignore (arrow handles dropdown)
+            if (e.target.closest(".themeArrowIcon")) return;
+            currentIndex = (currentIndex + 1) % themeKeys.length;
+            applyTheme(themeKeys[currentIndex], null);
+        });
 
-        // === Instruction Comment ===
-        const instruction = document.createElement("p");
-        instruction.className = "tb-instruction-text";
-        instruction.textContent =
-            "💡 For Flat Color in Header: Choose the same color for Start & End";
-        gradientWrapper.appendChild(instruction);
+        // populate dropdown
+        themeKeys.forEach(themeName => {
+            const optBtn = document.createElement("button");
+            optBtn.type = "button";
+            optBtn.textContent = themeName;
+            optBtn.addEventListener("click", (ev) => {
+                ev.stopPropagation();
+                applyTheme(themeName,null);
+                dropdownBox.classList.remove("show");
+                arrowIcon.innerHTML = '<i class="fa-solid fa-angle-down" aria-hidden="true"></i>';
+            });
+            dropdownBox.appendChild(optBtn);
+        });
 
-        section.appendChild(gradientWrapper);
+        // arrow toggles dropdown
+        arrowIcon.addEventListener("click", (ev) => {
+            ev.stopPropagation();
+            const open = dropdownBox.classList.toggle("show");
+            arrowIcon.innerHTML = open ? '<i class="fa-solid fa-angle-up" aria-hidden="true"></i>' : '<i class="fa-solid fa-angle-down" aria-hidden="true"></i>';
+        });
 
-        // Initial Preview
-        updateGradientPreview();
+        // close when clicking outside
+        document.addEventListener("click", (ev) => {
+            if (!wrapper.contains(ev.target)) {
+                dropdownBox.classList.remove("show");
+                arrowIcon.innerHTML = '<i class="fa-solid fa-angle-down" aria-hidden="true"></i>';
+            }
+        });
 
-        container.appendChild(section);
-        return section;
+        // prevent accidental form submit if in a form
+        themeBtn.addEventListener("keydown", (ev) => {
+            if (ev.key === " " || ev.key === "Enter") {
+                ev.preventDefault();
+                themeBtn.click();
+            }
+        });
     }
-
-    //function buildThemeSelectorSection(container) {
-    //    if (!container) return;
-    //    const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-    //    const selectedtheme = localStorage.getItem("themebuilder_selectedTheme");
-    //    // inject minimal styles once
-    //    if (!document.getElementById("tb-theme-selector-styles")) {
-    //        const s = document.createElement("style");
-    //        s.id = "tb-theme-selector-styles";
-    //        s.textContent = `
-    //    .themeSelectWrapper{position:relative;display:inline-flex;align-items:center}
-    //    .tb-theme-cycle-btn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;border:none;cursor:pointer;font-weight:600;min-width:160px;justify-content:space-between}
-    //    .themeBtnInner{display:flex;align-items:center;gap:8px;width:100%}
-    //    .themeBtnText{flex:1;text-align:left}
-    //    .themeArrowIcon{width:28px;height:28px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;border:1px solid rgba(0,0,0,0.08);font-size:12px;cursor:pointer}
-    //    `;
-    //        document.head.appendChild(s);
-    //    }
-
-    //    // Build DOM
-    //    const wrapper = document.createElement("div");
-    //    wrapper.className = "themeSelectWrapper";
-
-    //    const themeBtn = document.createElement("button");
-    //    themeBtn.className = "tb-theme-cycle-btn";
-    //    themeBtn.type = "button";
-
-    //    const inner = document.createElement("div");
-    //    inner.className = "themeBtnInner";
-
-    //    const textSpan = document.createElement("span");
-    //    textSpan.className = "themeBtnText";
-    //    textSpan.textContent = selectedtheme || "Select Theme";
-
-    //    // circle icon (Font Awesome expected to be loaded separately)
-
-    //    const arrowIcon = document.createElement("span");
-    //    arrowIcon.className = "themeArrowIcon";
-    //    arrowIcon.innerHTML = '<i class="fa-solid fa-angle-down" aria-hidden="true"></i>';
-
-    //    // dropdown container
-    //    const dropdownBox = document.createElement("div");
-    //    dropdownBox.className = "themeDropdownBox";
-
-    //    inner.appendChild(textSpan);
-    //    inner.appendChild(arrowIcon);
-    //    themeBtn.appendChild(inner);
-
-    //    wrapper.appendChild(themeBtn);
-    //    wrapper.appendChild(dropdownBox);
-    //    container.appendChild(wrapper);
-    //    // Themes object (kept from your original)
-    //    const themes = {
-    //        "Default Theme": {
-    //            "--primary-color": "#0a6e35",
-    //            "--second-color": "#07a125",
-    //            "--dark-color": "#000000",
-    //            "--grey-color": "#E2E2E2",
-    //            "--alert-color": "#E63946",
-    //            "--app-bg-color": "#F9F9F9",
-    //            "--Acent-color": "#FFFFFF",
-
-    //            "--sidebar-bg-color": "#000000",          /* Flat black sidebar background */
-    //            "--sidebar-menu-bg": "#000000",
-    //            "--sidebar-menu-color": "#FFFFFF",
-    //            "--sidebar-menu-hover-bg": "#0a6e35",
-    //            "--sidebar-menu-active-bg": "#07a125",
-    //            "--sidebar-menu-icon-color": "#A6DDBA",
-    //            "--sidebar-menu-icon-hover-color": "#FFFFFF",
-    //            "--sidebar-menu-icon-active-color": "#FFFFFF",
-
-    //            "--sidebar-top-right-radius": "16px",
-    //            "--sidebar-bottom-right-radius": "16px",
-
-    //            "--scroll-color": "#0a6e35",
-
-    //            "--header-bg-color": "#000000",           /* Flat black header */
-    //            "--header-icon-color": "#FFFFFF",
-    //            "--header-icon-hover-color": "#0a6e35",
-    //            "--header-icon-bg": "#000000",
-    //            "--header-icon-hover-bg": "#111111",
-
-    //            "--card-body-bg-color": "#FFFFFF",
-    //            "--card-body-font-color": "#1A1A1A",
-    //            "--card-title-font-color": "#000000",
-    //            "--card-dec-font-color": "#333333",
-    //            "--card-footer-bg-color": "#F0FFF6",
-    //            "--card-footer-font-color": "#000000",
-
-    //            "--top-nav-menu-bg": "#000000",
-    //            "--top-nav-menu-hover-bg": "#111111",
-    //            "--top-nav-menu-active-bg": "#111111",
-    //            "--top-nav-menu-color": "#FFFFFF",
-    //            "--top-nav-menu-hover-color": "#0a6e35",
-    //            "--top-nav-menu-active-color": "#07a125",
-
-    //            "--card-header-gradient-start": "#000000",
-    //            "--card-header-bg-gradient": "linear-gradient(38deg, rgba(0,0,0,1) 45%, rgba(0,0,0,1) 55%)",
-    //            "--card-header-gradient-end": "#0a6e35",
-
-    //            "--card-body-border-color": "#E2E2E2",
-
-    //            "--bg-gradient": "linear-gradient(38deg, rgba(0,0,0,0.95) 45%, rgba(37,175,96,1) 55%)",
-
-    //            "--sidebar-main-bg-gradient": "#000000",   /* Flat black sidebar */
-    //            "--login-card-bg-gradient": "linear-gradient(38deg, rgba(0,0,0,1) 45%, rgba(57,200,117,1) 55%)",
-
-    //            "--login-link-text-color": "#0a6e35",
-    //            "--login-button-bg-gradient": "linear-gradient(38deg, rgba(0,0,0,1) 45%, rgba(57,200,117,1) 55%)",
-    //            "--login-button-bg-color": "#0a6e35",
-    //            "--login-card-bg-color": "#FFFFFF",
-
-    //            "--header-main-bg-gradient": "linear-gradient(38deg, #000000 0%, #000000 100%)",
-    //            "--header-icon-hover": "#0a6e35",
-
-    //            "--scroll-width": "7px",
-    //            "--card-title-font-size": "18px",
-    //            "--card-body-border-radius": "24px",
-    //            "--lockedMenus": "{}",
-    //            "--body-font": "Roboto",
-    //            "--loader-background-color":""
-    //        },
-    //        "BlueWave Theme": {
-    //            "--primary-color": "#2A3E9B",
-    //            "--second-color": "#62C6F0",
-    //            "--dark-color": "#1B255E",
-    //            "--grey-color": "#E4E7EF",
-    //            "--alert-color": "#E63946",
-    //            "--app-bg-color": "#F7F9FC",
-    //            "--Acent-color": "#FFFFFF",
-
-    //            "--sidebar-bg-color": "linear-gradient(to bottom, #2A3E9B, #62C6F0)",
-    //            "--sidebar-menu-bg": "transparent",
-    //            "--sidebar-menu-color": "#FFFFFF",
-    //            "--sidebar-menu-hover-bg": "#3B9DD3",
-    //            "--sidebar-menu-active-bg": "#2692cb",
-    //            "--sidebar-menu-icon-color": "#B8D9F8",
-    //            "--sidebar-menu-icon-hover-color": "#FFFFFF",
-    //            "--sidebar-menu-icon-active-color": "#2A3E9B",
-    //            "--sidebar-menu-border-radius":"0px",
-
-    //            "--sidebar-top-right-radius": "16px",
-    //            "--sidebar-bottom-right-radius": "16px",
-
-    //            "--scroll-color": "#62C6F0",
-
-    //            "--header-bg-color": "transparent",
-    //            "--header-icon-color": "#FFFFFF",
-    //            "--header-icon-hover-color": "#62C6F0",
-    //            "--header-icon-bg": "transparent",
-    //            "--header-icon-hover-bg": "rgba(255,255,255,0.1)",
-
-    //            "--card-body-bg-color": "#FFFFFF",
-    //            "--card-body-font-color": "#1A1A1A",
-    //            "--card-title-font-color": "#2A3E9B",
-    //            "--card-dec-font-color": "#333333",
-    //            "--card-footer-bg-color": "#F0F6FC",
-    //            "--card-footer-font-color": "#000000",
-
-    //            "--sidebar-top-right-radius": "0px",
-    //            "--sidebar-bottom-right-radius": "0px",
-
-    //            "--top-nav-menu-bg": "transparent",
-    //            "--top-nav-menu-hover-bg": "rgba(255,255,255,0.1)",
-    //            "--top-nav-menu-active-bg": "rgba(255,255,255,0.2)",
-    //            "--top-nav-menu-color": "#FFFFFF",
-    //            "--top-nav-menu-hover-color": "#62C6F0",
-    //            "--top-nav-menu-active-color": "#FFFFFF",
-
-    //            "--card-header-gradient-start": "#2A3E9B",
-    //            "--card-header-bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
-    //            "--card-header-gradient-end": "#62C6F0",
-
-    //            "--card-body-border-color": "#E4E7EF",
-
-    //            "--bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
-
-    //            "--sidebar-main-bg-gradient": "linear-gradient(to bottom, #2A3E9B, #62C6F0)",
-    //            "--login-card-bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
-
-    //            "--login-link-text-color": "#2A3E9B",
-    //            "--login-button-bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
-    //            "--login-button-bg-color": "#2A3E9B",
-    //            "--login-card-bg-color": "#FFFFFF",
-
-    //            "--header-main-bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
-    //            "--header-icon-hover": "#62C6F0",
-
-    //            "--scroll-width": "7px",
-    //            "--card-title-font-size": "18px",
-    //            "--card-body-border-radius": "24px",
-    //            "--lockedMenus": "{}",
-    //            "--body-font": "Roboto"
-    //        },
-    //        "GlitchGone Theme": {
-    //            "--primary-color": "#0B3D0B",
-    //            "--second-color": "#00A86B",
-    //            "--dark-color": "#000000",
-    //            "--grey-color": "#D9E2D9",
-    //            "--alert-color": "#E63946",
-    //            "--app-bg-color": "#F5F5F5",
-    //            "--Acent-color": "#FFFFFF",
-
-    //            "--sidebar-bg-color": "#000000",
-    //            "--sidebar-menu-bg": "#0B3D0B",
-    //            "--sidebar-menu-color": "#FFFFFF",
-    //            "--sidebar-menu-hover-bg": "#00A86B",
-    //            "--sidebar-menu-active-bg": "#0B3D0B",
-    //            "--sidebar-menu-icon-color": "#A0D6B4",
-    //            "--sidebar-menu-icon-hover-color": "#FFFFFF",
-    //            "--sidebar-menu-icon-active-color": "#FFFFFF",
-
-    //            "--sidebar-top-right-radius": "16px",
-    //            "--sidebar-bottom-right-radius": "16px",
-
-    //            "--scroll-color": "#00A86B",
-
-    //            "--header-bg-color": "#FFFFFF",
-    //            "--header-icon-color": "#000000",
-    //            "--header-icon-hover-color": "#00A86B",
-    //            "--header-icon-bg": "#F5F5F5",
-    //            "--header-icon-hover-bg": "#E8F5E9",
-
-    //            "--card-body-bg-color": "#FFFFFF",
-    //            "--card-body-font-color": "#1A1A1A",
-    //            "--card-title-font-color": "#000000",
-    //            "--card-dec-font-color": "#333333",
-    //            "--card-footer-bg-color": "#E8F5E9",
-    //            "--card-footer-font-color": "#000000",
-
-    //            "--top-nav-menu-bg": "#FFFFFF",
-    //            "--top-nav-menu-hover-bg": "#E8F5E9",
-    //            "--top-nav-menu-active-bg": "#F5F5F5",
-    //            "--top-nav-menu-color": "#000000",
-    //            "--top-nav-menu-hover-color": "#00A86B",
-    //            "--top-nav-menu-active-color": "#00A86B",
-
-    //            "--card-header-gradient-start": "#000000",
-    //            "--card-header-bg-gradient": "linear-gradient(38deg, rgba(0,0,0,0.95) 45%, rgba(255,255,255,1) 45%, rgba(255,255,255,1) 54%, rgba(0,168,107,1) 55%)",
-    //            "--card-header-gradient-end": "#00A86B",
-
-    //            "--card-body-border-color": "#D9E2D9",
-
-    //            "--bg-gradient": "linear-gradient(38deg, rgba(0,0,0,0.9) 45%, rgba(255,255,255,1) 45%, rgba(255,255,255,1) 54%, rgba(0,168,107,1) 55%)",
-    //            "--sidebar-main-bg-gradient": "linear-gradient(to bottom, rgba(0,0,0,0.95), rgba(0,168,107,1) 80%)",
-    //            "--login-card-bg-gradient": "linear-gradient(38deg, rgba(0,0,0,0.9) 45%, rgba(255,255,255,1) 45%, rgba(255,255,255,1) 54%, rgba(0,168,107,1) 55%)",
-
-    //            "--login-link-text-color": "#00A86B",
-    //            "--login-button-bg-gradient": "linear-gradient(38deg, rgba(0,0,0,1) 45%, rgba(255,255,255,1) 45%, rgba(255,255,255,1) 54%, rgba(0,168,107,1) 55%)",
-    //            "--login-button-bg-color": "#0B3D0B",
-    //            "--login-card-bg-color": "#FFFFFF",
-
-    //            "--header-main-bg-gradient": "linear-gradient(38deg, rgba(0,0,0,1) 45%, rgba(255,255,255,1) 45%, rgba(255,255,255,1) 54%, rgba(0,168,107,1) 55%)",
-    //            "--header-icon-hover": "#00A86B",
-
-    //            "--scroll-width": "7px",
-    //            "--card-title-font-size": "18px",
-    //            "--card-body-border-radius": "24px",
-    //            "--lockedMenus": "{}",
-    //            "--body-font": "Roboto"
-    //        },
-    //        "OceanMist Theme": {
-    //            "--primary-color": "#276678",
-    //            "--second-color": "#1687A7",
-    //            "--dark-color": "#1B3B4B",
-    //            "--grey-color": "#D3E0EA",
-    //            "--alert-color": "#E63946",
-    //            "--app-bg-color": "#F6F5F5",
-    //            "--Acent-color": "#FFFFFF",
-
-    //            "--sidebar-bg-color": "#276678",
-    //            "--sidebar-menu-bg": "#1E4E5E",
-    //            "--sidebar-menu-color": "#FFFFFF",
-    //            "--sidebar-menu-hover-bg": "#1687A7",
-    //            "--sidebar-menu-active-bg": "#1B3B4B",
-    //            "--sidebar-menu-icon-color": "#D3E0EA",
-    //            "--sidebar-menu-icon-hover-color": "#F6F5F5",
-    //            "--sidebar-menu-icon-active-color": "#FFFFFF",
-
-    //            "--sidebar-top-right-radius": "0px",
-    //            "--sidebar-bottom-right-radius": "0px",
-
-    //            "--scroll-color": "#1687A7",
-
-    //            "--header-bg-color": "#FFFFFF",
-    //            "--header-icon-color": "#276678",
-    //            "--header-icon-hover-color": "#1687A7",
-    //            "--header-icon-bg": "#F6F5F5",
-    //            "--header-icon-hover-bg": "#D3E0EA",
-
-    //            "--card-body-bg-color": "#FFFFFF",
-    //            "--card-body-font-color": "#333333",
-    //            "--card-title-font-color": "#1B3B4B",
-    //            "--card-dec-font-color": "#4B5563",
-    //            "--card-footer-bg-color": "#D3E0EA",
-    //            "--card-footer-font-color": "#1B3B4B",
-
-    //            "--top-nav-menu-bg": "#FFFFFF",
-    //            "--top-nav-menu-hover-bg": "#D3E0EA",
-    //            "--top-nav-menu-active-bg": "#F6F5F5",
-    //            "--top-nav-menu-color": "#276678",
-    //            "--top-nav-menu-hover-color": "#1687A7",
-    //            "--top-nav-menu-active-color": "#1687A7",
-
-    //            "--card-header-gradient-start": "#1687A7",
-    //            "--card-header-bg-gradient": "linear-gradient(90deg, #1687A7 0%, #276678 50%, #D3E0EA 100%)",
-    //            "--card-header-gradient-end": "#D3E0EA",
-
-    //            "--card-body-border-color": "#D3E0EA",
-
-    //            "--bg-gradient": "linear-gradient(90deg, #F6F5F5 0%, #D3E0EA 60%, #FFFFFF 100%)",
-    //            "--sidebar-main-bg-gradient": "linear-gradient(to bottom, #1E4E5E, #276678 70%, #1687A7)",
-    //            "--login-card-bg-gradient": "linear-gradient(to bottom, #D3E0EA, #F6F5F5, #FFFFFF)",
-
-    //            "--login-link-text-color": "#1687A7",
-    //            "--login-button-bg-gradient": "linear-gradient(to right, #276678 0%, #1687A7 60%, #D3E0EA 100%)",
-    //            "--login-button-bg-color": "#276678",
-    //            "--login-card-bg-color": "#FFFFFF",
-
-    //            "--header-main-bg-gradient": "linear-gradient(90deg, #FFFFFF 0%, #FFFFFF 50%, #FFFFFF 100%)",
-    //            "--header-icon-hover": "#1687A7",
-
-    //            "--scroll-width": "7px",
-    //            "--card-title-font-size": "18px",
-    //            "--card-body-border-radius": "24px",
-    //            "--lockedMenus": "{}",
-    //            "--body-font": "Roboto"
-    //        },
-    //        "JetBlack Luxury Gold Theme": {
-    //            "--primary-color": "#545454",
-    //            "--second-color": "#7D7D7D",
-    //            "--dark-color": "#0E0E0E",
-    //            "--grey-color": "#CFCFCF",
-    //            "--alert-color": "#FF4B4B",
-    //            "--app-bg-color": "#1A1A1A",
-    //            "--Acent-color": "#D4AF37",
-
-    //            "--sidebar-bg-color": "#0E0E0E",
-    //            "--sidebar-menu-bg": "#1A1A1A",
-    //            "--sidebar-menu-color": "#E6E6E6",
-    //            "--sidebar-menu-hover-bg": "#2A2A2A",
-    //            "--sidebar-menu-active-bg": "#333333",
-    //            "--sidebar-menu-icon-color": "#BFA76B",
-    //            "--sidebar-menu-icon-hover-color": "#D4AF37",
-    //            "--sidebar-menu-icon-active-color": "#EEDC82",
-
-    //            "--scroll-color": "#D4AF37",
-
-    //            "--header-bg-color": "#1F1F1F",
-    //            "--header-icon-color": "#CFCFCF",
-    //            "--header-icon-hover-color": "#D4AF37",
-    //            "--header-icon-bg": "#2A2A2A",
-    //            "--header-icon-hover-bg": "#3B2E07",
-
-    //            "--card-body-bg-color": "#121212",
-    //            "--card-body-font-color": "#D9D9D9",
-    //            "--card-title-font-color": "#FFFFFF",
-    //            "--card-dec-font-color": "#B2B2B2",
-    //            "--card-footer-bg-color": "#2D2D2D",
-    //            "--card-footer-font-color": "#D4AF37",
-
-    //            "--top-nav-menu-bg": "#1A1A1A",
-    //            "--top-nav-menu-hover-bg": "#2D2D2D",
-    //            "--top-nav-menu-active-bg": "#3B3B3B",
-    //            "--top-nav-menu-color": "#FFFFFF",
-    //            "--top-nav-menu-hover-color": "#D4AF37",
-    //            "--top-nav-menu-active-color": "#EEDC82",
-
-    //            "--card-header-gradient-start": "#3A3A3A",
-    //            "--card-header-bg-gradient": "linear-gradient(135deg, #3A3A3A 0%, #1A1A1A 40%, #D4AF37 100%)",
-    //            "--card-header-gradient-end": "#D4AF37",
-
-    //            "--card-body-border-color": "#D4AF37",
-
-    //            "--bg-gradient": "linear-gradient(180deg, #0E0E0E 0%, #1A1A1A 50%, #2B2B2B 100%)",
-    //            "--sidebar-main-bg-gradient": "linear-gradient(to bottom, #0E0E0E, #1A1A1A 60%, #D4AF37 150%)",
-    //            "--login-card-bg-gradient": "linear-gradient(145deg, rgba(255,255,255,0.05), rgba(0,0,0,0.9))",
-
-    //            "--login-link-text-color": "#D4AF37",
-    //            "--login-button-bg-gradient": "linear-gradient(to right, #2D2D2D 0%, #3E3E3E 50%, #D4AF37 100%)",
-    //            "--login-button-bg-color": "#2D2D2D",
-    //            "--login-card-bg-color": "rgba(18,18,18,0.9)",
-
-    //            "--header-main-bg-gradient": "linear-gradient(90deg, #1A1A1A 0%, #2A2A2A 60%, #D4AF37 100%)",
-    //            "--header-icon-hover": "#D4AF37",
-
-    //            "--scroll-width": "7px",
-    //            "--card-title-font-size": "18px",
-    //            "--card-body-border-radius": "22px",
-    //            "--lockedMenus": "{}",
-    //            "--body-font": "Poppins",
-    //            "--sidebar-top-right-radius": "16px",
-    //            "--sidebar-bottom-right-radius": "16px",
-
-    //            /* === Login Page Additions === */
-    //            "--login-bg-gradient": "linear-gradient(135deg, #0E0E0E 0%, #1A1A1A 50%, #2B2B2B 100%)",
-    //            "--login-card-width": "480px",
-    //            "--login-card-border-radius": "22px",
-    //            "--login-card-box-shadow": "0 8px 30px rgba(0, 0, 0, 0.4)",
-    //            "--login-input-border-color": "#333333",
-    //            "--login-input-bg-color": "#0E0E0E",
-    //            "--login-input-text-color": "#FFFFFF",
-    //            "--login-input-border-radius": "10px",
-    //            "--login-button-border-radius": "12px",
-    //            "--login-button-text-color": "#FFFFFF",
-    //            "--login-button-hover-bg-color": "#D4AF37",
-    //            "--login-button-hover-text-color": "#0E0E0E",
-    //            "--login-footer-text-color": "#BFA76B",
-    //            "--login-logo-space": "50px",
-    //            "--login-layout-padding-right": "8%",
-    //            "--login-company-logo": "url('https://msgsndr-private.storage.googleapis.com/companyPhotos/47b7e157-d197-4ce5-9a94-b697c258702a.png')",
-    //            "--login-logo-width": "140px",
-    //            "--login-logo-height": "70px",
-    //            "--login-logo-filter": "drop-shadow(0 2px 6px rgba(212,175,55,0.3))",
-    //            "--login-background-active":"linear-gradient(180deg, #0E0E0E 0%, #1A1A1A 50%, #2B2B2B 100%)"
-    //        }
-    //    };
-    //    const themeKeys = Object.keys(themes);
-    //    let currentIndex = -1;
-
-    //    // apply theme (merges theme vars into saved themeData to avoid overwriting other keys)
-    //    function applyTheme(themeName, themeVars) {
-    //        const vars = themeVars || themes[themeName];
-    //        if (!vars) return;
-
-    //        Object.entries(vars).forEach(([key, value]) => {
-    //            if (value && value !== "undefined") {
-    //                document.body.style.setProperty(key, value);
-    //            }
-    //        });
-
-    //        // update UI
-    //        textSpan.textContent = themeName;
-    //        themeBtn.style.backgroundColor = vars["--primary-color"] || "#007bff";
-    //        themeBtn.style.color = "#fff";
-
-    //        // Save (merge so we don't drop other saved keys like --lockedMenus etc)
-    //        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-    //        savedThemeObj.themeData = { ...(savedThemeObj.themeData || {}), ...vars };
-    //        savedThemeObj.selectedTheme = themeName;
-    //        console.log(themeName);
-    //        localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
-    //        localStorage.setItem("themebuilder_selectedTheme", themeName);
-
-    //    }
-
-    //    // restore saved theme if exists
-    //    if (selectedtheme) {
-    //        applyTheme(selectedtheme, savedThemeObj.themeData);
-    //        if (themeKeys.includes(selectedtheme)) {
-    //            currentIndex = themeKeys.indexOf(selectedtheme);
-    //        }
-    //    }
-
-    //    // cycle themes when clicking main area of button (but not when clicking the arrow)
-    //    themeBtn.addEventListener("click", (e) => {
-    //        // if the click target is the arrow or inside it, ignore (arrow handles dropdown)
-    //        if (e.target.closest(".themeArrowIcon")) return;
-    //        currentIndex = (currentIndex + 1) % themeKeys.length;
-    //        applyTheme(themeKeys[currentIndex], null);
-    //    });
-
-    //    // populate dropdown
-    //    themeKeys.forEach(themeName => {
-    //        const optBtn = document.createElement("button");
-    //        optBtn.type = "button";
-    //        optBtn.textContent = themeName;
-    //        optBtn.addEventListener("click", (ev) => {
-    //            ev.stopPropagation();
-    //            applyTheme(themeName,null);
-    //            dropdownBox.classList.remove("show");
-    //            arrowIcon.innerHTML = '<i class="fa-solid fa-angle-down" aria-hidden="true"></i>';
-    //        });
-    //        dropdownBox.appendChild(optBtn);
-    //    });
-
-    //    // arrow toggles dropdown
-    //    arrowIcon.addEventListener("click", (ev) => {
-    //        ev.stopPropagation();
-    //        const open = dropdownBox.classList.toggle("show");
-    //        arrowIcon.innerHTML = open ? '<i class="fa-solid fa-angle-up" aria-hidden="true"></i>' : '<i class="fa-solid fa-angle-down" aria-hidden="true"></i>';
-    //    });
-
-    //    // close when clicking outside
-    //    document.addEventListener("click", (ev) => {
-    //        if (!wrapper.contains(ev.target)) {
-    //            dropdownBox.classList.remove("show");
-    //            arrowIcon.innerHTML = '<i class="fa-solid fa-angle-down" aria-hidden="true"></i>';
-    //        }
-    //    });
-
-    //    // prevent accidental form submit if in a form
-    //    themeBtn.addEventListener("keydown", (ev) => {
-    //        if (ev.key === " " || ev.key === "Enter") {
-    //            ev.preventDefault();
-    //            themeBtn.click();
-    //        }
-    //    });
-    //}
 
     // Build theme colors section
     function buildThemeColorsSection(container) {
@@ -2014,8 +1856,8 @@
         wrapper.appendChild(input);
         return wrapper;
     }
-    function buildHeaderControlsSection(container) {
 
+    function buildHeaderControlsSection(container) {
         const section = document.createElement("div");
         section.className = "tb-controls-section";
 
@@ -2033,16 +1875,30 @@
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedThemeObj.themeData || {};
 
+        // === ⛔ Disable this section for specific themes ===
+        const selectedTheme = localStorage.getItem("themebuilder_selectedTheme") || "";
+        const disabledThemes = ["BlueWave Theme", "OceanMist Theme"];
+
+        if (disabledThemes.includes(selectedTheme)) {
+            const disabledMsg = document.createElement("p");
+            disabledMsg.className = "tb-disabled-message";
+            disabledMsg.textContent = `⚠️ The "${selectedTheme}" uses a fixed header design. Custom gradient changes are disabled.`;
+            gradientWrapper.appendChild(disabledMsg);
+            gradientWrapper.style.opacity = "0.6";
+            gradientWrapper.style.pointerEvents = "none";
+            section.appendChild(gradientWrapper);
+            container.appendChild(section);
+            return section; // ⛔ Stop building further controls
+        }
+
         // ✅ If themeData has a gradient string, extract start & end colors
         if (themeData["--header-main-bg-gradient"]) {
             const gradient = themeData["--header-main-bg-gradient"];
-            // Match something like "linear-gradient(90deg, #2A3E9B 0%, #62C6F0 100%)"
             const match = gradient.match(/#([0-9A-F]{6})/gi);
             if (match && match.length >= 2) {
                 themeData["--header-gradient-start"] = match[0];
                 themeData["--header-gradient-end"] = match[1];
             } else if (match && match.length === 1) {
-                // In case both colors are same (flat color header)
                 themeData["--header-gradient-start"] = match[0];
                 themeData["--header-gradient-end"] = match[0];
             }
@@ -2074,7 +1930,6 @@
             headerEl.style.setProperty("background-image", "var(--header-main-bg-gradient)", "important");
         }
 
-        // Color picker helper
         // === Color picker helper ===
         function makePicker(labelText, cssVar, fallback = "#007bff") {
             const wrapper = document.createElement("div");
@@ -2084,7 +1939,7 @@
             label.className = "tb-color-picker-label";
             label.textContent = labelText;
 
-            // 1️⃣ Load initial color
+            // Load initial color
             let initial =
                 themeData[cssVar] ||
                 getComputedStyle(document.body).getPropertyValue(cssVar).trim() ||
@@ -2094,20 +1949,17 @@
                 initial = fallback;
             }
 
-            // 🎨 Color input
             const colorInput = document.createElement("input");
             colorInput.type = "color";
             colorInput.className = "tb-color-input";
             colorInput.value = initial;
 
-            // 🔹 Editable text input
             const colorCode = document.createElement("input");
             colorCode.type = "text";
             colorCode.className = "tb-color-code";
             colorCode.value = initial;
             colorCode.maxLength = 7;
 
-            // ✅ Apply color function
             function applyColor(color) {
                 if (!/^#[0-9A-F]{6}$/i.test(color)) return;
 
@@ -2116,7 +1968,6 @@
 
                 document.body.style.setProperty(cssVar, color);
 
-                // Save in localStorage
                 savedThemeObj.themeData = savedThemeObj.themeData || {};
                 savedThemeObj.themeData[cssVar] = color;
                 localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
@@ -2124,7 +1975,6 @@
                 updateGradientPreview();
             }
 
-            // Events
             colorInput.addEventListener("input", () => applyColor(colorInput.value));
             colorCode.addEventListener("input", () => {
                 const val = colorCode.value.trim();
@@ -2133,7 +1983,6 @@
                 }
             });
 
-            // Initial apply AFTER both pickers exist
             setTimeout(() => applyColor(initial), 0);
 
             wrapper.appendChild(label);
@@ -2142,11 +1991,11 @@
 
             return { wrapper, input: colorInput, code: colorCode };
         }
+
         // === Create Inputs ===
         const startPicker = makePicker("Choose Start Color For Header", "--header-gradient-start", "#ff0000");
         const endPicker = makePicker("Choose End Color For Header", "--header-gradient-end", "#0000ff");
 
-        // Append only color pickers
         gradientWrapper.appendChild(startPicker.wrapper);
         gradientWrapper.appendChild(endPicker.wrapper);
 
@@ -2165,6 +2014,160 @@
         container.appendChild(section);
         return section;
     }
+
+
+
+    //function buildHeaderControlsSection(container) {
+
+    //    const section = document.createElement("div");
+    //    section.className = "tb-controls-section";
+
+    //    // === Section Title ===
+    //    const header = document.createElement("h4");
+    //    header.className = "tb-header-controls";
+    //    header.textContent = "Header Gradient Color";
+    //    section.appendChild(header);
+
+    //    // === Gradient Controls Wrapper ===
+    //    const gradientWrapper = document.createElement("div");
+    //    gradientWrapper.className = "tb-gradient-controls";
+
+    //    // === Load saved state ===
+    //    const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+    //    const themeData = savedThemeObj.themeData || {};
+
+    //    // ✅ If themeData has a gradient string, extract start & end colors
+    //    if (themeData["--header-main-bg-gradient"]) {
+    //        const gradient = themeData["--header-main-bg-gradient"];
+    //        // Match something like "linear-gradient(90deg, #2A3E9B 0%, #62C6F0 100%)"
+    //        const match = gradient.match(/#([0-9A-F]{6})/gi);
+    //        if (match && match.length >= 2) {
+    //            themeData["--header-gradient-start"] = match[0];
+    //            themeData["--header-gradient-end"] = match[1];
+    //        } else if (match && match.length === 1) {
+    //            // In case both colors are same (flat color header)
+    //            themeData["--header-gradient-start"] = match[0];
+    //            themeData["--header-gradient-end"] = match[0];
+    //        }
+    //    }
+
+    //    const headerEl = document.querySelector(".hl_header");
+
+    //    // === Update Gradient Preview ===
+    //    function updateGradientPreview() {
+    //        if (!headerEl || !startPicker || !endPicker) return;
+
+    //        const start = startPicker.input.value;
+    //        const end = endPicker.input.value;
+
+    //        const stop = 0;
+    //        const angle = 90;
+
+    //        const gradient = `linear-gradient(${angle}deg, ${start} ${stop}%, ${end} 100%)`;
+
+    //        // Update CSS vars
+    //        document.body.style.setProperty("--header-gradient-start", start);
+    //        document.body.style.setProperty("--header-gradient-end", end);
+    //        document.body.style.setProperty("--header-gradient-stop", stop + "%");
+    //        document.body.style.setProperty("--header-gradient-angle", angle + "deg");
+    //        document.body.style.setProperty("--header-main-bg-gradient", gradient);
+
+    //        // Apply live
+    //        headerEl.style.setProperty("background", "none", "important");
+    //        headerEl.style.setProperty("background-image", "var(--header-main-bg-gradient)", "important");
+    //    }
+
+    //    // Color picker helper
+    //    // === Color picker helper ===
+    //    function makePicker(labelText, cssVar, fallback = "#007bff") {
+    //        const wrapper = document.createElement("div");
+    //        wrapper.className = "tb-color-picker-wrapper";
+
+    //        const label = document.createElement("label");
+    //        label.className = "tb-color-picker-label";
+    //        label.textContent = labelText;
+
+    //        // 1️⃣ Load initial color
+    //        let initial =
+    //            themeData[cssVar] ||
+    //            getComputedStyle(document.body).getPropertyValue(cssVar).trim() ||
+    //            fallback;
+
+    //        if (!/^#[0-9A-F]{6}$/i.test(initial)) {
+    //            initial = fallback;
+    //        }
+
+    //        // 🎨 Color input
+    //        const colorInput = document.createElement("input");
+    //        colorInput.type = "color";
+    //        colorInput.className = "tb-color-input";
+    //        colorInput.value = initial;
+
+    //        // 🔹 Editable text input
+    //        const colorCode = document.createElement("input");
+    //        colorCode.type = "text";
+    //        colorCode.className = "tb-color-code";
+    //        colorCode.value = initial;
+    //        colorCode.maxLength = 7;
+
+    //        // ✅ Apply color function
+    //        function applyColor(color) {
+    //            if (!/^#[0-9A-F]{6}$/i.test(color)) return;
+
+    //            colorInput.value = color;
+    //            colorCode.value = color;
+
+    //            document.body.style.setProperty(cssVar, color);
+
+    //            // Save in localStorage
+    //            savedThemeObj.themeData = savedThemeObj.themeData || {};
+    //            savedThemeObj.themeData[cssVar] = color;
+    //            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+
+    //            updateGradientPreview();
+    //        }
+
+    //        // Events
+    //        colorInput.addEventListener("input", () => applyColor(colorInput.value));
+    //        colorCode.addEventListener("input", () => {
+    //            const val = colorCode.value.trim();
+    //            if (/^#[0-9A-F]{6}$/i.test(val)) {
+    //                applyColor(val);
+    //            }
+    //        });
+
+    //        // Initial apply AFTER both pickers exist
+    //        setTimeout(() => applyColor(initial), 0);
+
+    //        wrapper.appendChild(label);
+    //        wrapper.appendChild(colorInput);
+    //        wrapper.appendChild(colorCode);
+
+    //        return { wrapper, input: colorInput, code: colorCode };
+    //    }
+    //    // === Create Inputs ===
+    //    const startPicker = makePicker("Choose Start Color For Header", "--header-gradient-start", "#ff0000");
+    //    const endPicker = makePicker("Choose End Color For Header", "--header-gradient-end", "#0000ff");
+
+    //    // Append only color pickers
+    //    gradientWrapper.appendChild(startPicker.wrapper);
+    //    gradientWrapper.appendChild(endPicker.wrapper);
+
+    //    // === Instruction Comment ===
+    //    const instruction = document.createElement("p");
+    //    instruction.className = "tb-instruction-text";
+    //    instruction.textContent =
+    //        "💡 For Flat Color in Header: Choose the same color for Start & End";
+    //    gradientWrapper.appendChild(instruction);
+
+    //    section.appendChild(gradientWrapper);
+
+    //    // Initial Preview
+    //    updateGradientPreview();
+
+    //    container.appendChild(section);
+    //    return section;
+    //}
     function buildProfileButtonControls(section) {
         const profileWrapper = document.createElement("div");
         profileWrapper.className = "tb-profile-btn-controls";
