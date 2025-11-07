@@ -726,6 +726,7 @@
                 "--sidebar-menu-icon-color": "#A0D6B4",
                 "--sidebar-menu-icon-hover-color": "#FFFFFF",
                 "--sidebar-menu-icon-active-color": "#FFFFFF",
+                "--sidebar-menu-border-radius": "16px",
 
                 "--sidebar-top-right-radius": "16px",
                 "--sidebar-bottom-right-radius": "16px",
