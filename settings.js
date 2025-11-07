@@ -957,6 +957,8 @@
             console.log(themeName);
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
             localStorage.setItem("themebuilder_selectedTheme", themeName);
+            window.dispatchEvent(new Event("themeChanged"));
+
 
         }
 
@@ -1860,6 +1862,7 @@
     function buildHeaderControlsSection(container) {
         const section = document.createElement("div");
         section.className = "tb-controls-section";
+        section.dataset.section = "header-gradient";
 
         // === Section Title ===
         const header = document.createElement("h4");
@@ -1875,20 +1878,27 @@
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedThemeObj.themeData || {};
 
-        // === ⛔ Disable this section for specific themes ===
-        const selectedTheme = localStorage.getItem("themebuilder_selectedTheme") || "";
+        // === Disable logic ===
         const disabledThemes = ["BlueWave Theme", "OceanMist Theme"];
 
-        if (disabledThemes.includes(selectedTheme)) {
-            const disabledMsg = document.createElement("p");
-            disabledMsg.className = "tb-disabled-message";
-            disabledMsg.textContent = `⚠️ The "${selectedTheme}" uses a fixed header design. Custom gradient changes are disabled.`;
-            gradientWrapper.appendChild(disabledMsg);
-            gradientWrapper.style.opacity = "0.6";
-            gradientWrapper.style.pointerEvents = "none";
-            section.appendChild(gradientWrapper);
-            container.appendChild(section);
-            return section; // ⛔ Stop building further controls
+        function shouldDisableHeaderSection() {
+            const selectedTheme = localStorage.getItem("themebuilder_selectedTheme") || "";
+            return disabledThemes.includes(selectedTheme);
+        }
+
+        function toggleDisableState() {
+            const disable = shouldDisableHeaderSection();
+            const inputs = section.querySelectorAll("input, select, button, textarea");
+
+            inputs.forEach((input) => {
+                input.disabled = disable;
+                input.style.cursor = disable ? "not-allowed" : "pointer";
+            });
+
+            section.style.opacity = disable ? "0.6" : "1";
+            section.style.pointerEvents = disable ? "none" : "auto";
+            // pointer-events none will block all interaction
+            // opacity gives visual feedback
         }
 
         // ✅ If themeData has a gradient string, extract start & end colors
@@ -1918,14 +1928,12 @@
 
             const gradient = `linear-gradient(${angle}deg, ${start} ${stop}%, ${end} 100%)`;
 
-            // Update CSS vars
             document.body.style.setProperty("--header-gradient-start", start);
             document.body.style.setProperty("--header-gradient-end", end);
             document.body.style.setProperty("--header-gradient-stop", stop + "%");
             document.body.style.setProperty("--header-gradient-angle", angle + "deg");
             document.body.style.setProperty("--header-main-bg-gradient", gradient);
 
-            // Apply live
             headerEl.style.setProperty("background", "none", "important");
             headerEl.style.setProperty("background-image", "var(--header-main-bg-gradient)", "important");
         }
@@ -1939,7 +1947,6 @@
             label.className = "tb-color-picker-label";
             label.textContent = labelText;
 
-            // Load initial color
             let initial =
                 themeData[cssVar] ||
                 getComputedStyle(document.body).getPropertyValue(cssVar).trim() ||
@@ -1999,7 +2006,6 @@
         gradientWrapper.appendChild(startPicker.wrapper);
         gradientWrapper.appendChild(endPicker.wrapper);
 
-        // === Instruction Comment ===
         const instruction = document.createElement("p");
         instruction.className = "tb-instruction-text";
         instruction.textContent =
@@ -2007,15 +2013,19 @@
         gradientWrapper.appendChild(instruction);
 
         section.appendChild(gradientWrapper);
+        container.appendChild(section);
 
         // Initial Preview
         updateGradientPreview();
 
-        container.appendChild(section);
+        // ✅ Initial disable state check
+        toggleDisableState();
+
+        // === 💡 Runtime theme change listener ===
+        window.addEventListener("themeChanged", toggleDisableState);
+
         return section;
     }
-
-
 
     //function buildHeaderControlsSection(container) {
 
