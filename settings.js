@@ -646,7 +646,7 @@
                 "--Acent-color": "#FFFFFF",
 
                 "--sidebar-bg-color": "linear-gradient(to bottom, #2A3E9B, #62C6F0)",
-                "--sidebar-menu-bg": "transparent",
+                "--sidebar-menu-bg": "#007bff26",
                 "--sidebar-menu-color": "#FFFFFF",
                 "--sidebar-menu-hover-bg": "#3B9DD3",
                 "--sidebar-menu-active-bg": "#2692cb",
