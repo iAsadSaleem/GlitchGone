@@ -4667,25 +4667,32 @@
             }
         };
     }
-    function applyTheme(mode = "light") {
-        const themes = getPredefinedThemes();
-        const selectedTheme = mode === "dark" ? themes["Dark Theme"] : themes["Light Theme"];
+    function applyTheme(mode) {
+        const themes = getPredefinedThemes(); // your method that returns both themes
+        const vars = themes[mode === "dark" ? "Dark Theme" : "Light Theme"];
+        if (!vars) return;
 
-        // Apply CSS variables
-        Object.entries(selectedTheme).forEach(([key, value]) => {
-            document.documentElement.style.setProperty(key, value);
+        // 1️⃣ Clear all old theme vars from body (to prevent leftover colors)
+        Object.keys(vars).forEach(key => {
+            document.body.style.removeProperty(key);
         });
 
-        // Save in userTheme object
+        // 2️⃣ Apply new vars to body
+        Object.entries(vars).forEach(([key, value]) => {
+            if (value && value !== "undefined") {
+                document.body.style.setProperty(key, value);
+            }
+        });
+
+        // 3️⃣ Save clean version in localStorage
         let savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        if (!savedThemeObj.themeData) savedThemeObj.themeData = {};
-
-        Object.assign(savedThemeObj.themeData, selectedTheme);
-        savedThemeObj.themeData["--theme-mode"] = mode; // store the mode as well
-
+        savedThemeObj.themeData = { "--theme-mode": mode, ...vars };
         localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
 
-        console.log(`✅ ${mode.charAt(0).toUpperCase() + mode.slice(1)} Theme applied successfully`);
+        // 4️⃣ Update body class (for any dark/light styling)
+        document.body.classList.toggle("dark-mode", mode === "dark");
+
+        console.log(`✅ Applied ${mode} theme and saved to localStorage`);
     }
 
     // Apply saved settings
