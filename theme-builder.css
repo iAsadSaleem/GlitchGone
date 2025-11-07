@@ -9,7 +9,7 @@
     /* 25% active color, 75% white */
     background: linear-gradient(to bottom, var(--primary-color) 40%, #ffffff 0%);
     box-shadow: -4px 1px 30px var(--primary-color); /* ✅ Works */
-    transition: right 0.28s ease;
+    transition: right 0.48s ease;
     z-index: 99999;
     padding: 16px 7px;
     display: flex;
@@ -46,7 +46,10 @@
         border-radius: 21px;
         padding: 0px 5px 0px 5px;
     }
-
+    #themeBuilderDrawer.closing {
+        right: -420px;
+        transition: right 0.4s ease; /* slightly slower close transition */
+    }
 /* Overlay covers entire drawer and blocks clicks */
 .jc-confirm-modal-overlay {
     position: absolute; /* relative to drawer */

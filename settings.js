@@ -4769,6 +4769,7 @@
             bindThemeBuilderEvents(btn, drawer);
         }
     }
+
     function bindThemeBuilderEvents(btn, drawer) {
         if (!btn || !drawer) return;
 
@@ -4776,23 +4777,59 @@
         const newBtn = btn.cloneNode(true);
         btn.replaceWith(newBtn);
 
-        // Re-bind click to toggle drawer
+        // Toggle drawer
         newBtn.addEventListener("click", () => {
             drawer.classList.toggle("open");
+            drawer.classList.remove("closing");
         });
 
-        // Re-bind close button
+        // Close button logic
         const closeBtn = drawer.querySelector(".tb-drawer-close");
         if (closeBtn) {
             closeBtn.addEventListener("click", (e) => {
                 e.stopPropagation();
+
+                // Add "closing" state for animation
+                drawer.classList.add("closing");
                 drawer.classList.remove("open");
-                drawer.style.left = "";
-                drawer.style.top = "";
+
+                // After animation ends, clean up
+                drawer.addEventListener(
+                    "transitionend",
+                    () => {
+                        drawer.classList.remove("closing");
+                    },
+                    { once: true }
+                );
             });
         }
-
     }
+
+
+    //function bindThemeBuilderEvents(btn, drawer) {
+    //    if (!btn || !drawer) return;
+
+    //    // Remove any old listeners
+    //    const newBtn = btn.cloneNode(true);
+    //    btn.replaceWith(newBtn);
+
+    //    // Re-bind click to toggle drawer
+    //    newBtn.addEventListener("click", () => {
+    //        drawer.classList.toggle("open");
+    //    });
+
+    //    // Re-bind close button
+    //    const closeBtn = drawer.querySelector(".tb-drawer-close");
+    //    if (closeBtn) {
+    //        closeBtn.addEventListener("click", (e) => {
+    //            e.stopPropagation();
+    //            drawer.classList.remove("open");
+    //            drawer.style.left = "";
+    //            drawer.style.top = "";
+    //        });
+    //    }
+
+    //}
 
     function injectThemeBuilderMenu() {
         // Find the "Login As" element
