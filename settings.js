@@ -4597,7 +4597,7 @@
             // Title beside the toggle
             const toggleTitle = document.createElement('span');
             toggleTitle.className = "tb-toggle-title";
-            toggleTitle.textContent = "Theme Mode";
+            toggleTitle.textContent = "Mode";
 
             // Toggle Switch Container
             const toggleSwitch = document.createElement('div');

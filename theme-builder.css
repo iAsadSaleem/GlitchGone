@@ -1597,11 +1597,11 @@ body::-webkit-scrollbar-track {
 
 .tb-toggle-wrapper {
     position: absolute;
-    top: 40px; /* just below close button */
-    right: 18px;
+    top: 35px; /* just below close button */
+    right: -7px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 0px;
     z-index: 10;
 }
 
