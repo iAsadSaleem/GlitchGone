@@ -1589,3 +1589,112 @@ body::-webkit-scrollbar-track {
         content: "🏠";
         font-size: 16px;
     }
+
+/* === Toggle Section Wrapper === */
+.tb-drawer-title-wrapper {
+    position: relative;
+}
+
+.tb-toggle-wrapper {
+    position: absolute;
+    top: 40px; /* just below close button */
+    right: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 10;
+}
+
+.tb-toggle-title {
+    color: #e8e8e8;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    user-select: none;
+}
+
+/* === Toggle Switch === */
+.toggle-switch {
+    position: relative;
+    width: 50px;
+    height: 26px;
+}
+
+.toggle-input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* === Toggle Label Background === */
+.toggle-label {
+    position: absolute;
+    inset: 0;
+    cursor: pointer;
+    border-radius: 30px;
+    background: linear-gradient(135deg, #ffcc33, #f39c12);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 6px;
+    box-sizing: border-box;
+    transition: all 0.4s ease;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.4);
+}
+
+    /* === Toggle Knob === */
+    .toggle-label::before {
+        content: "";
+        position: absolute;
+        left: 3px;
+        top: 3px;
+        width: 20px;
+        height: 20px;
+        background: #fff;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.25);
+    }
+
+/* === Icons === */
+.toggle-icon {
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+    .toggle-icon.sun {
+        opacity: 1;
+        color: #f1c40f;
+    }
+
+    .toggle-icon.moon {
+        color: #b3c6ff;
+    }
+
+/* === Checked State (Dark Mode) === */
+.toggle-input:checked + .toggle-label {
+    background: linear-gradient(135deg, #2c3e50, #1a252f);
+    box-shadow: 0 0 10px rgba(0, 136, 255, 0.5);
+}
+
+    .toggle-input:checked + .toggle-label::before {
+        transform: translateX(24px);
+    }
+
+    /* Icon swap */
+    .toggle-input:checked + .toggle-label .sun {
+        opacity: 0;
+    }
+
+    .toggle-input:checked + .toggle-label .moon {
+        opacity: 1;
+    }
+
+/* === Optional Dark Mode Styling (you can replace with your theme logic) === */
+body.dark-mode {
+    background-color: #141414;
+    color: #e8e8e8;
+    transition: background 0.5s ease, color 0.5s ease;
+}

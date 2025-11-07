@@ -4594,6 +4594,12 @@
             const toggleWrapper = document.createElement('div');
             toggleWrapper.className = "tb-toggle-wrapper";
 
+            // Title beside the toggle
+            const toggleTitle = document.createElement('span');
+            toggleTitle.className = "tb-toggle-title";
+            toggleTitle.textContent = "Theme Mode";
+
+            // Toggle Switch Container
             const toggleSwitch = document.createElement('div');
             toggleSwitch.className = "toggle-switch";
 
@@ -4606,12 +4612,48 @@
             toggleLabel.className = "toggle-label";
             toggleLabel.setAttribute("for", "tb-theme-toggle");
 
+            // Icons inside toggle
+            const sunIcon = document.createElement('span');
+            sunIcon.className = "toggle-icon sun";
+            sunIcon.innerHTML = "☀️";
+
+            const moonIcon = document.createElement('span');
+            moonIcon.className = "toggle-icon moon";
+            moonIcon.innerHTML = "🌙";
+
+            toggleLabel.appendChild(sunIcon);
+            toggleLabel.appendChild(moonIcon);
+
             toggleSwitch.appendChild(toggleInput);
             toggleSwitch.appendChild(toggleLabel);
+
+            // Append title + switch
+            toggleWrapper.appendChild(toggleTitle);
             toggleWrapper.appendChild(toggleSwitch);
 
-            // Append toggle right next to close button
+            // Append to title wrapper (below close button, right side)
             drawerTitleWrapper.appendChild(toggleWrapper);
+
+            // === Remember user’s last theme ===
+            const savedMode = localStorage.getItem("tb_theme_mode");
+            if (savedMode === "dark") {
+                toggleInput.checked = true;
+                document.body.classList.add("dark-mode");
+            }
+
+            // === Toggle logic ===
+            toggleInput.addEventListener("change", (e) => {
+                if (e.target.checked) {
+                    document.body.classList.add("dark-mode");
+                    localStorage.setItem("tb_theme_mode", "dark");
+                    console.log("🌙 Dark Mode Enabled");
+                } else {
+                    document.body.classList.remove("dark-mode");
+                    localStorage.setItem("tb_theme_mode", "light");
+                    console.log("☀️ Light Mode Enabled");
+                }
+            });
+
 
 
 
