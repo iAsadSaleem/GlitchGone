@@ -4777,9 +4777,9 @@
         const newBtn = btn.cloneNode(true);
         btn.replaceWith(newBtn);
 
-        // Toggle drawer
+        // Toggle drawer open
         newBtn.addEventListener("click", () => {
-            drawer.classList.toggle("open");
+            drawer.classList.add("open");
             drawer.classList.remove("closing");
         });
 
@@ -4789,11 +4789,15 @@
             closeBtn.addEventListener("click", (e) => {
                 e.stopPropagation();
 
-                // Add "closing" state for animation
-                drawer.classList.add("closing");
+                // Remove .open first so we can animate to closing
                 drawer.classList.remove("open");
 
-                // After animation ends, clean up
+                // Force the browser to register this removal before adding .closing
+                requestAnimationFrame(() => {
+                    drawer.classList.add("closing");
+                });
+
+                // Clean up after animation
                 drawer.addEventListener(
                     "transitionend",
                     () => {
