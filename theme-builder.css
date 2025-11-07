@@ -700,7 +700,7 @@ body::-webkit-scrollbar-track {
 .toggle-switch {
     position: relative;
     display: inline-block;
-    width: 40px;
+    width: 50px;
     height: 24px;
     margin: 10px;
 }
@@ -1665,6 +1665,8 @@ body::-webkit-scrollbar-track {
 }
 
     .toggle-icon.sun {
+        right: -17px;
+        position: relative;
         opacity: 1;
         color: #f1c40f;
     }
@@ -1689,6 +1691,8 @@ body::-webkit-scrollbar-track {
     }
 
     .toggle-input:checked + .toggle-label .moon {
+        right: 25px;
+        position: relative;
         opacity: 1;
     }
 
