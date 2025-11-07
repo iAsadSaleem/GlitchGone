@@ -4522,6 +4522,171 @@
         // Run on first load
         reapplyThemeOnRouteChange();
     })();
+    function getPredefinedThemes() {
+        return {
+            "Light Theme": {
+                "--primary-color": "#0a6e35",
+                "--second-color": "#07a125",
+                "--dark-color": "#000000",
+                "--grey-color": "#E2E2E2",
+                "--alert-color": "#E63946",
+                "--app-bg-color": "#FFFFFF",
+                "--Acent-color": "#000000",
+
+                "--sidebar-bg-color": "#F9F9F9",
+                "--sidebar-menu-bg": "#FFFFFF",
+                "--sidebar-menu-color": "#1A1A1A",
+                "--sidebar-menu-hover-bg": "#E8E8E8",
+                "--sidebar-menu-active-bg": "#D6F5E3",
+                "--sidebar-menu-icon-color": "#0a6e35",
+                "--sidebar-menu-icon-hover-color": "#07a125",
+                "--sidebar-menu-icon-active-color": "#07a125",
+                "--sidebar-menu-border-radius": "16px",
+
+                "--sidebar-top-right-radius": "16px",
+                "--sidebar-bottom-right-radius": "16px",
+
+                "--scroll-color": "#0a6e35",
+
+                "--header-bg-color": "#FFFFFF",
+                "--header-icon-color": "#000000",
+                "--header-icon-hover-color": "#07a125",
+                "--header-icon-bg": "#FFFFFF",
+                "--header-icon-hover-bg": "#E8E8E8",
+
+                "--card-body-bg-color": "#FFFFFF",
+                "--card-body-font-color": "#1A1A1A",
+                "--card-title-font-color": "#000000",
+                "--card-dec-font-color": "#333333",
+                "--card-footer-bg-color": "#F9F9F9",
+                "--card-footer-font-color": "#000000",
+
+                "--top-nav-menu-bg": "#FFFFFF",
+                "--top-nav-menu-hover-bg": "#E8E8E8",
+                "--top-nav-menu-active-bg": "#D6F5E3",
+                "--top-nav-menu-color": "#000000",
+                "--top-nav-menu-hover-color": "#0a6e35",
+                "--top-nav-menu-active-color": "#07a125",
+
+                "--card-header-gradient-start": "#FFFFFF",
+                "--card-header-bg-gradient": "linear-gradient(38deg, #F9F9F9 45%, #FFFFFF 55%)",
+                "--card-header-gradient-end": "#0a6e35",
+
+                "--card-body-border-color": "#E2E2E2",
+
+                "--bg-gradient": "linear-gradient(38deg, #FFFFFF 45%, #D6F5E3 55%)",
+
+                "--sidebar-main-bg-gradient": "#FFFFFF",
+                "--login-card-bg-gradient": "linear-gradient(38deg, #FFFFFF 45%, #D6F5E3 55%)",
+
+                "--login-link-text-color": "#0a6e35",
+                "--login-button-bg-gradient": "linear-gradient(38deg, #0a6e35 45%, #07a125 55%)",
+                "--login-button-bg-color": "#0a6e35",
+                "--login-card-bg-color": "#FFFFFF",
+
+                "--header-main-bg-gradient": "linear-gradient(38deg, #FFFFFF 0%, #FFFFFF 100%)",
+                "--header-icon-hover": "#0a6e35",
+
+                "--scroll-width": "7px",
+                "--card-title-font-size": "18px",
+                "--card-body-border-radius": "24px",
+                "--lockedMenus": "{}",
+                "--body-font": "Roboto",
+                "--loader-background-color": "#FFFFFF"
+            },
+
+            "Dark Theme": {
+                "--primary-color": "#07a125",
+                "--second-color": "#0a6e35",
+                "--dark-color": "#000000",
+                "--grey-color": "#2B2B2B",
+                "--alert-color": "#E63946",
+                "--app-bg-color": "#111111",
+                "--Acent-color": "#FFFFFF",
+
+                "--sidebar-bg-color": "#000000",
+                "--sidebar-menu-bg": "#000000",
+                "--sidebar-menu-color": "#FFFFFF",
+                "--sidebar-menu-hover-bg": "#0a6e35",
+                "--sidebar-menu-active-bg": "#07a125",
+                "--sidebar-menu-icon-color": "#A6DDBA",
+                "--sidebar-menu-icon-hover-color": "#FFFFFF",
+                "--sidebar-menu-icon-active-color": "#FFFFFF",
+                "--sidebar-menu-border-radius": "16px",
+
+                "--sidebar-top-right-radius": "16px",
+                "--sidebar-bottom-right-radius": "16px",
+
+                "--scroll-color": "#07a125",
+
+                "--header-bg-color": "#000000",
+                "--header-icon-color": "#FFFFFF",
+                "--header-icon-hover-color": "#07a125",
+                "--header-icon-bg": "#000000",
+                "--header-icon-hover-bg": "#111111",
+
+                "--card-body-bg-color": "#1A1A1A",
+                "--card-body-font-color": "#E8E8E8",
+                "--card-title-font-color": "#FFFFFF",
+                "--card-dec-font-color": "#CCCCCC",
+                "--card-footer-bg-color": "#111111",
+                "--card-footer-font-color": "#FFFFFF",
+
+                "--top-nav-menu-bg": "#000000",
+                "--top-nav-menu-hover-bg": "#0a6e35",
+                "--top-nav-menu-active-bg": "#07a125",
+                "--top-nav-menu-color": "#FFFFFF",
+                "--top-nav-menu-hover-color": "#A6DDBA",
+                "--top-nav-menu-active-color": "#FFFFFF",
+
+                "--card-header-gradient-start": "#000000",
+                "--card-header-bg-gradient": "linear-gradient(38deg, #000000 45%, #0a6e35 55%)",
+                "--card-header-gradient-end": "#07a125",
+
+                "--card-body-border-color": "#222222",
+
+                "--bg-gradient": "linear-gradient(38deg, #000000 45%, #0a6e35 55%)",
+
+                "--sidebar-main-bg-gradient": "#000000",
+                "--login-card-bg-gradient": "linear-gradient(38deg, #000000 45%, #07a125 55%)",
+
+                "--login-link-text-color": "#07a125",
+                "--login-button-bg-gradient": "linear-gradient(38deg, #000000 45%, #07a125 55%)",
+                "--login-button-bg-color": "#07a125",
+                "--login-card-bg-color": "#111111",
+
+                "--header-main-bg-gradient": "linear-gradient(38deg, #000000 0%, #000000 100%)",
+                "--header-icon-hover": "#07a125",
+
+                "--scroll-width": "7px",
+                "--card-title-font-size": "18px",
+                "--card-body-border-radius": "24px",
+                "--lockedMenus": "{}",
+                "--body-font": "Roboto",
+                "--loader-background-color": "#000000"
+            }
+        };
+    }
+    function applyTheme(mode = "light") {
+        const themes = getPredefinedThemes();
+        const selectedTheme = mode === "dark" ? themes["Dark Theme"] : themes["Light Theme"];
+
+        // Apply CSS variables
+        Object.entries(selectedTheme).forEach(([key, value]) => {
+            document.documentElement.style.setProperty(key, value);
+        });
+
+        // Save in userTheme object
+        let savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        if (!savedThemeObj.themeData) savedThemeObj.themeData = {};
+
+        Object.assign(savedThemeObj.themeData, selectedTheme);
+        savedThemeObj.themeData["--theme-mode"] = mode; // store the mode as well
+
+        localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+
+        console.log(`✅ ${mode.charAt(0).toUpperCase() + mode.slice(1)} Theme applied successfully`);
+    }
 
     // Apply saved settings
     function applySavedSettings() {
@@ -4628,14 +4793,16 @@
             toggleWrapper.appendChild(toggleSwitch);
             drawerTitleWrapper.appendChild(toggleWrapper);
 
-            // ===== Load from userTheme =====
-            let savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-            if (!savedThemeObj.themeData) savedThemeObj.themeData = {};
+            // ===============================
+            // ✅ Load saved mode on startup
+            // ===============================
+            const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+            const currentMode = savedThemeObj?.themeData?.["--theme-mode"] || "light";
 
-            const currentMode = savedThemeObj.themeData["--theme-mode"] || "light";
-            document.documentElement.style.setProperty("--theme-mode", currentMode);
+            // Apply the saved or default theme
+            applyTheme(currentMode);
 
-            // Reflect mode in checkbox + body class
+            // Reflect saved mode in toggle + body
             if (currentMode === "dark") {
                 toggleInput.checked = true;
                 document.body.classList.add("dark-mode");
@@ -4643,25 +4810,23 @@
                 document.body.classList.remove("dark-mode");
             }
 
-            // ===== Toggle logic =====
+            console.log(`Loaded theme mode: ${currentMode}`);
+
+            // ===============================
+            // ✅ Toggle change event
+            // ===============================
             toggleInput.addEventListener("change", (e) => {
                 const isDark = e.target.checked;
                 const newMode = isDark ? "dark" : "light";
 
-                // Apply mode visually
-                document.documentElement.style.setProperty("--theme-mode", newMode);
+                // Apply and save theme using our helper
+                applyTheme(newMode);
+
+                // Visual mode toggle (optional animation or CSS class)
                 document.body.classList.toggle("dark-mode", isDark);
-
-                // Save mode in themeData + localStorage
-                savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-                if (!savedThemeObj.themeData) savedThemeObj.themeData = {};
-                savedThemeObj.themeData["--theme-mode"] = newMode;
-
-                localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
 
                 console.log(`Theme mode switched to: ${newMode}`);
             });
-
 
 
 
