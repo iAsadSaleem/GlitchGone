@@ -4590,16 +4590,14 @@
             drawerTitleWrapper.appendChild(closeBtn);
             drawer.appendChild(drawerTitleWrapper);
 
-            // ===== Toggle Switch (Dark / Light Mode) =====
+            // ===== Theme Mode Toggle (Dark / Light) =====
             const toggleWrapper = document.createElement('div');
             toggleWrapper.className = "tb-toggle-wrapper";
 
-            // Title beside the toggle
             const toggleTitle = document.createElement('span');
             toggleTitle.className = "tb-toggle-title";
-            toggleTitle.textContent = "Mode";
+            toggleTitle.textContent = "Theme Mode";
 
-            // Toggle Switch Container
             const toggleSwitch = document.createElement('div');
             toggleSwitch.className = "toggle-switch";
 
@@ -4612,7 +4610,6 @@
             toggleLabel.className = "toggle-label";
             toggleLabel.setAttribute("for", "tb-theme-toggle");
 
-            // Icons inside toggle
             const sunIcon = document.createElement('span');
             sunIcon.className = "toggle-icon sun";
             sunIcon.innerHTML = "☀️";
@@ -4627,32 +4624,44 @@
             toggleSwitch.appendChild(toggleInput);
             toggleSwitch.appendChild(toggleLabel);
 
-            // Append title + switch
             toggleWrapper.appendChild(toggleTitle);
             toggleWrapper.appendChild(toggleSwitch);
-
-            // Append to title wrapper (below close button, right side)
             drawerTitleWrapper.appendChild(toggleWrapper);
 
-            // === Remember user’s last theme ===
-            const savedMode = localStorage.getItem("tb_theme_mode");
-            if (savedMode === "dark") {
+            // ===== Load from userTheme =====
+            let savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+            if (!savedThemeObj.themeData) savedThemeObj.themeData = {};
+
+            const currentMode = savedThemeObj.themeData["--theme-mode"] || "light";
+            document.documentElement.style.setProperty("--theme-mode", currentMode);
+
+            // Reflect mode in checkbox + body class
+            if (currentMode === "dark") {
                 toggleInput.checked = true;
                 document.body.classList.add("dark-mode");
+            } else {
+                document.body.classList.remove("dark-mode");
             }
 
-            // === Toggle logic ===
+            // ===== Toggle logic =====
             toggleInput.addEventListener("change", (e) => {
-                if (e.target.checked) {
-                    document.body.classList.add("dark-mode");
-                    localStorage.setItem("tb_theme_mode", "dark");
-                    console.log("🌙 Dark Mode Enabled");
-                } else {
-                    document.body.classList.remove("dark-mode");
-                    localStorage.setItem("tb_theme_mode", "light");
-                    console.log("☀️ Light Mode Enabled");
-                }
+                const isDark = e.target.checked;
+                const newMode = isDark ? "dark" : "light";
+
+                // Apply mode visually
+                document.documentElement.style.setProperty("--theme-mode", newMode);
+                document.body.classList.toggle("dark-mode", isDark);
+
+                // Save mode in themeData + localStorage
+                savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                if (!savedThemeObj.themeData) savedThemeObj.themeData = {};
+                savedThemeObj.themeData["--theme-mode"] = newMode;
+
+                localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+
+                console.log(`Theme mode switched to: ${newMode}`);
             });
+
 
 
 
