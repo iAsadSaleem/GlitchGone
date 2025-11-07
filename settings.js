@@ -859,7 +859,7 @@
                 "--sidebar-menu-icon-color": "#BFA76B",
                 "--sidebar-menu-icon-hover-color": "#D4AF37",
                 "--sidebar-menu-icon-active-color": "#EEDC82",
-
+                "--sidebar-menu-border-radius": "16px",
                 "--scroll-color": "#D4AF37",
 
                 "--header-bg-color": "#1F1F1F",
