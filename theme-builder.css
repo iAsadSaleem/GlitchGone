@@ -1111,7 +1111,9 @@ body::-webkit-scrollbar-track {
     flex-direction: column;
     gap: 10px;
 }
-.tb-title{
+.tb-title {
+    top: -15px;
+    position: relative;
     font-weight: 700;
 }
 
