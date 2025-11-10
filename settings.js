@@ -4820,7 +4820,7 @@
             // ✅ Load saved mode on startup
             // ===============================
             const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-            const currentMode = savedThemeObj?.themeData?.["--theme-mode"] || "light";
+            const currentMode = savedThemeObj?.themeData?.["--theme-mode"];
 
          
                 // Apply the saved or default theme
