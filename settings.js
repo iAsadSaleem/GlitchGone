@@ -207,7 +207,7 @@
 
         const header = document.createElement("div");
         header.className = "tb-section-header";
-        header.style.cursor = "pointer";
+        header.style.cursor = 'var(--custome-pointer)';
 
         // Optional left icon
         if (icon) {
@@ -525,7 +525,7 @@
             s.id = "tb-theme-selector-styles";
             s.textContent = `
         .themeSelectWrapper{position:relative;display:inline-flex;align-items:center}
-        .tb-theme-cycle-btn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;border:none;cursor:pointer;font-weight:600;min-width:160px;justify-content:space-between}
+        .tb-theme-cycle-btn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;border:none;cursor:var(--custom-pointer);font-weight:600;min-width:160px;justify-content:space-between}
         .themeBtnInner{display:flex;align-items:center;gap:8px;width:100%}
         .themeBtnText{flex:1;text-align:left}
         .themeArrowIcon{width:28px;height:28px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;border:1px solid rgba(0,0,0,0.08);font-size:12px;cursor:pointer}
