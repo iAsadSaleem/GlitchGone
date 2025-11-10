@@ -207,7 +207,7 @@
 
         const header = document.createElement("div");
         header.className = "tb-section-header";
-        header.style.cursor = 'var(--custome-pointer)';
+        header.style.cursor = "var(--custom-pointer)";
 
         // Optional left icon
         if (icon) {
