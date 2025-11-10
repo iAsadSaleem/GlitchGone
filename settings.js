@@ -4706,6 +4706,8 @@
         savedThemeObj.selectedTheme = themeName;
 
         localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+        localStorage.setItem("themebuilder_selectedTheme", themeName);
+
 
         // ✅ Dispatch update event (used by your ThemeBuilder live updates)
         window.dispatchEvent(new Event("themeChanged"));
