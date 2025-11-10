@@ -958,6 +958,7 @@
 
             // 🧹 Remove mode before merging
             if (savedThemeObj.themeData && savedThemeObj.themeData["--theme-mode"]) {
+                console.log("Removed:", savedThemeObj.themeData["--theme-mode"]);
                 delete savedThemeObj.themeData["--theme-mode"];
             }
 
