@@ -1860,7 +1860,6 @@
         wrapper.appendChild(input);
         return wrapper;
     }
-
     function buildHeaderControlsSection(container) {
         const section = document.createElement("div");
         section.className = "tb-controls-section";
@@ -2028,7 +2027,6 @@
 
         return section;
     }
-
     //function buildHeaderControlsSection(container) {
 
     //    const section = document.createElement("div");
@@ -5229,7 +5227,6 @@
         }
 
     }
-
     function injectThemeBuilderMenu() {
         // Find the "Login As" element
         const loginAsItem = Array.from(document.querySelectorAll(".dropdown-item"))
