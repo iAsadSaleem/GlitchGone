@@ -4689,7 +4689,7 @@
 
         // ✅ Update --theme-mode variable
         /*  const themeMode = isMode ? modeOrName : "light";*/
-        const themeMode = isMode ? modeOrName : vars["--theme-mode"];        // default light if no explicit mode
+        const themeMode = isMode ? modeOrName : undefined;        // default light if no explicit mode
         document.body.style.setProperty("--theme-mode", themeMode);
         document.body.classList.toggle("dark-mode", themeMode === "dark");
 
