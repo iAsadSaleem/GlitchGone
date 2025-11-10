@@ -958,7 +958,6 @@
 
             // 🧹 Remove mode before merging
             if (savedThemeObj.themeData && savedThemeObj.themeData["--theme-mode"]) {
-                console.log("Removed:", savedThemeObj.themeData["--theme-mode"]);
                 delete savedThemeObj.themeData["--theme-mode"];
             }
 
@@ -4707,12 +4706,8 @@
 
         localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
         localStorage.setItem("themebuilder_selectedTheme", themeName);
-
-
         // ✅ Dispatch update event (used by your ThemeBuilder live updates)
         window.dispatchEvent(new Event("themeChanged"));
-
-            console.log(`✅ Applied ${themeMode} (${themeName}) theme and saved safely.`);
     }
 
     // Apply saved settingss
@@ -4825,11 +4820,8 @@
             // ===============================
             const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
             const currentMode = savedThemeObj?.themeData?.["--theme-mode"];
-            console.log("Current Mode:", currentMode);
-         
                 // Apply the saved or default theme
                 applyTheme(currentMode);
-
                 // Reflect saved mode in toggle + body
                 if (currentMode === "dark") {
                     toggleInput.checked = true;
@@ -4837,23 +4829,16 @@
                 } else {
                     document.body.classList.remove("dark-mode");
                 }
-
-                console.log(`Loaded theme mode: ${currentMode}`);
-
                 // ===============================
                 // ✅ Toggle change event
                 // ===============================
                 toggleInput.addEventListener("change", (e) => {
                     const isDark = e.target.checked;
                     const newMode = isDark ? "dark" : "light";
-                    console.log("newmode:", newMode);
                     // Apply and save theme using our helper
                     applyTheme(newMode);
-
                     // Visual mode toggle (optional animation or CSS class)
                     document.body.classList.toggle("dark-mode", isDark);
-
-                    console.log(`Theme mode switched to: ${newMode}`);
                 });
 
             // ===== Card Wrapper =====
