@@ -941,28 +941,35 @@
             const vars = themeVars || themes[themeName];
             if (!vars) return;
 
+            // Apply theme variables
             Object.entries(vars).forEach(([key, value]) => {
                 if (value && value !== "undefined") {
                     document.body.style.setProperty(key, value);
                 }
             });
 
-            // update UI
+            // Update UI
             textSpan.textContent = themeName;
             themeBtn.style.backgroundColor = vars["--primary-color"] || "#007bff";
             themeBtn.style.color = "#fff";
 
-            // Save (merge so we don't drop other saved keys like --lockedMenus etc)
+            // Save
             const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+
+            // 🧹 Remove mode before merging
+            if (savedThemeObj.themeData && savedThemeObj.themeData["--theme-mode"]) {
+                delete savedThemeObj.themeData["--theme-mode"];
+            }
+
+            // Merge and save
             savedThemeObj.themeData = { ...(savedThemeObj.themeData || {}), ...vars };
             savedThemeObj.selectedTheme = themeName;
-            console.log(themeName);
+
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
             localStorage.setItem("themebuilder_selectedTheme", themeName);
             window.dispatchEvent(new Event("themeChanged"));
-
-
         }
+
 
         // restore saved theme if exists
         if (selectedtheme) {
@@ -4669,7 +4676,6 @@
         const themes = getPredefinedThemes(); // assume you have this returning Light & Dark themes
         const isMode = modeOrName === "dark" || modeOrName === "light";
         const themeName = isMode ? (modeOrName === "dark" ? "Dark Theme" : "Light Theme") : modeOrName;
-
         const vars = themeVars || themes[themeName];
         if (!vars) return;
 
@@ -4698,12 +4704,11 @@
         savedThemeObj.selectedTheme = themeName;
 
         localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
-        localStorage.setItem("themebuilder_selectedTheme", themeName);
 
         // ✅ Dispatch update event (used by your ThemeBuilder live updates)
         window.dispatchEvent(new Event("themeChanged"));
 
-        console.log(`✅ Applied ${themeMode} (${themeName}) theme and saved safely.`);
+            console.log(`✅ Applied ${themeMode} (${themeName}) theme and saved safely.`);
     }
 
     // Apply saved settingss
@@ -4814,11 +4819,10 @@
             // ===============================
             // ✅ Load saved mode on startup
             // ===============================
-            const selectedTheme = localStorage.getItem("themebuilder_selectedTheme");
             const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
             const currentMode = savedThemeObj?.themeData?.["--theme-mode"] || "light";
 
-            if (selectedTheme == "Dark Theme" || selectedTheme == "Light Theme") {
+         
                 // Apply the saved or default theme
                 applyTheme(currentMode);
 
@@ -4847,10 +4851,6 @@
 
                     console.log(`Theme mode switched to: ${newMode}`);
                 });
-            }
-
-
-
 
             // ===== Card Wrapper =====
             const cardWrapper = document.createElement('div');
