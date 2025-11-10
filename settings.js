@@ -4821,7 +4821,7 @@
             // ===============================
             const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
             const currentMode = savedThemeObj?.themeData?.["--theme-mode"];
-
+            console.log("Current Mode:", currentMode);
          
                 // Apply the saved or default theme
                 applyTheme(currentMode);
@@ -4842,7 +4842,7 @@
                 toggleInput.addEventListener("change", (e) => {
                     const isDark = e.target.checked;
                     const newMode = isDark ? "dark" : "light";
-
+                    console.log("newmode:", newMode);
                     // Apply and save theme using our helper
                     applyTheme(newMode);
 
