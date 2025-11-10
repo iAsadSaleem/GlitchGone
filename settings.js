@@ -970,7 +970,6 @@
             window.dispatchEvent(new Event("themeChanged"));
         }
 
-
         // restore saved theme if exists
         if (selectedtheme) {
             applyTheme(selectedtheme, savedThemeObj.themeData);
@@ -4819,8 +4818,10 @@
             // ✅ Load saved mode on startup
             // ===============================
             const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+            const selectedTheme = localStorage.getItem("themebuilder_selectedTheme");
             const currentMode = savedThemeObj?.themeData?.["--theme-mode"];
-                // Apply the saved or default theme
+            if (selectedTheme == "Dark Theme" || selectedTheme == "Light Theme") {
+            // Apply the saved or default theme
                 applyTheme(currentMode);
                 // Reflect saved mode in toggle + body
                 if (currentMode === "dark") {
@@ -4829,6 +4830,7 @@
                 } else {
                     document.body.classList.remove("dark-mode");
                 }
+            }
                 // ===============================
                 // ✅ Toggle change event
                 // ===============================
