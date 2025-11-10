@@ -4600,74 +4600,74 @@
             },
 
             "Dark Theme": {
-                "--primary-color": "#07a125",
-                "--second-color": "#0a6e35",
-                "--dark-color": "#000000",
-                "--grey-color": "#2B2B2B",
-                "--alert-color": "#E63946",
-                "--app-bg-color": "#111111",
-                "--Acent-color": "#FFFFFF",
+                "--primary-color": "#273332",        // Primary action / highlights
+                "--second-color": "#3a4241",         // Secondary highlights
+                "--dark-color": "#142423",           // Main dark background
+                "--grey-color": "#4d5150",           // Grey shades for borders, text, etc.
+                "--alert-color": "#E63946",          // Keep alert red as is
+                "--app-bg-color": "#142423",         // Main app background
+                "--Acent-color": "#5f5f5f",          // Accent color for text/icons
 
-                "--sidebar-bg-color": "#000000",
-                "--sidebar-menu-bg": "#000000",
-                "--sidebar-menu-color": "#FFFFFF",
-                "--sidebar-menu-hover-bg": "#0a6e35",
-                "--sidebar-menu-active-bg": "#07a125",
-                "--sidebar-menu-icon-color": "#A6DDBA",
-                "--sidebar-menu-icon-hover-color": "#FFFFFF",
-                "--sidebar-menu-icon-active-color": "#FFFFFF",
+                "--sidebar-bg-color": "#142423",
+                "--sidebar-menu-bg": "#142423",
+                "--sidebar-menu-color": "#5f5f5f",
+                "--sidebar-menu-hover-bg": "#273332",
+                "--sidebar-menu-active-bg": "#3a4241",
+                "--sidebar-menu-icon-color": "#5f5f5f",
+                "--sidebar-menu-icon-hover-color": "#ffffff",
+                "--sidebar-menu-icon-active-color": "#ffffff",
                 "--sidebar-menu-border-radius": "16px",
 
                 "--sidebar-top-right-radius": "16px",
                 "--sidebar-bottom-right-radius": "16px",
 
-                "--scroll-color": "#07a125",
+                "--scroll-color": "#273332",
 
-                "--header-bg-color": "#000000",
-                "--header-icon-color": "#FFFFFF",
-                "--header-icon-hover-color": "#07a125",
-                "--header-icon-bg": "#000000",
-                "--header-icon-hover-bg": "#111111",
+                "--header-bg-color": "#142423",
+                "--header-icon-color": "#5f5f5f",
+                "--header-icon-hover-color": "#273332",
+                "--header-icon-bg": "#142423",
+                "--header-icon-hover-bg": "#273332",
 
-                "--card-body-bg-color": "#1A1A1A",
-                "--card-body-font-color": "#E8E8E8",
-                "--card-title-font-color": "#FFFFFF",
-                "--card-dec-font-color": "#CCCCCC",
-                "--card-footer-bg-color": "#111111",
-                "--card-footer-font-color": "#FFFFFF",
+                "--card-body-bg-color": "#273332",
+                "--card-body-font-color": "#5f5f5f",
+                "--card-title-font-color": "#ffffff",
+                "--card-dec-font-color": "#cccccc",
+                "--card-footer-bg-color": "#142423",
+                "--card-footer-font-color": "#ffffff",
 
-                "--top-nav-menu-bg": "#000000",
-                "--top-nav-menu-hover-bg": "#0a6e35",
-                "--top-nav-menu-active-bg": "#07a125",
-                "--top-nav-menu-color": "#FFFFFF",
-                "--top-nav-menu-hover-color": "#A6DDBA",
-                "--top-nav-menu-active-color": "#FFFFFF",
+                "--top-nav-menu-bg": "#142423",
+                "--top-nav-menu-hover-bg": "#273332",
+                "--top-nav-menu-active-bg": "#3a4241",
+                "--top-nav-menu-color": "#5f5f5f",
+                "--top-nav-menu-hover-color": "#ffffff",
+                "--top-nav-menu-active-color": "#ffffff",
 
-                "--card-header-gradient-start": "#000000",
-                "--card-header-bg-gradient": "linear-gradient(38deg, #000000 45%, #0a6e35 55%)",
-                "--card-header-gradient-end": "#07a125",
+                "--card-header-gradient-start": "#142423",
+                "--card-header-bg-gradient": "linear-gradient(38deg, #142423 45%, #273332 55%)",
+                "--card-header-gradient-end": "#3a4241",
 
-                "--card-body-border-color": "#222222",
+                "--card-body-border-color": "#4d5150",
 
-                "--bg-gradient": "linear-gradient(38deg, #000000 45%, #0a6e35 55%)",
+                "--bg-gradient": "linear-gradient(38deg, #142423 45%, #273332 55%)",
 
-                "--sidebar-main-bg-gradient": "#000000",
-                "--login-card-bg-gradient": "linear-gradient(38deg, #000000 45%, #07a125 55%)",
+                "--sidebar-main-bg-gradient": "#142423",
+                "--login-card-bg-gradient": "linear-gradient(38deg, #142423 45%, #3a4241 55%)",
 
-                "--login-link-text-color": "#07a125",
-                "--login-button-bg-gradient": "linear-gradient(38deg, #000000 45%, #07a125 55%)",
-                "--login-button-bg-color": "#07a125",
-                "--login-card-bg-color": "#111111",
+                "--login-link-text-color": "#273332",
+                "--login-button-bg-gradient": "linear-gradient(38deg, #142423 45%, #3a4241 55%)",
+                "--login-button-bg-color": "#273332",
+                "--login-card-bg-color": "#142423",
 
-                "--header-main-bg-gradient": "linear-gradient(38deg, #000000 0%, #000000 100%)",
-                "--header-icon-hover": "#07a125",
+                "--header-main-bg-gradient": "linear-gradient(38deg, #142423 0%, #142423 100%)",
+                "--header-icon-hover": "#273332",
 
                 "--scroll-width": "7px",
                 "--card-title-font-size": "18px",
                 "--card-body-border-radius": "24px",
                 "--lockedMenus": "{}",
                 "--body-font": "Roboto",
-                "--loader-background-color": "#000000"
+                "--loader-background-color": "#142423"
             }
         };
     }
