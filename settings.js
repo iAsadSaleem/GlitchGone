@@ -5237,7 +5237,8 @@
 
         // Create new Theme Builder item
         const themeBuilderItem = document.createElement("div");
-        themeBuilderItem.className = "py-2 cursor-pointer dropdown-item theme-builder-highlight";
+        themeBuilderItem.className = "py-2 dropdown-item theme-builder-highlight";
+        themeBuilderItem.style.cursor = "var(--custom-pointer)";
         themeBuilderItem.innerHTML = `
         <span class="rainbow-text"> Theme Builder</span>
         <span class="new-badge">NEW</span>
