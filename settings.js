@@ -4064,9 +4064,8 @@
             { id: "sb_saas-education", label: "SaaS Education" },
             { id: "sb_ghl-swag", label: "GHL Swag" },
             { id: "sb_agency-ideas", label: "Agency Ideas" },
-            { id: "sb_mobile-app-customiser", label: "Mobile App Customiser" }
-        ];
-        const agencySettingsMenus = [
+            { id: "sb_mobile-app-customiser", label: "Mobile App Customiser" },
+            //Settings menu
             { id: "sb_agency-profile-settings", label: "My Profile" },
             { id: "sb_agency-company-settings", label: "Company" },
             { id: "sb_agency-team-settings", label: "Team" },
@@ -4086,7 +4085,6 @@
             { id: "sb_agency-labs-settings", label: "Labs" },
             { id: "sb_agency-audit-logs-settings", label: "Audit Logs" }
         ];
-
         // ✅ Debug: check if your menus arrays are defined correctly
         // Load saved theme 
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
@@ -4333,12 +4331,7 @@
                   ✨ <em>Tip:</em> Use these customization options to design a navigation layout that’s tailored to your needs — improving productivity and making your workspace more intuitive.
                 `;
         wrapper.appendChild(instruction);
-
-        const agencySettingsIds = new Set(agencySettingsMenus.map(m => m.id));
-        const agencyNormalMenus = agencyMenus.filter(m => !agencySettingsIds.has(m.id));
-
-        buildSection(agencyNormalMenus, "Agency Level Menu Customization", "--agencyMenuOrder", "#agencySidebar");
-        buildSection(agencySettingsIds, "Agency Settings Menu Customization", "--agencySettingsMenuOrder", "#agencySidebar");
+        buildSection(agencyMenus, "Agency Level Menu Customization", "--agencyMenuOrder", "#agencySidebar");
         buildSection(subAccountMenus, "Sub-Account Level Menu Customization", "--subMenuOrder", "#subAccountSidebar");
 
         container.appendChild(wrapper);
@@ -4356,10 +4349,7 @@
             const order = JSON.parse(saved.themeData["--agencyMenuOrder"]);
             reorderMenu(order, "#agencySidebar");
         }
-        if (saved.themeData?.["--agencySettingsMenuOrder"]) {
-            const order = JSON.parse(saved.themeData["--agencySettingsMenuOrder"]);
-            reorderMenu(order, "#agencySidebar");
-        }
+
         function reorderMenu(order, containerSelector) {
             // Try the exact selector first (keeps agency behavior unchanged)
             let container = document.querySelector(containerSelector);
