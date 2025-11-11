@@ -3942,15 +3942,31 @@
             const listContainer = document.createElement("div");
             listContainer.className = "tb-draggable-menu-list";
 
+            //const savedOrder = themeData[storageKey] ? JSON.parse(themeData[storageKey]) : [];
+            //if (savedOrder.length > 0) {
+            //    const indexOf = id => {
+            //        const idx = savedOrder.indexOf(id);
+            //        return idx === -1 ? Number.MAX_SAFE_INTEGER : idx;
+            //    };
+            //    menus.sort((a, b) => indexOf(a.id) - indexOf(b.id));
+            //}
             const savedOrder = themeData[storageKey] ? JSON.parse(themeData[storageKey]) : [];
-            if (savedOrder.length > 0) {
-                const indexOf = id => {
-                    const idx = savedOrder.indexOf(id);
-                    return idx === -1 ? Number.MAX_SAFE_INTEGER : idx;
-                };
-                menus.sort((a, b) => indexOf(a.id) - indexOf(b.id));
-            }
 
+            if (Array.isArray(savedOrder) && savedOrder.length > 0) {
+                // Reorder menus according to saved order only
+                const orderedMenus = [];
+                savedOrder.forEach(id => {
+                    const found = menus.find(m => m.id === id);
+                    if (found) orderedMenus.push(found);
+                });
+
+                // Add any new menus not in savedOrder (to preserve new additions)
+                menus.forEach(m => {
+                    if (!savedOrder.includes(m.id)) orderedMenus.push(m);
+                });
+
+                menus = orderedMenus;
+            }
             menus.forEach(menu => {
                 const row = document.createElement("div");
                 row.className = "tb-menu-row";
