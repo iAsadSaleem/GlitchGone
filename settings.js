@@ -4085,6 +4085,31 @@
             { id: "sb_agency-labs-settings", label: "Labs" },
             { id: "sb_agency-audit-logs-settings", label: "Audit Logs" }
         ];
+
+
+        // Find where settings start
+        const firstSettingsIndex = agencyMenus.findIndex(item =>
+            item.id.includes("settings") || item.id.includes("setting")
+        );
+
+        if (firstSettingsIndex !== -1) {
+            agencyMenus.splice(firstSettingsIndex, 0, {
+                id: "title_settings",
+                label: "⚙️ Settings",
+                isTitle: true
+            });
+        }
+
+        // Now render
+        agencyMenus.forEach(menu => {
+            if (menu.isTitle) {
+                console.log(`\n=== ${menu.label} ===`);
+            } else {
+                console.log(menu.label);
+            }
+        });
+
+
         // ✅ Debug: check if your menus arrays are defined correctly
         // Load saved theme 
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
