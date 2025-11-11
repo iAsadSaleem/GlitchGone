@@ -4056,7 +4056,7 @@
             { id: "sb_location-prospect", label: "Prospecting" },
             { id: "sb_agency-accounts", label: "Agency Accounts" },
             { id: "sb_agency-account-reselling", label: "Account Reselling" },
-            { id: "sb_agency-accounts", label: "Agency Marketplace" },
+            { id: "sb_agency-marketplace", label: "Agency Marketplace" },
             { id: "sb_agency-affiliate-portal", label: "Affiliate Portal" },
             { id: "sb_agency-template-library", label: "Template Library" },
             { id: "sb_agency-partners", label: "Partners" },
