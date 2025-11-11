@@ -4333,8 +4333,12 @@
                   ✨ <em>Tip:</em> Use these customization options to design a navigation layout that’s tailored to your needs — improving productivity and making your workspace more intuitive.
                 `;
         wrapper.appendChild(instruction);
-        buildSection(agencyMenus, "Agency Level Menu Customization", "--agencyMenuOrder", "#agencySidebar");
-        buildSection(agencySettingsMenus, "Agency Settings Menu Customization", "--agencySettingsMenuOrder", "#agencySidebar");
+
+        const agencySettingsIds = new Set(agencySettingsMenus.map(m => m.id));
+        const agencyNormalMenus = agencyMenus.filter(m => !agencySettingsIds.has(m.id));
+
+        buildSection(agencyNormalMenus, "Agency Level Menu Customization", "--agencyMenuOrder", "#agencySidebar");
+        buildSection(agencySettingsIds, "Agency Settings Menu Customization", "--agencySettingsMenuOrder", "#agencySidebar");
         buildSection(subAccountMenus, "Sub-Account Level Menu Customization", "--subMenuOrder", "#subAccountSidebar");
 
         container.appendChild(wrapper);
