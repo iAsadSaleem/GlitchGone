@@ -4064,8 +4064,28 @@
             { id: "sb_saas-education", label: "SaaS Education" },
             { id: "sb_ghl-swag", label: "GHL Swag" },
             { id: "sb_agency-ideas", label: "Agency Ideas" },
-            { id: "sb_mobile-app-customiser", label: "Mobile App Customiser" },
-            //Settings menu
+            { id: "sb_mobile-app-customiser", label: "Mobile App Customiser" }
+            ////Settings menu
+            //{ id: "sb_agency-profile-settings", label: "My Profile" },
+            //{ id: "sb_agency-company-settings", label: "Company" },
+            //{ id: "sb_agency-team-settings", label: "Team" },
+            //{ id: "sb_agency-twilio-settings", label: "Phone Integration" },
+            //{ id: "sb_agency-email-settings", label: "Email Services" },
+            //{ id: "sb_system-emails-setting", label: "System Emails" },
+            //{ id: "sb_workflow-premium-actions-setting", label: "Workflow - Premium Features" },
+            //{ id: "sb_conversation-ai-setting", label: "AI Employee" },
+            //{ id: "sb_workflow-ai-setting", label: "Workflow - External AI Models" },
+            //{ id: "sb_domain-purchase-setting", label: "Domain Purchase" },
+            //{ id: "sb_undefined", label: "Private Integrations" },
+            //{ id: "sb_agency-affiliate-settings", label: "Affiliates" },
+            //{ id: "sb_agency-custom-link-settings", label: "Custom Menu Links" },
+            //{ id: "sb_agency-stripe-settings", label: "Stripe" },
+            //{ id: "sb_agency-api-keys-settings", label: "API Keys" },
+            //{ id: "sb_agency-compliance-settings", label: "Compliance" },
+            //{ id: "sb_agency-labs-settings", label: "Labs" },
+            //{ id: "sb_agency-audit-logs-settings", label: "Audit Logs" }
+        ];
+        const agencySettingsMenus = [
             { id: "sb_agency-profile-settings", label: "My Profile" },
             { id: "sb_agency-company-settings", label: "Company" },
             { id: "sb_agency-team-settings", label: "Team" },
@@ -4333,6 +4353,7 @@
                 `;
         wrapper.appendChild(instruction);
         buildSection(agencyMenus, "Agency Level Menu Customization", "--agencyMenuOrder", "#agencySidebar");
+        buildSection(agencySettingsMenus, "Agency Settings Menu Customization", "--agencySettingsMenuOrder", "#agencySidebar");
         buildSection(subAccountMenus, "Sub-Account Level Menu Customization", "--subMenuOrder", "#subAccountSidebar");
 
         container.appendChild(wrapper);
@@ -4350,7 +4371,10 @@
             const order = JSON.parse(saved.themeData["--agencyMenuOrder"]);
             reorderMenu(order, "#agencySidebar");
         }
-
+        if (saved.themeData?.["--agencySettingsMenuOrder"]) {
+            const order = JSON.parse(saved.themeData["--agencySettingsMenuOrder"]);
+            reorderMenu(order, "#agencySidebar");
+        }
         function reorderMenu(order, containerSelector) {
             // Try the exact selector first (keeps agency behavior unchanged)
             let container = document.querySelector(containerSelector);
