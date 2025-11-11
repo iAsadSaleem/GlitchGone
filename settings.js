@@ -4333,29 +4333,9 @@
                 `;
         wrapper.appendChild(instruction);
 
-
-
-        // Deduplicate menus (keep first occurrence) and warn in console
-        function dedupeMenus(menus) {
-            const seen = new Set();
-            const out = [];
-            menus.forEach(m => {
-                if (seen.has(m.id)) {
-                    console.warn(`[tb] Duplicate menu id detected and skipped: ${m.id} (${m.label})`);
-                    return;
-                }
-                seen.add(m.id);
-                out.push(m);
-            });
-            return out;
-        }
-
-        const safeAgencyMenus = dedupeMenus(agencyMenus);
-        const safeSubAccountMenus = dedupeMenus(subAccountMenus);
-
         // pass safeAgencyMenus / safeSubAccountMenus to buildSection
-        buildSection(safeAgencyMenus, "Agency Level Menu Customization", "--agencyMenuOrder", "#agencySidebar");
-        buildSection(safeSubAccountMenus, "Sub-Account Level Menu Customization", "--subMenuOrder", "#subAccountSidebar");
+        buildSection(agencyMenus, "Agency Level Menu Customization", "--agencyMenuOrder", "#agencySidebar");
+        buildSection(subAccountMenus, "Sub-Account Level Menu Customization", "--subMenuOrder", "#subAccountSidebar");
 
 
         container.appendChild(wrapper);
