@@ -3851,7 +3851,7 @@
         separator.className = "tb-section-separator";
         wrapper.appendChild(separator);
         // ---------------- Menu definitions ----------------
-        const subAccountMenus = [
+        let subAccountMenus = [
             { id: "sb_launchpad", label: "Launchpad" },
             { id: "sb_dashboard", label: "Dashboard" },
             { id: "sb_conversations", label: "Conversations" },
@@ -3890,7 +3890,7 @@
             { id: "sb_custom-fields-settings", label: "Custom Fields" }
         ];
 
-        const agencyMenus = [
+        let agencyMenus = [
             { id: "sb_agency-dashboard", label: "Agency Dashboard" },
             { id: "sb_location-prospect", label: "Prospecting" },
             { id: "sb_agency-accounts", label: "Agency Accounts" },
