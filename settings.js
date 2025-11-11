@@ -267,16 +267,6 @@
                 toggleIcon.className = "fa-solid fa-angle-down tb-toggle-icon"; // 🔽
             }
 
-
-            //if (content.classList.contains("open")) {
-            //    content.style.maxHeight = "200px";
-            //    content.style.overflowY = "auto";
-            //    toggleIcon.className = "fa-solid fa-angle-up tb-toggle-icon"; // 🔼
-            //} else {
-            //    content.style.maxHeight = null;
-            //    content.style.overflowY = null;
-            //    toggleIcon.className = "fa-solid fa-angle-down tb-toggle-icon"; // 🔽
-            //}
         });
 
         section.appendChild(header);
@@ -2033,157 +2023,6 @@
 
         return section;
     }
-    //function buildHeaderControlsSection(container) {
-
-    //    const section = document.createElement("div");
-    //    section.className = "tb-controls-section";
-
-    //    // === Section Title ===
-    //    const header = document.createElement("h4");
-    //    header.className = "tb-header-controls";
-    //    header.textContent = "Header Gradient Color";
-    //    section.appendChild(header);
-
-    //    // === Gradient Controls Wrapper ===
-    //    const gradientWrapper = document.createElement("div");
-    //    gradientWrapper.className = "tb-gradient-controls";
-
-    //    // === Load saved state ===
-    //    const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-    //    const themeData = savedThemeObj.themeData || {};
-
-    //    // ✅ If themeData has a gradient string, extract start & end colors
-    //    if (themeData["--header-main-bg-gradient"]) {
-    //        const gradient = themeData["--header-main-bg-gradient"];
-    //        // Match something like "linear-gradient(90deg, #2A3E9B 0%, #62C6F0 100%)"
-    //        const match = gradient.match(/#([0-9A-F]{6})/gi);
-    //        if (match && match.length >= 2) {
-    //            themeData["--header-gradient-start"] = match[0];
-    //            themeData["--header-gradient-end"] = match[1];
-    //        } else if (match && match.length === 1) {
-    //            // In case both colors are same (flat color header)
-    //            themeData["--header-gradient-start"] = match[0];
-    //            themeData["--header-gradient-end"] = match[0];
-    //        }
-    //    }
-
-    //    const headerEl = document.querySelector(".hl_header");
-
-    //    // === Update Gradient Preview ===
-    //    function updateGradientPreview() {
-    //        if (!headerEl || !startPicker || !endPicker) return;
-
-    //        const start = startPicker.input.value;
-    //        const end = endPicker.input.value;
-
-    //        const stop = 0;
-    //        const angle = 90;
-
-    //        const gradient = `linear-gradient(${angle}deg, ${start} ${stop}%, ${end} 100%)`;
-
-    //        // Update CSS vars
-    //        document.body.style.setProperty("--header-gradient-start", start);
-    //        document.body.style.setProperty("--header-gradient-end", end);
-    //        document.body.style.setProperty("--header-gradient-stop", stop + "%");
-    //        document.body.style.setProperty("--header-gradient-angle", angle + "deg");
-    //        document.body.style.setProperty("--header-main-bg-gradient", gradient);
-
-    //        // Apply live
-    //        headerEl.style.setProperty("background", "none", "important");
-    //        headerEl.style.setProperty("background-image", "var(--header-main-bg-gradient)", "important");
-    //    }
-
-    //    // Color picker helper
-    //    // === Color picker helper ===
-    //    function makePicker(labelText, cssVar, fallback = "#007bff") {
-    //        const wrapper = document.createElement("div");
-    //        wrapper.className = "tb-color-picker-wrapper";
-
-    //        const label = document.createElement("label");
-    //        label.className = "tb-color-picker-label";
-    //        label.textContent = labelText;
-
-    //        // 1️⃣ Load initial color
-    //        let initial =
-    //            themeData[cssVar] ||
-    //            getComputedStyle(document.body).getPropertyValue(cssVar).trim() ||
-    //            fallback;
-
-    //        if (!/^#[0-9A-F]{6}$/i.test(initial)) {
-    //            initial = fallback;
-    //        }
-
-    //        // 🎨 Color input
-    //        const colorInput = document.createElement("input");
-    //        colorInput.type = "color";
-    //        colorInput.className = "tb-color-input";
-    //        colorInput.value = initial;
-
-    //        // 🔹 Editable text input
-    //        const colorCode = document.createElement("input");
-    //        colorCode.type = "text";
-    //        colorCode.className = "tb-color-code";
-    //        colorCode.value = initial;
-    //        colorCode.maxLength = 7;
-
-    //        // ✅ Apply color function
-    //        function applyColor(color) {
-    //            if (!/^#[0-9A-F]{6}$/i.test(color)) return;
-
-    //            colorInput.value = color;
-    //            colorCode.value = color;
-
-    //            document.body.style.setProperty(cssVar, color);
-
-    //            // Save in localStorage
-    //            savedThemeObj.themeData = savedThemeObj.themeData || {};
-    //            savedThemeObj.themeData[cssVar] = color;
-    //            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
-
-    //            updateGradientPreview();
-    //        }
-
-    //        // Events
-    //        colorInput.addEventListener("input", () => applyColor(colorInput.value));
-    //        colorCode.addEventListener("input", () => {
-    //            const val = colorCode.value.trim();
-    //            if (/^#[0-9A-F]{6}$/i.test(val)) {
-    //                applyColor(val);
-    //            }
-    //        });
-
-    //        // Initial apply AFTER both pickers exist
-    //        setTimeout(() => applyColor(initial), 0);
-
-    //        wrapper.appendChild(label);
-    //        wrapper.appendChild(colorInput);
-    //        wrapper.appendChild(colorCode);
-
-    //        return { wrapper, input: colorInput, code: colorCode };
-    //    }
-    //    // === Create Inputs ===
-    //    const startPicker = makePicker("Choose Start Color For Header", "--header-gradient-start", "#ff0000");
-    //    const endPicker = makePicker("Choose End Color For Header", "--header-gradient-end", "#0000ff");
-
-    //    // Append only color pickers
-    //    gradientWrapper.appendChild(startPicker.wrapper);
-    //    gradientWrapper.appendChild(endPicker.wrapper);
-
-    //    // === Instruction Comment ===
-    //    const instruction = document.createElement("p");
-    //    instruction.className = "tb-instruction-text";
-    //    instruction.textContent =
-    //        "💡 For Flat Color in Header: Choose the same color for Start & End";
-    //    gradientWrapper.appendChild(instruction);
-
-    //    section.appendChild(gradientWrapper);
-
-    //    // Initial Preview
-    //    updateGradientPreview();
-
-    //    container.appendChild(section);
-    //    return section;
-    //}
     function buildProfileButtonControls(section) {
         const profileWrapper = document.createElement("div");
         profileWrapper.className = "tb-profile-btn-controls";
@@ -4490,13 +4329,6 @@
         // Append wrapper to section
         section.appendChild(wrapper);
     }
-    // ---------------- Apply on Page Load ----------------
-    //window.addEventListener("load", () => {
-    //    waitForSidebarMenus(() => {
-    //        applyLockedMenus(); // optional
-    //        applyMenuCustomizations();
-    //    });
-    //});
 
     // --- 1️⃣ Create a helper to run your theme logic ---
     function reapplyThemeOnRouteChange() {
