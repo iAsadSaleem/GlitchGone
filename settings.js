@@ -4332,16 +4332,34 @@
                   ✨ <em>Tip:</em> Use these customization options to design a navigation layout that’s tailored to your needs — improving productivity and making your workspace more intuitive.
                 `;
         wrapper.appendChild(instruction);
-        buildSection(agencyMenus, "Agency Level Menu Customization", "--agencyMenuOrder", "#agencySidebar");
-        buildSection(subAccountMenus, "Sub-Account Level Menu Customization", "--subMenuOrder", "#subAccountSidebar");
-        // Split Settings menus from others
+        // ✅ Filter out settings menus from agencyMenus
         const settingsMenus = agencyMenus.filter(menu =>
             menu.id.includes("settings") || menu.id.includes("setting")
         );
 
-        // Build a new section for Settings menu
-        buildSection(settingsMenus,"Settings Menu Customization","--settingsMenuOrder","#agencySidebar");
+        // ✅ Create a filtered version of agencyMenus that excludes settings items
+        const filteredAgencyMenus = agencyMenus.filter(menu =>
+            !menu.id.includes("settings") && !menu.id.includes("setting")
+        );
+
+        // ✅ Build Agency Level Menu Customization section first
+        const agencySection = buildSection(filteredAgencyMenus, "Agency Level Menu Customization", "--agencyMenuOrder", "#agencySidebar");
+
+        // ✅ Build Settings section *inside* or *just below* Agency Level Menu Customization
+        if (agencySection && settingsMenus.length > 0) {
+            const settingsSection = buildSection(settingsMenus, "Settings Menu Customization", "--settingsMenuOrder", "#agencySidebar");
+            // insert after agency section (if buildSection returns a DOM element)
+            if (settingsSection && agencySection.parentNode) {
+                agencySection.parentNode.insertBefore(settingsSection, agencySection.nextSibling);
+            }
+        }
+
+        // ✅ Then build Sub-Account section
+        buildSection(subAccountMenus, "Sub-Account Level Menu Customization", "--subMenuOrder", "#subAccountSidebar");
+
+        // ✅ Finally append wrapper
         container.appendChild(wrapper);
+
         applyMenuCustomizations();
 
         // ✅ Restore order if sidebar exists
