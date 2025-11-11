@@ -4344,10 +4344,13 @@
 
         // ✅ Build Agency Level Menu Customization section first
         const agencySection = buildSection(filteredAgencyMenus, "Agency Level Menu Customization", "--agencyMenuOrder", "#agencySidebar");
+        console.log("🧠 Settings Menus Found:", settingsMenus);
 
         // ✅ Build Settings section *inside* or *just below* Agency Level Menu Customization
         if (agencySection && settingsMenus.length > 0) {
             const settingsSection = buildSection(settingsMenus, "Settings Menu Customization", "--settingsMenuOrder", "#agencySidebar");
+            console.log("🧩 Settings Section Built:", settingsSection);
+
             // insert after agency section (if buildSection returns a DOM element)
             if (settingsSection && agencySection.parentNode) {
                 agencySection.parentNode.insertBefore(settingsSection, agencySection.nextSibling);
