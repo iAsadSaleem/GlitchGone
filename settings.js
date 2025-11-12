@@ -899,8 +899,6 @@
                 "--card-body-border-radius": "22px",
                 "--lockedMenus": "{}",
                 "--body-font": "Poppins",
-                "--sidebar-top-right-radius": "16px",
-                "--sidebar-bottom-right-radius": "16px",
 
                 /* === Login Page Additions === */
                 "--login-bg-gradient": "linear-gradient(135deg, #0E0E0E 0%, #1A1A1A 50%, #2B2B2B 100%)",
