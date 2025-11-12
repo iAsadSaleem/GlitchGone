@@ -1,4 +1,11 @@
-﻿/* Example for drawer */
+﻿@import url(https://fonts.googleapis.com);
+@import url(https://fonts.gstatic.com);
+@import url(https://fonts.googleapis.com/css2?family=Lavishly+Yours&display=swap);
+
+
+
+
+/* Example for drawer */
 #themeBuilderDrawer {
     position: fixed;
     top: 50px;
