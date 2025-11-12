@@ -5136,7 +5136,7 @@
                 font-family: "Birthstone", cursive !important;
                 position: relative;
                 left: 50px;
-                font-size: 25px;
+                font-size: 40px;
                 font-weight: 700;
                 -webkit-background-clip: text;
                 color: black;
