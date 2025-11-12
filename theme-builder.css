@@ -1707,7 +1707,7 @@ body.dark-mode {
 
 /* Professional Rainbow Text */
 .rainbow-text {
-    --rb-speed: 6s; /* speed of the subtle rainbow animation */
+    --rb-speed: 4s; /* speed of the subtle rainbow animation */
     --rb-font-weight: 700;
     --rb-font-size: 1.8rem;
     display: inline-block;
@@ -1721,7 +1721,7 @@ body.dark-mode {
     color: transparent;
     -webkit-text-fill-color: transparent;
     /* Smooth, subtle color slide */
-    animation: rainbow-shift var(--rb-speed) linear infinite;
+    /*animation: rainbow-shift var(--rb-speed) linear ;*/
 }
 
 /* Gentle gradient movement */

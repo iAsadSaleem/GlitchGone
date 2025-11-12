@@ -5141,7 +5141,7 @@
                 font-weight: 700;
                 -webkit-background-clip: text;
                 color: black;
-                animation: rainbowMove 2s linear infinite;
+                animation: rainbowMove 2s linear;
             }
             @keyframes rainbowMove {
                 from { background-position: 0%; }
