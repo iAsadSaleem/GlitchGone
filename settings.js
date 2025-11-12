@@ -4401,8 +4401,8 @@
                 "--sidebar-menu-icon-active-color": "#07a125",
                 "--sidebar-menu-border-radius": "16px",
 
-                "--sidebar-top-right-radius": "16px",
-                "--sidebar-bottom-right-radius": "16px",
+                "--sidebar-top-right-radius": "0px",
+                "--sidebar-bottom-right-radius": "0px",
 
                 "--scroll-color": "#0a6e35",
 
@@ -4472,8 +4472,8 @@
                 "--sidebar-menu-icon-active-color": "#ffffff",
                 "--sidebar-menu-border-radius": "16px",
 
-                "--sidebar-top-right-radius": "16px",
-                "--sidebar-bottom-right-radius": "16px",
+                "--sidebar-top-right-radius": "0px",
+                "--sidebar-bottom-right-radius": "0px",
 
                 "--scroll-color": "#273332",
 
