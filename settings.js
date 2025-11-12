@@ -4383,21 +4383,21 @@
     function getPredefinedThemes() {
         return {
             "Light Theme": {
-                "--primary-color": "#484b6a",            /* Deep accent color for main buttons & highlights */
-                "--second-color": "#9394a5",            /* Secondary accent for subtle contrasts */
+                "--primary-color": "#484b6a",
+                "--second-color": "#9394a5",
                 "--dark-color": "#000000",
-                "--grey-color": "#d2d3db",              /* Neutral base tone for borders and dividers */
+                "--grey-color": "#d2d3db",
                 "--alert-color": "#E63946",
-                "--app-bg-color": "#fafafa",            /* Clean main background */
+                "--app-bg-color": "#fafafa",
                 "--Acent-color": "#484b6a",
 
-                "--sidebar-bg-color": "#ffffff",        /* Sidebar background kept pure white for clarity */
+                "--sidebar-bg-color": "#ffffff",
                 "--sidebar-menu-bg": "#fafafa",
-                "--sidebar-menu-color": "#484b6a",
+                "--sidebar-menu-color": "#2b2b2b",        /* darker text for sidebar labels */
                 "--sidebar-menu-hover-bg": "#e4e5f1",
                 "--sidebar-menu-active-bg": "#d2d3db",
-                "--sidebar-menu-icon-color": "#484b6a",
-                "--sidebar-menu-icon-hover-color": "#9394a5",
+                "--sidebar-menu-icon-color": "#2b2b2b",   /* default icon = dark */
+                "--sidebar-menu-icon-hover-color": "#484b6a", /* hover = soft bluish tone */
                 "--sidebar-menu-icon-active-color": "#484b6a",
                 "--sidebar-menu-border-radius": "14px",
 
@@ -4407,22 +4407,22 @@
                 "--scroll-color": "#9394a5",
 
                 "--header-bg-color": "#ffffff",
-                "--header-icon-color": "#484b6a",
-                "--header-icon-hover-color": "#9394a5",
+                "--header-icon-color": "#2b2b2b",           /* dark by default */
+                "--header-icon-hover-color": "#484b6a",     /* deep accent on hover */
                 "--header-icon-bg": "#ffffff",
-                "--header-icon-hover-bg": "#e4e5f1",
+                "--header-icon-hover-bg": "#e4e5f1",        /* gentle hover background */
 
                 "--card-body-bg-color": "#ffffff",
-                "--card-body-font-color": "#484b6a",
+                "--card-body-font-color": "#2b2b2b",
                 "--card-title-font-color": "#000000",
                 "--card-dec-font-color": "#484b6a",
                 "--card-footer-bg-color": "#fafafa",
-                "--card-footer-font-color": "#484b6a",
+                "--card-footer-font-color": "#2b2b2b",
 
                 "--top-nav-menu-bg": "#ffffff",
                 "--top-nav-menu-hover-bg": "#e4e5f1",
                 "--top-nav-menu-active-bg": "#d2d3db",
-                "--top-nav-menu-color": "#484b6a",
+                "--top-nav-menu-color": "#2b2b2b",
                 "--top-nav-menu-hover-color": "#484b6a",
                 "--top-nav-menu-active-color": "#000000",
 
@@ -4443,7 +4443,7 @@
                 "--login-card-bg-color": "#ffffff",
 
                 "--header-main-bg-gradient": "linear-gradient(38deg, #ffffff 0%, #fafafa 100%)",
-                "--header-icon-hover": "#9394a5",
+                "--header-icon-hover": "#484b6a",
 
                 "--scroll-width": "7px",
                 "--card-title-font-size": "18px",
@@ -4452,7 +4452,6 @@
                 "--body-font": "Roboto",
                 "--loader-background-color": "#fafafa"
             },
-
             "Dark Theme": {
                 "--primary-color": "#273332",        // Primary action / highlights
                 "--second-color": "#3a4241",         // Secondary highlights
