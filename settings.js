@@ -581,7 +581,7 @@
 
                 "--scroll-color": "#0a6e35",
 
-                "--header-bg-color": "#000000",           /* Flat black header */
+                "--header-bg-color": "#FFFFFF",          /* Flat black header */
                 "--header-icon-color": "#FFFFFF",
                 "--header-icon-hover-color": "#0a6e35",
                 "--header-icon-bg": "#000000",
@@ -718,8 +718,8 @@
                 "--sidebar-menu-icon-active-color": "#FFFFFF",
                 "--sidebar-menu-border-radius": "16px",
 
-                "--sidebar-top-right-radius": "16px",
-                "--sidebar-bottom-right-radius": "16px",
+                "--sidebar-top-right-radius": "0px",
+                "--sidebar-bottom-right-radius": "0px",
 
                 "--scroll-color": "#00A86B",
 
@@ -758,7 +758,7 @@
                 "--login-button-bg-color": "#0B3D0B",
                 "--login-card-bg-color": "#FFFFFF",
 
-                "--header-main-bg-gradient": "linear-gradient(38deg, rgba(0,0,0,1) 45%, rgba(255,255,255,1) 45%, rgba(255,255,255,1) 54%, rgba(0,168,107,1) 55%)",
+                "--header-main-bg-gradient": "linear-gradient(225deg,rgba(0, 168, 107, 1) 48%, rgba(255, 255, 255, 1) 48%, rgba(0, 0, 0, 1) 49%);",
                 "--header-icon-hover": "#00A86B",
 
                 "--scroll-width": "7px",
@@ -852,6 +852,8 @@
                 "--sidebar-menu-icon-hover-color": "#D4AF37",
                 "--sidebar-menu-icon-active-color": "#EEDC82",
                 "--sidebar-menu-border-radius": "16px",
+                "--sidebar-top-right-radius": "0px",
+                "--sidebar-bottom-right-radius": "0px",
                 "--scroll-color": "#D4AF37",
 
                 "--header-bg-color": "#1F1F1F",

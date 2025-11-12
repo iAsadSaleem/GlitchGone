@@ -323,7 +323,7 @@
     touch-action: manipulation;
     width: 284px;
     height: 47px;
-    top: 13px;
+    top: 8px;
 }
 
 /* Reset Changes Button */
@@ -1703,4 +1703,68 @@ body.dark-mode {
     background-color: #141414;
     color: #e8e8e8;
     transition: background 0.5s ease, color 0.5s ease;
+}
+
+/* CSS */
+.rainbow-text {
+    --rb-speed: 5s; /* gradient animation duration */
+    --rb-glow-size: 10px; /* blur size of glow */
+    --rb-glow-intensity: 0.45; /* opacity of glow (0..1) */
+    --rb-font-weight: 700;
+    --rb-font-size: 1.6rem;
+    display: inline-block;
+    font-weight: var(--rb-font-weight);
+    font-size: var(--rb-font-size);
+    line-height: 1;
+    letter-spacing: 0.4px;
+    /* animated gradient inside the text */
+    background: linear-gradient( 90deg, #ff3cac 0%, #ffbd3a 15%, #ffee55 30%, #2be7b8 45%, #4ea1ff 60%, #9b59ff 75%, #ff3cac 100% );
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    /* subtle smoothing */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* outer glow */
+    text-shadow: 0 0 calc(var(--rb-glow-size) * 0.4) rgba(255, 60, 172, var(--rb-glow-intensity)), 0 0 calc(var(--rb-glow-size) * 0.7) rgba(255, 189, 58, calc(var(--rb-glow-intensity) * 0.9)), 0 0 var(--rb-glow-size) rgba(78, 161, 255, var(--rb-glow-intensity));
+    /* smooth animation */
+    animation: rainbow-slide var(--rb-speed) linear infinite, rainbow-pulse 4s ease-in-out infinite;
+    will-change: background-position, filter;
+}
+
+/* gentle horizontal gradient slide */
+@keyframes rainbow-slide {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* subtle pulsing glow to feel alive */
+@keyframes rainbow-pulse {
+    0%, 100% {
+        filter: drop-shadow(0 0 0px rgba(0,0,0,0));
+        transform: translateZ(0);
+    }
+
+    50% {
+        filter: drop-shadow(0 0 6px rgba(0,0,0,0.04));
+        transform: translateY(-1px);
+    }
+}
+
+/* Optional: a stronger neon effect variant */
+.rainbow-text.neon {
+    --rb-glow-size: 18px;
+    --rb-glow-intensity: 0.8;
+    filter: saturate(1.1) contrast(1.05);
 }
