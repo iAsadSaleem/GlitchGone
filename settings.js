@@ -758,7 +758,7 @@
                 "--login-button-bg-color": "#0B3D0B",
                 "--login-card-bg-color": "#FFFFFF",
 
-                "--header-main-bg-gradient": "linear-gradient(225deg,rgba(0, 168, 107, 1) 56%, rgba(255, 255, 255, 1) 57%, rgba(0, 0, 0, 1) 58%);",
+                "--header-main-bg-gradient": "linear-gradient(225deg,rgba(0, 168, 107, 1) 56%, rgba(255, 255, 255, 1) 57%, rgba(0, 0, 0, 1) 58%)",
                 "--header-icon-hover": "#00A86B",
 
                 "--scroll-width": "7px",
