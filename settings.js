@@ -4452,7 +4452,6 @@
                 "--body-font": "Roboto",
                 "--loader-background-color": "#FFFFFF"
             },
-
             "Dark Theme": {
                 "--primary-color": "#273332",        // Primary action / highlights
                 "--second-color": "#3a4241",         // Secondary highlights
