@@ -1,10 +1,4 @@
-﻿@import url(https://fonts.googleapis.com);
-@import url(https://fonts.gstatic.com);
-@import url(https://fonts.googleapis.com/css2?family=Lavishly+Yours&display=swap);
-
-
-
-
+﻿@import url('https://fonts.googleapis.com/css2?family=Birthstone&family=Lavishly+Yours&display=swap');
 /* Example for drawer */
 #themeBuilderDrawer {
     position: fixed;

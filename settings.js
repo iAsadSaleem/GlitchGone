@@ -5133,7 +5133,7 @@
                 100% { box-shadow: 0 0 10px violet; border-color: violet; }
             }
             .rainbow-text {
-                font-family: "Lavishly Yours", cursive;
+                font-family: "Birthstone", cursive !important;
                 position: relative;
                 left: 50px;
                 font-size: 25px;
