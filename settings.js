@@ -1876,7 +1876,7 @@
         const themeData = savedThemeObj.themeData || {};
 
         // === Disable logic ===
-        const disabledThemes = ["BlueWave Theme", "OceanMist Theme"];
+        const disabledThemes = ["BlueWave Theme", "OceanMist Theme","GlitchGone Theme"];
 
         function shouldDisableHeaderSection() {
             const selectedTheme = localStorage.getItem("themebuilder_selectedTheme") || "";
