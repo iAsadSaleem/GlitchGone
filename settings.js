@@ -4383,75 +4383,76 @@
     function getPredefinedThemes() {
         return {
             "Light Theme": {
-                "--primary-color": "#0a6e35",
-                "--second-color": "#07a125",
+                "--primary-color": "#484b6a",            /* Deep accent color for main buttons & highlights */
+                "--second-color": "#9394a5",            /* Secondary accent for subtle contrasts */
                 "--dark-color": "#000000",
-                "--grey-color": "#E2E2E2",
+                "--grey-color": "#d2d3db",              /* Neutral base tone for borders and dividers */
                 "--alert-color": "#E63946",
-                "--app-bg-color": "#FFFFFF",
-                "--Acent-color": "#000000",
+                "--app-bg-color": "#fafafa",            /* Clean main background */
+                "--Acent-color": "#484b6a",
 
-                "--sidebar-bg-color": "#F9F9F9",
-                "--sidebar-menu-bg": "#FFFFFF",
-                "--sidebar-menu-color": "#1A1A1A",
-                "--sidebar-menu-hover-bg": "#E8E8E8",
-                "--sidebar-menu-active-bg": "#D6F5E3",
-                "--sidebar-menu-icon-color": "#0a6e35",
-                "--sidebar-menu-icon-hover-color": "#07a125",
-                "--sidebar-menu-icon-active-color": "#07a125",
-                "--sidebar-menu-border-radius": "16px",
+                "--sidebar-bg-color": "#ffffff",        /* Sidebar background kept pure white for clarity */
+                "--sidebar-menu-bg": "#fafafa",
+                "--sidebar-menu-color": "#484b6a",
+                "--sidebar-menu-hover-bg": "#e4e5f1",
+                "--sidebar-menu-active-bg": "#d2d3db",
+                "--sidebar-menu-icon-color": "#484b6a",
+                "--sidebar-menu-icon-hover-color": "#9394a5",
+                "--sidebar-menu-icon-active-color": "#484b6a",
+                "--sidebar-menu-border-radius": "14px",
 
                 "--sidebar-top-right-radius": "0px",
                 "--sidebar-bottom-right-radius": "0px",
 
-                "--scroll-color": "#0a6e35",
+                "--scroll-color": "#9394a5",
 
-                "--header-bg-color": "#FFFFFF",
-                "--header-icon-color": "#000000",
-                "--header-icon-hover-color": "#07a125",
-                "--header-icon-bg": "#FFFFFF",
-                "--header-icon-hover-bg": "#E8E8E8",
+                "--header-bg-color": "#ffffff",
+                "--header-icon-color": "#484b6a",
+                "--header-icon-hover-color": "#9394a5",
+                "--header-icon-bg": "#ffffff",
+                "--header-icon-hover-bg": "#e4e5f1",
 
-                "--card-body-bg-color": "#FFFFFF",
-                "--card-body-font-color": "#1A1A1A",
+                "--card-body-bg-color": "#ffffff",
+                "--card-body-font-color": "#484b6a",
                 "--card-title-font-color": "#000000",
-                "--card-dec-font-color": "#333333",
-                "--card-footer-bg-color": "#F9F9F9",
-                "--card-footer-font-color": "#000000",
+                "--card-dec-font-color": "#484b6a",
+                "--card-footer-bg-color": "#fafafa",
+                "--card-footer-font-color": "#484b6a",
 
-                "--top-nav-menu-bg": "#FFFFFF",
-                "--top-nav-menu-hover-bg": "#E8E8E8",
-                "--top-nav-menu-active-bg": "#D6F5E3",
-                "--top-nav-menu-color": "#000000",
-                "--top-nav-menu-hover-color": "#0a6e35",
-                "--top-nav-menu-active-color": "#07a125",
+                "--top-nav-menu-bg": "#ffffff",
+                "--top-nav-menu-hover-bg": "#e4e5f1",
+                "--top-nav-menu-active-bg": "#d2d3db",
+                "--top-nav-menu-color": "#484b6a",
+                "--top-nav-menu-hover-color": "#484b6a",
+                "--top-nav-menu-active-color": "#000000",
 
-                "--card-header-gradient-start": "#FFFFFF",
-                "--card-header-bg-gradient": "linear-gradient(38deg, #F9F9F9 45%, #FFFFFF 55%)",
-                "--card-header-gradient-end": "#0a6e35",
+                "--card-header-gradient-start": "#fafafa",
+                "--card-header-bg-gradient": "linear-gradient(38deg, #fafafa 45%, #e4e5f1 55%)",
+                "--card-header-gradient-end": "#d2d3db",
 
-                "--card-body-border-color": "#E2E2E2",
+                "--card-body-border-color": "#e4e5f1",
 
-                "--bg-gradient": "linear-gradient(38deg, #FFFFFF 45%, #D6F5E3 55%)",
+                "--bg-gradient": "linear-gradient(38deg, #ffffff 45%, #e4e5f1 55%)",
 
-                "--sidebar-main-bg-gradient": "#FFFFFF",
-                "--login-card-bg-gradient": "linear-gradient(38deg, #FFFFFF 45%, #D6F5E3 55%)",
+                "--sidebar-main-bg-gradient": "linear-gradient(38deg, #ffffff 0%, #fafafa 100%)",
+                "--login-card-bg-gradient": "linear-gradient(38deg, #ffffff 45%, #e4e5f1 55%)",
 
-                "--login-link-text-color": "#0a6e35",
-                "--login-button-bg-gradient": "linear-gradient(38deg, #0a6e35 45%, #07a125 55%)",
-                "--login-button-bg-color": "#0a6e35",
-                "--login-card-bg-color": "#FFFFFF",
+                "--login-link-text-color": "#484b6a",
+                "--login-button-bg-gradient": "linear-gradient(38deg, #9394a5 45%, #484b6a 55%)",
+                "--login-button-bg-color": "#484b6a",
+                "--login-card-bg-color": "#ffffff",
 
-                "--header-main-bg-gradient": "linear-gradient(38deg, #FFFFFF 0%, #FFFFFF 100%)",
-                "--header-icon-hover": "#0a6e35",
+                "--header-main-bg-gradient": "linear-gradient(38deg, #ffffff 0%, #fafafa 100%)",
+                "--header-icon-hover": "#9394a5",
 
                 "--scroll-width": "7px",
                 "--card-title-font-size": "18px",
-                "--card-body-border-radius": "24px",
+                "--card-body-border-radius": "22px",
                 "--lockedMenus": "{}",
                 "--body-font": "Roboto",
-                "--loader-background-color": "#FFFFFF"
+                "--loader-background-color": "#fafafa"
             },
+
             "Dark Theme": {
                 "--primary-color": "#273332",        // Primary action / highlights
                 "--second-color": "#3a4241",         // Secondary highlights
