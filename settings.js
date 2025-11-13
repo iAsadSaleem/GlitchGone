@@ -755,11 +755,11 @@
                 "--bg-gradient": "linear-gradient(38deg, rgba(0,0,0,0.9) 45%, rgba(255,255,255,1) 45%, rgba(255,255,255,1) 54%, rgba(0,168,107,1) 55%)",
                 "--sidebar-main-bg-gradient": "linear-gradient(to bottom, rgba(0,0,0,0.95), rgba(0,168,107,1) 80%)",
                 "--login-card-bg-gradient": "linear-gradient(38deg, rgba(0,0,0,0.9) 45%, rgba(255,255,255,1) 45%, rgba(255,255,255,1) 54%, rgba(0,168,107,1) 55%)",
-
-                "--login-link-text-color": "#00A86B",
+                "--login-headline-text-color":"#00c853",
+                "--login-link-text-color": "#9e9e9e",
                 "--login-button-bg-gradient": "linear-gradient(38deg, rgba(0,0,0,1) 45%, rgba(255,255,255,1) 45%, rgba(255,255,255,1) 54%, rgba(0,168,107,1) 55%)",
                 "--login-button-bg-color": "#0B3D0B",
-                "--login-card-bg-color": "#FFFFFF",
+                "--login-card-bg-color": "#000000",
 
                 "--header-main-bg-gradient": "linear-gradient(225deg,rgba(0, 168, 107, 1) 56%, rgba(255, 255, 255, 1) 57%, rgba(0, 0, 0, 1) 58%)",
                 "--header-icon-hover": "#00A86B",
