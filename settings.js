@@ -686,9 +686,9 @@
                 "--sidebar-main-bg-gradient": "linear-gradient(to bottom, #2A3E9B, #62C6F0)",
                 "--login-card-bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
 
-                "--login-link-text-color": "#2A3E9B",
+                "--login-link-text-color": "#007bff",
                 "--login-button-bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
-                "--login-button-bg-color": "#2A3E9B",
+                "--login-button-bg-color": "#0084ff",
                 "--login-card-bg-color": "#FFFFFF",
 
                 "--header-main-bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
@@ -698,7 +698,9 @@
                 "--card-title-font-size": "18px",
                 "--card-body-border-radius": "24px",
                 "--lockedMenus": "{}",
-                "--body-font": "Roboto"
+                "--body-font": "Roboto",
+                "--login-background-active": "linear-gradient(135deg, #0052cc 0%, #00aaff 100%)",
+                "--login-button-hover-bg-color":"#0071e3"
             },
             "GlitchGone Theme": {
                 "--primary-color": "#0B3D0B",
