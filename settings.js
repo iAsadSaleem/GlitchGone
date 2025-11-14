@@ -1054,11 +1054,11 @@
                 "--Acent-color": "#FFFFFF",
 
                 /* 🔥 UPDATED SIDEBAR COLORS — Softer, Light but Not Washed Out */
-                "--sidebar-bg-color": "#F3F7F4",                /* soft tinted off-white */
-                "--sidebar-menu-bg": "#E8F2EB",                 /* gentle green-tinted grey */
+                "--sidebar-bg-color": "#94ebaa",                /* soft tinted off-white */
+                "--sidebar-menu-bg": "#c1e7cc",                 /* gentle green-tinted grey */
                 "--sidebar-menu-color": "#1E1E1E",
-                "--sidebar-menu-hover-bg": "#DCEFE2",           /* slightly deeper soft hover */
-                "--sidebar-menu-active-bg": "#D2E7D8",
+                "--sidebar-menu-hover-bg": "#9cd3ad",           /* slightly deeper soft hover */
+                "--sidebar-menu-active-bg": "#64cd82",
                 "--sidebar-menu-icon-color": "#5EBF7A",         /* balanced green */
                 "--sidebar-menu-icon-hover-color": "#4CAF50",
                 "--sidebar-menu-icon-active-color": "#4CAF50",
