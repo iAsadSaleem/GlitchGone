@@ -981,9 +981,9 @@
                 "--sidebar-menu-icon-hover-color": "#62C6F0",
                 "--sidebar-menu-icon-active-color": "#2A3E9B",
 
-                "--sidebar-menu-border-radius": "10px",
-                "--sidebar-top-right-radius": "14px",
-                "--sidebar-bottom-right-radius": "14px",
+                "--sidebar-menu-border-radius": "4px",
+                "--sidebar-top-right-radius": "0px",
+                "--sidebar-bottom-right-radius": "0px",
 
                 "--scroll-color": "#62C6F0",
 

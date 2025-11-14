@@ -304,7 +304,7 @@
 
 /* CSS */
 .tb-apply-btn {
-    background: var(--sidebar-menu-active-bg) !important;
+    background: var(--primary-color) !important;
     /*background-image: var(--sidebar-main-bg-gradient) !important;*/
     border-radius: 10px;
     color: white;
@@ -326,7 +326,11 @@
     height: 47px;
     top: 8px;
 }
-
+    .tb-apply-btn:hover {
+        background: var(--second-color) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
 /* Reset Changes Button */
 /*.tb-reset-btn {
     padding: 10px 16px;
@@ -354,7 +358,7 @@
     margin: 12px auto;
     top: -25px;
     border-radius: 8px !important;
-    background: var(--sidebar-menu-active-bg) !important;
+    background: var(--primary-color) !important;
     /*background-image: var(--sidebar-main-bg-gradient) !important;*/
     position: relative;
     min-width: 296px !important;
