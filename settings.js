@@ -509,7 +509,7 @@
             "Default Theme": {
                 "--primary-color": "#0a6e35",
                 "--second-color": "#07a125",
-                //"--dark-color": "#000000",
+                "--dark-color": "#000000",
                 "--grey-color": "#E2E2E2",
                 "--alert-color": "#E63946",
                 "--app-bg-color": "#F9F9F9",
