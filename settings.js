@@ -1132,9 +1132,9 @@
 
                 /* -------------------- SIDEBAR -------------------- */
                 "--sidebar-bg-color": "#E4EEF2",                  /* Softened blue — NOT white */
-                "--sidebar-menu-bg": "#F2F7F9",                   /* Slight off-white, still blue-tinted */
+                "--sidebar-menu-bg": "#d6eef7",                   /* Slight off-white, still blue-tinted */
                 "--sidebar-menu-color": "#1B3B4B",
-                "--sidebar-menu-hover-bg": "#D5E6EC",             /* Light hover, noticeable but soft */
+                "--sidebar-menu-hover-bg": "#94becd",             /* Light hover, noticeable but soft */
                 "--sidebar-menu-active-bg": "#C2D7E0",            /* Soft active with clear contrast */
                 "--sidebar-menu-icon-color": "#276678",
                 "--sidebar-menu-icon-hover-color": "#1687A7",
@@ -1178,7 +1178,7 @@
 
                 /* -------------------- BACKGROUNDS -------------------- */
                 "--bg-gradient": "linear-gradient(90deg, #FFFFFF 0%, #F4FAFC 70%, #E8F2F7 100%)",
-                "--sidebar-main-bg-gradient": "linear-gradient(to bottom, #FFFFFF, #F2F7F9)",
+                "--sidebar-main-bg-gradient": "linear-gradient(to bottom, #99c7e7, #c2c4c5)",
 
                 /* -------------------- LOGIN -------------------- */
                 "--login-card-bg-gradient": "linear-gradient(to bottom, #FFFFFF, #F2F7F9, #E8F2F7)",
