@@ -937,7 +937,7 @@
                 "--bg-gradient": "linear-gradient(38deg, #F9FCFA 45%, #E7F4EC 55%)",
 
                 /* Login Page */
-                "--sidebar-main-bg-gradient": "#F1F9F4",
+                "--sidebar-main-bg-gradient": "linear-gradient(38deg, #bde5c7 45%, #7bbb94 55%)",
                 "--login-card-bg-gradient": "linear-gradient(38deg, #FFFFFF 45%, #DFF1E6 55%)",
                 "--login-link-text-color": "#0a6e35",
                 "--login-button-bg-gradient": "linear-gradient(38deg, #0a6e35 45%, #07a125 55%)",
