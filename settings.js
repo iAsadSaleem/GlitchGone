@@ -4867,7 +4867,7 @@
         // Update --theme-mode and class
         const currentMode = isMode ? modeOrName : (darkThemes[themeName] ? "dark" : "light");
         document.body.style.setProperty("--theme-mode", currentMode);
-        document.body.classList.toggle("dark-mode", currentMode === "dark");
+        //document.body.classList.toggle("dark-mode", currentMode === "dark");
 
         // Save theme selection to localStorage
         savedThemeObj.selectedTheme = themeName;
