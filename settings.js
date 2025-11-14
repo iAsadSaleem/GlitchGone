@@ -1127,43 +1127,43 @@
                 "--grey-color": "#D3E0EA",
                 "--alert-color": "#E63946",
 
-                "--app-bg-color": "#FFFFFF",
-                "--Acent-color": "#000000",
+                "--app-bg-color": "#FDFDFE",
+                "--Acent-color": "#1B3B4B",
 
-                /* Sidebar */
-                "--sidebar-bg-color": "#F0F5F7",
-                "--sidebar-menu-bg": "#FFFFFF",
-                "--sidebar-menu-color": "#1B3B4B",
-                "--sidebar-menu-hover-bg": "#E7F1F5",
-                "--sidebar-menu-active-bg": "#D3E0EA",
+                /* -------------------- SIDEBAR -------------------- */
+                "--sidebar-bg-color": "#F2F7F9",                  /* soft ocean mist */
+                "--sidebar-menu-bg": "#FFFFFF",                   /* clean menu */
+                "--sidebar-menu-color": "#234A5A",                /* calm navy tint */
+                "--sidebar-menu-hover-bg": "#E5EFF3",             /* soft aqua hover */
+                "--sidebar-menu-active-bg": "#D3E0EA",            /* ocean-grey active */
                 "--sidebar-menu-icon-color": "#276678",
                 "--sidebar-menu-icon-hover-color": "#1687A7",
                 "--sidebar-menu-icon-active-color": "#1687A7",
                 "--sidebar-menu-border-radius": "16px",
 
-                "--sidebar-top-right-radius": "12px",
-                "--sidebar-bottom-right-radius": "12px",
+                "--sidebar-top-right-radius": "14px",
+                "--sidebar-bottom-right-radius": "14px",
 
                 "--scroll-color": "#1687A7",
 
-                /* Header */
+                /* -------------------- HEADER -------------------- */
                 "--header-bg-color": "#FFFFFF",
                 "--header-icon-color": "#276678",
                 "--header-icon-hover-color": "#1687A7",
-                "--header-icon-bg": "#F6F9FA",
-                "--header-icon-hover-bg": "#E0ECF2",
+                "--header-icon-bg": "#F4F8FA",
+                "--header-icon-hover-bg": "#E4EEF3",
 
-                /* Card */
+                /* -------------------- CARDS -------------------- */
                 "--card-body-bg-color": "#FFFFFF",
                 "--card-body-font-color": "#1B3B4B",
                 "--card-title-font-color": "#276678",
-                "--card-dec-font-color": "#4B5563",
-                "--card-footer-bg-color": "#F0F5F7",
+                "--card-dec-font-color": "#44515B",
+                "--card-footer-bg-color": "#EEF4F7",
                 "--card-footer-font-color": "#1B3B4B",
 
                 "--card-body-border-color": "#D3E0EA",
 
-                /* Top Navigation */
+                /* -------------------- TOP NAV -------------------- */
                 "--top-nav-menu-bg": "#FFFFFF",
                 "--top-nav-menu-hover-bg": "#E7F1F5",
                 "--top-nav-menu-active-bg": "#D3E0EA",
@@ -1171,28 +1171,28 @@
                 "--top-nav-menu-hover-color": "#1687A7",
                 "--top-nav-menu-active-color": "#1687A7",
 
-                /* Card Header Gradient (Soft Ocean Fade) */
-                "--card-header-gradient-start": "#E7F1F5",
-                "--card-header-bg-gradient": "linear-gradient(90deg, #FFFFFF 0%, #E7F1F5 60%, #D3E0EA 100%)",
-                "--card-header-gradient-end": "#FFFFFF",
+                /* -------------------- CARD HEADER GRADIENT -------------------- */
+                "--card-header-gradient-start": "#EEF6F9",
+                "--card-header-bg-gradient": "linear-gradient(90deg, #FFFFFF 0%, #E8F2F7 55%, #D3E0EA 100%)",
+                "--card-header-gradient-end": "#D3E0EA",
 
-                /* Backgrounds */
-                "--bg-gradient": "linear-gradient(90deg, #FFFFFF 0%, #F6F9FA 70%, #E7F1F5 100%)",
-                "--sidebar-main-bg-gradient": "linear-gradient(to bottom, #FFFFFF, #F0F5F7)",
+                /* -------------------- BACKGROUNDS -------------------- */
+                "--bg-gradient": "linear-gradient(90deg, #FFFFFF 0%, #F4FAFC 70%, #E8F2F7 100%)",
+                "--sidebar-main-bg-gradient": "linear-gradient(to bottom, #FFFFFF, #F2F7F9)",
 
-                /* Login */
-                "--login-card-bg-gradient": "linear-gradient(to bottom, #FFFFFF, #F0F5F7, #E7F1F5)",
+                /* -------------------- LOGIN -------------------- */
+                "--login-card-bg-gradient": "linear-gradient(to bottom, #FFFFFF, #F2F7F9, #E8F2F7)",
                 "--login-link-text-color": "#1687A7",
                 "--login-button-bg-gradient": "linear-gradient(to right, #276678 0%, #1687A7 60%, #4DA6C5 100%)",
                 "--login-button-bg-color": "#276678",
                 "--login-button-hover-bg-color": "#1687A7",
                 "--login-card-bg-color": "#FFFFFF",
 
-                /* Header Main Gradient */
-                "--header-main-bg-gradient": "linear-gradient(90deg, #FFFFFF 0%, #F9FBFC 100%)",
+                /* -------------------- HEADER MAIN GRADIENT -------------------- */
+                "--header-main-bg-gradient": "linear-gradient(90deg, #FFFFFF 0%, #F7FBFD 100%)",
                 "--header-icon-hover": "#1687A7",
 
-                /* Misc */
+                /* -------------------- MISC -------------------- */
                 "--scroll-width": "7px",
                 "--card-title-font-size": "18px",
                 "--card-body-border-radius": "24px",
