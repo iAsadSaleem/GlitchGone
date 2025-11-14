@@ -5043,7 +5043,7 @@
 
                 // Set toggle state and body class
                 toggleInput.checked = isDark;
-                document.body.classList.toggle("dark-mode", isDark);
+                //document.body.classList.toggle("dark-mode", isDark);
             }
 
             // ===============================
@@ -5057,7 +5057,7 @@
                 applyTheme(newMode);
 
                 // Visual mode toggle
-                document.body.classList.toggle("dark-mode", isDark);
+                //document.body.classList.toggle("dark-mode", isDark);
             });
 
 
