@@ -504,59 +504,8 @@
         });
     }
 
-    // NEW: Theme Selector Section
-    function buildThemeSelectorSection(container) {
-        if (!container) return;
-        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        const selectedtheme = localStorage.getItem("themebuilder_selectedTheme");
-        // inject minimal styles once
-        if (!document.getElementById("tb-theme-selector-styles")) {
-            const s = document.createElement("style");
-            s.id = "tb-theme-selector-styles";
-            s.textContent = `
-        .themeSelectWrapper{position:relative;display:inline-flex;align-items:center}
-        .tb-theme-cycle-btn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;border:none;cursor:'var(--custom-pointer)';font-weight:600;min-width:160px;justify-content:space-between}
-        .themeBtnInner{display:flex;align-items:center;gap:8px;width:100%}
-        .themeBtnText{flex:1;text-align:left}
-        .themeArrowIcon{width:28px;height:28px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;border:1px solid rgba(0,0,0,0.08);font-size:12px;cursor:pointer}
-        `;
-            document.head.appendChild(s);
-        }
-
-        // Build DOM
-        const wrapper = document.createElement("div");
-        wrapper.className = "themeSelectWrapper";
-
-        const themeBtn = document.createElement("button");
-        themeBtn.className = "tb-theme-cycle-btn";
-        themeBtn.type = "button";
-
-        const inner = document.createElement("div");
-        inner.className = "themeBtnInner";
-
-        const textSpan = document.createElement("span");
-        textSpan.className = "themeBtnText";
-        textSpan.textContent = selectedtheme || "Select Theme";
-
-        // circle icon (Font Awesome expected to be loaded separately)
-
-        const arrowIcon = document.createElement("span");
-        arrowIcon.className = "themeArrowIcon";
-        arrowIcon.innerHTML = '<i class="fa-solid fa-angle-down" aria-hidden="true"></i>';
-
-        // dropdown container
-        const dropdownBox = document.createElement("div");
-        dropdownBox.className = "themeDropdownBox";
-
-        inner.appendChild(textSpan);
-        inner.appendChild(arrowIcon);
-        themeBtn.appendChild(inner);
-
-        wrapper.appendChild(themeBtn);
-        wrapper.appendChild(dropdownBox);
-        container.appendChild(wrapper);
-        // Themes object (kept from your original)
-        const themes = {
+    function darkthemes() {
+        return {
             "Default Theme": {
                 "--primary-color": "#0a6e35",
                 "--second-color": "#07a125",
@@ -616,7 +565,7 @@
                 "--login-button-bg-gradient": "linear-gradient(38deg, rgba(0,0,0,1) 45%, rgba(57,200,117,1) 55%)",
                 "--login-button-bg-color": "#0a6e35",
                 "--login-card-bg-color": "#000000cc",
-                "--login-button-hover-bg-color":"#00e676",
+                "--login-button-hover-bg-color": "#00e676",
 
                 "--header-main-bg-gradient": "linear-gradient(38deg, #FCFCFD 0%, #FCFCFD 100%)",
                 "--header-icon-hover": "#0a6e35",
@@ -626,7 +575,7 @@
                 "--card-body-border-radius": "24px",
                 "--lockedMenus": "{}",
                 "--body-font": "Roboto",
-                "--loader-background-color":""
+                "--loader-background-color": ""
             },
             "BlueWave Theme": {
                 "--primary-color": "#2A3E9B",
@@ -645,7 +594,7 @@
                 "--sidebar-menu-icon-color": "#B8D9F8",
                 "--sidebar-menu-icon-hover-color": "#FFFFFF",
                 "--sidebar-menu-icon-active-color": "#2A3E9B",
-                "--sidebar-menu-border-radius":"0px",
+                "--sidebar-menu-border-radius": "0px",
 
                 "--sidebar-top-right-radius": "16px",
                 "--sidebar-bottom-right-radius": "16px",
@@ -700,7 +649,7 @@
                 "--lockedMenus": "{}",
                 "--body-font": "Roboto",
                 "--login-background-active": "linear-gradient(135deg, #0052cc 0%, #00aaff 100%)",
-                "--login-button-hover-bg-color":"#0071e3"
+                "--login-button-hover-bg-color": "#0071e3"
             },
             "GlitchGone Theme": {
                 "--primary-color": "#0B3D0B",
@@ -755,7 +704,7 @@
                 "--bg-gradient": "linear-gradient(38deg, rgba(0,0,0,0.9) 45%, rgba(255,255,255,1) 45%, rgba(255,255,255,1) 54%, rgba(0,168,107,1) 55%)",
                 "--sidebar-main-bg-gradient": "linear-gradient(to bottom, rgba(0,0,0,0.95), rgba(0,168,107,1) 80%)",
                 "--login-card-bg-gradient": "linear-gradient(38deg, rgba(0,0,0,0.9) 45%, rgba(255,255,255,1) 45%, rgba(255,255,255,1) 54%, rgba(0,168,107,1) 55%)",
-                "--login-headline-text-color":"#00c853",
+                "--login-headline-text-color": "#00c853",
                 "--login-link-text-color": "#9e9e9e",
                 "--login-button-bg-gradient": "linear-gradient(38deg, rgba(0,0,0,1) 45%, rgba(255,255,255,1) 45%, rgba(255,255,255,1) 54%, rgba(0,168,107,1) 55%)",
                 "--login-button-bg-color": "#0B3D0B",
@@ -923,9 +872,64 @@
                 "--login-logo-width": "140px",
                 "--login-logo-height": "70px",
                 "--login-logo-filter": "drop-shadow(0 2px 6px rgba(212,175,55,0.3))",
-                "--login-background-active":"linear-gradient(180deg, #0E0E0E 0%, #1A1A1A 50%, #2B2B2B 100%)"
+                "--login-background-active": "linear-gradient(180deg, #0E0E0E 0%, #1A1A1A 50%, #2B2B2B 100%)"
             }
         };
+    }
+
+    // NEW: Theme Selector Section
+    function buildThemeSelectorSection(container) {
+        if (!container) return;
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        const selectedtheme = localStorage.getItem("themebuilder_selectedTheme");
+        // inject minimal styles once
+        if (!document.getElementById("tb-theme-selector-styles")) {
+            const s = document.createElement("style");
+            s.id = "tb-theme-selector-styles";
+            s.textContent = `
+        .themeSelectWrapper{position:relative;display:inline-flex;align-items:center}
+        .tb-theme-cycle-btn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;border:none;cursor:'var(--custom-pointer)';font-weight:600;min-width:160px;justify-content:space-between}
+        .themeBtnInner{display:flex;align-items:center;gap:8px;width:100%}
+        .themeBtnText{flex:1;text-align:left}
+        .themeArrowIcon{width:28px;height:28px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;border:1px solid rgba(0,0,0,0.08);font-size:12px;cursor:pointer}
+        `;
+            document.head.appendChild(s);
+        }
+
+        // Build DOM
+        const wrapper = document.createElement("div");
+        wrapper.className = "themeSelectWrapper";
+
+        const themeBtn = document.createElement("button");
+        themeBtn.className = "tb-theme-cycle-btn";
+        themeBtn.type = "button";
+
+        const inner = document.createElement("div");
+        inner.className = "themeBtnInner";
+
+        const textSpan = document.createElement("span");
+        textSpan.className = "themeBtnText";
+        textSpan.textContent = selectedtheme || "Select Theme";
+
+        // circle icon (Font Awesome expected to be loaded separately)
+
+        const arrowIcon = document.createElement("span");
+        arrowIcon.className = "themeArrowIcon";
+        arrowIcon.innerHTML = '<i class="fa-solid fa-angle-down" aria-hidden="true"></i>';
+
+        // dropdown container
+        const dropdownBox = document.createElement("div");
+        dropdownBox.className = "themeDropdownBox";
+
+        inner.appendChild(textSpan);
+        inner.appendChild(arrowIcon);
+        themeBtn.appendChild(inner);
+
+        wrapper.appendChild(themeBtn);
+        wrapper.appendChild(dropdownBox);
+        container.appendChild(wrapper);
+        // Themes object (kept from your original)
+        const themes = darkthemes();
         const themeKeys = Object.keys(themes);
         let currentIndex = -1;
 
@@ -4844,8 +4848,8 @@
     //    window.dispatchEvent(new Event("themeChanged"));
     //}
     function applyTheme(modeOrName, themeVars) {
-
-        const themes = getPredefinedThemes();
+        const darkThemes = darkthemes();           // Your dark themes
+        const lightThemes = getPredefinedThemes(); // Your light themes
 
         // Theme pairs: dark -> light
         const themePairs = {
@@ -4863,7 +4867,7 @@
 
         // Get previously selected theme
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        const previouslySelectedTheme = savedThemeObj.selectedTheme;
+        const previouslySelectedTheme = savedThemeObj.selectedTheme || "Default Theme";
 
         let themeName = modeOrName;
         let isMode = modeOrName === "dark" || modeOrName === "light";
@@ -4874,32 +4878,44 @@
                 themeName = themePairs[previouslySelectedTheme] || "Default Light Theme";
             } else {
                 // Convert light → dark
-                themeName = reversePairs[previouslySelectedTheme] || "Default Theme";
+                // Check if previously selected was light, map to dark
+                themeName = reversePairs[previouslySelectedTheme] || previouslySelectedTheme;
             }
         }
 
-        // Get all theme variables
-        const vars = themeVars || themes[themeName];
-        if (!vars) return;
+        // Determine which theme vars to use
+        let vars = themeVars;
+        if (!vars) {
+            if (darkThemes[themeName]) {
+                vars = darkThemes[themeName];
+            } else if (lightThemes[themeName]) {
+                vars = lightThemes[themeName];
+            } else {
+                console.warn("Theme not found:", themeName);
+                return;
+            }
+        }
 
-        // Apply CSS vars
+        // Apply CSS variables
         Object.entries(vars).forEach(([key, value]) => {
             if (value) document.body.style.setProperty(key, value);
         });
 
-        // Set theme-mode var
-        document.body.style.setProperty("--theme-mode", isMode ? modeOrName : undefined);
-        document.body.classList.toggle("dark-mode", modeOrName === "dark");
+        // Update --theme-mode and class
+        const currentMode = isMode ? modeOrName : (darkThemes[themeName] ? "dark" : "light");
+        document.body.style.setProperty("--theme-mode", currentMode);
+        document.body.classList.toggle("dark-mode", currentMode === "dark");
 
-        // Save back to localStorage
+        // Save theme selection to localStorage
         savedThemeObj.selectedTheme = themeName;
-        savedThemeObj.themeData = { ...vars, "--theme-mode": isMode ? modeOrName : undefined };
-
+        savedThemeObj.themeData = { ...vars, "--theme-mode": currentMode };
         localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
         localStorage.setItem("themebuilder_selectedTheme", themeName);
 
+        // Notify other parts of app
         window.dispatchEvent(new Event("themeChanged"));
     }
+
 
     // Apply saved settingss
     function applySavedSettings() {
