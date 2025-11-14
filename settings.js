@@ -1044,7 +1044,7 @@
                 "--body-font": "Roboto",
                 "--login-background-active": "linear-gradient(135deg, #4A5FBE 0%, #7FCCF1 100%)"
             },
-            "GlitchGone Theme Light": {
+            "GlitchGone Light Theme": {
                 "--primary-color": "#4CAF50",
                 "--second-color": "#80D8A1",
                 "--dark-color": "#1B1B1B",
