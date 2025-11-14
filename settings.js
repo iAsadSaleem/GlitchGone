@@ -512,7 +512,7 @@
                 "--dark-color": "#000000",
                 "--grey-color": "#E2E2E2",
                 "--alert-color": "#E63946",
-                "--app-bg-color": "#F9F9F9",
+                "--app-bg-color": "#Ffffff",
                 "--Acent-color": "#FFFFFF",
 
                 "--sidebar-bg-color": "#000000",          /* Flat black sidebar background */
