@@ -1053,12 +1053,13 @@
                 "--app-bg-color": "#FAFAFA",
                 "--Acent-color": "#FFFFFF",
 
-                "--sidebar-bg-color": "#FFFFFF",
-                "--sidebar-menu-bg": "#F2F8F3",
-                "--sidebar-menu-color": "#1A1A1A",
-                "--sidebar-menu-hover-bg": "#E1F4E8",
-                "--sidebar-menu-active-bg": "#D4ECD9",
-                "--sidebar-menu-icon-color": "#6BBF8A",
+                /* 🔥 UPDATED SIDEBAR COLORS — Softer, Light but Not Washed Out */
+                "--sidebar-bg-color": "#F3F7F4",                /* soft tinted off-white */
+                "--sidebar-menu-bg": "#E8F2EB",                 /* gentle green-tinted grey */
+                "--sidebar-menu-color": "#1E1E1E",
+                "--sidebar-menu-hover-bg": "#DCEFE2",           /* slightly deeper soft hover */
+                "--sidebar-menu-active-bg": "#D2E7D8",
+                "--sidebar-menu-icon-color": "#5EBF7A",         /* balanced green */
                 "--sidebar-menu-icon-hover-color": "#4CAF50",
                 "--sidebar-menu-icon-active-color": "#4CAF50",
                 "--sidebar-menu-border-radius": "16px",
@@ -1096,7 +1097,7 @@
 
                 "--bg-gradient": "linear-gradient(38deg, rgba(27,27,27,0.70) 45%, rgba(255,255,255,1) 45%, rgba(255,255,255,1) 54%, rgba(76,175,80,1) 55%)",
 
-                "--sidebar-main-bg-gradient": "linear-gradient(to bottom, rgba(255,255,255,0.95), rgba(76,175,80,0.45) 80%)",
+                "--sidebar-main-bg-gradient": "linear-gradient(to bottom, rgba(243,247,244,0.95), rgba(76,175,80,0.35) 80%)",
 
                 "--login-card-bg-gradient": "linear-gradient(38deg, rgba(27,27,27,0.70) 45%, rgba(255,255,255,1) 45%, rgba(255,255,255,1) 54%, rgba(76,175,80,1) 55%)",
 
@@ -1109,7 +1110,7 @@
 
                 "--login-card-bg-color": "#FFFFFF",
 
-                "--header-main-bg-gradient": "linear-gradient(225deg, rgba(76,175,80,1) 56%, rgba(255,255,255,1) 57%, rgba(27,27,27,1) 58%)",
+                "--header-main-bg-gradient": "linear-gradient(225deg, rgb(163,231,166) 56%, rgba(255,255,255,1) 57%, rgba(27,27,27,1) 58%)",
 
                 "--header-icon-hover": "#4CAF50",
 
