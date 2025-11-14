@@ -1044,82 +1044,74 @@
                 "--body-font": "Roboto",
                 "--login-background-active": "linear-gradient(135deg, #4A5FBE 0%, #7FCCF1 100%)"
             },
-            "GlitchGone Light Theme": {
-                "--primary-color": "#0B3D0B",
-                "--second-color": "#00A86B",
-                "--dark-color": "#1A1A1A",
-                "--grey-color": "#D9E2D9",
+            "GlitchGone Theme Light": {
+                "--primary-color": "#4CAF50",
+                "--second-color": "#80D8A1",
+                "--dark-color": "#1B1B1B",
+                "--grey-color": "#E7EFE7",
                 "--alert-color": "#E63946",
+                "--app-bg-color": "#FAFAFA",
+                "--Acent-color": "#FFFFFF",
 
-                "--app-bg-color": "#FFFFFF",
-                "--Acent-color": "#000000",
-
-                /* Sidebar */
-                "--sidebar-bg-color": "#F2F8F4",
-                "--sidebar-menu-bg": "#FFFFFF",
+                "--sidebar-bg-color": "#FFFFFF",
+                "--sidebar-menu-bg": "#F2F8F3",
                 "--sidebar-menu-color": "#1A1A1A",
-                "--sidebar-menu-hover-bg": "#E5F7ED",
-                "--sidebar-menu-active-bg": "#D8F3E3",
-                "--sidebar-menu-icon-color": "#0B3D0B",
-                "--sidebar-menu-icon-hover-color": "#00A86B",
-                "--sidebar-menu-icon-active-color": "#00A86B",
-
+                "--sidebar-menu-hover-bg": "#E1F4E8",
+                "--sidebar-menu-active-bg": "#D4ECD9",
+                "--sidebar-menu-icon-color": "#6BBF8A",
+                "--sidebar-menu-icon-hover-color": "#4CAF50",
+                "--sidebar-menu-icon-active-color": "#4CAF50",
                 "--sidebar-menu-border-radius": "16px",
-                "--sidebar-top-right-radius": "12px",
-                "--sidebar-bottom-right-radius": "12px",
 
-                "--scroll-color": "#00A86B",
+                "--sidebar-top-right-radius": "0px",
+                "--sidebar-bottom-right-radius": "0px",
 
-                /* Header */
+                "--scroll-color": "#4CAF50",
+
                 "--header-bg-color": "#FFFFFF",
-                "--header-icon-color": "#0B3D0B",
-                "--header-icon-hover-color": "#00A86B",
-                "--header-icon-bg": "#F8FDF9",
-                "--header-icon-hover-bg": "#E5F7ED",
+                "--header-icon-color": "#4CAF50",
+                "--header-icon-hover-color": "#2E7D32",
+                "--header-icon-bg": "#F7F7F7",
+                "--header-icon-hover-bg": "#E8F5E9",
 
-                /* Cards */
                 "--card-body-bg-color": "#FFFFFF",
-                "--card-body-font-color": "#1A1A1A",
-                "--card-title-font-color": "#0B3D0B",
-                "--card-dec-font-color": "#333333",
-                "--card-footer-bg-color": "#F0FAF5",
-                "--card-footer-font-color": "#000000",
+                "--card-body-font-color": "#1E1E1E",
+                "--card-title-font-color": "#1B1B1B",
+                "--card-dec-font-color": "#4A4A4A",
+                "--card-footer-bg-color": "#EAF6EF",
+                "--card-footer-font-color": "#1A1A1A",
 
-                "--card-body-border-color": "#D9E2D9",
-
-                /* Top Nav */
                 "--top-nav-menu-bg": "#FFFFFF",
-                "--top-nav-menu-hover-bg": "#F0FAF5",
-                "--top-nav-menu-active-bg": "#E5F7ED",
-                "--top-nav-menu-color": "#0B3D0B",
-                "--top-nav-menu-hover-color": "#00A86B",
-                "--top-nav-menu-active-color": "#00A86B",
+                "--top-nav-menu-hover-bg": "#E8F5E9",
+                "--top-nav-menu-active-bg": "#F3F7F5",
+                "--top-nav-menu-color": "#1A1A1A",
+                "--top-nav-menu-hover-color": "#4CAF50",
+                "--top-nav-menu-active-color": "#4CAF50",
 
-                /* Card Header (Smooth Light Gradient) */
-                "--card-header-gradient-start": "#E5F7ED",
-                "--card-header-bg-gradient": "linear-gradient(38deg, #F8FDF9 0%, #E5F7ED 100%)",
-                "--card-header-gradient-end": "#FFFFFF",
+                "--card-header-gradient-start": "#1B1B1B",
+                "--card-header-bg-gradient": "linear-gradient(38deg, rgba(27,27,27,0.70) 45%, rgba(255,255,255,1) 45%, rgba(255,255,255,1) 54%, rgba(76,175,80,1) 55%)",
+                "--card-header-gradient-end": "#4CAF50",
 
-                /* Background */
-                "--bg-gradient": "linear-gradient(38deg, #FFFFFF 0%, #F8FDF9 100%)",
+                "--card-body-border-color": "#DFE7DF",
 
-                /* Sidebar BG Gradient */
-                "--sidebar-main-bg-gradient": "linear-gradient(to bottom, #FFFFFF, #E5F7ED)",
+                "--bg-gradient": "linear-gradient(38deg, rgba(27,27,27,0.70) 45%, rgba(255,255,255,1) 45%, rgba(255,255,255,1) 54%, rgba(76,175,80,1) 55%)",
 
-                /* Login Page */
-                "--login-card-bg-gradient": "linear-gradient(38deg, #FFFFFF 0%, #E5F7ED 100%)",
-                "--login-headline-text-color": "#0B3D0B",
-                "--login-link-text-color": "#00A86B",
+                "--sidebar-main-bg-gradient": "linear-gradient(to bottom, rgba(255,255,255,0.95), rgba(76,175,80,0.45) 80%)",
 
-                "--login-button-bg-gradient": "linear-gradient(38deg, #0B3D0B 0%, #00A86B 100%)",
-                "--login-button-bg-color": "#0B3D0B",
-                "--login-button-hover-bg-color": "#009f61",
+                "--login-card-bg-gradient": "linear-gradient(38deg, rgba(27,27,27,0.70) 45%, rgba(255,255,255,1) 45%, rgba(255,255,255,1) 54%, rgba(76,175,80,1) 55%)",
+
+                "--login-headline-text-color": "#4CAF50",
+                "--login-link-text-color": "#6D6D6D",
+
+                "--login-button-bg-gradient": "linear-gradient(38deg, rgba(27,27,27,0.90) 45%, rgba(255,255,255,1) 45%, rgba(255,255,255,1) 54%, rgba(76,175,80,1) 55%)",
+
+                "--login-button-bg-color": "#4CAF50",
 
                 "--login-card-bg-color": "#FFFFFF",
 
-                /* Header Main Gradient */
-                "--header-main-bg-gradient": "linear-gradient(225deg, #FFFFFF 0%, #F8FDF9 100%)",
-                "--header-icon-hover": "#00A86B",
+                "--header-main-bg-gradient": "linear-gradient(225deg, rgba(76,175,80,1) 56%, rgba(255,255,255,1) 57%, rgba(27,27,27,1) 58%)",
+
+                "--header-icon-hover": "#4CAF50",
 
                 "--scroll-width": "7px",
                 "--card-title-font-size": "18px",
