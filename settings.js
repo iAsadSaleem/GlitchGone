@@ -520,7 +520,7 @@
                 "--sidebar-menu-color": "#FFFFFF",
                 "--sidebar-menu-hover-bg": "#0a6e35",
                 "--sidebar-menu-active-bg": "#07a125",
-                "--sidebar-menu-icon-color": "#A6DDBA",
+                "--sidebar-menu-icon-color": "#FFFFFF",
                 "--sidebar-menu-icon-hover-color": "#FFFFFF",
                 "--sidebar-menu-icon-active-color": "#FFFFFF",
                 "--sidebar-menu-border-radius": "16px",
@@ -5494,11 +5494,10 @@
                 100% { box-shadow: 0 0 10px violet; border-color: violet; }
             }
             .rainbow-text {
-                font-family: "Birthstone", cursive !important;
                 position: relative;
                 left: 50px;
-                font-size: 40px;
-                font-weight: 700;
+                font-size: 25px;
+                font-weight: 400;
                 -webkit-background-clip: text;
                 color: black;
                 animation: rainbowMove 2s linear;
