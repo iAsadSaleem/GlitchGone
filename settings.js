@@ -1131,11 +1131,11 @@
                 "--Acent-color": "#1B3B4B",
 
                 /* -------------------- SIDEBAR -------------------- */
-                "--sidebar-bg-color": "#F2F7F9",                  /* soft ocean mist */
-                "--sidebar-menu-bg": "#FFFFFF",                   /* clean menu */
-                "--sidebar-menu-color": "#234A5A",                /* calm navy tint */
-                "--sidebar-menu-hover-bg": "#E5EFF3",             /* soft aqua hover */
-                "--sidebar-menu-active-bg": "#D3E0EA",            /* ocean-grey active */
+                "--sidebar-bg-color": "#E4EEF2",                  /* Softened blue — NOT white */
+                "--sidebar-menu-bg": "#F2F7F9",                   /* Slight off-white, still blue-tinted */
+                "--sidebar-menu-color": "#1B3B4B",
+                "--sidebar-menu-hover-bg": "#D5E6EC",             /* Light hover, noticeable but soft */
+                "--sidebar-menu-active-bg": "#C2D7E0",            /* Soft active with clear contrast */
                 "--sidebar-menu-icon-color": "#276678",
                 "--sidebar-menu-icon-hover-color": "#1687A7",
                 "--sidebar-menu-icon-active-color": "#1687A7",
