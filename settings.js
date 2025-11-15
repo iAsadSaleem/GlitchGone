@@ -5497,7 +5497,7 @@
                 position: relative;
                 left: 50px;
                 font-size: 25px;
-                font-weight: 400;
+                font-weight: 800;
                 -webkit-background-clip: text;
                 color: black;
                 animation: rainbowMove 2s linear;
