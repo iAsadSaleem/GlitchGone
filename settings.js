@@ -1122,7 +1122,7 @@
             },
             "OceanMist Light Theme": {
                 "--primary-color": "#008080",               /* Main teal */
-                "--second-color": "#66b2b2",                /* Accent teal */
+                "--second-color": "#004c4c",                /* Accent teal */
                 "--dark-color": "#004c4c",                  /* Strong contrast */
                 "--grey-color": "#b2d8d8",                  /* Soft mint grey */
                 "--alert-color": "#E63946",
@@ -1131,32 +1131,32 @@
                 "--Acent-color": "#006666",
 
                 /* -------------------- SIDEBAR -------------------- */
-                "--sidebar-bg-color": "#bfe5e5",            /* Soft tinted sidebar */
-                "--sidebar-menu-bg": "#e5f7f7",             /* Light bluish-white */
-                "--sidebar-menu-color": "#004c4c",
-                "--sidebar-menu-hover-bg": "#b2d8d8",       /* Soft hover */
-                "--sidebar-menu-active-bg": "#a3cece",      /* Light but visible */
-                "--sidebar-menu-icon-color": "#008080",
+                "--sidebar-bg-color": "#fdffff",            /* Soft tinted sidebar */
+                "--sidebar-menu-bg": "#006666",             /* Light bluish-white */
+                "--sidebar-menu-color": "#ffffff",
+                "--sidebar-menu-hover-bg": "#006666",       /* Soft hover */
+                "--sidebar-menu-active-bg": "#66b2b2",      /* Light but visible */
+                "--sidebar-menu-icon-color": "#ffffff",
                 "--sidebar-menu-icon-hover-color": "#66b2b2",
-                "--sidebar-menu-icon-active-color": "#66b2b2",
-                "--sidebar-menu-border-radius": "16px",
+                "--sidebar-menu-icon-active-color": "#006666",
+                "--sidebar-menu-border-radius": "10px",
 
-                "--sidebar-top-right-radius": "14px",
-                "--sidebar-bottom-right-radius": "14px",
+                "--sidebar-top-right-radius": "0px",
+                "--sidebar-bottom-right-radius": "0px",
 
                 "--scroll-color": "#66b2b2",
 
                 /* -------------------- HEADER -------------------- */
-                "--header-bg-color": "#FFFFFF",
-                "--header-icon-color": "#006666",
+                "--header-bg-color": "#006666",
+                "--header-icon-color": "#ffffff",
                 "--header-icon-hover-color": "#008080",
-                "--header-icon-bg": "#f0fafb",
+                "--header-icon-bg": "#006666",
                 "--header-icon-hover-bg": "#e0f3f4",
 
                 /* -------------------- CARDS -------------------- */
                 "--card-body-bg-color": "#FFFFFF",
                 "--card-body-font-color": "#004c4c",
-                "--card-title-font-color": "#006666",
+                "--card-title-font-color": "#004c4c",
                 "--card-dec-font-color": "#44515B",
                 "--card-footer-bg-color": "#eef7f7",
                 "--card-footer-font-color": "#004c4c",
@@ -1173,7 +1173,7 @@
 
                 /* -------------------- CARD HEADER GRADIENT -------------------- */
                 "--card-header-gradient-start": "#f2fbfb",
-                "--card-header-bg-gradient": "linear-gradient(90deg, #FFFFFF 0%, #e5f7f7 55%, #b2d8d8 100%)",
+                "--card-header-bg-gradient": "linear-gradient(to bottom, #66b2b2, #008080)",
                 "--card-header-gradient-end": "#b2d8d8",
 
                 /* -------------------- BACKGROUNDS -------------------- */
@@ -1189,7 +1189,7 @@
                 "--login-card-bg-color": "#FFFFFF",
 
                 /* -------------------- HEADER MAIN GRADIENT -------------------- */
-                "--header-main-bg-gradient": "linear-gradient(90deg, #FFFFFF 0%, #f3fcfc 100%)",
+                "--header-main-bg-gradient": "linear-gradient(90deg, #F3F5F6 0%, #F3F5F6 100%)",
                 "--header-icon-hover": "#008080",
 
                 /* -------------------- MISC -------------------- */
