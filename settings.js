@@ -1200,73 +1200,74 @@
                 "--body-font": "Roboto"
             },
             "JetBlack Luxury Gold Theme - Light": {
-                "--primary-color": "#CFB257",                 /* Premium Gold */
-                "--second-color": "#E7D67B",                  /* Soft Light Gold */
-                "--dark-color": "#502C2B",                    /* Deep Brown Accent */
-                "--grey-color": "#F1E6AD",                    /* Gentle warm cream */
+                "--primary-color": "#C5A880",                 /* Elegant Gold-Beige */
+                "--second-color": "#E6E6E6",                  /* Soft Balanced Grey */
+                "--dark-color": "#0F0F0F",                    /* Deep Charcoal Black */
+                "--grey-color": "#E6E6E6",
                 "--alert-color": "#D9534F",
                 "--app-bg-color": "#FFFFFF",
-                "--Acent-color": "#502C2B",
+                "--Acent-color": "#532E1C",
 
                 /* -------------------- SIDEBAR -------------------- */
-                "--sidebar-bg-color": "#FFFFFF",
-                "--sidebar-menu-bg": "#FAF7EF",               /* Soft pale gold tint */
-                "--sidebar-menu-color": "#502C2B",
-                "--sidebar-menu-hover-bg": "#F1E6AD",
-                "--sidebar-menu-active-bg": "#E7D67B",
-                "--sidebar-menu-icon-color": "#B69349",
-                "--sidebar-menu-icon-hover-color": "#CFB257",
-                "--sidebar-menu-icon-active-color": "#502C2B",
-                "--sidebar-menu-border-radius": "16px",
+                "--sidebar-bg-color": "#1A1A1A",              /* Dark but NOT black */
+                "--sidebar-menu-bg": "#262626",               /* Slightly lighter inside */
+                "--sidebar-menu-color": "#E6E6E6",            /* Soft gray text */
+                "--sidebar-menu-hover-bg": "#3A3A3A",         /* Clean dark hover */
+                "--sidebar-menu-active-bg": "#532E1C",        /* Rich brown highlight */
+                "--sidebar-menu-icon-color": "#C5A880",       /* Gold icons */
+                "--sidebar-menu-icon-hover-color": "#E6E6E6",
+                "--sidebar-menu-icon-active-color": "#FFFFFF",
+                "--sidebar-menu-border-radius": "14px",
+
                 "--sidebar-top-right-radius": "0px",
                 "--sidebar-bottom-right-radius": "0px",
 
-                "--scroll-color": "#CFB257",
+                "--scroll-color": "#C5A880",
 
                 /* -------------------- HEADER -------------------- */
                 "--header-bg-color": "#FFFFFF",
-                "--header-icon-color": "#502C2B",
-                "--header-icon-hover-color": "#CFB257",
-                "--header-icon-bg": "#F8F4E7",
-                "--header-icon-hover-bg": "#F1E6AD",
+                "--header-icon-color": "#532E1C",
+                "--header-icon-hover-color": "#C5A880",
+                "--header-icon-bg": "#F4F4F4",
+                "--header-icon-hover-bg": "#E6E6E6",
 
                 /* -------------------- CARDS -------------------- */
                 "--card-body-bg-color": "#FFFFFF",
-                "--card-body-font-color": "#502C2B",
-                "--card-title-font-color": "#502C2B",
-                "--card-dec-font-color": "#634D48",
-                "--card-footer-bg-color": "#F5EDCF",
-                "--card-footer-font-color": "#CFB257",
+                "--card-body-font-color": "#0F0F0F",
+                "--card-title-font-color": "#532E1C",
+                "--card-dec-font-color": "#4D4D4D",
+                "--card-footer-bg-color": "#F5F5F5",
+                "--card-footer-font-color": "#532E1C",
 
-                "--card-body-border-color": "#E7D67B",
+                "--card-body-border-color": "#C5A880",
 
                 /* -------------------- TOP NAV -------------------- */
                 "--top-nav-menu-bg": "#FFFFFF",
-                "--top-nav-menu-hover-bg": "#F5EDCF",
-                "--top-nav-menu-active-bg": "#E7D67B",
-                "--top-nav-menu-color": "#502C2B",
-                "--top-nav-menu-hover-color": "#CFB257",
-                "--top-nav-menu-active-color": "#502C2B",
+                "--top-nav-menu-hover-bg": "#F0F0F0",
+                "--top-nav-menu-active-bg": "#E6E6E6",
+                "--top-nav-menu-color": "#0F0F0F",
+                "--top-nav-menu-hover-color": "#532E1C",
+                "--top-nav-menu-active-color": "#532E1C",
 
                 /* -------------------- CARD HEADER GRADIENT -------------------- */
-                "--card-header-gradient-start": "#F8F1D5",
-                "--card-header-bg-gradient": "linear-gradient(135deg, #FFF9E6 0%, #F1E6AD 40%, #CFB257 100%)",
-                "--card-header-gradient-end": "#CFB257",
+                "--card-header-gradient-start": "#F9F6F2",
+                "--card-header-bg-gradient": "linear-gradient(135deg, #FFFFFF 0%, #E6E6E6 40%, #C5A880 100%)",
+                "--card-header-gradient-end": "#C5A880",
 
                 /* -------------------- BACKGROUNDS -------------------- */
-                "--bg-gradient": "linear-gradient(180deg, #FFFFFF 0%, #FAF6E9 55%, #F1E6AD 100%)",
-                "--sidebar-main-bg-gradient": "linear-gradient(to bottom, #FFFFFF, #FAF7EE 60%, #E7D67B 150%)",
+                "--bg-gradient": "linear-gradient(180deg, #FFFFFF 0%, #F8F8F8 50%, #E6E6E6 100%)",
+                "--sidebar-main-bg-gradient": "linear-gradient(to bottom, #1A1A1A, #262626 70%, #532E1C 150%)",
 
                 /* -------------------- LOGIN -------------------- */
-                "--login-card-bg-gradient": "linear-gradient(145deg, rgba(255,255,255,0.95), rgba(241,230,173,0.7))",
-                "--login-link-text-color": "#CFB257",
-                "--login-button-bg-gradient": "linear-gradient(to right, #F1E6AD 0%, #E7D67B 50%, #CFB257 100%)",
-                "--login-button-bg-color": "#E7D67B",
+                "--login-card-bg-gradient": "linear-gradient(145deg, rgba(255,255,255,0.95), rgba(229,229,229,0.7))",
+                "--login-link-text-color": "#532E1C",
+                "--login-button-bg-gradient": "linear-gradient(to right, #C5A880 0%, #532E1C 80%)",
+                "--login-button-bg-color": "#532E1C",
                 "--login-card-bg-color": "#FFFFFF",
 
                 /* -------------------- HEADER MAIN GRADIENT -------------------- */
-                "--header-main-bg-gradient": "linear-gradient(90deg, #FFFFFF 0%, #FAF7EC 60%, #E7D67B 100%)",
-                "--header-icon-hover": "#CFB257",
+                "--header-main-bg-gradient": "linear-gradient(90deg, #FFFFFF 0%, #F6F6F6 60%, #E6E6E6 100%)",
+                "--header-icon-hover": "#C5A880",
 
                 /* -------------------- MISC -------------------- */
                 "--scroll-width": "7px",
@@ -1276,22 +1277,22 @@
                 "--body-font": "Poppins",
 
                 /* === Light Login Page Additions === */
-                "--login-bg-gradient": "linear-gradient(135deg, #FFFFFF 0%, #FAF8E9 55%, #F1E6AD 100%)",
+                "--login-bg-gradient": "linear-gradient(135deg, #FFFFFF 0%, #F4F4F4 60%, #E6E6E6 100%)",
                 "--login-card-width": "480px",
                 "--login-card-border-radius": "22px",
-                "--login-card-box-shadow": "0 8px 30px rgba(80,44,43,0.15)",
+                "--login-card-box-shadow": "0 8px 30px rgba(0,0,0,0.12)",
 
-                "--login-input-border-color": "#E7D67B",
+                "--login-input-border-color": "#C5A880",
                 "--login-input-bg-color": "#FFFFFF",
-                "--login-input-text-color": "#502C2B",
+                "--login-input-text-color": "#0F0F0F",
                 "--login-input-border-radius": "10px",
 
                 "--login-button-border-radius": "12px",
-                "--login-button-text-color": "#502C2B",
-                "--login-button-hover-bg-color": "#CFB257",
-                "--login-button-hover-text-color": "#FFFFFF",
+                "--login-button-text-color": "#FFFFFF",
+                "--login-button-hover-bg-color": "#C5A880",
+                "--login-button-hover-text-color": "#0F0F0F",
 
-                "--login-footer-text-color": "#8A6E3A",
+                "--login-footer-text-color": "#6B5B4D",
                 "--login-logo-space": "50px",
                 "--login-layout-padding-right": "8%",
 
@@ -1299,10 +1300,11 @@
 
                 "--login-logo-width": "140px",
                 "--login-logo-height": "70px",
-                "--login-logo-filter": "drop-shadow(0 2px 6px rgba(207,178,87,0.4))",
+                "--login-logo-filter": "drop-shadow(0 2px 6px rgba(197,168,128,0.4))",
 
-                "--login-background-active": "linear-gradient(180deg, #FFFFFF 0%, #FAF8E9 50%, #F1E6AD 100%)"
+                "--login-background-active": "linear-gradient(180deg, #FFFFFF 0%, #F4F4F4 55%, #E6E6E6 100%)"
             }
+
         };
     }
     function enableBlueWaveTopNav() {
