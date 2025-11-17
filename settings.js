@@ -702,7 +702,7 @@
                 "--card-body-border-color": "#D9E2D9",
 
                 "--bg-gradient": "linear-gradient(38deg, rgba(0,0,0,0.9) 45%, rgba(255,255,255,1) 45%, rgba(255,255,255,1) 54%, rgba(0,168,107,1) 55%)",
-                "--sidebar-main-bg-gradient": "linear-gradient(to bottom, rgba(0,0,0,0.95), rgba(0,168,107,1) 80%)",
+                "--sidebar-main-bg-gradient": "linear-gradient(to bottom, rgb(39 69 81 / 95%), rgb(12 41 53 / 81%) 80%)",
                 "--login-card-bg-gradient": "linear-gradient(38deg, rgba(0,0,0,0.9) 45%, rgba(255,255,255,1) 45%, rgba(255,255,255,1) 54%, rgba(0,168,107,1) 55%)",
                 "--login-headline-text-color": "#00c853",
                 "--login-link-text-color": "#9e9e9e",
@@ -1045,8 +1045,8 @@
                 "--login-background-active": "linear-gradient(135deg, #4A5FBE 0%, #7FCCF1 100%)"
             },
             "GlitchGone Light Theme": {
-                "--primary-color": "#4CAF50",
-                "--second-color": "#80D8A1",
+                "--primary-color": "#124170",
+                "--second-color": "#26667F",
                 "--dark-color": "#1B1B1B",
                 "--grey-color": "#E7EFE7",
                 "--alert-color": "#E63946",
@@ -1055,29 +1055,29 @@
 
                 /* 🔥 UPDATED SIDEBAR COLORS — Softer, Light but Not Washed Out */
                 "--sidebar-bg-color": "#94ebaa",                /* soft tinted off-white */
-                "--sidebar-menu-bg": "#c1e7cc",                 /* gentle green-tinted grey */
-                "--sidebar-menu-color": "#1E1E1E",
-                "--sidebar-menu-hover-bg": "#9cd3ad",           /* slightly deeper soft hover */
-                "--sidebar-menu-active-bg": "#64cd82",
-                "--sidebar-menu-icon-color": "#5EBF7A",         /* balanced green */
-                "--sidebar-menu-icon-hover-color": "#4CAF50",
-                "--sidebar-menu-icon-active-color": "#4CAF50",
+                "--sidebar-menu-bg": "#113f6785",                 /* gentle green-tinted grey */
+                "--sidebar-menu-color": "#ffffff",
+                "--sidebar-menu-hover-bg": "#34699A",           /* slightly deeper soft hover */
+                "--sidebar-menu-active-bg": "#26667F",
+                "--sidebar-menu-icon-color": "#ffffff",         /* balanced green */
+                "--sidebar-menu-icon-hover-color": "#ffffff",
+                "--sidebar-menu-icon-active-color": "#ffffff",
                 "--sidebar-menu-border-radius": "16px",
 
                 "--sidebar-top-right-radius": "0px",
                 "--sidebar-bottom-right-radius": "0px",
 
-                "--scroll-color": "#4CAF50",
+                "--scroll-color": "#113F67",
 
-                "--header-bg-color": "#FFFFFF",
-                "--header-icon-color": "#4CAF50",
-                "--header-icon-hover-color": "#2E7D32",
-                "--header-icon-bg": "#F7F7F7",
-                "--header-icon-hover-bg": "#E8F5E9",
+                "--header-bg-color": "#113F67",
+                "--header-icon-color": "#ebebeb",
+                "--header-icon-hover-color": "#d1e3d2",
+                "--header-icon-bg": "#113F67",
+                "--header-icon-hover-bg": "#4281bb",
 
                 "--card-body-bg-color": "#FFFFFF",
-                "--card-body-font-color": "#1E1E1E",
-                "--card-title-font-color": "#1B1B1B",
+                "--card-body-font-color": "#4d4d4d",
+                "--card-title-font-color": "#ffffff",
                 "--card-dec-font-color": "#4A4A4A",
                 "--card-footer-bg-color": "#EAF6EF",
                 "--card-footer-font-color": "#1A1A1A",
@@ -1090,14 +1090,14 @@
                 "--top-nav-menu-active-color": "#4CAF50",
 
                 "--card-header-gradient-start": "#1B1B1B",
-                "--card-header-bg-gradient": "linear-gradient(38deg, rgba(27,27,27,0.70) 45%, rgba(255,255,255,1) 45%, rgba(255,255,255,1) 54%, rgba(76,175,80,1) 55%)",
+                "--card-header-bg-gradient": "linear-gradient(225deg, rgb(5 64 89 / 83%) 40%, rgba(255, 255, 255, 1) 40%, rgb(247 245 245) 41%, rgb(19 40 51 / 94%) 40%)",
                 "--card-header-gradient-end": "#4CAF50",
 
                 "--card-body-border-color": "#DFE7DF",
 
                 "--bg-gradient": "linear-gradient(38deg, rgba(27,27,27,0.70) 45%, rgba(255,255,255,1) 45%, rgba(255,255,255,1) 54%, rgba(76,175,80,1) 55%)",
 
-                "--sidebar-main-bg-gradient": "linear-gradient(to bottom, rgba(243,247,244,0.95), rgba(76,175,80,0.35) 80%)",
+                "--sidebar-main-bg-gradient": "linear-gradient(225deg, rgb(5 64 89 / 83%) 40%, rgba(255, 255, 255, 1) 40%, rgb(247 245 245) 41%, rgb(19 40 51 / 94%) 40%)",
 
                 "--login-card-bg-gradient": "linear-gradient(38deg, rgba(27,27,27,0.70) 45%, rgba(255,255,255,1) 45%, rgba(255,255,255,1) 54%, rgba(76,175,80,1) 55%)",
 
@@ -1110,7 +1110,7 @@
 
                 "--login-card-bg-color": "#FFFFFF",
 
-                "--header-main-bg-gradient": "linear-gradient(225deg, rgb(163,231,166) 56%, rgba(255,255,255,1) 57%, rgba(27,27,27,1) 58%)",
+                "--header-main-bg-gradient": "linear-gradient(225deg, rgb(5 64 89 / 83%) 40%, rgba(255, 255, 255, 1) 40%, rgb(247 245 245) 41%, rgb(19 40 51 / 94%) 40%)",
 
                 "--header-icon-hover": "#4CAF50",
 
