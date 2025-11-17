@@ -958,7 +958,7 @@
                 "--body-font": "Roboto",
 
                 "--loader-background-color": "#F4FFF1"
-            }
+            },
 
             //"BlueWave Light Theme": {
             //    "--primary-color": "#2A3E9B",
