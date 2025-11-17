@@ -891,11 +891,11 @@
                 /* Sidebar */
                 "--sidebar-bg-color": "#ffffff",
                 "--sidebar-menu-bg": "#665b75",
-                "--sidebar-menu-color": "#1C1427",
+                "--sidebar-menu-color": "#fbfbfb",
                 "--sidebar-menu-hover-bg": "#2d2847",
                 "--sidebar-menu-active-bg": "#292235",
                 "--sidebar-menu-icon-color": "#ffffff",
-                "--sidebar-menu-icon-hover-color": "#40394A",
+                "--sidebar-menu-icon-hover-color": "#FFFFFF",
                 "--sidebar-menu-icon-active-color": "#FFFFFF",
                 "--sidebar-menu-border-radius": "16px",
                 "--sidebar-top-right-radius": "18px",
