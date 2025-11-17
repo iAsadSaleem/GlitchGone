@@ -538,7 +538,7 @@
 
                 "--card-body-bg-color": "#FFFFFF",
                 "--card-body-font-color": "#1A1A1A",
-                "--card-title-font-color": "#000000",
+                "--card-title-font-color": "#f9f9f9",
                 "--card-dec-font-color": "#333333",
                 "--card-footer-bg-color": "#F0FFF6",
                 "--card-footer-font-color": "#000000",
