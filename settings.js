@@ -743,7 +743,7 @@
                 "--scroll-color": "#1687A7",
 
                 "--header-bg-color": "#FFFFFF",
-                "--header-icon-color": "#276678",
+                "--header-icon-color": "#ffffff",
                 "--header-icon-hover-color": "#1687A7",
                 "--header-icon-bg": "#276678",
                 "--header-icon-hover-bg": "#1c3a51",
