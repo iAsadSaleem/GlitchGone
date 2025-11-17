@@ -879,8 +879,8 @@
     function getPredefinedThemes() {
         return {
             "Default Light Theme": {
-                "--primary-color": "#0a6e35",
-                "--second-color": "#07a125",
+                "--primary-color": "#0C2B4E",
+                "--second-color": "#174143",
                 "--dark-color": "#2A2A2A",
                 "--grey-color": "#D4D4D4",
                 "--alert-color": "#E63946",
@@ -890,30 +890,30 @@
 
                 /* Sidebar */
                 "--sidebar-bg-color": "#E9F3EC",           /* Very soft green tint */
-                "--sidebar-menu-bg": "#F2F7F4",
-                "--sidebar-menu-color": "#1F1F1F",
-                "--sidebar-menu-hover-bg": "#DFF1E6",
-                "--sidebar-menu-active-bg": "#CDEBD9",
-                "--sidebar-menu-icon-color": "#0a6e35",
-                "--sidebar-menu-icon-hover-color": "#07a125",
-                "--sidebar-menu-icon-active-color": "#07a125",
+                "--sidebar-menu-bg": "#305669",
+                "--sidebar-menu-color": "#ffffff",
+                "--sidebar-menu-hover-bg": "#7b817d",
+                "--sidebar-menu-active-bg": "#435663",
+                "--sidebar-menu-icon-color": "#fbfbfb",
+                "--sidebar-menu-icon-hover-color": "#ffffff",
+                "--sidebar-menu-icon-active-color": "#ffffff",
                 "--sidebar-menu-border-radius": "16px",
                 "--sidebar-top-right-radius": "16px",
                 "--sidebar-bottom-right-radius": "16px",
 
-                "--scroll-color": "#0a6e35",
+                "--scroll-color": "#0C2B4E",
 
                 /* Header */
-                "--header-bg-color": "#F8FBF9",             /* Soft gray-green */
-                "--header-icon-color": "#0a6e35",
-                "--header-icon-hover-color": "#07a125",
-                "--header-icon-bg": "#E6EFE9",
-                "--header-icon-hover-bg": "#DCE8E0",
+                "--header-bg-color": "#0C2B4E",             /* Soft gray-green */
+                "--header-icon-color": "#0C2B4E",
+                "--header-icon-hover-color": "#0C2B4E",
+                "--header-icon-bg": "#305669",
+                "--header-icon-hover-bg": "#4A70A9",
 
                 /* Cards */
-                "--card-body-bg-color": "#FFFFFF",
-                "--card-body-font-color": "#1A1A1A",
-                "--card-title-font-color": "#0a6e35",
+                "--card-body-bg-color": "#305669",
+                "--card-body-font-color": "#FFFFFF",
+                "--card-title-font-color": "#FFFFFF",
                 "--card-dec-font-color": "#333333",
                 "--card-footer-bg-color": "#E9F5EE",
                 "--card-footer-font-color": "#1A1A1A",
@@ -937,7 +937,7 @@
                 "--bg-gradient": "linear-gradient(38deg, #F9FCFA 45%, #E7F4EC 55%)",
 
                 /* Login Page */
-                "--sidebar-main-bg-gradient": "linear-gradient(38deg, #bde5c7 45%, #7bbb94 55%)",
+                "--sidebar-main-bg-gradient": "linear-gradient(38deg, #43495d 45%, #495069 55%)",
                 "--login-card-bg-gradient": "linear-gradient(38deg, #FFFFFF 45%, #DFF1E6 55%)",
                 "--login-link-text-color": "#0a6e35",
                 "--login-button-bg-gradient": "linear-gradient(38deg, #0a6e35 45%, #07a125 55%)",
@@ -2199,7 +2199,6 @@
 
         return wrapper;
     }
-
     /* ========== Link Text Font Size Input (with same classes as Border Radius) ========== */
     function createLoginLinkTextSizeInput() {
         const wrapper = document.createElement("div");
@@ -2246,7 +2245,6 @@
 
         return wrapper;
     }
-
     // Create Heading Controls
     function createLoginHeadingControls() {
         const wrapper = document.createElement("div");
