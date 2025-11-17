@@ -702,7 +702,7 @@
                 "--card-body-border-color": "#D9E2D9",
 
                 "--bg-gradient": "linear-gradient(38deg, rgba(0,0,0,0.9) 45%, rgba(255,255,255,1) 45%, rgba(255,255,255,1) 54%, rgba(0,168,107,1) 55%)",
-                "--sidebar-main-bg-gradient": "linear-gradient(to bottom, rgb(39 69 81 / 95%), rgb(12 41 53 / 81%) 80%)",
+                "--sidebar-main-bg-gradient": "linear-gradient(to bottom, rgba(0,0,0,0.95), rgba(0,168,107,1) 80%)",
                 "--login-card-bg-gradient": "linear-gradient(38deg, rgba(0,0,0,0.9) 45%, rgba(255,255,255,1) 45%, rgba(255,255,255,1) 54%, rgba(0,168,107,1) 55%)",
                 "--login-headline-text-color": "#00c853",
                 "--login-link-text-color": "#9e9e9e",
