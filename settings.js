@@ -676,14 +676,14 @@
                 "--scroll-color": "#00A86B",
 
                 "--header-bg-color": "#FFFFFF",
-                "--header-icon-color": "#000000",
+                "--header-icon-color": "#FFFFFF",
                 "--header-icon-hover-color": "#00A86B",
                 "--header-icon-bg": "#060606",
                 "--header-icon-hover-bg": "#2f3f31",
 
                 "--card-body-bg-color": "#FFFFFF",
                 "--card-body-font-color": "#1A1A1A",
-                "--card-title-font-color": "#000000",
+                "--card-title-font-color": "#f9f6f6",
                 "--card-dec-font-color": "#333333",
                 "--card-footer-bg-color": "#E8F5E9",
                 "--card-footer-font-color": "#000000",
@@ -696,7 +696,7 @@
                 "--top-nav-menu-active-color": "#00A86B",
 
                 "--card-header-gradient-start": "#000000",
-                "--card-header-bg-gradient": "linear-gradient(38deg, rgba(0,0,0,0.95) 45%, rgba(255,255,255,1) 45%, rgba(255,255,255,1) 54%, rgba(0,168,107,1) 55%)",
+                "--card-header-bg-gradient": "linear-gradient(225deg, rgba(0, 168, 107, 1) 40%, rgba(255, 255, 255, 1) 40%, rgb(247 245 245) 41%, rgba(0, 0, 0, 1) 40%)",
                 "--card-header-gradient-end": "#00A86B",
 
                 "--card-body-border-color": "#D9E2D9",
@@ -710,7 +710,7 @@
                 "--login-button-bg-color": "#0B3D0B",
                 "--login-card-bg-color": "#000000",
 
-                "--header-main-bg-gradient": "linear-gradient(225deg, rgba(0, 168, 107, 1) 31%, rgba(255, 255, 255, 1) 30%, rgb(247 245 245) 43%, rgba(0, 0, 0, 1) 33%)",
+                "--header-main-bg-gradient": "linear-gradient(225deg, rgba(0, 168, 107, 1) 40%, rgba(255, 255, 255, 1) 40%, rgb(247 245 245) 41%, rgba(0, 0, 0, 1) 40%)",
                 "--header-icon-hover": "#00A86B",
 
                 "--scroll-width": "7px",
