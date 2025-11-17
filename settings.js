@@ -577,80 +577,80 @@
                 "--body-font": "Roboto",
                 "--loader-background-color": ""
             },
-            "BlueWave Theme": {
-                "--primary-color": "#2A3E9B",
-                "--second-color": "#62C6F0",
-                "--dark-color": "#1B255E",
-                "--grey-color": "#E4E7EF",
-                "--alert-color": "#E63946",
-                "--app-bg-color": "#F7F9FC",
-                "--Acent-color": "#FFFFFF",
+            //"BlueWave Theme": {
+            //    "--primary-color": "#2A3E9B",
+            //    "--second-color": "#62C6F0",
+            //    "--dark-color": "#1B255E",
+            //    "--grey-color": "#E4E7EF",
+            //    "--alert-color": "#E63946",
+            //    "--app-bg-color": "#F7F9FC",
+            //    "--Acent-color": "#FFFFFF",
 
-                "--sidebar-bg-color": "linear-gradient(to bottom, #2A3E9B, #62C6F0)",
-                "--sidebar-menu-bg": "#007bff26",
-                "--sidebar-menu-color": "#FFFFFF",
-                "--sidebar-menu-hover-bg": "#3B9DD3",
-                "--sidebar-menu-active-bg": "#2692cb",
-                "--sidebar-menu-icon-color": "#B8D9F8",
-                "--sidebar-menu-icon-hover-color": "#FFFFFF",
-                "--sidebar-menu-icon-active-color": "#2A3E9B",
-                "--sidebar-menu-border-radius": "0px",
+            //    "--sidebar-bg-color": "linear-gradient(to bottom, #2A3E9B, #62C6F0)",
+            //    "--sidebar-menu-bg": "#007bff26",
+            //    "--sidebar-menu-color": "#FFFFFF",
+            //    "--sidebar-menu-hover-bg": "#3B9DD3",
+            //    "--sidebar-menu-active-bg": "#2692cb",
+            //    "--sidebar-menu-icon-color": "#B8D9F8",
+            //    "--sidebar-menu-icon-hover-color": "#FFFFFF",
+            //    "--sidebar-menu-icon-active-color": "#2A3E9B",
+            //    "--sidebar-menu-border-radius": "0px",
 
-                "--sidebar-top-right-radius": "16px",
-                "--sidebar-bottom-right-radius": "16px",
+            //    "--sidebar-top-right-radius": "16px",
+            //    "--sidebar-bottom-right-radius": "16px",
 
-                "--scroll-color": "#62C6F0",
+            //    "--scroll-color": "#62C6F0",
 
-                "--header-bg-color": "transparent",
-                "--header-icon-color": "#FFFFFF",
-                "--header-icon-hover-color": "#62C6F0",
-                "--header-icon-bg": "transparent",
-                "--header-icon-hover-bg": "rgba(255,255,255,0.1)",
+            //    "--header-bg-color": "transparent",
+            //    "--header-icon-color": "#FFFFFF",
+            //    "--header-icon-hover-color": "#62C6F0",
+            //    "--header-icon-bg": "transparent",
+            //    "--header-icon-hover-bg": "rgba(255,255,255,0.1)",
 
-                "--card-body-bg-color": "#FFFFFF",
-                "--card-body-font-color": "#1A1A1A",
-                "--card-title-font-color": "#2A3E9B",
-                "--card-dec-font-color": "#333333",
-                "--card-footer-bg-color": "#F0F6FC",
-                "--card-footer-font-color": "#000000",
+            //    "--card-body-bg-color": "#FFFFFF",
+            //    "--card-body-font-color": "#1A1A1A",
+            //    "--card-title-font-color": "#2A3E9B",
+            //    "--card-dec-font-color": "#333333",
+            //    "--card-footer-bg-color": "#F0F6FC",
+            //    "--card-footer-font-color": "#000000",
 
-                "--sidebar-top-right-radius": "0px",
-                "--sidebar-bottom-right-radius": "0px",
+            //    "--sidebar-top-right-radius": "0px",
+            //    "--sidebar-bottom-right-radius": "0px",
 
-                "--top-nav-menu-bg": "transparent",
-                "--top-nav-menu-hover-bg": "rgba(255,255,255,0.1)",
-                "--top-nav-menu-active-bg": "rgba(255,255,255,0.2)",
-                "--top-nav-menu-color": "#FFFFFF",
-                "--top-nav-menu-hover-color": "#62C6F0",
-                "--top-nav-menu-active-color": "#FFFFFF",
+            //    "--top-nav-menu-bg": "transparent",
+            //    "--top-nav-menu-hover-bg": "rgba(255,255,255,0.1)",
+            //    "--top-nav-menu-active-bg": "rgba(255,255,255,0.2)",
+            //    "--top-nav-menu-color": "#FFFFFF",
+            //    "--top-nav-menu-hover-color": "#62C6F0",
+            //    "--top-nav-menu-active-color": "#FFFFFF",
 
-                "--card-header-gradient-start": "#2A3E9B",
-                "--card-header-bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
-                "--card-header-gradient-end": "#62C6F0",
+            //    "--card-header-gradient-start": "#2A3E9B",
+            //    "--card-header-bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
+            //    "--card-header-gradient-end": "#62C6F0",
 
-                "--card-body-border-color": "#E4E7EF",
+            //    "--card-body-border-color": "#E4E7EF",
 
-                "--bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
+            //    "--bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
 
-                "--sidebar-main-bg-gradient": "linear-gradient(to bottom, #2A3E9B, #62C6F0)",
-                "--login-card-bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
+            //    "--sidebar-main-bg-gradient": "linear-gradient(to bottom, #2A3E9B, #62C6F0)",
+            //    "--login-card-bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
 
-                "--login-link-text-color": "#007bff",
-                "--login-button-bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
-                "--login-button-bg-color": "#0084ff",
-                "--login-card-bg-color": "#FFFFFF",
+            //    "--login-link-text-color": "#007bff",
+            //    "--login-button-bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
+            //    "--login-button-bg-color": "#0084ff",
+            //    "--login-card-bg-color": "#FFFFFF",
 
-                "--header-main-bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
-                "--header-icon-hover": "#62C6F0",
+            //    "--header-main-bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
+            //    "--header-icon-hover": "#62C6F0",
 
-                "--scroll-width": "7px",
-                "--card-title-font-size": "18px",
-                "--card-body-border-radius": "24px",
-                "--lockedMenus": "{}",
-                "--body-font": "Roboto",
-                "--login-background-active": "linear-gradient(135deg, #0052cc 0%, #00aaff 100%)",
-                "--login-button-hover-bg-color": "#0071e3"
-            },
+            //    "--scroll-width": "7px",
+            //    "--card-title-font-size": "18px",
+            //    "--card-body-border-radius": "24px",
+            //    "--lockedMenus": "{}",
+            //    "--body-font": "Roboto",
+            //    "--login-background-active": "linear-gradient(135deg, #0052cc 0%, #00aaff 100%)",
+            //    "--login-button-hover-bg-color": "#0071e3"
+            //},
             "GlitchGone Theme": {
                 "--primary-color": "#0B3D0B",
                 "--second-color": "#00A86B",
@@ -959,91 +959,91 @@
 
                 "--loader-background-color": "#F3F8F5"
             },
-            "BlueWave Light Theme": {
-                "--primary-color": "#2A3E9B",
-                "--second-color": "#62C6F0",
-                "--dark-color": "#2D3A78",
-                "--grey-color": "#DDE3F0",
-                "--alert-color": "#E63946",
+            //"BlueWave Light Theme": {
+            //    "--primary-color": "#2A3E9B",
+            //    "--second-color": "#62C6F0",
+            //    "--dark-color": "#2D3A78",
+            //    "--grey-color": "#DDE3F0",
+            //    "--alert-color": "#E63946",
 
-                /* App Background – Blue tint */
-                "--app-bg-color": "#EEF3FA",
-                "--Acent-color": "#2A3E9B",
+            //    /* App Background – Blue tint */
+            //    "--app-bg-color": "#EEF3FA",
+            //    "--Acent-color": "#2A3E9B",
 
-                /* Sidebar – Lighter, soft, cool gradient */
-                "--sidebar-bg-color": "linear-gradient(to bottom, #4A5FBE, #9AD8F7)",
-                "--sidebar-menu-bg": "rgba(255,255,255,0.06)",
-                "--sidebar-menu-color": "#101725",
-                "--sidebar-menu-hover-bg": "rgba(255,255,255,0.15)",
-                "--sidebar-menu-active-bg": "rgba(255,255,255,0.22)",
+            //    /* Sidebar – Lighter, soft, cool gradient */
+            //    "--sidebar-bg-color": "linear-gradient(to bottom, #4A5FBE, #9AD8F7)",
+            //    "--sidebar-menu-bg": "rgba(255,255,255,0.06)",
+            //    "--sidebar-menu-color": "#101725",
+            //    "--sidebar-menu-hover-bg": "rgba(255,255,255,0.15)",
+            //    "--sidebar-menu-active-bg": "rgba(255,255,255,0.22)",
 
-                "--sidebar-menu-icon-color": "#2A3E9B",
-                "--sidebar-menu-icon-hover-color": "#62C6F0",
-                "--sidebar-menu-icon-active-color": "#2A3E9B",
+            //    "--sidebar-menu-icon-color": "#2A3E9B",
+            //    "--sidebar-menu-icon-hover-color": "#62C6F0",
+            //    "--sidebar-menu-icon-active-color": "#2A3E9B",
 
-                "--sidebar-menu-border-radius": "4px",
-                "--sidebar-top-right-radius": "0px",
-                "--sidebar-bottom-right-radius": "0px",
+            //    "--sidebar-menu-border-radius": "4px",
+            //    "--sidebar-top-right-radius": "0px",
+            //    "--sidebar-bottom-right-radius": "0px",
 
-                "--scroll-color": "#62C6F0",
+            //    "--scroll-color": "#62C6F0",
 
-                /* HEADER – Light blue gradient (NOT white) */
-                "--header-bg-color": "linear-gradient(90deg, #CFDBF5 0%, #D8E6FA 100%)",
-                "--header-icon-color": "#1F2F85",
-                "--header-icon-hover-color": "#62C6F0",
-                "--header-icon-bg": "#C9D5F0",
-                "--header-icon-hover-bg": "#BFD0EB",
+            //    /* HEADER – Light blue gradient (NOT white) */
+            //    "--header-bg-color": "linear-gradient(90deg, #CFDBF5 0%, #D8E6FA 100%)",
+            //    "--header-icon-color": "#1F2F85",
+            //    "--header-icon-hover-color": "#62C6F0",
+            //    "--header-icon-bg": "#C9D5F0",
+            //    "--header-icon-hover-bg": "#BFD0EB",
 
-                /* Cards – Very light tinted blue */
-                "--card-body-bg-color": "#F4F7FC",
-                "--card-body-font-color": "#1A1A1A",
-                "--card-title-font-color": "#2A3E9B",
-                "--card-dec-font-color": "#3B445C",
+            //    /* Cards – Very light tinted blue */
+            //    "--card-body-bg-color": "#F4F7FC",
+            //    "--card-body-font-color": "#1A1A1A",
+            //    "--card-title-font-color": "#2A3E9B",
+            //    "--card-dec-font-color": "#3B445C",
 
-                "--card-footer-bg-color": "#E2EBF8",
-                "--card-footer-font-color": "#1A1A1A",
+            //    "--card-footer-bg-color": "#E2EBF8",
+            //    "--card-footer-font-color": "#1A1A1A",
 
-                /* Top Navbar */
-                "--top-nav-menu-bg": "#E7EDF7",
-                "--top-nav-menu-hover-bg": "#DDE7F5",
-                "--top-nav-menu-active-bg": "#D2DEF1",
-                "--top-nav-menu-color": "#1A1A1A",
-                "--top-nav-menu-hover-color": "#2A3E9B",
-                "--top-nav-menu-active-color": "#62C6F0",
+            //    /* Top Navbar */
+            //    "--top-nav-menu-bg": "#E7EDF7",
+            //    "--top-nav-menu-hover-bg": "#DDE7F5",
+            //    "--top-nav-menu-active-bg": "#D2DEF1",
+            //    "--top-nav-menu-color": "#1A1A1A",
+            //    "--top-nav-menu-hover-color": "#2A3E9B",
+            //    "--top-nav-menu-active-color": "#62C6F0",
 
-                /* Card Header Gradient – soft ocean-blue */
-                "--card-header-gradient-start": "#DFE8F9",
-                "--card-header-bg-gradient": "linear-gradient(38deg, #DFE8F9 0%, #CDE0F4 100%)",
-                "--card-header-gradient-end": "#CDE0F4",
+            //    /* Card Header Gradient – soft ocean-blue */
+            //    "--card-header-gradient-start": "#DFE8F9",
+            //    "--card-header-bg-gradient": "linear-gradient(38deg, #DFE8F9 0%, #CDE0F4 100%)",
+            //    "--card-header-gradient-end": "#CDE0F4",
 
-                "--card-body-border-color": "#D5DDEC",
+            //    "--card-body-border-color": "#D5DDEC",
 
-                /* Page Background Gradient */
-                "--bg-gradient": "linear-gradient(38deg, #F1F5FC 0%, #E3EDF8 100%)",
+            //    /* Page Background Gradient */
+            //    "--bg-gradient": "linear-gradient(38deg, #F1F5FC 0%, #E3EDF8 100%)",
 
-                /* Login */
-                "--sidebar-main-bg-gradient": "linear-gradient(to bottom, #4A5FBE, #9AD8F7)",
-                "--login-card-bg-gradient": "linear-gradient(38deg, #E7EEFA 0%, #D6E5F7 100%)",
-                "--login-link-text-color": "#2A3E9B",
+            //    /* Login */
+            //    "--sidebar-main-bg-gradient": "linear-gradient(to bottom, #4A5FBE, #9AD8F7)",
+            //    "--login-card-bg-gradient": "linear-gradient(38deg, #E7EEFA 0%, #D6E5F7 100%)",
+            //    "--login-link-text-color": "#2A3E9B",
 
-                "--login-button-bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
-                "--login-button-bg-color": "#2A3E9B",
-                "--login-button-hover-bg-color": "#1F2F85",
+            //    "--login-button-bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
+            //    "--login-button-bg-color": "#2A3E9B",
+            //    "--login-button-hover-bg-color": "#1F2F85",
 
-                "--login-card-bg-color": "#F2F6FC",
+            //    "--login-card-bg-color": "#F2F6FC",
 
-                /* Header Main */
-                "--header-main-bg-gradient": "linear-gradient(38deg, #CFDAF2 0%, #DBE7FA 100%)",
-                "--header-icon-hover": "#62C6F0",
+            //    /* Header Main */
+            //    "--header-main-bg-gradient": "linear-gradient(38deg, #CFDAF2 0%, #DBE7FA 100%)",
+            //    "--header-icon-hover": "#62C6F0",
 
-                "--scroll-width": "7px",
-                "--card-title-font-size": "18px",
-                "--card-body-border-radius": "22px",
+            //    "--scroll-width": "7px",
+            //    "--card-title-font-size": "18px",
+            //    "--card-body-border-radius": "22px",
 
-                "--lockedMenus": "{}",
-                "--body-font": "Roboto",
-                "--login-background-active": "linear-gradient(135deg, #4A5FBE 0%, #7FCCF1 100%)"
-            },
+            //    "--lockedMenus": "{}",
+            //    "--body-font": "Roboto",
+            //    "--login-background-active": "linear-gradient(135deg, #4A5FBE 0%, #7FCCF1 100%)"
+            //},
             "GlitchGone Light Theme": {
                 "--primary-color": "#124170",
                 "--second-color": "#26667F",
