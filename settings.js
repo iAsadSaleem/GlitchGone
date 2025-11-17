@@ -668,7 +668,7 @@
                 "--sidebar-menu-icon-color": "#A0D6B4",
                 "--sidebar-menu-icon-hover-color": "#FFFFFF",
                 "--sidebar-menu-icon-active-color": "#FFFFFF",
-                "--sidebar-menu-border-radius": "16px",
+                "--sidebar-menu-border-radius": "10px",
 
                 "--sidebar-top-right-radius": "0px",
                 "--sidebar-bottom-right-radius": "0px",
@@ -714,8 +714,8 @@
                 "--header-icon-hover": "#00A86B",
 
                 "--scroll-width": "7px",
-                "--card-title-font-size": "18px",
-                "--card-body-border-radius": "24px",
+                "--card-body-border-radius":"6px",
+                "--card-title-font-size": "15px",
                 "--lockedMenus": "{}",
                 "--body-font": "Roboto"
             },
