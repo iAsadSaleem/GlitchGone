@@ -911,7 +911,7 @@
                 "--header-icon-hover-bg": "#4A70A9",
 
                 /* Cards */
-                "--card-body-bg-color": "#305669",
+                "--card-body-bg-color": "#d0deeb",
                 "--card-body-font-color": "#FFFFFF",
                 "--card-title-font-color": "#FFFFFF",
                 "--card-dec-font-color": "#333333",
@@ -927,9 +927,9 @@
                 "--top-nav-menu-active-color": "#07a125",
 
                 /* Card Header Gradient (Soft Green Tint) */
-                "--card-header-gradient-start": "#FFFFFF",
-                "--card-header-bg-gradient": "linear-gradient(38deg, #FFFFFF 45%, #DFF1E6 55%)",
-                "--card-header-gradient-end": "#DFF1E6",
+                "--card-header-gradient-start": "#465a65",
+                "--card-header-bg-gradient": "linear-gradient(38deg, #465a65 45%, #465a65 55%)",
+                "--card-header-gradient-end": "#465a65",
 
                 "--card-body-border-color": "#D9E7DD",
 
