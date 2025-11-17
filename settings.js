@@ -1097,7 +1097,7 @@
 
                 "--bg-gradient": "linear-gradient(38deg, rgba(27,27,27,0.70) 45%, rgba(255,255,255,1) 45%, rgba(255,255,255,1) 54%, rgba(76,175,80,1) 55%)",
 
-                "--sidebar-main-bg-gradient": "linear-gradient(225deg, rgb(5 64 89 / 83%) 40%, rgba(255, 255, 255, 1) 40%, rgb(247 245 245) 41%, rgb(19 40 51 / 94%) 40%)",
+                "--sidebar-main-bg-gradient": "linear-gradient(to bottom, rgba(0, 0, 0, 0.95), rgb(39 77 81) 80%)",
 
                 "--login-card-bg-gradient": "linear-gradient(38deg, rgba(27,27,27,0.70) 45%, rgba(255,255,255,1) 45%, rgba(255,255,255,1) 54%, rgba(76,175,80,1) 55%)",
 
