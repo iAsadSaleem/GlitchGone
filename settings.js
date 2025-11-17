@@ -1121,76 +1121,76 @@
                 "--body-font": "Roboto"
             },
             "OceanMist Light Theme": {
-                "--primary-color": "#276678",
-                "--second-color": "#1687A7",
-                "--dark-color": "#1B3B4B",
-                "--grey-color": "#D3E0EA",
+                "--primary-color": "#008080",               /* Main teal */
+                "--second-color": "#66b2b2",                /* Accent teal */
+                "--dark-color": "#004c4c",                  /* Strong contrast */
+                "--grey-color": "#b2d8d8",                  /* Soft mint grey */
                 "--alert-color": "#E63946",
 
-                "--app-bg-color": "#FDFDFE",
-                "--Acent-color": "#1B3B4B",
+                "--app-bg-color": "#F7FCFC",                /* Very light teal tint */
+                "--Acent-color": "#006666",
 
                 /* -------------------- SIDEBAR -------------------- */
-                "--sidebar-bg-color": "#E4EEF2",                  /* Softened blue — NOT white */
-                "--sidebar-menu-bg": "#d6eef7",                   /* Slight off-white, still blue-tinted */
-                "--sidebar-menu-color": "#1B3B4B",
-                "--sidebar-menu-hover-bg": "#94becd",             /* Light hover, noticeable but soft */
-                "--sidebar-menu-active-bg": "#C2D7E0",            /* Soft active with clear contrast */
-                "--sidebar-menu-icon-color": "#276678",
-                "--sidebar-menu-icon-hover-color": "#1687A7",
-                "--sidebar-menu-icon-active-color": "#1687A7",
+                "--sidebar-bg-color": "#bfe5e5",            /* Soft tinted sidebar */
+                "--sidebar-menu-bg": "#e5f7f7",             /* Light bluish-white */
+                "--sidebar-menu-color": "#004c4c",
+                "--sidebar-menu-hover-bg": "#b2d8d8",       /* Soft hover */
+                "--sidebar-menu-active-bg": "#a3cece",      /* Light but visible */
+                "--sidebar-menu-icon-color": "#008080",
+                "--sidebar-menu-icon-hover-color": "#66b2b2",
+                "--sidebar-menu-icon-active-color": "#66b2b2",
                 "--sidebar-menu-border-radius": "16px",
 
                 "--sidebar-top-right-radius": "14px",
                 "--sidebar-bottom-right-radius": "14px",
 
-                "--scroll-color": "#1687A7",
+                "--scroll-color": "#66b2b2",
 
                 /* -------------------- HEADER -------------------- */
                 "--header-bg-color": "#FFFFFF",
-                "--header-icon-color": "#276678",
-                "--header-icon-hover-color": "#1687A7",
-                "--header-icon-bg": "#F4F8FA",
-                "--header-icon-hover-bg": "#E4EEF3",
+                "--header-icon-color": "#006666",
+                "--header-icon-hover-color": "#008080",
+                "--header-icon-bg": "#f0fafb",
+                "--header-icon-hover-bg": "#e0f3f4",
 
                 /* -------------------- CARDS -------------------- */
                 "--card-body-bg-color": "#FFFFFF",
-                "--card-body-font-color": "#1B3B4B",
-                "--card-title-font-color": "#276678",
+                "--card-body-font-color": "#004c4c",
+                "--card-title-font-color": "#006666",
                 "--card-dec-font-color": "#44515B",
-                "--card-footer-bg-color": "#EEF4F7",
-                "--card-footer-font-color": "#1B3B4B",
+                "--card-footer-bg-color": "#eef7f7",
+                "--card-footer-font-color": "#004c4c",
 
-                "--card-body-border-color": "#D3E0EA",
+                "--card-body-border-color": "#b2d8d8",
 
                 /* -------------------- TOP NAV -------------------- */
                 "--top-nav-menu-bg": "#FFFFFF",
-                "--top-nav-menu-hover-bg": "#E7F1F5",
-                "--top-nav-menu-active-bg": "#D3E0EA",
-                "--top-nav-menu-color": "#276678",
-                "--top-nav-menu-hover-color": "#1687A7",
-                "--top-nav-menu-active-color": "#1687A7",
+                "--top-nav-menu-hover-bg": "#e5f7f7",
+                "--top-nav-menu-active-bg": "#b2d8d8",
+                "--top-nav-menu-color": "#006666",
+                "--top-nav-menu-hover-color": "#008080",
+                "--top-nav-menu-active-color": "#008080",
 
                 /* -------------------- CARD HEADER GRADIENT -------------------- */
-                "--card-header-gradient-start": "#EEF6F9",
-                "--card-header-bg-gradient": "linear-gradient(90deg, #FFFFFF 0%, #E8F2F7 55%, #D3E0EA 100%)",
-                "--card-header-gradient-end": "#D3E0EA",
+                "--card-header-gradient-start": "#f2fbfb",
+                "--card-header-bg-gradient": "linear-gradient(90deg, #FFFFFF 0%, #e5f7f7 55%, #b2d8d8 100%)",
+                "--card-header-gradient-end": "#b2d8d8",
 
                 /* -------------------- BACKGROUNDS -------------------- */
-                "--bg-gradient": "linear-gradient(90deg, #FFFFFF 0%, #F4FAFC 70%, #E8F2F7 100%)",
-                "--sidebar-main-bg-gradient": "linear-gradient(to bottom, #99c7e7, #c2c4c5)",
+                "--bg-gradient": "linear-gradient(90deg, #FFFFFF 0%, #f1fcfc 70%, #dff4f4 100%)",
+                "--sidebar-main-bg-gradient": "linear-gradient(to bottom, #66b2b2, #008080)",
 
                 /* -------------------- LOGIN -------------------- */
-                "--login-card-bg-gradient": "linear-gradient(to bottom, #FFFFFF, #F2F7F9, #E8F2F7)",
-                "--login-link-text-color": "#1687A7",
-                "--login-button-bg-gradient": "linear-gradient(to right, #276678 0%, #1687A7 60%, #4DA6C5 100%)",
-                "--login-button-bg-color": "#276678",
-                "--login-button-hover-bg-color": "#1687A7",
+                "--login-card-bg-gradient": "linear-gradient(to bottom, #FFFFFF, #f2fbfb, #e5f7f7)",
+                "--login-link-text-color": "#008080",
+                "--login-button-bg-gradient": "linear-gradient(to right, #006666 0%, #008080 60%, #66b2b2 100%)",
+                "--login-button-bg-color": "#006666",
+                "--login-button-hover-bg-color": "#008080",
                 "--login-card-bg-color": "#FFFFFF",
 
                 /* -------------------- HEADER MAIN GRADIENT -------------------- */
-                "--header-main-bg-gradient": "linear-gradient(90deg, #FFFFFF 0%, #F7FBFD 100%)",
-                "--header-icon-hover": "#1687A7",
+                "--header-main-bg-gradient": "linear-gradient(90deg, #FFFFFF 0%, #f3fcfc 100%)",
+                "--header-icon-hover": "#008080",
 
                 /* -------------------- MISC -------------------- */
                 "--scroll-width": "7px",
