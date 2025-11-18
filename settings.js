@@ -1317,7 +1317,7 @@
 
             const WRAPPER_ID = "ghl_custom_topnav_wrapper_v4";
             const STYLE_ID = "ghl_custom_topnav_styles_v4";
-            const LOGO_URL = "https://storage.googleapis.com/msgsndr/XOCRDXAxpkDgdqfr2neh/media/68fabe313b0ac65732907719.png";
+            const LOGO_URL = "https://msgsndr-private.storage.googleapis.com/companyPhotos/47b7e157-d197-4ce5-9a94-b697c258702a.png";
             const MAX_BUILD_ATTEMPTS = 40;
             const BUILD_INTERVAL_MS = 700;
 
