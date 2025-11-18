@@ -888,24 +888,25 @@
 
                 /* Sidebar */
                 "--sidebar-bg-color": "#C8B6A6",                      /* Soft Tan */
-                "--sidebar-menu-bg": "#A4907C",                       /* Warm Brown-Grey */
+                "--sidebar-menu-bg": "#cbb9a6",                       /* Warm Brown-Grey */
                 "--sidebar-menu-color": "#FFFFFF",
-                "--sidebar-menu-hover-bg": "#8D7B68",                 /* Mocha Hover */
-                "--sidebar-menu-active-bg": "#8D7B68",
+                "--sidebar-menu-hover-bg": "#d1beaa",                 /* Mocha Hover */
+                "--sidebar-menu-active-bg": "#c9ae92",
                 "--sidebar-menu-icon-color": "#FFFFFF",
                 "--sidebar-menu-icon-hover-color": "#FFFFFF",
                 "--sidebar-menu-icon-active-color": "#FFFFFF",
                 "--sidebar-menu-border-radius": "16px",
                 "--sidebar-top-right-radius": "18px",
                 "--sidebar-bottom-right-radius": "18px",
+                "--sidebar-main-bg-gradient": "linear-gradient(38deg, #E8E8E8 45%, #E8E8E8 55%)",
 
                 "--scroll-color": "#A4907C",
 
                 /* Header (white as requested) */
                 "--header-bg-color": "#FFFFFF",
-                "--header-icon-color": "#8D7B68",
-                "--header-icon-hover-color": "#A4907C",
-                "--header-icon-bg": "#F1DEC9",
+                "--header-icon-color": "#ffffff",
+                "--header-icon-hover-color": "#ffffff",
+                "--header-icon-bg": "#6C645D",
                 "--header-icon-hover-bg": "#E5CFBA",
 
                 /* Cards */
@@ -935,7 +936,6 @@
                 "--bg-gradient": "linear-gradient(180deg, #F8F0E9 0%, #F1DEC9 100%)",
 
                 /* Login Page */
-                "--sidebar-main-bg-gradient": "linear-gradient(38deg, #C8B6A6 45%, #A4907C 55%)",
                 "--login-card-bg-gradient": "linear-gradient(38deg, #FFFFFF 45%, #F1DEC9 55%)",
                 "--login-link-text-color": "#8D7B68",
                 "--login-button-bg-gradient": "linear-gradient(38deg, #A4907C 45%, #8D7B68 55%)",
