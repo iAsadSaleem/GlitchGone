@@ -5697,8 +5697,8 @@
             .rainbow-text {
                 position: relative;
                 left: 50px;
-                font-size: 25px;
-                font-weight: 800;
+                font-size: 23px;
+                font-weight: 700;
                 -webkit-background-clip: text;
                 color: black;
                 animation: rainbowMove 2s linear;
