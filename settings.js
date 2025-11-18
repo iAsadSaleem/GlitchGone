@@ -959,7 +959,6 @@
 
                 "--loader-background-color": "#F4FFF1"
             },
-
             "BlueWave Light Theme": {
                 "--primary-color": "#2A3E9B",
                 "--second-color": "#62C6F0",
@@ -5027,7 +5026,9 @@
 
         // Get previously selected theme
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        const previouslySelectedTheme = savedThemeObj.selectedTheme || "Default Theme";
+        const selectedtheme = localStorage.getItem("themebuilder_selectedTheme");
+
+        const previouslySelectedTheme = selectedtheme || "Default Theme";
 
         let themeName = modeOrName;
         let isMode = modeOrName === "dark" || modeOrName === "light";
