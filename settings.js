@@ -575,7 +575,7 @@
                 "--card-body-border-radius": "24px",
                 "--lockedMenus": "{}",
                 "--body-font": "Roboto",
-                "--loader-background-color": ""
+                "--login-company-logo": "url('https://msgsndr-private.storage.googleapis.com/companyPhotos/47b7e157-d197-4ce5-9a94-b697c258702a.png')"
             },
             "BlueWave Theme": {
                 "--primary-color": "#2A3E9B",
@@ -649,7 +649,8 @@
                 "--lockedMenus": "{}",
                 "--body-font": "Roboto",
                 "--login-background-active": "linear-gradient(135deg, #0052cc 0%, #00aaff 100%)",
-                "--login-button-hover-bg-color": "#0071e3"
+                "--login-button-hover-bg-color": "#0071e3",
+                "--login-company-logo": "url('https://msgsndr-private.storage.googleapis.com/companyPhotos/47b7e157-d197-4ce5-9a94-b697c258702a.png')"
             },
             "GlitchGone Theme": {
                 "--primary-color": "#0B3D0B",
@@ -718,7 +719,8 @@
                 "--card-title-font-size": "15px",
                 "--lockedMenus": "{}",
                 "--body-font": "Roboto",
-                "--login-background-image":"https://images.unsplash.com/photo-1504384308090-c894fdcc538d"
+                "--login-background-image": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d",
+                "--login-company-logo": "url('https://msgsndr-private.storage.googleapis.com/companyPhotos/47b7e157-d197-4ce5-9a94-b697c258702a.png')"
             },
             "OceanMist Theme": {
                 "--primary-color": "#276678",
@@ -785,7 +787,8 @@
                 "--card-title-font-size": "18px",
                 "--card-body-border-radius": "24px",
                 "--lockedMenus": "{}",
-                "--body-font": "Roboto"
+                "--body-font": "Roboto",
+                "--login-company-logo": "url('https://msgsndr-private.storage.googleapis.com/companyPhotos/47b7e157-d197-4ce5-9a94-b697c258702a.png')"
             },
             "JetBlack Luxury Gold Theme": {
                 "--primary-color": "#545454",
@@ -958,7 +961,8 @@
                 "--lockedMenus": "{}",
                 "--body-font": "Roboto",
 
-                "--loader-background-color": "#F4FFF1"
+                "--loader-background-color": "#F4FFF1",
+                "--login-company-logo": "url('https://msgsndr-private.storage.googleapis.com/companyPhotos/47b7e157-d197-4ce5-9a94-b697c258702a.png')",
             },
             "BlueWave Light Theme": {
                 "--primary-color": "#2A3E9B",
