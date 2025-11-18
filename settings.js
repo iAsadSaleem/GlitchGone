@@ -717,7 +717,8 @@
                 "--card-body-border-radius":"6px",
                 "--card-title-font-size": "15px",
                 "--lockedMenus": "{}",
-                "--body-font": "Roboto"
+                "--body-font": "Roboto",
+                "--login-background-image":"https://images.unsplash.com/photo-1504384308090-c894fdcc538d"
             },
             "OceanMist Theme": {
                 "--primary-color": "#276678",
