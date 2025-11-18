@@ -1303,7 +1303,6 @@
 
                 "--login-background-active": "linear-gradient(180deg, #FFFFFF 0%, #F4F4F4 55%, #E6E6E6 100%)"
             }
-
         };
     }
     function enableBlueWaveTopNav() {
