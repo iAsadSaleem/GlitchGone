@@ -883,75 +883,69 @@
     function getPredefinedThemes() {
         return {
             "Default Light Theme": {
-                "--primary-color": "#1C1427",
-                "--second-color": "#40394A",
-                "--dark-color": "#1C1427",
-                "--grey-color": "#E8F5E9",
-                "--alert-color": "#E63946",
-
-                "--app-bg-color": "#F9FFF6",
-                "--Acent-color": "#40394A",
+                "--primary-color": "#8D7B68",
+                "--second-color": "#A4907C",
 
                 /* Sidebar */
-                "--sidebar-bg-color": "#ffffff",
-                "--sidebar-menu-bg": "#665b75",
-                "--sidebar-menu-color": "#fbfbfb",
-                "--sidebar-menu-hover-bg": "#2d2847",
-                "--sidebar-menu-active-bg": "#292235",
-                "--sidebar-menu-icon-color": "#ffffff",
+                "--sidebar-bg-color": "#C8B6A6",                      /* Soft Tan */
+                "--sidebar-menu-bg": "#A4907C",                       /* Warm Brown-Grey */
+                "--sidebar-menu-color": "#FFFFFF",
+                "--sidebar-menu-hover-bg": "#8D7B68",                 /* Mocha Hover */
+                "--sidebar-menu-active-bg": "#8D7B68",
+                "--sidebar-menu-icon-color": "#FFFFFF",
                 "--sidebar-menu-icon-hover-color": "#FFFFFF",
                 "--sidebar-menu-icon-active-color": "#FFFFFF",
                 "--sidebar-menu-border-radius": "16px",
                 "--sidebar-top-right-radius": "18px",
                 "--sidebar-bottom-right-radius": "18px",
 
-                "--scroll-color": "#40394A",
+                "--scroll-color": "#A4907C",
 
-                /* Header */
-                "--header-bg-color": "#1C1427",
-                "--header-icon-color": "#ffffff",
-                "--header-icon-hover-color": "#ffffff",
-                "--header-icon-bg": "#3d304f",
-                "--header-icon-hover-bg": "#53486d",
+                /* Header (white as requested) */
+                "--header-bg-color": "#FFFFFF",
+                "--header-icon-color": "#8D7B68",
+                "--header-icon-hover-color": "#A4907C",
+                "--header-icon-bg": "#F1DEC9",
+                "--header-icon-hover-bg": "#E5CFBA",
 
                 /* Cards */
                 "--card-body-bg-color": "#FFFFFF",
-                "--card-body-font-color": "#1C1427",
-                "--card-title-font-color": "#ffffff",
-                "--card-dec-font-color": "#444444",
-                "--card-footer-bg-color": "#F3FAF2",
-                "--card-footer-font-color": "#1C1427",
+                "--card-body-font-color": "#403B36",
+                "--card-title-font-color": "#8D7B68",
+                "--card-dec-font-color": "#6C645D",
+                "--card-footer-bg-color": "#F4EEE8",
+                "--card-footer-font-color": "#403B36",
 
                 /* Top Navbar */
-                "--top-nav-menu-bg": "#F5FFF0",
-                "--top-nav-menu-hover-bg": "#E8FEE1",
-                "--top-nav-menu-active-bg": "#D8F8CD",
-                "--top-nav-menu-color": "#1C1427",
-                "--top-nav-menu-hover-color": "#7ECA9C",
-                "--top-nav-menu-active-color": "#40394A",
+                "--top-nav-menu-bg": "#F1DEC9",
+                "--top-nav-menu-hover-bg": "#E8D3BD",
+                "--top-nav-menu-active-bg": "#D9C3AC",
+                "--top-nav-menu-color": "#403B36",
+                "--top-nav-menu-hover-color": "#8D7B68",
+                "--top-nav-menu-active-color": "#A4907C",
 
                 /* Card Header Gradient */
-                "--card-header-gradient-start": "#7ECA9C",
-                "--card-header-gradient-end": "#CCFFBD",
-                "--card-header-bg-gradient": "linear-gradient(38deg, #1C1427 45%, #1C1427 55%)",
+                "--card-header-gradient-start": "#C8B6A6",
+                "--card-header-gradient-end": "#F1DEC9",
+                "--card-header-bg-gradient": "linear-gradient(38deg, #C8B6A6 0%, #F1DEC9 100%)",
 
-                "--card-body-border-color": "#CFEFD4",
+                "--card-body-border-color": "#E6D7C8",
 
                 /* App Background Gradient */
-                "--bg-gradient": "linear-gradient(38deg, #F9FFF6 40%, #E8FEE1 60%)",
+                "--bg-gradient": "linear-gradient(180deg, #F8F0E9 0%, #F1DEC9 100%)",
 
                 /* Login Page */
-                "--sidebar-main-bg-gradient": "linear-gradient(38deg, #1C1427 45%, #1C1427 55%)",
-                "--login-card-bg-gradient": "linear-gradient(38deg, #FFFFFF 45%, #CCFFBD 55%)",
-                "--login-link-text-color": "#40394A",
-                "--login-button-bg-gradient": "linear-gradient(38deg, #7ECA9C 45%, #40394A 55%)",
-                "--login-button-bg-color": "#7ECA9C",
+                "--sidebar-main-bg-gradient": "linear-gradient(38deg, #C8B6A6 45%, #A4907C 55%)",
+                "--login-card-bg-gradient": "linear-gradient(38deg, #FFFFFF 45%, #F1DEC9 55%)",
+                "--login-link-text-color": "#8D7B68",
+                "--login-button-bg-gradient": "linear-gradient(38deg, #A4907C 45%, #8D7B68 55%)",
+                "--login-button-bg-color": "#A4907C",
                 "--login-card-bg-color": "#FFFFFF",
-                "--login-button-hover-bg-color": "#40394A",
+                "--login-button-hover-bg-color": "#8D7B68",
 
                 /* Header Main Gradient */
-                "--header-main-bg-gradient": "linear-gradient(38deg, #ffffff 0% 0%, #ffffff 100% 100%)",
-                "--header-icon-hover": "#CCFFBD",
+                "--header-main-bg-gradient": "linear-gradient(38deg, #FFFFFF 0% 0%, #FFFFFF 100% 100%)",
+                "--header-icon-hover": "#8D7B68",
 
                 "--scroll-width": "7px",
 
@@ -961,7 +955,7 @@
                 "--lockedMenus": "{}",
                 "--body-font": "Roboto",
 
-                "--loader-background-color": "#F4FFF1",
+                "--loader-background-color": "#F4EEE8",
                 "--login-company-logo": "url('https://msgsndr-private.storage.googleapis.com/companyPhotos/47b7e157-d197-4ce5-9a94-b697c258702a.png')",
             },
             "BlueWave Light Theme": {
