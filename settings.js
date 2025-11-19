@@ -1574,7 +1574,7 @@
             savedThemeObj.themeData = { ...(savedThemeObj.themeData || {}), ...vars };
             savedThemeObj.selectedTheme = themeName;
 
-            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            //localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
             localStorage.setItem("themebuilder_selectedTheme", themeName);
             window.dispatchEvent(new Event("themeChanged"));
             // ----------------------------------------------
@@ -3986,7 +3986,6 @@
 
         setTimeout(updateSidebarLogo, 500);
     }
-
 
     // ✅ Your existing observer (don’t change this)
     function waitForSidebarMenus(callback) {
