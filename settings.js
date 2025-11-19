@@ -3903,6 +3903,7 @@
         logoInput.placeholder = "https://example.com/logo.png";
 
         const savedLogo = themeData["--agency-logo-url"] || themeData["--agency-logo"] || "";
+        console.log(savedLogo, 'Here is the Saved Logo');
         if (savedLogo) {
             let cleanURL = savedLogo.trim()
                 .replace(/^url\(/i, "")
@@ -3950,6 +3951,7 @@
 
         const savedWidth = themeData["--logo-width"];
         widthSlider.value = savedWidth ? parseInt(savedWidth.replace("px", "")) : 120;
+        console.log(savedWidth, 'Here is the savedWidth');
 
         widthSlider.addEventListener("input", () => {
             const px = widthSlider.value + "px";
@@ -3980,6 +3982,7 @@
 
         const savedHeight = themeData["--logo-height"];
         heightSlider.value = savedHeight ? parseInt(savedHeight.replace("px", "")) : 40;
+        console.log(savedHeight, 'Here is the savedHeight');
 
         heightSlider.addEventListener("input", () => {
             const px = heightSlider.value + "px";
