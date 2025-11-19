@@ -3897,9 +3897,14 @@
         logoInput.className = "tb-logo-input";
         logoInput.placeholder = "https://example.com/logo.png";
 
-        const savedLogoURL = themeData["--agency-logo"] || "";
-        if (savedLogoURL) {
-            logoInput.value = savedLogoURL.replace(/^url\(|\)$/g, "").replace(/"/g, "");
+        const savedLogo = themeData["--agency-logo-url"] || themeData["--agency-logo"] || "";
+        if (savedLogo) {
+            let cleanURL = savedLogo.trim()
+                .replace(/^url\(/i, "")
+                .replace(/\)$/i, "")
+                .replace(/^"|"$/g, "")
+                .replace(/^'|'$/g, "");
+            logoInput.value = cleanURL;
         }
 
         logoInput.addEventListener("input", () => {
@@ -3938,9 +3943,8 @@
         widthSlider.max = 100;
         widthSlider.className = "tb-slider";
 
-        widthSlider.value = themeData["--logo-width"]
-            ? parseInt(themeData["--logo-width"])
-            : 120;
+        const savedWidth = themeData["--logo-width"];
+        widthSlider.value = savedWidth ? parseInt(savedWidth.replace("px", "")) : 120;
 
         widthSlider.addEventListener("input", () => {
             const px = widthSlider.value + "px";
@@ -3968,9 +3972,8 @@
         heightSlider.max = 100;
         heightSlider.className = "tb-slider";
 
-        heightSlider.value = themeData["--logo-height"]
-            ? parseInt(themeData["--logo-height"])
-            : 40;
+        const savedHeight = themeData["--logo-height"];
+        heightSlider.value = savedHeight ? parseInt(savedHeight.replace("px", "")) : 40;
 
         heightSlider.addEventListener("input", () => {
             const px = heightSlider.value + "px";
