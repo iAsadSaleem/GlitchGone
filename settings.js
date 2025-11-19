@@ -5314,8 +5314,6 @@
         window.dispatchEvent(new Event("themeChanged"));
     }
 
-
-
     // Apply saved settingss
     function applySavedSettings() {
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
@@ -5561,30 +5559,24 @@
             // Toggle change: compute counterpart theme name and apply it
             toggleInput.addEventListener("change", (e) => {
                 const isDark = e.target.checked;
-                // reload selectedTheme (in case it changed elsewhere)
                 selectedTheme = localStorage.getItem("themebuilder_selectedTheme") || selectedTheme;
 
                 let targetTheme = null;
 
                 if (selectedTheme) {
-                    // pick counterpart from mapping, prefer exact matching list
                     if (isDark) {
-                        // want a dark theme
                         targetTheme = darkList.includes(selectedTheme)
                             ? selectedTheme
                             : (reversePairs[selectedTheme] || selectedTheme);
                     } else {
-                        // want a light theme
                         targetTheme = lightList.includes(selectedTheme)
                             ? selectedTheme
                             : (themePairs[selectedTheme] || selectedTheme);
                     }
                 } else {
-                    // no selected theme — pass a simple mode string; applyTheme will choose sensible default
                     targetTheme = isDark ? "dark" : "light";
                 }
 
-                console.debug("[ThemeToggle] toggled -> isDark:", isDark, "selectedTheme:", selectedTheme, "applying:", targetTheme);
                 applyTheme(targetTheme);
             });
 
