@@ -1754,7 +1754,7 @@ body.dark-mode {
     background: var(--grey-color, #d4d4d4);
     border-radius: 8px;
     outline: none;
-    cursor: pointer;
+    cursor: var(--custom-pointer,pointer);
     margin-top: 6px;
 }
 

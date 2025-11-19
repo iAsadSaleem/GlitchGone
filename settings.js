@@ -3956,7 +3956,7 @@
            HEIGHT SLIDER (80–200)
         ----------------------------------------- */
         const heightWrapper = document.createElement("div");
-        heightWrapper.className = "tb-color-picker-wrapper";
+        heightWrapper.className = "tb-color-picker-wrapperLogoSettings";
 
         const heightLabel = document.createElement("label");
         heightLabel.className = "tb-color-picker-label";
