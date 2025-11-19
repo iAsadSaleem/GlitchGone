@@ -3842,6 +3842,140 @@
 
         container.appendChild(wrapper);
     }
+    function addLogoSettings(container) {
+        if (document.getElementById("tb-logo-settings")) return;
+
+        const wrapper = document.createElement("div");
+        wrapper.className = "tb-logo-settings";
+        wrapper.id = "tb-logo-settings";
+        wrapper.style.marginTop = "16px";
+
+        const title = document.createElement("h4");
+        title.className = "tb-header-controls";
+        title.innerText = "Sidebar Logo Settings";
+        wrapper.appendChild(title);
+
+        // Load saved theme data
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        savedThemeObj.themeData = savedThemeObj.themeData || {};
+        const themeData = savedThemeObj.themeData;
+
+        function saveVar(key, value) {
+            themeData[key] = value;
+            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            document.body.style.setProperty(key, value);
+        }
+
+        function updateSidebarLogo() {
+            const rootStyle = getComputedStyle(document.documentElement);
+            let logoVar = rootStyle.getPropertyValue("--agency-logo").trim();
+
+            // remove quotes
+            logoVar = logoVar.replace(/^"|"$/g, "");
+
+            // Extract URL from url("xxx")
+            const match = logoVar.match(/url\(['"]?(.*?)['"]?\)/);
+            if (!match) return;
+
+            const logoURL = match[1];
+
+            const img = document.querySelector(".agency-logo");
+            if (img) {
+                img.src = logoURL;
+                img.style.objectFit = "contain";
+            }
+        }
+
+        // --- LOGO URL INPUT FIELD ---
+        const logoWrapper = document.createElement("div");
+        logoWrapper.className = "tb-color-picker-wrapper";
+
+        const logoLabel = document.createElement("label");
+        logoLabel.className = "tb-color-picker-label";
+        logoLabel.textContent = "Logo URL";
+        logoLabel.setAttribute("for", "tb-logo-url-input");
+
+        const logoInput = document.createElement("input");
+        logoInput.type = "text";
+        logoInput.id = "tb-logo-url-input";
+        logoInput.className = "tb-logo-input";
+        logoInput.placeholder = "https://example.com/logo.png";
+
+        const savedLogoURL = themeData["--agency-logo"] || "";
+        if (savedLogoURL) logoInput.value = savedLogoURL.replace(/^url\(|\)$/g, "").replace(/"/g, "");
+
+        logoInput.addEventListener("change", () => {
+            const url = logoInput.value.trim();
+            if (url) {
+                const cssValue = `url("${url}")`;
+                saveVar("--agency-logo", cssValue);
+                updateSidebarLogo();
+            }
+        });
+
+        logoWrapper.appendChild(logoLabel);
+        logoWrapper.appendChild(logoInput);
+        wrapper.appendChild(logoWrapper);
+
+        // --- LOGO WIDTH INPUT FIELD ---
+        const widthWrapper = document.createElement("div");
+        widthWrapper.className = "tb-color-picker-wrapper";
+
+        const widthLabel = document.createElement("label");
+        widthLabel.className = "tb-color-picker-label";
+        widthLabel.textContent = "Logo Width";
+
+        const widthInput = document.createElement("input");
+        widthInput.type = "text";
+        widthInput.className = "tb-logo-width-input";
+        widthInput.placeholder = "e.g. 120px";
+
+        if (themeData["--logo-width"]) widthInput.value = themeData["--logo-width"];
+
+        widthInput.addEventListener("change", () => {
+            const value = widthInput.value.trim();
+            if (value) {
+                saveVar("--logo-width", value);
+                updateSidebarLogo();
+            }
+        });
+
+        widthWrapper.appendChild(widthLabel);
+        widthWrapper.appendChild(widthInput);
+        wrapper.appendChild(widthWrapper);
+
+        // --- LOGO HEIGHT INPUT FIELD ---
+        const heightWrapper = document.createElement("div");
+        heightWrapper.className = "tb-color-picker-wrapper";
+
+        const heightLabel = document.createElement("label");
+        heightLabel.className = "tb-color-picker-label";
+        heightLabel.textContent = "Logo Height";
+
+        const heightInput = document.createElement("input");
+        heightInput.type = "text";
+        heightInput.className = "tb-logo-height-input";
+        heightInput.placeholder = "e.g. 40px";
+
+        if (themeData["--logo-height"]) heightInput.value = themeData["--logo-height"];
+
+        heightInput.addEventListener("change", () => {
+            const value = heightInput.value.trim();
+            if (value) {
+                saveVar("--logo-height", value);
+                updateSidebarLogo();
+            }
+        });
+
+        heightWrapper.appendChild(heightLabel);
+        heightWrapper.appendChild(heightInput);
+        wrapper.appendChild(heightWrapper);
+
+        container.appendChild(wrapper);
+
+        // update logo on load
+        setTimeout(updateSidebarLogo, 500);
+    }
 
     // ✅ Your existing observer (don’t change this)
     function waitForSidebarMenus(callback) {
@@ -5367,7 +5501,7 @@
                     addScrollbarSettings(section);   // Profile Button Color Controls
                     addDashboardCardSettings(section);
                     addBackgroundGradientSettings(section);
-
+                    addLogoSettings(section) 
                     //buildFeedbackForm(section);
                     addCursorSelectorSettings(section);
                     addCursorPointerSelectorSettings(section);
