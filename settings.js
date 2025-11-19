@@ -5309,7 +5309,7 @@
 
         localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
         localStorage.setItem("themebuilder_selectedTheme", themeName);
-
+        console.log('usertheme', savedThemeObj);
         // Notify others
         window.dispatchEvent(new Event("themeChanged"));
     }
