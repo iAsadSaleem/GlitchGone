@@ -5908,7 +5908,7 @@
                 const data = await response.json();
                 if (data.success) {
                     injectThemeBuilderMenu(); 
-                    createBuilderUI(controlsContainer);
+                    //createBuilderUI(controlsContainer);
 
                     const headerEl = document.querySelector("header.hl_header") || document.querySelector("header");
                     if (headerEl && !headerObserver) {
