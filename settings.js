@@ -5239,7 +5239,7 @@
     function applyTheme(modeOrName, themeVars = null) {
         const darkThemes = darkthemes();
         const lightThemes = getPredefinedThemes();
-
+        console.log(modeOrName, 'herre is the modeorname');
         // Theme pairs: dark -> light
         const themePairs = {
             "JetBlack Luxury Gold Theme": "JetBlack Luxury Gold Theme - Light",
@@ -5576,7 +5576,7 @@
                 } else {
                     targetTheme = isDark ? "dark" : "light";
                 }
-
+                console.log('going to hit the applytheme method');
                 applyTheme(targetTheme);
             });
 
