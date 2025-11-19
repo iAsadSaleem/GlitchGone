@@ -1493,6 +1493,7 @@
     function buildThemeSelectorSection(container) {
         if (!container) return;
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        console.log(savedThemeObj, 'Here is the First called savedthemeObj Data');
         const selectedtheme = localStorage.getItem("themebuilder_selectedTheme");
         // inject minimal styles once
         if (!document.getElementById("tb-theme-selector-styles")) {
