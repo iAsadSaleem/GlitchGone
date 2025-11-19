@@ -5462,43 +5462,132 @@
             const darkThemes = darkthemes();
             const lightThemes = getPredefinedThemes();
 
-            // ===============================
-            // ✅ Initialize toggle on page load
-            // ===============================
-            if (selectedTheme) {
-                let isDark = false;
+            //// ===============================
+            //// ✅ Initialize toggle on page load
+            //// ===============================
+            //if (selectedTheme) {
+            //    let isDark = false;
 
-                // Check if saved theme is a dark theme
-                if (darkThemes[selectedTheme]) {
-                    isDark = true;
-                } else if (lightThemes[selectedTheme]) {
-                    isDark = false;
-                } else {
-                    // fallback: check currentMode
-                    isDark = currentMode === "dark";
-                }
+            //    // Check if saved theme is a dark theme
+            //    if (darkThemes[selectedTheme]) {
+            //        isDark = true;
+            //    } else if (lightThemes[selectedTheme]) {
+            //        isDark = false;
+            //    } else {
+            //        // fallback: check currentMode
+            //        isDark = currentMode === "dark";
+            //    }
 
-                // Apply saved theme
-                applyTheme(currentMode || (isDark ? "dark" : "light"));
+            //    // Apply saved theme
+            //    applyTheme(currentMode || (isDark ? "dark" : "light"));
 
-                // Set toggle state and body class
-                toggleInput.checked = isDark;
-                //document.body.classList.toggle("dark-mode", isDark);
+            //    // Set toggle state and body class
+            //    toggleInput.checked = isDark;
+            //    //document.body.classList.toggle("dark-mode", isDark);
+            //}
+
+            //// ===============================
+            //// ✅ Toggle change event
+            //// ===============================
+            //toggleInput.addEventListener("change", (e) => {
+            //    const isDark = e.target.checked;
+            //    const newMode = isDark ? "dark" : "light";
+
+            //    // Apply and save theme using helper
+            //    applyTheme(newMode);
+
+            //    // Visual mode toggle
+            //    //document.body.classList.toggle("dark-mode", isDark);
+            //});
+            // Build the exact mapping used by applyTheme
+            const themePairs = {
+                "JetBlack Luxury Gold Theme": "JetBlack Luxury Gold Theme - Light",
+                "OceanMist Theme": "OceanMist Light Theme",
+                "GlitchGone Theme": "GlitchGone Light Theme",
+                "BlueWave Theme": "BlueWave Light Theme",
+                "Default Theme": "Default Light Theme"
+            };
+            const reversePairs = Object.fromEntries(Object.entries(themePairs).map(([d, l]) => [l, d]));
+
+            // Read current selection
+            let selectedTheme = localStorage.getItem("themebuilder_selectedTheme") || null;
+            const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+            const currentModeVar = savedThemeObj?.themeData?.["--theme-mode"] || null;
+
+            // Helper: decide whether a theme name is in darkThemes or lightThemes
+            const darkList = Object.keys(darkthemes());
+            const lightList = Object.keys(getPredefinedThemes());
+
+            function themeIsDark(name) {
+                if (!name) return false;
+                if (darkList.includes(name)) return true;
+                if (lightList.includes(name)) return false;
+                // fallback to stored mode
+                return currentModeVar === "dark";
             }
 
-            // ===============================
-            // ✅ Toggle change event
-            // ===============================
+            // Initialize toggle state and apply saved theme/mode
+            (function initToggle() {
+                // determine initial state
+                let isDark = false;
+                if (selectedTheme) {
+                    isDark = themeIsDark(selectedTheme);
+                } else {
+                    // fallback to theme-mode var or false
+                    isDark = currentModeVar === "dark";
+                }
+
+                // set checkbox visual
+                toggleInput.checked = !!isDark;
+
+                // Apply the appropriate theme on load:
+                // If there's a selectedTheme and it already matches the mode, re-apply it.
+                // Otherwise get the mapped counterpart and apply that.
+                if (selectedTheme) {
+                    const targetThemeName = isDark
+                        ? (darkList.includes(selectedTheme) ? selectedTheme : (reversePairs[selectedTheme] || selectedTheme))
+                        : (lightList.includes(selectedTheme) ? selectedTheme : (themePairs[selectedTheme] || selectedTheme));
+
+                    console.debug("[ThemeToggle] init -> selectedTheme:", selectedTheme, "apply ->", targetThemeName);
+                    applyTheme(targetThemeName);
+                } else {
+                    // no selectedTheme — apply mode directly (applyTheme will fallback to defaults)
+                    const mode = isDark ? "dark" : "light";
+                    console.debug("[ThemeToggle] init -> no selectedTheme, applying mode:", mode);
+                    applyTheme(mode);
+                }
+            })();
+
+            // Toggle change: compute counterpart theme name and apply it
             toggleInput.addEventListener("change", (e) => {
                 const isDark = e.target.checked;
-                const newMode = isDark ? "dark" : "light";
+                // reload selectedTheme (in case it changed elsewhere)
+                selectedTheme = localStorage.getItem("themebuilder_selectedTheme") || selectedTheme;
 
-                // Apply and save theme using helper
-                applyTheme(newMode);
+                let targetTheme = null;
 
-                // Visual mode toggle
-                //document.body.classList.toggle("dark-mode", isDark);
+                if (selectedTheme) {
+                    // pick counterpart from mapping, prefer exact matching list
+                    if (isDark) {
+                        // want a dark theme
+                        targetTheme = darkList.includes(selectedTheme)
+                            ? selectedTheme
+                            : (reversePairs[selectedTheme] || selectedTheme);
+                    } else {
+                        // want a light theme
+                        targetTheme = lightList.includes(selectedTheme)
+                            ? selectedTheme
+                            : (themePairs[selectedTheme] || selectedTheme);
+                    }
+                } else {
+                    // no selected theme — pass a simple mode string; applyTheme will choose sensible default
+                    targetTheme = isDark ? "dark" : "light";
+                }
+
+                console.debug("[ThemeToggle] toggled -> isDark:", isDark, "selectedTheme:", selectedTheme, "applying:", targetTheme);
+                applyTheme(targetTheme);
             });
+
 
 
             // ===== Card Wrapper =====
