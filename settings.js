@@ -33,7 +33,8 @@
             document.head.appendChild(link);
         }
     })();
-
+    const abc = JSON.parse(localStorage.getItem("userTheme") || "{}");
+    console.log(abc, 'Here is First Usertheem data');
     window.addEventListener("load", () => {
         waitForSidebarMenus(() => {
             // ✅ Apply locked menus or other functions if needed
@@ -5181,7 +5182,6 @@
 
         // Get previously selected theme
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        console.log(savedThemeObj, 'Here is the Theme Data From Applytheme Mehtod');
         const selectedtheme = localStorage.getItem("themebuilder_selectedTheme");
 
         const previouslySelectedTheme = selectedtheme || "Default Theme";
@@ -5226,7 +5226,6 @@
         // Save theme selection to localStorage
         savedThemeObj.selectedTheme = themeName;
         savedThemeObj.themeData = { ...vars, "--theme-mode": currentMode };
-        console.log(savedThemeObj, 'after functionality savedthemeObj');
         localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
         localStorage.setItem("themebuilder_selectedTheme", themeName);
 
