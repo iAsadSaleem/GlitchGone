@@ -575,7 +575,9 @@
                 "--card-body-border-radius": "24px",
                 "--lockedMenus": "{}",
                 "--body-font": "Roboto",
-                "--login-company-logo": "url('https://msgsndr-private.storage.googleapis.com/companyPhotos/47b7e157-d197-4ce5-9a94-b697c258702a.png')"
+                "--login-company-logo": "url('https://msgsndr-private.storage.googleapis.com/companyPhotos/47b7e157-d197-4ce5-9a94-b697c258702a.png')",
+                "--login-background-image": "url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d')",
+
             },
             "BlueWave Theme": {
                 "--primary-color": "#2A3E9B",
@@ -719,7 +721,6 @@
                 "--card-title-font-size": "15px",
                 "--lockedMenus": "{}",
                 "--body-font": "Roboto",
-                "--login-background-image": "url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d')",
                 "--login-company-logo": "url('https://msgsndr-private.storage.googleapis.com/companyPhotos/47b7e157-d197-4ce5-9a94-b697c258702a.png')"
             },
             "OceanMist Theme": {
