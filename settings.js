@@ -3866,11 +3866,15 @@
             document.body.style.setProperty(key, value);
         }
 
-        function updateSidebarLogo() {
-            const url = getComputedStyle(document.documentElement)
-                .getPropertyValue("--agency-logo-url")
-                .trim()
-                .replace(/^"|"$/g, "");
+        function updateSidebarLogo(forceUrl = null) {
+            let url = forceUrl;
+
+            if (!url) {
+                url = getComputedStyle(document.documentElement)
+                    .getPropertyValue("--agency-logo-url")
+                    .trim()
+                    .replace(/^"|"$/g, "");
+            }
 
             if (!url) return;
 
@@ -3880,6 +3884,7 @@
                 img.style.objectFit = "contain";
             }
         }
+
 
 
         /* -----------------------------------------
@@ -3949,7 +3954,8 @@
         widthSlider.addEventListener("input", () => {
             const px = widthSlider.value + "px";
             saveVar("--logo-width", px);
-            updateSidebarLogo();
+            updateSidebarLogo(themeData["--agency-logo-url"]);
+
         });
 
         widthWrapper.appendChild(widthLabel);
