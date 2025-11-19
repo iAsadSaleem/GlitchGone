@@ -719,7 +719,7 @@
                 "--card-title-font-size": "15px",
                 "--lockedMenus": "{}",
                 "--body-font": "Roboto",
-                "--login-background-image": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d",
+                "--login-background-image": "url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d')",
                 "--login-company-logo": "url('https://msgsndr-private.storage.googleapis.com/companyPhotos/47b7e157-d197-4ce5-9a94-b697c258702a.png')"
             },
             "OceanMist Theme": {
