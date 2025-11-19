@@ -1750,28 +1750,30 @@ body.dark-mode {
 }
 .tb-slider {
     width: 70%;
-    height: 9px;
-    background: var(--grey-color, #d4d4d4);
-    border-radius: 8px;
+    height: 6px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: linear-gradient( 90deg, var(--primary-color, #4A90E2), var(--second-color, #9bc5ff) );
+    border-radius: 20px;
     outline: none;
-    cursor: var(--custom-pointer,pointer);
-    margin-top: 6px;
+    cursor: var(--custom-pointer, pointer);
+    transition: background 0.3s ease;
 }
 
+    /* Thumb */
     .tb-slider::-webkit-slider-thumb {
         -webkit-appearance: none;
-        appearance: none;
-        width: 14px;
-        height: 14px;
+        height: 18px;
+        width: 18px;
+        background: white;
+        border: 3px solid var(--primary-color, #4A90E2);
         border-radius: 50%;
-        background: var(--primary-color, #333);
         cursor: pointer;
+        transition: 0.25s;
+        box-shadow: 0 0 6px rgba(0,0,0,0.2);
     }
 
-    .tb-slider::-moz-range-thumb {
-        width: 14px;
-        height: 14px;
-        border-radius: 50%;
-        background: var(--primary-color, #333);
-        cursor: pointer;
-    }
+        .tb-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+        }
+
