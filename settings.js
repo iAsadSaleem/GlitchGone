@@ -3922,12 +3922,12 @@
         widthWrapper.className = "tb-color-picker-wrapper";
 
         const widthLabel = document.createElement("label");
-        widthLabel.className = "tb-color-picker-label";
+        widthLabel.className = "tb-number-fond-input";
         widthLabel.textContent = "Logo Width";
 
         const widthInput = document.createElement("input");
         widthInput.type = "text";
-        widthInput.className = "tb-logo-width-input";
+        widthInput.className = "tb-number-fond-input";
         widthInput.placeholder = "e.g. 120px";
 
         if (themeData["--logo-width"]) widthInput.value = themeData["--logo-width"];
