@@ -5451,10 +5451,10 @@
             //        document.body.classList.toggle("dark-mode", isDark);
             //    });
             // Get saved theme and mode
-            const abc = JSON.parse(localStorage.getItem("userTheme") || "{}");
-            console.log(abc, 'Here is First Usertheem data');
-            const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-            console.log(savedThemeObj, 'here is the savedThemeObj theme data');
+            //const abc = JSON.parse(localStorage.getItem("userTheme") || "{}");
+            //console.log(abc, 'Here is First Usertheem data');
+            //const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+            //console.log(savedThemeObj, 'here is the savedThemeObj theme data');
             //const selectedTheme = localStorage.getItem("themebuilder_selectedTheme");
             //const currentMode = savedThemeObj?.themeData?.["--theme-mode"];
 
