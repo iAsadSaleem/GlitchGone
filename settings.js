@@ -5160,9 +5160,85 @@
         reapplyThemeOnRouteChange();
     })();
    
-    function applyTheme(modeOrName, themeVars) {
-        const darkThemes = darkthemes();           // Your dark themes
-        const lightThemes = getPredefinedThemes(); // Your light themes
+    //function applyTheme(modeOrName, themeVars) {
+    //    const darkThemes = darkthemes();           // Your dark themes
+    //    const lightThemes = getPredefinedThemes(); // Your light themes
+
+    //    // Theme pairs: dark -> light
+    //    const themePairs = {
+    //        "JetBlack Luxury Gold Theme": "JetBlack Luxury Gold Theme - Light",
+    //        "OceanMist Theme": "OceanMist Light Theme",
+    //        "GlitchGone Theme": "GlitchGone Light Theme",
+    //        "BlueWave Theme": "BlueWave Light Theme",
+    //        "Default Theme": "Default Light Theme"
+    //    };
+
+    //    // Auto-generate light -> dark mapping
+    //    const reversePairs = Object.fromEntries(
+    //        Object.entries(themePairs).map(([dark, light]) => [light, dark])
+    //    );
+
+    //    // Get previously selected theme
+    //    const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+    //    console.log(savedThemeObj, 'Here is applytheme method data');
+    //    const selectedtheme = localStorage.getItem("themebuilder_selectedTheme");
+
+    //    const previouslySelectedTheme = selectedtheme || "Default Theme";
+
+    //    let themeName = modeOrName;
+    //    let isMode = modeOrName === "dark" || modeOrName === "light";
+
+    //    if (isMode) {
+    //        if (modeOrName === "light") {
+    //            // Convert dark → light
+    //            themeName = themePairs[previouslySelectedTheme] || "Default Light Theme";
+    //        } else {
+    //            // Convert light → dark
+    //            // Check if previously selected was light, map to dark
+    //            themeName = reversePairs[previouslySelectedTheme] || previouslySelectedTheme;
+    //        }
+    //    }
+
+    //    // Determine which theme vars to use
+    //    let vars = themeVars;
+    //    if (!vars) {
+    //        if (darkThemes[themeName]) {
+    //            vars = darkThemes[themeName];
+    //        } else if (lightThemes[themeName]) {
+    //            vars = lightThemes[themeName];
+    //        } else {
+    //            console.warn("Theme not found:", themeName);
+    //            return;
+    //        }
+    //    }
+
+    //    // Apply CSS variables
+    //    Object.entries(vars).forEach(([key, value]) => {
+    //        if (value) document.body.style.setProperty(key, value);
+    //    });
+
+    //    // Update --theme-mode and class
+    //    const currentMode = isMode ? modeOrName : (darkThemes[themeName] ? "dark" : "light");
+    //    document.body.style.setProperty("--theme-mode", currentMode);
+    //    //document.body.classList.toggle("dark-mode", currentMode === "dark");
+
+    //    // Save theme selection to localStorage
+    //    savedThemeObj.selectedTheme = themeName;
+    //    //savedThemeObj.themeData = { ...vars, "--theme-mode": currentMode };
+    //    savedThemeObj.selectedTheme = themeName;
+    //    savedThemeObj.themeData = {
+    //        ...vars,                     // theme defaults
+    //        ...(savedThemeObj.themeData || {}) // preserve user customizations
+    //    };
+    //    localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+    //    localStorage.setItem("themebuilder_selectedTheme", themeName);
+
+    //    // Notify other parts of app
+    //    window.dispatchEvent(new Event("themeChanged"));
+    //}
+    function applyTheme(modeOrName, themeVars = null) {
+        const darkThemes = darkthemes();
+        const lightThemes = getPredefinedThemes();
 
         // Theme pairs: dark -> light
         const themePairs = {
@@ -5173,64 +5249,71 @@
             "Default Theme": "Default Light Theme"
         };
 
-        // Auto-generate light -> dark mapping
+        // Auto-generate light -> dark
         const reversePairs = Object.fromEntries(
             Object.entries(themePairs).map(([dark, light]) => [light, dark])
         );
 
-        // Get previously selected theme
+        // LOAD USER SAVED THEME
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        console.log(savedThemeObj, 'Here is applytheme method data');
+        const savedThemeData = savedThemeObj.themeData || {};
         const selectedtheme = localStorage.getItem("themebuilder_selectedTheme");
-
         const previouslySelectedTheme = selectedtheme || "Default Theme";
 
         let themeName = modeOrName;
-        let isMode = modeOrName === "dark" || modeOrName === "light";
+        const isMode = (modeOrName === "dark" || modeOrName === "light");
 
+        // If light/dark toggle clicked
         if (isMode) {
             if (modeOrName === "light") {
-                // Convert dark → light
                 themeName = themePairs[previouslySelectedTheme] || "Default Light Theme";
             } else {
-                // Convert light → dark
-                // Check if previously selected was light, map to dark
                 themeName = reversePairs[previouslySelectedTheme] || previouslySelectedTheme;
             }
         }
 
-        // Determine which theme vars to use
+        // FIND THEME VARIABLES
         let vars = themeVars;
         if (!vars) {
-            if (darkThemes[themeName]) {
-                vars = darkThemes[themeName];
-            } else if (lightThemes[themeName]) {
-                vars = lightThemes[themeName];
-            } else {
+            vars = darkThemes[themeName] || lightThemes[themeName];
+            if (!vars) {
                 console.warn("Theme not found:", themeName);
                 return;
             }
         }
 
-        // Apply CSS variables
+        // 🔥 APPLY ONLY THE VARIABLES FROM THE THEME (safe)
         Object.entries(vars).forEach(([key, value]) => {
-            if (value) document.body.style.setProperty(key, value);
+            if (value !== undefined && value !== null && value !== "") {
+                document.documentElement.style.setProperty(key, value);
+            }
         });
 
-        // Update --theme-mode and class
-        const currentMode = isMode ? modeOrName : (darkThemes[themeName] ? "dark" : "light");
-        document.body.style.setProperty("--theme-mode", currentMode);
-        //document.body.classList.toggle("dark-mode", currentMode === "dark");
+        // DETECT CURRENT MODE
+        const currentMode = isMode
+            ? modeOrName
+            : (darkThemes[themeName] ? "dark" : "light");
 
-        // Save theme selection to localStorage
+        // APPLY THE MODE VARIABLE SAFELY
+        document.documentElement.style.setProperty("--theme-mode", currentMode);
+
+        // ⭐ SAVE THEME SAFELY (NO MORE OVERWRITE)
+        const mergedThemeData = {
+            ...savedThemeData, // user custom settings FIRST
+            ...vars,           // theme defaults override only their own keys
+            "--theme-mode": currentMode
+        };
+
         savedThemeObj.selectedTheme = themeName;
-        savedThemeObj.themeData = { ...vars, "--theme-mode": currentMode };
+        savedThemeObj.themeData = mergedThemeData;
+
         localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
         localStorage.setItem("themebuilder_selectedTheme", themeName);
 
-        // Notify other parts of app
+        // Notify others
         window.dispatchEvent(new Event("themeChanged"));
     }
+
 
 
     // Apply saved settingss
