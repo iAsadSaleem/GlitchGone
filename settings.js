@@ -3870,15 +3870,11 @@
             const rootStyle = getComputedStyle(document.documentElement);
             let logoVar = rootStyle.getPropertyValue("--agency-logo").trim();
 
-            // remove quotes
             logoVar = logoVar.replace(/^"|"$/g, "");
-
-            // Extract URL from url("xxx")
             const match = logoVar.match(/url\(['"]?(.*?)['"]?\)/);
             if (!match) return;
 
             const logoURL = match[1];
-
             const img = document.querySelector(".agency-logo");
             if (img) {
                 img.src = logoURL;
@@ -3886,25 +3882,27 @@
             }
         }
 
-        // --- LOGO URL INPUT FIELD ---
+        /* -----------------------------------------
+           LOGO URL INPUT
+        ----------------------------------------- */
         const logoWrapper = document.createElement("div");
         logoWrapper.className = "tb-color-picker-wrapper";
 
         const logoLabel = document.createElement("label");
         logoLabel.className = "tb-color-picker-label";
         logoLabel.textContent = "Logo URL";
-        logoLabel.setAttribute("for", "tb-logo-url-input");
 
         const logoInput = document.createElement("input");
         logoInput.type = "text";
-        logoInput.id = "tb-logo-url-input";
         logoInput.className = "tb-logo-input";
         logoInput.placeholder = "https://example.com/logo.png";
 
         const savedLogoURL = themeData["--agency-logo"] || "";
-        if (savedLogoURL) logoInput.value = savedLogoURL.replace(/^url\(|\)$/g, "").replace(/"/g, "");
+        if (savedLogoURL) {
+            logoInput.value = savedLogoURL.replace(/^url\(|\)$/g, "").replace(/"/g, "");
+        }
 
-        logoInput.addEventListener("change", () => {
+        logoInput.addEventListener("input", () => {
             const url = logoInput.value.trim();
             if (url) {
                 const cssValue = `url("${url}")`;
@@ -3917,34 +3915,39 @@
         logoWrapper.appendChild(logoInput);
         wrapper.appendChild(logoWrapper);
 
-        // --- LOGO WIDTH INPUT FIELD ---
+        /* -----------------------------------------
+           WIDTH SLIDER (80–200)
+        ----------------------------------------- */
         const widthWrapper = document.createElement("div");
         widthWrapper.className = "tb-color-picker-wrapper";
 
         const widthLabel = document.createElement("label");
-        widthLabel.className = "tb-number-fond-input";
+        widthLabel.className = "tb-color-picker-label";
         widthLabel.textContent = "Logo Width";
 
-        const widthInput = document.createElement("input");
-        widthInput.type = "text";
-        widthInput.className = "tb-number-fond-input";
-        widthInput.placeholder = "e.g. 120px";
+        const widthSlider = document.createElement("input");
+        widthSlider.type = "range";
+        widthSlider.min = 80;
+        widthSlider.max = 200;
+        widthSlider.className = "tb-slider";
 
-        if (themeData["--logo-width"]) widthInput.value = themeData["--logo-width"];
+        widthSlider.value = themeData["--logo-width"]
+            ? parseInt(themeData["--logo-width"])
+            : 120;
 
-        widthInput.addEventListener("change", () => {
-            const value = widthInput.value.trim();
-            if (value) {
-                saveVar("--logo-width", value);
-                updateSidebarLogo();
-            }
+        widthSlider.addEventListener("input", () => {
+            const px = widthSlider.value + "px";
+            saveVar("--logo-width", px);
+            updateSidebarLogo();
         });
 
         widthWrapper.appendChild(widthLabel);
-        widthWrapper.appendChild(widthInput);
+        widthWrapper.appendChild(widthSlider);
         wrapper.appendChild(widthWrapper);
 
-        // --- LOGO HEIGHT INPUT FIELD ---
+        /* -----------------------------------------
+           HEIGHT SLIDER (80–200)
+        ----------------------------------------- */
         const heightWrapper = document.createElement("div");
         heightWrapper.className = "tb-color-picker-wrapper";
 
@@ -3952,30 +3955,31 @@
         heightLabel.className = "tb-color-picker-label";
         heightLabel.textContent = "Logo Height";
 
-        const heightInput = document.createElement("input");
-        heightInput.type = "text";
-        heightInput.className = "tb-logo-height-input";
-        heightInput.placeholder = "e.g. 40px";
+        const heightSlider = document.createElement("input");
+        heightSlider.type = "range";
+        heightSlider.min = 80;
+        heightSlider.max = 200;
+        heightSlider.className = "tb-slider";
 
-        if (themeData["--logo-height"]) heightInput.value = themeData["--logo-height"];
+        heightSlider.value = themeData["--logo-height"]
+            ? parseInt(themeData["--logo-height"])
+            : 40;
 
-        heightInput.addEventListener("change", () => {
-            const value = heightInput.value.trim();
-            if (value) {
-                saveVar("--logo-height", value);
-                updateSidebarLogo();
-            }
+        heightSlider.addEventListener("input", () => {
+            const px = heightSlider.value + "px";
+            saveVar("--logo-height", px);
+            updateSidebarLogo();
         });
 
         heightWrapper.appendChild(heightLabel);
-        heightWrapper.appendChild(heightInput);
+        heightWrapper.appendChild(heightSlider);
         wrapper.appendChild(heightWrapper);
 
         container.appendChild(wrapper);
 
-        // update logo on load
         setTimeout(updateSidebarLogo, 500);
     }
+
 
     // ✅ Your existing observer (don’t change this)
     function waitForSidebarMenus(callback) {
