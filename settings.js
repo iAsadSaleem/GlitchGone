@@ -33,8 +33,6 @@
             document.head.appendChild(link);
         }
     })();
-    const abc = JSON.parse(localStorage.getItem("userTheme") || "{}");
-    console.log(abc, 'Here is First Usertheem data');
     window.addEventListener("load", () => {
         waitForSidebarMenus(() => {
             // ✅ Apply locked menus or other functions if needed
@@ -5252,6 +5250,8 @@
     function createBuilderUI(controlsContainer) {
         const existingIcon = document.getElementById("hl_header--themebuilder-icon");
         const existingDrawer = document.getElementById("themeBuilderDrawer");
+        const abc = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        console.log(abc, 'Here is First Usertheem data');
 
         // 🛠️ If UI already exists, just rebind listeners and return
         if (existingIcon && existingDrawer) {
@@ -5908,7 +5908,7 @@
                 const data = await response.json();
                 if (data.success) {
                     injectThemeBuilderMenu(); 
-                    //createBuilderUI(controlsContainer);
+                    createBuilderUI(controlsContainer);
 
                     const headerEl = document.querySelector("header.hl_header") || document.querySelector("header");
                     if (headerEl && !headerObserver) {
