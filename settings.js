@@ -1564,7 +1564,7 @@
 
             // Save
             const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-
+            console.log(savedThemeObj, 'here is the saved usertheme cssveriables');
             // 🧹 Remove mode before merging
             if (savedThemeObj.themeData && savedThemeObj.themeData["--theme-mode"]) {
                 delete savedThemeObj.themeData["--theme-mode"];
