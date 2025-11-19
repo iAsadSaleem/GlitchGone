@@ -5560,7 +5560,7 @@
             toggleInput.addEventListener("change", (e) => {
                 const isDark = e.target.checked;
                 selectedTheme = localStorage.getItem("themebuilder_selectedTheme") || selectedTheme;
-
+                console.log(selectedTheme, 'toggle hit');
                 let targetTheme = null;
 
                 if (selectedTheme) {
