@@ -1743,3 +1743,30 @@ body.dark-mode {
         background-position: 0% center;
     }
 }
+.tb-slider {
+    width: 100%;
+    height: 4px;
+    background: var(--grey-color, #d4d4d4);
+    border-radius: 8px;
+    outline: none;
+    cursor: pointer;
+    margin-top: 6px;
+}
+
+    .tb-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: var(--primary-color, #333);
+        cursor: pointer;
+    }
+
+    .tb-slider::-moz-range-thumb {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: var(--primary-color, #333);
+        cursor: pointer;
+    }
