@@ -3927,8 +3927,8 @@
 
         const widthSlider = document.createElement("input");
         widthSlider.type = "range";
-        widthSlider.min = 80;
-        widthSlider.max = 200;
+        widthSlider.min = 20;
+        widthSlider.max = 400;
         widthSlider.className = "tb-slider";
 
         widthSlider.value = themeData["--logo-width"]
@@ -3957,8 +3957,8 @@
 
         const heightSlider = document.createElement("input");
         heightSlider.type = "range";
-        heightSlider.min = 80;
-        heightSlider.max = 200;
+        heightSlider.min = 20;
+        heightSlider.max = 400;
         heightSlider.className = "tb-slider";
 
         heightSlider.value = themeData["--logo-height"]
