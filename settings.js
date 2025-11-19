@@ -1493,7 +1493,6 @@
     function buildThemeSelectorSection(container) {
         if (!container) return;
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        console.log(savedThemeObj, 'Here is the First called savedthemeObj Data');
         const selectedtheme = localStorage.getItem("themebuilder_selectedTheme");
         // inject minimal styles once
         if (!document.getElementById("tb-theme-selector-styles")) {
@@ -1565,7 +1564,6 @@
 
             // Save
             const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-            console.log(savedThemeObj, 'here is the saved usertheme cssveriables');
             // 🧹 Remove mode before merging
             if (savedThemeObj.themeData && savedThemeObj.themeData["--theme-mode"]) {
                 delete savedThemeObj.themeData["--theme-mode"];
@@ -5183,6 +5181,7 @@
 
         // Get previously selected theme
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        console.log(savedThemeObj, 'Here is the Theme Data From Applytheme Mehtod');
         const selectedtheme = localStorage.getItem("themebuilder_selectedTheme");
 
         const previouslySelectedTheme = selectedtheme || "Default Theme";
@@ -5227,6 +5226,7 @@
         // Save theme selection to localStorage
         savedThemeObj.selectedTheme = themeName;
         savedThemeObj.themeData = { ...vars, "--theme-mode": currentMode };
+        console.log(savedThemeObj, 'after functionality savedthemeObj');
         localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
         localStorage.setItem("themebuilder_selectedTheme", themeName);
 
