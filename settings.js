@@ -5250,8 +5250,7 @@
     function createBuilderUI(controlsContainer) {
         const existingIcon = document.getElementById("hl_header--themebuilder-icon");
         const existingDrawer = document.getElementById("themeBuilderDrawer");
-        const abc = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        console.log(abc, 'Here is First Usertheem data');
+        
 
         // 🛠️ If UI already exists, just rebind listeners and return
         if (existingIcon && existingDrawer) {
@@ -5369,6 +5368,8 @@
             //        document.body.classList.toggle("dark-mode", isDark);
             //    });
             // Get saved theme and mode
+            const abc = JSON.parse(localStorage.getItem("userTheme") || "{}");
+            console.log(abc, 'Here is First Usertheem data');
             const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
             const selectedTheme = localStorage.getItem("themebuilder_selectedTheme");
             const currentMode = savedThemeObj?.themeData?.["--theme-mode"];
