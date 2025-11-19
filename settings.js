@@ -3867,20 +3867,20 @@
         }
 
         function updateSidebarLogo() {
-            const rootStyle = getComputedStyle(document.documentElement);
-            let logoVar = rootStyle.getPropertyValue("--agency-logo").trim();
+            const url = getComputedStyle(document.documentElement)
+                .getPropertyValue("--agency-logo-url")
+                .trim()
+                .replace(/^"|"$/g, "");
 
-            logoVar = logoVar.replace(/^"|"$/g, "");
-            const match = logoVar.match(/url\(['"]?(.*?)['"]?\)/);
-            if (!match) return;
+            if (!url) return;
 
-            const logoURL = match[1];
             const img = document.querySelector(".agency-logo");
             if (img) {
-                img.src = logoURL;
+                img.src = url;
                 img.style.objectFit = "contain";
             }
         }
+
 
         /* -----------------------------------------
            LOGO URL INPUT
@@ -3904,12 +3904,19 @@
 
         logoInput.addEventListener("input", () => {
             const url = logoInput.value.trim();
-            if (url) {
-                const cssValue = `url("${url}")`;
-                saveVar("--agency-logo", cssValue);
-                updateSidebarLogo();
+            if (!url) return;
+
+            // Save both CSS and Raw URL versions
+            saveVar("--agency-logo", `url("${url}")`);
+            saveVar("--agency-logo-url", url);
+
+            // Update IMG directly
+            const img = document.querySelector(".agency-logo");
+            if (img) {
+                img.src = url;
             }
         });
+
 
         logoWrapper.appendChild(logoLabel);
         logoWrapper.appendChild(logoInput);
@@ -3928,7 +3935,7 @@
         const widthSlider = document.createElement("input");
         widthSlider.type = "range";
         widthSlider.min = 20;
-        widthSlider.max = 400;
+        widthSlider.max = 100;
         widthSlider.className = "tb-slider";
 
         widthSlider.value = themeData["--logo-width"]
@@ -3958,7 +3965,7 @@
         const heightSlider = document.createElement("input");
         heightSlider.type = "range";
         heightSlider.min = 20;
-        heightSlider.max = 400;
+        heightSlider.max = 100;
         heightSlider.className = "tb-slider";
 
         heightSlider.value = themeData["--logo-height"]
