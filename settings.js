@@ -3926,7 +3926,7 @@
            WIDTH SLIDER (80–200)
         ----------------------------------------- */
         const widthWrapper = document.createElement("div");
-        widthWrapper.className = "tb-color-picker-wrapper";
+        widthWrapper.className = "tb-color-picker-wrapperLogoSettings";
 
         const widthLabel = document.createElement("label");
         widthLabel.className = "tb-color-picker-label";
