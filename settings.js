@@ -1477,12 +1477,33 @@
                     if (topnavLocationBtn) {
                         topnavLocationBtn.addEventListener("click", () => {
                             const sidebarTrigger = document.querySelector("#location-switcher-sidbar-v2");
-                            if (sidebarTrigger) {
-                                sidebarTrigger.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
-                                sidebarTrigger.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
-                                sidebarTrigger.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-                            }
+
+                            if (!sidebarTrigger) return;
+
+                            // Temporarily unhide the location switcher so GHL click works
+                            const originalStyles = {
+                                display: sidebarTrigger.style.display,
+                                visibility: sidebarTrigger.style.visibility,
+                                opacity: sidebarTrigger.style.opacity
+                            };
+
+                            sidebarTrigger.style.setProperty("display", "flex", "important");
+                            sidebarTrigger.style.setProperty("visibility", "visible", "important");
+                            sidebarTrigger.style.setProperty("opacity", "1", "important");
+
+                            // Now trigger GHL’s click
+                            sidebarTrigger.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+                            sidebarTrigger.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
+                            sidebarTrigger.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+
+                            // Re-hide it after 300ms
+                            setTimeout(() => {
+                                sidebarTrigger.style.display = originalStyles.display;
+                                sidebarTrigger.style.visibility = originalStyles.visibility;
+                                sidebarTrigger.style.opacity = originalStyles.opacity;
+                            }, 300);
                         });
+
                     }
 
                     return true;
