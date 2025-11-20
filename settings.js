@@ -1494,6 +1494,12 @@
         forceSidebarOpen();
     }
     function resetGhlSidebar() {
+        const wrapper = document.getElementById("ghl_custom_topnav_wrapper_v4");
+        const style = document.getElementById("ghl_custom_topnav_styles_v4");
+
+        if (wrapper) wrapper.remove();
+        if (style) style.remove();
+
         const sidebar = document.querySelector("#sidebar-v2");
         const body = document.body;
 
@@ -1511,6 +1517,12 @@
         localStorage.setItem("sidebarCollapsed", "false");
     }
     function forceSidebarOpen() {
+        const wrapper = document.getElementById("ghl_custom_topnav_wrapper_v4");
+        const style = document.getElementById("ghl_custom_topnav_styles_v4");
+
+        if (wrapper) wrapper.remove();
+        if (style) style.remove();
+
         const sidebar = document.querySelector("#sidebar-v2")
             || document.querySelector(".hl_app_sidebar")
             || document.querySelector(".hl_sidebar");
