@@ -1309,19 +1309,27 @@
         };
     }
     function openGHLLocationSwitcher() {
-        console.log('working code here');
-        // Look for the hidden button GHL uses to open the switcher
-        const btn =
-            document.querySelector("[data-testid='location-switcher']") ||
-            document.querySelector("#location-switcher-sidbar-v2") ||
-            document.querySelector(".location-switcher"); // fallback
+        console.log("Triggering Location Switcher");
 
-        if (btn) {
-            btn.click();    // Trigger GHL’s native handler
-        } else {
-            console.warn("Location switcher trigger not found.");
+        const selectors = [
+            "#location-switcher-sidbar-v2 .hl_location-text",
+            "#location-switcher-sidbar-v2 svg",
+            "#location-switcher-sidbar-v2 .switcher-caret-holder",
+            "#location-switcher-sidbar-v2 *"
+        ];
+
+        for (const sel of selectors) {
+            const el = document.querySelector(sel);
+            if (el) {
+                el.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+                console.log("Clicked:", sel);
+                return;
+            }
         }
+
+        console.warn("Location switcher trigger not found.");
     }
+
     function enableBlueWaveTopNav() {
         // Prevent duplicates
         if (document.getElementById("ghl_custom_topnav_wrapper_v4")) return;
