@@ -1309,25 +1309,25 @@
         };
     }
     function openGHLLocationSwitcher() {
-        console.log("Triggering Location Switcher");
+        console.log("Triggering TRUE GHL Location Switcher…");
 
-        const selectors = [
-            "#location-switcher-sidbar-v2 .hl_location-text",
-            "#location-switcher-sidbar-v2 svg",
-            "#location-switcher-sidbar-v2 .switcher-caret-holder",
-            "#location-switcher-sidbar-v2 *"
+        // These buttons ALWAYS open the switcher if they exist
+        const trueBtns = [
+            "button[aria-label='Switch Location']",
+            "button[data-testid='location-switcher-button']",
+            ".hl_header__location-switcher-button",
         ];
 
-        for (const sel of selectors) {
-            const el = document.querySelector(sel);
-            if (el) {
-                el.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-                console.log("Clicked:", sel);
+        for (const sel of trueBtns) {
+            const btn = document.querySelector(sel);
+            if (btn) {
+                btn.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+                console.log("Opened using:", sel);
                 return;
             }
         }
 
-        console.warn("Location switcher trigger not found.");
+        console.warn("No true location switcher button found.");
     }
 
     function enableBlueWaveTopNav() {
