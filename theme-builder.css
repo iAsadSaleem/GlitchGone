@@ -1797,9 +1797,10 @@ body.dark-mode {
 
 /* Wrapper for each slider section */
 .tb-slider-block {
+    margin-top:10px;
     display: flex;
     flex-direction: column;
-    margin-bottom: 14px;
+    margin-bottom: 5px;
     background: #f5f9ff;
     padding: 12px;
     border-radius: 10px;
@@ -1808,12 +1809,13 @@ body.dark-mode {
 /* Label above everything */
 .tb-slider-label {
     font-size: 14px;
-    margin-bottom: 6px;
+    margin-bottom: -30px;
     font-weight: 500;
 }
 
 /* Input + PX inline */
 .tb-input-row {
+    justify-content:flex-end;
     display: flex;
     align-items: center;
     gap: 8px;

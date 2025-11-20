@@ -4021,7 +4021,7 @@
         widthSlider.addEventListener("input", () => {
             tbWidth = parseInt(widthSlider.value);
             widthInput.value = tbWidth;
-            this.style.setProperty("--slider-fill", `${(this.value / this.max) * 100}%`);
+            //this.style.setProperty("--slider-fill", `${(this.value / this.max) * 100}%`);
 
             applyLogoSize();
         });
@@ -4029,7 +4029,7 @@
         widthInput.addEventListener("input", () => {
             tbWidth = parseInt(widthInput.value);
             widthSlider.value = tbWidth;
-            widthSlider.style.setProperty("--slider-fill", `${(tbWidth / widthSlider.max) * 100}%`);
+            //widthSlider.style.setProperty("--slider-fill", `${(tbWidth / widthSlider.max) * 100}%`);
 
             applyLogoSize();
         });
@@ -4037,7 +4037,7 @@
         heightSlider.addEventListener("input", () => {
             tbHeight = parseInt(heightSlider.value);
             heightInput.value = tbHeight;
-            this.style.setProperty("--slider-fill", `${(this.value / this.max) * 100}%`);
+            //this.style.setProperty("--slider-fill", `${(this.value / this.max) * 100}%`);
 
             applyLogoSize();
         });
@@ -4045,7 +4045,7 @@
         heightInput.addEventListener("input", () => {
             tbHeight = parseInt(heightInput.value);
             heightSlider.value = tbHeight;
-            heightSlider.style.setProperty("--slider-fill", `${(tbHeight / heightSlider.max) * 100}%`);
+            //heightSlider.style.setProperty("--slider-fill", `${(tbHeight / heightSlider.max) * 100}%`);
 
             applyLogoSize();
         });
