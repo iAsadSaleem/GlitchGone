@@ -1749,8 +1749,8 @@ body.dark-mode {
     }
 }
 .tb-range-slider {
-    width: 70%;
-    height: 6px;
+    width: 100%;
+    height: 10px;
     -webkit-appearance: none;
     appearance: none;
     background: linear-gradient( 90deg, var(--primary-color, #4A90E2), var(--second-color, #9bc5ff) );
