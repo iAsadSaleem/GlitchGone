@@ -1628,8 +1628,8 @@
                 enableBlueWaveTopNav();
             } else {
                 window.__BLUEWAVE_TOPNAV_ENABLED__ = false;
-                disableBlueWaveTopNav();
                 resetGhlSidebar();
+                disableBlueWaveTopNav();
 
             }
         }
