@@ -3953,7 +3953,7 @@
         widthInput.className = "tb-size-input";
 
         const widthPx = document.createElement("span");
-        widthPx.textContent = "PX";
+        widthPx.textContent = "px";
 
         widthInputRow.appendChild(widthInput);
         widthInputRow.appendChild(widthPx);
@@ -3991,7 +3991,7 @@
         heightInput.className = "tb-size-input";
 
         const heightPx = document.createElement("span");
-        heightPx.textContent = "PX";
+        heightPx.textContent = "px";
 
         heightInputRow.appendChild(heightInput);
         heightInputRow.appendChild(heightPx);
