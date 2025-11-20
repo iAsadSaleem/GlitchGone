@@ -3929,8 +3929,8 @@
         logoWrapper.appendChild(logoLabel);
         logoWrapper.appendChild(logoInput);
         wrapper.appendChild(logoWrapper);
-        let tbWidth = parseInt(themeData["--agency-logo-width"]) || 150;
-        let tbHeight = parseInt(themeData["--agency-logo-height"]) || 40;
+        let tbWidth = parseInt(themeData["--logo-width"]) || 150;
+        let tbHeight = parseInt(themeData["--logo-height"]) || 40;
 
         // --- WIDTH BLOCK ---
         const widthWrapper = document.createElement("div");
