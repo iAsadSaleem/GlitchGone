@@ -1503,11 +1503,7 @@
         forceSidebarOpen();
     }
     function resetGhlSidebar() {
-        
-
-        if (wrapper) wrapper.remove();
-        if (style) style.remove();
-
+       
         const sidebar = document.querySelector("#sidebar-v2");
         const body = document.body;
 
@@ -1526,9 +1522,6 @@
     }
     function forceSidebarOpen() {
      
-        if (wrapper) wrapper.remove();
-        if (style) style.remove();
-
         const sidebar = document.querySelector("#sidebar-v2")
             || document.querySelector(".hl_app_sidebar")
             || document.querySelector(".hl_sidebar");
