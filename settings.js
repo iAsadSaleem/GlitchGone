@@ -1451,9 +1451,31 @@
                     }, BUILD_INTERVAL_MS);
                 });
             }
+            //old COde commented because of new code
+            //let debounceTimer = null;
+            //const observer = new MutationObserver(() => {
+            //    if (!window.__BLUEWAVE_TOPNAV_ENABLED__) return;  // PREVENT REBUILD
+            //    clearTimeout(debounceTimer);
+            //    debounceTimer = setTimeout(() => init(), 700);
+            //});
 
+            //if (document.readyState === "complete" || document.readyState === "interactive") {
+            //    setTimeout(init, 200);
+            //    //observer.observe(document.body, { childList: true, subtree: true });//old commented code
+            //    window.__BLUEWAVE_OBSERVER__.observe(document.body, { childList: true, subtree: true });//new code
+
+            //} else {
+            //    window.addEventListener("DOMContentLoaded", () => {
+            //        setTimeout(init, 200);
+            //        //observer.observe(document.body, { childList: true, subtree: true });
+            //        window.__BLUEWAVE_OBSERVER__.observe(document.body, { childList: true, subtree: true });
+
+            //    });
+            //}
             let debounceTimer = null;
-            const observer = new MutationObserver(() => {
+
+            // SAVE OBSERVER INTO GLOBAL VARIABLE
+            window.__BLUEWAVE_OBSERVER__ = new MutationObserver(() => {
                 if (!window.__BLUEWAVE_TOPNAV_ENABLED__) return;  // PREVENT REBUILD
                 clearTimeout(debounceTimer);
                 debounceTimer = setTimeout(() => init(), 700);
@@ -1461,18 +1483,17 @@
 
             if (document.readyState === "complete" || document.readyState === "interactive") {
                 setTimeout(init, 200);
-                //observer.observe(document.body, { childList: true, subtree: true });
+
+                // NOW IT EXISTS → SAFE TO OBSERVE
                 window.__BLUEWAVE_OBSERVER__.observe(document.body, { childList: true, subtree: true });
 
             } else {
                 window.addEventListener("DOMContentLoaded", () => {
                     setTimeout(init, 200);
-                    //observer.observe(document.body, { childList: true, subtree: true });
-                    window.__BLUEWAVE_OBSERVER__.observe(document.body, { childList: true, subtree: true });
 
+                    window.__BLUEWAVE_OBSERVER__.observe(document.body, { childList: true, subtree: true });
                 });
             }
-
         })();
     }
     function disableBlueWaveTopNav() {
