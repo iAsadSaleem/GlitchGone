@@ -4006,31 +4006,40 @@
         heightSlider.className = "tb-range-slider";
 
         heightWrapper.appendChild(heightSlider);
+        function applyLogoSize() {
+            const img = document.querySelector(".agency-logo");
+            if (!img) return;
 
+            img.style.width = tbWidth + "px";
+            img.style.height = tbHeight + "px";
+
+            saveVar("--logo-width", tbWidth + "px");
+            saveVar("--logo-height", tbHeight + "px");
+        }
 
         // --- EVENTS (unchanged) ---
         widthSlider.addEventListener("input", () => {
             tbWidth = parseInt(widthSlider.value);
             widthInput.value = tbWidth;
-            updateTbPreview();
+            applyLogoSize();
         });
 
         widthInput.addEventListener("input", () => {
             tbWidth = parseInt(widthInput.value);
             widthSlider.value = tbWidth;
-            updateTbPreview();
+            applyLogoSize();
         });
 
         heightSlider.addEventListener("input", () => {
             tbHeight = parseInt(heightSlider.value);
             heightInput.value = tbHeight;
-            updateTbPreview();
+            applyLogoSize();
         });
 
         heightInput.addEventListener("input", () => {
             tbHeight = parseInt(heightInput.value);
             heightSlider.value = tbHeight;
-            updateTbPreview();
+            applyLogoSize();
         });
 
 
