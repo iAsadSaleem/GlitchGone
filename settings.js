@@ -3929,131 +3929,115 @@
         logoWrapper.appendChild(logoLabel);
         logoWrapper.appendChild(logoInput);
         wrapper.appendChild(logoWrapper);
+        let tbWidth = parseInt(themeData["--agency-logo-width"]) || 150;
+        let tbHeight = parseInt(themeData["--agency-logo-height"]) || 40;
 
-        /* -----------------------------------------
-           WIDTH SLIDER (80–200)
-        ----------------------------------------- */
+        // --- WIDTH BLOCK ---
         const widthWrapper = document.createElement("div");
-        widthWrapper.className = "tb-color-picker-wrapperLogoSettings";
+        widthWrapper.className = "tb-slider-block";
 
+        // Label
         const widthLabel = document.createElement("label");
-        widthLabel.className = "tb-color-picker-label";
-        widthLabel.textContent = "Logo Width";
-
-        const widthSlider = document.createElement("input");
-        widthSlider.type = "range";
-        widthSlider.min = 20;
-        widthSlider.max = 100;
-        widthSlider.className = "tb-slider";
-
-        const savedWidth = themeData["--logo-width"];
-        widthSlider.value = savedWidth ? parseInt(savedWidth.replace("px", "")) : 120;
-
-        widthSlider.addEventListener("input", () => {
-            const px = widthSlider.value + "px";
-            saveVar("--logo-width", px);
-            updateSidebarLogo(themeData["--agency-logo-url"]);
-
-        });
-
+        widthLabel.className = "tb-slider-label";
+        widthLabel.textContent = "Width";
         widthWrapper.appendChild(widthLabel);
-        // Width input display
-        const widthInputWrapper = document.createElement("div");
-        widthInputWrapper.style.display = "flex";
-        widthInputWrapper.style.alignItems = "center";
-        widthInputWrapper.style.gap = "6px";
-        widthInputWrapper.style.marginBottom = "6px";
+
+        // Input row
+        const widthInputRow = document.createElement("div");
+        widthInputRow.className = "tb-input-row";
 
         const widthInput = document.createElement("input");
         widthInput.type = "number";
+        widthInput.min = "0";
+        widthInput.value = tbWidth;
         widthInput.className = "tb-size-input";
-        widthInput.value = widthSlider.value;
 
         const widthPx = document.createElement("span");
         widthPx.textContent = "PX";
 
-        widthInputWrapper.appendChild(widthInput);
-        widthInputWrapper.appendChild(widthPx);
-        widthWrapper.appendChild(widthInputWrapper);
+        widthInputRow.appendChild(widthInput);
+        widthInputRow.appendChild(widthPx);
+        widthWrapper.appendChild(widthInputRow);
 
-        widthInput.addEventListener("input", () => {
-            let val = parseInt(widthInput.value);
-            if (val < widthSlider.min) val = widthSlider.min;
-            if (val > widthSlider.max) val = widthSlider.max;
-
-            widthSlider.value = val;
-            saveVar("--logo-width", val + "px");
-            updateSidebarLogo();
-        });
-
-        widthSlider.addEventListener("input", () => {
-            widthInput.value = widthSlider.value;
-        });
+        // Slider
+        const widthSlider = document.createElement("input");
+        widthSlider.type = "range";
+        widthSlider.min = "0";
+        widthSlider.max = "1000";
+        widthSlider.value = tbWidth;
+        widthSlider.className = "tb-range-slider";
 
         widthWrapper.appendChild(widthSlider);
-        wrapper.appendChild(widthWrapper);
 
-        /* -----------------------------------------
-           HEIGHT SLIDER (80–200)
-        ----------------------------------------- */
+
+        // --- HEIGHT BLOCK ---
         const heightWrapper = document.createElement("div");
-        heightWrapper.className = "tb-color-picker-wrapperLogoSettings";
+        heightWrapper.className = "tb-slider-block";
 
+        // Label
         const heightLabel = document.createElement("label");
-        heightLabel.className = "tb-color-picker-label";
-        heightLabel.textContent = "Logo Height";
-
-        const heightSlider = document.createElement("input");
-        heightSlider.type = "range";
-        heightSlider.min = 20;
-        heightSlider.max = 100;
-        heightSlider.className = "tb-slider";
-
-        const savedHeight = themeData["--logo-height"];
-        heightSlider.value = savedHeight ? parseInt(savedHeight.replace("px", "")) : 40;
-
-        heightSlider.addEventListener("input", () => {
-            const px = heightSlider.value + "px";
-            saveVar("--logo-height", px);
-            updateSidebarLogo();
-        });
-
+        heightLabel.className = "tb-slider-label";
+        heightLabel.textContent = "Height";
         heightWrapper.appendChild(heightLabel);
-        // Height input display
-        const heightInputWrapper = document.createElement("div");
-        heightInputWrapper.style.display = "flex";
-        heightInputWrapper.style.alignItems = "center";
-        heightInputWrapper.style.gap = "6px";
-        heightInputWrapper.style.marginBottom = "6px";
+
+        // Input row
+        const heightInputRow = document.createElement("div");
+        heightInputRow.className = "tb-input-row";
 
         const heightInput = document.createElement("input");
         heightInput.type = "number";
+        heightInput.min = "0";
+        heightInput.value = tbHeight;
         heightInput.className = "tb-size-input";
-        heightInput.value = heightSlider.value;
 
         const heightPx = document.createElement("span");
         heightPx.textContent = "PX";
 
-        heightInputWrapper.appendChild(heightInput);
-        heightInputWrapper.appendChild(heightPx);
-        heightWrapper.appendChild(heightInputWrapper);
+        heightInputRow.appendChild(heightInput);
+        heightInputRow.appendChild(heightPx);
+        heightWrapper.appendChild(heightInputRow);
 
-        heightInput.addEventListener("input", () => {
-            let val = parseInt(heightInput.value);
-            if (val < heightSlider.min) val = heightSlider.min;
-            if (val > heightSlider.max) val = heightSlider.max;
+        // Slider
+        const heightSlider = document.createElement("input");
+        heightSlider.type = "range";
+        heightSlider.min = "0";
+        heightSlider.max = "1000";
+        heightSlider.value = tbHeight;
+        heightSlider.className = "tb-range-slider";
 
-            heightSlider.value = val;
-            saveVar("--logo-height", val + "px");
-            updateSidebarLogo();
+        heightWrapper.appendChild(heightSlider);
+
+
+        // --- EVENTS (unchanged) ---
+        widthSlider.addEventListener("input", () => {
+            tbWidth = parseInt(widthSlider.value);
+            widthInput.value = tbWidth;
+            updateTbPreview();
+        });
+
+        widthInput.addEventListener("input", () => {
+            tbWidth = parseInt(widthInput.value);
+            widthSlider.value = tbWidth;
+            updateTbPreview();
         });
 
         heightSlider.addEventListener("input", () => {
-            heightInput.value = heightSlider.value;
+            tbHeight = parseInt(heightSlider.value);
+            heightInput.value = tbHeight;
+            updateTbPreview();
         });
 
-        heightWrapper.appendChild(heightSlider);
+        heightInput.addEventListener("input", () => {
+            tbHeight = parseInt(heightInput.value);
+            heightSlider.value = tbHeight;
+            updateTbPreview();
+        });
+
+
+        // --- Append to your settings container ---
+        wrapper.appendChild(widthWrapper);
         wrapper.appendChild(heightWrapper);
+
 
         container.appendChild(wrapper);
 

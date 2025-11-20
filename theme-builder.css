@@ -1791,3 +1791,34 @@ body.dark-mode {
         border-color: var(--primary-color, #4A90E2);
         box-shadow: 0 0 4px rgba(74, 144, 226, 0.4);
     }
+
+/* Wrapper for each slider section */
+.tb-slider-block {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 12px;
+}
+
+/* Label above everything */
+.tb-slider-label {
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+/* Input + PX inline */
+.tb-input-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+
+/* Input style (already yours, just keep it) */
+.tb-size-input {
+    width: 60px;
+    padding: 4px 6px;
+    font-size: 14px;
+    border: 1px solid #d0d0d0;
+    border-radius: 6px;
+    text-align: center;
+}
