@@ -1474,6 +1474,7 @@
     function disableBlueWaveTopNav() {
         const wrapper = document.getElementById("ghl_custom_topnav_wrapper_v4");
         const style = document.getElementById("ghl_custom_topnav_styles_v4");
+        console.log('here is the wrapper:', wrapper)
 
         if (wrapper) wrapper.remove();
         if (style) style.remove();
@@ -1496,6 +1497,7 @@
     function resetGhlSidebar() {
         const wrapper = document.getElementById("ghl_custom_topnav_wrapper_v4");
         const style = document.getElementById("ghl_custom_topnav_styles_v4");
+        console.log('here is the wrapper:', wrapper)
 
         if (wrapper) wrapper.remove();
         if (style) style.remove();
@@ -1519,7 +1521,7 @@
     function forceSidebarOpen() {
         const wrapper = document.getElementById("ghl_custom_topnav_wrapper_v4");
         const style = document.getElementById("ghl_custom_topnav_styles_v4");
-
+        console.log('here is the wrapper:', wrapper)
         if (wrapper) wrapper.remove();
         if (style) style.remove();
 
