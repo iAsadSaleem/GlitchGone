@@ -1309,26 +1309,20 @@
         };
     }
     function openGHLLocationSwitcher() {
-        console.log("Triggering TRUE GHL Location Switcher…");
+        console.log("Triggering via Vue event…");
 
-        // These buttons ALWAYS open the switcher if they exist
-        const trueBtns = [
-            "button[aria-label='Switch Location']",
-            "button[data-testid='location-switcher-button']",
-            ".hl_header__location-switcher-button",
-        ];
+        const vueRoot = document.querySelector("#app")?._vue_app_ ||
+            document.querySelector("#root")?._vue_app_;
 
-        for (const sel of trueBtns) {
-            const btn = document.querySelector(sel);
-            if (btn) {
-                btn.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-                console.log("Opened using:", sel);
-                return;
-            }
+        if (vueRoot?._component?.exposed?.toggleLocationPopup) {
+            vueRoot._component.exposed.toggleLocationPopup();
+            console.log("Opened via exposed Vue method");
+            return;
         }
 
-        console.warn("No true location switcher button found.");
+        console.warn("Vue toggle method not found.");
     }
+
 
     function enableBlueWaveTopNav() {
         // Prevent duplicates
