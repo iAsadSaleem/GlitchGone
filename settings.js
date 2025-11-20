@@ -1491,6 +1491,45 @@
             el.style.removeProperty("opacity");
         });
     }
+    function resetGhlSidebar() {
+        const sidebar = document.querySelector("#sidebar-v2");
+        const body = document.body;
+
+        // Remove forced hidden inline styles
+        sidebar.style.display = "";
+        sidebar.style.width = "";
+        sidebar.style.minWidth = "";
+        sidebar.style.visibility = "";
+        sidebar.style.opacity = "";
+
+        // Remove GHL's collapsed class if it exists
+        body.classList.remove("sidebar-collapsed");
+
+        // Reset localStorage collapse state
+        localStorage.setItem("sidebarCollapsed", "false");
+    }
+    function forceSidebarOpen() {
+        const sidebar = document.querySelector("#sidebar-v2")
+            || document.querySelector(".hl_app_sidebar")
+            || document.querySelector(".hl_sidebar");
+
+        if (!sidebar) return;
+
+        const fix = () => {
+            sidebar.style.display = "block";
+            sidebar.style.width = "14rem";
+            sidebar.style.minWidth = "14rem";
+            sidebar.style.visibility = "visible";
+            sidebar.style.opacity = "1";
+        };
+
+        // Apply immediately
+        fix();
+
+        // Prevent GHL from collapsing again
+        const observer = new MutationObserver(() => fix());
+        observer.observe(sidebar, { attributes: true, attributeFilter: ["style", "class"] });
+    }
 
     // NEW: Theme Selector Section
     function buildThemeSelectorSection(container) {
@@ -1588,6 +1627,8 @@
             } else {
                 window.__BLUEWAVE_TOPNAV_ENABLED__ = false;
                 disableBlueWaveTopNav();
+                resetGhlSidebar();
+
             }
         }
 
