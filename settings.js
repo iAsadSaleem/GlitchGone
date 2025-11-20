@@ -5557,27 +5557,19 @@
             })();
 
             // Toggle change: compute counterpart theme name and apply it
+            // toggle event
             toggleInput.addEventListener("change", (e) => {
                 const isDark = e.target.checked;
-                selectedTheme = localStorage.getItem("themebuilder_selectedTheme") || selectedTheme;
-                console.log(selectedTheme, 'toggle hit');
-                let targetTheme = null;
+                const baseDarkTheme = localStorage.getItem("themebuilder_selectedTheme") || "Default Theme";
 
-                if (selectedTheme) {
-                    if (isDark) {
-                        targetTheme = darkList.includes(selectedTheme)
-                            ? selectedTheme
-                            : (reversePairs[selectedTheme] || selectedTheme);
-                    } else {
-                        targetTheme = lightList.includes(selectedTheme)
-                            ? selectedTheme
-                            : (themePairs[selectedTheme] || selectedTheme);
-                    }
-                } else {
-                    targetTheme = isDark ? "dark" : "light";
-                }
-                console.log('going to hit the applytheme method');
-                applyTheme(targetTheme);
+                let targetThemeName = isDark
+                    ? baseDarkTheme
+                    : themePairs[baseDarkTheme] || baseDarkTheme;
+
+                // Get the full theme object
+                const themeVars = darkthemes()[targetThemeName] || getPredefinedThemes()[targetThemeName];
+
+                applyTheme(targetThemeName, themeVars);
             });
 
 
