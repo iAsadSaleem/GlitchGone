@@ -1508,6 +1508,27 @@
 
         })();
     }
+
+    function forceRemoveBlueWaveTopNav() {
+        let attempts = 0;
+        const maxAttempts = 20; // 20 × 50ms = 1 second
+
+        const interval = setInterval(() => {
+            attempts++;
+
+            const wrapper = document.getElementById("ghl_custom_topnav_wrapper_v4");
+            const style = document.getElementById("ghl_custom_topnav_styles_v4");
+
+            if (wrapper) wrapper.remove();
+            if (style) style.remove();
+
+            if (attempts >= maxAttempts) {
+                clearInterval(interval);
+            }
+
+        }, 50);
+    }
+
     function disableBlueWaveTopNav() {
         // ⛔ Stop re-inserting TopNav
         if (window.__BLUEWAVE_OBSERVER__) {
@@ -1532,6 +1553,8 @@
             el.style.removeProperty("visibility");
             el.style.removeProperty("opacity");
         });
+
+        forceRemoveBlueWaveTopNav();
 
         forceSidebarOpen();
     }
