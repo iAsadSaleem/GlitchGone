@@ -5281,7 +5281,7 @@
                 return;
             }
         }
-
+        console.log('vars:', vars);
         // 🔥 APPLY ONLY THE VARIABLES FROM THE THEME (safe)
         Object.entries(vars).forEach(([key, value]) => {
             if (value !== undefined && value !== null && value !== "") {
