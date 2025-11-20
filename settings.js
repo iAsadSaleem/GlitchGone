@@ -5286,6 +5286,7 @@
         Object.entries(vars).forEach(([key, value]) => {
             if (value !== undefined && value !== null && value !== "") {
                 document.body.style.setProperty(key, value);
+                console.log('Here is the Veriables', 'Key:', key, 'Value', value);
             }
         });
 
