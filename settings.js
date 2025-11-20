@@ -1472,10 +1472,17 @@
                     if (right && container) container.insertBefore(wrapper, right);
                     else header.prepend(wrapper);
 
-                    // 🔥 Add listener so TopNav switcher opens the REAL GHL switcher
-                    const topNavLoc = wrapper.querySelector("#bw-location-switcher");
-                    if (topNavLoc) {
-                        topNavLoc.addEventListener("click", openGHLLocationSwitcher);
+                    // ⭐ ADD THIS HERE — the event binding ⭐
+                    const topnavLocationBtn = document.querySelector("#bw-location-switcher");
+                    if (topnavLocationBtn) {
+                        topnavLocationBtn.addEventListener("click", () => {
+                            const sidebarTrigger = document.querySelector("#location-switcher-sidbar-v2");
+                            if (sidebarTrigger) {
+                                sidebarTrigger.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+                                sidebarTrigger.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
+                                sidebarTrigger.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+                            }
+                        });
                     }
 
                     return true;
