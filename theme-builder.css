@@ -1748,7 +1748,7 @@ body.dark-mode {
         background-position: 0% center;
     }
 }
-.tb-slider {
+.tb-range-slider {
     width: 100%;
     height: 6px;
     -webkit-appearance: none;
@@ -1761,14 +1761,14 @@ body.dark-mode {
 }
 
     /* Progress fill (blue part) */
-    .tb-slider::-webkit-slider-runnable-track {
+    .tb-range-slider::-webkit-slider-runnable-track {
         height: 6px;
         border-radius: 20px;
         background: linear-gradient( 90deg, var(--primary-color, #4A90E2) var(--slider-fill, 50%), #dce4f1 var(--slider-fill, 50%) );
     }
 
     /* Thumb */
-    .tb-slider::-webkit-slider-thumb {
+    .tb-range-slider::-webkit-slider-thumb {
         -webkit-appearance: none;
         height: 18px;
         width: 18px;
