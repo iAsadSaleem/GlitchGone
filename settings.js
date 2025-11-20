@@ -1,6 +1,8 @@
 (function () {
     let headerObserver = null;
     const MAX_ATTEMPTS = 40;
+    window.__BLUEWAVE_TOPNAV_ENABLED__ = false;
+
     // --- Dynamically load Sortable.js ---
     (function loadSortable() {
         if (!window.Sortable) { // Only load if not already loaded
@@ -1312,6 +1314,7 @@
 
         (function () {
             "use strict";
+            if (!window.__BLUEWAVE_TOPNAV_ENABLED__) return;
 
             const WRAPPER_ID = "ghl_custom_topnav_wrapper_v4";
             const STYLE_ID = "ghl_custom_topnav_styles_v4";
@@ -1451,6 +1454,7 @@
 
             let debounceTimer = null;
             const observer = new MutationObserver(() => {
+                if (!window.__BLUEWAVE_TOPNAV_ENABLED__) return;  // PREVENT REBUILD
                 clearTimeout(debounceTimer);
                 debounceTimer = setTimeout(() => init(), 700);
             });
@@ -1579,8 +1583,10 @@
             // 🔵 APPLY TOP NAV FOR BLUEWAVE THEME ONLY
             // ----------------------------------------------
             if (themeName === "BlueWave Theme") {
+                window.__BLUEWAVE_TOPNAV_ENABLED__ = true;
                 enableBlueWaveTopNav();
             } else {
+                window.__BLUEWAVE_TOPNAV_ENABLED__ = false;
                 disableBlueWaveTopNav();
             }
         }
