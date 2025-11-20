@@ -1,7 +1,7 @@
 (function () {
     let headerObserver = null;
     const MAX_ATTEMPTS = 40;
-    window.__BLUEWAVE_TOPNAV_ENABLED__ = false;
+    window.__BLUEWAVE_TOPNAV_ENABLED__ = true;
 
     // --- Dynamically load Sortable.js ---
     (function loadSortable() {
@@ -1474,26 +1474,38 @@
             //}
             let debounceTimer = null;
 
-            // SAVE OBSERVER INTO GLOBAL VARIABLE
-            window.__BLUEWAVE_OBSERVER__ = new MutationObserver(() => {
-                if (!window.__BLUEWAVE_TOPNAV_ENABLED__) return;  // PREVENT REBUILD
-                clearTimeout(debounceTimer);
-                debounceTimer = setTimeout(() => init(), 700);
-            });
+            // Only create observer WHEN topnav is enabled
+            if (window.__BLUEWAVE_TOPNAV_ENABLED__) {
 
-            if (document.readyState === "complete" || document.readyState === "interactive") {
-                setTimeout(init, 200);
-
-                // NOW IT EXISTS → SAFE TO OBSERVE
-                window.__BLUEWAVE_OBSERVER__.observe(document.body, { childList: true, subtree: true });
-
-            } else {
-                window.addEventListener("DOMContentLoaded", () => {
-                    setTimeout(init, 200);
-
-                    window.__BLUEWAVE_OBSERVER__.observe(document.body, { childList: true, subtree: true });
+                window.__BLUEWAVE_OBSERVER__ = new MutationObserver(() => {
+                    if (!window.__BLUEWAVE_TOPNAV_ENABLED__) return; // safety check
+                    clearTimeout(debounceTimer);
+                    debounceTimer = setTimeout(() => init(), 700);
                 });
+
+                const startObserver = () => {
+                    window.__BLUEWAVE_OBSERVER__.observe(document.body, {
+                        childList: true,
+                        subtree: true
+                    });
+                };
+
+                if (document.readyState === "complete" || document.readyState === "interactive") {
+                    setTimeout(() => {
+                        if (!window.__BLUEWAVE_TOPNAV_ENABLED__) return;
+                        init();
+                        startObserver();
+                    }, 200);
+
+                } else {
+                    window.addEventListener("DOMContentLoaded", () => {
+                        if (!window.__BLUEWAVE_TOPNAV_ENABLED__) return;
+                        init();
+                        startObserver();
+                    });
+                }
             }
+
         })();
     }
     function disableBlueWaveTopNav() {
