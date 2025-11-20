@@ -1461,17 +1461,25 @@
 
             if (document.readyState === "complete" || document.readyState === "interactive") {
                 setTimeout(init, 200);
-                observer.observe(document.body, { childList: true, subtree: true });
+                //observer.observe(document.body, { childList: true, subtree: true });
+                window.__BLUEWAVE_OBSERVER__.observe(document.body, { childList: true, subtree: true });
+
             } else {
                 window.addEventListener("DOMContentLoaded", () => {
                     setTimeout(init, 200);
-                    observer.observe(document.body, { childList: true, subtree: true });
+                    //observer.observe(document.body, { childList: true, subtree: true });
+                    window.__BLUEWAVE_OBSERVER__.observe(document.body, { childList: true, subtree: true });
+
                 });
             }
 
         })();
     }
     function disableBlueWaveTopNav() {
+        // ⛔ Stop re-inserting TopNav
+        if (window.__BLUEWAVE_OBSERVER__) {
+            window.__BLUEWAVE_OBSERVER__.disconnect();
+        }
         const wrapper = document.getElementById("ghl_custom_topnav_wrapper_v4");
         const style = document.getElementById("ghl_custom_topnav_styles_v4");
         console.log('here is the wrapper:', wrapper)
@@ -1495,9 +1503,7 @@
         forceSidebarOpen();
     }
     function resetGhlSidebar() {
-        const wrapper = document.getElementById("ghl_custom_topnav_wrapper_v4");
-        const style = document.getElementById("ghl_custom_topnav_styles_v4");
-        console.log('here is the wrapper:', wrapper)
+        
 
         if (wrapper) wrapper.remove();
         if (style) style.remove();
@@ -1519,9 +1525,7 @@
         localStorage.setItem("sidebarCollapsed", "false");
     }
     function forceSidebarOpen() {
-        const wrapper = document.getElementById("ghl_custom_topnav_wrapper_v4");
-        const style = document.getElementById("ghl_custom_topnav_styles_v4");
-        console.log('here is the wrapper:', wrapper)
+     
         if (wrapper) wrapper.remove();
         if (style) style.remove();
 
