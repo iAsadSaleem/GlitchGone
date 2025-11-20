@@ -1490,6 +1490,8 @@
             el.style.removeProperty("visibility");
             el.style.removeProperty("opacity");
         });
+
+        forceSidebarOpen();
     }
     function resetGhlSidebar() {
         const sidebar = document.querySelector("#sidebar-v2");
