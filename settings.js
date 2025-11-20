@@ -1308,6 +1308,19 @@
             }
         };
     }
+    function openGHLLocationSwitcher() {
+        // Look for the hidden button GHL uses to open the switcher
+        const btn =
+            document.querySelector("[data-testid='location-switcher']") ||
+            document.querySelector("#location-switcher-sidbar-v2") ||
+            document.querySelector(".location-switcher"); // fallback
+
+        if (btn) {
+            btn.click();    // Trigger GHL’s native handler
+        } else {
+            console.warn("Location switcher trigger not found.");
+        }
+    }
     function enableBlueWaveTopNav() {
         // Prevent duplicates
         if (document.getElementById("ghl_custom_topnav_wrapper_v4")) return;
@@ -1442,15 +1455,32 @@
                 const wrapper = buildNavbarFromSidebar(aside);
                 const right = header.querySelector(".hl_header__right,.hl_header--controls");
                 const container = header.querySelector(".container-fluid") || header;
+                //Old COde and working Fine without Location Selector
+                //try {
+                //    if (right && container) container.insertBefore(wrapper, right);
+                //    else header.prepend(wrapper);
 
+                //    return true;
+                //} catch (e) {
+                //    console.error("Navbar insert error", e);
+                //    return false;
+                //}
                 try {
                     if (right && container) container.insertBefore(wrapper, right);
                     else header.prepend(wrapper);
+
+                    // 🔥 Add listener so TopNav switcher opens the REAL GHL switcher
+                    const topNavLoc = wrapper.querySelector("#bw-location-switcher");
+                    if (topNavLoc) {
+                        topNavLoc.addEventListener("click", openGHLLocationSwitcher);
+                    }
+
                     return true;
                 } catch (e) {
                     console.error("Navbar insert error", e);
                     return false;
                 }
+
             }
 
             function init() {
