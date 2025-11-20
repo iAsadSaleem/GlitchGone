@@ -3963,7 +3963,7 @@
         const widthSlider = document.createElement("input");
         widthSlider.type = "range";
         widthSlider.min = "0";
-        widthSlider.max = "1000";
+        widthSlider.max = "100";
         widthSlider.value = tbWidth;
         widthSlider.className = "tb-range-slider";
 
@@ -4001,7 +4001,7 @@
         const heightSlider = document.createElement("input");
         heightSlider.type = "range";
         heightSlider.min = "0";
-        heightSlider.max = "1000";
+        heightSlider.max = "100";
         heightSlider.value = tbHeight;
         heightSlider.className = "tb-range-slider";
 
