@@ -1309,6 +1309,7 @@
         };
     }
     function openGHLLocationSwitcher() {
+        console.log('working code here');
         // Look for the hidden button GHL uses to open the switcher
         const btn =
             document.querySelector("[data-testid='location-switcher']") ||
