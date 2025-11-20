@@ -1394,6 +1394,22 @@
                 wrapper.appendChild(logo);
 
                 const nav = document.createElement("nav");
+                // INSERT LOCATION SWITCHER HERE
+                const loc = aside.querySelector("#location-switcher-sidbar-v2");
+                if (loc) {
+                    const clonedLoc = loc.cloneNode(true);
+                    clonedLoc.id = "bw-location-switcher";
+
+                    clonedLoc.style.transform = "scale(0.75)";
+                    clonedLoc.style.transformOrigin = "left center";
+                    clonedLoc.style.marginRight = "10px";
+
+                    clonedLoc.querySelectorAll("*").forEach(el => {
+                        el.style.color = "#fff";
+                    });
+
+                    wrapper.appendChild(clonedLoc);
+                }
                 if (aside) {
                     const seen = new Set();
                     const links = aside.querySelectorAll("a[href]");
@@ -1451,27 +1467,6 @@
                     }, BUILD_INTERVAL_MS);
                 });
             }
-            //old COde commented because of new code
-            //let debounceTimer = null;
-            //const observer = new MutationObserver(() => {
-            //    if (!window.__BLUEWAVE_TOPNAV_ENABLED__) return;  // PREVENT REBUILD
-            //    clearTimeout(debounceTimer);
-            //    debounceTimer = setTimeout(() => init(), 700);
-            //});
-
-            //if (document.readyState === "complete" || document.readyState === "interactive") {
-            //    setTimeout(init, 200);
-            //    //observer.observe(document.body, { childList: true, subtree: true });//old commented code
-            //    window.__BLUEWAVE_OBSERVER__.observe(document.body, { childList: true, subtree: true });//new code
-
-            //} else {
-            //    window.addEventListener("DOMContentLoaded", () => {
-            //        setTimeout(init, 200);
-            //        //observer.observe(document.body, { childList: true, subtree: true });
-            //        window.__BLUEWAVE_OBSERVER__.observe(document.body, { childList: true, subtree: true });
-
-            //    });
-            //}
             let debounceTimer = null;
 
             // Only create observer WHEN topnav is enabled
