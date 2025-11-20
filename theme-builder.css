@@ -1777,3 +1777,17 @@ body.dark-mode {
             transform: scale(1.15);
         }
 
+.tb-size-input {
+    width: 55px;
+    padding: 4px 6px;
+    font-size: 13px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    text-align: center;
+    outline: none;
+}
+
+    .tb-size-input:focus {
+        border-color: var(--primary-color, #4A90E2);
+        box-shadow: 0 0 4px rgba(74, 144, 226, 0.4);
+    }

@@ -3957,6 +3957,39 @@
         });
 
         widthWrapper.appendChild(widthLabel);
+        // Width input display
+        const widthInputWrapper = document.createElement("div");
+        widthInputWrapper.style.display = "flex";
+        widthInputWrapper.style.alignItems = "center";
+        widthInputWrapper.style.gap = "6px";
+        widthInputWrapper.style.marginBottom = "6px";
+
+        const widthInput = document.createElement("input");
+        widthInput.type = "number";
+        widthInput.className = "tb-size-input";
+        widthInput.value = widthSlider.value;
+
+        const widthPx = document.createElement("span");
+        widthPx.textContent = "PX";
+
+        widthInputWrapper.appendChild(widthInput);
+        widthInputWrapper.appendChild(widthPx);
+        widthWrapper.appendChild(widthInputWrapper);
+
+        widthInput.addEventListener("input", () => {
+            let val = parseInt(widthInput.value);
+            if (val < widthSlider.min) val = widthSlider.min;
+            if (val > widthSlider.max) val = widthSlider.max;
+
+            widthSlider.value = val;
+            saveVar("--logo-width", val + "px");
+            updateSidebarLogo();
+        });
+
+        widthSlider.addEventListener("input", () => {
+            widthInput.value = widthSlider.value;
+        });
+
         widthWrapper.appendChild(widthSlider);
         wrapper.appendChild(widthWrapper);
 
@@ -3986,6 +4019,39 @@
         });
 
         heightWrapper.appendChild(heightLabel);
+        // Height input display
+        const heightInputWrapper = document.createElement("div");
+        heightInputWrapper.style.display = "flex";
+        heightInputWrapper.style.alignItems = "center";
+        heightInputWrapper.style.gap = "6px";
+        heightInputWrapper.style.marginBottom = "6px";
+
+        const heightInput = document.createElement("input");
+        heightInput.type = "number";
+        heightInput.className = "tb-size-input";
+        heightInput.value = heightSlider.value;
+
+        const heightPx = document.createElement("span");
+        heightPx.textContent = "PX";
+
+        heightInputWrapper.appendChild(heightInput);
+        heightInputWrapper.appendChild(heightPx);
+        heightWrapper.appendChild(heightInputWrapper);
+
+        heightInput.addEventListener("input", () => {
+            let val = parseInt(heightInput.value);
+            if (val < heightSlider.min) val = heightSlider.min;
+            if (val > heightSlider.max) val = heightSlider.max;
+
+            heightSlider.value = val;
+            saveVar("--logo-height", val + "px");
+            updateSidebarLogo();
+        });
+
+        heightSlider.addEventListener("input", () => {
+            heightInput.value = heightSlider.value;
+        });
+
         heightWrapper.appendChild(heightSlider);
         wrapper.appendChild(heightWrapper);
 
