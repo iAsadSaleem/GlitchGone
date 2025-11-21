@@ -1108,12 +1108,49 @@ body::-webkit-scrollbar-track {
 }
 
 /* Radio button styling */
+/*.tb-cursor-item input[type="radio"] {
+    width: 26px;
+    height: 26px;
+    accent-color: #6366f1;*/ /* Modern browsers support this */
+    /*cursor: var(--custom-pointer);
+}*/
+/* Base radio button */
 .tb-cursor-item input[type="radio"] {
-    width: 18px;
-    height: 18px;
-    accent-color: #6366f1; /* Modern browsers support this */
+    appearance: none;
+    -webkit-appearance: none;
+    width: 26px;
+    height: 26px;
+    border: 2px solid #6366f1;
+    border-radius: 50%;
     cursor: var(--custom-pointer);
+    position: relative;
+    transition: border-color 0.25s ease, background-color 0.25s ease;
 }
+
+    /* The inner dot when checked */
+    .tb-cursor-item input[type="radio"]:checked::before {
+        content: "";
+        position: absolute;
+        width: 60%;
+        height: 60%;
+        border-radius: 50%;
+        background-color: #6366f1;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    /* Hover effect */
+    .tb-cursor-item input[type="radio"]:hover {
+        border-color: #4f46e5; /* hover border */
+        background-color: #eef2ff; /* subtle background */
+    }
+
+    /* Hover effect when checked */
+    .tb-cursor-item input[type="radio"]:checked:hover::before {
+        background-color: #4f46e5; /* darken the check dot */
+    }
+
 
 /* Layout */
 .tb-cursor-list {
