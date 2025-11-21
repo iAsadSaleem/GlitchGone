@@ -1114,7 +1114,7 @@ body::-webkit-scrollbar-track {
     accent-color: #6366f1;*/ /* Modern browsers support this */
     /*cursor: var(--custom-pointer);
 }*/
-/* Base radio button */
+/* RESET default radio */
 .tb-cursor-item input[type="radio"] {
     appearance: none;
     -webkit-appearance: none;
@@ -1123,11 +1123,18 @@ body::-webkit-scrollbar-track {
     border: 2px solid #6366f1;
     border-radius: 50%;
     cursor: var(--custom-pointer);
-    position: relative;
+    background-color: white;
     transition: border-color 0.25s ease, background-color 0.25s ease;
+    position: relative;
 }
 
-    /* The inner dot when checked */
+    /* HOVER — applies to both checked AND unchecked */
+    .tb-cursor-item input[type="radio"]:hover {
+        border-color: #4f46e5; /* darker on hover */
+        background-color: #eef2ff; /* subtle fill on hover */
+    }
+
+    /* CHECKED DOT */
     .tb-cursor-item input[type="radio"]:checked::before {
         content: "";
         position: absolute;
@@ -1138,17 +1145,12 @@ body::-webkit-scrollbar-track {
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
+        transition: background-color 0.25s ease;
     }
 
-    /* Hover effect */
-    .tb-cursor-item input[type="radio"]:hover {
-        border-color: #4f46e5; /* hover border */
-        background-color: #eef2ff; /* subtle background */
-    }
-
-    /* Hover effect when checked */
+    /* OPTIONAL: darker dot on hover when checked */
     .tb-cursor-item input[type="radio"]:checked:hover::before {
-        background-color: #4f46e5; /* darken the check dot */
+        background-color: #4f46e5;
     }
 
 
