@@ -3588,6 +3588,7 @@
                 label.style.flex = "1";
 
                 const toggle = document.createElement("input");
+                label.className = "tb-cursor-radiobutton";
                 toggle.type = "radio";
                 toggle.name = "custom-cursor-toggle";
 
