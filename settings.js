@@ -1322,8 +1322,6 @@
 
         console.warn("Vue toggle method not found.");
     }
-
-
     function enableBlueWaveTopNav() {
         // Prevent duplicates
         if (document.getElementById("ghl_custom_topnav_wrapper_v4")) return;
@@ -1480,28 +1478,28 @@
 
                             if (!sidebarTrigger) return;
 
-                            // Temporarily unhide the location switcher so GHL click works
-                            const originalStyles = {
-                                display: sidebarTrigger.style.display,
-                                visibility: sidebarTrigger.style.visibility,
-                                opacity: sidebarTrigger.style.opacity
-                            };
+                                    // Temporarily unhide the location switcher so GHL click works
+                                    const originalStyles = {
+                                        display: sidebarTrigger.style.display,
+                                        visibility: sidebarTrigger.style.visibility,
+                                        opacity: sidebarTrigger.style.opacity
+                                    };
 
-                            sidebarTrigger.style.setProperty("display", "flex", "important");
-                            sidebarTrigger.style.setProperty("visibility", "visible", "important");
-                            sidebarTrigger.style.setProperty("opacity", "1", "important");
+                                    sidebarTrigger.style.setProperty("display", "flex", "important");
+                                    sidebarTrigger.style.setProperty("visibility", "visible", "important");
+                                    sidebarTrigger.style.setProperty("opacity", "1", "important");
 
-                            // Now trigger GHL’s click
-                            sidebarTrigger.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
-                            sidebarTrigger.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
-                            sidebarTrigger.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+                                    // Now trigger GHL’s click
+                                    sidebarTrigger.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+                                    sidebarTrigger.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
+                                    sidebarTrigger.dispatchEvent(new MouseEvent("click", { bubbles: true }));
 
-                            // Re-hide it after 300ms
-                            setTimeout(() => {
-                                sidebarTrigger.style.display = originalStyles.display;
-                                sidebarTrigger.style.visibility = originalStyles.visibility;
-                                sidebarTrigger.style.opacity = originalStyles.opacity;
-                            }, 300);
+                                    // Re-hide it after 300ms
+                                    setTimeout(() => {
+                                        sidebarTrigger.style.display = originalStyles.display;
+                                        sidebarTrigger.style.visibility = originalStyles.visibility;
+                                        sidebarTrigger.style.opacity = originalStyles.opacity;
+                                    }, 300);
                         });
 
                     }
@@ -5884,6 +5882,7 @@
                                         bodyFont: savedTheme.themeData["--body-font"] || "Arial, sans-serif",
                                         updatedAt: new Date().toISOString(),
                                     };
+                                    console.log('dbData:', dbData);
                                     //console.log('Here is the themeData:', dbData.themeData);
                                     await fetch("https://theme-builder-delta.vercel.app/api/theme", {
                                         method: "POST",
