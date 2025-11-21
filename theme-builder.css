@@ -1133,6 +1133,7 @@ body::-webkit-scrollbar-track {
     .tb-cursor-radiobutton[type="radio"]:hover {
         border-color: #4f46e5;
         background-color: #eef2ff;
+        border: 4px solid #6267e5;
     }
 
     /* CHECKED DOT */
