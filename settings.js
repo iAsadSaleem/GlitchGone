@@ -331,6 +331,8 @@
     }
     function updateLoginBackgroundGradient() {
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        const selectedtheme = localStorage.getItem("themebuilder_selectedTheme");
+
         savedThemeObj.themeData = savedThemeObj.themeData || {};
 
         const start = getComputedStyle(document.body).getPropertyValue("--login-background-gradient-start").trim() || "#ffffff";
@@ -342,9 +344,10 @@
 
         // ✅ Save gradient
         savedThemeObj.themeData["--login-background-active"] = gradient;
-
+        if (selectedtheme != 'Default Theme' || selectedtheme != 'Default Light Theme') {
+            delete savedThemeObj.themeData["--login-background-image"];
+        }
         // ❌ Remove background image so it doesn’t conflict
-        delete savedThemeObj.themeData["--login-background-image"];
 
         // ✅ Save updated theme
         localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
