@@ -1115,7 +1115,8 @@ body::-webkit-scrollbar-track {
     /*cursor: var(--custom-pointer);
 }*/
 /* RESET default radio */
-.tb-cursor-radiobutton{
+/* RESET default radio */
+.tb-cursor-radiobutton[type="radio"] {
     appearance: none;
     -webkit-appearance: none;
     width: 26px;
@@ -1128,14 +1129,14 @@ body::-webkit-scrollbar-track {
     position: relative;
 }
 
-    /* HOVER — applies to both checked AND unchecked */
-    .tb-cursor-radiobutton :hover {
-        border-color: #4f46e5; /* darker on hover */
-        background-color: #eef2ff; /* subtle fill on hover */
+    /* HOVER — applies to BOTH checked AND unchecked */
+    .tb-cursor-radiobutton[type="radio"]:hover {
+        border-color: #4f46e5;
+        background-color: #eef2ff;
     }
 
     /* CHECKED DOT */
-    .tb-cursor-radiobutton :checked::before {
+    .tb-cursor-radiobutton[type="radio"]:checked::before {
         content: "";
         position: absolute;
         width: 60%;
@@ -1149,9 +1150,10 @@ body::-webkit-scrollbar-track {
     }
 
     /* OPTIONAL: darker dot on hover when checked */
-    .tb-cursor-radiobutton :checked:hover::before {
+    .tb-cursor-radiobutton[type="radio"]:checked:hover::before {
         background-color: #4f46e5;
     }
+
 
 
 /* Layout */
