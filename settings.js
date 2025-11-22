@@ -1456,7 +1456,7 @@
                 const header = $q("header.hl_header.--agency") || $q("header.hl_header");
                 if (!header || $q(`#${WRAPPER_ID}`)) return false;
 
-                const wrapper = buildNavbarFromSidebar(aside);
+                //const wrapper = buildNavbarFromSidebar(aside);
                 const right = header.querySelector(".hl_header__right,.hl_header--controls");
                 const container = header.querySelector(".container-fluid") || header;
                 //Old COde and working Fine without Location Selector
