@@ -1473,39 +1473,39 @@
                     if (right && container) container.insertBefore(wrapper, right);
                     else header.prepend(wrapper);
 
-                    // ⭐ ADD THIS HERE — the event binding ⭐
-                    const topnavLocationBtn = document.querySelector("#bw-location-switcher");
-                    if (topnavLocationBtn) {
-                        topnavLocationBtn.addEventListener("click", () => {
-                            const sidebarTrigger = document.querySelector("#location-switcher-sidbar-v2");
+                    //// ⭐ ADD THIS HERE — the event binding ⭐
+                    //const topnavLocationBtn = document.querySelector("#bw-location-switcher");
+                    //if (topnavLocationBtn) {
+                    //    topnavLocationBtn.addEventListener("click", () => {
+                    //        const sidebarTrigger = document.querySelector("#location-switcher-sidbar-v2");
 
-                            if (!sidebarTrigger) return;
+                    //        if (!sidebarTrigger) return;
 
-                                    // Temporarily unhide the location switcher so GHL click works
-                                    const originalStyles = {
-                                        display: sidebarTrigger.style.display,
-                                        visibility: sidebarTrigger.style.visibility,
-                                        opacity: sidebarTrigger.style.opacity
-                                    };
+                    //                // Temporarily unhide the location switcher so GHL click works
+                    //                const originalStyles = {
+                    //                    display: sidebarTrigger.style.display,
+                    //                    visibility: sidebarTrigger.style.visibility,
+                    //                    opacity: sidebarTrigger.style.opacity
+                    //                };
 
-                                    sidebarTrigger.style.setProperty("display", "flex", "important");
-                                    sidebarTrigger.style.setProperty("visibility", "visible", "important");
-                                    sidebarTrigger.style.setProperty("opacity", "1", "important");
+                    //                sidebarTrigger.style.setProperty("display", "flex", "important");
+                    //                sidebarTrigger.style.setProperty("visibility", "visible", "important");
+                    //                sidebarTrigger.style.setProperty("opacity", "1", "important");
 
-                                    // Now trigger GHL’s click
-                                    sidebarTrigger.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
-                                    sidebarTrigger.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
-                                    sidebarTrigger.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+                    //                // Now trigger GHL’s click
+                    //                sidebarTrigger.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+                    //                sidebarTrigger.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
+                    //                sidebarTrigger.dispatchEvent(new MouseEvent("click", { bubbles: true }));
 
-                                    // Re-hide it after 300ms
-                                    setTimeout(() => {
-                                        sidebarTrigger.style.display = originalStyles.display;
-                                        sidebarTrigger.style.visibility = originalStyles.visibility;
-                                        sidebarTrigger.style.opacity = originalStyles.opacity;
-                                    }, 300);
-                        });
+                    //                // Re-hide it after 300ms
+                    //                setTimeout(() => {
+                    //                    sidebarTrigger.style.display = originalStyles.display;
+                    //                    sidebarTrigger.style.visibility = originalStyles.visibility;
+                    //                    sidebarTrigger.style.opacity = originalStyles.opacity;
+                    //                }, 300);
+                    //    });
 
-                    }
+                    //}
 
                     return true;
                 } catch (e) {
