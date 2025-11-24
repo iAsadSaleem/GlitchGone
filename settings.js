@@ -1412,21 +1412,21 @@
 
                 const nav = document.createElement("nav");
                 // INSERT LOCATION SWITCHER HERE
-                const loc = aside.querySelector("#location-switcher-sidbar-v2");
-                if (loc) {
-                    const clonedLoc = loc.cloneNode(true);
-                    clonedLoc.id = "bw-location-switcher";
+                //const loc = aside.querySelector("#location-switcher-sidbar-v2");
+                //if (loc) {
+                //    const clonedLoc = loc.cloneNode(true);
+                //    clonedLoc.id = "bw-location-switcher";
 
-                    clonedLoc.style.transform = "scale(0.75)";
-                    clonedLoc.style.transformOrigin = "left center";
-                    clonedLoc.style.marginRight = "10px";
+                //    clonedLoc.style.transform = "scale(0.75)";
+                //    clonedLoc.style.transformOrigin = "left center";
+                //    clonedLoc.style.marginRight = "10px";
 
-                    clonedLoc.querySelectorAll("*").forEach(el => {
-                        el.style.color = "#fff";
-                    });
+                //    clonedLoc.querySelectorAll("*").forEach(el => {
+                //        el.style.color = "#fff";
+                //    });
 
-                    wrapper.appendChild(clonedLoc);
-                }
+                //    wrapper.appendChild(clonedLoc);
+                //}
                 if (aside) {
                     const seen = new Set();
                     const links = aside.querySelectorAll("a[href]");
