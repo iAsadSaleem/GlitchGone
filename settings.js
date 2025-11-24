@@ -6162,6 +6162,36 @@
                 console.error("❌ Error verifying user:", err);
             }
         }
+    (function () {
+        let lastUrl = location.href;
+
+        new MutationObserver(() => {
+            const currentUrl = location.href;
+
+            if (currentUrl !== lastUrl) {
+                lastUrl = currentUrl;
+                handleUrlChange();
+            }
+        }).observe(document, { subtree: true, childList: true });
+
+    })();
+    function handleUrlChange() {
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        const themeName = savedThemeObj.selectedTheme;
+
+        if (!themeName) return;
+
+        const isSubAccount = window.location.pathname.startsWith("/v2/location/");
+
+        if (themeName === "BlueWave Theme" && isSubAccount) {
+            window.__BLUEWAVE_TOPNAV_ENABLED__ = true;
+            enableBlueWaveTopNav();
+        } else {
+            window.__BLUEWAVE_TOPNAV_ENABLED__ = false;
+            resetGhlSidebar();
+            disableBlueWaveTopNav();
+        }
+    }
 
     document.addEventListener("keydown", (e) => {
             if (e.key === "Escape") {
