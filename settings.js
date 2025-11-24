@@ -1744,14 +1744,15 @@
             // ----------------------------------------------
             // 🔵 APPLY TOP NAV FOR BLUEWAVE THEME ONLY
             // ----------------------------------------------
-            if (themeName === "BlueWave Theme") {
+            const isSubAccount = window.location.pathname.startsWith("/v2/location/");
+
+            if (themeName === "BlueWave Theme" && isSubAccount) {
                 window.__BLUEWAVE_TOPNAV_ENABLED__ = true;
                 enableBlueWaveTopNav();
             } else {
                 window.__BLUEWAVE_TOPNAV_ENABLED__ = false;
                 resetGhlSidebar();
                 disableBlueWaveTopNav();
-
             }
         }
 
