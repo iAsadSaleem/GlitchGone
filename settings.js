@@ -1358,7 +1358,7 @@
               #${WRAPPER_ID} nav {display:flex!important;gap:8px!important;align-items:center!important;}
               #${WRAPPER_ID} nav a {
                 color:#fff!important;text-decoration:none!important;font-weight:500!important;
-                padding:8px 12px!important;border-radius:4px!important;
+                padding:14px 17px!important;border-radius:4px!important; background: #1d7bcd40;
               }
               #${WRAPPER_ID} nav a:hover {background:rgba(255,255,255,0.15)!important;}
               aside#sidebar-v2,#sidebar-v2,.hl_sidebar,.hl_app_sidebar {
