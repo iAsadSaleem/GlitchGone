@@ -615,7 +615,7 @@
 
                 "--card-body-bg-color": "#FFFFFF",
                 "--card-body-font-color": "#1A1A1A",
-                "--card-title-font-color": "#2A3E9B",
+                "--card-title-font-color": "#ffffff",
                 "--card-dec-font-color": "#333333",
                 "--card-footer-bg-color": "#F0F6FC",
                 "--card-footer-font-color": "#000000",
@@ -1311,20 +1311,20 @@
             }
         };
     }
-    function openGHLLocationSwitcher() {
-        console.log("Triggering via Vue event…");
+    //function openGHLLocationSwitcher() {
+    //    console.log("Triggering via Vue event…");
 
-        const vueRoot = document.querySelector("#app")?._vue_app_ ||
-            document.querySelector("#root")?._vue_app_;
+    //    const vueRoot = document.querySelector("#app")?._vue_app_ ||
+    //        document.querySelector("#root")?._vue_app_;
 
-        if (vueRoot?._component?.exposed?.toggleLocationPopup) {
-            vueRoot._component.exposed.toggleLocationPopup();
-            console.log("Opened via exposed Vue method");
-            return;
-        }
+    //    if (vueRoot?._component?.exposed?.toggleLocationPopup) {
+    //        vueRoot._component.exposed.toggleLocationPopup();
+    //        console.log("Opened via exposed Vue method");
+    //        return;
+    //    }
 
-        console.warn("Vue toggle method not found.");
-    }
+    //    console.warn("Vue toggle method not found.");
+    //}
     function enableBlueWaveTopNav() {
         // Prevent duplicates
         if (document.getElementById("ghl_custom_topnav_wrapper_v4")) return;
