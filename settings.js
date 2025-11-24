@@ -5473,10 +5473,10 @@
     //    window.dispatchEvent(new Event("themeChanged"));
     //}
     function applyTheme(modeOrName, themeVars) {
-        const darkThemes = darkthemes();             // Dark themes map
-        const lightThemes = getPredefinedThemes();   // Light themes map
+        const darkThemes = darkthemes();
+        const lightThemes = getPredefinedThemes();
 
-        // Dark → Light theme mapping
+        // Theme Pairs
         const themePairs = {
             "Default Theme": "Default Light Theme",
             "BlueWave TopNav Theme": "BlueWave Light Theme",
@@ -5485,74 +5485,67 @@
             "JetBlack Luxury Gold Theme": "JetBlack Luxury Gold Theme - Light"
         };
 
-        // Auto generate light → dark mapping
         const reversePairs = Object.fromEntries(
             Object.entries(themePairs).map(([dark, light]) => [light, dark])
         );
 
-        // Get previously selected BASE (dark) theme
-        const storedBaseTheme = localStorage.getItem("themebuilder_selectedTheme") || "Default Theme";
+        const storedBaseTheme =
+            localStorage.getItem("themebuilder_selectedTheme") || "Default Theme";
+
         let themeName = modeOrName;
+        const isModeSwitch = modeOrName === "dark" || modeOrName === "light";
 
-        const isModeSwitch = (modeOrName === "dark" || modeOrName === "light");
-
-        // ----------------------------------------------------
-        // 1. HANDLE MODE SWITCHING (dark ↔ light toggle)
-        // ----------------------------------------------------
+        //-------------------------------------------
+        // 1. Mode switching logic
+        //-------------------------------------------
         if (isModeSwitch) {
-            if (modeOrName === "light") {
-                // Convert stored dark theme → corresponding light version
-                themeName = themePairs[storedBaseTheme] || "Default Light Theme";
-            } else {
-                // Switching back to dark → use stored base theme directly
-                themeName = storedBaseTheme;
-            }
+            themeName =
+                modeOrName === "light"
+                    ? themePairs[storedBaseTheme] || "Default Light Theme"
+                    : storedBaseTheme;
         }
 
-        // ----------------------------------------------------
-        // 2. DETERMINE THE CSS VARIABLES TO APPLY
-        // ----------------------------------------------------
-        let vars = themeVars
-            || darkThemes[themeName]
-            || lightThemes[themeName];
+        //-------------------------------------------
+        // 2. Determine CSS Vars for this theme
+        //-------------------------------------------
+        let vars =
+            themeVars || darkThemes[themeName] || lightThemes[themeName];
 
-        if (!vars) {
-            console.warn("Theme not found:", themeName);
-            return;
-        }
+        if (!vars) return console.warn("Theme not found:", themeName);
 
-        // ----------------------------------------------------
-        // 3. APPLY CSS VARIABLES TO DOCUMENT
-        // ----------------------------------------------------
+        //-------------------------------------------
+        // 3. Apply CSS vars to document
+        //-------------------------------------------
         Object.entries(vars).forEach(([key, val]) => {
             if (val) document.body.style.setProperty(key, val);
         });
 
-        // Determine the current mode of the theme
         const currentMode = darkThemes[themeName] ? "dark" : "light";
         document.body.style.setProperty("--theme-mode", currentMode);
 
-        // ----------------------------------------------------
-        // 4. SAVE TO LOCAL STORAGE (BASE THEME ONLY)
-        // ----------------------------------------------------
-        // Always store the BASE DARK theme in storage, never the light one
-        let baseThemeToStore = themeName;
+        //-------------------------------------------
+        // 4. Merge into localStorage (KEEP ALL other settings!)
+        //-------------------------------------------
 
-        // If themeName is a light theme, convert it back to its dark base
-        if (reversePairs[themeName]) {
-            baseThemeToStore = reversePairs[themeName];
-        }
+        // Load existing object from storage (keep everything)
+        let savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
 
-        // Store only the base theme name
-        const savedThemeObj = {
-            selectedTheme: baseThemeToStore,
-            themeData: vars        // Save CSS variables for UI builder compatibility
+        // Always store dark base theme
+        let baseThemeToStore = reversePairs[themeName] || themeName;
+
+        savedThemeObj.selectedTheme = baseThemeToStore;
+
+        // Merge themeData
+        savedThemeObj.themeData = {
+            ...(savedThemeObj.themeData || {}), // keep ALL custom settings
+            ...vars,                            // override only theme vars
+            "--theme-mode": currentMode         // ensure mode updates
         };
 
+        // Save merged result
         localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
         localStorage.setItem("themebuilder_selectedTheme", baseThemeToStore);
 
-        // Notify any listeners that theme has changed
         window.dispatchEvent(new Event("themeChanged"));
     }
 
