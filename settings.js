@@ -5418,7 +5418,7 @@
         // Get previously selected theme
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const selectedtheme = localStorage.getItem("themebuilder_selectedTheme");
-
+        console.log('Here is the Selected theme:', selectedtheme);
         const previouslySelectedTheme = selectedtheme || "Default Theme";
 
         let themeName = modeOrName;
