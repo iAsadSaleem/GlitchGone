@@ -5616,114 +5616,114 @@
             drawerTitleWrapper.appendChild(closeBtn);
             drawer.appendChild(drawerTitleWrapper);
 
-            // ===== Theme Mode Toggle (Dark / Light) =====
-            const toggleWrapper = document.createElement('div');
-            toggleWrapper.className = "tb-toggle-wrapper";
+            //// ===== Theme Mode Toggle (Dark / Light) =====
+            //const toggleWrapper = document.createElement('div');
+            //toggleWrapper.className = "tb-toggle-wrapper";
 
-            const toggleTitle = document.createElement('span');
-            toggleTitle.className = "tb-toggle-title";
-            toggleTitle.textContent = "Theme Mode";
+            //const toggleTitle = document.createElement('span');
+            //toggleTitle.className = "tb-toggle-title";
+            //toggleTitle.textContent = "Theme Mode";
 
-            const toggleSwitch = document.createElement('div');
-            toggleSwitch.className = "toggle-switch";
+            //const toggleSwitch = document.createElement('div');
+            //toggleSwitch.className = "toggle-switch";
 
-            const toggleInput = document.createElement('input');
-            toggleInput.type = "checkbox";
-            toggleInput.className = "toggle-input";
-            toggleInput.id = "tb-theme-toggle";
+            //const toggleInput = document.createElement('input');
+            //toggleInput.type = "checkbox";
+            //toggleInput.className = "toggle-input";
+            //toggleInput.id = "tb-theme-toggle";
 
-            const toggleLabel = document.createElement('label');
-            toggleLabel.className = "toggle-label";
-            toggleLabel.setAttribute("for", "tb-theme-toggle");
+            //const toggleLabel = document.createElement('label');
+            //toggleLabel.className = "toggle-label";
+            //toggleLabel.setAttribute("for", "tb-theme-toggle");
 
-            const sunIcon = document.createElement('span');
-            sunIcon.className = "toggle-icon sun";
-            sunIcon.innerHTML = "☀️";
+            //const sunIcon = document.createElement('span');
+            //sunIcon.className = "toggle-icon sun";
+            //sunIcon.innerHTML = "☀️";
 
-            const moonIcon = document.createElement('span');
-            moonIcon.className = "toggle-icon moon";
-            moonIcon.innerHTML = "🌙";
+            //const moonIcon = document.createElement('span');
+            //moonIcon.className = "toggle-icon moon";
+            //moonIcon.innerHTML = "🌙";
 
-            toggleLabel.appendChild(sunIcon);
-            toggleLabel.appendChild(moonIcon);
+            //toggleLabel.appendChild(sunIcon);
+            //toggleLabel.appendChild(moonIcon);
 
-            toggleSwitch.appendChild(toggleInput);
-            toggleSwitch.appendChild(toggleLabel);
+            //toggleSwitch.appendChild(toggleInput);
+            //toggleSwitch.appendChild(toggleLabel);
 
-            toggleWrapper.appendChild(toggleTitle);
-            toggleWrapper.appendChild(toggleSwitch);
-            drawerTitleWrapper.appendChild(toggleWrapper);
+            //toggleWrapper.appendChild(toggleTitle);
+            //toggleWrapper.appendChild(toggleSwitch);
+            //drawerTitleWrapper.appendChild(toggleWrapper);
 
-            // ===============================
-            // ✅ Load saved mode on startup
-            // ===============================
-            const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-            const selectedTheme = localStorage.getItem("themebuilder_selectedTheme");
-            const currentMode = savedThemeObj?.themeData?.["--theme-mode"];
-            if (selectedTheme == "Dark Theme" || selectedTheme == "Light Theme") {
-            // Apply the saved or default theme
-                applyTheme(currentMode);
-                // Reflect saved mode in toggle + body
-                if (currentMode === "dark") {
-                    toggleInput.checked = true;
-                    document.body.classList.add("dark-mode");
-                } else {
-                    document.body.classList.remove("dark-mode");
-                }
-            }
-                // ===============================
-                // ✅ Toggle change event
-                // ===============================
-                toggleInput.addEventListener("change", (e) => {
-                    const isDark = e.target.checked;
-                    const newMode = isDark ? "dark" : "light";
-                    // Apply and save theme using our helper
-                    applyTheme(newMode);
-                    // Visual mode toggle (optional animation or CSS class)
-                    document.body.classList.toggle("dark-mode", isDark);
-                });
+            //// ===============================
+            //// ✅ Load saved mode on startup
+            //// ===============================
+            //const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+            //const selectedTheme = localStorage.getItem("themebuilder_selectedTheme");
+            //const currentMode = savedThemeObj?.themeData?.["--theme-mode"];
+            //if (selectedTheme == "Dark Theme" || selectedTheme == "Light Theme") {
+            //// Apply the saved or default theme
+            //    applyTheme(currentMode);
+            //    // Reflect saved mode in toggle + body
+            //    if (currentMode === "dark") {
+            //        toggleInput.checked = true;
+            //        document.body.classList.add("dark-mode");
+            //    } else {
+            //        document.body.classList.remove("dark-mode");
+            //    }
+            //}
+            //    // ===============================
+            //    // ✅ Toggle change event
+            //    // ===============================
+            //    toggleInput.addEventListener("change", (e) => {
+            //        const isDark = e.target.checked;
+            //        const newMode = isDark ? "dark" : "light";
+            //        // Apply and save theme using our helper
+            //        applyTheme(newMode);
+            //        // Visual mode toggle (optional animation or CSS class)
+            //        document.body.classList.toggle("dark-mode", isDark);
+            //    });
 
-            // Your dark -> light mapping
-            const darkThemes = darkthemes();
-            const lightThemes = getPredefinedThemes();
+            //// Your dark -> light mapping
+            //const darkThemes = darkthemes();
+            //const lightThemes = getPredefinedThemes();
 
-            // ===============================
-            // ✅ Initialize toggle on page load
-            // ===============================
-            if (selectedTheme) {
-                let isDark = false;
+            //// ===============================
+            //// ✅ Initialize toggle on page load
+            //// ===============================
+            //if (selectedTheme) {
+            //    let isDark = false;
 
-                // Check if saved theme is a dark theme
-                if (darkThemes[selectedTheme]) {
-                    isDark = true;
-                } else if (lightThemes[selectedTheme]) {
-                    isDark = false;
-                } else {
-                    // fallback: check currentMode
-                    isDark = currentMode === "dark";
-                }
+            //    // Check if saved theme is a dark theme
+            //    if (darkThemes[selectedTheme]) {
+            //        isDark = true;
+            //    } else if (lightThemes[selectedTheme]) {
+            //        isDark = false;
+            //    } else {
+            //        // fallback: check currentMode
+            //        isDark = currentMode === "dark";
+            //    }
 
-                // Apply saved theme
-                applyTheme(currentMode || (isDark ? "dark" : "light"));
+            //    // Apply saved theme
+            //    applyTheme(currentMode || (isDark ? "dark" : "light"));
 
-                // Set toggle state and body class
-                toggleInput.checked = isDark;
-                //document.body.classList.toggle("dark-mode", isDark);
-            }
+            //    // Set toggle state and body class
+            //    toggleInput.checked = isDark;
+            //    //document.body.classList.toggle("dark-mode", isDark);
+            //}
 
-            // ===============================
-            // ✅ Toggle change event
-            // ===============================
-            toggleInput.addEventListener("change", (e) => {
-                const isDark = e.target.checked;
-                const newMode = isDark ? "dark" : "light";
+            //// ===============================
+            //// ✅ Toggle change event
+            //// ===============================
+            //toggleInput.addEventListener("change", (e) => {
+            //    const isDark = e.target.checked;
+            //    const newMode = isDark ? "dark" : "light";
 
-                // Apply and save theme using helper
-                applyTheme(newMode);
+            //    // Apply and save theme using helper
+            //    applyTheme(newMode);
 
-                // Visual mode toggle
-                //document.body.classList.toggle("dark-mode", isDark);
-            });
+            //    // Visual mode toggle
+            //    //document.body.classList.toggle("dark-mode", isDark);
+            //});
 
             // ===== Card Wrapper =====
             const cardWrapper = document.createElement('div');
