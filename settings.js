@@ -1746,7 +1746,7 @@
             // ----------------------------------------------
             const isSubAccount = window.location.pathname.startsWith("/v2/location/");
 
-            if (themeName === "BlueWave Theme" && isSubAccount) {
+            if (isSubAccount) {
                 window.__BLUEWAVE_TOPNAV_ENABLED__ = true;
                 enableBlueWaveTopNav();
             } else {
