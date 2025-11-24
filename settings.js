@@ -5423,7 +5423,7 @@
 
         let themeName = modeOrName;
         let isMode = modeOrName === "dark" || modeOrName === "light";
-
+        console.log('Theme Mode:', isMode);
         if (isMode) {
             if (modeOrName === "light") {
                 // Convert dark → light
