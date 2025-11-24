@@ -529,8 +529,8 @@
                 "--sidebar-menu-icon-active-color": "#FFFFFF",
                 "--sidebar-menu-border-radius": "16px",
 
-                "--sidebar-top-right-radius": "16px",
-                "--sidebar-bottom-right-radius": "16px",
+                "--sidebar-top-right-radius": "18px",
+                "--sidebar-bottom-right-radius": "18px",
 
                 "--scroll-color": "#0a6e35",
 
