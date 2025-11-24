@@ -583,7 +583,7 @@
                 //"--login-background-image": "url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d')",
 
             },
-            "BlueWave Theme": {
+            "BlueWave TopNav Theme": {
                 "--primary-color": "#2A3E9B",
                 "--second-color": "#62C6F0",
                 "--dark-color": "#1B255E",
@@ -1742,11 +1742,11 @@
             localStorage.setItem("themebuilder_selectedTheme", themeName);
             window.dispatchEvent(new Event("themeChanged"));
             // ----------------------------------------------
-            // 🔵 APPLY TOP NAV FOR BLUEWAVE THEME ONLY
+            // 🔵 APPLY TOP NAV FOR BlueWave TopNav Theme ONLY
             // ----------------------------------------------
             const isSubAccount = window.location.pathname.startsWith("/v2/location/");
 
-            if (themeName === "BlueWave Theme" && isSubAccount) {
+            if (themeName === "BlueWave TopNav Theme" && isSubAccount) {
                 window.__BLUEWAVE_TOPNAV_ENABLED__ = true;
                 enableBlueWaveTopNav();
             } else {
@@ -5406,7 +5406,7 @@
             "JetBlack Luxury Gold Theme": "JetBlack Luxury Gold Theme - Light",
             "OceanMist Theme": "OceanMist Light Theme",
             "GlitchGone Theme": "GlitchGone Light Theme",
-            "BlueWave Theme": "BlueWave Light Theme",
+            "BlueWave TopNav Theme": "BlueWave Light Theme",
             "Default Theme": "Default Light Theme"
         };
 
@@ -6183,7 +6183,7 @@
 
         const isSubAccount = window.location.pathname.startsWith("/v2/location/");
 
-        if (themeName === "BlueWave Theme" && isSubAccount) {
+        if (themeName === "BlueWave TopNav Theme" && isSubAccount) {
             window.__BLUEWAVE_TOPNAV_ENABLED__ = true;
             enableBlueWaveTopNav();
         } else {
