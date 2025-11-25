@@ -512,6 +512,8 @@
         return {
             "Default Theme": {
                 "--primary-color": "#0a6e35",
+                "--themebuildermaincolor": "#0a6e35",
+                "--themebuildermain-active-bg": "#07a125",
                 "--second-color": "#07a125",
                 "--dark-color": "#000000",
                 "--grey-color": "#E2E2E2",
@@ -583,84 +585,86 @@
                 //"--login-background-image": "url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d')",
 
             },
-            "BlueWave TopNav Theme": {
-                "--primary-color": "#2A3E9B",
-                "--second-color": "#62C6F0",
-                "--dark-color": "#1B255E",
-                "--grey-color": "#E4E7EF",
-                "--alert-color": "#E63946",
-                "--app-bg-color": "#F7F9FC",
-                "--Acent-color": "#FFFFFF",
+            //"BlueWave TopNav Theme": {
+            //    "--primary-color": "#2A3E9B",
+            //    "--second-color": "#62C6F0",
+            //    "--dark-color": "#1B255E",
+            //    "--grey-color": "#E4E7EF",
+            //    "--alert-color": "#E63946",
+            //    "--app-bg-color": "#F7F9FC",
+            //    "--Acent-color": "#FFFFFF",
 
-                "--sidebar-bg-color": "linear-gradient(to bottom, #2A3E9B, #62C6F0)",
-                "--sidebar-menu-bg": "#007bff26",
-                "--sidebar-menu-color": "#FFFFFF",
-                "--sidebar-menu-hover-bg": "#3B9DD3",
-                "--sidebar-menu-active-bg": "#2692cb",
-                "--sidebar-menu-icon-color": "#B8D9F8",
-                "--sidebar-menu-icon-hover-color": "#FFFFFF",
-                "--sidebar-menu-icon-active-color": "#2A3E9B",
-                "--sidebar-menu-border-radius": "0px",
+            //    "--sidebar-bg-color": "linear-gradient(to bottom, #2A3E9B, #62C6F0)",
+            //    "--sidebar-menu-bg": "#007bff26",
+            //    "--sidebar-menu-color": "#FFFFFF",
+            //    "--sidebar-menu-hover-bg": "#3B9DD3",
+            //    "--sidebar-menu-active-bg": "#2692cb",
+            //    "--sidebar-menu-icon-color": "#B8D9F8",
+            //    "--sidebar-menu-icon-hover-color": "#FFFFFF",
+            //    "--sidebar-menu-icon-active-color": "#2A3E9B",
+            //    "--sidebar-menu-border-radius": "0px",
 
-                "--sidebar-top-right-radius": "16px",
-                "--sidebar-bottom-right-radius": "16px",
+            //    "--sidebar-top-right-radius": "16px",
+            //    "--sidebar-bottom-right-radius": "16px",
 
-                "--scroll-color": "#62C6F0",
+            //    "--scroll-color": "#62C6F0",
 
-                "--header-bg-color": "transparent",
-                "--header-icon-color": "#FFFFFF",
-                "--header-icon-hover-color": "#62C6F0",
-                "--header-icon-bg": "transparent",
-                "--header-icon-hover-bg": "rgba(255,255,255,0.1)",
+            //    "--header-bg-color": "transparent",
+            //    "--header-icon-color": "#FFFFFF",
+            //    "--header-icon-hover-color": "#62C6F0",
+            //    "--header-icon-bg": "transparent",
+            //    "--header-icon-hover-bg": "rgba(255,255,255,0.1)",
 
-                "--card-body-bg-color": "#FFFFFF",
-                "--card-body-font-color": "#1A1A1A",
-                "--card-title-font-color": "#ffffff",
-                "--card-dec-font-color": "#333333",
-                "--card-footer-bg-color": "#F0F6FC",
-                "--card-footer-font-color": "#000000",
+            //    "--card-body-bg-color": "#FFFFFF",
+            //    "--card-body-font-color": "#1A1A1A",
+            //    "--card-title-font-color": "#ffffff",
+            //    "--card-dec-font-color": "#333333",
+            //    "--card-footer-bg-color": "#F0F6FC",
+            //    "--card-footer-font-color": "#000000",
 
-                "--sidebar-top-right-radius": "0px",
-                "--sidebar-bottom-right-radius": "0px",
+            //    "--sidebar-top-right-radius": "0px",
+            //    "--sidebar-bottom-right-radius": "0px",
 
-                "--top-nav-menu-bg": "transparent",
-                "--top-nav-menu-hover-bg": "rgba(255,255,255,0.1)",
-                "--top-nav-menu-active-bg": "rgba(255,255,255,0.2)",
-                "--top-nav-menu-color": "#FFFFFF",
-                "--top-nav-menu-hover-color": "#62C6F0",
-                "--top-nav-menu-active-color": "#FFFFFF",
+            //    "--top-nav-menu-bg": "transparent",
+            //    "--top-nav-menu-hover-bg": "rgba(255,255,255,0.1)",
+            //    "--top-nav-menu-active-bg": "rgba(255,255,255,0.2)",
+            //    "--top-nav-menu-color": "#FFFFFF",
+            //    "--top-nav-menu-hover-color": "#62C6F0",
+            //    "--top-nav-menu-active-color": "#FFFFFF",
 
-                "--card-header-gradient-start": "#2A3E9B",
-                "--card-header-bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
-                "--card-header-gradient-end": "#62C6F0",
+            //    "--card-header-gradient-start": "#2A3E9B",
+            //    "--card-header-bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
+            //    "--card-header-gradient-end": "#62C6F0",
 
-                "--card-body-border-color": "#E4E7EF",
+            //    "--card-body-border-color": "#E4E7EF",
 
-                "--bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
+            //    "--bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
 
-                "--sidebar-main-bg-gradient": "linear-gradient(to bottom, #2A3E9B, #62C6F0)",
-                "--login-card-bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
+            //    "--sidebar-main-bg-gradient": "linear-gradient(to bottom, #2A3E9B, #62C6F0)",
+            //    "--login-card-bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
 
-                "--login-link-text-color": "#007bff",
-                "--login-button-bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
-                "--login-button-bg-color": "#0084ff",
-                "--login-card-bg-color": "#FFFFFF",
+            //    "--login-link-text-color": "#007bff",
+            //    "--login-button-bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
+            //    "--login-button-bg-color": "#0084ff",
+            //    "--login-card-bg-color": "#FFFFFF",
 
-                "--header-main-bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
-                "--header-icon-hover": "#62C6F0",
+            //    "--header-main-bg-gradient": "linear-gradient(38deg, #2A3E9B 0%, #62C6F0 100%)",
+            //    "--header-icon-hover": "#62C6F0",
 
-                "--scroll-width": "7px",
-                "--card-title-font-size": "18px",
-                "--card-body-border-radius": "24px",
-                "--lockedMenus": "{}",
-                "--body-font": "Roboto",
-                "--login-background-active": "linear-gradient(135deg, #0052cc 0%, #00aaff 100%)",
-                "--login-button-hover-bg-color": "#0071e3",
-                "--login-company-logo": "url('https://msgsndr-private.storage.googleapis.com/companyPhotos/47b7e157-d197-4ce5-9a94-b697c258702a.png')"
-            },
+            //    "--scroll-width": "7px",
+            //    "--card-title-font-size": "18px",
+            //    "--card-body-border-radius": "24px",
+            //    "--lockedMenus": "{}",
+            //    "--body-font": "Roboto",
+            //    "--login-background-active": "linear-gradient(135deg, #0052cc 0%, #00aaff 100%)",
+            //    "--login-button-hover-bg-color": "#0071e3",
+            //    "--login-company-logo": "url('https://msgsndr-private.storage.googleapis.com/companyPhotos/47b7e157-d197-4ce5-9a94-b697c258702a.png')"
+            //},
             "GlitchGone Theme": {
                 "--primary-color": "#0B3D0B",
                 "--second-color": "#00A86B",
+                "--themebuildermaincolor": "#0B3D0B",
+                "--themebuildermain-active-bg": "#0B3D0B",
                 "--dark-color": "#000000",
                 "--grey-color": "#D9E2D9",
                 "--alert-color": "#E63946",
@@ -730,6 +734,8 @@
             "OceanMist Theme": {
                 "--primary-color": "#276678",
                 "--second-color": "#1687A7",
+                "--themebuildermaincolor": "#276678",
+                "--themebuildermain-active-bg": "#1B3B4B",
                 "--dark-color": "#1B3B4B",
                 "--grey-color": "#D3E0EA",
                 "--alert-color": "#E63946",
@@ -798,6 +804,8 @@
             "JetBlack Luxury Gold Theme": {
                 "--primary-color": "#545454",
                 "--second-color": "#7D7D7D",
+                "--themebuildermaincolor": "#545454",
+                "--themebuildermain-active-bg": "#333333",
                 "--dark-color": "#0E0E0E",
                 "--grey-color": "#CFCFCF",
                 "--alert-color": "#FF4B4B",
@@ -5755,8 +5763,6 @@
             );
             contentWrapper.appendChild(
             
-               
-
                 createSection(
                     '<i class="fa-solid fa-right-to-bracket" style="color:white;margin-right:6px;font-size:17px;"></i> Login Page Settings',
                     (section) => {
@@ -5842,7 +5848,6 @@
                     "",
                     true
                 )
-
             );
             contentWrapper.appendChild(
                 createSection('<i class="fa-solid fa-database"style="color:white;margin-right:6px;font-size:17px;"></i>Advance Settings', (section) => {
