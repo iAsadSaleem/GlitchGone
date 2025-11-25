@@ -2920,7 +2920,7 @@
 
         // === Background Color ===
         profileWrapper.appendChild(
-            makePicker("Dashboard Background Color", "profile-bg-color", "#344391", (val) => {
+            makePicker("Background Color", "profile-bg-color", "#344391", (val) => {
                 setImportantStyle(
                     "profile-bg-color",
                     `${selector} { background-color: ${val} !important; }`
@@ -4920,7 +4920,9 @@
             { id: "sb_ghl-swag", label: "GHL Swag" },
             { id: "sb_agency-ideas", label: "Agency Ideas" },
             { id: "sb_mobile-app-customiser", label: "Mobile App Customiser" },
-            { id: "sb_agency-accounts", label: "App Marketplace" },
+            //{ id: "sb_agency-accounts", label: "App Marketplace" },
+            { id: "sb_ai-employee-promo", label: "AI Holiday Promo" },
+            { id: "sb_holiday-promos", label: "Holiday Promos" },
             //Settings menu
             { id: "sb_agency-profile-settings", label: "My Profile" },
             { id: "sb_agency-company-settings", label: "Company" },
