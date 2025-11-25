@@ -624,6 +624,7 @@
                 "--login-button-bg-color": "#0a6e35",
                 "--login-card-bg-color": "#000000cc",
                 "--login-button-hover-bg-color": "#00e676",
+                "--login-headline-font-size": "25px",
 
                 "--header-main-bg-gradient": "linear-gradient(90deg, #ffffff 0%, #ffffff 100%)",
                 "--header-icon-hover": "#0a6e35",
@@ -771,6 +772,7 @@
                 "--login-button-bg-gradient": "linear-gradient(38deg, rgba(0,0,0,1) 45%, rgba(255,255,255,1) 45%, rgba(255,255,255,1) 54%, rgba(0,168,107,1) 55%)",
                 "--login-button-bg-color": "#0B3D0B",
                 "--login-card-bg-color": "#000000",
+                "--login-headline-font-size": "25px",
 
                 "--header-main-bg-gradient": "linear-gradient(225deg, rgba(0, 168, 107, 1) 22%, rgba(255, 255, 255, 1) 22%, rgb(247 245 245) 23%, rgba(0, 0, 0, 1) 23%)",
                 "--header-icon-hover": "#00A86B",
@@ -841,6 +843,8 @@
                 "--login-button-bg-gradient": "linear-gradient(to right, #276678 0%, #1687A7 60%, #D3E0EA 100%)",
                 "--login-button-bg-color": "#276678",
                 "--login-card-bg-color": "#FFFFFF",
+                "--login-headline-text-color": "#4CAF50",
+                "--login-headline-font-size": "25px",
 
                 "--header-main-bg-gradient": "linear-gradient(90deg, #FFFFFF 0%, #FFFFFF 50%, #FFFFFF 100%)",
                 "--header-icon-hover": "#1687A7",
@@ -906,9 +910,9 @@
                 "--sidebar-main-bg-gradient": "linear-gradient(to bottom, #0E0E0E, #1A1A1A 60%, #D4AF37 150%)",
                 "--login-card-bg-gradient": "linear-gradient(145deg, rgba(255,255,255,0.05), rgba(0,0,0,0.9))",
 
-                "--login-link-text-color": "#D4AF37",
+                "--login-link-text-color": "#ffd700",
                 "--login-button-bg-gradient": "linear-gradient(to right, #2D2D2D 0%, #3E3E3E 50%, #D4AF37 100%)",
-                "--login-button-bg-color": "#2D2D2D",
+                "--login-button-bg-color": "linear-gradient(90deg, #b8860b, #ffd700, #b8860b)",
                 "--login-card-bg-color": "rgba(18,18,18,0.9)",
 
                 "--header-main-bg-gradient": "linear-gradient(90deg, #1A1A1A 0%, #2A2A2A 60%, #D4AF37 100%)",
@@ -930,9 +934,10 @@
                 "--login-input-text-color": "#FFFFFF",
                 "--login-input-border-radius": "10px",
                 "--login-button-border-radius": "12px",
-                "--login-button-text-color": "#FFFFFF",
+                "--login-button-text-color": "#000",
                 "--login-button-hover-bg-color": "#D4AF37",
                 "--login-button-hover-text-color": "#0E0E0E",
+                "--login-button-border-radius":"14px",
                 "--login-footer-text-color": "#BFA76B",
                 "--login-logo-space": "50px",
                 "--login-layout-padding-right": "8%",
@@ -940,7 +945,9 @@
                 "--login-logo-width": "140px",
                 "--login-logo-height": "70px",
                 "--login-logo-filter": "drop-shadow(0 2px 6px rgba(212,175,55,0.3))",
-                "--login-background-active": "linear-gradient(135deg, #0288d1 0%, #01579b 100%)"
+                "--login-background-active": "linear-gradient(135deg, #0288d1 0%, #01579b 100%)",
+                "--login-headline-font-size": "35px",
+                "--login-headline-text-color":"#ffd700"
             }
         };
     }
@@ -1329,6 +1336,8 @@
                 "--login-button-bg-gradient": "linear-gradient(to right, #C5A880 0%, #532E1C 80%)",
                 "--login-button-bg-color": "#532E1C",
                 "--login-card-bg-color": "#FFFFFF",
+                "--login-background-active":"linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #b8860b 100%)",
+                "--login-headline-text-color":"#ffd700",
 
                 /* -------------------- HEADER MAIN GRADIENT -------------------- */
                 "--header-main-bg-gradient": "linear-gradient(to bottom, #1A1A1A, #262626 70%, #532E1C 150%)",
@@ -1353,7 +1362,7 @@
                 "--login-input-border-radius": "10px",
 
                 "--login-button-border-radius": "12px",
-                "--login-button-text-color": "#FFFFFF",
+                "--login-button-text-color": "#000",
                 "--login-button-hover-bg-color": "#C5A880",
                 "--login-button-hover-text-color": "#0F0F0F",
 
@@ -5903,7 +5912,7 @@
 
                         // Append these after your login button hover settings
                         section.appendChild(createLoginLinkTextColorPicker());
-                        section.appendChild(createLoginLinkTextSizeInput());
+                        //section.appendChild(createLoginLinkTextSizeInput());
                         section.appendChild(createLoginLogoInput("Logo URL", "--login-company-logo"));
                         section.appendChild(createForgetPasswordTextInput());
 
