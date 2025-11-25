@@ -835,7 +835,7 @@
 
                 "--bg-gradient": "linear-gradient(90deg, #F6F5F5 0%, #D3E0EA 60%, #FFFFFF 100%)",
                 "--sidebar-main-bg-gradient": "linear-gradient(to bottom, #1E4E5E, #276678 70%, #1687A7)",
-                "--login-card-bg-gradient": "linear-gradient(to bottom, #D3E0EA, #F6F5F5, #FFFFFF)",
+                "--login-card-bg-gradient": "#ffffff00",
 
                 "--login-link-text-color": "#1687A7",
                 "--login-button-bg-gradient": "linear-gradient(to right, #276678 0%, #1687A7 60%, #D3E0EA 100%)",
@@ -940,7 +940,7 @@
                 "--login-logo-width": "140px",
                 "--login-logo-height": "70px",
                 "--login-logo-filter": "drop-shadow(0 2px 6px rgba(212,175,55,0.3))",
-                "--login-background-active": "linear-gradient(180deg, #0E0E0E 0%, #1A1A1A 50%, #2B2B2B 100%)"
+                "--login-background-active": "linear-gradient(135deg, #0288d1 0%, #01579b 100%)"
             }
         };
     }
@@ -2165,7 +2165,7 @@
         wrapper.className = "tb-color-picker-wrapper";
 
         const label = document.createElement("label");
-        label.textContent = "Button Font Color";
+        label.textContent = "Button Text Color";
         label.className = "tb-color-picker-label";
 
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
