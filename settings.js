@@ -335,23 +335,75 @@
 
         savedThemeObj.themeData = savedThemeObj.themeData || {};
 
-        const start = getComputedStyle(document.body).getPropertyValue("--login-background-gradient-start").trim() || "#ffffff";
-        const end = getComputedStyle(document.body).getPropertyValue("--login-background-gradient-end").trim() || start;
-        const gradient = `linear-gradient(to bottom, ${start} 0%, ${start} 20%, ${end} 100%)`;
+        // Get user-selected colors
+        const start = getComputedStyle(document.body)
+            .getPropertyValue("--login-background-gradient-start")
+            .trim() || "#ffffff";
 
-        // ✅ Apply gradient
+        const end = getComputedStyle(document.body)
+            .getPropertyValue("--login-background-gradient-end")
+            .trim() || start;
+
+        let gradient;
+
+        // ---------------------------------------------
+        // ⭐ SPECIAL CASE: GlitchGone Theme gradient
+        // ---------------------------------------------
+        if (selectedtheme === "GlitchGone Theme") {
+            const whiteMiddle = "rgba(255, 255, 255, 1)";
+
+            gradient = `linear-gradient(
+            130deg,
+            ${start} 40%,
+            ${whiteMiddle} 40%,
+            ${whiteMiddle} 60%,
+            ${end} 60%
+        )`;
+        }
+        else {
+            // ---------------------------------------------
+            // DEFAULT GRADIENT (existing logic)
+            // ---------------------------------------------
+            gradient = `linear-gradient(to bottom, ${start} 0%, ${start} 20%, ${end} 100%)`;
+        }
+
+        // Apply gradient
         document.body.style.setProperty("--login-background-active", gradient);
 
-        // ✅ Save gradient
+        // Save gradient
         savedThemeObj.themeData["--login-background-active"] = gradient;
-        if (selectedtheme != 'Default Theme' || selectedtheme != 'Default Light Theme') {
+
+        // Remove background image (unless default themes)
+        if (selectedtheme !== 'Default Theme' && selectedtheme !== 'Default Light Theme') {
             delete savedThemeObj.themeData["--login-background-image"];
         }
-        // ❌ Remove background image so it doesn’t conflict
 
-        // ✅ Save updated theme
         localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
     }
+
+    //function updateLoginBackgroundGradient() {
+    //    const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+    //    const selectedtheme = localStorage.getItem("themebuilder_selectedTheme");
+
+    //    savedThemeObj.themeData = savedThemeObj.themeData || {};
+
+    //    const start = getComputedStyle(document.body).getPropertyValue("--login-background-gradient-start").trim() || "#ffffff";
+    //    const end = getComputedStyle(document.body).getPropertyValue("--login-background-gradient-end").trim() || start;
+    //    const gradient = `linear-gradient(to bottom, ${start} 0%, ${start} 20%, ${end} 100%)`;
+
+    //    // ✅ Apply gradient
+    //    document.body.style.setProperty("--login-background-active", gradient);
+
+    //    // ✅ Save gradient
+    //    savedThemeObj.themeData["--login-background-active"] = gradient;
+    //    if (selectedtheme != 'Default Theme' || selectedtheme != 'Default Light Theme') {
+    //        delete savedThemeObj.themeData["--login-background-image"];
+    //    }
+    //    // ❌ Remove background image so it doesn’t conflict
+
+    //    // ✅ Save updated theme
+    //    localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+    //}
 
     // === Background Image Input ===
     function createLoginBackgroundImageInput() {
