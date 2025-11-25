@@ -5754,7 +5754,8 @@
                 )
             );
             contentWrapper.appendChild(
-
+            
+               
 
                 createSection(
                     '<i class="fa-solid fa-right-to-bracket" style="color:white;margin-right:6px;font-size:17px;"></i> Login Page Settings',
@@ -5765,14 +5766,38 @@
                             "💡 For Flat Color: Choose the same color for Start & End";
                         section.appendChild(instruction);
 
+                        const selectedTheme = localStorage.getItem("themebuilder_selectedTheme");
+
+                        // Create a wrapper for disabling
+                        const bgSectionWrapper = document.createElement("div");
+                        bgSectionWrapper.className = "bg-section-wrapper";
+
                         const header = document.createElement("h4");
                         header.className = "tb-header-controls";
                         header.textContent = "Background Gradient Color & Image";
-                        section.appendChild(header);
+                        bgSectionWrapper.appendChild(header);
 
-                        section.appendChild(createLoginGradientPicker());
-                        // Attach it after End Color row
-                        section.appendChild(createLoginBackgroundImageInput());
+                        bgSectionWrapper.appendChild(createLoginGradientPicker());
+                        bgSectionWrapper.appendChild(createLoginBackgroundImageInput());
+
+                        section.appendChild(bgSectionWrapper);
+
+                        // Disable if theme is Default Theme
+                        if (selectedTheme === "Default Theme") {
+                            bgSectionWrapper.classList.add("disabled-section");
+                        }
+
+                        //const selectedTheme = localStorage.getItem("themebuilder_selectedTheme");
+
+
+                        //const header = document.createElement("h4");
+                        //header.className = "tb-header-controls";
+                        //header.textContent = "Background Gradient Color & Image";
+                        //section.appendChild(header);
+
+                        //section.appendChild(createLoginGradientPicker());
+                        //// Attach it after End Color row
+                        //section.appendChild(createLoginBackgroundImageInput());
 
 
                         const loginheader = document.createElement("h4");
