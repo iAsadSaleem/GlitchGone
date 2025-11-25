@@ -1165,7 +1165,7 @@
 
                 "--login-card-bg-gradient": "linear-gradient(38deg, rgba(27,27,27,0.70) 45%, rgba(255,255,255,1) 45%, rgba(255,255,255,1) 54%, rgba(76,175,80,1) 55%)",
 
-                "--login-headline-text-color": "#4CAF50",
+                "--login-headline-text-color": "#FFFFFF",
                 "--login-link-text-color": "#6D6D6D",
 
                 "--login-button-bg-gradient": "linear-gradient(38deg, rgba(27,27,27,0.90) 45%, rgba(255,255,255,1) 45%, rgba(255,255,255,1) 54%, rgba(76,175,80,1) 55%)",
