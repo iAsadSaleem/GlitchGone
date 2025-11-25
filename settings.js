@@ -837,7 +837,7 @@
                 "--sidebar-main-bg-gradient": "linear-gradient(to bottom, #1E4E5E, #276678 70%, #1687A7)",
                 "--login-card-bg-gradient": "#ffffff00",
 
-                "--login-link-text-color": "#1687A7",
+                "--login-link-text-color": "#FFFFFF",
                 "--login-button-bg-gradient": "linear-gradient(to right, #276678 0%, #1687A7 60%, #D3E0EA 100%)",
                 "--login-button-bg-color": "#276678",
                 "--login-card-bg-color": "#FFFFFF",
