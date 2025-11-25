@@ -5799,12 +5799,15 @@
                         // Run on load
                         updateBgSectionState();
 
-                        // Auto-update when localStorage changes
+                        // Listen when localStorage changes from **other tabs**
                         window.addEventListener("storage", function (event) {
                             if (event.key === "themebuilder_selectedTheme") {
                                 updateBgSectionState();
                             }
                         });
+
+                        // ✅ Listen when theme changes in the **same tab**
+                        window.addEventListener("themeChanged", updateBgSectionState);
 
 
                         //const selectedTheme = localStorage.getItem("themebuilder_selectedTheme");
