@@ -303,6 +303,8 @@
 
         "--sidebar-menu-color": "Choose SideBar Text Color",
         "--sidebar-menu-icon-color": "Choose SideBar Icon Color",
+        "--sidebar-menu-icon-hover-color": "Choose SideBar Icon Hover Color",
+        "--sidebar-menu-icon-active-color": "Choose SideBar Icon Active Color",
 
         // Login page gradient
         "--login-background-gradient-start": "Login BG Gradient Start Color",
@@ -620,7 +622,7 @@
                 "--login-card-bg-gradient": "#000000cc",
 
                 "--login-link-text-color": "#0a6e35",
-                "--login-button-bg-gradient": "linear-gradient(38deg, rgba(0,0,0,1) 45%, rgba(57,200,117,1) 55%)",
+                "--login-button-bg-gradient": "#00c853",
                 "--login-button-bg-color": "#0a6e35",
                 "--login-card-bg-color": "#000000cc",
                 "--login-button-hover-bg-color": "#00e676",
@@ -769,7 +771,7 @@
                 "--login-card-bg-gradient": "linear-gradient(38deg, rgba(0,0,0,0.9) 45%, rgba(255,255,255,1) 45%, rgba(255,255,255,1) 54%, rgba(0,168,107,1) 55%)",
                 "--login-headline-text-color": "#00c853",
                 "--login-link-text-color": "#9e9e9e",
-                "--login-button-bg-gradient": "linear-gradient(38deg, rgba(0,0,0,1) 45%, rgba(255,255,255,1) 45%, rgba(255,255,255,1) 54%, rgba(0,168,107,1) 55%)",
+                "--login-button-bg-gradient": "#00c853",
                 "--login-button-bg-color": "#0B3D0B",
                 "--login-card-bg-color": "#000000",
                 "--login-headline-font-size": "25px",
@@ -911,7 +913,7 @@
                 "--login-card-bg-gradient": "linear-gradient(145deg, rgba(255,255,255,0.05), rgba(0,0,0,0.9))",
 
                 "--login-link-text-color": "#ffd700",
-                "--login-button-bg-gradient": "linear-gradient(to right, #2D2D2D 0%, #3E3E3E 50%, #D4AF37 100%)",
+                "--login-button-bg-gradient": "linear-gradient(90deg, #b8860b, #ffd700, #b8860b)",
                 "--login-button-bg-color": "linear-gradient(90deg, #b8860b, #ffd700, #b8860b)",
                 "--login-card-bg-color": "rgba(18,18,18,0.9)",
 
