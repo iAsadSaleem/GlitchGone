@@ -507,7 +507,7 @@
             if (span) span.style.setProperty("color", color, "important");
         });
     }
-
+   
     function darkthemes() {
         return {
             "Default Theme": {
@@ -583,7 +583,6 @@
                 "--body-font": "Roboto",
                 "--login-company-logo": "url('https://msgsndr-private.storage.googleapis.com/companyPhotos/47b7e157-d197-4ce5-9a94-b697c258702a.png')",
                 //"--login-background-image": "url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d')",
-
             },
             //"BlueWave TopNav Theme": {
             //    "--primary-color": "#2A3E9B",
@@ -5774,7 +5773,6 @@
 
                         const selectedTheme = localStorage.getItem("themebuilder_selectedTheme");
 
-                        // Create a wrapper for disabling
                         const bgSectionWrapper = document.createElement("div");
                         bgSectionWrapper.className = "bg-section-wrapper";
 
@@ -5788,10 +5786,26 @@
 
                         section.appendChild(bgSectionWrapper);
 
-                        // Disable if theme is Default Theme
-                        if (selectedTheme === "Default Theme") {
-                            bgSectionWrapper.classList.add("disabled-section");
+                        function updateBgSectionState() {
+                            const selectedTheme = localStorage.getItem("themebuilder_selectedTheme");
+
+                            if (selectedTheme === "Default Theme") {
+                                bgSectionWrapper.classList.add("disabled-section");
+                            } else {
+                                bgSectionWrapper.classList.remove("disabled-section");
+                            }
                         }
+
+                        // Run on load
+                        updateBgSectionState();
+
+                        // Auto-update when localStorage changes
+                        window.addEventListener("storage", function (event) {
+                            if (event.key === "themebuilder_selectedTheme") {
+                                updateBgSectionState();
+                            }
+                        });
+
 
                         //const selectedTheme = localStorage.getItem("themebuilder_selectedTheme");
 
