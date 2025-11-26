@@ -859,6 +859,80 @@
                 "--body-font": "Roboto",
                 "--login-company-logo": "url('https://msgsndr-private.storage.googleapis.com/companyPhotos/47b7e157-d197-4ce5-9a94-b697c258702a.png')"
             },
+            "VelvetNight Theme": {
+                "--primary-color": "#C8ACD6",
+                "--second-color": "#433D8B",
+                "--themebuildermaincolor": "#2E236C",
+                "--themebuildermain-active-bg": "#17153B",
+                "--dark-color": "#0A0A0A",
+                "--grey-color": "#E8E0EE",
+                "--alert-color": "#E63946",
+                "--app-bg-color": "#F6F2FA",
+                "--Acent-color": "#FFFFFF",
+
+                "--sidebar-bg-color": "#17153B",
+                "--sidebar-menu-bg": "#2E236C",
+                "--sidebar-menu-color": "#FFFFFF",
+                "--sidebar-menu-hover-bg": "#433D8B",
+                "--sidebar-menu-active-bg": "#C8ACD6",
+                "--sidebar-menu-icon-color": "#DCCEF0",
+                "--sidebar-menu-icon-hover-color": "#FFFFFF",
+                "--sidebar-menu-icon-active-color": "#FFFFFF",
+                "--sidebar-menu-border-radius": "10px",
+
+                "--sidebar-top-right-radius": "0px",
+                "--sidebar-bottom-right-radius": "0px",
+
+                "--scroll-color": "#433D8B",
+
+                "--header-bg-color": "#FFFFFF",
+                "--header-icon-color": "#FFFFFF",
+                "--header-icon-hover-color": "#C8ACD6",
+                "--header-icon-bg": "#2E236C",
+                "--header-icon-hover-bg": "#433D8B",
+
+                "--card-body-bg-color": "#FFFFFF",
+                "--card-body-font-color": "#1A1A1A",
+                "--card-title-font-color": "#C8ACD6",
+                "--card-dec-font-color": "#333333",
+                "--card-footer-bg-color": "#ECE6F4",
+                "--card-footer-font-color": "#000000",
+
+                "--top-nav-menu-bg": "#FFFFFF",
+                "--top-nav-menu-hover-bg": "#ECE6F4",
+                "--top-nav-menu-active-bg": "#F6F2FA",
+                "--top-nav-menu-color": "#000000",
+                "--top-nav-menu-hover-color": "#433D8B",
+                "--top-nav-menu-active-color": "#C8ACD6",
+
+                "--card-header-gradient-start": "#17153B",
+                "--card-header-bg-gradient": "linear-gradient(225deg, #433D8B 40%, #FFFFFF 40%, #F6F2FA 41%, #17153B 40%)",
+                "--card-header-gradient-end": "#C8ACD6",
+
+                "--card-body-border-color": "#DCD2EA",
+
+                "--bg-gradient": "linear-gradient(38deg, rgba(23,21,59,0.9) 45%, #FFFFFF 45%, #FFFFFF 54%, #C8ACD6 55%)",
+                "--sidebar-main-bg-gradient": "linear-gradient(to bottom, #17153B, #2E236C 60%, #433D8B 100%)",
+                "--login-card-bg-gradient": "linear-gradient(38deg, rgba(23,21,59,0.9) 45%, #FFFFFF 45%, #FFFFFF 54%, #C8ACD6 55%)",
+
+                "--login-headline-text-color": "#433D8B",
+                "--login-link-text-color": "#9e9e9e",
+                "--login-button-bg-gradient": "linear-gradient(45deg, #2E236C, #433D8B)",
+                "--login-button-bg-color": "#2E236C",
+                "--login-card-bg-color": "#17153B",
+                "--login-headline-font-size": "25px",
+
+                "--header-main-bg-gradient": "linear-gradient(225deg, #433D8B 22%, #FFFFFF 22%, #F6F2FA 23%, #17153B 23%)",
+                "--header-icon-hover": "#C8ACD6",
+
+                "--scroll-width": "7px",
+                "--card-body-border-radius": "6px",
+                "--card-title-font-size": "15px",
+                "--lockedMenus": "{}",
+                "--body-font": "Roboto",
+                "--login-company-logo": "url('https://msgsndr-private.storage.googleapis.com/companyPhotos/47b7e157-d197-4ce5-9a94-b697c258702a.png')"
+            },
+
 
             "OceanMist Theme": {
                 "--primary-color": "#276678",
