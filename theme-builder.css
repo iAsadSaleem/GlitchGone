@@ -645,7 +645,7 @@ tb-apply-btn
     padding: 4px 1px 1px 1px;
     text-align: center;
     height: 25px;
-    font-size: 14px;
+    font-size: 12px;
     color: #ffffff;
     background: var(--primary-color);
     border: solid 1px #ffffff08;
@@ -659,7 +659,7 @@ tb-apply-btn
     padding: 4px 1px 1px 1px;
     text-align: center;
     height: 25px;
-    font-size: 14px;
+    font-size: 12px;
     color: #ffffff;
     background: var(--primary-color);
     border: solid 1px #ffffff08;
@@ -686,7 +686,7 @@ body::-webkit-scrollbar-track {
     color: #413939ad;
     text-align: center;
     color: white;
-    font-size: 13px;
+    font-size: 12px;
 }
 .tb-sidebar-title-input {
     font-size: 8px;
@@ -798,7 +798,7 @@ body::-webkit-scrollbar-track {
     padding: 4px 1px 1px 1px;
     text-align: center;
     height: 25px;
-    font-size: 14px;
+    font-size: 12px;
     color: #ffffff;
     background: var(--primary-color);
     border: solid 1px #ffffff08;
@@ -811,7 +811,7 @@ body::-webkit-scrollbar-track {
     padding: 4px 1px 1px 1px;
     text-align: center;
     height: 25px;
-    font-size: 14px;
+    font-size: 12px;
     color: #ffffff;
     background: var(--primary-color);
     border: solid 1px #ffffff08;
@@ -824,7 +824,7 @@ body::-webkit-scrollbar-track {
     padding: 4px 1px 1px 1px;
     text-align: center;
     height: 25px;
-    font-size: 14px;
+    font-size: 12px;
     color: #ffffff;
     background: var(--primary-color);
     border: solid 1px #ffffff08;

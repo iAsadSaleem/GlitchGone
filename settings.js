@@ -5911,7 +5911,7 @@
                         section.appendChild(createLoginButtonTextInput());
                         const forgetpass = document.createElement("h4");
                         forgetpass.className = "tb-header-controls";
-                        forgetpass.textContent = "Forget Password & Policiy Link Color";
+                        forgetpass.textContent = "Forget Password & Policiy Text Color";
                         section.appendChild(forgetpass);
 
 
