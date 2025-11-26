@@ -51,6 +51,15 @@
         right: -420px;
         transition: right 0.4s ease; /* slightly slower close transition */
     }
+.gg-name {
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.tb-name {
+    font-weight: 500;
+    font-size: 14px;
+}
 /* Overlay covers entire drawer and blocks clicks */
 .jc-confirm-modal-overlay {
     position: absolute; /* relative to drawer */

@@ -5676,9 +5676,16 @@
             const drawerTitleWrapper = document.createElement('div');
             drawerTitleWrapper.className = "tb-drawer-title-wrapper";
 
+            //const title = document.createElement('div');
+            //title.textContent = "GlitchGone<br>Theme Builder";
+            //title.className = "tb-title";
             const title = document.createElement('div');
-            title.textContent = "Theme Builder";
             title.className = "tb-title";
+
+            title.innerHTML = `
+              <span class="gg-name">GlitchGone</span><br>
+              <span class="tb-name">Theme Builder</span>
+            `;
 
             const closeBtn = document.createElement('button');
             closeBtn.innerHTML = '&times;';
