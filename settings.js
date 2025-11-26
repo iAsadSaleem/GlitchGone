@@ -5680,12 +5680,8 @@
             //title.textContent = "GlitchGone<br>Theme Builder";
             //title.className = "tb-title";
             const title = document.createElement('div');
+            title.innerHTML = "GlitchGone<br>Theme Builder";
             title.className = "tb-title";
-
-            title.innerHTML = `
-              <span class="gg-name">GlitchGone</span><br>
-              <span class="tb-name">Theme Builder</span>
-            `;
 
             const closeBtn = document.createElement('button');
             closeBtn.innerHTML = '&times;';
