@@ -786,6 +786,80 @@
                 "--body-font": "Roboto",
                 "--login-company-logo": "url('https://msgsndr-private.storage.googleapis.com/companyPhotos/47b7e157-d197-4ce5-9a94-b697c258702a.png')"
             },
+            "RoyalNebula Theme": {
+                "--primary-color": "#3DC2EC",
+                "--second-color": "#4B70F5",
+                "--themebuildermaincolor": "#4C3BCF",
+                "--themebuildermain-active-bg": "#402E7A",
+                "--dark-color": "#0A0A0A",
+                "--grey-color": "#E3E6F5",
+                "--alert-color": "#E63946",
+                "--app-bg-color": "#F4F7FF",
+                "--Acent-color": "#FFFFFF",
+
+                "--sidebar-bg-color": "#402E7A",
+                "--sidebar-menu-bg": "#4C3BCF",
+                "--sidebar-menu-color": "#FFFFFF",
+                "--sidebar-menu-hover-bg": "#4B70F5",
+                "--sidebar-menu-active-bg": "#3DC2EC",
+                "--sidebar-menu-icon-color": "#BFD6FF",
+                "--sidebar-menu-icon-hover-color": "#FFFFFF",
+                "--sidebar-menu-icon-active-color": "#FFFFFF",
+                "--sidebar-menu-border-radius": "10px",
+
+                "--sidebar-top-right-radius": "0px",
+                "--sidebar-bottom-right-radius": "0px",
+
+                "--scroll-color": "#4B70F5",
+
+                "--header-bg-color": "#FFFFFF",
+                "--header-icon-color": "#FFFFFF",
+                "--header-icon-hover-color": "#3DC2EC",
+                "--header-icon-bg": "#4C3BCF",
+                "--header-icon-hover-bg": "#4B70F5",
+
+                "--card-body-bg-color": "#FFFFFF",
+                "--card-body-font-color": "#1A1A1A",
+                "--card-title-font-color": "#3DC2EC",
+                "--card-dec-font-color": "#333333",
+                "--card-footer-bg-color": "#E6EBFF",
+                "--card-footer-font-color": "#000000",
+
+                "--top-nav-menu-bg": "#FFFFFF",
+                "--top-nav-menu-hover-bg": "#E6EBFF",
+                "--top-nav-menu-active-bg": "#F4F7FF",
+                "--top-nav-menu-color": "#000000",
+                "--top-nav-menu-hover-color": "#4B70F5",
+                "--top-nav-menu-active-color": "#3DC2EC",
+
+                "--card-header-gradient-start": "#402E7A",
+                "--card-header-bg-gradient": "linear-gradient(225deg, #4B70F5 40%, #FFFFFF 40%, #F4F7FF 41%, #402E7A 40%)",
+                "--card-header-gradient-end": "#3DC2EC",
+
+                "--card-body-border-color": "#D5DBFF",
+
+                "--bg-gradient": "linear-gradient(38deg, rgba(64,46,122,0.9) 45%, rgba(255,255,255,1) 45%, rgba(255,255,255,1) 54%, #3DC2EC 55%)",
+                "--sidebar-main-bg-gradient": "linear-gradient(to bottom, #402E7A, #4C3BCF 60%, #4B70F5 100%)",
+                "--login-card-bg-gradient": "linear-gradient(38deg, rgba(64,46,122,0.9) 45%, #FFFFFF 45%, #FFFFFF 54%, #3DC2EC 55%)",
+
+                "--login-headline-text-color": "#4B70F5",
+                "--login-link-text-color": "#9e9e9e",
+                "--login-button-bg-gradient": "linear-gradient(45deg, #4C3BCF, #4B70F5)",
+                "--login-button-bg-color": "#4C3BCF",
+                "--login-card-bg-color": "#402E7A",
+                "--login-headline-font-size": "25px",
+
+                "--header-main-bg-gradient": "linear-gradient(225deg, #4B70F5 22%, #FFFFFF 22%, #F4F7FF 23%, #402E7A 23%)",
+                "--header-icon-hover": "#3DC2EC",
+
+                "--scroll-width": "7px",
+                "--card-body-border-radius": "6px",
+                "--card-title-font-size": "15px",
+                "--lockedMenus": "{}",
+                "--body-font": "Roboto",
+                "--login-company-logo": "url('https://msgsndr-private.storage.googleapis.com/companyPhotos/47b7e157-d197-4ce5-9a94-b697c258702a.png')"
+            },
+
             "OceanMist Theme": {
                 "--primary-color": "#276678",
                 "--second-color": "#1687A7",
