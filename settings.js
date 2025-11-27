@@ -5728,18 +5728,12 @@
                     saved.themeData[storageKey] = JSON.stringify(newOrder);
                     localStorage.setItem("userTheme", JSON.stringify(saved));
 
+                    // ONLY THIS — correct live update
                     reorderMenu(newOrder, "#subAccountSidebar");
-
-                    newOrder.forEach(menuId => {
-                        const menuEl = document.getElementById(menuId);
-                        if (menuEl && menuEl.parentElement) {
-                            menuEl.parentElement.appendChild(menuEl);
-                        }
-                    });
-
 
                     applyMenuCustomizations();
                 }
+
             });
         };
 
