@@ -586,6 +586,8 @@
                 "--sidebar-menu-icon-hover-color": "#FFFFFF",
                 "--sidebar-menu-icon-active-color": "#FFFFFF",
                 "--sidebar-menu-border-radius": "16px",
+                "--sidebar-text-hover-color": "#ffffff",
+                "--sidebar-text-active-color":"#ffffff",
 
                 "--sidebar-top-right-radius": "18px",
                 "--sidebar-bottom-right-radius": "18px",
@@ -5924,6 +5926,7 @@
                         const forgetpass = document.createElement("h4");
                         forgetpass.className = "tb-header-controls";
                         forgetpass.textContent = "Forget Password & Policiy Text Settings";
+                        section.appendChild(forgetpass);
 
 
                         // Append these after your login button hover settings
@@ -5936,7 +5939,6 @@
                         heading.className = "tb-header-controls";
                         heading.textContent = "Card Title Settings";
                         section.appendChild(heading);
-                        section.appendChild(forgetpass);
 
                         section.appendChild(createLoginHeadingControls());
 
