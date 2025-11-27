@@ -2242,7 +2242,7 @@
         wrapper.className = "tb-color-picker-wrapper";
 
         const label = document.createElement("label");
-        label.textContent = "Login Button Hover Color";
+        label.textContent = "Button Hover Color";
         label.className = "tb-color-picker-label";
 
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
@@ -2405,7 +2405,7 @@
         wrapper.className = "tb-color-picker-wrapper";
 
         const label = document.createElement("label");
-        label.textContent = "Login Link Text Color";
+        label.textContent = "Links Text Color";
         label.className = "tb-color-picker-label";
 
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
@@ -2515,7 +2515,7 @@
         sizeWrapper.className = "tb-color-picker-wrapper";
 
         const sizeLabel = document.createElement("label");
-        sizeLabel.textContent = "Login Heading Font Size (px)";
+        sizeLabel.textContent = "Heading Font Size (px)";
         sizeLabel.className = "tb-color-picker-label";
 
         let storedSize =
@@ -2552,7 +2552,7 @@
         colorWrapper.className = "tb-color-picker-wrapper";
 
         const colorLabel = document.createElement("label");
-        colorLabel.textContent = "Login Heading Text Color";
+        colorLabel.textContent = "Heading Text Color";
         colorLabel.className = "tb-color-picker-label";
 
         let storedColor =
@@ -2598,7 +2598,7 @@
         textWrapper.className = "tb-color-picker-wrapper";
 
         const textLabel = document.createElement("label");
-        textLabel.textContent = "Login Heading Text";
+        textLabel.textContent = "Heading Text";
         textLabel.className = "tb-color-picker-label";
 
         let storedText =
@@ -5917,7 +5917,7 @@
                         section.appendChild(createLoginButtonTextInput());
                         const forgetpass = document.createElement("h4");
                         forgetpass.className = "tb-header-controls";
-                        forgetpass.textContent = "Forget Password & Policiy Text Color";
+                        forgetpass.textContent = "Forget Password & Policiy Text Settings";
                         section.appendChild(forgetpass);
 
 
@@ -5929,7 +5929,7 @@
 
                         const heading = document.createElement("h4");
                         heading.className = "tb-header-controls";
-                        heading.textContent = "Login Heading Card Settings";
+                        heading.textContent = "Card Title Settings";
                         section.appendChild(heading);
 
                         section.appendChild(createLoginHeadingControls());
