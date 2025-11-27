@@ -5918,7 +5918,6 @@
                         const forgetpass = document.createElement("h4");
                         forgetpass.className = "tb-header-controls";
                         forgetpass.textContent = "Forget Password & Policiy Text Settings";
-                        section.appendChild(forgetpass);
 
 
                         // Append these after your login button hover settings
@@ -5931,6 +5930,7 @@
                         heading.className = "tb-header-controls";
                         heading.textContent = "Card Title Settings";
                         section.appendChild(heading);
+                        section.appendChild(forgetpass);
 
                         section.appendChild(createLoginHeadingControls());
 
