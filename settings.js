@@ -577,8 +577,8 @@
                 "--app-bg-color": "#F9F9F9",
                 "--Acent-color": "#FFFFFF",
 
-                "--sidebar-bg-color": "#2D3748",          /* Flat black sidebar background */
-                "--sidebar-menu-bg": "#2D3748",
+                "--sidebar-bg-color": "#000000",          /* Flat black sidebar background */
+                "--sidebar-menu-bg": "#000000",
                 "--sidebar-menu-color": "#FFFFFF",
                 "--sidebar-menu-hover-bg": "#0a6e35",
                 "--sidebar-menu-active-bg": "#07a125",
@@ -597,8 +597,8 @@
                 "--header-icon-hover-color": "#0a6e35",
                 "--header-icon-bg": "#000000",
                 "--header-icon-hover-bg": "#111111",
-                "--card-header-bg-color":"212121",
-                "--card-body-bg-color": "#212121",
+
+                "--card-body-bg-color": "#FFFFFF",
                 "--card-body-font-color": "#1A1A1A",
                 "--card-title-font-color": "#f9f9f9",
                 "--card-dec-font-color": "#333333",
