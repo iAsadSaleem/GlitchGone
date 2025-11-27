@@ -4932,6 +4932,7 @@
             }
         });
     }
+
     function buildMenuCustomizationSection(container) {
         if (document.getElementById("tb-menu-customization")) return;
 
@@ -4942,7 +4943,6 @@
         const separator = document.createElement("hr");
         separator.className = "tb-section-separator";
         wrapper.appendChild(separator);
-
         // ---------------- Menu definitions ----------------
         let subAccountMenus = [
             { id: "sb_launchpad", label: "Launchpad" },
@@ -4959,11 +4959,34 @@
             { id: "sb_app-media", label: "App Media" },
             { id: "sb_memberships", label: "Memberships" },
             { id: "sb_reputation", label: "Reputation" },
+            //{ id: "sb_app-marketplace", label: "App Marketplace" },
+            //{ id: "sb_custom-values", label: "Custom Values" },
+            //{ id: "sb_manage-scoring", label: "Manage Scoring" },
+            //{ id: "sb_domains-urlRedirects", label: "Domains & URL Redirects" },
+            //{ id: "sb_integrations", label: "Integrations" },
+            //{ id: "sb_undefined", label: "Private Integrations" },
+            //{ id: "sb_conversations_providers", label: "Conversation Providers" },
+            //{ id: "sb_tags", label: "Tags" },
+            //{ id: "sb_labs", label: "Labs" },
+            //{ id: "sb_audit-logs-location", label: "Audit Logs" },
+            //{ id: "sb_brand-boards", label: "Brand Boards" },
+            //{ id: "sb_business_info", label: "Business Profile" },
+            //{ id: "sb_saas-billing", label: "Billing" },
+            //{ id: "sb_my-staff", label: "My Staff" },
+            //{ id: "sb_Opportunities-Pipelines", label: "Opportunities & Pipelines" },
+            //{ id: "sb_", label: "Automation" },
+            //{ id: "sb_calendars", label: "Calendars" },
+            //{ id: "sb_location-email-services", label: "Email Services" },
+            //{ id: "sb_phone-number", label: "Phone Numbers" },
+            //{ id: "sb_whatsapp", label: "WhatsApp" },
+            //{ id: "sb_objects", label: "Objects" },
+            //{ id: "sb_custom-fields-settings", label: "Custom Fields" }
         ];
 
         let agencyMenus = [
             { id: "sb_agency-dashboard", label: "Agency Dashboard" },
             { id: "sb_location-prospect", label: "Prospecting" },
+            { id: "sb_agency-accounts", label: "Agency Accounts" },
             { id: "sb_agency-account-reselling", label: "Account Reselling" },
             { id: "sb_agency-marketplace", label: "Add-Ons" },
             { id: "sb_agency-affiliate-portal", label: "Affiliate Portal" },
@@ -4974,15 +4997,34 @@
             { id: "sb_ghl-swag", label: "GHL Swag" },
             { id: "sb_agency-ideas", label: "Agency Ideas" },
             { id: "sb_mobile-app-customiser", label: "Mobile App Customiser" },
-        ];
+            //{ id: "sb_agency-accounts", label: "App Marketplace" },
 
-        // Load saved theme
+            //Settings menu
+            //{ id: "sb_agency-profile-settings", label: "My Profile" },
+            //{ id: "sb_agency-company-settings", label: "Company" },
+            //{ id: "sb_agency-team-settings", label: "Team" },
+            //{ id: "sb_agency-twilio-settings", label: "Phone Integration" },
+            //{ id: "sb_agency-email-settings", label: "Email Services" },
+            //{ id: "sb_system-emails-setting", label: "System Emails" },
+            //{ id: "sb_agency-banner-management", label: "Announcements" },
+            //{ id: "sb_workflow-premium-actions-setting", label: "Workflow - Premium Features" },
+            //{ id: "sb_conversation-ai-setting", label: "AI Employee" },
+            //{ id: "sb_ask-ai-configuration-setting", label: "Ask AI Configuration" },
+            //{ id: "sb_workflow-ai-setting", label: "Workflow - External AI Models" },
+            //{ id: "sb_domain-purchase-setting", label: "Domain Purchase" },
+            //{ id: "sb_undefined", label: "Private Integrations" },
+            //{ id: "sb_agency-affiliate-settings", label: "Affiliates" },
+            //{ id: "sb_agency-custom-link-settings", label: "Custom Menu Links" },
+            //{ id: "sb_agency-stripe-settings", label: "Stripe" },
+            //{ id: "sb_agency-api-keys-settings", label: "API Keys" },
+            //{ id: "sb_agency-compliance-settings", label: "Compliance" },
+            //{ id: "sb_agency-labs-settings", label: "Labs" },
+            //{ id: "sb_agency-audit-logs-settings", label: "Audit Logs" }
+        ];
+        // ✅ Debug: check if your menus arrays are defined correctly
+        // Load saved theme 
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedTheme.themeData || {};
-
-        // Keep an observer reference & flag so we can pause while reordering
-        let sidebarObserver = null;
-        let isPerformingProgrammaticReorder = false;
 
         // ---------------- Helper to build each section ----------------
         const buildSection = (menus, sectionTitle, storageKey, sidebarParentSelector) => {
@@ -4994,19 +5036,31 @@
             const listContainer = document.createElement("div");
             listContainer.className = "tb-draggable-menu-list";
 
+            //const savedOrder = themeData[storageKey] ? JSON.parse(themeData[storageKey]) : [];
+            //if (savedOrder.length > 0) {
+            //    const indexOf = id => {
+            //        const idx = savedOrder.indexOf(id);
+            //        return idx === -1 ? Number.MAX_SAFE_INTEGER : idx;
+            //    };
+            //    menus.sort((a, b) => indexOf(a.id) - indexOf(b.id));
+            //}
             const savedOrder = themeData[storageKey] ? JSON.parse(themeData[storageKey]) : [];
 
             if (Array.isArray(savedOrder) && savedOrder.length > 0) {
-                // Reorder menus according to saved order only (preserve newly added)
+                // Reorder menus according to saved order only
                 const orderedMenus = [];
                 savedOrder.forEach(id => {
                     const found = menus.find(m => m.id === id);
                     if (found) orderedMenus.push(found);
                 });
-                menus.forEach(m => { if (!savedOrder.includes(m.id)) orderedMenus.push(m); });
+
+                // Add any new menus not in savedOrder (to preserve new additions)
+                menus.forEach(m => {
+                    if (!savedOrder.includes(m.id)) orderedMenus.push(m);
+                });
+
                 menus = orderedMenus;
             }
-
             menus.forEach(menu => {
                 const row = document.createElement("div");
                 row.className = "tb-menu-row";
@@ -5021,11 +5075,11 @@
                 row.style.background = "#f9f9f9";
                 row.style.boxShadow = "-2px 2px 10px rgb(78 77 189 / 21%)";
 
-                // Drag icon (handle)
+                // 🖼️ Add drag icon before label
                 const dragIcon = document.createElement("img");
                 dragIcon.src = "https://theme-builder-delta.vercel.app/images/drag-logo-2.png";
                 dragIcon.alt = "drag";
-                dragIcon.className = "tb-drag-handle";
+                dragIcon.className = "tb-drag-handle"; // 👈 important for Sortable handle
                 dragIcon.style.width = "15px";
                 dragIcon.style.height = "15px";
                 dragIcon.style.objectFit = "contain";
@@ -5039,14 +5093,12 @@
                 titleInput.type = "text";
                 titleInput.placeholder = "Custom Title";
                 titleInput.className = "tb-input tb-title-input";
-                titleInput.value = menu.label;
-                // Live title update as user types
+                // 🔥 Live title update as user types
                 titleInput.addEventListener("input", (e) => {
                     const newLabel = e.target.value.trim();
                     const rawKey = menu.id.startsWith("sb_") ? menu.id.replace(/^sb_/, "") : menu.id;
                     updateSidebarTitle(rawKey, newLabel || menu.label);
                 });
-
                 const iconInput = document.createElement("input");
                 iconInput.type = "text";
                 iconInput.placeholder = "CODE";
@@ -5057,13 +5109,12 @@
                     : {};
 
                 if (menuCustomizations[menu.id]) {
-                    titleInput.value = menuCustomizations[menu.id].title || menu.label;
+                    titleInput.value = menuCustomizations[menu.id].title || "";
                     iconInput.value = menuCustomizations[menu.id].icon || "";
                 } else {
                     titleInput.value = menu.label;
                 }
-
-                // Keep your exact saveChange logic (untouched behavior)
+                //Old Code
                 const saveChange = () => {
                     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                     saved.themeData = saved.themeData || {};
@@ -5075,6 +5126,7 @@
                     let iconValue = iconInput.value.trim();
                     let isUnicode = false;
 
+                    // ✅ Detect if user pasted only Unicode like "f015"
                     if (/^f[0-9a-fA-F]{3}$/i.test(iconValue)) {
                         isUnicode = true;
                     }
@@ -5091,7 +5143,7 @@
                     const varName = `--${menu.id}-new-name`;
                     document.documentElement.style.setProperty(varName, `"${titleInput.value || menu.label}"`);
 
-                    // Update icon live
+                    // 🔄 Update icon live
                     const menuEl = document.getElementById(menu.id);
                     if (menuEl) {
                         let iconEl = menuEl.querySelector("i");
@@ -5101,8 +5153,10 @@
                         }
 
                         if (isUnicode) {
+                            // ✅ Update the CSS variable instead of injecting icon manually
                             updateIconVariable(menu.id, iconValue);
 
+                            // Optional: Add a fallback <i> for safety (not strictly required)
                             iconEl.className = "fa-solid";
                             iconEl.textContent = String.fromCharCode(parseInt(iconValue, 16));
                             iconEl.style.fontFamily = "Font Awesome 6 Free";
@@ -5110,16 +5164,20 @@
                             iconEl.style.marginRight = "0.5rem";
                             iconEl.style.fontSize = "16px";
                         } else {
+                            // ✅ User entered a normal class or URL
                             iconEl.textContent = "";
 
+                            // 🧠 Auto-correct class before assigning
                             let finalClass = iconValue.trim();
 
+                            // If accidentally Unicode, fallback
                             if (/^f[0-9a-f]{3}$/i.test(finalClass)) {
                                 iconEl.className = "fa-solid";
                                 iconEl.textContent = String.fromCharCode(parseInt(finalClass, 16));
                                 iconEl.style.fontFamily = "Font Awesome 6 Free";
                                 iconEl.style.fontWeight = "900";
                             } else {
+                                // Normalize normal icon class
                                 if (finalClass.startsWith("fa-") && !finalClass.includes("fa-solid") && !finalClass.includes("fa-regular") && !finalClass.includes("fa-brands")) {
                                     finalClass = `fa-solid ${finalClass}`;
                                 } else if (!finalClass.startsWith("fa-")) {
@@ -5131,9 +5189,9 @@
                                 iconEl.style.fontFamily = "Font Awesome 6 Free";
                                 iconEl.style.fontWeight = "900";
                             }
+
                         }
                     }
-
                     function waitForFontAwesome(cb) {
                         const test = document.createElement("i");
                         test.className = "fa-solid fa-house";
@@ -5155,7 +5213,8 @@
                 titleInput.addEventListener("input", saveChange);
                 iconInput.addEventListener("input", saveChange);
 
-                row.appendChild(dragIcon);
+                // ✅ Correct append order
+                row.appendChild(dragIcon);  // use dragIcon instead of dragHandle
                 row.appendChild(label);
                 row.appendChild(titleInput);
                 row.appendChild(iconInput);
@@ -5165,244 +5224,116 @@
 
             wrapper.appendChild(listContainer);
 
+            // ==========================
+            // Helper function (place at top or outside Sortable)
+            // ==========================
+            function updateSubaccountSidebarRuntime(newOrder) {
+                const sidebarNav = document.querySelector(
+                    '.hl_nav-header nav[aria-label="header"]'
+                );
+                if (!sidebarNav) return;
+
+                newOrder.forEach(metaKey => {
+                    const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
+                    if (el) sidebarNav.appendChild(el); // moves node in new order
+                });
+            }
+
             // ---------------- Drag & Drop ----------------
             Sortable.create(listContainer, {
                 animation: 150,
                 ghostClass: "tb-dragging",
-                handle: ".tb-drag-handle",
-                onEnd: (evt) => {
-                    // Run reorder asynchronously so Sortable's internal DOM ops finish
-                    setTimeout(() => {
-                        try {
-                            const rows = listContainer.querySelectorAll(".tb-menu-row");
-                            const newOrder = [...rows].map(r => r.dataset.id);
+                handle: ".tb-drag-handle", // ✅ Only drag when grabbing the handle
+                onEnd: () => {
+                    const rows = listContainer.querySelectorAll(".tb-menu-row");
+                    const newOrder = [...rows].map(r => r.dataset.id);
 
-                            // Save order to storage
-                            const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-                            saved.themeData = saved.themeData || {};
-                            saved.themeData[storageKey] = JSON.stringify(newOrder);
-                            localStorage.setItem("userTheme", JSON.stringify(saved));
+                    // Save order
+                    const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                    saved.themeData = saved.themeData || {};
+                    saved.themeData[storageKey] = JSON.stringify(newOrder);
+                    localStorage.setItem("userTheme", JSON.stringify(saved));
 
-                            // Perform a safe programmatic reorder
-                            safeReorder(newOrder, sidebarParentSelector);
+                    updateSubaccountSidebarRuntime(newOrder);
 
-                            // Re-apply visual customizations
-                            applyMenuCustomizations();
-                        } catch (err) {
-                            console.error("Error in sortable onEnd safeReorder:", err);
+                    newOrder.forEach(menuId => {
+                        const menuEl = document.getElementById(menuId);
+                        if (menuEl && menuEl.parentElement) {
+                            menuEl.parentElement.appendChild(menuEl);
                         }
-                    }, 120); // 6x more stable
+                    });
 
+
+                    applyMenuCustomizations();
                 }
             });
         };
 
-        // Instruction paragraph (unchanged)
+        // 💡 Add Instruction Paragraph under Agency Level Menu Customization
         const instruction = document.createElement("p");
         instruction.className = "tb-instruction-text";
         instruction.innerHTML = `
-      💡 <strong>How to Customize Your Menu:</strong><br><br>
-      1. To add a custom icon for any menu item, please visit the 
-      <a href="https://fontawesome.com/icons" target="_blank" style="color:#007bff; text-decoration:underline;">
-        Font Awesome Icons Library
-      </a>. Once there, select your preferred icon. On the <strong>top-right corner</strong> of the icon page, you’ll find a <strong>“Copy Code”</strong> button — click it and then <strong>paste the copied code into the relevant icon field</strong> here.<br><br>
-      2. You can <strong>drag and drop the menu items</strong> to change their order. This helps you organize your dashboard according to your preferences or workflow.<br><br>
-      3. To <strong>change the title of any menu item</strong>, simply edit the text in the <strong>relevant title field</strong>. This allows you to personalize your menu names for better clarity and easier navigation.<br><br>
-      ✨ <em>Tip:</em> Use these customization options to design a navigation layout that’s tailored to your needs — improving productivity and making your workspace more intuitive.
-    `;
+              💡 <strong>How to Customize Your Menu:</strong><br><br>
+              1. To add a custom icon for any menu item, please visit the 
+              <a href="https://fontawesome.com/icons" target="_blank" style="color:#007bff; text-decoration:underline;">
+                Font Awesome Icons Library
+              </a>. Once there, select your preferred icon. On the <strong>top-right corner</strong> of the icon page, you’ll find a <strong>“Copy Code”</strong> button — click it and then <strong>paste the copied code into the relevant icon field</strong> here.<br><br>
+              2. You can <strong>drag and drop the menu items</strong> to change their order. This helps you organize your dashboard according to your preferences or workflow.<br><br>
+              3. To <strong>change the title of any menu item</strong>, simply edit the text in the <strong>relevant title field</strong>. This allows you to personalize your menu names for better clarity and easier navigation.<br><br>
+              ✨ <em>Tip:</em> Use these customization options to design a navigation layout that’s tailored to your needs — improving productivity and making your workspace more intuitive.
+            `;
         wrapper.appendChild(instruction);
 
-        // Build sections. Sub-account header only (footer fixed)
+        // pass safeAgencyMenus / safeSubAccountMenus to buildSection
         buildSection(agencyMenus, "Agency Level Menu Customization", "--agencyMenuOrder", "#agencySidebar");
-        buildSection(subAccountMenus, "Sub-Account Level Menu Customization", "--subMenuOrder", '.hl_nav-header nav[aria-label="header"]');
+        buildSection(subAccountMenus, "Sub-Account Level Menu Customization", "--subMenuOrder", "#subAccountSidebar");
+
 
         container.appendChild(wrapper);
         applyMenuCustomizations();
 
-       
-         function reorderMenu(order, containerSelector) {
-             // Try the exact selector first (keeps agency behavior unchanged)
-             let container = document.querySelector(containerSelector);
-
-             // If selector not found, attempt to infer the container from the first existing menu item
-             if (!container) {
-                 for (let i = 0; i < order.length; i++) {
-                     const id = order[i];
-                     const el = document.getElementById(id);
-                     if (el && el.parentElement) {
-                         container = el.parentElement;
-                         break;
-                     }
-                 }
-             }
-
-             // If still not found, try a common sub-account selector (safe fallback)
-             if (!container) {
-                 container = document.querySelector(".hl_nav-header nav") || document.querySelector(".hl_nav-header");
-             }
-
-             if (!container) return;
-
-             order.forEach(id => {
-                 const el = document.getElementById(id);
-                 if (el) container.appendChild(el);
-             });
-         }
-        function safeReorder(order, containerSelector) {
-            // If a reorder is already in progress, bail out (prevents re-entrancy)
-            if (isPerformingProgrammaticReorder) return;
-            isPerformingProgrammaticReorder = true;
-
-            // Disconnect observer temporarily to avoid reacting to our own DOM moves
-            if (sidebarObserver) {
-                try { sidebarObserver.disconnect(); } catch (e) { /* ignore */ }
-            }
-
-            // Do the DOM mutation asynchronously to avoid blocking UI thread
-            // Small delay allows Sortable to complete its internal cleanup
-            setTimeout(() => {
-                try {
-                    let container = document.querySelector(containerSelector);
-                    // Fallbacks
-                    if (!container) {
-                        if (containerSelector.includes("hl_nav-header")) {
-                            container = document.querySelector('.hl_nav-header nav[aria-label="header"]') || document.querySelector('.hl_nav-header nav') || document.querySelector('.hl_nav-header');
-                        } else if (containerSelector === "#agencySidebar") {
-                            container = document.querySelector("#agencySidebar") || document.querySelector(".hl_nav-header nav");
-                        } else {
-                            container = document.querySelector(containerSelector);
-                        }
-                    }
-                    if (!container) {
-                        isPerformingProgrammaticReorder = false;
-                        // reconnect observer later
-                        reconnectObserverSafely();
-                        return;
-                    }
-
-                    // Build array of current children ids inside container (visible nav items)
-                    const currentChildren = Array.from(container.children).map(ch => ch.id).filter(Boolean);
-
-                    // We'll place each ordered id into the container only if it exists in DOM.
-                    // Use insertBefore to put at exact index. Skip elements that are already in correct position.
-                    for (let i = 0; i < order.length; i++) {
-                        const id = order[i];
-                        const el = document.getElementById(id);
-                        if (!el) continue; // item not present in DOM right now
-                        // Compute the desired reference node (child currently at index i)
-                        const currentAtIndex = container.children[i];
-                        if (currentAtIndex === el) {
-                            // already at correct position — skip
-                            continue;
-                        }
-                        // If el is already inside container but at different index, move it
-                        // If el is in different container, this will also move it (which is desired)
-                        // Use insertBefore with reference node (could be null to append)
-                        try {
-                            container.insertBefore(el, currentAtIndex || null);
-                        } catch (e) {
-                            // In unlikely case of DOM issues, fallback to appendChild
-                            try { container.appendChild(el); } catch (err) { /* ignore */ }
-                        }
-                    }
-                } catch (err) {
-                    console.error("safeReorder error:", err);
-                } finally {
-                    // Small stagger before reconnecting observer to avoid immediate re-trigger
-                    setTimeout(() => {
-                        isPerformingProgrammaticReorder = false;
-                        reconnectObserverSafely();
-                        // Apply visual updates after reorder
-                        try { applyMenuCustomizations(); } catch (e) { /* ignore */ }
-                    }, 120);
-                }
-            }, 20);
-        }
-        function getRealSubAccountSidebar() {
-            return document.querySelector("#subAccountSidebar")
-                || document.querySelector('nav[data-testid="sidebar-nav"]')
-                || document.querySelector('.hl-app .sidebar');
-        }
-        // ---------------- MutationObserver to re-apply saved order when nav is re-inserted ----------------
-        (function watchSidebarRecreation() {
-            const applySavedOrdersIfNeeded = () => {
-                const s = JSON.parse(localStorage.getItem("userTheme") || "{}");
-                if (s.themeData?.["--subMenuOrder"]) {
-                    const order = JSON.parse(s.themeData["--subMenuOrder"]);
-                    reorderMenu(order, getRealSubAccountSidebar());
-                }
-                if (s.themeData?.["--agencyMenuOrder"]) {
-                    const order = JSON.parse(s.themeData["--agencyMenuOrder"]);
-                    reorderMenu(order, '#agencySidebar');
-                }
-            };
-
-            sidebarObserver = new MutationObserver((mutations) => {
-                // If we are performing a programmatic reorder, ignore mutation callbacks
-                if (isPerformingProgrammaticReorder) return;
-
-                let relevant = false;
-                for (const m of mutations) {
-                    for (const n of m.addedNodes) {
-                        if (!(n instanceof HTMLElement)) continue;
-                        if (n.matches && (n.matches('.hl_nav-header') || n.matches('.hl_nav-settings') || n.matches('.hl_nav-header *') || n.matches('.hl_nav-settings *'))) {
-                            relevant = true;
-                            break;
-                        }
-                    }
-                    if (relevant) break;
-                }
-                if (relevant) {
-                    // Defer applying saved orders so UI can finish any framework rehydration
-                    setTimeout(applySavedOrdersIfNeeded, 80);
-                }
-            });
-
-            sidebarObserver.observe(document.body, { childList: true, subtree: true });
-
-            // expose for debugging if needed
-            window.__tb_sidebarObserver = sidebarObserver;
-        })();
-
-        // reconnect observer helper (safe check)
-        function reconnectObserverSafely() {
-            try {
-                if (sidebarObserver && sidebarObserver.disconnect) {
-                    // make sure it's observing; re-create if necessary
-                    sidebarObserver.disconnect();
-                    sidebarObserver.observe(document.body, { childList: true, subtree: true });
-                }
-            } catch (e) {
-                // create a fresh observer if something went wrong
-                // (keeps behavior resilient)
-                try {
-                    if (sidebarObserver) { sidebarObserver.disconnect(); }
-                } catch (ignore) { }
-                // re-create the observer quickly
-                (function recreate() {
-                    if (sidebarObserver) {
-                        try {
-                            sidebarObserver.observe(document.body, { childList: true, subtree: true });
-                            return;
-                        } catch (err) {
-                            // if cannot observe yet, try again soon
-                            setTimeout(recreate, 200);
-                        }
-                    }
-                })();
-            }
-        }
-
-        // Apply initial saved order
+        // ✅ Restore order if sidebar exists
         const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+
         if (saved.themeData?.["--subMenuOrder"]) {
             const order = JSON.parse(saved.themeData["--subMenuOrder"]);
-            reorderMenu(order, '.hl_nav-header nav[aria-label="header"]');
+            reorderMenu(order, "#subAccountSidebar");
         }
+
         if (saved.themeData?.["--agencyMenuOrder"]) {
             const order = JSON.parse(saved.themeData["--agencyMenuOrder"]);
-            reorderMenu(order, '#agencySidebar');
+            reorderMenu(order, "#agencySidebar");
         }
+
+        function reorderMenu(order, containerSelector) {
+            // Try the exact selector first (keeps agency behavior unchanged)
+            let container = document.querySelector(containerSelector);
+
+            // If selector not found, attempt to infer the container from the first existing menu item
+            if (!container) {
+                for (let i = 0; i < order.length; i++) {
+                    const id = order[i];
+                    const el = document.getElementById(id);
+                    if (el && el.parentElement) {
+                        container = el.parentElement;
+                        break;
+                    }
+                }
+            }
+
+            // If still not found, try a common sub-account selector (safe fallback)
+            if (!container) {
+                container = document.querySelector(".hl_nav-header nav") || document.querySelector(".hl_nav-header");
+            }
+
+            if (!container) return;
+
+            order.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) container.appendChild(el);
+            });
+        }
+
     }
 
     // === Subaccount Sidebar Menu Title Support ===
