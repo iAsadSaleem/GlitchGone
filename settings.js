@@ -4964,7 +4964,6 @@
         let agencyMenus = [
             { id: "sb_agency-dashboard", label: "Agency Dashboard" },
             { id: "sb_location-prospect", label: "Prospecting" },
-            { id: "sb_agency-accounts", label: "Agency Accounts" },
             { id: "sb_agency-account-reselling", label: "Account Reselling" },
             { id: "sb_agency-marketplace", label: "Add-Ons" },
             { id: "sb_agency-affiliate-portal", label: "Affiliate Portal" },
@@ -4975,6 +4974,7 @@
             { id: "sb_ghl-swag", label: "GHL Swag" },
             { id: "sb_agency-ideas", label: "Agency Ideas" },
             { id: "sb_mobile-app-customiser", label: "Mobile App Customiser" },
+            { id: "sb_agency-accounts", label: "Agency Accounts" },
         ];
 
         // Load saved theme
