@@ -4977,12 +4977,16 @@
             { id: "sb_mobile-app-customiser", label: "Mobile App Customiser" },
         ];
 
-        // Load saved theme 
+        // Load saved theme
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedTheme.themeData || {};
 
+        // Keep an observer reference & flag so we can pause while reordering
+        let sidebarObserver = null;
+        let isPerformingProgrammaticReorder = false;
+
         // ---------------- Helper to build each section ----------------
-        const buildSection = (menus, sectionTitle, storageKey, sidebarParentSelector, allowFooterDrag = false) => {
+        const buildSection = (menus, sectionTitle, storageKey, sidebarParentSelector) => {
             const sectionHeading = document.createElement("h4");
             sectionHeading.className = "tb-header-controls";
             sectionHeading.textContent = sectionTitle;
@@ -5022,7 +5026,7 @@
                 const dragIcon = document.createElement("img");
                 dragIcon.src = "https://theme-builder-delta.vercel.app/images/drag-logo-2.png";
                 dragIcon.alt = "drag";
-                dragIcon.className = "tb-drag-handle"; // important for Sortable handle
+                dragIcon.className = "tb-drag-handle";
                 dragIcon.style.width = "15px";
                 dragIcon.style.height = "15px";
                 dragIcon.style.objectFit = "contain";
@@ -5036,12 +5040,14 @@
                 titleInput.type = "text";
                 titleInput.placeholder = "Custom Title";
                 titleInput.className = "tb-input tb-title-input";
+                titleInput.value = menu.label;
                 // Live title update as user types
                 titleInput.addEventListener("input", (e) => {
                     const newLabel = e.target.value.trim();
                     const rawKey = menu.id.startsWith("sb_") ? menu.id.replace(/^sb_/, "") : menu.id;
                     updateSidebarTitle(rawKey, newLabel || menu.label);
                 });
+
                 const iconInput = document.createElement("input");
                 iconInput.type = "text";
                 iconInput.placeholder = "CODE";
@@ -5052,13 +5058,13 @@
                     : {};
 
                 if (menuCustomizations[menu.id]) {
-                    titleInput.value = menuCustomizations[menu.id].title || "";
+                    titleInput.value = menuCustomizations[menu.id].title || menu.label;
                     iconInput.value = menuCustomizations[menu.id].icon || "";
                 } else {
                     titleInput.value = menu.label;
                 }
 
-                // Keep the exact saveChange logic you had (no functional changes)
+                // Keep your exact saveChange logic (untouched behavior)
                 const saveChange = () => {
                     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                     saved.themeData = saved.themeData || {};
@@ -5070,7 +5076,6 @@
                     let iconValue = iconInput.value.trim();
                     let isUnicode = false;
 
-                    // Detect if user pasted only Unicode like "f015"
                     if (/^f[0-9a-fA-F]{3}$/i.test(iconValue)) {
                         isUnicode = true;
                     }
@@ -5129,6 +5134,7 @@
                             }
                         }
                     }
+
                     function waitForFontAwesome(cb) {
                         const test = document.createElement("i");
                         test.className = "fa-solid fa-house";
@@ -5150,7 +5156,6 @@
                 titleInput.addEventListener("input", saveChange);
                 iconInput.addEventListener("input", saveChange);
 
-                // Append items: handle, label, inputs
                 row.appendChild(dragIcon);
                 row.appendChild(label);
                 row.appendChild(titleInput);
@@ -5162,28 +5167,32 @@
             wrapper.appendChild(listContainer);
 
             // ---------------- Drag & Drop ----------------
-            // Choose which sidebar container to apply the ordering to.
-            // For sub-account (Option A) we will only reorder the main header nav;
-            // footer (settings) will remain fixed and not draggable.
             Sortable.create(listContainer, {
                 animation: 150,
                 ghostClass: "tb-dragging",
-                handle: ".tb-drag-handle", // only drag when grabbing the handle
-                onEnd: () => {
-                    const rows = listContainer.querySelectorAll(".tb-menu-row");
-                    const newOrder = [...rows].map(r => r.dataset.id);
+                handle: ".tb-drag-handle",
+                onEnd: (evt) => {
+                    // Run reorder asynchronously so Sortable's internal DOM ops finish
+                    setTimeout(() => {
+                        try {
+                            const rows = listContainer.querySelectorAll(".tb-menu-row");
+                            const newOrder = [...rows].map(r => r.dataset.id);
 
-                    // Save order
-                    const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-                    saved.themeData = saved.themeData || {};
-                    saved.themeData[storageKey] = JSON.stringify(newOrder);
-                    localStorage.setItem("userTheme", JSON.stringify(saved));
+                            // Save order to storage
+                            const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                            saved.themeData = saved.themeData || {};
+                            saved.themeData[storageKey] = JSON.stringify(newOrder);
+                            localStorage.setItem("userTheme", JSON.stringify(saved));
 
-                    // Single unified reorder function will place items into the correct live container
-                    reorderMenu(newOrder, sidebarParentSelector);
+                            // Perform a safe programmatic reorder
+                            safeReorder(newOrder, sidebarParentSelector);
 
-                    // Re-apply visual customizations (titles/icons)
-                    applyMenuCustomizations();
+                            // Re-apply visual customizations
+                            applyMenuCustomizations();
+                        } catch (err) {
+                            console.error("Error in sortable onEnd safeReorder:", err);
+                        }
+                    }, 20); // small delay to allow browser settle
                 }
             });
         };
@@ -5203,97 +5212,165 @@
     `;
         wrapper.appendChild(instruction);
 
-        // Build sections. For sub-account we target the header nav only (footer fixed).
-        buildSection(agencyMenus, "Agency Level Menu Customization", "--agencyMenuOrder", "#agencySidebar", false);
-        buildSection(subAccountMenus, "Sub-Account Level Menu Customization", "--subMenuOrder", ".hl_nav-header nav[aria-label=\"header\"]", false);
+        // Build sections. Sub-account header only (footer fixed)
+        buildSection(agencyMenus, "Agency Level Menu Customization", "--agencyMenuOrder", "#agencySidebar");
+        buildSection(subAccountMenus, "Sub-Account Level Menu Customization", "--subMenuOrder", '.hl_nav-header nav[aria-label="header"]');
 
         container.appendChild(wrapper);
         applyMenuCustomizations();
 
-        // ---------------- Robust reorder & persistence ----------------
-        // Unified reorder function: given an order and a selector, append found IDs into container.
-        // For sub-account header we use '.hl_nav-header nav[aria-label="header"]'
-        // For agency we will use whatever selector is passed (keeps agency behavior unchanged)
-        function reorderMenu(order, containerSelector) {
-            let container = document.querySelector(containerSelector);
+        // ---------------- Safe reorder helpers ----------------
+        function safeReorder(order, containerSelector) {
+            // If a reorder is already in progress, bail out (prevents re-entrancy)
+            if (isPerformingProgrammaticReorder) return;
+            isPerformingProgrammaticReorder = true;
 
-            // Fallbacks: try common header/footer selectors (safe)
-            if (!container) {
-                if (containerSelector.includes("hl_nav-header")) {
-                    container = document.querySelector('.hl_nav-header nav[aria-label="header"]') || document.querySelector('.hl_nav-header nav') || document.querySelector('.hl_nav-header');
-                } else if (containerSelector === "#agencySidebar") {
-                    container = document.querySelector("#agencySidebar") || document.querySelector(".hl_nav-header nav");
-                } else {
-                    container = document.querySelector(containerSelector);
-                }
+            // Disconnect observer temporarily to avoid reacting to our own DOM moves
+            if (sidebarObserver) {
+                try { sidebarObserver.disconnect(); } catch (e) { /* ignore */ }
             }
 
-            if (!container) return;
+            // Do the DOM mutation asynchronously to avoid blocking UI thread
+            // Small delay allows Sortable to complete its internal cleanup
+            setTimeout(() => {
+                try {
+                    let container = document.querySelector(containerSelector);
+                    // Fallbacks
+                    if (!container) {
+                        if (containerSelector.includes("hl_nav-header")) {
+                            container = document.querySelector('.hl_nav-header nav[aria-label="header"]') || document.querySelector('.hl_nav-header nav') || document.querySelector('.hl_nav-header');
+                        } else if (containerSelector === "#agencySidebar") {
+                            container = document.querySelector("#agencySidebar") || document.querySelector(".hl_nav-header nav");
+                        } else {
+                            container = document.querySelector(containerSelector);
+                        }
+                    }
+                    if (!container) {
+                        isPerformingProgrammaticReorder = false;
+                        // reconnect observer later
+                        reconnectObserverSafely();
+                        return;
+                    }
 
-            order.forEach(id => {
-                const el = document.getElementById(id);
-                if (el && el.parentElement !== container) {
-                    // Move element to the intended container (this appends and preserves event listeners)
-                    container.appendChild(el);
-                } else if (el && el.parentElement === container) {
-                    // already inside right container; ensure it is ordered correctly
-                    container.appendChild(el);
+                    // Build array of current children ids inside container (visible nav items)
+                    const currentChildren = Array.from(container.children).map(ch => ch.id).filter(Boolean);
+
+                    // We'll place each ordered id into the container only if it exists in DOM.
+                    // Use insertBefore to put at exact index. Skip elements that are already in correct position.
+                    for (let i = 0; i < order.length; i++) {
+                        const id = order[i];
+                        const el = document.getElementById(id);
+                        if (!el) continue; // item not present in DOM right now
+                        // Compute the desired reference node (child currently at index i)
+                        const currentAtIndex = container.children[i];
+                        if (currentAtIndex === el) {
+                            // already at correct position — skip
+                            continue;
+                        }
+                        // If el is already inside container but at different index, move it
+                        // If el is in different container, this will also move it (which is desired)
+                        // Use insertBefore with reference node (could be null to append)
+                        try {
+                            container.insertBefore(el, currentAtIndex || null);
+                        } catch (e) {
+                            // In unlikely case of DOM issues, fallback to appendChild
+                            try { container.appendChild(el); } catch (err) { /* ignore */ }
+                        }
+                    }
+                } catch (err) {
+                    console.error("safeReorder error:", err);
+                } finally {
+                    // Small stagger before reconnecting observer to avoid immediate re-trigger
+                    setTimeout(() => {
+                        isPerformingProgrammaticReorder = false;
+                        reconnectObserverSafely();
+                        // Apply visual updates after reorder
+                        try { applyMenuCustomizations(); } catch (e) { /* ignore */ }
+                    }, 120);
                 }
-            });
+            }, 20);
         }
 
-        // Apply any saved order on initial load (for both agency and subaccount)
+        // ---------------- MutationObserver to re-apply saved order when nav is re-inserted ----------------
+        (function watchSidebarRecreation() {
+            const applySavedOrdersIfNeeded = () => {
+                const s = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                if (s.themeData?.["--subMenuOrder"]) {
+                    const order = JSON.parse(s.themeData["--subMenuOrder"]);
+                    safeReorder(order, '.hl_nav-header nav[aria-label="header"]');
+                }
+                if (s.themeData?.["--agencyMenuOrder"]) {
+                    const order = JSON.parse(s.themeData["--agencyMenuOrder"]);
+                    safeReorder(order, '#agencySidebar');
+                }
+            };
+
+            sidebarObserver = new MutationObserver((mutations) => {
+                // If we are performing a programmatic reorder, ignore mutation callbacks
+                if (isPerformingProgrammaticReorder) return;
+
+                let relevant = false;
+                for (const m of mutations) {
+                    for (const n of m.addedNodes) {
+                        if (!(n instanceof HTMLElement)) continue;
+                        if (n.matches && (n.matches('.hl_nav-header') || n.matches('.hl_nav-settings') || n.matches('.hl_nav-header *') || n.matches('.hl_nav-settings *'))) {
+                            relevant = true;
+                            break;
+                        }
+                    }
+                    if (relevant) break;
+                }
+                if (relevant) {
+                    // Defer applying saved orders so UI can finish any framework rehydration
+                    setTimeout(applySavedOrdersIfNeeded, 80);
+                }
+            });
+
+            sidebarObserver.observe(document.body, { childList: true, subtree: true });
+
+            // expose for debugging if needed
+            window.__tb_sidebarObserver = sidebarObserver;
+        })();
+
+        // reconnect observer helper (safe check)
+        function reconnectObserverSafely() {
+            try {
+                if (sidebarObserver && sidebarObserver.disconnect) {
+                    // make sure it's observing; re-create if necessary
+                    sidebarObserver.disconnect();
+                    sidebarObserver.observe(document.body, { childList: true, subtree: true });
+                }
+            } catch (e) {
+                // create a fresh observer if something went wrong
+                // (keeps behavior resilient)
+                try {
+                    if (sidebarObserver) { sidebarObserver.disconnect(); }
+                } catch (ignore) { }
+                // re-create the observer quickly
+                (function recreate() {
+                    if (sidebarObserver) {
+                        try {
+                            sidebarObserver.observe(document.body, { childList: true, subtree: true });
+                            return;
+                        } catch (err) {
+                            // if cannot observe yet, try again soon
+                            setTimeout(recreate, 200);
+                        }
+                    }
+                })();
+            }
+        }
+
+        // Apply initial saved order
         const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
         if (saved.themeData?.["--subMenuOrder"]) {
             const order = JSON.parse(saved.themeData["--subMenuOrder"]);
-            reorderMenu(order, '.hl_nav-header nav[aria-label="header"]');
+            safeReorder(order, '.hl_nav-header nav[aria-label="header"]');
         }
         if (saved.themeData?.["--agencyMenuOrder"]) {
             const order = JSON.parse(saved.themeData["--agencyMenuOrder"]);
-            reorderMenu(order, '#agencySidebar');
+            safeReorder(order, '#agencySidebar');
         }
-
-        // ---------------- Robustness: observe for sidebar re-creation ----------------
-        // GHL often re-renders the nav on navigation; use a MutationObserver to re-apply saved order
-        // when the header or footer nav elements are re-inserted into DOM.
-        (function watchSidebarRecreation() {
-            const observer = new MutationObserver(mutations => {
-                // if nav header/footer added, reapply saved orders
-                let headerAdded = false;
-                let footerAdded = false;
-                for (const m of mutations) {
-                    for (const node of m.addedNodes) {
-                        if (!(node instanceof HTMLElement)) continue;
-                        if (node.matches && node.matches('.hl_nav-header, .hl_nav-header *')) headerAdded = true;
-                        if (node.matches && node.matches('.hl_nav-settings, .hl_nav-settings *')) footerAdded = true;
-                    }
-                }
-                if (headerAdded) {
-                    const s = JSON.parse(localStorage.getItem("userTheme") || "{}");
-                    if (s.themeData?.["--subMenuOrder"]) {
-                        const order = JSON.parse(s.themeData["--subMenuOrder"]);
-                        reorderMenu(order, '.hl_nav-header nav[aria-label="header"]');
-                        applyMenuCustomizations();
-                    }
-                }
-                if (footerAdded) {
-                    const s = JSON.parse(localStorage.getItem("userTheme") || "{}");
-                    if (s.themeData?.["--agencyMenuOrder"]) {
-                        const order = JSON.parse(s.themeData["--agencyMenuOrder"]);
-                        reorderMenu(order, '#agencySidebar');
-                        applyMenuCustomizations();
-                    }
-                }
-            });
-
-            // Observe body for subtree changes (sidebar can be re-rendered anywhere)
-            observer.observe(document.body, { childList: true, subtree: true });
-
-            // Keep reference if you want to disconnect later: window.__tb_sidebarObserver = observer;
-        })();
-
-        // Note: we intentionally do NOT call any legacy updateSubaccountSidebarRuntime()
-        // or perform any meta-based reordering to prevent conflicts with IDs.
     }
 
     // === Subaccount Sidebar Menu Title Support ===
