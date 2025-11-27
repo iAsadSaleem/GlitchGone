@@ -779,7 +779,7 @@
                 "--login-headline-text-color": "#433D8B",
                 "--login-link-text-color": "#9e9e9e",
                 "--login-button-bg-gradient": "linear-gradient(45deg, #2E236C, #433D8B)",
-                "--login-button-bg-color": "#2E236C",
+                "--login-button-bg-color": "#5b4bff",
                 "--login-card-bg-color": "#17153B",
                 "--login-headline-font-size": "25px",
 
@@ -792,7 +792,8 @@
                 "--lockedMenus": "{}",
                 "--body-font": "Roboto",
                 "--login-company-logo": "url('https://msgsndr-private.storage.googleapis.com/companyPhotos/47b7e157-d197-4ce5-9a94-b697c258702a.png')",
-                "--login-background-active": "linear-gradient(225deg, #433D8B 22%, #FFFFFF 22%, #F6F2FA 23%, #17153B 23%)",
+                "--login-background-active": "linear-gradient(135deg, #d6d8ff 0%, #b7afff 100%)",
+                "--login-background-image": "url('https://theme-builder-delta.vercel.app/images/velvetbgimg.png')"
 
             },
             "OceanMist Theme": {
@@ -5933,7 +5934,6 @@
                         section.appendChild(createLoginLinkTextColorPicker());
                         //section.appendChild(createLoginLinkTextSizeInput());
                         section.appendChild(createLoginLogoInput("Logo URL", "--login-company-logo"));
-                        section.appendChild(createForgetPasswordTextInput());
 
                         const heading = document.createElement("h4");
                         heading.className = "tb-header-controls";
@@ -5941,6 +5941,7 @@
                         section.appendChild(heading);
 
                         section.appendChild(createLoginHeadingControls());
+                        section.appendChild(createForgetPasswordTextInput());
 
                     },
                     "",
