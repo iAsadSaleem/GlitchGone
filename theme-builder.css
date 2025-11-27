@@ -647,7 +647,7 @@ tb-apply-btn
     height: 25px;
     font-size: 12px;
     color: #ffffff;
-    background: var(--primary-color);
+    background: var(--themebuildermaincolor);
     border: solid 1px #ffffff08;
     border-radius: 4px;
     top: 8px;
@@ -661,7 +661,7 @@ tb-apply-btn
     height: 25px;
     font-size: 12px;
     color: #ffffff;
-    background: var(--primary-color);
+    background: var(--themebuildermaincolor);
     border: solid 1px #ffffff08;
     border-radius: 4px;
     top: 8px;
@@ -800,7 +800,7 @@ body::-webkit-scrollbar-track {
     height: 25px;
     font-size: 12px;
     color: #ffffff;
-    background: var(--primary-color);
+    background: var(--themebuildermaincolor);
     border: solid 1px #ffffff08;
     border-radius: 4px;
     top: 8px;
@@ -813,7 +813,7 @@ body::-webkit-scrollbar-track {
     height: 25px;
     font-size: 12px;
     color: #ffffff;
-    background: var(--primary-color);
+    background: var(--themebuildermaincolor);
     border: solid 1px #ffffff08;
     border-radius: 4px;
     top: 8px;
@@ -826,7 +826,7 @@ body::-webkit-scrollbar-track {
     height: 25px;
     font-size: 12px;
     color: #ffffff;
-    background: var(--primary-color);
+    background: var(--themebuildermaincolor);
     border: solid 1px #ffffff08;
     border-radius: 4px;
     top: 4px;
