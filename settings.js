@@ -5185,7 +5185,7 @@
                             localStorage.setItem("userTheme", JSON.stringify(saved));
 
                             // Perform a safe programmatic reorder
-                            reorderMenu(newOrder, sidebarParentSelector);
+                            safeReorder(newOrder, sidebarParentSelector);
 
                             // Re-apply visual customizations
                             applyMenuCustomizations();
