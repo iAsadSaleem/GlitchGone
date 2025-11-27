@@ -577,8 +577,8 @@
                 "--app-bg-color": "#F9F9F9",
                 "--Acent-color": "#FFFFFF",
 
-                "--sidebar-bg-color": "#000000",          /* Flat black sidebar background */
-                "--sidebar-menu-bg": "#000000",
+                "--sidebar-bg-color": "#2D3748",          /* Flat black sidebar background */
+                "--sidebar-menu-bg": "#2D3748",
                 "--sidebar-menu-color": "#FFFFFF",
                 "--sidebar-menu-hover-bg": "#0a6e35",
                 "--sidebar-menu-active-bg": "#07a125",
@@ -597,8 +597,8 @@
                 "--header-icon-hover-color": "#0a6e35",
                 "--header-icon-bg": "#000000",
                 "--header-icon-hover-bg": "#111111",
-
-                "--card-body-bg-color": "#FFFFFF",
+                "--card-header-bg-color":"212121",
+                "--card-body-bg-color": "#212121",
                 "--card-body-font-color": "#1A1A1A",
                 "--card-title-font-color": "#f9f9f9",
                 "--card-dec-font-color": "#333333",
@@ -789,7 +789,9 @@
                 "--card-title-font-size": "15px",
                 "--lockedMenus": "{}",
                 "--body-font": "Roboto",
-                "--login-company-logo": "url('https://msgsndr-private.storage.googleapis.com/companyPhotos/47b7e157-d197-4ce5-9a94-b697c258702a.png')"
+                "--login-company-logo": "url('https://msgsndr-private.storage.googleapis.com/companyPhotos/47b7e157-d197-4ce5-9a94-b697c258702a.png')",
+                "--login-background-active": "linear-gradient(225deg, #433D8B 22%, #FFFFFF 22%, #F6F2FA 23%, #17153B 23%)",
+
             },
             "OceanMist Theme": {
                 "--primary-color": "#276678",
@@ -952,7 +954,7 @@
                 "--login-logo-width": "140px",
                 "--login-logo-height": "70px",
                 "--login-logo-filter": "drop-shadow(0 2px 6px rgba(212,175,55,0.3))",
-                "--login-background-active": "linear-gradient(135deg, #0288d1 0%, #01579b 100%)",
+                "--login-background-active": "linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #b8860b 100%)",
                 "--login-headline-font-size": "35px",
                 "--login-headline-text-color":"#ffd700"
             }
