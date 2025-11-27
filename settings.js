@@ -5192,7 +5192,8 @@
                         } catch (err) {
                             console.error("Error in sortable onEnd safeReorder:", err);
                         }
-                    }, 20); // small delay to allow browser settle
+                    }, 120); // 6x more stable
+
                 }
             });
         };
@@ -5290,14 +5291,21 @@
                 }
             }, 20);
         }
-
+        function getSubaccountContainer() {
+            return document.querySelector('.hl_nav-header nav[aria-label="header"]')
+                || document.querySelector('.hl_nav-header nav')
+                || document.querySelector('#sidebar-nav')
+                || document.querySelector('#sidebarMenu')
+                || document.querySelector('.sidebar-nav')
+                || document.querySelector('.hl_nav-header');
+        }
         // ---------------- MutationObserver to re-apply saved order when nav is re-inserted ----------------
         (function watchSidebarRecreation() {
             const applySavedOrdersIfNeeded = () => {
                 const s = JSON.parse(localStorage.getItem("userTheme") || "{}");
                 if (s.themeData?.["--subMenuOrder"]) {
                     const order = JSON.parse(s.themeData["--subMenuOrder"]);
-                    safeReorder(order, '.hl_nav-header nav[aria-label="header"]');
+                    safeReorder(order, getSubaccountContainer());
                 }
                 if (s.themeData?.["--agencyMenuOrder"]) {
                     const order = JSON.parse(s.themeData["--agencyMenuOrder"]);
