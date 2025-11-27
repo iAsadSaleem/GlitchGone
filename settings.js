@@ -777,7 +777,7 @@
                 "--login-card-bg-gradient": "linear-gradient(38deg, rgba(23,21,59,0.9) 45%, #FFFFFF 45%, #FFFFFF 54%, #C8ACD6 55%)",
 
                 "--login-headline-text-color": "#433D8B",
-                "--login-link-text-color": "#9e9e9e",
+                "--login-link-text-color": "#632ef5",
                 "--login-button-bg-gradient": "linear-gradient(45deg, #2E236C, #433D8B)",
                 "--login-button-bg-color": "#5b4bff",
                 "--login-card-bg-color": "#17153B",
@@ -5855,8 +5855,14 @@
 
                         const selectedTheme = localStorage.getItem("themebuilder_selectedTheme");
 
+                        const companylogo = document.createElement("h4");
+                        companylogo.className = "tb-header-controls";
+                        companylogo.textContent = "Company Log For Login Page";
+                        section.appendChild(createLoginLogoInput("Logo URL", "--login-company-logo"));
+
                         const bgSectionWrapper = document.createElement("div");
                         bgSectionWrapper.className = "bg-section-wrapper";
+
 
                         const header = document.createElement("h4");
                         header.className = "tb-header-controls";
@@ -5933,7 +5939,7 @@
                         // Append these after your login button hover settings
                         section.appendChild(createLoginLinkTextColorPicker());
                         //section.appendChild(createLoginLinkTextSizeInput());
-                        section.appendChild(createLoginLogoInput("Logo URL", "--login-company-logo"));
+                        section.appendChild(createForgetPasswordTextInput());
 
                         const heading = document.createElement("h4");
                         heading.className = "tb-header-controls";
@@ -5941,7 +5947,6 @@
                         section.appendChild(heading);
 
                         section.appendChild(createLoginHeadingControls());
-                        section.appendChild(createForgetPasswordTextInput());
 
                     },
                     "",
