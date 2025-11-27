@@ -4934,7 +4934,7 @@
     }
     function buildMenuCustomizationSection(container) {
         if (document.getElementById("tb-menu-customization")) return;
-       
+
         const wrapper = document.createElement("div");
         wrapper.id = "tb-menu-customization";
         wrapper.className = "tb-menu-customization";
@@ -4942,44 +4942,23 @@
         const separator = document.createElement("hr");
         separator.className = "tb-section-separator";
         wrapper.appendChild(separator);
+
         // ---------------- Menu definitions ----------------
         let subAccountMenus = [
-            { id: "sb_launchpad",       label: "Launchpad" },
-            { id: "sb_dashboard",       label: "Dashboard" },
-            { id: "sb_conversations",   label: "Conversations" },
-            { id: "sb_opportunities",   label: "Opportunities" },
-            { id: "sb_calendars",       label: "Calendars" },
-            { id: "sb_contacts",        label: "Contacts" },
-            { id: "sb_payments",        label: "Payments" },
-            { id: "sb_reporting",       label: "Reporting" },
+            { id: "sb_launchpad", label: "Launchpad" },
+            { id: "sb_dashboard", label: "Dashboard" },
+            { id: "sb_conversations", label: "Conversations" },
+            { id: "sb_opportunities", label: "Opportunities" },
+            { id: "sb_calendars", label: "Calendars" },
+            { id: "sb_contacts", label: "Contacts" },
+            { id: "sb_payments", label: "Payments" },
+            { id: "sb_reporting", label: "Reporting" },
             { id: "sb_email-marketing", label: "Email Marketing" },
-            { id: "sb_automation",      label: "Automation" },
-            { id: "sb_sites",           label: "Sites" },
-            { id: "sb_app-media",       label: "App Media" },
-            { id: "sb_memberships",     label: "Memberships" },
-            { id: "sb_reputation",      label: "Reputation" },
-            //{ id: "sb_app-marketplace", label: "App Marketplace" },
-            //{ id: "sb_custom-values", label: "Custom Values" },
-            //{ id: "sb_manage-scoring", label: "Manage Scoring" },
-            //{ id: "sb_domains-urlRedirects", label: "Domains & URL Redirects" },
-            //{ id: "sb_integrations", label: "Integrations" },
-            //{ id: "sb_undefined", label: "Private Integrations" },
-            //{ id: "sb_conversations_providers", label: "Conversation Providers" },
-            //{ id: "sb_tags", label: "Tags" },
-            //{ id: "sb_labs", label: "Labs" },
-            //{ id: "sb_audit-logs-location", label: "Audit Logs" },
-            //{ id: "sb_brand-boards", label: "Brand Boards" },
-            //{ id: "sb_business_info", label: "Business Profile" },
-            //{ id: "sb_saas-billing", label: "Billing" },
-            //{ id: "sb_my-staff", label: "My Staff" },
-            //{ id: "sb_Opportunities-Pipelines", label: "Opportunities & Pipelines" },
-            //{ id: "sb_", label: "Automation" },
-            //{ id: "sb_calendars", label: "Calendars" },
-            //{ id: "sb_location-email-services", label: "Email Services" },
-            //{ id: "sb_phone-number", label: "Phone Numbers" },
-            //{ id: "sb_whatsapp", label: "WhatsApp" },
-            //{ id: "sb_objects", label: "Objects" },
-            //{ id: "sb_custom-fields-settings", label: "Custom Fields" }
+            { id: "sb_automation", label: "Automation" },
+            { id: "sb_sites", label: "Sites" },
+            { id: "sb_app-media", label: "App Media" },
+            { id: "sb_memberships", label: "Memberships" },
+            { id: "sb_reputation", label: "Reputation" },
         ];
 
         let agencyMenus = [
@@ -4996,37 +4975,14 @@
             { id: "sb_ghl-swag", label: "GHL Swag" },
             { id: "sb_agency-ideas", label: "Agency Ideas" },
             { id: "sb_mobile-app-customiser", label: "Mobile App Customiser" },
-            //{ id: "sb_agency-accounts", label: "App Marketplace" },
-           
-            //Settings menu
-            //{ id: "sb_agency-profile-settings", label: "My Profile" },
-            //{ id: "sb_agency-company-settings", label: "Company" },
-            //{ id: "sb_agency-team-settings", label: "Team" },
-            //{ id: "sb_agency-twilio-settings", label: "Phone Integration" },
-            //{ id: "sb_agency-email-settings", label: "Email Services" },
-            //{ id: "sb_system-emails-setting", label: "System Emails" },
-            //{ id: "sb_agency-banner-management", label: "Announcements" },
-            //{ id: "sb_workflow-premium-actions-setting", label: "Workflow - Premium Features" },
-            //{ id: "sb_conversation-ai-setting", label: "AI Employee" },
-            //{ id: "sb_ask-ai-configuration-setting", label: "Ask AI Configuration" },
-            //{ id: "sb_workflow-ai-setting", label: "Workflow - External AI Models" },
-            //{ id: "sb_domain-purchase-setting", label: "Domain Purchase" },
-            //{ id: "sb_undefined", label: "Private Integrations" },
-            //{ id: "sb_agency-affiliate-settings", label: "Affiliates" },
-            //{ id: "sb_agency-custom-link-settings", label: "Custom Menu Links" },
-            //{ id: "sb_agency-stripe-settings", label: "Stripe" },
-            //{ id: "sb_agency-api-keys-settings", label: "API Keys" },
-            //{ id: "sb_agency-compliance-settings", label: "Compliance" },
-            //{ id: "sb_agency-labs-settings", label: "Labs" },
-            //{ id: "sb_agency-audit-logs-settings", label: "Audit Logs" }
         ];
-        // ✅ Debug: check if your menus arrays are defined correctly
+
         // Load saved theme 
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedTheme.themeData || {};
 
         // ---------------- Helper to build each section ----------------
-        const buildSection = (menus, sectionTitle, storageKey, sidebarParentSelector) => {
+        const buildSection = (menus, sectionTitle, storageKey, sidebarParentSelector, allowFooterDrag = false) => {
             const sectionHeading = document.createElement("h4");
             sectionHeading.className = "tb-header-controls";
             sectionHeading.textContent = sectionTitle;
@@ -5035,31 +4991,19 @@
             const listContainer = document.createElement("div");
             listContainer.className = "tb-draggable-menu-list";
 
-            //const savedOrder = themeData[storageKey] ? JSON.parse(themeData[storageKey]) : [];
-            //if (savedOrder.length > 0) {
-            //    const indexOf = id => {
-            //        const idx = savedOrder.indexOf(id);
-            //        return idx === -1 ? Number.MAX_SAFE_INTEGER : idx;
-            //    };
-            //    menus.sort((a, b) => indexOf(a.id) - indexOf(b.id));
-            //}
             const savedOrder = themeData[storageKey] ? JSON.parse(themeData[storageKey]) : [];
 
             if (Array.isArray(savedOrder) && savedOrder.length > 0) {
-                // Reorder menus according to saved order only
+                // Reorder menus according to saved order only (preserve newly added)
                 const orderedMenus = [];
                 savedOrder.forEach(id => {
                     const found = menus.find(m => m.id === id);
                     if (found) orderedMenus.push(found);
                 });
-
-                // Add any new menus not in savedOrder (to preserve new additions)
-                menus.forEach(m => {
-                    if (!savedOrder.includes(m.id)) orderedMenus.push(m);
-                });
-
+                menus.forEach(m => { if (!savedOrder.includes(m.id)) orderedMenus.push(m); });
                 menus = orderedMenus;
             }
+
             menus.forEach(menu => {
                 const row = document.createElement("div");
                 row.className = "tb-menu-row";
@@ -5074,11 +5018,11 @@
                 row.style.background = "#f9f9f9";
                 row.style.boxShadow = "-2px 2px 10px rgb(78 77 189 / 21%)";
 
-                // 🖼️ Add drag icon before label
+                // Drag icon (handle)
                 const dragIcon = document.createElement("img");
                 dragIcon.src = "https://theme-builder-delta.vercel.app/images/drag-logo-2.png";
                 dragIcon.alt = "drag";
-                dragIcon.className = "tb-drag-handle"; // 👈 important for Sortable handle
+                dragIcon.className = "tb-drag-handle"; // important for Sortable handle
                 dragIcon.style.width = "15px";
                 dragIcon.style.height = "15px";
                 dragIcon.style.objectFit = "contain";
@@ -5092,7 +5036,7 @@
                 titleInput.type = "text";
                 titleInput.placeholder = "Custom Title";
                 titleInput.className = "tb-input tb-title-input";
-                // 🔥 Live title update as user types
+                // Live title update as user types
                 titleInput.addEventListener("input", (e) => {
                     const newLabel = e.target.value.trim();
                     const rawKey = menu.id.startsWith("sb_") ? menu.id.replace(/^sb_/, "") : menu.id;
@@ -5113,107 +5057,101 @@
                 } else {
                     titleInput.value = menu.label;
                 }
-                    //Old Code
-                    const saveChange = () => {
-                        const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-                        saved.themeData = saved.themeData || {};
 
-                        const customizations = saved.themeData["--menuCustomizations"]
-                            ? JSON.parse(saved.themeData["--menuCustomizations"])
-                            : {};
+                // Keep the exact saveChange logic you had (no functional changes)
+                const saveChange = () => {
+                    const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                    saved.themeData = saved.themeData || {};
 
-                        let iconValue = iconInput.value.trim();
-                        let isUnicode = false;
+                    const customizations = saved.themeData["--menuCustomizations"]
+                        ? JSON.parse(saved.themeData["--menuCustomizations"])
+                        : {};
 
-                        // ✅ Detect if user pasted only Unicode like "f015"
-                        if (/^f[0-9a-fA-F]{3}$/i.test(iconValue)) {
-                            isUnicode = true;
+                    let iconValue = iconInput.value.trim();
+                    let isUnicode = false;
+
+                    // Detect if user pasted only Unicode like "f015"
+                    if (/^f[0-9a-fA-F]{3}$/i.test(iconValue)) {
+                        isUnicode = true;
+                    }
+
+                    customizations[menu.id] = {
+                        title: titleInput.value,
+                        icon: iconValue
+                    };
+
+                    saved.themeData["--menuCustomizations"] = JSON.stringify(customizations);
+                    localStorage.setItem("userTheme", JSON.stringify(saved));
+
+                    // Apply title instantly via CSS variable
+                    const varName = `--${menu.id}-new-name`;
+                    document.documentElement.style.setProperty(varName, `"${titleInput.value || menu.label}"`);
+
+                    // Update icon live
+                    const menuEl = document.getElementById(menu.id);
+                    if (menuEl) {
+                        let iconEl = menuEl.querySelector("i");
+                        if (!iconEl) {
+                            iconEl = document.createElement("i");
+                            menuEl.prepend(iconEl);
                         }
 
-                        customizations[menu.id] = {
-                            title: titleInput.value,
-                            icon: iconValue
-                        };
+                        if (isUnicode) {
+                            updateIconVariable(menu.id, iconValue);
 
-                        saved.themeData["--menuCustomizations"] = JSON.stringify(customizations);
-                        localStorage.setItem("userTheme", JSON.stringify(saved));
+                            iconEl.className = "fa-solid";
+                            iconEl.textContent = String.fromCharCode(parseInt(iconValue, 16));
+                            iconEl.style.fontFamily = "Font Awesome 6 Free";
+                            iconEl.style.fontWeight = "900";
+                            iconEl.style.marginRight = "0.5rem";
+                            iconEl.style.fontSize = "16px";
+                        } else {
+                            iconEl.textContent = "";
 
-                        // Apply title instantly via CSS variable
-                        const varName = `--${menu.id}-new-name`;
-                        document.documentElement.style.setProperty(varName, `"${titleInput.value || menu.label}"`);
+                            let finalClass = iconValue.trim();
 
-                        // 🔄 Update icon live
-                        const menuEl = document.getElementById(menu.id);
-                        if (menuEl) {
-                            let iconEl = menuEl.querySelector("i");
-                            if (!iconEl) {
-                                iconEl = document.createElement("i");
-                                menuEl.prepend(iconEl);
-                            }
-
-                            if (isUnicode) {
-                                // ✅ Update the CSS variable instead of injecting icon manually
-                                updateIconVariable(menu.id, iconValue);
-
-                                // Optional: Add a fallback <i> for safety (not strictly required)
+                            if (/^f[0-9a-f]{3}$/i.test(finalClass)) {
                                 iconEl.className = "fa-solid";
-                                iconEl.textContent = String.fromCharCode(parseInt(iconValue, 16));
+                                iconEl.textContent = String.fromCharCode(parseInt(finalClass, 16));
                                 iconEl.style.fontFamily = "Font Awesome 6 Free";
                                 iconEl.style.fontWeight = "900";
-                                iconEl.style.marginRight = "0.5rem";
-                                iconEl.style.fontSize = "16px";
-                            } else { 
-                                // ✅ User entered a normal class or URL
-                                iconEl.textContent = "";
-
-                                // 🧠 Auto-correct class before assigning
-                                let finalClass = iconValue.trim();
-
-                                // If accidentally Unicode, fallback
-                                if (/^f[0-9a-f]{3}$/i.test(finalClass)) {
-                                    iconEl.className = "fa-solid";
-                                    iconEl.textContent = String.fromCharCode(parseInt(finalClass, 16));
-                                    iconEl.style.fontFamily = "Font Awesome 6 Free";
-                                    iconEl.style.fontWeight = "900";
-                                } else {
-                                    // Normalize normal icon class
-                                    if (finalClass.startsWith("fa-") && !finalClass.includes("fa-solid") && !finalClass.includes("fa-regular") && !finalClass.includes("fa-brands")) {
-                                        finalClass = `fa-solid ${finalClass}`;
-                                    } else if (!finalClass.startsWith("fa-")) {
-                                        finalClass = `fa-solid fa-${finalClass}`;
-                                    }
-
-                                    iconEl.className = finalClass;
-                                    iconEl.textContent = "";
-                                    iconEl.style.fontFamily = "Font Awesome 6 Free";
-                                    iconEl.style.fontWeight = "900";
+                            } else {
+                                if (finalClass.startsWith("fa-") && !finalClass.includes("fa-solid") && !finalClass.includes("fa-regular") && !finalClass.includes("fa-brands")) {
+                                    finalClass = `fa-solid ${finalClass}`;
+                                } else if (!finalClass.startsWith("fa-")) {
+                                    finalClass = `fa-solid fa-${finalClass}`;
                                 }
 
+                                iconEl.className = finalClass;
+                                iconEl.textContent = "";
+                                iconEl.style.fontFamily = "Font Awesome 6 Free";
+                                iconEl.style.fontWeight = "900";
                             }
                         }
-                        function waitForFontAwesome(cb) {
-                            const test = document.createElement("i");
-                            test.className = "fa-solid fa-house";
-                            document.body.appendChild(test);
-                            requestAnimationFrame(() => {
-                                const style = getComputedStyle(test).fontFamily;
-                                test.remove();
-                                if (style.includes("Font Awesome")) {
-                                    cb();
-                                } else {
-                                    setTimeout(() => waitForFontAwesome(cb), 100);
-                                }
-                            });
-                        }
+                    }
+                    function waitForFontAwesome(cb) {
+                        const test = document.createElement("i");
+                        test.className = "fa-solid fa-house";
+                        document.body.appendChild(test);
+                        requestAnimationFrame(() => {
+                            const style = getComputedStyle(test).fontFamily;
+                            test.remove();
+                            if (style.includes("Font Awesome")) {
+                                cb();
+                            } else {
+                                setTimeout(() => waitForFontAwesome(cb), 100);
+                            }
+                        });
+                    }
 
-                        waitForFontAwesome(applyMenuCustomizations);
-                    };
+                    waitForFontAwesome(applyMenuCustomizations);
+                };
 
                 titleInput.addEventListener("input", saveChange);
                 iconInput.addEventListener("input", saveChange);
 
-                // ✅ Correct append order
-                row.appendChild(dragIcon);  // use dragIcon instead of dragHandle
+                // Append items: handle, label, inputs
+                row.appendChild(dragIcon);
                 row.appendChild(label);
                 row.appendChild(titleInput);
                 row.appendChild(iconInput);
@@ -5222,27 +5160,15 @@
             });
 
             wrapper.appendChild(listContainer);
-                        
-            // ==========================
-            // Helper function (place at top or outside Sortable)
-            // ==========================
-            function updateSubaccountSidebarRuntime(newOrder) {
-                const sidebarNav = document.querySelector(
-                    '.hl_nav-header nav[aria-label="header"]'
-                );
-                if (!sidebarNav) return;
-
-                newOrder.forEach(metaKey => {
-                    const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
-                    if (el) sidebarNav.appendChild(el); // moves node in new order
-                });
-            }
 
             // ---------------- Drag & Drop ----------------
+            // Choose which sidebar container to apply the ordering to.
+            // For sub-account (Option A) we will only reorder the main header nav;
+            // footer (settings) will remain fixed and not draggable.
             Sortable.create(listContainer, {
                 animation: 150,
                 ghostClass: "tb-dragging",
-                handle: ".tb-drag-handle", // ✅ Only drag when grabbing the handle
+                handle: ".tb-drag-handle", // only drag when grabbing the handle
                 onEnd: () => {
                     const rows = listContainer.querySelectorAll(".tb-menu-row");
                     const newOrder = [...rows].map(r => r.dataset.id);
@@ -5253,86 +5179,121 @@
                     saved.themeData[storageKey] = JSON.stringify(newOrder);
                     localStorage.setItem("userTheme", JSON.stringify(saved));
 
-                    updateSubaccountSidebarRuntime(newOrder);
+                    // Single unified reorder function will place items into the correct live container
+                    reorderMenu(newOrder, sidebarParentSelector);
 
-                    newOrder.forEach(menuId => {
-                        const menuEl = document.getElementById(menuId);
-                        if (menuEl && menuEl.parentElement) {
-                            menuEl.parentElement.appendChild(menuEl);
-                        }
-                    });
-              
-
+                    // Re-apply visual customizations (titles/icons)
                     applyMenuCustomizations();
                 }
             });
         };
 
-        // 💡 Add Instruction Paragraph under Agency Level Menu Customization
+        // Instruction paragraph (unchanged)
         const instruction = document.createElement("p");
         instruction.className = "tb-instruction-text";
         instruction.innerHTML = `
-                  💡 <strong>How to Customize Your Menu:</strong><br><br>
-                  1. To add a custom icon for any menu item, please visit the 
-                  <a href="https://fontawesome.com/icons" target="_blank" style="color:#007bff; text-decoration:underline;">
-                    Font Awesome Icons Library
-                  </a>. Once there, select your preferred icon. On the <strong>top-right corner</strong> of the icon page, you’ll find a <strong>“Copy Code”</strong> button — click it and then <strong>paste the copied code into the relevant icon field</strong> here.<br><br>
-                  2. You can <strong>drag and drop the menu items</strong> to change their order. This helps you organize your dashboard according to your preferences or workflow.<br><br>
-                  3. To <strong>change the title of any menu item</strong>, simply edit the text in the <strong>relevant title field</strong>. This allows you to personalize your menu names for better clarity and easier navigation.<br><br>
-                  ✨ <em>Tip:</em> Use these customization options to design a navigation layout that’s tailored to your needs — improving productivity and making your workspace more intuitive.
-                `;
+      💡 <strong>How to Customize Your Menu:</strong><br><br>
+      1. To add a custom icon for any menu item, please visit the 
+      <a href="https://fontawesome.com/icons" target="_blank" style="color:#007bff; text-decoration:underline;">
+        Font Awesome Icons Library
+      </a>. Once there, select your preferred icon. On the <strong>top-right corner</strong> of the icon page, you’ll find a <strong>“Copy Code”</strong> button — click it and then <strong>paste the copied code into the relevant icon field</strong> here.<br><br>
+      2. You can <strong>drag and drop the menu items</strong> to change their order. This helps you organize your dashboard according to your preferences or workflow.<br><br>
+      3. To <strong>change the title of any menu item</strong>, simply edit the text in the <strong>relevant title field</strong>. This allows you to personalize your menu names for better clarity and easier navigation.<br><br>
+      ✨ <em>Tip:</em> Use these customization options to design a navigation layout that’s tailored to your needs — improving productivity and making your workspace more intuitive.
+    `;
         wrapper.appendChild(instruction);
 
-        // pass safeAgencyMenus / safeSubAccountMenus to buildSection
-        buildSection(agencyMenus, "Agency Level Menu Customization", "--agencyMenuOrder", "#agencySidebar");
-        buildSection(subAccountMenus, "Sub-Account Level Menu Customization", "--subMenuOrder", "#subAccountSidebar");
-
+        // Build sections. For sub-account we target the header nav only (footer fixed).
+        buildSection(agencyMenus, "Agency Level Menu Customization", "--agencyMenuOrder", "#agencySidebar", false);
+        buildSection(subAccountMenus, "Sub-Account Level Menu Customization", "--subMenuOrder", ".hl_nav-header nav[aria-label=\"header\"]", false);
 
         container.appendChild(wrapper);
         applyMenuCustomizations();
 
-        // ✅ Restore order if sidebar exists
-        const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-
-        if (saved.themeData?.["--subMenuOrder"]) {
-            const order = JSON.parse(saved.themeData["--subMenuOrder"]);
-            reorderMenu(order, "#subAccountSidebar");
-        }
-
-        if (saved.themeData?.["--agencyMenuOrder"]) {
-            const order = JSON.parse(saved.themeData["--agencyMenuOrder"]);
-            reorderMenu(order, "#agencySidebar");
-        }
-
+        // ---------------- Robust reorder & persistence ----------------
+        // Unified reorder function: given an order and a selector, append found IDs into container.
+        // For sub-account header we use '.hl_nav-header nav[aria-label="header"]'
+        // For agency we will use whatever selector is passed (keeps agency behavior unchanged)
         function reorderMenu(order, containerSelector) {
-            // Try the exact selector first (keeps agency behavior unchanged)
             let container = document.querySelector(containerSelector);
 
-            // If selector not found, attempt to infer the container from the first existing menu item
+            // Fallbacks: try common header/footer selectors (safe)
             if (!container) {
-                for (let i = 0; i < order.length; i++) {
-                    const id = order[i];
-                    const el = document.getElementById(id);
-                    if (el && el.parentElement) {
-                        container = el.parentElement;
-                        break;
-                    }
+                if (containerSelector.includes("hl_nav-header")) {
+                    container = document.querySelector('.hl_nav-header nav[aria-label="header"]') || document.querySelector('.hl_nav-header nav') || document.querySelector('.hl_nav-header');
+                } else if (containerSelector === "#agencySidebar") {
+                    container = document.querySelector("#agencySidebar") || document.querySelector(".hl_nav-header nav");
+                } else {
+                    container = document.querySelector(containerSelector);
                 }
-            }
-
-            // If still not found, try a common sub-account selector (safe fallback)
-            if (!container) {
-                container = document.querySelector(".hl_nav-header nav") || document.querySelector(".hl_nav-header");
             }
 
             if (!container) return;
 
             order.forEach(id => {
                 const el = document.getElementById(id);
-                if (el) container.appendChild(el);
+                if (el && el.parentElement !== container) {
+                    // Move element to the intended container (this appends and preserves event listeners)
+                    container.appendChild(el);
+                } else if (el && el.parentElement === container) {
+                    // already inside right container; ensure it is ordered correctly
+                    container.appendChild(el);
+                }
             });
         }
 
+        // Apply any saved order on initial load (for both agency and subaccount)
+        const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        if (saved.themeData?.["--subMenuOrder"]) {
+            const order = JSON.parse(saved.themeData["--subMenuOrder"]);
+            reorderMenu(order, '.hl_nav-header nav[aria-label="header"]');
+        }
+        if (saved.themeData?.["--agencyMenuOrder"]) {
+            const order = JSON.parse(saved.themeData["--agencyMenuOrder"]);
+            reorderMenu(order, '#agencySidebar');
+        }
+
+        // ---------------- Robustness: observe for sidebar re-creation ----------------
+        // GHL often re-renders the nav on navigation; use a MutationObserver to re-apply saved order
+        // when the header or footer nav elements are re-inserted into DOM.
+        (function watchSidebarRecreation() {
+            const observer = new MutationObserver(mutations => {
+                // if nav header/footer added, reapply saved orders
+                let headerAdded = false;
+                let footerAdded = false;
+                for (const m of mutations) {
+                    for (const node of m.addedNodes) {
+                        if (!(node instanceof HTMLElement)) continue;
+                        if (node.matches && node.matches('.hl_nav-header, .hl_nav-header *')) headerAdded = true;
+                        if (node.matches && node.matches('.hl_nav-settings, .hl_nav-settings *')) footerAdded = true;
+                    }
+                }
+                if (headerAdded) {
+                    const s = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                    if (s.themeData?.["--subMenuOrder"]) {
+                        const order = JSON.parse(s.themeData["--subMenuOrder"]);
+                        reorderMenu(order, '.hl_nav-header nav[aria-label="header"]');
+                        applyMenuCustomizations();
+                    }
+                }
+                if (footerAdded) {
+                    const s = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                    if (s.themeData?.["--agencyMenuOrder"]) {
+                        const order = JSON.parse(s.themeData["--agencyMenuOrder"]);
+                        reorderMenu(order, '#agencySidebar');
+                        applyMenuCustomizations();
+                    }
+                }
+            });
+
+            // Observe body for subtree changes (sidebar can be re-rendered anywhere)
+            observer.observe(document.body, { childList: true, subtree: true });
+
+            // Keep reference if you want to disconnect later: window.__tb_sidebarObserver = observer;
+        })();
+
+        // Note: we intentionally do NOT call any legacy updateSubaccountSidebarRuntime()
+        // or perform any meta-based reordering to prevent conflicts with IDs.
     }
 
     // === Subaccount Sidebar Menu Title Support ===
@@ -5685,7 +5646,7 @@
             //title.textContent = "GlitchGone<br>Theme Builder";
             //title.className = "tb-title";
             const title = document.createElement('div');
-            title.innerHTML = "GlitchGone<br>Theme Builder";
+            title.innerHTML = "Theme Builder";
             title.className = "tb-title";
 
             const closeBtn = document.createElement('button');
