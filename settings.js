@@ -5185,7 +5185,7 @@
                             localStorage.setItem("userTheme", JSON.stringify(saved));
 
                             // Perform a safe programmatic reorder
-                            safeReorder(newOrder, sidebarParentSelector);
+                            reorderMenu(newOrder, sidebarParentSelector);
 
                             // Re-apply visual customizations
                             applyMenuCustomizations();
@@ -5220,52 +5220,35 @@
         container.appendChild(wrapper);
         applyMenuCustomizations();
 
-        // ---------------- Safe reorder helpers ----------------
-        function reorderMenu(order, containerSelector) {
+       
+         function reorderMenu(order, containerSelector) {
+             // Try the exact selector first (keeps agency behavior unchanged)
+             let container = document.querySelector(containerSelector);
 
-            // 🛑 Prevent infinite loops or freezing during drag operations
-            if (window.__tb_dragging_now__) return;
-            if (window.isPerformingProgrammaticReorder) return;
+             // If selector not found, attempt to infer the container from the first existing menu item
+             if (!container) {
+                 for (let i = 0; i < order.length; i++) {
+                     const id = order[i];
+                     const el = document.getElementById(id);
+                     if (el && el.parentElement) {
+                         container = el.parentElement;
+                         break;
+                     }
+                 }
+             }
 
-            let container = document.querySelector(containerSelector);
+             // If still not found, try a common sub-account selector (safe fallback)
+             if (!container) {
+                 container = document.querySelector(".hl_nav-header nav") || document.querySelector(".hl_nav-header");
+             }
 
-            // -------------------------------------------------------------------------
-            // 1️⃣ Special handling for sub-account sidebar
-            // -------------------------------------------------------------------------
-            if (!container && containerSelector === "#subAccountSidebar") {
-                container = getRealSubAccountSidebar();  // your safe subaccount lookup
-            }
+             if (!container) return;
 
-            // -------------------------------------------------------------------------
-            // 2️⃣ Special handling for agency-level sidebar
-            // (Never use these for sub-account!)
-            // -------------------------------------------------------------------------
-            if (!container && containerSelector === "#agencySidebar") {
-                container =
-                    document.querySelector("#sidebarMenu") ||
-                    document.querySelector("#sidebar-nav") ||
-                    document.querySelector(".hl_nav-header nav[aria-label='header']") ||
-                    document.querySelector(".hl_nav-header nav") ||
-                    document.querySelector(".hl_nav-header");
-            }
-
-            // -------------------------------------------------------------------------
-            // 3️⃣ If container still not found → STOP safely
-            // -------------------------------------------------------------------------
-            if (!container) return;
-
-            // -------------------------------------------------------------------------
-            // 4️⃣ Perform reorder safely
-            // -------------------------------------------------------------------------
-            window.isPerformingProgrammaticReorder = true;
-
-            order.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) container.appendChild(el);
-            });
-
-            window.isPerformingProgrammaticReorder = false;
-        }
+             order.forEach(id => {
+                 const el = document.getElementById(id);
+                 if (el) container.appendChild(el);
+             });
+         }
         function safeReorder(order, containerSelector) {
             // If a reorder is already in progress, bail out (prevents re-entrancy)
             if (isPerformingProgrammaticReorder) return;
