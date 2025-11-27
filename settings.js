@@ -5291,13 +5291,10 @@
                 }
             }, 20);
         }
-        function getSubaccountContainer() {
-            return document.querySelector('.hl_nav-header nav[aria-label="header"]')
-                || document.querySelector('.hl_nav-header nav')
-                || document.querySelector('#sidebar-nav')
-                || document.querySelector('#sidebarMenu')
-                || document.querySelector('.sidebar-nav')
-                || document.querySelector('.hl_nav-header');
+        function getRealSubAccountSidebar() {
+            return document.querySelector("#subAccountSidebar")
+                || document.querySelector('nav[data-testid="sidebar-nav"]')
+                || document.querySelector('.hl-app .sidebar');
         }
         // ---------------- MutationObserver to re-apply saved order when nav is re-inserted ----------------
         (function watchSidebarRecreation() {
