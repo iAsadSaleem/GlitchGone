@@ -879,7 +879,7 @@
                 "--sidebar-menu-icon-hover-color": "#FFFFFF",
                 "--sidebar-menu-icon-active-color": "#FFFFFF",
                 "--sidebar-menu-border-radius": "10px",
-                "--sidebar-menu-icon-hover-color": "#17153B",
+                "--sidebar-menu-icon-hover-color": "#ffffff",
                 "--sidebar-menu-icon-active-color":"#17153B",
 
                 "--sidebar-top-right-radius": "0px",
