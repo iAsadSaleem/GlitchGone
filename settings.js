@@ -5221,6 +5221,51 @@
         applyMenuCustomizations();
 
         // ---------------- Safe reorder helpers ----------------
+        function reorderMenu(order, containerSelector) {
+
+            // 🛑 Prevent infinite loops or freezing during drag operations
+            if (window.__tb_dragging_now__) return;
+            if (window.isPerformingProgrammaticReorder) return;
+
+            let container = document.querySelector(containerSelector);
+
+            // -------------------------------------------------------------------------
+            // 1️⃣ Special handling for sub-account sidebar
+            // -------------------------------------------------------------------------
+            if (!container && containerSelector === "#subAccountSidebar") {
+                container = getRealSubAccountSidebar();  // your safe subaccount lookup
+            }
+
+            // -------------------------------------------------------------------------
+            // 2️⃣ Special handling for agency-level sidebar
+            // (Never use these for sub-account!)
+            // -------------------------------------------------------------------------
+            if (!container && containerSelector === "#agencySidebar") {
+                container =
+                    document.querySelector("#sidebarMenu") ||
+                    document.querySelector("#sidebar-nav") ||
+                    document.querySelector(".hl_nav-header nav[aria-label='header']") ||
+                    document.querySelector(".hl_nav-header nav") ||
+                    document.querySelector(".hl_nav-header");
+            }
+
+            // -------------------------------------------------------------------------
+            // 3️⃣ If container still not found → STOP safely
+            // -------------------------------------------------------------------------
+            if (!container) return;
+
+            // -------------------------------------------------------------------------
+            // 4️⃣ Perform reorder safely
+            // -------------------------------------------------------------------------
+            window.isPerformingProgrammaticReorder = true;
+
+            order.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) container.appendChild(el);
+            });
+
+            window.isPerformingProgrammaticReorder = false;
+        }
         function safeReorder(order, containerSelector) {
             // If a reorder is already in progress, bail out (prevents re-entrancy)
             if (isPerformingProgrammaticReorder) return;
@@ -5302,11 +5347,11 @@
                 const s = JSON.parse(localStorage.getItem("userTheme") || "{}");
                 if (s.themeData?.["--subMenuOrder"]) {
                     const order = JSON.parse(s.themeData["--subMenuOrder"]);
-                    safeReorder(order, getRealSubAccountSidebar());
+                    reorderMenu(order, getRealSubAccountSidebar());
                 }
                 if (s.themeData?.["--agencyMenuOrder"]) {
                     const order = JSON.parse(s.themeData["--agencyMenuOrder"]);
-                    safeReorder(order, '#agencySidebar');
+                    reorderMenu(order, '#agencySidebar');
                 }
             };
 
@@ -5370,11 +5415,11 @@
         const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
         if (saved.themeData?.["--subMenuOrder"]) {
             const order = JSON.parse(saved.themeData["--subMenuOrder"]);
-            safeReorder(order, '.hl_nav-header nav[aria-label="header"]');
+            reorderMenu(order, '.hl_nav-header nav[aria-label="header"]');
         }
         if (saved.themeData?.["--agencyMenuOrder"]) {
             const order = JSON.parse(saved.themeData["--agencyMenuOrder"]);
-            safeReorder(order, '#agencySidebar');
+            reorderMenu(order, '#agencySidebar');
         }
     }
 
