@@ -5302,7 +5302,7 @@
                 const s = JSON.parse(localStorage.getItem("userTheme") || "{}");
                 if (s.themeData?.["--subMenuOrder"]) {
                     const order = JSON.parse(s.themeData["--subMenuOrder"]);
-                    safeReorder(order, getSubaccountContainer());
+                    safeReorder(order, getRealSubAccountSidebar());
                 }
                 if (s.themeData?.["--agencyMenuOrder"]) {
                     const order = JSON.parse(s.themeData["--agencyMenuOrder"]);
