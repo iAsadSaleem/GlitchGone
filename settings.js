@@ -1899,7 +1899,9 @@
             "--sidebar-menu-hover-bg",
             "--sidebar-menu-active-bg",
             "--sidebar-menu-color",
-            "--sidebar-menu-icon-color"
+            "--sidebar-menu-icon-color",
+            "--sidebar-menu-icon-hover-color",
+            "--sidebar-menu-icon-active-color"
         ];
 
         function updateSidebarGradient() {
