@@ -4974,7 +4974,6 @@
             { id: "sb_ghl-swag", label: "GHL Swag" },
             { id: "sb_agency-ideas", label: "Agency Ideas" },
             { id: "sb_mobile-app-customiser", label: "Mobile App Customiser" },
-            { id: "sb_agency-accounts", label: "Agency Accounts" },
         ];
 
         // Load saved theme
