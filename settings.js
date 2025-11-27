@@ -302,6 +302,8 @@
         "--sidebar-menu-active-bg": "Choose Menu Active BG Color",
 
         "--sidebar-menu-color": "Choose SideBar Text Color",
+        "--sidebar-text-hover-color": "Choose SideBar Text Hover Color",
+        "--sidebar-text-active-color": "Choose SideBar Text Active Color",
         "--sidebar-menu-icon-color": "Choose SideBar Icon Color",
         "--sidebar-menu-icon-hover-color": "Choose SideBar Icon Hover Color",
         "--sidebar-menu-icon-active-color": "Choose SideBar Icon Active Color",
@@ -1899,6 +1901,8 @@
             "--sidebar-menu-hover-bg",
             "--sidebar-menu-active-bg",
             "--sidebar-menu-color",
+            "--sidebar-text-hover-color",
+            "--sidebar-text-active-color",
             "--sidebar-menu-icon-color",
             "--sidebar-menu-icon-hover-color",
             "--sidebar-menu-icon-active-color"
