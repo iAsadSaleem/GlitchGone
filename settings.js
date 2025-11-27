@@ -5728,7 +5728,7 @@
                     saved.themeData[storageKey] = JSON.stringify(newOrder);
                     localStorage.setItem("userTheme", JSON.stringify(saved));
 
-                    updateSubaccountSidebarRuntime(newOrder);
+                    reorderMenu(newOrder, "#subAccountSidebar");
 
                     newOrder.forEach(menuId => {
                         const menuEl = document.getElementById(menuId);
