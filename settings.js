@@ -5858,6 +5858,7 @@
                         const companylogo = document.createElement("h4");
                         companylogo.className = "tb-header-controls";
                         companylogo.textContent = "Company Log For Login Page";
+                        section.appendChild(companylogo);
                         section.appendChild(createLoginLogoInput("Logo URL", "--login-company-logo"));
 
                         const bgSectionWrapper = document.createElement("div");
