@@ -623,7 +623,7 @@
                 "--bg-gradient": "linear-gradient(38deg, rgba(0,0,0,0.95) 45%, rgba(37,175,96,1) 55%)",
 
                 "--sidebar-main-bg-gradient": "#1c1c1c",   /* Flat black sidebar */
-                "--login-card-bg-gradient": "#1c1c1c",
+                "--login-card-bg-gradient": "#000",
 
                 "--login-link-text-color": "#0a6e35",
                 "--login-button-bg-gradient": "#00c853",
