@@ -577,8 +577,8 @@
                 "--app-bg-color": "#F9F9F9",
                 "--Acent-color": "#FFFFFF",
 
-                "--sidebar-bg-color": "#000000",          /* Flat black sidebar background */
-                "--sidebar-menu-bg": "#000000",
+                "--sidebar-bg-color": "#1c1c1c",          /* Flat black sidebar background */
+                "--sidebar-menu-bg": "#1c1c1c",
                 "--sidebar-menu-color": "#FFFFFF",
                 "--sidebar-menu-hover-bg": "#0a6e35",
                 "--sidebar-menu-active-bg": "#07a125",
@@ -597,15 +597,15 @@
                 "--header-bg-color": "#FFFFFF",          /* Flat black header */
                 "--header-icon-color": "#FFFFFF",
                 "--header-icon-hover-color": "#0a6e35",
-                "--header-icon-bg": "#000000",
+                "--header-icon-bg": "#1c1c1c",
                 "--header-icon-hover-bg": "#111111",
 
-                "--card-body-bg-color": "#FFFFFF",
-                "--card-body-font-color": "#1A1A1A",
+                "--card-body-bg-color": "#1c1c1c",
+                "--card-body-font-color": "#FFFFFF",
                 "--card-title-font-color": "#f9f9f9",
-                "--card-dec-font-color": "#333333",
-                "--card-footer-bg-color": "#F0FFF6",
-                "--card-footer-font-color": "#000000",
+                "--card-dec-font-color": "#fdfdfd",
+                "--card-footer-bg-color": "#2a2d2b",
+                "--card-footer-font-color": "#c7b2b2",
 
                 "--top-nav-menu-bg": "#000000",
                 "--top-nav-menu-hover-bg": "#111111",
@@ -614,21 +614,21 @@
                 "--top-nav-menu-hover-color": "#0a6e35",
                 "--top-nav-menu-active-color": "#07a125",
 
-                "--card-header-gradient-start": "#000000",
-                "--card-header-bg-gradient": "linear-gradient(38deg, rgba(0,0,0,1) 45%, rgba(0,0,0,1) 55%)",
+                "--card-header-gradient-start": "#1c1c1c",
+                "--card-header-bg-gradient": "linear-gradient(90deg, #1c1c1c 0%, #1c1c1c 100%)",
                 "--card-header-gradient-end": "#0a6e35",
 
                 "--card-body-border-color": "#E2E2E2",
 
                 "--bg-gradient": "linear-gradient(38deg, rgba(0,0,0,0.95) 45%, rgba(37,175,96,1) 55%)",
 
-                "--sidebar-main-bg-gradient": "#000000",   /* Flat black sidebar */
-                "--login-card-bg-gradient": "#000000cc",
+                "--sidebar-main-bg-gradient": "#1c1c1c",   /* Flat black sidebar */
+                "--login-card-bg-gradient": "#1c1c1c",
 
                 "--login-link-text-color": "#0a6e35",
                 "--login-button-bg-gradient": "#00c853",
                 "--login-button-bg-color": "#0a6e35",
-                "--login-card-bg-color": "#000000cc",
+                "--login-card-bg-color": "#1c1c1c",
                 "--login-button-hover-bg-color": "#00e676",
                 "--login-headline-font-size": "25px",
 
