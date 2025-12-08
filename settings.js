@@ -616,7 +616,7 @@
 
                 "--card-header-gradient-start": "#1c1c1c",
                 "--card-header-bg-gradient": "linear-gradient(90deg, #1c1c1c 0%, #1c1c1c 100%)",
-                "--card-header-gradient-end": "#0a6e35",
+                "--card-header-gradient-end": "#1c1c1c",
 
                 "--card-body-border-color": "#E2E2E2",
 
