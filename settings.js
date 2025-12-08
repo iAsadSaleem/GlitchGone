@@ -5861,9 +5861,11 @@
                         section.appendChild(companylogo);
                         section.appendChild(createLoginLogoInput("Logo URL", "--login-company-logo"));
 
+                        /* ================================
+                           BACKGROUND (already working)
+                        ================================ */
                         const bgSectionWrapper = document.createElement("div");
                         bgSectionWrapper.className = "bg-section-wrapper";
-
 
                         const header = document.createElement("h4");
                         header.className = "tb-header-controls";
@@ -5875,27 +5877,42 @@
 
                         section.appendChild(bgSectionWrapper);
 
+
+                        /* ================================
+                           ✅ CARD BG SECTION (NEW WRAPPER)
+                        ================================ */
+                        const cardBgSectionWrapper = document.createElement("div");
+                        cardBgSectionWrapper.className = "card-bg-section-wrapper";
+
+                        const loginheader = document.createElement("h4");
+                        loginheader.className = "tb-header-controls";
+                        loginheader.textContent = "Card BG Gradient Color";
+                        cardBgSectionWrapper.appendChild(loginheader);
+
+                        cardBgSectionWrapper.appendChild(createLoginCardGradientPicker());
+
+                        section.appendChild(cardBgSectionWrapper);
+
                         function updateBgSectionState() {
                             const selectedTheme = localStorage.getItem("themebuilder_selectedTheme");
 
-                            if (selectedTheme === "Default Theme") {
-                                bgSectionWrapper.classList.add("disabled-section");
-                            } else {
-                                bgSectionWrapper.classList.remove("disabled-section");
-                            }
+                            const isDefault = selectedTheme === "Default Theme";
+
+                            bgSectionWrapper.classList.toggle("disabled-section", isDefault);
+                            cardBgSectionWrapper.classList.toggle("disabled-section", isDefault);
                         }
 
                         // Run on load
                         updateBgSectionState();
 
-                        // Listen when localStorage changes from **other tabs**
+                        // Listen when localStorage changes from other tabs
                         window.addEventListener("storage", function (event) {
                             if (event.key === "themebuilder_selectedTheme") {
                                 updateBgSectionState();
                             }
                         });
 
-                        // ✅ Listen when theme changes in the **same tab**
+                        // Listen when theme changes in the same tab
                         window.addEventListener("themeChanged", updateBgSectionState);
 
 
@@ -5912,12 +5929,6 @@
                         //section.appendChild(createLoginBackgroundImageInput());
 
 
-                        const loginheader = document.createElement("h4");
-                        loginheader.className = "tb-header-controls";
-                        loginheader.textContent = "Card BG Gradient Color";
-                        section.appendChild(loginheader);
-
-                        section.appendChild(createLoginCardGradientPicker());
 
                         const loginbutton = document.createElement("h4");
                         loginbutton.className = "tb-header-controls";
