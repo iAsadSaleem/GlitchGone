@@ -5236,39 +5236,17 @@
             // ==========================
             // Helper function (place at top or outside Sortable)
             // ==========================
-            //function updateSubaccountSidebarRuntime(newOrder) {
-            //    const sidebarNav = document.querySelector(
-            //        '.hl_nav-header nav[aria-label="header"]'
-            //    );
-            //    if (!sidebarNav) return;
-
-            //    newOrder.forEach(metaKey => {
-            //        const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
-            //        if (el) sidebarNav.appendChild(el); // moves node in new order
-            //    });
-            //}
             function updateSubaccountSidebarRuntime(newOrder) {
-
-                // Agency sidebar
-                let sidebarNav =
-                    document.querySelector('.hl_nav-header nav[aria-label="header"]');
-
-                // Sub-account fallback sidebar
-                if (!sidebarNav) {
-                    sidebarNav =
-                        document.querySelector('.hl_nav-header nav[aria-label="sidebar"]')
-                        || document.querySelector('.hl_nav-header nav')
-                        || document.querySelector('.hl_nav-header');
-                }
-
+                const sidebarNav = document.querySelector(
+                    '.hl_nav-header nav[aria-label="header"]'
+                );
                 if (!sidebarNav) return;
 
-                newOrder.forEach(id => {
-                    const el = document.getElementById(id);
-                    if (el) sidebarNav.appendChild(el);
+                newOrder.forEach(metaKey => {
+                    const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
+                    if (el) sidebarNav.appendChild(el); // moves node in new order
                 });
             }
-
 
             // ---------------- Drag & Drop ----------------
             Sortable.create(listContainer, {
