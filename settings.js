@@ -5285,16 +5285,25 @@
             }
 
             function updateSubaccountSidebarRuntime(newOrder) {
-                const sidebarNav = document.querySelector(
-                    '.hl_nav-header nav[aria-label="header"]'
-                );
-                if (!sidebarNav) return;
+                const wait = setInterval(() => {
+                    const sidebarNav = document.querySelector(
+                        '.hl_nav-header nav[aria-label="header"]'
+                    );
+                    if (!sidebarNav) return;
 
-                newOrder.forEach(metaKey => {
-                    const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
-                    if (el) sidebarNav.appendChild(el); // moves node in new order
-                });
+                    const allExist = newOrder.every(key => sidebarNav.querySelector(`[meta="${key}"]`));
+                    if (!allExist) return;
+
+                    clearInterval(wait);
+
+                    // Reorder DOM elements
+                    newOrder.forEach(metaKey => {
+                        const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
+                        if (el) sidebarNav.appendChild(el); // moves node in new order
+                    });
+                }, 50);
             }
+
             const isSubAccount = location.pathname.includes("/location/");
 
             // ---------------- Drag & Drop ----------------
@@ -5306,17 +5315,17 @@
                     const rows = listContainer.querySelectorAll(".tb-menu-row");
                     const newOrder = [...rows].map(r => r.dataset.id);
 
-                    // save
+                    // Save order in localStorage
                     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                     saved.themeData ??= {};
-                    saved.themeData[storageKey] = JSON.stringify(newOrder);
+                    saved.themeData["--subMenuOrder"] = JSON.stringify(newOrder);
                     localStorage.setItem("userTheme", JSON.stringify(saved));
 
+                    // Update sidebar DOM immediately
                     if (isSubAccount) {
-                        forceSubaccountSidebarRefresh();
-                        observeSubaccountSidebar(newOrder);
-                    } else {
                         updateSubaccountSidebarRuntime(newOrder);
+                    } else {
+                        updateSubaccountSidebarRuntime(newOrder); // agency
                     }
 
                     applyMenuCustomizations();
