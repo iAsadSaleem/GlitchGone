@@ -4943,31 +4943,24 @@
         });
     }
     function observeSubAccountSidebar(order) {
-        const header = document.querySelector('.hl_nav-header');
-        if (!header) return;
-
-        if (header.__TB_MENU_OBSERVER__) return;
+        const container = document.querySelector(
+            '#sidebar-v2 .hl_nav-header'
+        );
+        if (!container || container.__OBS__) return;
 
         const observer = new MutationObserver(() => {
-            if (__TB_IS_SUB_REORDERING__) return; // 🔴 CRITICAL LINE
-
-            const nav = header.querySelector('nav[aria-label="header"]');
+            const nav = getSubAccountMainNav();
             if (!nav) return;
 
-            order.forEach(id => {
-                const el = nav.querySelector(`#${id}`);
-                if (el && el.parentNode === nav) {
-                    nav.appendChild(el);
-                }
-            });
+            updateSubaccountSidebarRuntime(order);
         });
 
-        observer.observe(header, {
+        observer.observe(container, {
             childList: true,
             subtree: true
         });
 
-        header.__TB_MENU_OBSERVER__ = observer;
+        container.__OBS__ = observer;
     }
 
     function buildMenuCustomizationSection(container) {
@@ -5276,25 +5269,29 @@
             //        if (el) sidebarNav.appendChild(el); // moves node in new order
             //    });
             //}
-            function updateSubaccountSidebarRuntime(order) {
-                const nav = document.querySelector(
-                    '.hl_nav-header nav[aria-label="header"]'
+            function getSubAccountMainNav() {
+                return document.querySelector(
+                    '#sidebar-v2 .hl_nav-header > nav[aria-label="header"]'
                 );
+            }
+            function updateSubaccountSidebarRuntime(order) {
+                const nav = getSubAccountMainNav();
                 if (!nav) return;
 
-                __TB_IS_SUB_REORDERING__ = true;
+                // Work ONLY within this nav
+                const items = Array.from(nav.children);
+
+                const map = new Map();
+                items.forEach(el => {
+                    if (el.id) map.set(el.id, el);
+                });
 
                 order.forEach(id => {
-                    const el = nav.querySelector(`#${id}`);
-                    if (el && el.parentNode === nav) {
-                        nav.appendChild(el); // ✅ move, not clone
-                    }
-                });
-
-                requestAnimationFrame(() => {
-                    __TB_IS_SUB_REORDERING__ = false;
+                    const el = map.get(id);
+                    if (el) nav.appendChild(el); // reorder ONLY
                 });
             }
+
 
 
             // ---------------- Drag & Drop ----------------
@@ -5374,6 +5371,9 @@
 
         function reorderMenu(order, containerSelector) {
             // Try the exact selector first (keeps agency behavior unchanged)
+            if (document.querySelector('.hl_nav-header-without-footer')) {
+                return; // 🔒 Settings sidebar – DO NOTHING
+            }
             let container = document.querySelector(containerSelector);
 
             // If selector not found, attempt to infer the container from the first existing menu item
