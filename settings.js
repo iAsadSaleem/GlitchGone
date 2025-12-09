@@ -5291,7 +5291,7 @@
 
                 const observer = new MutationObserver(() => {
                     const allExist = newOrder.every(key => sidebarNav.querySelector(`[meta="${key}"]`));
-                    console.log('here is sidebarnav:', sidebarNav);
+                    console.log('here is allExist:', allExist);
 
                     if (!allExist) return;
 
@@ -5311,7 +5311,7 @@
 
                 // In case items already exist
                 const allExist = newOrder.every(key => sidebarNav.querySelector(`[meta="${key}"]`));
-                console.log('here is sidebarnav:', sidebarNav);
+                console.log('here is already exist:', allExist);
 
                 if (allExist) {
                     observer.disconnect();
