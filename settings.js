@@ -5320,8 +5320,8 @@
                     saved.themeData ??= {};
                     saved.themeData[storageKey] = JSON.stringify(newOrder);
                     localStorage.setItem("userTheme", JSON.stringify(saved));
-
                     if (isSubAccount) {
+                    reorderMenu(newOrder, "#subAccountSidebar");
                         forceSubaccountSidebarRefresh();
                         observeSubaccountSidebar(newOrder);
                     } else {
