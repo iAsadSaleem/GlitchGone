@@ -5285,27 +5285,61 @@
             }
 
             function updateSubaccountSidebarRuntime(newOrder) {
-                const wait = setInterval(() => {
-                    const sidebarNav = document.querySelector(
-                        '.hl_nav-header nav[aria-label="header"]'
-                    );
-                    console.log('here is sidebarnav',sidebarNav);
-                    if (!sidebarNav) return;
+                const sidebarNav = document.querySelector('.hl_nav-header nav[aria-label="header"]');
+                if (!sidebarNav) return;
 
+                const observer = new MutationObserver(() => {
                     const allExist = newOrder.every(key => sidebarNav.querySelector(`[meta="${key}"]`));
-                    console.log('here is allExist', allExist);
-
                     if (!allExist) return;
 
-                    clearInterval(wait);
+                    // Disconnect after first successful detection
+                    observer.disconnect();
 
                     // Reorder DOM elements
                     newOrder.forEach(metaKey => {
                         const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
-                        if (el) sidebarNav.appendChild(el); // moves node in new order
+                        if (el) sidebarNav.appendChild(el);
                     });
-                }, 50);
+
+                    console.log('Subaccount sidebar reordered live:', newOrder);
+                });
+
+                observer.observe(sidebarNav, { childList: true, subtree: true });
+
+                // In case items already exist
+                const allExist = newOrder.every(key => sidebarNav.querySelector(`[meta="${key}"]`));
+                if (allExist) {
+                    observer.disconnect();
+                    newOrder.forEach(metaKey => {
+                        const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
+                        if (el) sidebarNav.appendChild(el);
+                    });
+                    console.log('Subaccount sidebar reordered live (immediate):', newOrder);
+                }
             }
+
+            //function updateSubaccountSidebarRuntime(newOrder) {
+            //    const wait = setInterval(() => {
+            //        const sidebarNav = document.querySelector(
+            //            '.hl_nav-header nav[aria-label="header"]'
+            //        );
+            //        console.log('here is sidebarnav',sidebarNav);
+            //        if (!sidebarNav) return;
+
+            //        const allExist = newOrder.every(key => sidebarNav.querySelector(`[meta="${key}"]`));
+            //        console.log('here is allExist', allExist);
+
+            //        if (!allExist) return;
+
+            //        clearInterval(wait);
+
+            //        // Reorder DOM elements
+            //        newOrder.forEach(metaKey => {
+            //            const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
+            //            if (el) sidebarNav.appendChild(el); // moves node in new order
+            //        });
+            //    }, 50);
+            //}
 
             const isSubAccount = location.pathname.includes("/location/");
 
