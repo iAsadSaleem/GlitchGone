@@ -5236,6 +5236,43 @@
             // ==========================
             // Helper function (place at top or outside Sortable)
             // ==========================
+            let sidebarObserver;
+
+            function observeSubaccountSidebar(newOrder) {
+                const wait = setInterval(() => {
+                    const header = document.querySelector('.hl_nav-header');
+                    if (!header) return;
+
+                    clearInterval(wait);
+
+                    if (sidebarObserver) sidebarObserver.disconnect();
+
+                    sidebarObserver = new MutationObserver(() => {
+                        const sidebarNav = header.querySelector(
+                            'nav[aria-label="header"]'
+                        );
+                        if (!sidebarNav) return;
+
+                        const allExist = newOrder.every(key =>
+                            sidebarNav.querySelector(`[meta="${key}"]`)
+                        );
+                        if (!allExist) return;
+
+                        sidebarObserver.disconnect();
+
+                        newOrder.forEach(metaKey => {
+                            const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
+                            if (el) sidebarNav.appendChild(el);
+                        });
+                    });
+
+                    sidebarObserver.observe(header, {
+                        childList: true,
+                        subtree: true
+                    });
+                }, 50);
+            }
+
             function updateSubaccountSidebarRuntime(newOrder) {
                 const sidebarNav = document.querySelector(
                     '.hl_nav-header nav[aria-label="header"]'
@@ -5247,6 +5284,7 @@
                     if (el) sidebarNav.appendChild(el); // moves node in new order
                 });
             }
+            const isSubAccount = location.pathname.includes("/location/");
 
             // ---------------- Drag & Drop ----------------
             Sortable.create(listContainer, {
@@ -5257,24 +5295,20 @@
                     const rows = listContainer.querySelectorAll(".tb-menu-row");
                     const newOrder = [...rows].map(r => r.dataset.id);
 
-                    // Save order
                     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-                    saved.themeData = saved.themeData || {};
+                    saved.themeData ??= {};
                     saved.themeData[storageKey] = JSON.stringify(newOrder);
                     localStorage.setItem("userTheme", JSON.stringify(saved));
 
-                    updateSubaccountSidebarRuntime(newOrder);
-
-                    newOrder.forEach(menuId => {
-                        const menuEl = document.getElementById(menuId);
-                        if (menuEl && menuEl.parentElement) {
-                            menuEl.parentElement.appendChild(menuEl);
-                        }
-                    });
-
+                    if (isSubAccount) {
+                        observeSubaccountSidebar(newOrder);
+                    } else {
+                        updateSubaccountSidebarRuntime(newOrder);
+                    }
 
                     applyMenuCustomizations();
                 }
+
             });
         };
 
