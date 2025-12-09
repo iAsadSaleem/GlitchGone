@@ -4941,6 +4941,30 @@
             }
         });
     }
+    function observeSubAccountSidebar(order) {
+        const header = document.querySelector('.hl_nav-header');
+        if (!header) return;
+
+        // prevent duplicate observer
+        if (header.__TB_MENU_OBSERVER__) return;
+
+        const observer = new MutationObserver(() => {
+            const nav = header.querySelector('nav[aria-label="header"]');
+            if (!nav) return;
+
+            order.forEach(id => {
+                const el = nav.querySelector(`#${id}`);
+                if (el) nav.appendChild(el);
+            });
+        });
+
+        observer.observe(header, {
+            childList: true,
+            subtree: true
+        });
+
+        header.__TB_MENU_OBSERVER__ = observer;
+    }
 
     function buildMenuCustomizationSection(container) {
         if (document.getElementById("tb-menu-customization")) return;
@@ -5243,7 +5267,8 @@
                 if (!sidebarNav) return;
 
                 newOrder.forEach(metaKey => {
-                    const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
+                    //const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
+                    const el = sidebarNav.querySelector(`#${metaKey}`);
                     if (el) sidebarNav.appendChild(el); // moves node in new order
                 });
             }
@@ -5265,12 +5290,12 @@
 
                     updateSubaccountSidebarRuntime(newOrder);
 
-                    newOrder.forEach(menuId => {
-                        const menuEl = document.getElementById(menuId);
-                        if (menuEl && menuEl.parentElement) {
-                            menuEl.parentElement.appendChild(menuEl);
-                        }
-                    });
+                    //newOrder.forEach(menuId => {
+                    //    const menuEl = document.getElementById(menuId);
+                    //    if (menuEl && menuEl.parentElement) {
+                    //        menuEl.parentElement.appendChild(menuEl);
+                    //    }
+                    //});
 
 
                     applyMenuCustomizations();
@@ -5306,8 +5331,17 @@
 
         if (saved.themeData?.["--subMenuOrder"]) {
             const order = JSON.parse(saved.themeData["--subMenuOrder"]);
+
+            // Apply immediately once
             reorderMenu(order, "#subAccountSidebar");
+
+            // ✅ THIS IS THE ACTUAL FIX
+            observeSubAccountSidebar(order);
         }
+        //if (saved.themeData?.["--subMenuOrder"]) {
+        //    const order = JSON.parse(saved.themeData["--subMenuOrder"]);
+        //    reorderMenu(order, "#subAccountSidebar");
+        //}
 
         if (saved.themeData?.["--agencyMenuOrder"]) {
             const order = JSON.parse(saved.themeData["--agencyMenuOrder"]);
