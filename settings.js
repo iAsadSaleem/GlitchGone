@@ -5315,17 +5315,17 @@
                     const rows = listContainer.querySelectorAll(".tb-menu-row");
                     const newOrder = [...rows].map(r => r.dataset.id);
 
-                    // Save order in localStorage
+                    // save
                     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                     saved.themeData ??= {};
-                    saved.themeData["--subMenuOrder"] = JSON.stringify(newOrder);
+                    saved.themeData[storageKey] = JSON.stringify(newOrder);
                     localStorage.setItem("userTheme", JSON.stringify(saved));
 
-                    // Update sidebar DOM immediately
                     if (isSubAccount) {
-                        updateSubaccountSidebarRuntime(newOrder);
+                        forceSubaccountSidebarRefresh();
+                        observeSubaccountSidebar(newOrder);
                     } else {
-                        updateSubaccountSidebarRuntime(newOrder); // agency
+                        updateSubaccountSidebarRuntime(newOrder);
                     }
 
                     applyMenuCustomizations();
