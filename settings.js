@@ -5372,6 +5372,10 @@
         }
 
         function reorderMenu(order, containerSelector) {
+            console.log(order, 'Here is the order');
+            console.log(order, 'Here is the order');
+            console.log(order, 'Here is the order');
+            console.log(order, 'Here is the order');
             // Try the exact selector first (keeps agency behavior unchanged)
             let container = document.querySelector(containerSelector);
 
