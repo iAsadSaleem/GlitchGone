@@ -5372,6 +5372,7 @@
         }
 
         function reorderMenu(order, containerSelector) {
+            console.log('Subaccount Order Hit');
             // Try the exact selector first (keeps agency behavior unchanged)
             let container = document.querySelector(containerSelector);
 
