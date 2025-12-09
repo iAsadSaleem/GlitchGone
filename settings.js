@@ -5286,10 +5286,13 @@
 
             function updateSubaccountSidebarRuntime(newOrder) {
                 const sidebarNav = document.querySelector('.hl_nav-header nav[aria-label="header"]');
+                console.log('here is sidebarnav:', sidebarNav);
                 if (!sidebarNav) return;
 
                 const observer = new MutationObserver(() => {
                     const allExist = newOrder.every(key => sidebarNav.querySelector(`[meta="${key}"]`));
+                    console.log('here is sidebarnav:', sidebarNav);
+
                     if (!allExist) return;
 
                     // Disconnect after first successful detection
@@ -5308,6 +5311,8 @@
 
                 // In case items already exist
                 const allExist = newOrder.every(key => sidebarNav.querySelector(`[meta="${key}"]`));
+                console.log('here is sidebarnav:', sidebarNav);
+
                 if (allExist) {
                     observer.disconnect();
                     newOrder.forEach(metaKey => {
