@@ -1,6 +1,5 @@
 (function () {
     let headerObserver = null;
-    let __TB_IS_SUB_REORDERING__ = false;
     const MAX_ATTEMPTS = 40;
     window.__BLUEWAVE_TOPNAV_ENABLED__ = true;
 
@@ -4942,26 +4941,6 @@
             }
         });
     }
-    function observeSubAccountSidebar(order) {
-        const container = document.querySelector(
-            '#sidebar-v2 .hl_nav-header'
-        );
-        if (!container || container.__OBS__) return;
-
-        const observer = new MutationObserver(() => {
-            const nav = getSubAccountMainNav();
-            if (!nav) return;
-
-            updateSubaccountSidebarRuntime(order);
-        });
-
-        observer.observe(container, {
-            childList: true,
-            subtree: true
-        });
-
-        container.__OBS__ = observer;
-    }
 
     function buildMenuCustomizationSection(container) {
         if (document.getElementById("tb-menu-customization")) return;
@@ -5257,42 +5236,17 @@
             // ==========================
             // Helper function (place at top or outside Sortable)
             // ==========================
-            //function updateSubaccountSidebarRuntime(newOrder) {
-            //    const sidebarNav = document.querySelector(
-            //        '.hl_nav-header nav[aria-label="header"]'
-            //    );
-            //    if (!sidebarNav) return;
-
-            //    newOrder.forEach(metaKey => {
-            //        //const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
-            //        const el = sidebarNav.querySelector(`#${metaKey}`);
-            //        if (el) sidebarNav.appendChild(el); // moves node in new order
-            //    });
-            //}
-            function getSubAccountMainNav() {
-                return document.querySelector(
-                    '#sidebar-v2 .hl_nav-header > nav[aria-label="header"]'
+            function updateSubaccountSidebarRuntime(newOrder) {
+                const sidebarNav = document.querySelector(
+                    '.hl_nav-header nav[aria-label="header"]'
                 );
-            }
-            function updateSubaccountSidebarRuntime(order) {
-                const nav = getSubAccountMainNav();
-                if (!nav) return;
+                if (!sidebarNav) return;
 
-                // Work ONLY within this nav
-                const items = Array.from(nav.children);
-
-                const map = new Map();
-                items.forEach(el => {
-                    if (el.id) map.set(el.id, el);
-                });
-
-                order.forEach(id => {
-                    const el = map.get(id);
-                    if (el) nav.appendChild(el); // reorder ONLY
+                newOrder.forEach(metaKey => {
+                    const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
+                    if (el) sidebarNav.appendChild(el); // moves node in new order
                 });
             }
-
-
 
             // ---------------- Drag & Drop ----------------
             Sortable.create(listContainer, {
@@ -5311,12 +5265,12 @@
 
                     updateSubaccountSidebarRuntime(newOrder);
 
-                    //newOrder.forEach(menuId => {
-                    //    const menuEl = document.getElementById(menuId);
-                    //    if (menuEl && menuEl.parentElement) {
-                    //        menuEl.parentElement.appendChild(menuEl);
-                    //    }
-                    //});
+                    newOrder.forEach(menuId => {
+                        const menuEl = document.getElementById(menuId);
+                        if (menuEl && menuEl.parentElement) {
+                            menuEl.parentElement.appendChild(menuEl);
+                        }
+                    });
 
 
                     applyMenuCustomizations();
@@ -5352,17 +5306,8 @@
 
         if (saved.themeData?.["--subMenuOrder"]) {
             const order = JSON.parse(saved.themeData["--subMenuOrder"]);
-
-            // Apply immediately once
             reorderMenu(order, "#subAccountSidebar");
-
-            // ✅ THIS IS THE ACTUAL FIX
-            observeSubAccountSidebar(order);
         }
-        //if (saved.themeData?.["--subMenuOrder"]) {
-        //    const order = JSON.parse(saved.themeData["--subMenuOrder"]);
-        //    reorderMenu(order, "#subAccountSidebar");
-        //}
 
         if (saved.themeData?.["--agencyMenuOrder"]) {
             const order = JSON.parse(saved.themeData["--agencyMenuOrder"]);
@@ -5371,9 +5316,6 @@
 
         function reorderMenu(order, containerSelector) {
             // Try the exact selector first (keeps agency behavior unchanged)
-            if (document.querySelector('.hl_nav-header-without-footer')) {
-                return; // 🔒 Settings sidebar – DO NOTHING
-            }
             let container = document.querySelector(containerSelector);
 
             // If selector not found, attempt to infer the container from the first existing menu item
