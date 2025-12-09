@@ -5236,6 +5236,17 @@
             // ==========================
             // Helper function (place at top or outside Sortable)
             // ==========================
+            function forceSubaccountSidebarRefresh() {
+                const header = document.querySelector('.hl_nav-header');
+                if (!header) return;
+
+                const parent = header.parentNode;
+                const next = header.nextSibling;
+
+                parent.removeChild(header);
+                parent.insertBefore(header, next);
+            }
+
             let sidebarObserver;
 
             function observeSubaccountSidebar(newOrder) {
@@ -5295,12 +5306,14 @@
                     const rows = listContainer.querySelectorAll(".tb-menu-row");
                     const newOrder = [...rows].map(r => r.dataset.id);
 
+                    // save
                     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                     saved.themeData ??= {};
                     saved.themeData[storageKey] = JSON.stringify(newOrder);
                     localStorage.setItem("userTheme", JSON.stringify(saved));
 
                     if (isSubAccount) {
+                        forceSubaccountSidebarRefresh();
                         observeSubaccountSidebar(newOrder);
                     } else {
                         updateSubaccountSidebarRuntime(newOrder);
@@ -5308,6 +5321,7 @@
 
                     applyMenuCustomizations();
                 }
+
 
             });
         };
