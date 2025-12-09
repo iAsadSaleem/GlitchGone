@@ -1,5 +1,6 @@
 (function () {
     let headerObserver = null;
+    let __TB_IS_SUB_REORDERING__ = false;
     const MAX_ATTEMPTS = 40;
     window.__BLUEWAVE_TOPNAV_ENABLED__ = true;
 
@@ -4945,16 +4946,19 @@
         const header = document.querySelector('.hl_nav-header');
         if (!header) return;
 
-        // prevent duplicate observer
         if (header.__TB_MENU_OBSERVER__) return;
 
         const observer = new MutationObserver(() => {
+            if (__TB_IS_SUB_REORDERING__) return; // 🔴 CRITICAL LINE
+
             const nav = header.querySelector('nav[aria-label="header"]');
             if (!nav) return;
 
             order.forEach(id => {
                 const el = nav.querySelector(`#${id}`);
-                if (el) nav.appendChild(el);
+                if (el && el.parentNode === nav) {
+                    nav.appendChild(el);
+                }
             });
         });
 
@@ -5260,18 +5264,38 @@
             // ==========================
             // Helper function (place at top or outside Sortable)
             // ==========================
-            function updateSubaccountSidebarRuntime(newOrder) {
-                const sidebarNav = document.querySelector(
+            //function updateSubaccountSidebarRuntime(newOrder) {
+            //    const sidebarNav = document.querySelector(
+            //        '.hl_nav-header nav[aria-label="header"]'
+            //    );
+            //    if (!sidebarNav) return;
+
+            //    newOrder.forEach(metaKey => {
+            //        //const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
+            //        const el = sidebarNav.querySelector(`#${metaKey}`);
+            //        if (el) sidebarNav.appendChild(el); // moves node in new order
+            //    });
+            //}
+            function updateSubaccountSidebarRuntime(order) {
+                const nav = document.querySelector(
                     '.hl_nav-header nav[aria-label="header"]'
                 );
-                if (!sidebarNav) return;
+                if (!nav) return;
 
-                newOrder.forEach(metaKey => {
-                    //const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
-                    const el = sidebarNav.querySelector(`#${metaKey}`);
-                    if (el) sidebarNav.appendChild(el); // moves node in new order
+                __TB_IS_SUB_REORDERING__ = true;
+
+                order.forEach(id => {
+                    const el = nav.querySelector(`#${id}`);
+                    if (el && el.parentNode === nav) {
+                        nav.appendChild(el); // ✅ move, not clone
+                    }
+                });
+
+                requestAnimationFrame(() => {
+                    __TB_IS_SUB_REORDERING__ = false;
                 });
             }
+
 
             // ---------------- Drag & Drop ----------------
             Sortable.create(listContainer, {
