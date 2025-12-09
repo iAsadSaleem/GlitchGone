@@ -5289,9 +5289,12 @@
                     const sidebarNav = document.querySelector(
                         '.hl_nav-header nav[aria-label="header"]'
                     );
+                    console.log('here is sidebarnav',sidebarNav);
                     if (!sidebarNav) return;
 
                     const allExist = newOrder.every(key => sidebarNav.querySelector(`[meta="${key}"]`));
+                    console.log('here is allExist', allExist);
+
                     if (!allExist) return;
 
                     clearInterval(wait);
@@ -5373,9 +5376,6 @@
         }
 
         function reorderMenu(order, containerSelector) {
-            console.log(order, 'Here is the order');
-            console.log(order, 'Here is the order');
-            console.log(order, 'Here is the order');
             console.log(order, 'Here is the order');
             // Try the exact selector first (keeps agency behavior unchanged)
             let container = document.querySelector(containerSelector);
