@@ -2,8 +2,6 @@
     let headerObserver = null;
     const MAX_ATTEMPTS = 40;
     window.__BLUEWAVE_TOPNAV_ENABLED__ = true;
-    let __TB_APPLYING_SUBMENU_ORDER = false;
-
 
     // --- Dynamically load Sortable.js ---
     (function loadSortable() {
@@ -5251,41 +5249,40 @@
 
             let sidebarObserver;
 
-            function observeSubaccountSidebarLive(newOrder) {
-                const header = document.querySelector('.hl_nav-header');
-                if (!header) return;
+            function observeSubaccountSidebar(newOrder) {
+                const wait = setInterval(() => {
+                    const header = document.querySelector('.hl_nav-header');
+                    if (!header) return;
 
-                let sidebarObserver = new MutationObserver(() => {
-                    if (__TB_APPLYING_SUBMENU_ORDER) return;
+                    clearInterval(wait);
 
-                    const sidebarNav = header.querySelector('nav[aria-label="header"]');
-                    if (!sidebarNav) return;
+                    if (sidebarObserver) sidebarObserver.disconnect();
 
-                    const allExist = newOrder.every(key =>
-                        sidebarNav.querySelector(`[meta="${key}"]`)
-                    );
+                    sidebarObserver = new MutationObserver(() => {
+                        const sidebarNav = header.querySelector(
+                            'nav[aria-label="header"]'
+                        );
+                        if (!sidebarNav) return;
 
-                    if (!allExist) return;
+                        const allExist = newOrder.every(key =>
+                            sidebarNav.querySelector(`[meta="${key}"]`)
+                        );
+                        if (!allExist) return;
 
-                    __TB_APPLYING_SUBMENU_ORDER = true;
+                        sidebarObserver.disconnect();
 
-                    newOrder.forEach(metaKey => {
-                        const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
-                        if (el) sidebarNav.appendChild(el);
+                        newOrder.forEach(metaKey => {
+                            const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
+                            if (el) sidebarNav.appendChild(el);
+                        });
                     });
 
-                    // Release lock after DOM settles
-                    requestAnimationFrame(() => {
-                        __TB_APPLYING_SUBMENU_ORDER = false;
+                    sidebarObserver.observe(header, {
+                        childList: true,
+                        subtree: true
                     });
-                });
-
-                sidebarObserver.observe(header, {
-                    childList: true,
-                    subtree: true
-                });
+                }, 50);
             }
-
 
             function updateSubaccountSidebarRuntime(newOrder) {
                 const sidebarNav = document.querySelector('.hl_nav-header nav[aria-label="header"]');
@@ -5394,7 +5391,7 @@
                     localStorage.setItem("userTheme", JSON.stringify(saved));
                     if (isSubAccount) {
                         forceSubaccountSidebarRefresh();
-                        observeSubaccountSidebarLive(newOrder);
+                        observeSubaccountSidebar(newOrder);
                     } else {
                         updateSubaccountSidebarRuntime(newOrder);
                     }
