@@ -5392,8 +5392,6 @@
                     if (isSubAccount) {
                         forceSubaccountSidebarRefresh();
                         observeSubaccountSidebar(newOrder);
-                        updateSubaccountSidebarRuntime(newOrder);
-
                     } else {
                         updateSubaccountSidebarRuntime(newOrder);
                     }
