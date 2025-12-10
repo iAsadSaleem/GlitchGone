@@ -5421,12 +5421,10 @@
                     saved.themeData[storageKey] = JSON.stringify(newOrder);
                     localStorage.setItem("userTheme", JSON.stringify(saved));
                     if (isSubAccount) {
+                        forceSubaccountSidebarRefresh();
+                        observeSubaccountSidebar(newOrder);
                         updateSubaccountSidebarRuntime(newOrder);
 
-                        // ✅ Force React to respect the new DOM order
-                        setTimeout(() => {
-                            forceReactSidebarRerender();
-                        }, 0);
                     } else {
                         updateSubaccountSidebarRuntime(newOrder);
                     }
