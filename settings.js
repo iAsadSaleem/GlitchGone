@@ -5284,94 +5284,94 @@
                 }, 50);
             }
 
-            function updateSubaccountSidebarRuntime(newOrder) {
-                const sidebarNav = document.querySelector('.hl_nav-header nav[aria-label="header"]');
-                console.log('[Log] sidebarNav:', sidebarNav);
-
-                if (!sidebarNav) {
-                    console.warn('[Warning] Sidebar nav not found!');
-                    return;
-                }
-
-                const observer = new MutationObserver(() => {
-                    console.log('[Observer] DOM mutation detected');
-
-                    // Log what meta keys currently exist in DOM
-                    const existingMeta = Array.from(sidebarNav.querySelectorAll('[meta]')).map(el => el.getAttribute('meta'));
-                    console.log('[Observer] Existing meta attributes:', existingMeta);
-
-                    // Check if all items from newOrder exist in DOM
-                    const allExist = newOrder.every(key => sidebarNav.querySelector(`[meta="${key}"]`));
-                    console.log('[Observer] allExist check:', allExist, '| newOrder:', newOrder);
-
-                    if (!allExist) return;
-
-                    observer.disconnect();
-                    console.log('[Observer] All elements found, reordering now');
-
-                    newOrder.forEach(metaKey => {
-                        const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
-                        if (el) {
-                            sidebarNav.appendChild(el);
-                            console.log(`[Observer] Appended ${metaKey}`);
-                        } else {
-                            console.warn(`[Observer] Element with meta="${metaKey}" not found`);
-                        }
-                    });
-
-                    console.log('[Observer] Subaccount sidebar reordered live:', newOrder);
-                });
-
-                observer.observe(sidebarNav, { childList: true, subtree: true });
-
-                // Immediate check in case items already exist
-                const existingMetaImmediate = Array.from(sidebarNav.querySelectorAll('[meta]')).map(el => el.getAttribute('meta'));
-                console.log('[Immediate] Existing meta attributes:', existingMetaImmediate);
-
-                const allExistImmediate = newOrder.every(key => sidebarNav.querySelector(`[meta="${key}"]`));
-                console.log('[Immediate] allExist check:', allExistImmediate, '| newOrder:', newOrder);
-
-                if (allExistImmediate) {
-                    observer.disconnect();
-                    console.log('[Immediate] All elements exist, reordering now');
-
-                    newOrder.forEach(metaKey => {
-                        const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
-                        if (el) {
-                            sidebarNav.appendChild(el);
-                            console.log(`[Immediate] Appended ${metaKey}`);
-                        } else {
-                            console.warn(`[Immediate] Element with meta="${metaKey}" not found`);
-                        }
-                    });
-
-                    console.log('[Immediate] Subaccount sidebar reordered live (immediate):', newOrder);
-                }
-            }
-
-
             //function updateSubaccountSidebarRuntime(newOrder) {
-            //    const wait = setInterval(() => {
-            //        const sidebarNav = document.querySelector(
-            //            '.hl_nav-header nav[aria-label="header"]'
-            //        );
-            //        console.log('here is sidebarnav',sidebarNav);
-            //        if (!sidebarNav) return;
+            //    const sidebarNav = document.querySelector('.hl_nav-header nav[aria-label="header"]');
+            //    console.log('[Log] sidebarNav:', sidebarNav);
 
+            //    if (!sidebarNav) {
+            //        console.warn('[Warning] Sidebar nav not found!');
+            //        return;
+            //    }
+
+            //    const observer = new MutationObserver(() => {
+            //        console.log('[Observer] DOM mutation detected');
+
+            //        // Log what meta keys currently exist in DOM
+            //        const existingMeta = Array.from(sidebarNav.querySelectorAll('[meta]')).map(el => el.getAttribute('meta'));
+            //        console.log('[Observer] Existing meta attributes:', existingMeta);
+
+            //        // Check if all items from newOrder exist in DOM
             //        const allExist = newOrder.every(key => sidebarNav.querySelector(`[meta="${key}"]`));
-            //        console.log('here is allExist', allExist);
+            //        console.log('[Observer] allExist check:', allExist, '| newOrder:', newOrder);
 
             //        if (!allExist) return;
 
-            //        clearInterval(wait);
+            //        observer.disconnect();
+            //        console.log('[Observer] All elements found, reordering now');
 
-            //        // Reorder DOM elements
             //        newOrder.forEach(metaKey => {
             //            const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
-            //            if (el) sidebarNav.appendChild(el); // moves node in new order
+            //            if (el) {
+            //                sidebarNav.appendChild(el);
+            //                console.log(`[Observer] Appended ${metaKey}`);
+            //            } else {
+            //                console.warn(`[Observer] Element with meta="${metaKey}" not found`);
+            //            }
             //        });
-            //    }, 50);
+
+            //        console.log('[Observer] Subaccount sidebar reordered live:', newOrder);
+            //    });
+
+            //    observer.observe(sidebarNav, { childList: true, subtree: true });
+
+            //    // Immediate check in case items already exist
+            //    const existingMetaImmediate = Array.from(sidebarNav.querySelectorAll('[meta]')).map(el => el.getAttribute('meta'));
+            //    console.log('[Immediate] Existing meta attributes:', existingMetaImmediate);
+
+            //    const allExistImmediate = newOrder.every(key => sidebarNav.querySelector(`[meta="${key}"]`));
+            //    console.log('[Immediate] allExist check:', allExistImmediate, '| newOrder:', newOrder);
+
+            //    if (allExistImmediate) {
+            //        observer.disconnect();
+            //        console.log('[Immediate] All elements exist, reordering now');
+
+            //        newOrder.forEach(metaKey => {
+            //            const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
+            //            if (el) {
+            //                sidebarNav.appendChild(el);
+            //                console.log(`[Immediate] Appended ${metaKey}`);
+            //            } else {
+            //                console.warn(`[Immediate] Element with meta="${metaKey}" not found`);
+            //            }
+            //        });
+
+            //        console.log('[Immediate] Subaccount sidebar reordered live (immediate):', newOrder);
+            //    }
             //}
+
+
+            function updateSubaccountSidebarRuntime(newOrder) {
+                const wait = setInterval(() => {
+                    const sidebarNav = document.querySelector(
+                        '.hl_nav-header nav[aria-label="header"]'
+                    );
+                    console.log('here is sidebarnav',sidebarNav);
+                    if (!sidebarNav) return;
+
+                    const allExist = newOrder.every(key => sidebarNav.querySelector(`[meta="${key}"]`));
+                    console.log('here is allExist', allExist);
+
+                    if (!allExist) return;
+
+                    clearInterval(wait);
+
+                    // Reorder DOM elements
+                    newOrder.forEach(metaKey => {
+                        const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
+                        if (el) sidebarNav.appendChild(el); // moves node in new order
+                    });
+                }, 50);
+            }
 
             const isSubAccount = location.pathname.includes("/location/");
 
