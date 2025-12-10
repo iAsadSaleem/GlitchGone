@@ -5248,23 +5248,6 @@
             }
 
             let sidebarObserver;
-            // ✅ Maps Theme Builder IDs → real sidebar meta keys (Sub-account only)
-            const SUBACCOUNT_META_MAP = {
-                sb_launchpad: "launchpad",
-                sb_dashboard: "dashboard",
-                sb_conversations: "conversations",
-                sb_opportunities: "opportunities",
-                sb_calendars: "calendars",
-                sb_contacts: "contacts",
-                sb_payments: "payments",
-                sb_reporting: "reporting",
-                "sb_email-marketing": "email-marketing",
-                sb_automation: "automation",
-                sb_sites: "sites",
-                "sb_app-media": "app-media",
-                sb_memberships: "memberships",
-                sb_reputation: "reputation"
-            };
 
             function observeSubaccountSidebar(newOrder) {
                 const wait = setInterval(() => {
@@ -5310,76 +5293,62 @@
                     return;
                 }
 
-                // ✅ Convert Theme Builder IDs → real subaccount meta keys
-                const normalizedOrder = newOrder
-                    .map(id => SUBACCOUNT_META_MAP[id])
-                    .filter(Boolean); // removes undefined safely
-
-                console.log('[Normalize] newOrder:', newOrder);
-                console.log('[Normalize] normalizedOrder:', normalizedOrder);
-
-                const reorder = (source) => {
-                    console.log(`[${source}] Reordering sidebar...`);
-
-                    normalizedOrder.forEach(metaKey => {
-                        const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
-                        if (el) {
-                            sidebarNav.appendChild(el);
-                            console.log(`[${source}] Appended`, metaKey);
-                        } else {
-                            console.warn(`[${source}] Element not found for meta="${metaKey}"`);
-                        }
-                    });
-
-                    console.log(`[${source}] ✅ Subaccount sidebar reordered successfully`);
-                };
-
                 const observer = new MutationObserver(() => {
                     console.log('[Observer] DOM mutation detected');
 
-                    const existingMeta = Array.from(
-                        sidebarNav.querySelectorAll('[meta]')
-                    ).map(el => el.getAttribute('meta'));
-
+                    // Log what meta keys currently exist in DOM
+                    const existingMeta = Array.from(sidebarNav.querySelectorAll('[meta]')).map(el => el.getAttribute('meta'));
                     console.log('[Observer] Existing meta attributes:', existingMeta);
 
-                    const allExist = normalizedOrder.every(meta =>
-                        sidebarNav.querySelector(`[meta="${meta}"]`)
-                    );
-
-                    console.log('[Observer] allExist check:', allExist);
+                    // Check if all items from newOrder exist in DOM
+                    const allExist = newOrder.every(key => sidebarNav.querySelector(`[meta="${key}"]`));
+                    console.log('[Observer] allExist check:', allExist, '| newOrder:', newOrder);
 
                     if (!allExist) return;
 
                     observer.disconnect();
-                    reorder('Observer');
+                    console.log('[Observer] All elements found, reordering now');
+
+                    newOrder.forEach(metaKey => {
+                        const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
+                        if (el) {
+                            sidebarNav.appendChild(el);
+                            console.log(`[Observer] Appended ${metaKey}`);
+                        } else {
+                            console.warn(`[Observer] Element with meta="${metaKey}" not found`);
+                        }
+                    });
+
+                    console.log('[Observer] Subaccount sidebar reordered live:', newOrder);
                 });
 
                 observer.observe(sidebarNav, { childList: true, subtree: true });
 
-                // ✅ Immediate attempt (most cases hit here)
-                const existingMetaImmediate = Array.from(
-                    sidebarNav.querySelectorAll('[meta]')
-                ).map(el => el.getAttribute('meta'));
-
+                // Immediate check in case items already exist
+                const existingMetaImmediate = Array.from(sidebarNav.querySelectorAll('[meta]')).map(el => el.getAttribute('meta'));
                 console.log('[Immediate] Existing meta attributes:', existingMetaImmediate);
 
-                const allExistImmediate = normalizedOrder.every(meta =>
-                    sidebarNav.querySelector(`[meta="${meta}"]`)
-                );
-
-                console.log('[Immediate] allExist check:', allExistImmediate);
+                const allExistImmediate = newOrder.every(key => sidebarNav.querySelector(`[meta="${key}"]`));
+                console.log('[Immediate] allExist check:', allExistImmediate, '| newOrder:', newOrder);
 
                 if (allExistImmediate) {
                     observer.disconnect();
-                    reorder('Immediate');
+                    console.log('[Immediate] All elements exist, reordering now');
+
+                    newOrder.forEach(metaKey => {
+                        const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
+                        if (el) {
+                            sidebarNav.appendChild(el);
+                            console.log(`[Immediate] Appended ${metaKey}`);
+                        } else {
+                            console.warn(`[Immediate] Element with meta="${metaKey}" not found`);
+                        }
+                    });
+
+                    console.log('[Immediate] Subaccount sidebar reordered live (immediate):', newOrder);
                 }
             }
 
-            function forceReactSidebarRerender() {
-                const event = new Event("popstate");
-                window.dispatchEvent(event);
-            }
 
             //function updateSubaccountSidebarRuntime(newOrder) {
             //    const wait = setInterval(() => {
