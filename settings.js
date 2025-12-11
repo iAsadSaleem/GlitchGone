@@ -2621,14 +2621,17 @@
 
         function applyText(text) {
             // 1️⃣ Apply to CSS variable
-            document.body.style.setProperty("--login-headline-text", text);
+            const cssText = `"${text}"`; // <-- adds quotes around the text
+
+            // 1️⃣ Apply to CSS variable
+            document.body.style.setProperty("--login-headline-text", cssText);
 
             // 2️⃣ Apply to actual heading DOM if it exists
             const heading = document.querySelector(".hl_login .hl_login--body .login-card-heading h2");
             if (heading) heading.textContent = text;
 
             // 3️⃣ Save in localStorage
-            savedThemeObj.themeData["--login-headline-text"] = text;
+            savedThemeObj.themeData["--login-headline-text"] = cssText; // save with quotes
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
         }
 
