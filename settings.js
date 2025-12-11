@@ -2381,7 +2381,14 @@
         input.value = storedText;
 
         function applyButtonText(text) {
-            const cssText = `"${text}"`;
+            // Trim whitespace
+            text = text.trim();
+
+            // 1️⃣ Wrap in quotes only if not already wrapped
+            let cssText = text;
+            if (!/^".*"$/.test(text)) { // regex checks if text starts and ends with "
+                cssText = `"${text}"`;
+            }
 
             // 1️⃣ Apply to CSS variable
             document.body.style.setProperty("--login-button-text", cssText);
@@ -2623,7 +2630,14 @@
 
         function applyText(text) {
             // 1️⃣ Apply to CSS variable
-            const cssText = `"${text}"`; // <-- adds quotes around the text
+            // Trim whitespace
+            text = text.trim();
+
+            // 1️⃣ Wrap in quotes only if not already wrapped
+            let cssText = text;
+            if (!/^".*"$/.test(text)) { // regex checks if text starts and ends with "
+                cssText = `"${text}"`;
+            }
 
             // 1️⃣ Apply to CSS variable
             document.body.style.setProperty("--login-headline-text", cssText);
