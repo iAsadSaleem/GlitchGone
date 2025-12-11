@@ -2381,8 +2381,10 @@
         input.value = storedText;
 
         function applyButtonText(text) {
+            const cssText = `"${text}"`;
+
             // 1️⃣ Apply to CSS variable
-            document.body.style.setProperty("--login-button-text", text);
+            document.body.style.setProperty("--login-button-text", cssText);
 
             // 2️⃣ Apply directly to login button
             const loginBtn = document.querySelector(
@@ -2391,7 +2393,7 @@
             if (loginBtn) loginBtn.textContent = text;
 
             // 3️⃣ Save to localStorage
-            savedThemeObj.themeData["--login-button-text"] = text;
+            savedThemeObj.themeData["--login-button-text"] = cssText;
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
         }
 
