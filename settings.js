@@ -5384,21 +5384,25 @@
                     const rows = listContainer.querySelectorAll(".tb-menu-row");
                     const newOrder = [...rows].map(r => r.dataset.id);
 
-                    // save
+                    // Save
                     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                     saved.themeData ??= {};
                     saved.themeData[storageKey] = JSON.stringify(newOrder);
                     localStorage.setItem("userTheme", JSON.stringify(saved));
-                    if (isSubAccount) {
-                        forceSubaccountSidebarRefresh();
-                        observeSubaccountSidebar(newOrder);
 
+                    if (isSubAccount) {
+                        // WAIT for Vue to finish rerendering before reordering
+                        setTimeout(() => {
+                            forceSubaccountSidebarRefresh();
+                            observeSubaccountSidebar(newOrder);
+                        }, 60);
                     } else {
                         updateSubaccountSidebarRuntime(newOrder);
                     }
 
                     applyMenuCustomizations();
                 }
+
 
 
             });
