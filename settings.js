@@ -5236,29 +5236,16 @@
             // ==========================
             // Helper function (place at top or outside Sortable)
             // ==========================
-            //function forceSubaccountSidebarRefresh() {
-            //    const header = document.querySelector('.hl_nav-header');
-            //    if (!header) return;
-
-            //    const parent = header.parentNode;
-            //    const next = header.nextSibling;
-
-            //    parent.removeChild(header);
-            //    parent.insertBefore(header, next);
-            //}
             function forceSubaccountSidebarRefresh() {
-                const sidebarRoot = document.querySelector(".hl_nav-header");
+                const header = document.querySelector('.hl_nav-header');
+                if (!header) return;
 
-                if (!sidebarRoot) return;
+                const parent = header.parentNode;
+                const next = header.nextSibling;
 
-                // Temporary hide → show (forces Vue re-render)
-                sidebarRoot.style.display = "none";
-
-                requestAnimationFrame(() => {
-                    sidebarRoot.style.display = "";
-                });
+                parent.removeChild(header);
+                parent.insertBefore(header, next);
             }
-
 
             let sidebarObserver;
 
@@ -5404,15 +5391,14 @@
                     localStorage.setItem("userTheme", JSON.stringify(saved));
 
                     if (isSubAccount) {
-                        // Force a true Vue sidebar remount
-                        forceSubaccountSidebarRefresh();
-
-                        // Now start watching for the fresh DOM
-                        observeSubaccountSidebar(newOrder);
+                        // WAIT for Vue to finish rerendering before reordering
+                        setTimeout(() => {
+                            forceSubaccountSidebarRefresh();
+                            observeSubaccountSidebar(newOrder);
+                        }, 60);
                     } else {
                         updateSubaccountSidebarRuntime(newOrder);
                     }
-
 
                     applyMenuCustomizations();
                 }
