@@ -627,7 +627,7 @@
 
                 "--login-headline-text-color": "#0a6e35",
                 "--login-link-text-color": "#0a6e35",
-                "--login-button-bg-gradient": "#00c853",
+                "--login-button-bg-gradient": "#00c853", 
                 "--login-button-bg-color": "#0a6e35",
                 "--login-card-bg-color": "#1c1c1c",
                 "--login-button-hover-bg-color": "#00e676",
