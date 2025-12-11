@@ -5367,29 +5367,34 @@
                 handle: ".tb-drag-handle",
 
                 onEnd: () => {
-                    allowReorder = true; // enable once, only after drag
-
                     const rows = listContainer.querySelectorAll(".tb-menu-row");
                     const newOrder = [...rows].map(r => r.dataset.id);
 
-                    // Save
+                    // Save order
                     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                     saved.themeData ??= {};
                     saved.themeData[storageKey] = JSON.stringify(newOrder);
                     localStorage.setItem("userTheme", JSON.stringify(saved));
 
-                    // Apply live reorder
-                    if (isSubAccount) {
-                        setTimeout(() => {
+                    // Enable reorder BEFORE doing anything
+                    allowReorder = true;
+
+                    // 🔥 Force immediate reorder every time
+                    setTimeout(() => {
+                        if (isSubAccount) {
                             forceSubaccountSidebarRefresh();
                             observeSubaccountSidebar(newOrder);
-                        }, 60);
-                    } else {
-                        updateSubaccountSidebarRuntime(newOrder);
-                    }
+
+                            // 🔥 NEW: directly try applying order RIGHT NOW
+                            updateSubaccountSidebarRuntime(newOrder);
+                        } else {
+                            updateSubaccountSidebarRuntime(newOrder);
+                        }
+                    }, 50);
 
                     applyMenuCustomizations();
                 }
+
             });
         };
 
