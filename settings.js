@@ -625,6 +625,7 @@
                 "--sidebar-main-bg-gradient": "#1c1c1c",   /* Flat black sidebar */
                 "--login-card-bg-gradient": "#000",
 
+                "--login-headline-text-color": "#0a6e35",
                 "--login-link-text-color": "#0a6e35",
                 "--login-button-bg-gradient": "#00c853",
                 "--login-button-bg-color": "#0a6e35",
@@ -752,7 +753,7 @@
                 "--header-icon-bg": "#2E236C",
                 "--header-icon-hover-bg": "#433D8B",
 
-                "--card-body-bg-color": "#FFFFFF",
+                "--card-body-bg-color": "#b9abcf",
                 "--card-body-font-color": "#1A1A1A",
                 "--card-title-font-color": "#C8ACD6",
                 "--card-dec-font-color": "#333333",
@@ -827,7 +828,7 @@
                 "--header-icon-bg": "#276678",
                 "--header-icon-hover-bg": "#1c3a51",
 
-                "--card-body-bg-color": "#FFFFFF",
+                "--card-body-bg-color": "#ade5f0",
                 "--card-body-font-color": "#333333",
                 "--card-title-font-color": "#1B3B4B",
                 "--card-dec-font-color": "#4B5563",
