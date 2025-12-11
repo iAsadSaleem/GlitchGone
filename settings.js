@@ -5356,120 +5356,41 @@
             //        });
             //    }, 50);
             //}
-            // ==========================
-            // Simple Immediate Reorder
-            // ==========================
-            function applyImmediateSidebarReorder(newOrder) {
-                const sidebarNav = document.querySelector('.hl_nav-header nav[aria-label="header"]');
-                if (!sidebarNav) return;
 
-                // Ensure all menu items exist before reordering
-                const allExist = newOrder.every(metaKey =>
-                    sidebarNav.querySelector(`[meta="${metaKey}"]`)
-                );
-                if (!allExist) return;
-
-                // Move nodes in correct order
-                newOrder.forEach(metaKey => {
-                    const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
-                    if (el) sidebarNav.appendChild(el);
-                });
-            }
-            // ==========================
-            // Force sidebar refresh (subaccount)
-            // ==========================
-            function forceSubaccountSidebarRefresh(callback) {
-                const header = document.querySelector('.hl_nav-header');
-                if (!header) {
-                    if (callback) callback();
-                    return;
-                }
-
-                const parent = header.parentNode;
-                const next = header.nextSibling;
-
-                parent.removeChild(header);
-                parent.insertBefore(header, next);
-
-                // Run callback *after refresh is complete*
-                if (callback) setTimeout(callback, 30);
-            }
-            // ==========================
-            // Detect subaccount
-            // ==========================
             const isSubAccount = location.pathname.includes("/location/");
+            let allowReorder = false;
 
-
-            // ==========================
-            // Drag & Drop
-            // ==========================
+            // ---------------- Drag & Drop ----------------
             Sortable.create(listContainer, {
                 animation: 150,
                 ghostClass: "tb-dragging",
                 handle: ".tb-drag-handle",
 
                 onEnd: () => {
+                    allowReorder = true; // enable once, only after drag
+
                     const rows = listContainer.querySelectorAll(".tb-menu-row");
                     const newOrder = [...rows].map(r => r.dataset.id);
 
-                    // Save order
+                    // Save
                     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                     saved.themeData ??= {};
                     saved.themeData[storageKey] = JSON.stringify(newOrder);
                     localStorage.setItem("userTheme", JSON.stringify(saved));
 
-                    // 🔥 Reorder sidebar immediately (no observers)
+                    // Apply live reorder
                     if (isSubAccount) {
-                        forceSubaccountSidebarRefresh(() => {
-                            applyImmediateSidebarReorder(newOrder);
-                        });
+                        setTimeout(() => {
+                            forceSubaccountSidebarRefresh();
+                            observeSubaccountSidebar(newOrder);
+                        }, 60);
                     } else {
-                        applyImmediateSidebarReorder(newOrder);
+                        updateSubaccountSidebarRuntime(newOrder);
                     }
 
                     applyMenuCustomizations();
                 }
             });
-
-            //const isSubAccount = location.pathname.includes("/location/");
-            //let allowReorder = false;
-
-            //// ---------------- Drag & Drop ----------------
-            //Sortable.create(listContainer, {
-            //    animation: 150,
-            //    ghostClass: "tb-dragging",
-            //    handle: ".tb-drag-handle",
-
-            //    onEnd: () => {
-            //        const rows = listContainer.querySelectorAll(".tb-menu-row");
-            //        const newOrder = [...rows].map(r => r.dataset.id);
-
-            //        // Save order
-            //        const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-            //        saved.themeData ??= {};
-            //        saved.themeData[storageKey] = JSON.stringify(newOrder);
-            //        localStorage.setItem("userTheme", JSON.stringify(saved));
-
-            //        // Enable reorder BEFORE doing anything
-            //        allowReorder = true;
-
-            //        // 🔥 Force immediate reorder every time
-            //        setTimeout(() => {
-            //            if (isSubAccount) {
-            //                forceSubaccountSidebarRefresh();
-            //                observeSubaccountSidebar(newOrder);
-
-            //                // 🔥 NEW: directly try applying order RIGHT NOW
-            //                updateSubaccountSidebarRuntime(newOrder);
-            //            } else {
-            //                updateSubaccountSidebarRuntime(newOrder);
-            //            }
-            //        }, 50);
-
-            //        applyMenuCustomizations();
-            //    }
-
-            //});
         };
 
         // 💡 Add Instruction Paragraph under Agency Level Menu Customization
