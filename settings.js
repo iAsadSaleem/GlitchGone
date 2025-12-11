@@ -2694,7 +2694,15 @@
 
         function applyForgetPasswordText(text) {
             // 1️⃣ Apply to CSS variable
-            document.body.style.setProperty("--forgetpassword-text", text);
+            // Trim whitespace
+            text = text.trim();
+
+            // 1️⃣ Wrap in quotes only if not already wrapped
+            let cssText = text;
+            if (!/^".*"$/.test(text)) { // regex checks if text starts and ends with "
+                cssText = `"${text}"`;
+            }
+            document.body.style.setProperty("--forgetpassword-text", cssText);
 
             // 2️⃣ Apply directly to the forget password link text
             const forgetLink = document.querySelector(".hl_login a[href*='forgot']");
@@ -2702,7 +2710,7 @@
             if (forgetLink) forgetLink.textContent = text;
 
             // 3️⃣ Save to localStorage
-            savedThemeObj.themeData["--forgetpassword-text"] = text;
+            savedThemeObj.themeData["--forgetpassword-text"] = cssText;
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
         }
 
