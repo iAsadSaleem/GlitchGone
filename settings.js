@@ -5234,7 +5234,7 @@
             wrapper.appendChild(listContainer);
 
             // ==========================
-            // Helper function (place at top or outside Sortable)
+            // Helper function
             // ==========================
             function forceSubaccountSidebarRefresh() {
                 const header = document.querySelector('.hl_nav-header');
@@ -5249,6 +5249,9 @@
 
             let sidebarObserver;
 
+            // ==========================
+            // Subaccount Sidebar Observer
+            // ==========================
             function observeSubaccountSidebar(newOrder) {
                 const wait = setInterval(() => {
                     const header = document.querySelector('.hl_nav-header');
@@ -5259,9 +5262,11 @@
                     if (sidebarObserver) sidebarObserver.disconnect();
 
                     sidebarObserver = new MutationObserver(() => {
-                        const sidebarNav = header.querySelector(
-                            'nav[aria-label="header"]'
-                        );
+
+                        // ❗ Prevent reorder when user just clicks a menu
+                        if (!allowReorder) return;
+
+                        const sidebarNav = header.querySelector('nav[aria-label="header"]');
                         if (!sidebarNav) return;
 
                         const allExist = newOrder.every(key =>
@@ -5270,6 +5275,7 @@
                         if (!allExist) return;
 
                         sidebarObserver.disconnect();
+                        allowReorder = false; // reset
 
                         newOrder.forEach(metaKey => {
                             const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
@@ -5277,78 +5283,56 @@
                         });
                     });
 
-                    sidebarObserver.observe(header, {
-                        childList: true,
-                        subtree: true
-                    });
+                    sidebarObserver.observe(header, { childList: true, subtree: true });
                 }, 50);
             }
 
+            // ==========================
+            // Main Account Runtime Reorder
+            // ==========================
             function updateSubaccountSidebarRuntime(newOrder) {
                 const sidebarNav = document.querySelector('.hl_nav-header nav[aria-label="header"]');
-                console.log('[Log] sidebarNav:', sidebarNav);
-
-                if (!sidebarNav) {
-                    console.warn('[Warning] Sidebar nav not found!');
-                    return;
-                }
+                if (!sidebarNav) return;
 
                 const observer = new MutationObserver(() => {
-                    console.log('[Observer] DOM mutation detected');
 
-                    // Log what meta keys currently exist in DOM
-                    const existingMeta = Array.from(sidebarNav.querySelectorAll('[meta]')).map(el => el.getAttribute('meta'));
-                    console.log('[Observer] Existing meta attributes:', existingMeta);
+                    // ❗ Skip when user clicks menu
+                    if (!allowReorder) return;
 
-                    // Check if all items from newOrder exist in DOM
-                    const allExist = newOrder.every(key => sidebarNav.querySelector(`[meta="${key}"]`));
-                    console.log('[Observer] allExist check:', allExist, '| newOrder:', newOrder);
-
+                    const allExist = newOrder.every(key =>
+                        sidebarNav.querySelector(`[meta="${key}"]`)
+                    );
                     if (!allExist) return;
 
                     observer.disconnect();
-                    console.log('[Observer] All elements found, reordering now');
+                    allowReorder = false; // reset
 
                     newOrder.forEach(metaKey => {
                         const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
-                        if (el) {
-                            sidebarNav.appendChild(el);
-                            console.log(`[Observer] Appended ${metaKey}`);
-                        } else {
-                            console.warn(`[Observer] Element with meta="${metaKey}" not found`);
-                        }
+                        if (el) sidebarNav.appendChild(el);
                     });
-
-                    console.log('[Observer] Subaccount sidebar reordered live:', newOrder);
                 });
 
                 observer.observe(sidebarNav, { childList: true, subtree: true });
 
-                // Immediate check in case items already exist
-                const existingMetaImmediate = Array.from(sidebarNav.querySelectorAll('[meta]')).map(el => el.getAttribute('meta'));
-                console.log('[Immediate] Existing meta attributes:', existingMetaImmediate);
+                // ==========================
+                // Immediate reorder (if DOM already loaded)
+                // ==========================
+                const allExistImmediate = newOrder.every(key =>
+                    sidebarNav.querySelector(`[meta="${key}"]`)
+                );
 
-                const allExistImmediate = newOrder.every(key => sidebarNav.querySelector(`[meta="${key}"]`));
-                console.log('[Immediate] allExist check:', allExistImmediate, '| newOrder:', newOrder);
-
-                if (allExistImmediate) {
+                // ❗ Prevent reorder when allowReorder = false
+                if (allowReorder && allExistImmediate) {
                     observer.disconnect();
-                    console.log('[Immediate] All elements exist, reordering now');
+                    allowReorder = false;
 
                     newOrder.forEach(metaKey => {
                         const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
-                        if (el) {
-                            sidebarNav.appendChild(el);
-                            console.log(`[Immediate] Appended ${metaKey}`);
-                        } else {
-                            console.warn(`[Immediate] Element with meta="${metaKey}" not found`);
-                        }
+                        if (el) sidebarNav.appendChild(el);
                     });
-
-                    console.log('[Immediate] Subaccount sidebar reordered live (immediate):', newOrder);
                 }
             }
-
 
             //function updateSubaccountSidebarRuntime(newOrder) {
             //    const wait = setInterval(() => {
@@ -5374,13 +5358,17 @@
             //}
 
             const isSubAccount = location.pathname.includes("/location/");
+            let allowReorder = false;
 
             // ---------------- Drag & Drop ----------------
             Sortable.create(listContainer, {
                 animation: 150,
                 ghostClass: "tb-dragging",
-                handle: ".tb-drag-handle", // ✅ Only drag when grabbing the handle
+                handle: ".tb-drag-handle",
+
                 onEnd: () => {
+                    allowReorder = true; // enable once, only after drag
+
                     const rows = listContainer.querySelectorAll(".tb-menu-row");
                     const newOrder = [...rows].map(r => r.dataset.id);
 
@@ -5390,8 +5378,8 @@
                     saved.themeData[storageKey] = JSON.stringify(newOrder);
                     localStorage.setItem("userTheme", JSON.stringify(saved));
 
+                    // Apply live reorder
                     if (isSubAccount) {
-                        // WAIT for Vue to finish rerendering before reordering
                         setTimeout(() => {
                             forceSubaccountSidebarRefresh();
                             observeSubaccountSidebar(newOrder);
@@ -5402,9 +5390,6 @@
 
                     applyMenuCustomizations();
                 }
-
-
-
             });
         };
 
