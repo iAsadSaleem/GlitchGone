@@ -5388,9 +5388,9 @@
 
                     if (isSubAccount) {
 
-                        // 👇 Add these two lines INSIDE the subaccount block
-                        enableLiveReorder(newOrder);
-                        applyImmediateReorder(newOrder);  // 🔥 Instant visual update
+                        //// 👇 Add these two lines INSIDE the subaccount block
+                        //enableLiveReorder(newOrder);
+                        //applyImmediateReorder(newOrder);  // 🔥 Instant visual update
 
                         setTimeout(() => {
                             forceSubaccountSidebarRefresh();
