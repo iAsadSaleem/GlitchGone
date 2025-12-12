@@ -5389,7 +5389,7 @@
                     if (isSubAccount) {
 
                         //// 👇 Add these two lines INSIDE the subaccount block
-                        //enableLiveReorder(newOrder);
+                        enableLiveReorder(newOrder);
                         //applyImmediateReorder(newOrder);  // 🔥 Instant visual update
 
                         setTimeout(() => {
