@@ -5392,18 +5392,18 @@
                         //enableLiveReorder(newOrder);
                         ////applyImmediateReorder(newOrder);  // 🔥 Instant visual update
 
-                        //setTimeout(() => {
-                        //    forceSubaccountSidebarRefresh();
-                        //    observeSubaccountSidebar(newOrder);
-                        //}, 60);
-                        const sidebarNav = document.querySelector('.hl_nav-header nav[aria-label="header"]');
-                        if (sidebarNav) {
-                            // Reorder DOM elements instantly
-                            newOrder.forEach(metaKey => {
-                                const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
-                                if (el) sidebarNav.appendChild(el);
-                            });
-                        }
+                        setTimeout(() => {
+                            observeSubaccountSidebar(newOrder);
+                            forceSubaccountSidebarRefresh();
+                        }, 60);
+                        //const sidebarNav = document.querySelector('.hl_nav-header nav[aria-label="header"]');
+                        //if (sidebarNav) {
+                        //    // Reorder DOM elements instantly
+                        //    newOrder.forEach(metaKey => {
+                        //        const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
+                        //        if (el) sidebarNav.appendChild(el);
+                        //    });
+                        //}
 
                     } else {
                         updateSubaccountSidebarRuntime(newOrder);
