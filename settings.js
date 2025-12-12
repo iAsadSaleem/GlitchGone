@@ -5403,6 +5403,7 @@
                                 const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
                                 if (el) sidebarNav.appendChild(el);
                             });
+                        }
 
                     } else {
                         updateSubaccountSidebarRuntime(newOrder);
