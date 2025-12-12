@@ -5315,53 +5315,6 @@
                 }, 50);
             }
 
-            // ==========================
-            // Main Account Runtime Reorder
-            // ==========================
-            //function updateSubaccountSidebarRuntime(newOrder) {
-            //    const sidebarNav = document.querySelector('.hl_nav-header nav[aria-label="header"]');
-            //    if (!sidebarNav) return;
-
-            //    const observer = new MutationObserver(() => {
-
-            //        // ❗ Skip when user clicks menu
-            //        if (!allowReorder) return;
-
-            //        const allExist = newOrder.every(key =>
-            //            sidebarNav.querySelector(`[meta="${key}"]`)
-            //        );
-            //        if (!allExist) return;
-
-            //        observer.disconnect();
-            //        allowReorder = false; // reset
-
-            //        newOrder.forEach(metaKey => {
-            //            const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
-            //            if (el) sidebarNav.appendChild(el);
-            //        });
-            //    });
-
-            //    observer.observe(sidebarNav, { childList: true, subtree: true });
-
-            //    // ==========================
-            //    // Immediate reorder (if DOM already loaded)
-            //    // ==========================
-            //    const allExistImmediate = newOrder.every(key =>
-            //        sidebarNav.querySelector(`[meta="${key}"]`)
-            //    );
-
-            //    // ❗ Prevent reorder when allowReorder = false
-            //    if (allowReorder && allExistImmediate) {
-            //        observer.disconnect();
-            //        allowReorder = false;
-
-            //        newOrder.forEach(metaKey => {
-            //            const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
-            //            if (el) sidebarNav.appendChild(el);
-            //        });
-            //    }
-            //}
-
             function updateSubaccountSidebarRuntime(newOrder) {
                 const wait = setInterval(() => {
                     const sidebarNav = document.querySelector(
@@ -5387,6 +5340,33 @@
 
             const isSubAccount = location.pathname.includes("/location/");
             let allowReorder = false;
+            // ==========================
+            // 🔥 Immediate Live Reorder After Drag
+            // ==========================
+            function applyImmediateReorder(newOrder) {
+                const sidebarNav = document.querySelector(
+                    '.hl_nav-header nav[aria-label="header"]'
+                );
+                if (!sidebarNav) return;
+
+                newOrder.forEach(metaKey => {
+                    const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
+                    if (el) sidebarNav.appendChild(el);
+                });
+            }
+
+            function enableLiveReorder(newOrder) {
+                const sidebarNav = document.querySelector(
+                    '.hl_nav-header nav[aria-label="header"]'
+                );
+                if (!sidebarNav) return;
+
+                sidebarNav.querySelectorAll('[meta]').forEach(item => {
+                    item.addEventListener('dragend', () => {
+                        applyImmediateReorder(newOrder);
+                    });
+                });
+            }
 
             // ---------------- Drag & Drop ----------------
             Sortable.create(listContainer, {
@@ -5406,15 +5386,18 @@
                     saved.themeData[storageKey] = JSON.stringify(newOrder);
                     localStorage.setItem("userTheme", JSON.stringify(saved));
 
-                    // Apply live reorder
                     if (isSubAccount) {
+
+                        // 👇 Add these two lines INSIDE the subaccount block
+                        enableLiveReorder(newOrder);
+                        applyImmediateReorder(newOrder);  // 🔥 Instant visual update
+
                         setTimeout(() => {
                             forceSubaccountSidebarRefresh();
                             observeSubaccountSidebar(newOrder);
-
                         }, 60);
+
                     } else {
-                            reorderMenu(newOrder, "#subAccountSidebar");
                         updateSubaccountSidebarRuntime(newOrder);
                     }
 
