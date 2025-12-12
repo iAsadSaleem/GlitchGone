@@ -5411,6 +5411,8 @@
                         setTimeout(() => {
                             forceSubaccountSidebarRefresh();
                             observeSubaccountSidebar(newOrder);
+                            reorderMenu(newOrder, "#subAccountSidebar");
+
                         }, 60);
                     } else {
                         updateSubaccountSidebarRuntime(newOrder);
