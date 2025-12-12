@@ -5388,14 +5388,21 @@
 
                     if (isSubAccount) {
 
-                        //// 👇 Add these two lines INSIDE the subaccount block
-                        enableLiveReorder(newOrder);
-                        //applyImmediateReorder(newOrder);  // 🔥 Instant visual update
+                        ////// 👇 Add these two lines INSIDE the subaccount block
+                        //enableLiveReorder(newOrder);
+                        ////applyImmediateReorder(newOrder);  // 🔥 Instant visual update
 
-                        setTimeout(() => {
-                            forceSubaccountSidebarRefresh();
-                            observeSubaccountSidebar(newOrder);
-                        }, 60);
+                        //setTimeout(() => {
+                        //    forceSubaccountSidebarRefresh();
+                        //    observeSubaccountSidebar(newOrder);
+                        //}, 60);
+                        const sidebarNav = document.querySelector('.hl_nav-header nav[aria-label="header"]');
+                        if (sidebarNav) {
+                            // Reorder DOM elements instantly
+                            newOrder.forEach(metaKey => {
+                                const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
+                                if (el) sidebarNav.appendChild(el);
+                            });
 
                     } else {
                         updateSubaccountSidebarRuntime(newOrder);
