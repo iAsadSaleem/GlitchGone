@@ -5492,6 +5492,12 @@
     // === Subaccount Sidebar Menu Title Support ===
     // === Dynamic Sidebar Title Update ===
     function updateSidebarTitle(metaKey, newLabel) {
+        // 🚫 Prevent title change for this menu only
+        if (metaKey === "agency-accounts") {
+            console.warn("Skipping update for sb_agency-accounts");
+            return;
+        }
+
         const varName = `--${metaKey}-new-name`;
 
         // Inject CSS rule only once
@@ -5515,21 +5521,25 @@
             document.head.appendChild(style);
         }
 
-        // ✅ Apply the CSS variable live
+        // Apply CSS variable
         document.documentElement.style.setProperty(varName, `"${newLabel}"`);
 
-        // ✅ Save in flat key:value format
+        // Save
         const saved = JSON.parse(localStorage.getItem("--themebuilder_sidebarTitles") || "{}");
-        saved[varName] = newLabel; // <--- clean flat storage
+        saved[varName] = newLabel;
         localStorage.setItem("--themebuilder_sidebarTitles", JSON.stringify(saved));
     }
+
     function restoreSidebarTitles() {
         const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
         if (saved.themeData && saved.themeData["--sidebarTitles"]) {
             try {
                 const titles = JSON.parse(saved.themeData["--sidebarTitles"]);
                 Object.entries(titles).forEach(([varName, value]) => {
-                    // Reapply the variable directly
+
+                    // 🚫 Skip restore for sb_agency-accounts
+                    if (varName.includes("agency-accounts")) return;
+
                     document.documentElement.style.setProperty(varName, `"${value}"`);
                 });
             } catch (err) {
@@ -5539,6 +5549,7 @@
     }
 
     restoreSidebarTitles();
+
     function buildFeedbackForm(section) {
         // Wrapper
         const wrapper = document.createElement("div");
