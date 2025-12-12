@@ -5411,10 +5411,10 @@
                         setTimeout(() => {
                             forceSubaccountSidebarRefresh();
                             observeSubaccountSidebar(newOrder);
-                            reorderMenu(newOrder, "#subAccountSidebar");
 
                         }, 60);
                     } else {
+                            reorderMenu(newOrder, "#subAccountSidebar");
                         updateSubaccountSidebarRuntime(newOrder);
                     }
 
