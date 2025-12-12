@@ -5318,72 +5318,72 @@
             // ==========================
             // Main Account Runtime Reorder
             // ==========================
-            function updateSubaccountSidebarRuntime(newOrder) {
-                const sidebarNav = document.querySelector('.hl_nav-header nav[aria-label="header"]');
-                if (!sidebarNav) return;
-
-                const observer = new MutationObserver(() => {
-
-                    // ❗ Skip when user clicks menu
-                    if (!allowReorder) return;
-
-                    const allExist = newOrder.every(key =>
-                        sidebarNav.querySelector(`[meta="${key}"]`)
-                    );
-                    if (!allExist) return;
-
-                    observer.disconnect();
-                    allowReorder = false; // reset
-
-                    newOrder.forEach(metaKey => {
-                        const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
-                        if (el) sidebarNav.appendChild(el);
-                    });
-                });
-
-                observer.observe(sidebarNav, { childList: true, subtree: true });
-
-                // ==========================
-                // Immediate reorder (if DOM already loaded)
-                // ==========================
-                const allExistImmediate = newOrder.every(key =>
-                    sidebarNav.querySelector(`[meta="${key}"]`)
-                );
-
-                // ❗ Prevent reorder when allowReorder = false
-                if (allowReorder && allExistImmediate) {
-                    observer.disconnect();
-                    allowReorder = false;
-
-                    newOrder.forEach(metaKey => {
-                        const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
-                        if (el) sidebarNav.appendChild(el);
-                    });
-                }
-            }
-
             //function updateSubaccountSidebarRuntime(newOrder) {
-            //    const wait = setInterval(() => {
-            //        const sidebarNav = document.querySelector(
-            //            '.hl_nav-header nav[aria-label="header"]'
+            //    const sidebarNav = document.querySelector('.hl_nav-header nav[aria-label="header"]');
+            //    if (!sidebarNav) return;
+
+            //    const observer = new MutationObserver(() => {
+
+            //        // ❗ Skip when user clicks menu
+            //        if (!allowReorder) return;
+
+            //        const allExist = newOrder.every(key =>
+            //            sidebarNav.querySelector(`[meta="${key}"]`)
             //        );
-            //        console.log('here is sidebarnav',sidebarNav);
-            //        if (!sidebarNav) return;
-
-            //        const allExist = newOrder.every(key => sidebarNav.querySelector(`[meta="${key}"]`));
-            //        console.log('here is allExist', allExist);
-
             //        if (!allExist) return;
 
-            //        clearInterval(wait);
+            //        observer.disconnect();
+            //        allowReorder = false; // reset
 
-            //        // Reorder DOM elements
             //        newOrder.forEach(metaKey => {
             //            const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
-            //            if (el) sidebarNav.appendChild(el); // moves node in new order
+            //            if (el) sidebarNav.appendChild(el);
             //        });
-            //    }, 50);
+            //    });
+
+            //    observer.observe(sidebarNav, { childList: true, subtree: true });
+
+            //    // ==========================
+            //    // Immediate reorder (if DOM already loaded)
+            //    // ==========================
+            //    const allExistImmediate = newOrder.every(key =>
+            //        sidebarNav.querySelector(`[meta="${key}"]`)
+            //    );
+
+            //    // ❗ Prevent reorder when allowReorder = false
+            //    if (allowReorder && allExistImmediate) {
+            //        observer.disconnect();
+            //        allowReorder = false;
+
+            //        newOrder.forEach(metaKey => {
+            //            const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
+            //            if (el) sidebarNav.appendChild(el);
+            //        });
+            //    }
             //}
+
+            function updateSubaccountSidebarRuntime(newOrder) {
+                const wait = setInterval(() => {
+                    const sidebarNav = document.querySelector(
+                        '.hl_nav-header nav[aria-label="header"]'
+                    );
+                    console.log('here is sidebarnav',sidebarNav);
+                    if (!sidebarNav) return;
+
+                    const allExist = newOrder.every(key => sidebarNav.querySelector(`[meta="${key}"]`));
+                    console.log('here is allExist', allExist);
+
+                    if (!allExist) return;
+
+                    clearInterval(wait);
+
+                    // Reorder DOM elements
+                    newOrder.forEach(metaKey => {
+                        const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
+                        if (el) sidebarNav.appendChild(el); // moves node in new order
+                    });
+                }, 50);
+            }
 
             const isSubAccount = location.pathname.includes("/location/");
             let allowReorder = false;
