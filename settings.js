@@ -5834,25 +5834,62 @@
             drawer.id = "themeBuilderDrawer";
             drawer.className = "tb-drawer";
 
-         
-            // ===== Title with Close Button =====
+
+            // ===== Title, Logo & Close Button =====
             const drawerTitleWrapper = document.createElement('div');
             drawerTitleWrapper.className = "tb-drawer-title-wrapper";
 
-            //const title = document.createElement('div');
-            //title.textContent = "GlitchGone<br>Theme Builder";
-            //title.className = "tb-title";
+            // Left: Title
             const title = document.createElement('div');
             title.innerHTML = "Theme Builder";
             title.className = "tb-title";
 
+            // Right: Logo + Close Button wrapper
+            const rightWrapper = document.createElement('div');
+            rightWrapper.className = "tb-header-right";
+
+            // Logo
+            const logo = document.createElement('img');
+            logo.src = "https://msgsndr-private.storage.googleapis.com/companyPhotos/47b7e157-d197-4ce5-9a94-b697c258702a.png";
+            logo.className = "tb-company-logo";
+            logo.alt = "Company Logo";
+
+            // Close button (below logo)
             const closeBtn = document.createElement('button');
             closeBtn.innerHTML = '&times;';
             closeBtn.className = "tb-drawer-close";
 
+            // Assemble right section
+            rightWrapper.appendChild(logo);
+            rightWrapper.appendChild(closeBtn);
+
+            // Assemble header
             drawerTitleWrapper.appendChild(title);
-            drawerTitleWrapper.appendChild(closeBtn);
+            drawerTitleWrapper.appendChild(rightWrapper);
             drawer.appendChild(drawerTitleWrapper);
+
+            //old code start from here 12-16-2025
+            //// ===== Title with Close Button =====
+            //const drawerTitleWrapper = document.createElement('div');
+            //drawerTitleWrapper.className = "tb-drawer-title-wrapper";
+
+            ////const title = document.createElement('div');
+            ////title.textContent = "GlitchGone<br>Theme Builder";
+            ////title.className = "tb-title";
+            //const title = document.createElement('div');
+            //title.innerHTML = "Theme Builder";
+            //title.className = "tb-title";
+
+            //const closeBtn = document.createElement('button');
+            //closeBtn.innerHTML = '&times;';
+            //closeBtn.className = "tb-drawer-close";
+
+            //drawerTitleWrapper.appendChild(title);
+            //drawerTitleWrapper.appendChild(closeBtn);
+            //drawer.appendChild(drawerTitleWrapper);
+            //end here 12-16-2025
+
+
 
             //// ===== Theme Mode Toggle (Dark / Light) =====
             //const toggleWrapper = document.createElement('div');
