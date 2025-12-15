@@ -37,12 +37,12 @@
     /* Only style the close button */
     #themeBuilderDrawer .tb-drawer-close {
         position: absolute;
-        right: 7px;
-        top: 22%;
+        right: 0px;
+        top: 8%;
         transform: translateY(-50%);
         font-size: 28px;
         background: none;
-        cursor: var(--custom-pointer);
+        cursor: var(--custom-pointer) !important;
         color: #ffffff;
         border-radius: 21px;
         padding: 0px 5px 0px 5px;
@@ -1173,7 +1173,7 @@ body::-webkit-scrollbar-track {
     gap: 10px;
 }
 .tb-title {
-    top: -15px;
+    top: -2px;
     position: relative;
     font-weight: 700;
 }
@@ -1906,7 +1906,7 @@ body.dark-mode {
 /* Logo */
 .tb-company-logo {
     position: relative;
-    left: 61px !important;
+    left: 8px !important;
     height: 48px;
     max-width: 140px;
     object-fit: contain;
