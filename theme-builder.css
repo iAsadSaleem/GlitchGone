@@ -1885,22 +1885,15 @@ body.dark-mode {
         box-shadow: 0 0 4px rgba(74, 144, 226, 0.4);
     }
 /* Header Wrapper */
-.tb-drawer-title-wrapper {
+/*.tb-drawer-title-wrapper {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 14px 16px;
     background: #0f6a3b;
     border-radius: 12px 12px 0 0;
-}
+}*/
 
-/* Title */
-.tb-title {
-    font-size: 22px;
-    font-weight: 600;
-    color: #ffffff;
-    letter-spacing: 0.4px;
-}
 
 /* Right Section */
 .tb-header-right {
@@ -1912,8 +1905,10 @@ body.dark-mode {
 
 /* Logo */
 .tb-company-logo {
-    height: 42px;
-    max-width: 120px;
+    position: relative;
+    left: 61px !important;
+    height: 48px;
+    max-width: 140px;
     object-fit: contain;
     filter: drop-shadow(0 2px 6px rgba(0,0,0,0.25));
 }
