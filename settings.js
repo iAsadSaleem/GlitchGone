@@ -368,9 +368,8 @@
             // ---------------------------------------------
             // DEFAULT GRADIENT (existing logic)
             // ---------------------------------------------
-            gradient = `linear-gradient(to bottom, ${start} 0%, ${start} 20%, ${end} 100%)`;
+            gradient = `linear-gradient(90deg, ${start} 0%, ${end} 100%)`;
         }
-
         // Apply gradient
         document.body.style.setProperty("--login-background-active", gradient);
 
@@ -6042,7 +6041,7 @@
 
                         const companylogo = document.createElement("h4");
                         companylogo.className = "tb-header-controls";
-                        companylogo.textContent = "Company Log For Login Page";
+                        companylogo.textContent = "Company Logo For Login Page";
                         section.appendChild(companylogo);
                         section.appendChild(createLoginLogoInput("Logo URL", "--login-company-logo"));
 
@@ -6129,7 +6128,7 @@
                         section.appendChild(createLoginButtonTextInput());
                         const forgetpass = document.createElement("h4");
                         forgetpass.className = "tb-header-controls";
-                        forgetpass.textContent = "Forget Password & Policiy Text Settings";
+                        forgetpass.textContent = "Forget Password & Policy Text Settings";
                         section.appendChild(forgetpass);
 
 
