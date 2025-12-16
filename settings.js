@@ -6157,8 +6157,8 @@
                         "💡 For Flat Color: Choose the same color for Start & End";
 
                     section.appendChild(instruction);
-                    buildThemeColorsSection(section); //Main Colors
-                    buildHeaderControlsSection(section);
+                    //buildThemeColorsSection(section); //Main Colors
+                    //buildHeaderControlsSection(section);
                     buildHelpButtonControls(section);   // Profile Button Color Controls
                     buildProfileButtonControls(section);   // Profile Button Color Controls
                     addScrollbarSettings(section);   // Profile Button Color Controls
