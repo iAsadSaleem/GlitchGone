@@ -6124,7 +6124,7 @@
                         section.appendChild(createLoginButtonFontColorPicker());
                         // Append these after your other login button settings
                         section.appendChild(createLoginButtonHoverBgColorPicker());
-                        section.appendChild(createLoginButtonHoverTextColorPicker());
+                        //section.appendChild(createLoginButtonHoverTextColorPicker());
                         section.appendChild(createLoginButtonTextInput());
                         const forgetpass = document.createElement("h4");
                         forgetpass.className = "tb-header-controls";
