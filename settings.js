@@ -6356,7 +6356,10 @@
                                         console.warn("Invalid existing --sidebarTitles JSON, resetting.", e);
                                         existingSidebarTitles = {};
                                     }
+                                    console.log("existingSidebarTitles:", existingSidebarTitles);
+                                    console.log("localSidebarTitles:", localSidebarTitles);
                                     const mergedSidebarTitles = { ...existingSidebarTitles, ...localSidebarTitles };
+                                    console.log("mergedSidebarTitles:", mergedSidebarTitles);
                                     savedTheme.themeData["--sidebarTitles"] = JSON.stringify(mergedSidebarTitles);
 
                                     localStorage.setItem("userTheme", JSON.stringify(savedTheme));
