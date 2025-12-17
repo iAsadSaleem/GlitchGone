@@ -5515,6 +5515,11 @@
     // === Dynamic Sidebar Title Update ===
     function updateSidebarTitle(metaKey, newLabel) {
         // 🚫 Prevent title change for this menu only
+        console.warn("🔴 updateSidebarTitle fired", {
+            metaKey,
+            newLabel,
+            stack: new Error().stack
+        });
         if (metaKey === "agency-accounts") {
             console.warn("Skipping update for sb_agency-accounts");
             return;
