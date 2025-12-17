@@ -5155,10 +5155,14 @@
                 if (menuCustomizations[menu.id]) {
                     titleInput.value = menuCustomizations[menu.id].title || "";
                     iconInput.value = menuCustomizations[menu.id].icon || "";
+
                 } else {
-                    titleInput.value = menu.label;
+                    titleInput.value = ""; // user must explicitly type
                 }
-                //Old Code
+                //} else {
+                //    titleInput.value = menu.label;
+                //}
+                
                 const saveChange = () => {
                     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                     saved.themeData = saved.themeData || {};
@@ -5167,29 +5171,63 @@
                         ? JSON.parse(saved.themeData["--menuCustomizations"])
                         : {};
 
-                    let iconValue = iconInput.value.trim();
-                    let isUnicode = false;
+                    // =========================
+                    // TITLE (FIXED – opt-in only)
+                    // =========================
+                    const titleValue = titleInput.value.trim();
 
-                    // ✅ Detect if user pasted only Unicode like "f015"
-                    if (/^f[0-9a-fA-F]{3}$/i.test(iconValue)) {
-                        isUnicode = true;
+                    if (titleValue) {
+                        customizations[menu.id] = {
+                            ...customizations[menu.id],
+                            title: titleValue
+                        };
+                    } else if (customizations[menu.id]) {
+                        delete customizations[menu.id].title;
                     }
 
-                    customizations[menu.id] = {
-                        title: titleInput.value,
-                        icon: iconValue
-                    };
+                    // =========================
+                    // ICON (UNCHANGED LOGIC)
+                    // =========================
+                    let iconValue = iconInput.value.trim();
+                    let isUnicode = /^f[0-9a-fA-F]{3}$/i.test(iconValue);
+
+                    if (iconValue) {
+                        customizations[menu.id] = {
+                            ...customizations[menu.id],
+                            icon: iconValue
+                        };
+                    } else if (customizations[menu.id]) {
+                        delete customizations[menu.id].icon;
+                    }
+
+                    // 🧼 Remove empty objects
+                    if (
+                        customizations[menu.id] &&
+                        !customizations[menu.id].title &&
+                        !customizations[menu.id].icon
+                    ) {
+                        delete customizations[menu.id];
+                    }
 
                     saved.themeData["--menuCustomizations"] = JSON.stringify(customizations);
                     localStorage.setItem("userTheme", JSON.stringify(saved));
 
-                    // Apply title instantly via CSS variable
+                    // =========================
+                    // APPLY TITLE (ONLY IF USER TYPED)
+                    // =========================
                     const varName = `--${menu.id}-new-name`;
-                    document.documentElement.style.setProperty(varName, `"${titleInput.value || menu.label}"`);
+                    if (titleValue) {
+                        document.documentElement.style.setProperty(
+                            varName,
+                            `"${titleValue}"`
+                        );
+                    }
 
-                    // 🔄 Update icon live
+                    // =========================
+                    // ICON LIVE UPDATE (100% SAME)
+                    // =========================
                     const menuEl = document.getElementById(menu.id);
-                    if (menuEl) {
+                    if (menuEl && iconValue) {
                         let iconEl = menuEl.querySelector("i");
                         if (!iconEl) {
                             iconEl = document.createElement("i");
@@ -5197,10 +5235,8 @@
                         }
 
                         if (isUnicode) {
-                            // ✅ Update the CSS variable instead of injecting icon manually
                             updateIconVariable(menu.id, iconValue);
 
-                            // Optional: Add a fallback <i> for safety (not strictly required)
                             iconEl.className = "fa-solid";
                             iconEl.textContent = String.fromCharCode(parseInt(iconValue, 16));
                             iconEl.style.fontFamily = "Font Awesome 6 Free";
@@ -5208,21 +5244,22 @@
                             iconEl.style.marginRight = "0.5rem";
                             iconEl.style.fontSize = "16px";
                         } else {
-                            // ✅ User entered a normal class or URL
                             iconEl.textContent = "";
 
-                            // 🧠 Auto-correct class before assigning
                             let finalClass = iconValue.trim();
 
-                            // If accidentally Unicode, fallback
                             if (/^f[0-9a-f]{3}$/i.test(finalClass)) {
                                 iconEl.className = "fa-solid";
                                 iconEl.textContent = String.fromCharCode(parseInt(finalClass, 16));
                                 iconEl.style.fontFamily = "Font Awesome 6 Free";
                                 iconEl.style.fontWeight = "900";
                             } else {
-                                // Normalize normal icon class
-                                if (finalClass.startsWith("fa-") && !finalClass.includes("fa-solid") && !finalClass.includes("fa-regular") && !finalClass.includes("fa-brands")) {
+                                if (
+                                    finalClass.startsWith("fa-") &&
+                                    !finalClass.includes("fa-solid") &&
+                                    !finalClass.includes("fa-regular") &&
+                                    !finalClass.includes("fa-brands")
+                                ) {
                                     finalClass = `fa-solid ${finalClass}`;
                                 } else if (!finalClass.startsWith("fa-")) {
                                     finalClass = `fa-solid fa-${finalClass}`;
@@ -5233,22 +5270,7 @@
                                 iconEl.style.fontFamily = "Font Awesome 6 Free";
                                 iconEl.style.fontWeight = "900";
                             }
-
                         }
-                    }
-                    function waitForFontAwesome(cb) {
-                        const test = document.createElement("i");
-                        test.className = "fa-solid fa-house";
-                        document.body.appendChild(test);
-                        requestAnimationFrame(() => {
-                            const style = getComputedStyle(test).fontFamily;
-                            test.remove();
-                            if (style.includes("Font Awesome")) {
-                                cb();
-                            } else {
-                                setTimeout(() => waitForFontAwesome(cb), 100);
-                            }
-                        });
                     }
 
                     waitForFontAwesome(applyMenuCustomizations);
