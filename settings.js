@@ -4388,6 +4388,7 @@
             { id: "sb_ghl-swag", label: "GHL Swag" },
             { id: "sb_agency-ideas", label: "Agency Ideas" },
             { id: "sb_mobile-app-customiser", label: "Mobile App Customiser" },
+            { id: "sb_agency-account-snapshots", label: "Account Snapshots" },
             //Settings menu
             //{ id: "sb_agency-profile-settings", label: "My Profile" },
             //{ id: "sb_agency-company-settings", label: "Company" },
@@ -5033,6 +5034,7 @@
             { id: "sb_agency-saas-configurator", label: "Saas Configurator" },
             { id: "sb_agency-ideas", label: "Agency Ideas" },
             { id: "sb_mobile-app-customiser", label: "Mobile App Customiser" },
+            { id: "sb_agency-account-snapshots", label: "Account Snapshots" },
             //{ id: "sb_agency-accounts", label: "App Marketplace" },
 
             //Settings menu
