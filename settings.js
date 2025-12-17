@@ -5141,7 +5141,11 @@
                 titleInput.addEventListener("input", (e) => {
                     const newLabel = e.target.value.trim();
                     const rawKey = menu.id.startsWith("sb_") ? menu.id.replace(/^sb_/, "") : menu.id;
-                    updateSidebarTitle(rawKey, newLabel || menu.label);
+                    if (newLabel) {
+                        updateSidebarTitle(rawKey, newLabel);
+                    }
+                    //old code
+                    //updateSidebarTitle(rawKey, newLabel || menu.label);
                 });
                 const iconInput = document.createElement("input");
                 iconInput.type = "text";
@@ -5514,48 +5518,77 @@
     // === Subaccount Sidebar Menu Title Support ===
     // === Dynamic Sidebar Title Update ===
     function updateSidebarTitle(metaKey, newLabel) {
-        // 🚫 Prevent title change for this menu only
-        console.warn("🔴 updateSidebarTitle fired", {
-            metaKey,
-            newLabel,
-            stack: new Error().stack
-        });
-        if (metaKey === "agency-accounts") {
-            console.warn("Skipping update for sb_agency-accounts");
-            return;
-        }
+        if (!newLabel) return; // 🚫 no fallback, no empty updates
 
         const varName = `--${metaKey}-new-name`;
 
-        // Inject CSS rule only once
         if (!document.querySelector(`style[data-meta="${metaKey}"]`)) {
             const style = document.createElement("style");
             style.dataset.meta = metaKey;
             style.innerHTML = `
-        a[meta="${metaKey}"] .nav-title,
-        a#${metaKey} .nav-title {
-          visibility: hidden !important;
-          position: relative !important;
-        }
-        a[meta="${metaKey}"] .nav-title::after,
-        a#${metaKey} .nav-title::after {
-          content: var(${varName}, "${metaKey}");
-          visibility: visible !important;
-          position: absolute !important;
-          left: 0;
-        }
-      `;
+            a[meta="${metaKey}"] .nav-title,
+            a#${metaKey} .nav-title {
+              visibility: hidden !important;
+              position: relative !important;
+            }
+            a[meta="${metaKey}"] .nav-title::after,
+            a#${metaKey} .nav-title::after {
+              content: var(${varName});
+              visibility: visible !important;
+              position: absolute !important;
+              left: 0;
+            }
+        `;
             document.head.appendChild(style);
         }
 
-        // Apply CSS variable
         document.documentElement.style.setProperty(varName, `"${newLabel}"`);
-
-        // Save
-        const saved = JSON.parse(localStorage.getItem("--themebuilder_sidebarTitles") || "{}");
-        saved[varName] = newLabel;
-        localStorage.setItem("--themebuilder_sidebarTitles", JSON.stringify(saved));
     }
+
+    //Old Method Title Updateion issue
+    //function updateSidebarTitle(metaKey, newLabel) {
+    //    // 🚫 Prevent title change for this menu only
+    //    console.warn("🔴 updateSidebarTitle fired", {
+    //        metaKey,
+    //        newLabel,
+    //        stack: new Error().stack
+    //    });
+    //    if (metaKey === "agency-accounts") {
+    //        console.warn("Skipping update for sb_agency-accounts");
+    //        return;
+    //    }
+
+    //    const varName = `--${metaKey}-new-name`;
+
+    //    // Inject CSS rule only once
+    //    if (!document.querySelector(`style[data-meta="${metaKey}"]`)) {
+    //        const style = document.createElement("style");
+    //        style.dataset.meta = metaKey;
+    //        style.innerHTML = `
+    //    a[meta="${metaKey}"] .nav-title,
+    //    a#${metaKey} .nav-title {
+    //      visibility: hidden !important;
+    //      position: relative !important;
+    //    }
+    //    a[meta="${metaKey}"] .nav-title::after,
+    //    a#${metaKey} .nav-title::after {
+    //      content: var(${varName}, "${metaKey}");
+    //      visibility: visible !important;
+    //      position: absolute !important;
+    //      left: 0;
+    //    }
+    //  `;
+    //        document.head.appendChild(style);
+    //    }
+
+    //    // Apply CSS variable
+    //    document.documentElement.style.setProperty(varName, `"${newLabel}"`);
+
+    //    // Save
+    //    const saved = JSON.parse(localStorage.getItem("--themebuilder_sidebarTitles") || "{}");
+    //    saved[varName] = newLabel;
+    //    localStorage.setItem("--themebuilder_sidebarTitles", JSON.stringify(saved));
+    //}
 
     function restoreSidebarTitles() {
         const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
