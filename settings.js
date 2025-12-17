@@ -5604,7 +5604,7 @@
             applyLockedMenus(); // optional
             applyMenuCustomizations();
             initThemeBuilder(0);
-            applymenuReorder();
+            //applymenuReorder();
             applyMenuIconCustomizations();
         });
     }
