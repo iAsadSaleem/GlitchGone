@@ -5190,13 +5190,20 @@
                     // =========================
                     const titleValue = titleInput.value.trim();
 
-                    if (titleValue) {
+                    // Initialize localSidebarTitles if missing
+                    const localSidebarTitles = JSON.parse(localStorage.getItem("--themebuilder_sidebarTitles") || "{}");
+
+                    if (titleValue && titleValue !== menu.label) {
+                        // Only save if user actually changed the title
                         customizations[menu.id] = {
                             ...customizations[menu.id],
                             title: titleValue
                         };
-                    } else if (customizations[menu.id]) {
-                        delete customizations[menu.id].title;
+                        localSidebarTitles[`--${menu.id}-new-name`] = titleValue;
+                    } else {
+                        // Remove title if empty or unchanged
+                        if (customizations[menu.id]) delete customizations[menu.id].title;
+                        delete localSidebarTitles[`--${menu.id}-new-name`];
                     }
 
                     // =========================
@@ -5225,16 +5232,14 @@
 
                     saved.themeData["--menuCustomizations"] = JSON.stringify(customizations);
                     localStorage.setItem("userTheme", JSON.stringify(saved));
+                    localStorage.setItem("--themebuilder_sidebarTitles", JSON.stringify(localSidebarTitles));
 
                     // =========================
                     // APPLY TITLE (ONLY IF USER TYPED)
                     // =========================
                     const varName = `--${menu.id}-new-name`;
-                    if (titleValue) {
-                        document.documentElement.style.setProperty(
-                            varName,
-                            `"${titleValue}"`
-                        );
+                    if (titleValue && titleValue !== menu.label) {
+                        document.documentElement.style.setProperty(varName, `"${titleValue}"`);
                     }
 
                     // =========================
