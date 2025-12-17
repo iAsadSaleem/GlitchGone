@@ -6358,7 +6358,16 @@
                                     }
                                     console.log("existingSidebarTitles:", existingSidebarTitles);
                                     console.log("localSidebarTitles:", localSidebarTitles);
-                                    const mergedSidebarTitles = { ...existingSidebarTitles, ...localSidebarTitles };
+
+                                    /*const mergedSidebarTitles = { ...existingSidebarTitles, ...localSidebarTitles };*/
+                                    const mergedSidebarTitles = { ...existingSidebarTitles };
+
+                                    Object.keys(localSidebarTitles).forEach(key => {
+                                        const value = localSidebarTitles[key];
+                                        if (value && value.trim() !== "") {
+                                            mergedSidebarTitles[key] = value;
+                                        }
+                                    });
                                     console.log("mergedSidebarTitles:", mergedSidebarTitles);
                                     savedTheme.themeData["--sidebarTitles"] = JSON.stringify(mergedSidebarTitles);
 
@@ -6407,7 +6416,7 @@
                                         console.error("Error sending loader-css status:", error);
                                     }
 
-                                    location.reload();
+                                    //location.reload();
                                 } catch (error) {
                                     console.error(error);
                                     loaderOverlay.style.display = "none";
