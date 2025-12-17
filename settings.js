@@ -4906,7 +4906,17 @@
 
             // Update Title
             const titleSpan = menuEl.querySelector(".nav-title");
-            if (titleSpan) titleSpan.textContent = menuData.title || menuEl.dataset.defaultLabel || "";
+            console.log("Applying title", {
+                menuId,
+                title: menuData.title
+            });
+            //if (titleSpan) titleSpan.textContent = menuData.title || menuEl.dataset.defaultLabel || "";
+            if (titleSpan) if (menuData.title) {
+                const titleSpan = menuEl.querySelector(".nav-title");
+                if (titleSpan) {
+                    titleSpan.textContent = menuData.title;
+                }
+            }
             if (menuData.icon) {
                 // Remove only existing icon inside this menu
                 const existingImg = menuEl.querySelector("img");
