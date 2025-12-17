@@ -5191,20 +5191,18 @@
                     const titleValue = titleInput.value.trim();
 
                     // Initialize localSidebarTitles if missing
+                    // 1️⃣ Inside saveChange
                     const localSidebarTitles = JSON.parse(localStorage.getItem("--themebuilder_sidebarTitles") || "{}");
 
                     if (titleValue && titleValue !== menu.label) {
-                        // Only save if user actually changed the title
-                        customizations[menu.id] = {
-                            ...customizations[menu.id],
-                            title: titleValue
-                        };
+                        // Only save if user typed a new title
                         localSidebarTitles[`--${menu.id}-new-name`] = titleValue;
                     } else {
-                        // Remove title if empty or unchanged
-                        if (customizations[menu.id]) delete customizations[menu.id].title;
+                        // Remove it if empty or unchanged
                         delete localSidebarTitles[`--${menu.id}-new-name`];
                     }
+
+                    localStorage.setItem("--themebuilder_sidebarTitles", JSON.stringify(localSidebarTitles));
 
                     // =========================
                     // ICON (UNCHANGED LOGIC)
@@ -5232,7 +5230,6 @@
 
                     saved.themeData["--menuCustomizations"] = JSON.stringify(customizations);
                     localStorage.setItem("userTheme", JSON.stringify(saved));
-                    localStorage.setItem("--themebuilder_sidebarTitles", JSON.stringify(localSidebarTitles));
 
                     // =========================
                     // APPLY TITLE (ONLY IF USER TYPED)
@@ -6350,31 +6347,46 @@
 
                                     const hiddenMenus = JSON.parse(savedTheme.themeData["--hiddenMenus"] || "{}");
                                     savedTheme.themeData["--hiddenMenus"] = JSON.stringify(hiddenMenus);
-
+                                    // 2️⃣ Inside applyBtn
                                     const localSidebarTitles = JSON.parse(localStorage.getItem("--themebuilder_sidebarTitles") || "{}");
-                                    let existingSidebarTitles = {};
-                                    try {
-                                        if (savedTheme.themeData["--sidebarTitles"]) {
-                                            existingSidebarTitles = JSON.parse(savedTheme.themeData["--sidebarTitles"]);
-                                        }
-                                    } catch (e) {
-                                        console.warn("Invalid existing --sidebarTitles JSON, resetting.", e);
-                                        existingSidebarTitles = {};
-                                    }
-                                    console.log("existingSidebarTitles:", existingSidebarTitles);
-                                    console.log("localSidebarTitles:", localSidebarTitles);
+                                    const existingSidebarTitles = savedTheme.themeData["--sidebarTitles"]
+                                        ? JSON.parse(savedTheme.themeData["--sidebarTitles"])
+                                        : {};
 
-                                    /*const mergedSidebarTitles = { ...existingSidebarTitles, ...localSidebarTitles };*/
-                                    const mergedSidebarTitles = { ...existingSidebarTitles };
-
+                                    // Merge carefully: overwrite only keys that exist in localSidebarTitles
                                     Object.keys(localSidebarTitles).forEach(key => {
                                         const value = localSidebarTitles[key];
                                         if (value && value.trim() !== "") {
-                                            mergedSidebarTitles[key] = value;
+                                            existingSidebarTitles[key] = value;
                                         }
                                     });
-                                    console.log("mergedSidebarTitles:", mergedSidebarTitles);
-                                    savedTheme.themeData["--sidebarTitles"] = JSON.stringify(mergedSidebarTitles);
+
+                                    savedTheme.themeData["--sidebarTitles"] = JSON.stringify(existingSidebarTitles);
+
+                                    //const localSidebarTitles = JSON.parse(localStorage.getItem("--themebuilder_sidebarTitles") || "{}");
+                                    //let existingSidebarTitles = {};
+                                    //try {
+                                    //    if (savedTheme.themeData["--sidebarTitles"]) {
+                                    //        existingSidebarTitles = JSON.parse(savedTheme.themeData["--sidebarTitles"]);
+                                    //    }
+                                    //} catch (e) {
+                                    //    console.warn("Invalid existing --sidebarTitles JSON, resetting.", e);
+                                    //    existingSidebarTitles = {};
+                                    //}
+                                    //console.log("existingSidebarTitles:", existingSidebarTitles);
+                                    //console.log("localSidebarTitles:", localSidebarTitles);
+
+                                    ///*const mergedSidebarTitles = { ...existingSidebarTitles, ...localSidebarTitles };*/
+                                    //const mergedSidebarTitles = { ...existingSidebarTitles };
+
+                                    //Object.keys(localSidebarTitles).forEach(key => {
+                                    //    const value = localSidebarTitles[key];
+                                    //    if (value && value.trim() !== "") {
+                                    //        mergedSidebarTitles[key] = value;
+                                    //    }
+                                    //});
+                                    //console.log("mergedSidebarTitles:", mergedSidebarTitles);
+                                    //savedTheme.themeData["--sidebarTitles"] = JSON.stringify(mergedSidebarTitles);
 
                                     localStorage.setItem("userTheme", JSON.stringify(savedTheme));
 
