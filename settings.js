@@ -2543,14 +2543,14 @@
         // 🏷️ Title
         const title = document.createElement("h4");
         title.className = "tb-header-controls";
-        title.innerText = "Loader Color";
+        title.innerText = "Loader Colors";
         wrapper.appendChild(title);
 
         // ℹ️ Instruction
         const instruction = document.createElement("p");
         instruction.className = "tb-instruction-text";
         instruction.textContent =
-            "🎨 Select loader color. Opacity is auto-calculated for animation dots.";
+            "🎨 Set loader dot color and background gradient. Use same colors for flat background.";
         wrapper.appendChild(instruction);
 
         // 🧠 Load theme
@@ -2558,7 +2558,9 @@
         savedThemeObj.themeData = savedThemeObj.themeData || {};
         const themeData = savedThemeObj.themeData;
 
+        // =========================
         // Helpers
+        // =========================
         function hexToRgb(hex) {
             const r = parseInt(hex.substr(1, 2), 16);
             const g = parseInt(hex.substr(3, 2), 16);
@@ -2569,13 +2571,12 @@
         function rgbToHex(rgb) {
             const parts = rgb.split(",").map(v => parseInt(v.trim(), 10));
             if (parts.length !== 3 || parts.some(isNaN)) return "#ffffff";
-            return (
-                "#" +
-                parts.map(v => v.toString(16).padStart(2, "0")).join("")
-            );
+            return "#" + parts.map(v => v.toString(16).padStart(2, "0")).join("");
         }
 
-        // Load stored value
+        // =========================
+        // 🔵 Loader Dot Color
+        // =========================
         let storedRgb =
             themeData["--loader-color-rgb"] ||
             getComputedStyle(document.body)
@@ -2585,58 +2586,147 @@
 
         let initialHex = rgbToHex(storedRgb);
 
-        // === Color Picker Wrapper
-        const colorWrapper = document.createElement("div");
-        colorWrapper.className = "tb-color-picker-wrapper";
+        const dotWrapper = document.createElement("div");
+        dotWrapper.className = "tb-color-picker-wrapper";
 
-        const colorLabel = document.createElement("label");
-        colorLabel.className = "tb-color-picker-label";
-        colorLabel.textContent = "Loader Color";
+        const dotLabel = document.createElement("label");
+        dotLabel.className = "tb-color-picker-label";
+        dotLabel.textContent = "Loader Dot Color";
 
-        const colorInput = document.createElement("input");
-        colorInput.type = "color";
-        colorInput.className = "tb-color-input";
-        colorInput.value = initialHex;
+        const dotColorInput = document.createElement("input");
+        dotColorInput.type = "color";
+        dotColorInput.className = "tb-color-input";
+        dotColorInput.value = initialHex;
 
-        const colorCode = document.createElement("input");
-        colorCode.type = "text";
-        colorCode.className = "tb-color-code";
-        colorCode.maxLength = 7;
-        colorCode.value = initialHex;
+        const dotColorCode = document.createElement("input");
+        dotColorCode.type = "text";
+        dotColorCode.className = "tb-color-code";
+        dotColorCode.maxLength = 7;
+        dotColorCode.value = initialHex;
 
-        function applyLoaderColor(hex) {
+        function applyDotColor(hex) {
             if (!/^#[0-9A-F]{6}$/i.test(hex)) return;
-
             const rgb = hexToRgb(hex);
 
-            colorInput.value = hex;
-            colorCode.value = hex;
+            dotColorInput.value = hex;
+            dotColorCode.value = hex;
 
             document.body.style.setProperty("--loader-color-rgb", rgb);
             themeData["--loader-color-rgb"] = rgb;
-
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
         }
 
-        colorInput.addEventListener("input", () =>
-            applyLoaderColor(colorInput.value)
+        dotColorInput.addEventListener("input", () =>
+            applyDotColor(dotColorInput.value)
         );
 
-        colorCode.addEventListener("input", () => {
-            const val = colorCode.value.trim();
-            if (/^#[0-9A-F]{6}$/i.test(val)) applyLoaderColor(val);
+        dotColorCode.addEventListener("input", () => {
+            if (/^#[0-9A-F]{6}$/i.test(dotColorCode.value))
+                applyDotColor(dotColorCode.value);
         });
 
-        // Apply on load
-        applyLoaderColor(initialHex);
+        applyDotColor(initialHex);
 
-        colorWrapper.appendChild(colorLabel);
-        colorWrapper.appendChild(colorInput);
-        colorWrapper.appendChild(colorCode);
+        dotWrapper.appendChild(dotLabel);
+        dotWrapper.appendChild(dotColorInput);
+        dotWrapper.appendChild(dotColorCode);
+        wrapper.appendChild(dotWrapper);
 
-        wrapper.appendChild(colorWrapper);
+        // =========================
+        // 🌈 Loader Background Gradient
+        // =========================
+        const bgWrapper = document.createElement("div");
+        bgWrapper.className = "tb-color-picker-wrapper";
+
+        const bgLabel = document.createElement("label");
+        bgLabel.className = "tb-color-picker-label";
+        bgLabel.textContent = "Loader Background Gradient";
+
+        // Defaults
+        let startColor = "#000000";
+        let endColor = "#000000";
+
+        const storedBg = themeData["--loader-background-color"];
+        if (storedBg && storedBg.includes("gradient")) {
+            const matches = storedBg.match(/#([0-9A-Fa-f]{6})/g);
+            if (matches && matches.length >= 2) {
+                startColor = matches[0];
+                endColor = matches[1];
+            }
+        }
+
+        const startInput = document.createElement("input");
+        startInput.type = "color";
+        startInput.className = "tb-color-input";
+        startInput.value = startColor;
+
+        const startCode = document.createElement("input");
+        startCode.type = "text";
+        startCode.className = "tb-color-code";
+        startCode.value = startColor;
+        startCode.maxLength = 7;
+
+        const endInput = document.createElement("input");
+        endInput.type = "color";
+        endInput.className = "tb-color-input";
+        endInput.value = endColor;
+
+        const endCode = document.createElement("input");
+        endCode.type = "text";
+        endCode.className = "tb-color-code";
+        endCode.value = endColor;
+        endCode.maxLength = 7;
+
+        function applyBackgroundGradient() {
+            if (
+                !/^#[0-9A-F]{6}$/i.test(startCode.value) ||
+                !/^#[0-9A-F]{6}$/i.test(endCode.value)
+            )
+                return;
+
+            const gradient = `linear-gradient(135deg, ${startCode.value}, ${endCode.value})`;
+
+            document.body.style.setProperty("--loader-background-color", gradient);
+            themeData["--loader-background-color"] = gradient;
+            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+        }
+
+        startInput.addEventListener("input", () => {
+            startCode.value = startInput.value;
+            applyBackgroundGradient();
+        });
+
+        startCode.addEventListener("input", () => {
+            if (/^#[0-9A-F]{6}$/i.test(startCode.value)) {
+                startInput.value = startCode.value;
+                applyBackgroundGradient();
+            }
+        });
+
+        endInput.addEventListener("input", () => {
+            endCode.value = endInput.value;
+            applyBackgroundGradient();
+        });
+
+        endCode.addEventListener("input", () => {
+            if (/^#[0-9A-F]{6}$/i.test(endCode.value)) {
+                endInput.value = endCode.value;
+                applyBackgroundGradient();
+            }
+        });
+
+        applyBackgroundGradient();
+
+        bgWrapper.appendChild(bgLabel);
+        bgWrapper.appendChild(startInput);
+        bgWrapper.appendChild(startCode);
+        bgWrapper.appendChild(endInput);
+        bgWrapper.appendChild(endCode);
+
+        wrapper.appendChild(bgWrapper);
         container.appendChild(wrapper);
     }
+
     function createLoginHeadingControls() {
         const wrapper = document.createElement("div");
 
