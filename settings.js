@@ -2533,6 +2533,103 @@
         return wrapper;
     }
     // Create Heading Controls
+    function createLoaderColorControls() {
+        const wrapper = document.createElement("div");
+
+        // Shared savedThemeObj
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        savedThemeObj.themeData = savedThemeObj.themeData || {};
+        const themeData = savedThemeObj.themeData;
+
+        // === Loader Color Picker ===
+        const colorWrapper = document.createElement("div");
+        colorWrapper.className = "tb-color-picker-wrapper";
+
+        const colorLabel = document.createElement("label");
+        colorLabel.textContent = "Loader Color";
+        colorLabel.className = "tb-color-picker-label";
+
+        // ---- Helpers ----
+        function hexToRgb(hex) {
+            const r = parseInt(hex.substring(1, 3), 16);
+            const g = parseInt(hex.substring(3, 5), 16);
+            const b = parseInt(hex.substring(5, 7), 16);
+            return `${r}, ${g}, ${b}`;
+        }
+
+        function rgbToHex(rgb) {
+            const parts = rgb.split(",").map(v => parseInt(v.trim(), 10));
+            if (parts.length !== 3 || parts.some(isNaN)) return "#ffffff";
+            return (
+                "#" +
+                parts
+                    .map(v => v.toString(16).padStart(2, "0"))
+                    .join("")
+            );
+        }
+
+        // ---- Load stored value ----
+        let storedRgb =
+            themeData["--loader-color-rgb"] ||
+            getComputedStyle(document.body)
+                .getPropertyValue("--loader-color-rgb")
+                .trim() ||
+            "255, 255, 255";
+
+        let initialHex = rgbToHex(storedRgb);
+
+        // ---- Inputs ----
+        const colorInput = document.createElement("input");
+        colorInput.type = "color";
+        colorInput.className = "tb-color-input";
+        colorInput.value = initialHex;
+
+        const colorCode = document.createElement("input");
+        colorCode.type = "text";
+        colorCode.className = "tb-color-code";
+        colorCode.maxLength = 7;
+        colorCode.value = initialHex;
+
+        // ---- Apply ----
+        function applyLoaderColor(hex) {
+            if (!/^#[0-9A-F]{6}$/i.test(hex)) return;
+
+            const rgb = hexToRgb(hex);
+
+            colorInput.value = hex;
+            colorCode.value = hex;
+
+            document.body.style.setProperty("--loader-color-rgb", rgb);
+            themeData["--loader-color-rgb"] = rgb;
+
+            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+        }
+
+        // ---- Events ----
+        colorInput.addEventListener("input", () => {
+            applyLoaderColor(colorInput.value);
+        });
+
+        colorCode.addEventListener("input", () => {
+            const val = colorCode.value.trim();
+            if (/^#[0-9A-F]{6}$/i.test(val)) {
+                applyLoaderColor(val);
+            }
+        });
+
+        // Apply on load
+        applyLoaderColor(initialHex);
+
+        // ---- Append ----
+        colorWrapper.appendChild(colorLabel);
+        colorWrapper.appendChild(colorInput);
+        colorWrapper.appendChild(colorCode);
+
+        wrapper.appendChild(colorWrapper);
+
+        return wrapper;
+    }
+
     function createLoginHeadingControls() {
         const wrapper = document.createElement("div");
 
@@ -6227,8 +6324,10 @@
                     addLogoSettings(section) 
                     //buildFeedbackForm(section);
                     addCursorSelectorSettings(section);
+
                     addCursorPointerSelectorSettings(section);
                     addLogoUrlInputSetting(section);
+                    createLoaderColorControls(section);
                     addLoaderSelectorSettings(section);
                     //buildHeadingSettings(section) //Commented Will see next time
                     // Add more advanced options later
