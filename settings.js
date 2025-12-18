@@ -4885,21 +4885,6 @@
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
 
         const themeData = savedTheme.themeData || {};
-
-        // ✅ APPLY SIDEBAR TITLES (CSS VARIABLES)
-        const localSidebarTitles = JSON.parse(
-            localStorage.getItem("--themebuilder_sidebarTitles") || "{}"
-        );
-
-        Object.keys(localSidebarTitles).forEach(varName => {
-            const value = localSidebarTitles[varName];
-            if (value && value.trim()) {
-                document.documentElement.style.setProperty(
-                    varName,
-                    `"${value}"`
-                );
-            }
-        });
         const menuCustomizations = themeData["--menuCustomizations"]
             ? JSON.parse(themeData["--menuCustomizations"])
             : {};
@@ -4921,17 +4906,7 @@
 
             // Update Title
             const titleSpan = menuEl.querySelector(".nav-title");
-            console.log("Applying title", {
-                menuId,
-                title: menuData.title
-            });
-            //if (titleSpan) titleSpan.textContent = menuData.title || menuEl.dataset.defaultLabel || "";
-            //if (titleSpan) if (menuData.title) {
-            //    const titleSpan = menuEl.querySelector(".nav-title");
-            //    if (titleSpan) {
-            //        titleSpan.textContent = menuData.title;
-            //    }
-            //}
+            if (titleSpan) titleSpan.textContent = menuData.title || menuEl.dataset.defaultLabel || "";
             if (menuData.icon) {
                 // Remove only existing icon inside this menu
                 const existingImg = menuEl.querySelector("img");
@@ -5053,9 +5028,7 @@
 
         let agencyMenus = [
             { id: "sb_agency-dashboard", label: "Agency Dashboard" },
-            { id: "sb_agency-saas-configurator", label: "Saas Configurator" },
             { id: "sb_location-prospect", label: "Prospecting" },
-            { id: "sb_agency-account-snapshots", label: "Account Snapshots" },
             { id: "sb_agency-account-reselling", label: "Account Reselling" },
             { id: "sb_agency-marketplace", label: "Add-Ons" },
             { id: "sb_agency-affiliate-portal", label: "Affiliate Portal" },
@@ -5064,6 +5037,7 @@
             { id: "sb_agency-university", label: "University" },
             { id: "sb_saas-education", label: "SaaS Education" },
             { id: "sb_ghl-swag", label: "GHL Swag" },
+            { id: "sb_agency-saas-configurator", label: "Saas Configurator" },
             { id: "sb_agency-ideas", label: "Agency Ideas" },
             { id: "sb_mobile-app-customiser", label: "Mobile App Customiser" },
             //{ id: "sb_agency-accounts", label: "App Marketplace" },
@@ -5166,11 +5140,7 @@
                 titleInput.addEventListener("input", (e) => {
                     const newLabel = e.target.value.trim();
                     const rawKey = menu.id.startsWith("sb_") ? menu.id.replace(/^sb_/, "") : menu.id;
-                    if (newLabel) {
-                        updateSidebarTitle(rawKey, newLabel);
-                    }
-                    //old code
-                    //updateSidebarTitle(rawKey, newLabel || menu.label);
+                    updateSidebarTitle(rawKey, newLabel || menu.label);
                 });
                 const iconInput = document.createElement("input");
                 iconInput.type = "text";
@@ -5184,14 +5154,10 @@
                 if (menuCustomizations[menu.id]) {
                     titleInput.value = menuCustomizations[menu.id].title || "";
                     iconInput.value = menuCustomizations[menu.id].icon || "";
-
                 } else {
-                    titleInput.value = ""; // user must explicitly type
+                    titleInput.value = menu.label;
                 }
-                //} else {
-                //    titleInput.value = menu.label;
-                //}
-                
+                //Old Code
                 const saveChange = () => {
                     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                     saved.themeData = saved.themeData || {};
@@ -5200,68 +5166,29 @@
                         ? JSON.parse(saved.themeData["--menuCustomizations"])
                         : {};
 
-                    // =========================
-                    // TITLE (FIXED – opt-in only)
-                    // =========================
-                    const titleValue = titleInput.value.trim();
-
-                    // Initialize localSidebarTitles if missing
-                    // 1️⃣ Inside saveChange
-                    const localSidebarTitles = JSON.parse(localStorage.getItem("--themebuilder_sidebarTitles") || "{}");
-
-                    const existingTitle =
-                        localSidebarTitles[`--${menu.id}-new-name`] || menu.label;
-
-                    if (titleValue && titleValue !== existingTitle) {
-                        // User actually changed the title
-                        localSidebarTitles[`--${menu.id}-new-name`] = titleValue;
-                    } else if (!titleValue || titleValue === menu.label) {
-                        // Reset back to default
-                        delete localSidebarTitles[`--${menu.id}-new-name`];
-                    }
-
-                    localStorage.setItem("--themebuilder_sidebarTitles", JSON.stringify(localSidebarTitles));
-
-                    // =========================
-                    // ICON (UNCHANGED LOGIC)
-                    // =========================
                     let iconValue = iconInput.value.trim();
-                    let isUnicode = /^f[0-9a-fA-F]{3}$/i.test(iconValue);
+                    let isUnicode = false;
 
-                    if (iconValue) {
-                        customizations[menu.id] = {
-                            ...customizations[menu.id],
-                            icon: iconValue
-                        };
-                    } else if (customizations[menu.id]) {
-                        delete customizations[menu.id].icon;
+                    // ✅ Detect if user pasted only Unicode like "f015"
+                    if (/^f[0-9a-fA-F]{3}$/i.test(iconValue)) {
+                        isUnicode = true;
                     }
 
-                    // 🧼 Remove empty objects
-                    if (
-                        customizations[menu.id] &&
-                        !customizations[menu.id].title &&
-                        !customizations[menu.id].icon
-                    ) {
-                        delete customizations[menu.id];
-                    }
+                    customizations[menu.id] = {
+                        title: titleInput.value,
+                        icon: iconValue
+                    };
 
                     saved.themeData["--menuCustomizations"] = JSON.stringify(customizations);
                     localStorage.setItem("userTheme", JSON.stringify(saved));
 
-                    // =========================
-                    // APPLY TITLE (ONLY IF USER TYPED)
-                    // =========================
+                    // Apply title instantly via CSS variable
                     const varName = `--${menu.id}-new-name`;
-                    if (titleValue && titleValue !== menu.label) {
-                        document.documentElement.style.setProperty(varName, `"${titleValue}"`);
-                    }
+                    document.documentElement.style.setProperty(varName, `"${titleInput.value || menu.label}"`);
 
-                    // =========================
-                    // ICON LIVE UPDATE (100% SAME)
-                    // =========================
+                    // 🔄 Update icon live
                     const menuEl = document.getElementById(menu.id);
-                    if (menuEl && iconValue) {
+                    if (menuEl) {
                         let iconEl = menuEl.querySelector("i");
                         if (!iconEl) {
                             iconEl = document.createElement("i");
@@ -5269,8 +5196,10 @@
                         }
 
                         if (isUnicode) {
+                            // ✅ Update the CSS variable instead of injecting icon manually
                             updateIconVariable(menu.id, iconValue);
 
+                            // Optional: Add a fallback <i> for safety (not strictly required)
                             iconEl.className = "fa-solid";
                             iconEl.textContent = String.fromCharCode(parseInt(iconValue, 16));
                             iconEl.style.fontFamily = "Font Awesome 6 Free";
@@ -5278,22 +5207,21 @@
                             iconEl.style.marginRight = "0.5rem";
                             iconEl.style.fontSize = "16px";
                         } else {
+                            // ✅ User entered a normal class or URL
                             iconEl.textContent = "";
 
+                            // 🧠 Auto-correct class before assigning
                             let finalClass = iconValue.trim();
 
+                            // If accidentally Unicode, fallback
                             if (/^f[0-9a-f]{3}$/i.test(finalClass)) {
                                 iconEl.className = "fa-solid";
                                 iconEl.textContent = String.fromCharCode(parseInt(finalClass, 16));
                                 iconEl.style.fontFamily = "Font Awesome 6 Free";
                                 iconEl.style.fontWeight = "900";
                             } else {
-                                if (
-                                    finalClass.startsWith("fa-") &&
-                                    !finalClass.includes("fa-solid") &&
-                                    !finalClass.includes("fa-regular") &&
-                                    !finalClass.includes("fa-brands")
-                                ) {
+                                // Normalize normal icon class
+                                if (finalClass.startsWith("fa-") && !finalClass.includes("fa-solid") && !finalClass.includes("fa-regular") && !finalClass.includes("fa-brands")) {
                                     finalClass = `fa-solid ${finalClass}`;
                                 } else if (!finalClass.startsWith("fa-")) {
                                     finalClass = `fa-solid fa-${finalClass}`;
@@ -5304,7 +5232,22 @@
                                 iconEl.style.fontFamily = "Font Awesome 6 Free";
                                 iconEl.style.fontWeight = "900";
                             }
+
                         }
+                    }
+                    function waitForFontAwesome(cb) {
+                        const test = document.createElement("i");
+                        test.className = "fa-solid fa-house";
+                        document.body.appendChild(test);
+                        requestAnimationFrame(() => {
+                            const style = getComputedStyle(test).fontFamily;
+                            test.remove();
+                            if (style.includes("Font Awesome")) {
+                                cb();
+                            } else {
+                                setTimeout(() => waitForFontAwesome(cb), 100);
+                            }
+                        });
                     }
 
                     waitForFontAwesome(applyMenuCustomizations);
@@ -5383,7 +5326,7 @@
                     const sidebarNav = document.querySelector(
                         '.hl_nav-header nav[aria-label="header"]'
                     );
-                    console.log('here is sidebarnav',sidebarNav);
+                    console.log('here is sidebarnav', sidebarNav);
                     if (!sidebarNav) return;
 
                     const allExist = newOrder.every(key => sidebarNav.querySelector(`[meta="${key}"]`));
@@ -5481,15 +5424,15 @@
         const instruction = document.createElement("p");
         instruction.className = "tb-instruction-text";
         instruction.innerHTML = `
-              💡 <strong>How to Customize Your Menu:</strong><br><br>
-              1. To add a custom icon for any menu item, please visit the 
-              <a href="https://fontawesome.com/icons" target="_blank" style="color:#007bff; text-decoration:underline;">
-                Font Awesome Icons Library
-              </a>. Once there, select your preferred icon. On the <strong>top-right corner</strong> of the icon page, you’ll find a <strong>“Copy Code”</strong> button — click it and then <strong>paste the copied code into the relevant icon field</strong> here.<br><br>
-              2. You can <strong>drag and drop the menu items</strong> to change their order. This helps you organize your dashboard according to your preferences or workflow.<br><br>
-              3. To <strong>change the title of any menu item</strong>, simply edit the text in the <strong>relevant title field</strong>. This allows you to personalize your menu names for better clarity and easier navigation.<br><br>
-              ✨ <em>Tip:</em> Use these customization options to design a navigation layout that’s tailored to your needs — improving productivity and making your workspace more intuitive.
-            `;
+           💡 <strong>How to Customize Your Menu:</strong><br><br>
+           1. To add a custom icon for any menu item, please visit the 
+           <a href="https://fontawesome.com/icons" target="_blank" style="color:#007bff; text-decoration:underline;">
+             Font Awesome Icons Library
+           </a>. Once there, select your preferred icon. On the <strong>top-right corner</strong> of the icon page, you’ll find a <strong>“Copy Code”</strong> button — click it and then <strong>paste the copied code into the relevant icon field</strong> here.<br><br>
+           2. You can <strong>drag and drop the menu items</strong> to change their order. This helps you organize your dashboard according to your preferences or workflow.<br><br>
+           3. To <strong>change the title of any menu item</strong>, simply edit the text in the <strong>relevant title field</strong>. This allows you to personalize your menu names for better clarity and easier navigation.<br><br>
+           ✨ <em>Tip:</em> Use these customization options to design a navigation layout that’s tailored to your needs — improving productivity and making your workspace more intuitive.
+         `;
         wrapper.appendChild(instruction);
 
         // pass safeAgencyMenus / safeSubAccountMenus to buildSection
@@ -5545,36 +5488,47 @@
 
     }
 
+
     // === Subaccount Sidebar Menu Title Support ===
     // === Dynamic Sidebar Title Update ===
     function updateSidebarTitle(metaKey, newLabel) {
-        if (!newLabel) return; // 🚫 no fallback, no empty updates
+        // 🚫 Prevent title change for this menu only
+        if (metaKey === "agency-accounts") {
+            console.warn("Skipping update for sb_agency-accounts");
+            return;
+        }
 
         const varName = `--${metaKey}-new-name`;
 
+        // Inject CSS rule only once
         if (!document.querySelector(`style[data-meta="${metaKey}"]`)) {
             const style = document.createElement("style");
             style.dataset.meta = metaKey;
             style.innerHTML = `
-            a[meta="${metaKey}"] .nav-title,
-            a#${metaKey} .nav-title {
-              visibility: hidden !important;
-              position: relative !important;
-            }
-            a[meta="${metaKey}"] .nav-title::after,
-            a#${metaKey} .nav-title::after {
-              content: var(${varName});
-              visibility: visible !important;
-              position: absolute !important;
-              left: 0;
-            }
-        `;
+    a[meta="${metaKey}"] .nav-title,
+    a#${metaKey} .nav-title {
+      visibility: hidden !important;
+      position: relative !important;
+    }
+    a[meta="${metaKey}"] .nav-title::after,
+    a#${metaKey} .nav-title::after {
+      content: var(${varName}, "${metaKey}");
+      visibility: visible !important;
+      position: absolute !important;
+      left: 0;
+    }
+  `;
             document.head.appendChild(style);
         }
 
+        // Apply CSS variable
         document.documentElement.style.setProperty(varName, `"${newLabel}"`);
-    }
 
+        // Save
+        const saved = JSON.parse(localStorage.getItem("--themebuilder_sidebarTitles") || "{}");
+        saved[varName] = newLabel;
+        localStorage.setItem("--themebuilder_sidebarTitles", JSON.stringify(saved));
+    }
     //Old Method Title Updateion issue
     //function updateSidebarTitle(metaKey, newLabel) {
     //    // 🚫 Prevent title change for this menu only
@@ -6341,7 +6295,7 @@
                                     const selectedtheme = localStorage.getItem("themebuilder_selectedTheme");
 
                                     savedTheme.themeData = savedTheme.themeData || {};
-                                    
+
 
                                     Object.keys(themeData).forEach(key => {
                                         if (key !== "--lockedMenus" && key !== "--hiddenMenus") {
@@ -6365,46 +6319,19 @@
 
                                     const hiddenMenus = JSON.parse(savedTheme.themeData["--hiddenMenus"] || "{}");
                                     savedTheme.themeData["--hiddenMenus"] = JSON.stringify(hiddenMenus);
-                                    // 2️⃣ Inside applyBtn
+
                                     const localSidebarTitles = JSON.parse(localStorage.getItem("--themebuilder_sidebarTitles") || "{}");
-                                    const existingSidebarTitles = savedTheme.themeData["--sidebarTitles"]
-                                        ? JSON.parse(savedTheme.themeData["--sidebarTitles"])
-                                        : {};
-
-                                    // Merge carefully: overwrite only keys that exist in localSidebarTitles
-                                    Object.keys(localSidebarTitles).forEach(key => {
-                                        const value = localSidebarTitles[key];
-                                        if (value && value.trim() !== "") {
-                                            existingSidebarTitles[key] = value;
+                                    let existingSidebarTitles = {};
+                                    try {
+                                        if (savedTheme.themeData["--sidebarTitles"]) {
+                                            existingSidebarTitles = JSON.parse(savedTheme.themeData["--sidebarTitles"]);
                                         }
-                                    });
-
-                                    savedTheme.themeData["--sidebarTitles"] = JSON.stringify(existingSidebarTitles);
-
-                                    //const localSidebarTitles = JSON.parse(localStorage.getItem("--themebuilder_sidebarTitles") || "{}");
-                                    //let existingSidebarTitles = {};
-                                    //try {
-                                    //    if (savedTheme.themeData["--sidebarTitles"]) {
-                                    //        existingSidebarTitles = JSON.parse(savedTheme.themeData["--sidebarTitles"]);
-                                    //    }
-                                    //} catch (e) {
-                                    //    console.warn("Invalid existing --sidebarTitles JSON, resetting.", e);
-                                    //    existingSidebarTitles = {};
-                                    //}
-                                    //console.log("existingSidebarTitles:", existingSidebarTitles);
-                                    //console.log("localSidebarTitles:", localSidebarTitles);
-
-                                    ///*const mergedSidebarTitles = { ...existingSidebarTitles, ...localSidebarTitles };*/
-                                    //const mergedSidebarTitles = { ...existingSidebarTitles };
-
-                                    //Object.keys(localSidebarTitles).forEach(key => {
-                                    //    const value = localSidebarTitles[key];
-                                    //    if (value && value.trim() !== "") {
-                                    //        mergedSidebarTitles[key] = value;
-                                    //    }
-                                    //});
-                                    //console.log("mergedSidebarTitles:", mergedSidebarTitles);
-                                    //savedTheme.themeData["--sidebarTitles"] = JSON.stringify(mergedSidebarTitles);
+                                    } catch (e) {
+                                        console.warn("Invalid existing --sidebarTitles JSON, resetting.", e);
+                                        existingSidebarTitles = {};
+                                    }
+                                    const mergedSidebarTitles = { ...existingSidebarTitles, ...localSidebarTitles };
+                                    savedTheme.themeData["--sidebarTitles"] = JSON.stringify(mergedSidebarTitles);
 
                                     localStorage.setItem("userTheme", JSON.stringify(savedTheme));
 
@@ -6441,7 +6368,7 @@
                                                 isActive: loaderCSSData.isActive,
                                             };
                                             // Send to loader-css/status API
-                                             await fetch("https://theme-builder-delta.vercel.app/api/theme/loader-css/status", {
+                                            await fetch("https://theme-builder-delta.vercel.app/api/theme/loader-css/status", {
                                                 method: "PUT",
                                                 headers: { "Content-Type": "application/json" },
                                                 body: JSON.stringify(payload),
