@@ -307,7 +307,7 @@
         "--sidebar-menu-icon-color": "Choose SideBar Icon Color",
         "--sidebar-menu-icon-hover-color": "Choose SideBar Icon Hover Color",
         "--sidebar-menu-icon-active-color": "Choose SideBar Icon Active Color",
-        "--tw-text-opacity": "Choose tw Text Color",
+        "--tw-text-opacity-color": "Choose Menu Title Color",
 
         // Login page gradient
         "--login-background-gradient-start": "Login BG Gradient Start Color",
