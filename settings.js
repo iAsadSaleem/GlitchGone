@@ -6330,6 +6330,10 @@
                                         console.warn("Invalid existing --sidebarTitles JSON, resetting.", e);
                                         existingSidebarTitles = {};
                                     }
+                                    // 🚫 Exclude sb_agency-accounts ONLY if it already exists
+                                    if (existingSidebarTitles["sb_agency-accounts"]) {
+                                        delete localSidebarTitles["sb_agency-accounts"];
+                                    }
                                     const mergedSidebarTitles = { ...existingSidebarTitles, ...localSidebarTitles };
                                     savedTheme.themeData["--sidebarTitles"] = JSON.stringify(mergedSidebarTitles);
 
