@@ -4886,17 +4886,20 @@
 
         const themeData = savedTheme.themeData || {};
 
-        const varName = `--${menu.id}-new-name`;
+        // ✅ APPLY SIDEBAR TITLES (CSS VARIABLES)
+        const localSidebarTitles = JSON.parse(
+            localStorage.getItem("--themebuilder_sidebarTitles") || "{}"
+        );
 
-        if (localSidebarTitles[`--${menu.id}-new-name`]) {
-            document.documentElement.style.setProperty(
-                varName,
-                `"${localSidebarTitles[`--${menu.id}-new-name`]}"`
-            );
-        } else {
-            document.documentElement.style.removeProperty(varName);
-        }
-
+        Object.keys(localSidebarTitles).forEach(varName => {
+            const value = localSidebarTitles[varName];
+            if (value && value.trim()) {
+                document.documentElement.style.setProperty(
+                    varName,
+                    `"${value}"`
+                );
+            }
+        });
         const menuCustomizations = themeData["--menuCustomizations"]
             ? JSON.parse(themeData["--menuCustomizations"])
             : {};
