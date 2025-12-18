@@ -576,7 +576,7 @@
                 "--alert-color": "#E63946",
                 "--app-bg-color": "#F9F9F9",
                 "--Acent-color": "#FFFFFF",
-                "--tw-text-opacity": "#FFFFFF",
+                "--tw-text-opacity-color": "#FFFFFF",
 
                 "--sidebar-bg-color": "#1c1c1c",          /* Flat black sidebar background */
                 "--sidebar-menu-bg": "#1c1c1c",
@@ -731,7 +731,7 @@
                 "--alert-color": "#E63946",
                 "--app-bg-color": "#F6F2FA",
                 "--Acent-color": "#FFFFFF",
-                "--tw-text-opacity":"#FFFFFF",
+                "--tw-text-opacity-color": "#FFFFFF",
 
                 "--sidebar-bg-color": "#17153B",
                 "--sidebar-menu-bg": "#2E236C",
@@ -811,7 +811,7 @@
                 "--alert-color": "#E63946",
                 "--app-bg-color": "#F6F5F5",
                 "--Acent-color": "#FFFFFF",
-                "--tw-text-opacity": "#FFFFFF",
+                "--tw-text-opacity-color": "#FFFFFF",
 
                 "--sidebar-bg-color": "#276678",
                 "--sidebar-menu-bg": "#1E4E5E",
@@ -885,7 +885,7 @@
                 "--alert-color": "#FF4B4B",
                 "--app-bg-color": "#1A1A1A",
                 "--Acent-color": "#D4AF37",
-                "--tw-text-opacity": "#FFFFFF",
+                "--tw-text-opacity-color": "#FFFFFF",
 
                 "--sidebar-bg-color": "#0E0E0E",
                 "--sidebar-menu-bg": "#1A1A1A",
