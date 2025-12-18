@@ -4885,6 +4885,18 @@
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
 
         const themeData = savedTheme.themeData || {};
+
+        const varName = `--${menu.id}-new-name`;
+
+        if (localSidebarTitles[`--${menu.id}-new-name`]) {
+            document.documentElement.style.setProperty(
+                varName,
+                `"${localSidebarTitles[`--${menu.id}-new-name`]}"`
+            );
+        } else {
+            document.documentElement.style.removeProperty(varName);
+        }
+
         const menuCustomizations = themeData["--menuCustomizations"]
             ? JSON.parse(themeData["--menuCustomizations"])
             : {};
@@ -4911,12 +4923,12 @@
                 title: menuData.title
             });
             //if (titleSpan) titleSpan.textContent = menuData.title || menuEl.dataset.defaultLabel || "";
-            if (titleSpan) if (menuData.title) {
-                const titleSpan = menuEl.querySelector(".nav-title");
-                if (titleSpan) {
-                    titleSpan.textContent = menuData.title;
-                }
-            }
+            //if (titleSpan) if (menuData.title) {
+            //    const titleSpan = menuEl.querySelector(".nav-title");
+            //    if (titleSpan) {
+            //        titleSpan.textContent = menuData.title;
+            //    }
+            //}
             if (menuData.icon) {
                 // Remove only existing icon inside this menu
                 const existingImg = menuEl.querySelector("img");
@@ -5194,11 +5206,14 @@
                     // 1️⃣ Inside saveChange
                     const localSidebarTitles = JSON.parse(localStorage.getItem("--themebuilder_sidebarTitles") || "{}");
 
-                    if (titleValue && titleValue !== menu.label) {
-                        // Only save if user typed a new title
+                    const existingTitle =
+                        localSidebarTitles[`--${menu.id}-new-name`] || menu.label;
+
+                    if (titleValue && titleValue !== existingTitle) {
+                        // User actually changed the title
                         localSidebarTitles[`--${menu.id}-new-name`] = titleValue;
-                    } else {
-                        // Remove it if empty or unchanged
+                    } else if (!titleValue || titleValue === menu.label) {
+                        // Reset back to default
                         delete localSidebarTitles[`--${menu.id}-new-name`];
                     }
 
