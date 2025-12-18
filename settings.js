@@ -307,6 +307,7 @@
         "--sidebar-menu-icon-color": "Choose SideBar Icon Color",
         "--sidebar-menu-icon-hover-color": "Choose SideBar Icon Hover Color",
         "--sidebar-menu-icon-active-color": "Choose SideBar Icon Active Color",
+        "--tw-text-opacity": "Choose tw Text Color",
 
         // Login page gradient
         "--login-background-gradient-start": "Login BG Gradient Start Color",
@@ -859,7 +860,7 @@
                 "--login-link-text-color": "#FFFFFF",
                 "--login-button-bg-gradient": "linear-gradient(to right, #276678 0%, #1687A7 60%, #D3E0EA 100%)",
                 "--login-button-bg-color": "#276678",
-                "--login-card-bg-color": "#FFFFFF",
+                "--login-card-bg-color": "#276678",
                 "--login-headline-text-color": "#4CAF50",
                 "--login-headline-font-size": "25px",
 
@@ -1918,7 +1919,8 @@
             "--sidebar-text-active-color",
             "--sidebar-menu-icon-color",
             "--sidebar-menu-icon-hover-color",
-            "--sidebar-menu-icon-active-color"
+            "--sidebar-menu-icon-active-color",
+            "--tw-text-opacity"
         ];
 
         function updateSidebarGradient() {
