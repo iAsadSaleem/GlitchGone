@@ -575,6 +575,7 @@
                 "--alert-color": "#E63946",
                 "--app-bg-color": "#F9F9F9",
                 "--Acent-color": "#FFFFFF",
+                "--tw-text-opacity": "#FFFFFF",
 
                 "--sidebar-bg-color": "#1c1c1c",          /* Flat black sidebar background */
                 "--sidebar-menu-bg": "#1c1c1c",
@@ -724,11 +725,12 @@
                 "--second-color": "#433D8B",
                 "--themebuildermaincolor": "#2E236C",
                 "--themebuildermain-active-bg": "#17153B",
-                "--dark-color": "#0A0A0A",
+                "--dark-color": "#433D8B",
                 "--grey-color": "#E8E0EE",
                 "--alert-color": "#E63946",
                 "--app-bg-color": "#F6F2FA",
                 "--Acent-color": "#FFFFFF",
+                "--tw-text-opacity":"#FFFFFF",
 
                 "--sidebar-bg-color": "#17153B",
                 "--sidebar-menu-bg": "#2E236C",
@@ -808,6 +810,7 @@
                 "--alert-color": "#E63946",
                 "--app-bg-color": "#F6F5F5",
                 "--Acent-color": "#FFFFFF",
+                "--tw-text-opacity": "#FFFFFF",
 
                 "--sidebar-bg-color": "#276678",
                 "--sidebar-menu-bg": "#1E4E5E",
@@ -881,6 +884,7 @@
                 "--alert-color": "#FF4B4B",
                 "--app-bg-color": "#1A1A1A",
                 "--Acent-color": "#D4AF37",
+                "--tw-text-opacity": "#FFFFFF",
 
                 "--sidebar-bg-color": "#0E0E0E",
                 "--sidebar-menu-bg": "#1A1A1A",
@@ -2617,64 +2621,64 @@
         colorWrapper.appendChild(colorInput);
         colorWrapper.appendChild(colorCode);
 
-        // === Heading Text Input ===
-        const textWrapper = document.createElement("div");
-        textWrapper.className = "tb-color-picker-wrapper";
+        //// === Heading Text Input ===
+        //const textWrapper = document.createElement("div");
+        //textWrapper.className = "tb-color-picker-wrapper";
 
-        const textLabel = document.createElement("label");
-        textLabel.textContent = "Heading Text";
-        textLabel.className = "tb-color-picker-label";
+        //const textLabel = document.createElement("label");
+        //textLabel.textContent = "Heading Text";
+        //textLabel.className = "tb-color-picker-label";
 
-        let storedText =
-            themeData["--login-headline-text"] ||
-            "Sign into your account";
+        //let storedText =
+        //    themeData["--login-headline-text"] ||
+        //    "Sign into your account";
 
-        const textInput = document.createElement("input");
-        textInput.type = "text";
-        textInput.className = "tb-logo-input"; // reuse styling
-        textInput.value = storedText;
+        //const textInput = document.createElement("input");
+        //textInput.type = "text";
+        //textInput.className = "tb-logo-input"; // reuse styling
+        //textInput.value = storedText;
 
-        function applyText(text) {
-            // 1️⃣ Apply to CSS variable
-            // Trim whitespace
-            text = text.trim();
+        //function applyText(text) {
+        //    // 1️⃣ Apply to CSS variable
+        //    // Trim whitespace
+        //    text = text.trim();
 
-            // 1️⃣ Wrap in quotes only if not already wrapped
-            let cssText = text;
-            if (!/^".*"$/.test(text)) { // regex checks if text starts and ends with "
-                cssText = `"${text}"`;
-            }
+        //    // 1️⃣ Wrap in quotes only if not already wrapped
+        //    let cssText = text;
+        //    if (!/^".*"$/.test(text)) { // regex checks if text starts and ends with "
+        //        cssText = `"${text}"`;
+        //    }
 
-            // 1️⃣ Apply to CSS variable
-            document.body.style.setProperty("--login-headline-text", cssText);
+        //    // 1️⃣ Apply to CSS variable
+        //    document.body.style.setProperty("--login-headline-text", cssText);
 
-            // 2️⃣ Apply to actual heading DOM if it exists
-            const heading = document.querySelector(".hl_login .hl_login--body .login-card-heading h2");
-            if (heading) heading.textContent = text;
+        //    // 2️⃣ Apply to actual heading DOM if it exists
+        //    const heading = document.querySelector(".hl_login .hl_login--body .login-card-heading h2");
+        //    if (heading) heading.textContent = text;
 
-            // 3️⃣ Save in localStorage
-            savedThemeObj.themeData["--login-headline-text"] = cssText; // save with quotes
-            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
-        }
+        //    // 3️⃣ Save in localStorage
+        //    savedThemeObj.themeData["--login-headline-text"] = cssText; // save with quotes
+        //    localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+        //}
 
-        // Save live while typing
-        textInput.addEventListener("input", () => {
-            applyText(textInput.value.trim());
-        });
+        //// Save live while typing
+        //textInput.addEventListener("input", () => {
+        //    applyText(textInput.value.trim());
+        //});
 
-        // Apply immediately on load
-        applyText(storedText);
+        //// Apply immediately on load
+        //applyText(storedText);
 
-        textWrapper.appendChild(textLabel);
-        textWrapper.appendChild(textInput);
+        //textWrapper.appendChild(textLabel);
+        //textWrapper.appendChild(textInput);
 
-        textWrapper.appendChild(textLabel);
-        textWrapper.appendChild(textInput);
+        //textWrapper.appendChild(textLabel);
+        //textWrapper.appendChild(textInput);
 
         // Put them together
         wrapper.appendChild(sizeWrapper);
         wrapper.appendChild(colorWrapper);
-        wrapper.appendChild(textWrapper);
+        //wrapper.appendChild(textWrapper);
 
         return wrapper;
     }
@@ -5656,7 +5660,7 @@
             applyLockedMenus(); // optional
             applyMenuCustomizations();
             initThemeBuilder(0);
-            applymenuReorder();
+            //applymenuReorder();
             applyMenuIconCustomizations();
         });
     }
@@ -6111,7 +6115,7 @@
                         bgSectionWrapper.appendChild(header);
 
                         bgSectionWrapper.appendChild(createLoginGradientPicker());
-                        bgSectionWrapper.appendChild(createLoginBackgroundImageInput());
+                        //bgSectionWrapper.appendChild(createLoginBackgroundImageInput());
 
                         section.appendChild(bgSectionWrapper);
 
@@ -6179,7 +6183,7 @@
                         // Append these after your other login button settings
                         section.appendChild(createLoginButtonHoverBgColorPicker());
                         //section.appendChild(createLoginButtonHoverTextColorPicker());
-                        section.appendChild(createLoginButtonTextInput());
+                        //section.appendChild(createLoginButtonTextInput());
                         const forgetpass = document.createElement("h4");
                         forgetpass.className = "tb-header-controls";
                         forgetpass.textContent = "Forget Password & Policy Text Settings";
@@ -6189,7 +6193,7 @@
                         // Append these after your login button hover settings
                         section.appendChild(createLoginLinkTextColorPicker());
                         //section.appendChild(createLoginLinkTextSizeInput());
-                        section.appendChild(createForgetPasswordTextInput());
+                        //section.appendChild(createForgetPasswordTextInput());
 
                         const heading = document.createElement("h4");
                         heading.className = "tb-header-controls";
