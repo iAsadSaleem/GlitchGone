@@ -2550,10 +2550,10 @@
         const instruction = document.createElement("p");
         instruction.className = "tb-instruction-text";
         instruction.textContent =
-            "🎨 Set loader dot color and background gradient. Use same colors for flat background.";
+            "🎨 Set loader dot color and background gradient.";
         wrapper.appendChild(instruction);
 
-        // 🧠 Load theme
+        // 🧠 Theme
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         savedThemeObj.themeData = savedThemeObj.themeData || {};
         const themeData = savedThemeObj.themeData;
@@ -2562,16 +2562,19 @@
         // Helpers
         // =========================
         function hexToRgb(hex) {
-            const r = parseInt(hex.substr(1, 2), 16);
-            const g = parseInt(hex.substr(3, 2), 16);
-            const b = parseInt(hex.substr(5, 2), 16);
-            return `${r}, ${g}, ${b}`;
+            return [
+                parseInt(hex.substr(1, 2), 16),
+                parseInt(hex.substr(3, 2), 16),
+                parseInt(hex.substr(5, 2), 16)
+            ].join(", ");
         }
 
         function rgbToHex(rgb) {
             const parts = rgb.split(",").map(v => parseInt(v.trim(), 10));
-            if (parts.length !== 3 || parts.some(isNaN)) return "#ffffff";
-            return "#" + parts.map(v => v.toString(16).padStart(2, "0")).join("");
+            return (
+                "#" +
+                parts.map(v => v.toString(16).padStart(2, "0")).join("")
+            );
         }
 
         // =========================
@@ -2579,12 +2582,10 @@
         // =========================
         let storedRgb =
             themeData["--loader-color-rgb"] ||
-            getComputedStyle(document.body)
-                .getPropertyValue("--loader-color-rgb")
-                .trim() ||
+            getComputedStyle(document.body).getPropertyValue("--loader-color-rgb") ||
             "255, 255, 255";
 
-        let initialHex = rgbToHex(storedRgb);
+        let dotHex = rgbToHex(storedRgb);
 
         const dotWrapper = document.createElement("div");
         dotWrapper.className = "tb-color-picker-wrapper";
@@ -2593,67 +2594,61 @@
         dotLabel.className = "tb-color-picker-label";
         dotLabel.textContent = "Loader Dot Color";
 
-        const dotColorInput = document.createElement("input");
-        dotColorInput.type = "color";
-        dotColorInput.className = "tb-color-input";
-        dotColorInput.value = initialHex;
+        const dotInput = document.createElement("input");
+        dotInput.type = "color";
+        dotInput.className = "tb-color-input";
+        dotInput.value = dotHex;
 
-        const dotColorCode = document.createElement("input");
-        dotColorCode.type = "text";
-        dotColorCode.className = "tb-color-code";
-        dotColorCode.maxLength = 7;
-        dotColorCode.value = initialHex;
+        const dotCode = document.createElement("input");
+        dotCode.type = "text";
+        dotCode.className = "tb-color-code";
+        dotCode.value = dotHex;
 
-        function applyDotColor(hex) {
+        function applyDot(hex) {
             if (!/^#[0-9A-F]{6}$/i.test(hex)) return;
-            const rgb = hexToRgb(hex);
-
-            dotColorInput.value = hex;
-            dotColorCode.value = hex;
-
-            document.body.style.setProperty("--loader-color-rgb", rgb);
-            themeData["--loader-color-rgb"] = rgb;
+            document.body.style.setProperty("--loader-color-rgb", hexToRgb(hex));
+            themeData["--loader-color-rgb"] = hexToRgb(hex);
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            dotInput.value = dotCode.value = hex;
         }
 
-        dotColorInput.addEventListener("input", () =>
-            applyDotColor(dotColorInput.value)
-        );
+        dotInput.oninput = () => applyDot(dotInput.value);
+        dotCode.oninput = () => applyDot(dotCode.value);
 
-        dotColorCode.addEventListener("input", () => {
-            if (/^#[0-9A-F]{6}$/i.test(dotColorCode.value))
-                applyDotColor(dotColorCode.value);
-        });
+        applyDot(dotHex);
 
-        applyDotColor(initialHex);
-
-        dotWrapper.appendChild(dotLabel);
-        dotWrapper.appendChild(dotColorInput);
-        dotWrapper.appendChild(dotColorCode);
+        dotWrapper.append(dotLabel, dotInput, dotCode);
         wrapper.appendChild(dotWrapper);
 
         // =========================
         // 🌈 Loader Background Gradient
         // =========================
-        const bgWrapper = document.createElement("div");
-        bgWrapper.className = "tb-color-picker-wrapper";
-
-        const bgLabel = document.createElement("label");
-        bgLabel.className = "tb-color-picker-label";
-        bgLabel.textContent = "Loader Background Gradient";
-
-        // Defaults
         let startColor = "#000000";
         let endColor = "#000000";
 
-        const storedBg = themeData["--loader-background-color"];
-        if (storedBg && storedBg.includes("gradient")) {
-            const matches = storedBg.match(/#([0-9A-Fa-f]{6})/g);
-            if (matches && matches.length >= 2) {
+        const storedGradient = themeData["--loader-background-color"];
+        if (storedGradient?.includes("#")) {
+            const matches = storedGradient.match(/#[0-9A-F]{6}/gi);
+            if (matches?.length >= 2) {
                 startColor = matches[0];
                 endColor = matches[1];
             }
         }
+
+        function applyGradient() {
+            const gradient = `linear-gradient(135deg, ${startColor}, ${endColor})`;
+            document.body.style.setProperty("--loader-background-color", gradient);
+            themeData["--loader-background-color"] = gradient;
+            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+        }
+
+        // 🟢 START COLOR PICKER
+        const startWrapper = document.createElement("div");
+        startWrapper.className = "tb-color-picker-wrapper";
+
+        const startLabel = document.createElement("label");
+        startLabel.className = "tb-color-picker-label";
+        startLabel.textContent = "Loader Background Start Color";
 
         const startInput = document.createElement("input");
         startInput.type = "color";
@@ -2664,7 +2659,28 @@
         startCode.type = "text";
         startCode.className = "tb-color-code";
         startCode.value = startColor;
-        startCode.maxLength = 7;
+
+        startInput.oninput = () => {
+            startColor = startCode.value = startInput.value;
+            applyGradient();
+        };
+
+        startCode.oninput = () => {
+            if (/^#[0-9A-F]{6}$/i.test(startCode.value)) {
+                startColor = startInput.value = startCode.value;
+                applyGradient();
+            }
+        };
+
+        startWrapper.append(startLabel, startInput, startCode);
+
+        // 🔵 END COLOR PICKER
+        const endWrapper = document.createElement("div");
+        endWrapper.className = "tb-color-picker-wrapper";
+
+        const endLabel = document.createElement("label");
+        endLabel.className = "tb-color-picker-label";
+        endLabel.textContent = "Loader Background End Color";
 
         const endInput = document.createElement("input");
         endInput.type = "color";
@@ -2675,55 +2691,24 @@
         endCode.type = "text";
         endCode.className = "tb-color-code";
         endCode.value = endColor;
-        endCode.maxLength = 7;
 
-        function applyBackgroundGradient() {
-            if (
-                !/^#[0-9A-F]{6}$/i.test(startCode.value) ||
-                !/^#[0-9A-F]{6}$/i.test(endCode.value)
-            )
-                return;
+        endInput.oninput = () => {
+            endColor = endCode.value = endInput.value;
+            applyGradient();
+        };
 
-            const gradient = `linear-gradient(135deg, ${startCode.value}, ${endCode.value})`;
-
-            document.body.style.setProperty("--loader-background-color", gradient);
-            themeData["--loader-background-color"] = gradient;
-            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
-        }
-
-        startInput.addEventListener("input", () => {
-            startCode.value = startInput.value;
-            applyBackgroundGradient();
-        });
-
-        startCode.addEventListener("input", () => {
-            if (/^#[0-9A-F]{6}$/i.test(startCode.value)) {
-                startInput.value = startCode.value;
-                applyBackgroundGradient();
-            }
-        });
-
-        endInput.addEventListener("input", () => {
-            endCode.value = endInput.value;
-            applyBackgroundGradient();
-        });
-
-        endCode.addEventListener("input", () => {
+        endCode.oninput = () => {
             if (/^#[0-9A-F]{6}$/i.test(endCode.value)) {
-                endInput.value = endCode.value;
-                applyBackgroundGradient();
+                endColor = endInput.value = endCode.value;
+                applyGradient();
             }
-        });
+        };
 
-        applyBackgroundGradient();
+        endWrapper.append(endLabel, endInput, endCode);
 
-        bgWrapper.appendChild(bgLabel);
-        bgWrapper.appendChild(startInput);
-        bgWrapper.appendChild(startCode);
-        bgWrapper.appendChild(endInput);
-        bgWrapper.appendChild(endCode);
+        applyGradient();
 
-        wrapper.appendChild(bgWrapper);
+        wrapper.append(startWrapper, endWrapper);
         container.appendChild(wrapper);
     }
 
