@@ -2533,7 +2533,7 @@
         return wrapper;
     }
     // Create Heading Controls
-    function createLoaderColorControls() {
+    function createLoaderColorControls(container) {
         const wrapper = document.createElement("div");
 
         // Shared savedThemeObj
@@ -6327,7 +6327,7 @@
 
                     addCursorPointerSelectorSettings(section);
                     addLogoUrlInputSetting(section);
-                    section.appendChild(createLoaderColorControls());
+                    createLoaderColorControls(section);
                     addLoaderSelectorSettings(section);
                     //buildHeadingSettings(section) //Commented Will see next time
                     // Add more advanced options later
