@@ -6327,8 +6327,7 @@
 
                     addCursorPointerSelectorSettings(section);
                     addLogoUrlInputSetting(section);
-                    createLoaderColorControls(section);
-
+                    section.appendChild(createLoaderColorControls());
                     addLoaderSelectorSettings(section);
                     //buildHeadingSettings(section) //Commented Will see next time
                     // Add more advanced options later
