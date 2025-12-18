@@ -5040,6 +5040,8 @@
             { id: "sb_agency-saas-configurator", label: "Saas Configurator" },
             { id: "sb_agency-ideas", label: "Agency Ideas" },
             { id: "sb_mobile-app-customiser", label: "Mobile App Customiser" },
+            { id: "sb_agency-account-snapshots", label: "Account Snapshots" },
+
             //{ id: "sb_agency-accounts", label: "App Marketplace" },
 
             //Settings menu
