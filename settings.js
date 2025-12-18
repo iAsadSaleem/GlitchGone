@@ -1920,7 +1920,7 @@
             "--sidebar-menu-icon-color",
             "--sidebar-menu-icon-hover-color",
             "--sidebar-menu-icon-active-color",
-            "--tw-text-opacity"
+            "--tw-text-opacity-color"
         ];
 
         function updateSidebarGradient() {
