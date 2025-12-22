@@ -6320,11 +6320,23 @@
                         function updateBgSectionState() {
                             const selectedTheme = localStorage.getItem("themebuilder_selectedTheme");
 
-                            const isDefault = selectedTheme === "Default Theme" || "VelvetNight Theme";
-                            if (selectedTheme == "Default Theme") {
-                            bgSectionWrapper.classList.toggle("disabled-section", isDefault);
-                            } else if (selectedTheme == "Default Theme" || "VelvetNight Theme") {
-                                cardBgSectionWrapper.classList.toggle("disabled-section", isDefault);
+                            const isDefaultTheme = selectedTheme === "Default Theme";
+                            const isVelvetNightTheme = selectedTheme === "VelvetNight Theme";
+
+                            // Default Theme → disable BOTH
+                            if (isDefaultTheme) {
+                                bgSectionWrapper.classList.add("disabled-section");
+                                cardBgSectionWrapper.classList.add("disabled-section");
+                            }
+                            // VelvetNight Theme → disable ONLY card bg section
+                            else if (isVelvetNightTheme) {
+                                bgSectionWrapper.classList.remove("disabled-section");
+                                cardBgSectionWrapper.classList.add("disabled-section");
+                            }
+                            // Any other theme → enable BOTH
+                            else {
+                                bgSectionWrapper.classList.remove("disabled-section");
+                                cardBgSectionWrapper.classList.remove("disabled-section");
                             }
                         }
 
