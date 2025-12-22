@@ -860,7 +860,7 @@
                 "--login-link-text-color": "#FFFFFF",
                 "--login-button-bg-gradient": "linear-gradient(to right, #276678 0%, #1687A7 60%, #D3E0EA 100%)",
                 "--login-button-bg-color": "#276678",
-                "--login-card-bg-color": "#276678",
+                "--login-card-bg-gradient": "#276678",
                 "--login-headline-text-color": "#4CAF50",
                 "--login-headline-font-size": "25px",
 
@@ -4026,7 +4026,7 @@
         // 🏷️ Title
         const title = document.createElement("h4");
         title.className = "tb-header-controls";
-        title.innerText = "Custom Page Loader";
+        title.innerText = "Custom Loader Settings";
         wrapper.appendChild(title);
 
         // ℹ️ Instructions
@@ -6367,7 +6367,7 @@
                         //section.appendChild(createLoginButtonTextInput());
                         const forgetpass = document.createElement("h4");
                         forgetpass.className = "tb-header-controls";
-                        forgetpass.textContent = "Forget Password & Policy Text Settings";
+                        forgetpass.textContent = "Forget Password & Policy Text Color";
                         section.appendChild(forgetpass);
 
 
