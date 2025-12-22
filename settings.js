@@ -645,7 +645,8 @@
                 "--body-font": "Roboto",
                 "--login-company-logo": "url('https://msgsndr-private.storage.googleapis.com/companyPhotos/47b7e157-d197-4ce5-9a94-b697c258702a.png')",
                 "--login-background-image": "url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d')",
-                "--loader-background-color": "#1c1c1c"
+                "--loader-background-color": "#1c1c1c",
+                "--loader-color-rgb":"#ffffff"
             },
             //"BlueWave TopNav Theme": {
             //    "--primary-color": "#2A3E9B",
@@ -799,7 +800,8 @@
                 "--login-company-logo": "url('https://msgsndr-private.storage.googleapis.com/companyPhotos/47b7e157-d197-4ce5-9a94-b697c258702a.png')",
                 "--login-background-active": "linear-gradient(135deg, #d6d8ff 0%, #b7afff 100%)",
                 "--login-background-image": "url('https://theme-builder-delta.vercel.app/images/velvetbgimg.png')",
-                "--loader-background-color": "linear-gradient(to bottom, #17153B, #2E236C 60%, #433D8B 100%)"
+                "--loader-background-color": "linear-gradient(to bottom, #17153B, #2E236C 60%, #433D8B 100%)",
+                "--loader-color-rgb": "#ffffff"
 
             },
             "OceanMist Theme": {
@@ -874,7 +876,8 @@
                 "--lockedMenus": "{}",
                 "--body-font": "Roboto",
                 "--login-company-logo": "url('https://msgsndr-private.storage.googleapis.com/companyPhotos/47b7e157-d197-4ce5-9a94-b697c258702a.png')",
-                "--loader-background-color": "linear-gradient(to bottom, #1E4E5E, #276678 70%, #1687A7)"
+                "--loader-background-color": "linear-gradient(to bottom, #1E4E5E, #276678 70%, #1687A7)",
+                "--loader-color-rgb": "#ffffff"
             },
             "JetBlack Luxury Gold Theme": {
                 "--primary-color": "#545454",
@@ -969,7 +972,8 @@
                 "--login-background-active": "linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #b8860b 100%)",
                 "--login-headline-font-size": "32px",
                 "--login-headline-text-color":"#ffd700",
-                "--loader-background-color":"linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #b8860b 100%)"
+                "--loader-background-color": "linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #b8860b 100%)",
+                "--loader-color-rgb": "#ffffff"
             }
         };
     }
