@@ -6320,7 +6320,7 @@
                         function updateBgSectionState() {
                             const selectedTheme = localStorage.getItem("themebuilder_selectedTheme");
 
-                            const isDefault = selectedTheme === "Default Theme";
+                            const isDefault = selectedTheme === "Default Theme" || "VelvetNight Theme";
 
                             bgSectionWrapper.classList.toggle("disabled-section", isDefault);
                             cardBgSectionWrapper.classList.toggle("disabled-section", isDefault);
