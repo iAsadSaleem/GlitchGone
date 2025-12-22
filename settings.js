@@ -6321,9 +6321,11 @@
                             const selectedTheme = localStorage.getItem("themebuilder_selectedTheme");
 
                             const isDefault = selectedTheme === "Default Theme" || "VelvetNight Theme";
-
+                            if (selectedTheme == "Default Theme") {
                             bgSectionWrapper.classList.toggle("disabled-section", isDefault);
-                            cardBgSectionWrapper.classList.toggle("disabled-section", isDefault);
+                            } else if (selectedTheme == "Default Theme" || "VelvetNight Theme") {
+                                cardBgSectionWrapper.classList.toggle("disabled-section", isDefault);
+                            }
                         }
 
                         // Run on load
