@@ -354,23 +354,24 @@
         // ---------------------------------------------
         // ⭐ SPECIAL CASE: VelvetNight Theme gradient
         // ---------------------------------------------
-        if (selectedtheme === "VelvetNight Theme") {
-            const whiteMiddle = "rgba(255, 255, 255, 1)";
+        //if (selectedtheme === "VelvetNight Theme") {
+        //    const whiteMiddle = "rgba(255, 255, 255, 1)";
 
-            gradient = `linear-gradient(
-            130deg,
-            ${start} 40%,
-            ${whiteMiddle} 40%,
-            ${whiteMiddle} 60%,
-            ${end} 60%
-        )`;
-        }
-        else {
-            // ---------------------------------------------
-            // DEFAULT GRADIENT (existing logic)
-            // ---------------------------------------------
-            gradient = `linear-gradient(90deg, ${start} 0%, ${end} 100%)`;
-        }
+        //    gradient = `linear-gradient(
+        //    130deg,
+        //    ${start} 40%,
+        //    ${whiteMiddle} 40%,
+        //    ${whiteMiddle} 60%,
+        //    ${end} 60%
+        //)`;
+        //}
+        //else {
+        //    // ---------------------------------------------
+        //    // DEFAULT GRADIENT (existing logic)
+        //    // ---------------------------------------------
+        //    gradient = `linear-gradient(90deg, ${start} 0%, ${end} 100%)`;
+        //}
+        gradient = `linear-gradient(90deg, ${start} 0%, ${end} 100%)`;
         // Apply gradient
         document.body.style.setProperty("--login-background-active", gradient);
 
@@ -6292,7 +6293,7 @@
 
                         const header = document.createElement("h4");
                         header.className = "tb-header-controls";
-                        header.textContent = "Background Gradient Color & Image";
+                        header.textContent = "Background Gradient Color";
                         bgSectionWrapper.appendChild(header);
 
                         bgSectionWrapper.appendChild(createLoginGradientPicker());
