@@ -6342,7 +6342,7 @@
 
                             // Default Theme → disable BOTH
                             if (isDefaultTheme) {
-                                bgSectionWrapper.classList.add("disabled-section");
+                                //bgSectionWrapper.classList.add("disabled-section");
                                 cardBgSectionWrapper.classList.add("disabled-section");
                             }
                             // VelvetNight Theme → disable ONLY card bg section
