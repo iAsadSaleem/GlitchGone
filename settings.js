@@ -5173,7 +5173,7 @@
 
                     if (/^f[0-9a-f]{3}$/i.test(iconValue)) {
                         iconEl = document.createElement("i");
-                        iconEl.className = "fa-solid tb-sidebar-icon";
+                        iconEl.className = "fa-regular tb-sidebar-icon";
                         iconEl.innerHTML = `&#x${iconValue};`;
                         iconEl.style.fontFamily = "Font Awesome 6 Free";
                         iconEl.style.fontWeight = "900";
@@ -5184,9 +5184,9 @@
                             !iconValue.includes("fa-regular") &&
                             !iconValue.includes("fa-brands")
                         ) {
-                            iconValue = `fa-solid ${iconValue}`;
+                            iconValue = `fa-regular ${iconValue}`;
                         } else if (!iconValue.startsWith("fa-")) {
-                            iconValue = `fa-solid fa-${iconValue}`;
+                            iconValue = `fa-regular fa-${iconValue}`;
                         }
 
                         iconEl = document.createElement("i");
