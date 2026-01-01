@@ -5275,6 +5275,25 @@
             //{ id: "sb_agency-labs-settings", label: "Labs" },
             //{ id: "sb_agency-audit-logs-settings", label: "Audit Logs" }
         ];
+        const SUBACCOUNT_ORDER_MAP = {
+              "sb_launchpad": "launchpad",
+              "sb_dashboard": "dashboard",
+              "sb_conversations": "conversations",
+              "sb_opportunities": "opportunities",
+              "sb_calendars": "calendars",
+              "sb_contacts": "contacts",
+              "sb_payments": "payments",
+              "sb_reporting": "reporting",
+              "sb_email-marketing": "marketing",
+              "sb_automation": "automation",
+              "sb_sites": "sites",
+              "sb_app-media": "media-storage",
+              "sb_memberships": "memberships",
+              "sb_reputation": "reputation",
+              "sb_app-marketplace": "app-marketplace",
+              "sb_location-mobile-app": "mobile-app"
+            };
+
         // ✅ Debug: check if your menus arrays are defined correctly
         // Load saved theme 
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
@@ -5477,79 +5496,28 @@
             });
 
             wrapper.appendChild(listContainer);
-
-            // ==========================
-            // Helper function
-            // ==========================
-            function forceSubaccountSidebarRefresh() {
-                const header = document.querySelector('.hl_nav-header');
-                if (!header) return;
-
-                const parent = header.parentNode;
-                const next = header.nextSibling;
-
-                parent.removeChild(header);
-                parent.insertBefore(header, next);
-            }
-
-            let sidebarObserver;
-
+            
             // ==========================
             // Subaccount Sidebar Observer
             // ==========================
-           function observeSubaccountSidebar(newOrder) {
-                const wait = setInterval(() => {
-                    const sidebarNav = getMainSubaccountSidebarNav();
-                    if (!sidebarNav) return;
-            
-                    clearInterval(wait);
-            
-                    if (sidebarObserver) sidebarObserver.disconnect();
-            
-                    sidebarObserver = new MutationObserver(() => {
-                            if (!location.pathname.includes('/location/')) {
-                                sidebarObserver.disconnect();
-                                return;
-                            }
-                        
-                            if (!allowReorder) return;
-                        
-                            const allExist = newOrder.every(id =>
-                                sidebarNav.querySelector(`#${id}`)
-                            );
-                            if (!allExist) return;
-                        
-                            sidebarObserver.disconnect();
-                            allowReorder = false;
-                        
-                            newOrder.forEach(id => {
-                                const el = sidebarNav.querySelector(`#${id}`);
-                                if (el) sidebarNav.appendChild(el);
-                            });
-                        });
-            
-                    sidebarObserver.observe(sidebarNav, { childList: true });
-                }, 50);
-            }
-            function updateSubaccountSidebarRuntime(newOrder) {
-                const wait = setInterval(() => {
-                    const sidebarNav = getMainSubaccountSidebarNav();
-                    if (!sidebarNav) return;
-            
-                    const allExist = newOrder.every(id =>
-                        sidebarNav.querySelector(`#${id}`)
-                    );
-                    if (!allExist) return;
-            
-                    clearInterval(wait);
-            
-                    newOrder.forEach(id => {
-                        const el = sidebarNav.querySelector(`#${id}`);
-                        if (el) sidebarNav.appendChild(el);
-                    });
-                }, 50);
-            }
+            function applySubaccountMenuOrderCSS(order) {
+                order.forEach((menuId, index) => {
+                    const cssKey = SUBACCOUNT_ORDER_MAP[menuId];
+                    if (!cssKey) return;
 
+                    document.documentElement.style.setProperty(
+                    `--${cssKey}-order`,
+                    index
+                    );
+                });
+                }
+                function saveSubaccountOrder(order) {
+                const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                saved.themeData ??= {};
+                saved.themeData["--subMenuOrder"] = JSON.stringify(order);
+                localStorage.setItem("userTheme", JSON.stringify(saved));
+                }
+           
             function updateAgencyaccountSidebarRuntime(newOrder) {
                 const wait = setInterval(() => {
                     const sidebarNav = document.querySelector(
@@ -5578,40 +5546,17 @@
             // ==========================
             // 🔥 Immediate Live Reorder After Drag
             // ==========================
-             function getMainSubaccountSidebarNav() {
-                    const header = document.querySelector('.hl_nav-header');
-                    if (!header) return null;
-                
-                    // ⛔ settings sidebar
-                    if (header.closest('.hl_nav-header-without-footer')) return null;
-                
-                    // ⛔ settings route
-                    if (!location.pathname.includes('/location/')) return null;
-                
-                    return header.querySelector('nav[aria-label="header"]');
-                }
-            function applyImmediateReorder(newOrder) {
-                const sidebarNav = getMainSubaccountSidebarNav();
-                if (!sidebarNav) return;
-            
-                newOrder.forEach(id => {
-                    const el = sidebarNav.querySelector(`#${id}`);
-                    if (el) sidebarNav.appendChild(el);
-                });
+            function restoreSubaccountMenuOrder() {
+            if (!location.pathname.includes("/location/")) return;
+
+            const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+            const order = saved.themeData?.["--subMenuOrder"]
+                ? JSON.parse(saved.themeData["--subMenuOrder"])
+                : [];
+
+            if (order.length) {
+                applySubaccountMenuOrderCSS(order);
             }
-
-
-            function enableLiveReorder(newOrder) {
-                const sidebarNav = document.querySelector(
-                    '.hl_nav-header nav[aria-label="header"]'
-                );
-                if (!sidebarNav) return;
-
-                sidebarNav.querySelectorAll('[meta]').forEach(item => {
-                    item.addEventListener('dragend', () => {
-                        applyImmediateReorder(newOrder);
-                    });
-                });
             }
 
             // ---------------- Drag & Drop ----------------
@@ -5633,12 +5578,12 @@
                     localStorage.setItem("userTheme", JSON.stringify(saved));
 
                     if (isSubAccount) {
-                            applyImmediateReorder(newOrder); // 🔥 REQUIRED
-                        
-                            setTimeout(() => {
-                                observeSubaccountSidebar(newOrder);
-                                updateSubaccountSidebarRuntime(newOrder);
-                            }, 50);
+                          restoreSubaccountMenuOrder();
+
+                                saveSubaccountOrder(newOrder);
+                                applySubaccountMenuOrderCSS(newOrder); // 🔥 LIVE APPLY
+
+                                applyMenuCustomizations();
                         } else {
                         updateAgencyaccountSidebarRuntime(newOrder);
                     }
@@ -5712,15 +5657,14 @@
             //     const el = document.getElementById(id);
             //     if (el) container.appendChild(el);
             // });
-            order.forEach(id => {
-                       const el = document.getElementById(id);
-                       if (!el) return;
-                   
-                       // ⛔ do not move if already in correct container
-                       if (el.parentElement === container) return;
-                   
-                       container.appendChild(el);
-                   });
+           order.forEach(id => {
+            const el = document.getElementById(id);
+            if (!el) return;
+
+            if (el.parentElement !== container) {
+                container.appendChild(el);
+            }
+});
 
         }
 
