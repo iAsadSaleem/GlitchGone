@@ -5497,42 +5497,55 @@
             // ==========================
             // Subaccount Sidebar Observer
             // ==========================
-            function observeSubaccountSidebar(newOrder) {
+           function observeSubaccountSidebar(newOrder) {
                 const wait = setInterval(() => {
-                    const header = document.querySelector('.hl_nav-header');
-                    if (!header) return;
-
+                    const sidebarNav = getMainSubaccountSidebarNav();
+                    if (!sidebarNav) return;
+            
                     clearInterval(wait);
-
+            
                     if (sidebarObserver) sidebarObserver.disconnect();
-
+            
                     sidebarObserver = new MutationObserver(() => {
-
-                        // ❗ Prevent reorder when user just clicks a menu
                         if (!allowReorder) return;
-
-                        const sidebarNav = header.querySelector('nav[aria-label="header"]');
-                        if (!sidebarNav) return;
-
-                        const allExist = newOrder.every(key =>
-                            sidebarNav.querySelector(`[meta="${key}"]`)
+            
+                        const allExist = newOrder.every(id =>
+                            sidebarNav.querySelector(`#${id}`)
                         );
                         if (!allExist) return;
-
+            
                         sidebarObserver.disconnect();
-                        allowReorder = false; // reset
-
-                        newOrder.forEach(metaKey => {
-                            const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
+                        allowReorder = false;
+            
+                        newOrder.forEach(id => {
+                            const el = sidebarNav.querySelector(`#${id}`);
                             if (el) sidebarNav.appendChild(el);
                         });
                     });
-
-                    sidebarObserver.observe(header, { childList: true, subtree: true });
+            
+                    sidebarObserver.observe(sidebarNav, { childList: true });
+                }, 50);
+            }
+            function updateSubaccountSidebarRuntime(newOrder) {
+                const wait = setInterval(() => {
+                    const sidebarNav = getMainSubaccountSidebarNav();
+                    if (!sidebarNav) return;
+            
+                    const allExist = newOrder.every(id =>
+                        sidebarNav.querySelector(`#${id}`)
+                    );
+                    if (!allExist) return;
+            
+                    clearInterval(wait);
+            
+                    newOrder.forEach(id => {
+                        const el = sidebarNav.querySelector(`#${id}`);
+                        if (el) sidebarNav.appendChild(el);
+                    });
                 }, 50);
             }
 
-            function updateSubaccountSidebarRuntime(newOrder) {
+            function updateAgencyaccountSidebarRuntime(newOrder) {
                 const wait = setInterval(() => {
                     const sidebarNav = document.querySelector(
                         '.hl_nav-header nav[aria-label="header"]'
@@ -5560,17 +5573,25 @@
             // ==========================
             // 🔥 Immediate Live Reorder After Drag
             // ==========================
+             function getMainSubaccountSidebarNav() {
+                 const header = document.querySelector('.hl_nav-header');
+                 if (!header) return null;
+             
+                 // 🚫 Ignore settings sidebar completely
+                 if (header.closest('.hl_nav-header-without-footer')) return null;
+             
+                 return header.querySelector('nav[aria-label="header"]');
+             }
             function applyImmediateReorder(newOrder) {
-                const sidebarNav = document.querySelector(
-                    '.hl_nav-header nav[aria-label="header"]'
-                );
+                const sidebarNav = getMainSubaccountSidebarNav();
                 if (!sidebarNav) return;
-
-                newOrder.forEach(metaKey => {
-                    const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
+            
+                newOrder.forEach(id => {
+                    const el = sidebarNav.querySelector(`#${id}`);
                     if (el) sidebarNav.appendChild(el);
                 });
             }
+
 
             function enableLiveReorder(newOrder) {
                 const sidebarNav = document.querySelector(
@@ -5611,6 +5632,7 @@
 
                         setTimeout(() => {
                             observeSubaccountSidebar(newOrder);
+                            updateSubaccountSidebarRuntime(newOrder);
                             forceSubaccountSidebarRefresh();
                         }, 60);
 
@@ -5624,7 +5646,7 @@
                         //}
 
                     } else {
-                        updateSubaccountSidebarRuntime(newOrder);
+                        updateAgencyaccountSidebarRuntime(newOrder);
                     }
 
                     applyMenuCustomizations();
