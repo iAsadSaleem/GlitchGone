@@ -5131,19 +5131,34 @@
                     iconEl.alt = menuData.title || "icon";
                     iconEl.className = "md:mr-0 h-5 w-5 mr-2 lg:mr-2 xl:mr-2";
                 } else if (/^f[0-9a-f]+$/i.test(menuData.icon)) {
-                    // Unicode like "f015"
-                    iconEl = document.createElement("i");
-                    iconEl.className = "fa-solid tb-sidebar-icon";
-                    iconEl.innerHTML = `&#x${menuData.icon};`;
-                    iconEl.style.fontFamily = "Font Awesome 6 Free";
-                    iconEl.style.fontWeight = "900";
-                    iconEl.style.fontStyle = "normal";
-                    iconEl.style.fontVariant = "normal";
-                    iconEl.style.textRendering = "auto";
-                    iconEl.style.lineHeight = "1";
-                    iconEl.style.fontSize = "16px";
-                    iconEl.style.marginRight = "0.5rem";
-                } else {
+                        // Unicode like "f015", "f232", "f436"
+
+                        const iconValue = menuData.icon.toLowerCase();
+
+                        // Known Font Awesome Brands unicodes (extend as needed)
+                        const BRAND_UNICODE_RANGE = ["f09a", "f16d", "f232", "f436"];
+
+                        const isBrandIcon = BRAND_UNICODE_RANGE.includes(iconValue);
+
+                        iconEl = document.createElement("i");
+                        iconEl.className = "tb-sidebar-icon";
+                        iconEl.innerHTML = `&#x${iconValue};`;
+
+                        if (isBrandIcon) {
+                            // ✅ Font Awesome Brands
+                            iconEl.style.fontFamily = "Font Awesome 6 Brands";
+                            iconEl.style.fontWeight = "400";
+                        } else {
+                            // ✅ Font Awesome Solid
+                            iconEl.style.fontFamily = "Font Awesome 6 Free";
+                            iconEl.style.fontWeight = "900";
+                        }
+
+                        iconEl.style.fontSize = "16px";
+                        iconEl.style.marginRight = "0.5rem";
+                        iconEl.style.lineHeight = "1";
+                    }
+                    else {
                     let iconValue = menuData.icon.trim();
 
                     if (/^f[0-9a-f]{3}$/i.test(iconValue)) {
