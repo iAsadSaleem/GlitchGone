@@ -5123,7 +5123,7 @@
                 if (existingImg) existingImg.remove();
                 if (existingI) existingI.remove();
             // ✅ Clear old CSS mask icon
-                const cssVarName = `--sidebar-menu-icon-${menu.id.replace(/^sb_/, "")}`;
+                const cssVarName = `--sidebar-menu-icon-${menuId.replace(/^sb_/, "")}`;
                 document.documentElement.style.setProperty(cssVarName, "");
                 if (/^f[0-9a-f]+$/i.test(menuData.icon)) {
                     menuEl.classList.add("tb-has-fa-icon");
