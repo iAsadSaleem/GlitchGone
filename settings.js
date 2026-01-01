@@ -5608,12 +5608,11 @@
                         ////// 👇 Add these two lines INSIDE the subaccount block
                         //enableLiveReorder(newOrder);
                         ////applyImmediateReorder(newOrder);  // 🔥 Instant visual update
-                        updateSubaccountSidebarRuntime(newOrder);
 
-                        //setTimeout(() => {
-                        //    observeSubaccountSidebar(newOrder);
-                        //    forceSubaccountSidebarRefresh();
-                        //}, 60);
+                        setTimeout(() => {
+                            observeSubaccountSidebar(newOrder);
+                            forceSubaccountSidebarRefresh();
+                        }, 60);
 
                         //const sidebarNav = document.querySelector('.hl_nav-header nav[aria-label="header"]');
                         //if (sidebarNav) {
