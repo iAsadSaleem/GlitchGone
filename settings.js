@@ -5578,7 +5578,7 @@
                     localStorage.setItem("userTheme", JSON.stringify(saved));
 
                     if (isSubAccount) {
-                          restoreSubaccountMenuOrder();
+                        //   restoreSubaccountMenuOrder();
 
                                 saveSubaccountOrder(newOrder);
                                 applySubaccountMenuOrderCSS(newOrder); // 🔥 LIVE APPLY
@@ -5616,15 +5616,33 @@
         container.appendChild(wrapper);
         applyMenuCustomizations();
 
+        (function applySavedSubAccountOrderOnLoad() {
+            if (!location.pathname.includes("/location/")) return;
+
+            const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+            const order = saved.themeData?.["--subMenuOrder"]
+                ? JSON.parse(saved.themeData["--subMenuOrder"])
+                : [];
+
+            if (!order.length) return;
+
+            // Apply CSS order
+            order.forEach((menuId, index) => {
+                const cssKey = SUBACCOUNT_ORDER_MAP[menuId];
+                if (!cssKey) return;
+
+                document.documentElement.style.setProperty(
+                    `--${cssKey}-order`,
+                    index
+                );
+            });
+        })();
         // ✅ Restore order if sidebar exists
         const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
 
-        if (saved.themeData?.["--subMenuOrder"]) {
-            const order = JSON.parse(saved.themeData["--subMenuOrder"]);
-            reorderMenu(order, "#subAccountSidebar");
-        }
+        const isSubAccount = location.pathname.includes("/location/");
 
-        if (saved.themeData?.["--agencyMenuOrder"]) {
+        if (!isSubAccount && saved.themeData?.["--agencyMenuOrder"]) {
             const order = JSON.parse(saved.themeData["--agencyMenuOrder"]);
             reorderMenu(order, "#agencySidebar");
         }
