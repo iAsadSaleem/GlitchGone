@@ -5125,7 +5125,13 @@
             // ✅ Clear old CSS mask icon
                 const cssVarName = `--sidebar-menu-icon-${menu.id.replace(/^sb_/, "")}`;
                 document.documentElement.style.setProperty(cssVarName, "");
-
+                if (/^f[0-9a-f]+$/i.test(menuData.icon)) {
+                    menuEl.classList.add("tb-has-fa-icon");
+                    menuEl.classList.remove("tb-has-svg-icon"); // hide the old SVG mask
+                } else if (/^https?:\/\//.test(menuData.icon)) {
+                    menuEl.classList.remove("tb-has-fa-icon");
+                    menuEl.classList.add("tb-has-svg-icon");
+                }
                 menuEl.classList.remove('tb-has-svg-icon'); // optional, for clarity
                 let iconEl;
                 if (/^https?:\/\//.test(menuData.icon)) {
@@ -5194,6 +5200,7 @@
 
                 // Add new icon for this menu
                 menuEl.prepend(iconEl);
+              
                 // ✅ Toggle classes for CSS
                 if (/^f[0-9a-f]+$/i.test(menuData.icon)) {
                     menuEl.classList.add("tb-has-fa-icon");
