@@ -5633,7 +5633,7 @@
                         setTimeout(() => {
                             observeSubaccountSidebar(newOrder);
                             updateSubaccountSidebarRuntime(newOrder);
-                            forceSubaccountSidebarRefresh();
+                            // forceSubaccountSidebarRefresh();
                         }, 60);
 
                         //const sidebarNav = document.querySelector('.hl_nav-header nav[aria-label="header"]');
