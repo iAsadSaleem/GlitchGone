@@ -5180,7 +5180,7 @@
                     } else {
                         if (
                             iconValue.startsWith("fa-") &&
-                            !iconValue.includes("fa-solid") &&
+                            // !iconValue.includes("fa-solid") &&
                             !iconValue.includes("fa-regular") &&
                             !iconValue.includes("fa-brands")
                         ) {
