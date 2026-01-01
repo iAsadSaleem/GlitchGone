@@ -5122,7 +5122,11 @@
                 const existingI = menuEl.querySelector("i");
                 if (existingImg) existingImg.remove();
                 if (existingI) existingI.remove();
+            // ✅ Clear old CSS mask icon
+                const cssVarName = `--sidebar-menu-icon-${menu.id.replace(/^sb_/, "")}`;
+                document.documentElement.style.setProperty(cssVarName, "");
 
+                menuEl.classList.remove('tb-has-svg-icon'); // optional, for clarity
                 let iconEl;
                 if (/^https?:\/\//.test(menuData.icon)) {
                     // Image URL
@@ -5190,7 +5194,14 @@
 
                 // Add new icon for this menu
                 menuEl.prepend(iconEl);
-
+                // ✅ Toggle classes for CSS
+                if (/^f[0-9a-f]+$/i.test(menuData.icon)) {
+                    menuEl.classList.add("tb-has-fa-icon");
+                    menuEl.classList.remove("tb-has-svg-icon");
+                } else if (/^https?:\/\//.test(menuData.icon)) {
+                    menuEl.classList.remove("tb-has-fa-icon");
+                    menuEl.classList.add("tb-has-svg-icon");
+                }
                 // 🧠 If icon is added, shift title like default
                 const titleEl = menuEl.querySelector(".nav-title");
                 if (titleEl) {
@@ -5558,22 +5569,7 @@
 
             const isSubAccount = location.pathname.includes("/location/");
             let allowReorder = false;
-            // ==========================
-            // 🔥 Immediate Live Reorder After Drag
-            // ==========================
-            function restoreSubaccountMenuOrder() {
-            if (!location.pathname.includes("/location/")) return;
-
-            const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-            const order = saved.themeData?.["--subMenuOrder"]
-                ? JSON.parse(saved.themeData["--subMenuOrder"])
-                : [];
-
-            if (order.length) {
-                applySubaccountMenuOrderCSS(order);
-            }
-            }
-
+           
             // ---------------- Drag & Drop ----------------
             Sortable.create(listContainer, {
                 animation: 150,
