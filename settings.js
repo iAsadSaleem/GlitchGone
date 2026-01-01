@@ -650,7 +650,9 @@
                 "--loader-background-color": "#1c1c1c",
                 "--loader-color-rgb": "255, 255, 255",
                 "--go-back-text-color": "#ffffff",
-                "--go-back-color":"#000000"
+                "--go-back-color": "#000000",
+                "--login-background-active": "linear-gradient(90deg, #000000 0%, #000000 100%)",
+                "--login-headline-text-color":"#00c853"
             },
             //"BlueWave TopNav Theme": {
             //    "--primary-color": "#2A3E9B",
@@ -807,7 +809,9 @@
                 "--loader-background-color": "linear-gradient(to bottom, #17153B, #2E236C 60%, #433D8B 100%)",
                 "--loader-color-rgb": "255, 255, 255",
                 "--go-back-text-color": "#ffffff",
-                "--go-back-color": "#000000"
+                "--go-back-color": "#000000",
+                "--login-background-active": "linear-gradient(90deg, #ffe1e1 60%, #ffe6e6 100%)",
+                "--login-headline-text-color": "#00c853"
 
             },
             "OceanMist Theme": {
@@ -867,11 +871,12 @@
                 "--login-card-bg-gradient": "#ffffff00",
 
                 "--login-link-text-color": "#FFFFFF",
-                "--login-button-bg-gradient": "linear-gradient(to right, #276678 0%, #1687A7 60%, #D3E0EA 100%)",
+                "--login-button-bg-gradient": "linear-gradient(to right, #276678 0%, #1687A7 0%)",
                 "--login-button-bg-color": "#276678",
                 "--login-card-bg-gradient": "#276678",
-                "--login-headline-text-color": "#4CAF50",
+                "--login-headline-text-color": "#ffffff",
                 "--login-headline-font-size": "25px",
+                "--login-button-hover-bg-color":"#01475a",
 
                 "--header-main-bg-gradient": "linear-gradient(90deg, #FFFFFF 0%, #FFFFFF 50%, #FFFFFF 100%)",
                 "--header-icon-hover": "#1687A7",
