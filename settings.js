@@ -880,7 +880,7 @@
                 "--login-headline-text-color": "#ffffff",
                 "--login-headline-font-size": "25px",
                 "--login-button-hover-bg-color":"#01475a",
-
+                "--login-background-active": "linear-gradient(135deg, #b9c0caff 0%, #b9c0caff 100%)",
                 "--header-main-bg-gradient": "linear-gradient(90deg, #FFFFFF 0%, #FFFFFF 50%, #FFFFFF 100%)",
                 "--header-icon-hover": "#1687A7",
 
@@ -894,7 +894,8 @@
                 "--loader-color-rgb": "255, 255, 255",
                 "--go-back-text-color": "#ffffff",
                 "--go-back-color": "#000000",
-                "--login-button-text-color":"#ffffff"
+                "--login-button-text-color":"#ffffff",
+                
 
             },
             "JetBlack Luxury Gold Theme": {
