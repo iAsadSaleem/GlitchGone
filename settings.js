@@ -795,11 +795,11 @@
                 "--login-button-bg-color": "#5b4bff",
                 "--login-card-bg-color": "#17153B",
                 "--login-headline-font-size": "38px",
+                "--login-headline-text-color":"#632ef5",
                 "--login-button-hover-bg-color": "#443ba5",
 
                 "--header-main-bg-gradient": "linear-gradient(225deg, #433D8B 22%, #FFFFFF 22%, #F6F2FA 23%, #17153B 23%)",
                 "--header-icon-hover": "#C8ACD6",
-
                 "--scroll-width": "7px",
                 "--card-body-border-radius": "6px",
                 "--card-title-font-size": "15px",
