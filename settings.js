@@ -652,7 +652,8 @@
                 "--go-back-text-color": "#ffffff",
                 "--go-back-color": "#000000",
                 "--login-background-active": "linear-gradient(90deg, #000000 0%, #000000 100%)",
-                "--login-headline-text-color":"#00c853"
+                "--login-headline-text-color":"#00c853",
+                "--login-button-text-color":"#ffffff"
             },
             //"BlueWave TopNav Theme": {
             //    "--primary-color": "#2A3E9B",
@@ -812,7 +813,8 @@
                 "--go-back-text-color": "#ffffff",
                 "--go-back-color": "#000000",
                 "--login-background-active": "linear-gradient(90deg, #ffe1e1 60%, #ffe6e6 100%)",
-                "--login-headline-text-color": "#00c853"
+                "--login-headline-text-color": "#00c853",
+                "--login-button-text-color":"#ffffff"
 
             },
             "OceanMist Theme": {
@@ -891,7 +893,8 @@
                 "--loader-background-color": "linear-gradient(to bottom, #1E4E5E, #276678 70%, #1687A7)",
                 "--loader-color-rgb": "255, 255, 255",
                 "--go-back-text-color": "#ffffff",
-                "--go-back-color": "#000000"
+                "--go-back-color": "#000000",
+                "--login-button-text-color":"#ffffff"
 
             },
             "JetBlack Luxury Gold Theme": {
