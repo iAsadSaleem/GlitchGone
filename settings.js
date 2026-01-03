@@ -3572,12 +3572,31 @@
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
             document.body.style.setProperty(key, value);
         }
-
         function updateCardGradient() {
             const start = themeData["--card-header-gradient-start"] || "#344391";
             const end = themeData["--card-header-gradient-end"] || "#1f2c66";
-            const gradient = `linear-gradient(90deg, ${start} 0%, ${end} 100%)`;
 
+            const selectedTheme = localStorage.getItem("themebuilder_selectedTheme") || "";
+
+            let gradient;
+
+            if (selectedTheme === "VelvetNight Theme") {
+                // ✅ Velvet Night: white separator preserved
+                gradient = `
+                    linear-gradient(
+                        225deg,
+                        ${start} 22%,
+                        #FFFFFF 22%,
+                        #F6F2FA 23%,
+                        ${end} 23%
+                    )
+                `.trim();
+            } else {
+                // ✅ Default behavior
+                gradient = `linear-gradient(90deg, ${start} 0%, ${end} 100%)`;
+            }
+
+            // Apply to card header
             const styleId = "tb-card-gradient-style";
             let styleTag = document.getElementById(styleId);
             if (!styleTag) {
@@ -3585,10 +3604,33 @@
                 styleTag.id = styleId;
                 document.head.appendChild(styleTag);
             }
-            styleTag.innerHTML = `.h1-card-header { background-image: ${gradient} !important; }`;
 
+            styleTag.innerHTML = `
+                .h1-card-header {
+                    background-image: ${gradient} !important;
+                }
+            `;
+
+            // Persist
             saveVar("--card-header-bg-gradient", gradient);
         }
+
+        // function updateCardGradient() {
+        //     const start = themeData["--card-header-gradient-start"] || "#344391";
+        //     const end = themeData["--card-header-gradient-end"] || "#1f2c66";
+        //     const gradient = `linear-gradient(90deg, ${start} 0%, ${end} 100%)`;
+
+        //     const styleId = "tb-card-gradient-style";
+        //     let styleTag = document.getElementById(styleId);
+        //     if (!styleTag) {
+        //         styleTag = document.createElement("style");
+        //         styleTag.id = styleId;
+        //         document.head.appendChild(styleTag);
+        //     }
+        //     styleTag.innerHTML = `.h1-card-header { background-image: ${gradient} !important; }`;
+
+        //     saveVar("--card-header-bg-gradient", gradient);
+        // }
 
         // === Color Picker helper with synced input ===
         function makePicker(labelText, key, fallback, cssVar, isGradient = false, transparent20 = false) {
