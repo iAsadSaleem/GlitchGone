@@ -2999,15 +2999,23 @@
         // ✅ If themeData has a gradient string, extract start & end colors
         if (themeData["--header-main-bg-gradient"]) {
             const gradient = themeData["--header-main-bg-gradient"];
-            const match = gradient.match(/#([0-9A-F]{6})/gi);
-            if (match && match.length >= 2) {
-                themeData["--header-gradient-start"] = match[0];
-                themeData["--header-gradient-end"] = match[1];
-            } else if (match && match.length === 1) {
-                themeData["--header-gradient-start"] = match[0];
-                themeData["--header-gradient-end"] = match[0];
+            const colors = gradient.match(/#([0-9A-F]{6})/gi);
+
+            const selectedTheme = localStorage.getItem("themebuilder_selectedTheme") || "";
+
+            if (colors && colors.length >= 2) {
+                if (selectedTheme === "Velvet Night Theme") {
+                    // ✅ FIRST and LAST colors only
+                    themeData["--header-gradient-start"] = colors[0];
+                    themeData["--header-gradient-end"] = colors[colors.length - 1];
+                } else {
+                    // ✅ Normal themes
+                    themeData["--header-gradient-start"] = colors[0];
+                    themeData["--header-gradient-end"] = colors[1];
+                }
             }
         }
+
 
         const headerEl = document.querySelector(".hl_header");
 
