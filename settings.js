@@ -3042,7 +3042,7 @@
 
             let gradient;
 
-            if (selectedTheme === "Velvet Night Theme") {
+            if (selectedTheme === "VelvetNight Theme") {
                 // ✅ Special velvet gradient with white separator
                 gradient = `
                     linear-gradient(
