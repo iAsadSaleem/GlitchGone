@@ -3004,7 +3004,7 @@
             const selectedTheme = localStorage.getItem("themebuilder_selectedTheme") || "";
 
             if (colors && colors.length >= 2) {
-                if (selectedTheme === "Velvet Night Theme") {
+                if (selectedTheme === "VelvetNight Theme") {
                     // ✅ FIRST and LAST colors only
                     themeData["--header-gradient-start"] = colors[0];
                     themeData["--header-gradient-end"] = colors[colors.length - 1];
