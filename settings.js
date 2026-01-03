@@ -6304,11 +6304,21 @@
                         bgSectionWrapper.appendChild(header);
 
                         bgSectionWrapper.appendChild(createLoginGradientPicker());
-                        bgSectionWrapper.appendChild(createLoginBackgroundImageInput());
+                        // bgSectionWrapper.appendChild(createLoginBackgroundImageInput());
 
                         section.appendChild(bgSectionWrapper);
 
+                        const loginimageurl= document.createElement("div");
+                        loginimageurl.className = "bg-section-wrapper";
 
+                        const headerd = document.createElement("h4");
+                        headerd.className = "tb-header-controls";
+                        headerd.textContent = "Login Form Image Settings";
+                        loginimageurl.appendChild(headerd);
+
+                        loginimageurl.appendChild(createLoginBackgroundImageInput());
+
+                        section.appendChild(loginimageurl);
                         /* ================================
                            ✅ CARD BG SECTION (NEW WRAPPER)
                         ================================ */
