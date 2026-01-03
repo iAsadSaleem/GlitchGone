@@ -609,7 +609,7 @@
                 "--login-card-bg-color": "#1c1c1c",
                 "--login-button-hover-bg-color": "#00e676",
                 "--login-headline-font-size": "38px",
-
+                "--login-button-border-radius":"4px",
                 "--header-main-bg-gradient": "linear-gradient(90deg, #ffffff 0%, #ffffff 100%)",
                 "--header-icon-hover": "#0a6e35",
 
@@ -770,7 +770,7 @@
                 "--login-headline-font-size": "38px",
                 "--login-headline-text-color":"#632ef5",
                 "--login-button-hover-bg-color": "#443ba5",
-
+                "--login-button-border-radius":"4px",
                 "--header-main-bg-gradient": "linear-gradient(225deg, #17153B 22%, #FFFFFF 22%, #F6F2FA 23%, #17153B 23%)",
                 "--header-icon-hover": "#C8ACD6",
                 "--scroll-width": "7px",
@@ -953,7 +953,6 @@
                 "--login-button-text-color": "#000",
                 "--login-button-hover-bg-color": "#D4AF37",
                 "--login-button-hover-text-color": "#0E0E0E",
-                "--login-button-border-radius":"14px",
                 "--login-footer-text-color": "#BFA76B",
                 "--login-logo-space": "50px",
                 "--login-layout-padding-right": "8%",
