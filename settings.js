@@ -438,40 +438,12 @@
             // ✅ Strip accidental url("...") wrapper before saving
             const cleanUrl = rawUrl.replace(/^url\(["']?|["']?\)$/g, "").trim();
             console.log(cleanUrl,"Here is the URL");
-            // if (cleanUrl !== "") {
-            //     // Apply to CSS (with proper wrapping)
-            //     document.body.style.setProperty(
-            //         "--login-background-active",
-            //         `url("${cleanUrl}")`
-            //     );
-
+           
                 // Save only the raw URL
                 savedThemeObj.themeData["--login-background-image"] = `url('${cleanUrl}')`;;
             console.log(savedThemeObj,"savedThemeObj");
 
-            //     // Remove gradient if image is set
-            //     delete savedThemeObj.themeData["--login-background-gradient-color"];
-            // } else {
-            //     // No image → restore gradient
-            //     document.body.style.removeProperty("--login-background-active");
-
-            //     const start =
-            //         getComputedStyle(document.body)
-            //             .getPropertyValue("--login-background-gradient-start")
-            //             .trim() || "#ffffff";
-            //     const end =
-            //         getComputedStyle(document.body)
-            //             .getPropertyValue("--login-background-gradient-end")
-            //             .trim() || start;
-            //     const gradient = `linear-gradient(to bottom, ${start} 0%, ${start} 20%, ${end} 100%)`;
-
-            //     document.body.style.setProperty("--login-background-active", gradient);
-            //     savedThemeObj.themeData["--login-background-gradient-color"] = gradient;
-
-            //     delete savedThemeObj.themeData["--login-background-image"];
-            // }
-
-            // Save updated theme
+            
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
         }
 
@@ -6533,7 +6505,11 @@
                                     const selectedtheme = localStorage.getItem("themebuilder_selectedTheme");
 
                                     savedTheme.themeData = savedTheme.themeData || {};
-
+                                    // Preserve login background image
+                                    if (savedTheme.themeData["--login-background-image"]) {
+                                        themeData["--login-background-image"] =
+                                            savedTheme.themeData["--login-background-image"];
+                                    }
 
                                     Object.keys(themeData).forEach(key => {
                                         if (key !== "--lockedMenus" && key !== "--hiddenMenus") {
