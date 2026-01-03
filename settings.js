@@ -6339,6 +6339,7 @@
 
                             const isDefaultTheme = selectedTheme === "Default Theme";
                             const isVelvetNightTheme = selectedTheme === "VelvetNight Theme";
+                            const isjetblack = selectedTheme === "JetBlack Luxury Gold Theme";
 
                             // Default Theme → disable BOTH
                             if (isDefaultTheme) {
@@ -6351,9 +6352,8 @@
                                 cardBgSectionWrapper.classList.add("disabled-section");
                             }
                             // Any other theme → enable BOTH
-                            else {
-                                bgSectionWrapper.classList.remove("disabled-section");
-                                cardBgSectionWrapper.classList.remove("disabled-section");
+                            else if(isjetblack){
+                                loginimageurl.classList.remove("disabled-section");
                             }
                         }
 
