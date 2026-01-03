@@ -437,7 +437,7 @@
         function applyImage(rawUrl) {
             // ✅ Strip accidental url("...") wrapper before saving
             const cleanUrl = rawUrl.replace(/^url\(["']?|["']?\)$/g, "").trim();
-
+            console.log(cleanUrl,"Here is the URL");
             // if (cleanUrl !== "") {
             //     // Apply to CSS (with proper wrapping)
             //     document.body.style.setProperty(
