@@ -3012,26 +3012,76 @@
         const headerEl = document.querySelector(".hl_header");
 
         // === Update Gradient Preview ===
+        // function updateGradientPreview() {
+        //     if (!headerEl || !startPicker || !endPicker) return;
+
+        //     const start = startPicker.input.value;
+        //     const end = endPicker.input.value;
+
+        //     const stop = 0;
+        //     const angle = 90;
+
+        //     const gradient = `linear-gradient(${angle}deg, ${start} ${stop}%, ${end} 100%)`;
+
+        //     document.body.style.setProperty("--header-gradient-start", start);
+        //     document.body.style.setProperty("--header-gradient-end", end);
+        //     document.body.style.setProperty("--header-gradient-stop", stop + "%");
+        //     document.body.style.setProperty("--header-gradient-angle", angle + "deg");
+        //     document.body.style.setProperty("--header-main-bg-gradient", gradient);
+
+        //     headerEl.style.setProperty("background", "none", "important");
+        //     headerEl.style.setProperty("background-image", "var(--header-main-bg-gradient)", "important");
+        // }
         function updateGradientPreview() {
             if (!headerEl || !startPicker || !endPicker) return;
 
             const start = startPicker.input.value;
             const end = endPicker.input.value;
 
-            const stop = 0;
-            const angle = 90;
+            const selectedTheme = localStorage.getItem("themebuilder_selectedTheme") || "";
 
-            const gradient = `linear-gradient(${angle}deg, ${start} ${stop}%, ${end} 100%)`;
+            let gradient;
 
+            if (selectedTheme === "Velvet Night Theme") {
+                // ✅ Special velvet gradient with white separator
+                gradient = `
+                    linear-gradient(
+                        225deg,
+                        ${start} 22%,
+                        #FFFFFF 22%,
+                        #F6F2FA 23%,
+                        ${end} 23%
+                    )
+                `;
+            } else {
+                // ✅ Default behavior for all other themes
+                const stop = 0;
+                const angle = 90;
+                gradient = `linear-gradient(${angle}deg, ${start} ${stop}%, ${end} 100%)`;
+
+                document.body.style.setProperty("--header-gradient-stop", stop + "%");
+                document.body.style.setProperty("--header-gradient-angle", angle + "deg");
+            }
+
+            // ✅ Apply CSS variables
             document.body.style.setProperty("--header-gradient-start", start);
             document.body.style.setProperty("--header-gradient-end", end);
-            document.body.style.setProperty("--header-gradient-stop", stop + "%");
-            document.body.style.setProperty("--header-gradient-angle", angle + "deg");
-            document.body.style.setProperty("--header-main-bg-gradient", gradient);
+            document.body.style.setProperty("--header-main-bg-gradient", gradient.trim());
 
+            // ✅ Force header background
             headerEl.style.setProperty("background", "none", "important");
-            headerEl.style.setProperty("background-image", "var(--header-main-bg-gradient)", "important");
+            headerEl.style.setProperty(
+                "background-image",
+                "var(--header-main-bg-gradient)",
+                "important"
+            );
+
+            // ✅ Persist
+            savedThemeObj.themeData = savedThemeObj.themeData || {};
+            savedThemeObj.themeData["--header-main-bg-gradient"] = gradient.trim();
+            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
         }
+
 
         // === Color picker helper ===
         function makePicker(labelText, cssVar, fallback = "#007bff") {
