@@ -6356,6 +6356,10 @@
                             // Any other theme → enable BOTH
                             else if(isjetblack){
                                 loginimageurl.classList.add("disabled-section");
+                            }else{
+                                  bgSectionWrapper.classList.remove("disabled-section");
+                                loginimageurl.classList.remove("disabled-section");
+                                cardBgSectionWrapper.classList.remove("disabled-section");
                             }
                         }
 
