@@ -6349,6 +6349,7 @@
                             // VelvetNight Theme → disable ONLY card bg section
                             else if (isVelvetNightTheme) {
                                 bgSectionWrapper.classList.remove("disabled-section");
+                                loginimageurl.classList.remove("disabled-section");
                                 cardBgSectionWrapper.classList.add("disabled-section");
                             }
                             // Any other theme → enable BOTH
