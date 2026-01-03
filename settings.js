@@ -447,6 +447,7 @@
 
                 // Save only the raw URL
                 savedThemeObj.themeData["--login-background-image"] = `url('${cleanUrl}')`;;
+            console.log(savedThemeObj,"savedThemeObj");
 
             //     // Remove gradient if image is set
             //     delete savedThemeObj.themeData["--login-background-gradient-color"];
