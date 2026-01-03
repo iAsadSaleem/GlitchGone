@@ -388,7 +388,7 @@
         localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
     }
 
-    //function updateLoginBackgroundGradient() {
+    // function updateLoginBackgroundGradient() {
     //    const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
     //    const selectedtheme = localStorage.getItem("themebuilder_selectedTheme");
 
@@ -410,7 +410,7 @@
 
     //    // ✅ Save updated theme
     //    localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
-    //}
+    // }
 
     // === Background Image Input ===
     function createLoginBackgroundImageInput() {
@@ -418,7 +418,7 @@
         wrapper.className = "tb-color-picker-wrapper";
 
         const label = document.createElement("label");
-        label.textContent = "Login Background Image URL";
+        label.textContent = "Login Page Image URL";
         label.className = "tb-color-picker-label";
 
         // Get stored theme object
@@ -438,37 +438,37 @@
             // ✅ Strip accidental url("...") wrapper before saving
             const cleanUrl = rawUrl.replace(/^url\(["']?|["']?\)$/g, "").trim();
 
-            if (cleanUrl !== "") {
-                // Apply to CSS (with proper wrapping)
-                document.body.style.setProperty(
-                    "--login-background-active",
-                    `url("${cleanUrl}")`
-                );
+            // if (cleanUrl !== "") {
+            //     // Apply to CSS (with proper wrapping)
+            //     document.body.style.setProperty(
+            //         "--login-background-active",
+            //         `url("${cleanUrl}")`
+            //     );
 
                 // Save only the raw URL
                 savedThemeObj.themeData["--login-background-image"] = `url('${cleanUrl}')`;;
 
-                // Remove gradient if image is set
-                delete savedThemeObj.themeData["--login-background-gradient-color"];
-            } else {
-                // No image → restore gradient
-                document.body.style.removeProperty("--login-background-active");
+            //     // Remove gradient if image is set
+            //     delete savedThemeObj.themeData["--login-background-gradient-color"];
+            // } else {
+            //     // No image → restore gradient
+            //     document.body.style.removeProperty("--login-background-active");
 
-                const start =
-                    getComputedStyle(document.body)
-                        .getPropertyValue("--login-background-gradient-start")
-                        .trim() || "#ffffff";
-                const end =
-                    getComputedStyle(document.body)
-                        .getPropertyValue("--login-background-gradient-end")
-                        .trim() || start;
-                const gradient = `linear-gradient(to bottom, ${start} 0%, ${start} 20%, ${end} 100%)`;
+            //     const start =
+            //         getComputedStyle(document.body)
+            //             .getPropertyValue("--login-background-gradient-start")
+            //             .trim() || "#ffffff";
+            //     const end =
+            //         getComputedStyle(document.body)
+            //             .getPropertyValue("--login-background-gradient-end")
+            //             .trim() || start;
+            //     const gradient = `linear-gradient(to bottom, ${start} 0%, ${start} 20%, ${end} 100%)`;
 
-                document.body.style.setProperty("--login-background-active", gradient);
-                savedThemeObj.themeData["--login-background-gradient-color"] = gradient;
+            //     document.body.style.setProperty("--login-background-active", gradient);
+            //     savedThemeObj.themeData["--login-background-gradient-color"] = gradient;
 
-                delete savedThemeObj.themeData["--login-background-image"];
-            }
+            //     delete savedThemeObj.themeData["--login-background-image"];
+            // }
 
             // Save updated theme
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
@@ -6330,7 +6330,7 @@
                         bgSectionWrapper.appendChild(header);
 
                         bgSectionWrapper.appendChild(createLoginGradientPicker());
-                        //bgSectionWrapper.appendChild(createLoginBackgroundImageInput());
+                        bgSectionWrapper.appendChild(createLoginBackgroundImageInput());
 
                         section.appendChild(bgSectionWrapper);
 
