@@ -6353,7 +6353,7 @@
                             }
                             // Any other theme → enable BOTH
                             else if(isjetblack){
-                                loginimageurl.classList.remove("disabled-section");
+                                loginimageurl.classList.add("disabled-section");
                             }
                         }
 
