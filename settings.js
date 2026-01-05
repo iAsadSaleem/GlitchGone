@@ -1797,6 +1797,64 @@
         const themes = darkthemes();
         const themeKeys = Object.keys(themes);
         let currentIndex = -1;
+        const GLOBAL_MENU_CONFIG = {
+        sidebarTitles: {
+            "--sb_agency-dashboard-new-name": "Agency Dashboard",
+            "--agency-dashboard-new-name": "Agency Dashboard",
+            "--launchpad-new-name": "Launchpad",
+            "--conversations-new-name": "Conversations",
+            "--dashboard-new-name": "Dashboard"
+        },
+
+        menuCustomizations: {
+            "sb_dashboard": { "title": "Dashboard", "icon": "f853" },
+            "sb_conversations": { "title": "Conversations", "icon": "f27a" },
+            "sb_calendars": { "title": "Calendars", "icon": "f133" },
+            "sb_launchpad": { "title": "Launchpad", "icon": "f06a" },
+            "sb_opportunities": { "title": "Opportunities", "icon": "f83e" },
+            "sb_contacts": { "title": "Contacts", "icon": "f2c2" },
+            "sb_payments": { "title": "Payments", "icon": "f81d" },
+            "sb_reporting": { "title": "Reporting", "icon": "f24d" },
+            "sb_email-marketing": { "title": "Email Marketing", "icon": "f07a" },
+            "sb_automation": { "title": "Automation", "icon": "f544" },
+            "sb_sites": { "title": "Sites", "icon": "f0ac" },
+            "sb_app-media": { "title": "App Media", "icon": "f478" },
+            "sb_memberships": { "title": "Memberships", "icon": "f390" },
+            "sb_reputation": { "title": "Reputation", "icon": "f005" }
+        },
+
+        subMenuOrder: [
+            "sb_launchpad",
+            "sb_dashboard",
+            "sb_conversations",
+            "sb_calendars",
+            "sb_opportunities",
+            "sb_contacts",
+            "sb_payments",
+            "sb_reporting",
+            "sb_email-marketing",
+            "sb_automation",
+            "sb_sites",
+            "sb_app-media",
+            "sb_memberships",
+            "sb_reputation"
+        ]
+        };
+        function injectMenuConfigIntoTheme() {
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        savedThemeObj.themeData = savedThemeObj.themeData || {};
+
+        savedThemeObj.themeData["--sidebarTitles"] =
+            JSON.stringify(GLOBAL_MENU_CONFIG.sidebarTitles);
+
+        savedThemeObj.themeData["--menuCustomizations"] =
+            JSON.stringify(GLOBAL_MENU_CONFIG.menuCustomizations);
+
+        savedThemeObj.themeData["--subMenuOrder"] =
+            JSON.stringify(GLOBAL_MENU_CONFIG.subMenuOrder);
+
+        localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+        }
 
         // apply theme (merges theme vars into saved themeData to avoid overwriting other keys)
         function applyTheme(themeName, themeVars) {
@@ -1828,6 +1886,7 @@
 
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
             localStorage.setItem("themebuilder_selectedTheme", themeName);
+            injectMenuConfigIntoTheme();
             window.dispatchEvent(new Event("themeChanged"));
             // ----------------------------------------------
             // 🔵 APPLY TOP NAV FOR BlueWave TopNav Theme ONLY
@@ -7002,7 +7061,15 @@
             initThemeBuilder(0);
         }, 500); // ⏳ delay so "Login As" exists
     });
-   
+   // 🔁 Re-apply menu customizations on theme change
+    window.addEventListener("themeChanged", () => {
+    // Give GHL sidebar a micro-delay to settle
+    requestAnimationFrame(() => {
+        applyMenuIconCustomizations();
+        applyMenuCustomizations();
+    });
+    });
+
     document.addEventListener('DOMContentLoaded', () =>
         setTimeout(() => initThemeBuilder(0), 1050));
         setTimeout(() => initThemeBuilder(0), 1050);
