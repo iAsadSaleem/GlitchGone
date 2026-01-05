@@ -6249,13 +6249,13 @@
             title.className = "tb-title";
             
             // Version text as a small <span> below the title
-            const version = document.createElement('span');
-            version.className = "tb-version";
-            version.textContent = "v1.0";
+            // const version = document.createElement('span');
+            // version.className = "tb-version";
+            // version.textContent = "v1.0";
 
-            // Append version inside the title div
-            title.appendChild(document.createElement('br')); // new line
-            title.appendChild(version);
+            // // Append version inside the title div
+            // title.appendChild(document.createElement('br')); // new line
+            // title.appendChild(version);
 
             // Right: Logo + Close Button wrapper
             const rightWrapper = document.createElement('div');
