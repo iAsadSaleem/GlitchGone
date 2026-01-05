@@ -7062,13 +7062,24 @@
         }, 500); // ⏳ delay so "Login As" exists
     });
    // 🔁 Re-apply menu customizations on theme change
-  window.addEventListener("themeChanged", () => {
-    console.log("Theme CHange hit");
-  setTimeout(() => {
-    applyMenuIconCustomizations();
-    applyMenuCustomizations();
-  }, 50); // 50ms is usually enough, can adjust
-});
+    function applyMenuWhenReady(retries = 20) {
+    const sidebar = document.querySelector(".sidebar-menu"); // <-- Update this selector if needed
+    if (sidebar) {
+        applyMenuIconCustomizations();
+        applyMenuCustomizations();
+        console.log("Menu applied after theme change");
+    } else if (retries > 0) {
+        setTimeout(() => applyMenuWhenReady(retries - 1), 50); // retry every 50ms
+    } else {
+        console.warn("Sidebar not found, menu customizations not applied");
+    }
+    }
+
+// Listen for theme changes
+    window.addEventListener("themeChanged", () => {
+    console.log("Theme change detected");
+    applyMenuWhenReady();
+    });
 
     document.addEventListener('DOMContentLoaded', () =>
         setTimeout(() => initThemeBuilder(0), 1050));
