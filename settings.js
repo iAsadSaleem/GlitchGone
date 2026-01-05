@@ -7062,13 +7062,13 @@
         }, 500); // ⏳ delay so "Login As" exists
     });
    // 🔁 Re-apply menu customizations on theme change
-    window.addEventListener("themeChanged", () => {
-    // Give GHL sidebar a micro-delay to settle
-    requestAnimationFrame(() => {
-        applyMenuIconCustomizations();
-        applyMenuCustomizations();
-    });
-    });
+  window.addEventListener("themeChanged", () => {
+    console.log("Theme CHange hit");
+  setTimeout(() => {
+    applyMenuIconCustomizations();
+    applyMenuCustomizations();
+  }, 50); // 50ms is usually enough, can adjust
+});
 
     document.addEventListener('DOMContentLoaded', () =>
         setTimeout(() => initThemeBuilder(0), 1050));
