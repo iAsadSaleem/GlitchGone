@@ -1931,10 +1931,10 @@ body.dark-mode {
         background: rgba(255, 255, 255, 0.35);
         transform: rotate(90deg);
     }
-.tb-title {
+/* .tb-title {
     font-size: 20px;
     font-weight: 600;
-}
+} */
 
 .tb-version {
     font-size: 12px;
