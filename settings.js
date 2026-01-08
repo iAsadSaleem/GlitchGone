@@ -4837,16 +4837,31 @@ function addCursorPointerSelectorSettings(container) {
         agencyTitle.className = "tb-header-controls";
         agencyTitle.textContent = "Agency Level Lock & Hide";
         agencyTitle.style.marginTop = "20px";
+        agencyTitle.style.cursor = "pointer";
         wrapper.appendChild(agencyTitle);
-
-        agencyMenus.forEach(menu => createToggleRow(menu, lockedMenus, hiddenMenus, wrapper));
+        // Agency Section
+        const agencyContainer = document.createElement("div");
+        agencyContainer.className = "tb-section-container"; // for slide animation
+        agencyMenus.forEach(menu => createToggleRow(menu, lockedMenus, hiddenMenus, agencyContainer));
+        wrapper.appendChild(agencyContainer);
+        
+        agencyTitle.addEventListener("click", () => {
+            agencyContainer.classList.toggle("open");
+        });
 
         const mainTitle = document.createElement("h4");
         mainTitle.className = "tb-header-controls";
         mainTitle.textContent = "Sub-Account Level Lock & Hide";
         wrapper.appendChild(mainTitle);
 
-        sidebarMenus.forEach(menu => createToggleRow(menu, lockedMenus, hiddenMenus, wrapper));
+        const subAccountContainer = document.createElement("div");
+        subAccountMenus.forEach(menu => createToggleRow(menu, lockedMenus, hiddenMenus, subAccountContainer));
+        wrapper.appendChild(subAccountContainer);
+        
+        mainTitle.addEventListener("click", () => {
+            subAccountContainer.classList.toggle("open");
+        });
+
 
         // 🏢 AGENCY MENUS
 
