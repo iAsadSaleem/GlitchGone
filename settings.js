@@ -4080,59 +4080,69 @@
         container.appendChild(wrapper);
     }
     function addCursorPointerSelectorSettings(container) {
-        if (document.getElementById("tb-cursor-pointer-settings")) return;
+    if (document.getElementById("tb-cursor-pointer-settings")) return;
 
-        const wrapper = document.createElement("div");
-        wrapper.className = "tb-cursor-settings";
-        wrapper.id = "tb-cursor-pointer-settings";
-        wrapper.style.marginTop = "16px";
+    const wrapper = document.createElement("div");
+    wrapper.className = "tb-cursor-settings";
+    wrapper.id = "tb-cursor-pointer-settings";
+    wrapper.style.marginTop = "16px";
 
-        const title = document.createElement("h4");
-        title.className = "tb-header-controls";
-        title.innerText = "Custom Cursor Pointer";
-        wrapper.appendChild(title);
+    // Title (clickable)
+    const title = document.createElement("h4");
+    title.className = "tb-header-controls";
+    title.innerText = "Custom Cursor Pointer";
+    title.style.cursor = "pointer"; // Show it's clickable
+    wrapper.appendChild(title);
 
-        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        savedThemeObj.themeData = savedThemeObj.themeData || {};
-        const themeData = savedThemeObj.themeData;
+    // Saved theme from localStorage
+    const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+    savedThemeObj.themeData = savedThemeObj.themeData || {};
+    const themeData = savedThemeObj.themeData;
 
-        function saveVar(key, value) {
-            themeData[key] = value;
-            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
-            document.body.style.setProperty(key, value);
-            console.log("Pointer Set:", key, value);
-        }
+    function saveVar(key, value) {
+        themeData[key] = value;
+        localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+        document.body.style.setProperty(key, value);
+        console.log("Pointer Set:", key, value);
+    }
 
-        // 🎨 Pointer options
-        const pointerOptions = [
-            { name: "Default Pointer", url: "https://theme-builder-delta.vercel.app/images/default-pointer.png", isDefault: true },
-            { name: "Orange Finger Pointer", url: "https://theme-builder-delta.vercel.app/images/orangefinger-pointer.png" },
-            { name: "Green Pointer", url: "https://theme-builder-delta.vercel.app/images/green-pointer.png" },
-            { name: "Black Pointer", url: "https://theme-builder-delta.vercel.app/images/black-pointer.png" },
-            { name: "Light Orange Pointer", url: "https://theme-builder-delta.vercel.app/images/lightorange-pointer.png" },
-            { name: "Golden Hand Pointer", url: "https://theme-builder-delta.vercel.app/images/goldenhand-pointer.png" },
-            { name: "Glow Hand Pointer", url: "https://theme-builder-delta.vercel.app/images/glowhand-pointer.png" },
-            { name: "Orange R Pointer", url: "https://theme-builder-delta.vercel.app/images/oranger-pointer.png" },
-            { name: "Sky Blue New Pointer", url: "https://theme-builder-delta.vercel.app/images/skybluenew-pointer.png" },
-            { name: "Classic Blue Pointer", url: "https://theme-builder-delta.vercel.app/images/classicblue-pointer.png" },
-            { name: "Black New Pointer", url: "https://theme-builder-delta.vercel.app/images/blacknew-pointer.png" },
-            { name: "Yellow Orange Pointer", url: "https://theme-builder-delta.vercel.app/images/yelloworange-pointer.png" },
-            { name: "Hand Pointer", url: "https://theme-builder-delta.vercel.app/images/hand-pointer.png" }
-        ];
+    // Pointer options array
+    const pointerOptions = [
+        { name: "Default Pointer", url: "https://theme-builder-delta.vercel.app/images/default-pointer.png", isDefault: true },
+        { name: "Orange Finger Pointer", url: "https://theme-builder-delta.vercel.app/images/orangefinger-pointer.png" },
+        { name: "Green Pointer", url: "https://theme-builder-delta.vercel.app/images/green-pointer.png" },
+        { name: "Black Pointer", url: "https://theme-builder-delta.vercel.app/images/black-pointer.png" },
+        { name: "Light Orange Pointer", url: "https://theme-builder-delta.vercel.app/images/lightorange-pointer.png" },
+        { name: "Golden Hand Pointer", url: "https://theme-builder-delta.vercel.app/images/goldenhand-pointer.png" },
+        { name: "Glow Hand Pointer", url: "https://theme-builder-delta.vercel.app/images/glowhand-pointer.png" },
+        { name: "Orange R Pointer", url: "https://theme-builder-delta.vercel.app/images/oranger-pointer.png" },
+        { name: "Sky Blue New Pointer", url: "https://theme-builder-delta.vercel.app/images/skybluenew-pointer.png" },
+        { name: "Classic Blue Pointer", url: "https://theme-builder-delta.vercel.app/images/classicblue-pointer.png" },
+        { name: "Black New Pointer", url: "https://theme-builder-delta.vercel.app/images/blacknew-pointer.png" },
+        { name: "Yellow Orange Pointer", url: "https://theme-builder-delta.vercel.app/images/yelloworange-pointer.png" },
+        { name: "Hand Pointer", url: "https://theme-builder-delta.vercel.app/images/hand-pointer.png" }
+    ];
 
-        const pointerList = document.createElement("div");
-        pointerList.className = "tb-cursor-list";
-        wrapper.appendChild(pointerList);
+    // List container (initially hidden)
+    const pointerList = document.createElement("div");
+    pointerList.className = "tb-cursor-list";
+    pointerList.style.display = "none"; // Hidden by default
+    wrapper.appendChild(pointerList);
 
-        function renderPointerOptions() {
-            pointerList.innerHTML = "";
+    // Toggle visibility when title is clicked
+    title.addEventListener("click", () => {
+        pointerList.style.display = pointerList.style.display === "none" ? "block" : "none";
+    });
 
-            const savedPointer = themeData["--custom-pointer"];
+    // Function to render pointer options
+    function renderPointerOptions() {
+        pointerList.innerHTML = "";
+        const savedPointer = themeData["--custom-pointer"];
 
-            pointerOptions.forEach(pointer => {
-                const item = document.createElement("div");
-                item.className = "tb-cursor-item";
-                item.style.cssText = `
+        pointerOptions.forEach(pointer => {
+            const item = document.createElement("div");
+            item.className = "tb-cursor-item";
+            item.style.cssText = `
                 display: flex;
                 align-items: center;
                 gap: 10px;
@@ -4142,44 +4152,44 @@
                 margin-bottom: 8px;
                 transition: background 0.3s;
             `;
-                item.addEventListener("mouseenter", () => item.style.background = "#fff1e0");
-                item.addEventListener("mouseleave", () => item.style.background = "#f8f8f8");
+            item.addEventListener("mouseenter", () => item.style.background = "#fff1e0");
+            item.addEventListener("mouseleave", () => item.style.background = "#f8f8f8");
 
-                const img = document.createElement("img");
-                img.src = pointer.url;
-                img.alt = pointer.name;
-                img.className = "tb-cursor-image";
-                img.style.width = "24px";
-                img.style.height = "24px";
+            const img = document.createElement("img");
+            img.src = pointer.url;
+            img.alt = pointer.name;
+            img.className = "tb-cursor-image";
+            img.style.width = "24px";
+            img.style.height = "24px";
 
-                const label = document.createElement("span");
-                label.className = "tb-cursor-label";
-                label.textContent = pointer.name;
-                label.style.flex = "1";
+            const label = document.createElement("span");
+            label.className = "tb-cursor-label";
+            label.textContent = pointer.name;
+            label.style.flex = "1";
 
-                const toggle = document.createElement("input");
-                toggle.className = "tb-cursor-radiobutton";
-                toggle.type = "radio";
-                toggle.name = "custom-pointer-toggle";
+            const toggle = document.createElement("input");
+            toggle.className = "tb-cursor-radiobutton";
+            toggle.type = "radio";
+            toggle.name = "custom-pointer-toggle";
 
-                // ✅ Store "pointer" for default; URL for others
-                const pointerCSS = pointer.name === "Default Pointer"? "pointer": `url("${pointer.url}") 0 0, pointer`;
-                toggle.checked = savedPointer === pointerCSS;
+            const pointerCSS = pointer.name === "Default Pointer" ? "pointer" : `url("${pointer.url}") 0 0, pointer`;
+            toggle.checked = savedPointer === pointerCSS;
 
-                toggle.addEventListener("change", () => {
-                    saveVar("--custom-pointer", pointerCSS);
-                });
-
-                item.appendChild(img);
-                item.appendChild(label);
-                item.appendChild(toggle);
-                pointerList.appendChild(item);
+            toggle.addEventListener("change", () => {
+                saveVar("--custom-pointer", pointerCSS);
             });
-        }
 
-        renderPointerOptions();
-        container.appendChild(wrapper);
+            item.appendChild(img);
+            item.appendChild(label);
+            item.appendChild(toggle);
+            pointerList.appendChild(item);
+        });
     }
+
+    renderPointerOptions();
+    container.appendChild(wrapper);
+}
+
 
     async function addLoaderSelectorSettings(container) {
         if (document.getElementById("tb-loader-selector-settings")) return;
