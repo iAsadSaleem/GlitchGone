@@ -3979,16 +3979,12 @@
         title.innerText = "Custom Cursor";
         title.style.cursor = "pointer"; // make it look clickable
         wrapper.appendChild(title);
+
         const arrow = document.createElement("span");
         arrow.innerHTML = "▶"; // right arrow
         arrow.style.marginLeft = "8px";
         title.appendChild(arrow);
-        // --- Toggle cursor list slide on click ---
-        title.addEventListener("click", () => {
-            cursorList.classList.toggle("open"); // 'open' class triggers CSS slide
-            arrow.innerHTML = pointerList.classList.contains("open") ? "▼" : "▶";
-
-        });
+        
 
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         savedThemeObj.themeData = savedThemeObj.themeData || {};
@@ -4082,6 +4078,12 @@
         }
 
         renderCursorOptions();
+        // --- Toggle cursor list slide on click ---
+        title.addEventListener("click", () => {
+            cursorList.classList.toggle("open"); // 'open' class triggers CSS slide
+            arrow.innerHTML = cursorList.classList.contains("open") ? "▼" : "▶";
+
+        });
         container.appendChild(wrapper);
     }
 function addCursorPointerSelectorSettings(container) {
@@ -4857,7 +4859,7 @@ function addCursorPointerSelectorSettings(container) {
         const subAccountContainer = document.createElement("div");
         subAccountMenus.forEach(menu => createToggleRow(menu, lockedMenus, hiddenMenus, subAccountContainer));
         wrapper.appendChild(subAccountContainer);
-        
+
         mainTitle.addEventListener("click", () => {
             subAccountContainer.classList.toggle("open");
         });
