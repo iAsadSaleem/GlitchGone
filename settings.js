@@ -4857,7 +4857,7 @@ function addCursorPointerSelectorSettings(container) {
         wrapper.appendChild(mainTitle);
 
         const subAccountContainer = document.createElement("div");
-        subAccountMenus.forEach(menu => createToggleRow(menu, lockedMenus, hiddenMenus, subAccountContainer));
+        sidebarMenus.forEach(menu => createToggleRow(menu, lockedMenus, hiddenMenus, subAccountContainer));
         wrapper.appendChild(subAccountContainer);
 
         mainTitle.addEventListener("click", () => {
