@@ -3979,10 +3979,15 @@
         title.innerText = "Custom Cursor";
         title.style.cursor = "pointer"; // make it look clickable
         wrapper.appendChild(title);
-
+        const arrow = document.createElement("span");
+        arrow.innerHTML = "▶"; // right arrow
+        arrow.style.marginLeft = "8px";
+        title.appendChild(arrow);
         // --- Toggle cursor list slide on click ---
         title.addEventListener("click", () => {
             cursorList.classList.toggle("open"); // 'open' class triggers CSS slide
+            arrow.innerHTML = pointerList.classList.contains("open") ? "▼" : "▶";
+
         });
 
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
