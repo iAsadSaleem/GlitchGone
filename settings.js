@@ -5521,11 +5521,23 @@ function addCursorPointerSelectorSettings(container) {
             const sectionHeading = document.createElement("h4");
             sectionHeading.className = "tb-header-controls";
             sectionHeading.textContent = sectionTitle;
+            sectionHeading.style.cursor = "pointer"; // Make clickable
+            sectionHeading.style.display = "flex";
+            sectionHeading.style.alignItems = "center";
+
+             // Add arrow for toggle
+            const arrow = document.createElement("span");
+            arrow.innerHTML = "▶"; // Right arrow initially
+            arrow.style.marginLeft = "8px";
+            sectionHeading.appendChild(arrow);
+
             wrapper.appendChild(sectionHeading);
 
             const listContainer = document.createElement("div");
-            listContainer.className = "tb-draggable-menu-list";
-
+            listContainer.className = "tb-draggable-menu-list tb-section-container";
+            listContainer.style.overflow = "hidden";
+            listContainer.style.maxHeight = "0px";
+            listContainer.style.transition = "max-height 0.3s ease, padding 0.3s ease";
             //const savedOrder = themeData[storageKey] ? JSON.parse(themeData[storageKey]) : [];
             //if (savedOrder.length > 0) {
             //    const indexOf = id => {
@@ -5547,6 +5559,7 @@ function addCursorPointerSelectorSettings(container) {
                 // Add any new menus not in savedOrder (to preserve new additions)
                 menus.forEach(m => {
                     if (!savedOrder.includes(m.id)) orderedMenus.push(m);
+                    
                 });
 
                 menus = orderedMenus;
@@ -5713,7 +5726,19 @@ function addCursorPointerSelectorSettings(container) {
             });
 
             wrapper.appendChild(listContainer);
-            
+             sectionHeading.addEventListener("click", () => {
+                if (listContainer.classList.contains("open")) {
+                    listContainer.style.maxHeight = "0px";
+                    listContainer.style.padding = "0 0"; 
+                    listContainer.classList.remove("open");
+                    arrow.innerHTML = "▶"; // Right arrow
+                } else {
+                    listContainer.style.maxHeight = listContainer.scrollHeight + "px";
+                    listContainer.style.padding = "10px 0"; 
+                    listContainer.classList.add("open");
+                    arrow.innerHTML = "▼"; // Down arrow
+                }
+            });
             // ==========================
             // Subaccount Sidebar Observer
             // ==========================
