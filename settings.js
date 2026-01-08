@@ -3977,7 +3977,13 @@
         const title = document.createElement("h4");
         title.className = "tb-header-controls";
         title.innerText = "Custom Cursor";
+        title.style.cursor = "pointer"; // make it look clickable
         wrapper.appendChild(title);
+
+        // --- Toggle cursor list slide on click ---
+        title.addEventListener("click", () => {
+            cursorList.classList.toggle("open"); // 'open' class triggers CSS slide
+        });
 
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         savedThemeObj.themeData = savedThemeObj.themeData || {};
