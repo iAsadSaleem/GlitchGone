@@ -1176,11 +1176,11 @@ body::-webkit-scrollbar-track {
 
 
 /* Layout */
-.tb-cursor-list {
+/* .tb-cursor-list {
     display: flex;
     flex-direction: column;
     gap: 10px;
-}
+} */
 .tb-title {
     top: -2px;
     position: relative;
