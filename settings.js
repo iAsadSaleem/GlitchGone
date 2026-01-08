@@ -4130,10 +4130,18 @@
     wrapper.appendChild(pointerList);
 
     // Toggle visibility when title is clicked
-    title.addEventListener("click", () => {
-        pointerList.style.display = pointerList.style.display === "none" ? "block" : "none";
-    });
+//    title.addEventListener("click", () => {
+//     pointerList.classList.toggle("open");
+//     });
+    const arrow = document.createElement("span");
+    arrow.innerHTML = "▶"; // right arrow
+    arrow.style.marginLeft = "8px";
+    title.appendChild(arrow);
 
+    title.addEventListener("click", () => {
+        pointerList.classList.toggle("open");
+        arrow.innerHTML = pointerList.classList.contains("open") ? "▼" : "▶";
+    });
     // Function to render pointer options
     function renderPointerOptions() {
         pointerList.innerHTML = "";
