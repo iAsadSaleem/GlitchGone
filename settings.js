@@ -4857,6 +4857,7 @@ function addCursorPointerSelectorSettings(container) {
         wrapper.appendChild(mainTitle);
 
         const subAccountContainer = document.createElement("div");
+        subAccountContainer.className = "tb-section-container"; // for slide animation
         sidebarMenus.forEach(menu => createToggleRow(menu, lockedMenus, hiddenMenus, subAccountContainer));
         wrapper.appendChild(subAccountContainer);
 
