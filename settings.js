@@ -4846,9 +4846,15 @@ function addCursorPointerSelectorSettings(container) {
         agencyContainer.className = "tb-section-container"; // for slide animation
         agencyMenus.forEach(menu => createToggleRow(menu, lockedMenus, hiddenMenus, agencyContainer));
         wrapper.appendChild(agencyContainer);
-        
+
+        const agencyArrow = document.createElement("span");
+        agencyArrow.innerHTML = "▶"; // initial closed state
+        agencyArrow.style.marginLeft = "8px";
+        agencyTitle.appendChild(agencyArrow);
+
         agencyTitle.addEventListener("click", () => {
             agencyContainer.classList.toggle("open");
+            agencyArrow.innerHTML = agencyContainer.classList.contains("open") ? "▼" : "▶";
         });
 
         const mainTitle = document.createElement("h4");
@@ -4861,8 +4867,14 @@ function addCursorPointerSelectorSettings(container) {
         sidebarMenus.forEach(menu => createToggleRow(menu, lockedMenus, hiddenMenus, subAccountContainer));
         wrapper.appendChild(subAccountContainer);
 
+        const subAccountArrow = document.createElement("span");
+        subAccountArrow.innerHTML = "▶";
+        subAccountArrow.style.marginLeft = "8px";
+        subAccountTitle.appendChild(subAccountArrow);
+
         mainTitle.addEventListener("click", () => {
             subAccountContainer.classList.toggle("open");
+            subAccountArrow.innerHTML = subAccountContainer.classList.contains("open") ? "▼" : "▶";
         });
 
 
