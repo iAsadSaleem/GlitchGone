@@ -4870,7 +4870,7 @@ function addCursorPointerSelectorSettings(container) {
         const subAccountArrow = document.createElement("span");
         subAccountArrow.innerHTML = "▶";
         subAccountArrow.style.marginLeft = "8px";
-        subAccountTitle.appendChild(subAccountArrow);
+        mainTitle.appendChild(subAccountArrow);
 
         mainTitle.addEventListener("click", () => {
             subAccountContainer.classList.toggle("open");
