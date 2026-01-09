@@ -290,30 +290,30 @@
     // Color picker creator
     // 🌟 Mapping of CSS vars -> Human-friendly labels
     const cssVarLabels = {
-        "--primary-color": "Choose Primary Color",
-        "--second-color": "Choose Secondary Color",
+        "--primary-color": "Primary Color",
+        "--second-color": "Secondary Color",
 
         // Sidebar gradient
-        "--sidebar-bg-color": "Choose Sidebar BG Start Color",
-        "--sidebar-bg-end-color": "Choose Sidebar BG End Color",
+        "--sidebar-bg-color": "Sidebar BG Start Color",
+        "--sidebar-bg-end-color": "Sidebar BG End Color",
 
-        "--sidebar-menu-bg": "Choose Sidebar Menu BG Color",
-        "--sidebar-menu-hover-bg": "Choose Menu Hover Color",
-        "--sidebar-menu-active-bg": "Choose Menu Active BG Color",
+        "--sidebar-menu-bg": "Sidebar Menu BG Color",
+        "--sidebar-menu-hover-bg": "Menu Hover Color",
+        "--sidebar-menu-active-bg": "Menu Active BG Color",
 
-        "--sidebar-menu-color": "Choose SideBar Text Color",
-        "--sidebar-text-hover-color": "Choose SideBar Text Hover Color",
-        "--sidebar-text-active-color": "Choose SideBar Text Active Color",
-        "--sidebar-menu-icon-color": "Choose SideBar Icon Color",
-        "--sidebar-menu-icon-hover-color": "Choose SideBar Icon Hover Color",
-        "--sidebar-menu-icon-active-color": "Choose SideBar Icon Active Color",
-        "--tw-text-opacity-color": "Choose Menu Title Color",
-        "--go-back-color": "Choose Go Back Button Color",
-        "--go-back-text-color": "Choose Go Back Text Color",
+        "--sidebar-menu-color": "SideBar Text Color",
+        "--sidebar-text-hover-color": "SideBar Text Hover Color",
+        "--sidebar-text-active-color": "SideBar Text Active Color",
+        "--sidebar-menu-icon-color": "SideBar Icon Color",
+        "--sidebar-menu-icon-hover-color": "SideBar Icon Hover Color",
+        "--sidebar-menu-icon-active-color": "SideBar Icon Active Color",
+        "--tw-text-opacity-color": "Menu Title Color",
+        "--go-back-color": "Back Button Color",
+        "--go-back-text-color": "Back Button Text Color",
 
         // Login page gradient
-        "--login-background-gradient-start": "Login BG Gradient Start Color",
-        "--login-background-gradient-end": "Login BG Gradient End Color"
+        "--login-background-gradient-start": "Login BG Start Color",
+        "--login-background-gradient-end": "Login BG End Color"
     };
     function createLoginGradientPicker() {
         const wrapper = document.createElement("div");
@@ -1996,7 +1996,7 @@
                 // Before Primary & Secondary
                 const header = document.createElement("h4");
                 header.className = "tb-header-controls";
-                header.textContent = "Main Colors";
+                header.textContent = "Root Colors";
                 container.appendChild(header);
             }
 
@@ -2004,7 +2004,7 @@
                 // Before Sidebar Colors
                 const header = document.createElement("h4");
                 header.className = "tb-header-controls";
-                header.textContent = "Sidebar Colors";
+                header.textContent = "Sidebar Theme Colors";
                 container.appendChild(header);
             }
 
