@@ -3981,7 +3981,7 @@
         wrapper.appendChild(title);
 
         const icon = document.createElement("i");
-        icon.className = "fa-solid fa-lock";
+        icon.className = "fa-solid fa-angle-down tb-toggle-icon";
         icon.style.color = "white";
         icon.style.marginLeft = "8px";   // same spacing as arrow
         icon.style.fontSize = "17px";
