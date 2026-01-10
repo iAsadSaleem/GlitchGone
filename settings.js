@@ -301,12 +301,12 @@
         "--sidebar-menu-hover-bg": "Menu Hover Color",
         "--sidebar-menu-active-bg": "Menu Active BG Color",
 
-        "--sidebar-menu-color": "SideBar Text Color",
-        "--sidebar-text-hover-color": "SideBar Text Hover Color",
-        "--sidebar-text-active-color": "SideBar Text Active Color",
-        "--sidebar-menu-icon-color": "SideBar Icon Color",
-        "--sidebar-menu-icon-hover-color": "SideBar Icon Hover Color",
-        "--sidebar-menu-icon-active-color": "SideBar Icon Active Color",
+        "--sidebar-menu-color": "Sidebar Text Color",
+        "--sidebar-text-hover-color": "Sidebar Text Hover Color",
+        "--sidebar-text-active-color": "Sidebar Text Active Color",
+        "--sidebar-menu-icon-color": "Sidebar Icon Color",
+        "--sidebar-menu-icon-hover-color": "Sidebar Icon Hover Color",
+        "--sidebar-menu-icon-active-color": "Sidebar Icon Active Color",
         "--tw-text-opacity-color": "Menu Title Color",
         "--go-back-color": "Back Button Color",
         "--go-back-text-color": "Back Button Text Color",
@@ -1996,7 +1996,7 @@
                 // Before Primary & Secondary
                 const header = document.createElement("h4");
                 header.className = "tb-header-controls";
-                header.textContent = "Root Colors";
+                header.textContent = "Main Theme Colors";
                 container.appendChild(header);
             }
 
@@ -2004,7 +2004,7 @@
                 // Before Sidebar Colors
                 const header = document.createElement("h4");
                 header.className = "tb-header-controls";
-                header.textContent = "Sidebar Theme Colors";
+                header.textContent = "Sidebar Colors";
                 container.appendChild(header);
             }
 
@@ -2041,7 +2041,7 @@
     }
     function buildFontFamilySelector(wrapper) {
         const label = document.createElement("label");
-        label.textContent = "Choose Font Family";
+        label.textContent = "Font Family";
         label.className = "tb-font-label";
 
         const select = document.createElement("select");
@@ -3020,7 +3020,7 @@
         // === Section Title ===
         const header = document.createElement("h4");
         header.className = "tb-header-controls";
-        header.textContent = "Header Gradient Color";
+        header.textContent = "Header Color";
         section.appendChild(header);
 
         // === Gradient Controls Wrapper ===
@@ -3211,8 +3211,8 @@
         }
 
         // === Create Inputs ===
-        const startPicker = makePicker("Choose Start Color For Header", "--header-gradient-start", "#ff0000");
-        const endPicker = makePicker("Choose End Color For Header", "--header-gradient-end", "#0000ff");
+        const startPicker = makePicker("Start Color For Header", "--header-gradient-start", "#ff0000");
+        const endPicker = makePicker("End Color For Header", "--header-gradient-end", "#0000ff");
 
         gradientWrapper.appendChild(startPicker.wrapper);
         gradientWrapper.appendChild(endPicker.wrapper);
@@ -3243,7 +3243,7 @@
 
         const title = document.createElement("h4");
         title.className = "tb-profile-title";
-        title.textContent = "Profile Button Settings";
+        title.textContent = "Profile Button";
         profileWrapper.appendChild(title);
 
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
@@ -3366,7 +3366,7 @@
 
         const title = document.createElement("h4");
         title.className = "tb-help-title";
-        title.textContent = "Header Buttons Settings";
+        title.textContent = "Header Buttons";
         helpWrapper.appendChild(title);
 
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
@@ -4096,7 +4096,7 @@ function addCursorPointerSelectorSettings(container) {
 
     const title = document.createElement("h4");
     title.className = "tb-header-controls";
-    title.innerText = "Custom Cursor Pointer";
+    title.innerText = "Custom Pointer";
     title.style.cursor = "pointer";
     wrapper.appendChild(title);
 
@@ -4206,7 +4206,7 @@ function addCursorPointerSelectorSettings(container) {
         // 🏷️ Title
         const title = document.createElement("h4");
         title.className = "tb-header-controls";
-        title.innerText = "Custom Loader Settings";
+        title.innerText = "Custom Loader";
         wrapper.appendChild(title);
 
         // ℹ️ Instructions
@@ -4837,7 +4837,7 @@ function addCursorPointerSelectorSettings(container) {
 
         const agencyTitle = document.createElement("h4");
         agencyTitle.className = "tb-header-controls";
-        agencyTitle.textContent = "Agency Level Lock & Hide";
+        agencyTitle.textContent = "Agency Level";
         agencyTitle.style.marginTop = "20px";
         agencyTitle.style.cursor = "pointer";
         wrapper.appendChild(agencyTitle);
@@ -4859,7 +4859,7 @@ function addCursorPointerSelectorSettings(container) {
 
         const mainTitle = document.createElement("h4");
         mainTitle.className = "tb-header-controls";
-        mainTitle.textContent = "Sub-Account Level Lock & Hide";
+        mainTitle.textContent = "Sub-Account Level";
         wrapper.appendChild(mainTitle);
 
         const subAccountContainer = document.createElement("div");
@@ -5836,8 +5836,8 @@ function addCursorPointerSelectorSettings(container) {
         wrapper.appendChild(instruction);
 
         // pass safeAgencyMenus / safeSubAccountMenus to buildSection
-        buildSection(agencyMenus, "Agency Level Menu Customization", "--agencyMenuOrder", "#agencySidebar");
-        buildSection(subAccountMenus, "Sub-Account Level Menu Customization", "--subMenuOrder", "#subAccountSidebar");
+        buildSection(agencyMenus, "Agency Level", "--agencyMenuOrder", "#agencySidebar");
+        buildSection(subAccountMenus, "Sub-Account Level", "--subMenuOrder", "#subAccountSidebar");
 
 
         container.appendChild(wrapper);
@@ -6506,6 +6506,11 @@ function addCursorPointerSelectorSettings(container) {
                 createSection(
                     '<i class="fa-solid fa-gear" style="color:white;margin-right:6px;font-size:17px;"></i> General Settings',
                     (section) => {
+                        const instruction = document.createElement("p");
+                        instruction.className = "tb-instruction-text";
+                        instruction.textContent =
+                            "💡 For Flat Color: Choose the same color for Start & End. For gradient color choose different in start and end color.";
+                        section.appendChild(instruction);
                         buildThemeColorsSection(section);
                         buildHeaderControlsSection(section);
                         buildFontFamilySelector(section);
@@ -6522,7 +6527,7 @@ function addCursorPointerSelectorSettings(container) {
                         const instruction = document.createElement("p");
                         instruction.className = "tb-instruction-text";
                         instruction.textContent =
-                            "💡 For Flat Color: Choose the same color for Start & End";
+                             "💡 For Flat Color: Choose the same color for Start & End. For gradient color choose different in start and end color.";
                         section.appendChild(instruction);
 
                         const selectedTheme = localStorage.getItem("themebuilder_selectedTheme");
@@ -6634,7 +6639,7 @@ function addCursorPointerSelectorSettings(container) {
 
                         const loginbutton = document.createElement("h4");
                         loginbutton.className = "tb-header-controls";
-                        loginbutton.textContent = "Login Button Gradient Color";
+                        loginbutton.textContent = "Login Button Color";
                         section.appendChild(loginbutton);
 
                         section.appendChild(createLoginButtonGradientPicker());
@@ -6657,7 +6662,7 @@ function addCursorPointerSelectorSettings(container) {
 
                         const heading = document.createElement("h4");
                         heading.className = "tb-header-controls";
-                        heading.textContent = "Card Title Settings";
+                        heading.textContent = "Card Title";
                         section.appendChild(heading);
 
                         section.appendChild(createLoginHeadingControls());
