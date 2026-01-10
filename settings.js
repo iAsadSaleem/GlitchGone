@@ -2125,7 +2125,7 @@
 
         // Start Color Picker
         wrapper.appendChild(createColorPicker(
-            "Card BG Gradient Start Color",
+            "Card BG Start Color",
             null,
             "--login-card-bg-gradient-start",
             updateLoginCardBackgroundGradient
@@ -2133,7 +2133,7 @@
 
         // End Color Picker
         wrapper.appendChild(createColorPicker(
-            "Card BG Gradient End Color",
+            "Card BG End Color",
             null,
             "--login-card-bg-gradient-end",
             updateLoginCardBackgroundGradient
@@ -2168,7 +2168,7 @@
 
         // Start Color Picker
         wrapper.appendChild(createColorPicker(
-            "Button Gradient Start Color",
+            "Button Start Color",
             null,
             "--login-button-gradient-start",
             updateLoginButtonGradient
@@ -2176,7 +2176,7 @@
 
         // End Color Picker
         wrapper.appendChild(createColorPicker(
-            "Button Gradient End Color",
+            "Button End Color",
             null,
             "--login-button-gradient-end",
             updateLoginButtonGradient
@@ -3612,7 +3612,7 @@
 
         const title = document.createElement("h4");
         title.className = "tb-section-dashbaord-title";
-        title.innerText = "Dashboard Cards Settings";
+        title.innerText = "Dashboard Card Settings";
         wrapper.appendChild(title);
 
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
@@ -3977,7 +3977,7 @@
         const title = document.createElement("h4");
         title.className = "tb-header-controls";
         title.innerText = "Custom Cursor";
-        title.style.cursor = "pointer"; // make it look clickable
+        title.style.cursor = "var(--custom-pointer,auto)"; // make it look clickable
         wrapper.appendChild(title);
 
         const arrow = document.createElement("span");
@@ -4097,7 +4097,7 @@ function addCursorPointerSelectorSettings(container) {
     const title = document.createElement("h4");
     title.className = "tb-header-controls";
     title.innerText = "Custom Pointer";
-    title.style.cursor = "pointer";
+    title.style.cursor = "var(--custom-pointer,auto)";
     wrapper.appendChild(title);
 
     const arrow = document.createElement("span");
@@ -4506,7 +4506,7 @@ function addCursorPointerSelectorSettings(container) {
 
         const title = document.createElement("h4");
         title.className = "tb-header-controls";
-        title.innerText = "Sidebar Logo Settings";
+        title.innerText = "Sidebar Logo";
         wrapper.appendChild(title);
 
         // Load saved theme data
@@ -4839,7 +4839,7 @@ function addCursorPointerSelectorSettings(container) {
         agencyTitle.className = "tb-header-controls";
         agencyTitle.textContent = "Agency Level";
         agencyTitle.style.marginTop = "20px";
-        agencyTitle.style.cursor = "pointer";
+        agencyTitle.style.cursor = "var(--custom-pointer,auto)";
         wrapper.appendChild(agencyTitle);
         // Agency Section
         const agencyContainer = document.createElement("div");
@@ -5521,8 +5521,8 @@ function addCursorPointerSelectorSettings(container) {
             const sectionHeading = document.createElement("h4");
             sectionHeading.className = "tb-header-controls";
             sectionHeading.textContent = sectionTitle;
-            sectionHeading.style.cursor = "pointer"; // Make clickable
-            sectionHeading.style.display = "flex";
+            sectionHeading.style.cursor = "var(--custom-pointer,auto)"; // Make clickable
+            // sectionHeading.style.display = "flex";
             sectionHeading.style.alignItems = "center";
 
              // Add arrow for toggle
@@ -6527,14 +6527,14 @@ function addCursorPointerSelectorSettings(container) {
                         const instruction = document.createElement("p");
                         instruction.className = "tb-instruction-text";
                         instruction.textContent =
-                             "💡 For Flat Color: Choose the same color for Start & End. For gradient color choose different in start and end color.";
+                             "💡 For Flat Color: Choose the same color for Start & End. For gradient color choose different in start and end color. This Logo will only be use on login page.!";
                         section.appendChild(instruction);
 
                         const selectedTheme = localStorage.getItem("themebuilder_selectedTheme");
 
                         const companylogo = document.createElement("h4");
                         companylogo.className = "tb-header-controls";
-                        companylogo.textContent = "Company Logo For Login Page";
+                        companylogo.textContent = "Logo";
                         section.appendChild(companylogo);
                         section.appendChild(createLoginLogoInput("Logo URL", "--login-company-logo"));
 
@@ -6546,7 +6546,7 @@ function addCursorPointerSelectorSettings(container) {
 
                         const header = document.createElement("h4");
                         header.className = "tb-header-controls";
-                        header.textContent = "Background Gradient Color";
+                        header.textContent = "Background Color";
                         bgSectionWrapper.appendChild(header);
 
                         bgSectionWrapper.appendChild(createLoginGradientPicker());
@@ -6559,7 +6559,7 @@ function addCursorPointerSelectorSettings(container) {
 
                         const headerd = document.createElement("h4");
                         headerd.className = "tb-header-controls";
-                        headerd.textContent = "Login Form Image Settings";
+                        headerd.textContent = "Login Image Appearance";
                         loginimageurl.appendChild(headerd);
 
                         loginimageurl.appendChild(createLoginBackgroundImageInput());
@@ -6573,7 +6573,7 @@ function addCursorPointerSelectorSettings(container) {
 
                         const loginheader = document.createElement("h4");
                         loginheader.className = "tb-header-controls";
-                        loginheader.textContent = "Card BG Gradient Color";
+                        loginheader.textContent = "Card BG Color";
                         cardBgSectionWrapper.appendChild(loginheader);
 
                         cardBgSectionWrapper.appendChild(createLoginCardGradientPicker());
@@ -6639,7 +6639,7 @@ function addCursorPointerSelectorSettings(container) {
 
                         const loginbutton = document.createElement("h4");
                         loginbutton.className = "tb-header-controls";
-                        loginbutton.textContent = "Login Button Color";
+                        loginbutton.textContent = "Login Button";
                         section.appendChild(loginbutton);
 
                         section.appendChild(createLoginButtonGradientPicker());
@@ -6651,7 +6651,7 @@ function addCursorPointerSelectorSettings(container) {
                         //section.appendChild(createLoginButtonTextInput());
                         const forgetpass = document.createElement("h4");
                         forgetpass.className = "tb-header-controls";
-                        forgetpass.textContent = "Forget Password & Policy Text Color";
+                        forgetpass.textContent = "Forgot Password & Policy Text Styling";
                         section.appendChild(forgetpass);
 
 
