@@ -3980,13 +3980,10 @@
         title.style.cursor = "var(--custom-pointer,auto)"; // make it look clickable
         wrapper.appendChild(title);
 
-        const icon = document.createElement("i");
-        icon.className = "fa-solid fa-angle-down tb-toggle-icon";
-        icon.style.color = "white";
-        icon.style.marginLeft = "8px";   // same spacing as arrow
-        icon.style.fontSize = "17px";
-
-        title.appendChild(icon);
+        const arrow = document.createElement("span");
+        arrow.innerHTML = "▶"; // right arrow
+        arrow.style.marginLeft = "8px";
+        title.appendChild(arrow);
         
 
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
