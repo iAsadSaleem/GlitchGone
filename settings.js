@@ -4860,6 +4860,8 @@ function addCursorPointerSelectorSettings(container) {
         const mainTitle = document.createElement("h4");
         mainTitle.className = "tb-header-controls";
         mainTitle.textContent = "Sub-Account Level";
+        mainTitle.style.cursor = "var(--custom-pointer,auto)";
+
         wrapper.appendChild(mainTitle);
 
         const subAccountContainer = document.createElement("div");
@@ -6677,7 +6679,7 @@ function addCursorPointerSelectorSettings(container) {
                     const instruction = document.createElement("p");
                     instruction.className = "tb-instruction-text";
                     instruction.textContent =
-                        "💡 For Flat Color: Choose the same color for Start & End";
+                        "💡 For Flat Color: Choose the same color for Start & End. For gradient color choose different in start and end color.";
 
                     section.appendChild(instruction);
                     //buildThemeColorsSection(section); //Main Colors
