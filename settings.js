@@ -4841,21 +4841,59 @@ function addCursorPointerSelectorSettings(container) {
         agencyTitle.style.marginTop = "20px";
         agencyTitle.style.cursor = "var(--custom-pointer,auto)";
         wrapper.appendChild(agencyTitle);
+
         // Agency Section
         const agencyContainer = document.createElement("div");
         agencyContainer.className = "tb-section-container"; // for slide animation
-        agencyMenus.forEach(menu => createToggleRow(menu, lockedMenus, hiddenMenus, agencyContainer));
+        agencyMenus.forEach(menu =>
+            createToggleRow(menu, lockedMenus, hiddenMenus, agencyContainer)
+        );
         wrapper.appendChild(agencyContainer);
 
+        // Arrow Icon (Font Awesome)
         const agencyArrow = document.createElement("span");
-        agencyArrow.innerHTML = "▶"; // initial closed state
         agencyArrow.style.marginLeft = "8px";
+        agencyArrow.innerHTML = `<i class="fa-solid fa-angle-right"></i>`; // initial closed
         agencyTitle.appendChild(agencyArrow);
 
+        // Toggle logic
         agencyTitle.addEventListener("click", () => {
-            agencyContainer.classList.toggle("open");
-            agencyArrow.innerHTML = agencyContainer.classList.contains("open") ? "▼" : "▶";
+            const icon = agencyArrow.querySelector("i");
+
+            if (agencyContainer.classList.contains("open")) {
+                agencyContainer.classList.remove("open");
+
+                icon.classList.remove("fa-angle-down");
+                icon.classList.add("fa-angle-right");
+            } else {
+                agencyContainer.classList.add("open");
+
+                icon.classList.remove("fa-angle-right");
+                icon.classList.add("fa-angle-down");
+            }
         });
+
+        // const agencyTitle = document.createElement("h4");
+        // agencyTitle.className = "tb-header-controls";
+        // agencyTitle.textContent = "Agency Level";
+        // agencyTitle.style.marginTop = "20px";
+        // agencyTitle.style.cursor = "var(--custom-pointer,auto)";
+        // wrapper.appendChild(agencyTitle);
+        // // Agency Section
+        // const agencyContainer = document.createElement("div");
+        // agencyContainer.className = "tb-section-container"; // for slide animation
+        // agencyMenus.forEach(menu => createToggleRow(menu, lockedMenus, hiddenMenus, agencyContainer));
+        // wrapper.appendChild(agencyContainer);
+
+        // const agencyArrow = document.createElement("span");
+        // agencyArrow.innerHTML = "▶"; // initial closed state
+        // agencyArrow.style.marginLeft = "8px";
+        // agencyTitle.appendChild(agencyArrow);
+
+        // agencyTitle.addEventListener("click", () => {
+        //     agencyContainer.classList.toggle("open");
+        //     agencyArrow.innerHTML = agencyContainer.classList.contains("open") ? "▼" : "▶";
+        // });
 
         const mainTitle = document.createElement("h4");
         mainTitle.className = "tb-header-controls";
@@ -5533,15 +5571,9 @@ function addCursorPointerSelectorSettings(container) {
             // arrow.style.marginLeft = "8px";
             // sectionHeading.appendChild(arrow);
             const arrow = document.createElement("span");
-
-            // Insert Font Awesome icon
             arrow.innerHTML = `<i class="fa-solid fa-angle-down tb-toggle-icon" style="color:white;margin-right:6px;font-size:16px; border-radius: 4px; border: 2px solid #ffffff;"></i>`;
-
-            // Optional spacing (if needed)
             arrow.style.marginLeft = "8px";
-
             sectionHeading.appendChild(arrow);
-
             wrapper.appendChild(sectionHeading);
 
             const listContainer = document.createElement("div");
