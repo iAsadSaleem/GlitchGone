@@ -5759,16 +5759,16 @@ function addCursorPointerSelectorSettings(container) {
                     listContainer.style.padding = "0 0";
                     listContainer.classList.remove("open");
 
-                    icon.classList.remove("fa-angle-down");
-                    icon.classList.add("fa-angle-up"); // collapsed icon
+                    icon.classList.remove("fa-angle-up");
+                    icon.classList.add("fa-angle-down"); // collapsed icon
                 } else {
                     // Expand
                     listContainer.style.maxHeight = listContainer.scrollHeight + "px";
                     listContainer.style.padding = "10px 0";
                     listContainer.classList.add("open");
 
-                    icon.classList.remove("fa-angle-up");
-                    icon.classList.add("fa-angle-down"); // expanded icon
+                    icon.classList.remove("fa-angle-down");
+                    icon.classList.add("fa-angle-up"); // expanded icon
                 }
             });
             // ==========================
