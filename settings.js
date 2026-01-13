@@ -4853,7 +4853,7 @@ function addCursorPointerSelectorSettings(container) {
         // Arrow Icon (Font Awesome)
         const agencyArrow = document.createElement("span");
         agencyArrow.style.marginLeft = "8px";
-        agencyArrow.innerHTML = `<i class="fa-solid fa-angle-right"></i>`; // initial closed
+        agencyArrow.innerHTML = `<i class="fa-solid fa-angle-down"></i>`; // initial closed
         agencyTitle.appendChild(agencyArrow);
 
         // Toggle logic
@@ -4863,13 +4863,13 @@ function addCursorPointerSelectorSettings(container) {
             if (agencyContainer.classList.contains("open")) {
                 agencyContainer.classList.remove("open");
 
-                icon.classList.remove("fa-angle-down");
-                icon.classList.add("fa-angle-right");
+                icon.classList.remove("fa-angle-up");
+                icon.classList.add("fa-angle-down");
             } else {
                 agencyContainer.classList.add("open");
 
-                icon.classList.remove("fa-angle-right");
-                icon.classList.add("fa-angle-down");
+                icon.classList.remove("fa-angle-down");
+                icon.classList.add("fa-angle-up");
             }
         });
 
@@ -4895,27 +4895,43 @@ function addCursorPointerSelectorSettings(container) {
         //     agencyArrow.innerHTML = agencyContainer.classList.contains("open") ? "▼" : "▶";
         // });
 
-        const mainTitle = document.createElement("h4");
-        mainTitle.className = "tb-header-controls";
-        mainTitle.textContent = "Sub-Account Level";
-        mainTitle.style.cursor = "var(--custom-pointer,auto)";
+     const mainTitle = document.createElement("h4");
+    mainTitle.className = "tb-header-controls";
+    mainTitle.textContent = "Sub-Account Level";
+    mainTitle.style.cursor = "var(--custom-pointer,auto)";
+    wrapper.appendChild(mainTitle);
 
-        wrapper.appendChild(mainTitle);
+    // Sub-Account Section
+    const subAccountContainer = document.createElement("div");
+    subAccountContainer.className = "tb-section-container"; // for slide animation
+    sidebarMenus.forEach(menu =>
+        createToggleRow(menu, lockedMenus, hiddenMenus, subAccountContainer)
+    );
+    wrapper.appendChild(subAccountContainer);
 
-        const subAccountContainer = document.createElement("div");
-        subAccountContainer.className = "tb-section-container"; // for slide animation
-        sidebarMenus.forEach(menu => createToggleRow(menu, lockedMenus, hiddenMenus, subAccountContainer));
-        wrapper.appendChild(subAccountContainer);
+    // Arrow Icon (Font Awesome)
+    const subAccountArrow = document.createElement("span");
+    subAccountArrow.style.marginLeft = "8px";
+    subAccountArrow.innerHTML = `<i class="fa-solid fa-angle-down"></i>`; // closed state
+    mainTitle.appendChild(subAccountArrow);
 
-        const subAccountArrow = document.createElement("span");
-        subAccountArrow.innerHTML = "▶";
-        subAccountArrow.style.marginLeft = "8px";
-        mainTitle.appendChild(subAccountArrow);
+    // Toggle logic
+    mainTitle.addEventListener("click", () => {
+        const icon = subAccountArrow.querySelector("i");
 
-        mainTitle.addEventListener("click", () => {
-            subAccountContainer.classList.toggle("open");
-            subAccountArrow.innerHTML = subAccountContainer.classList.contains("open") ? "▼" : "▶";
-        });
+        if (subAccountContainer.classList.contains("open")) {
+            subAccountContainer.classList.remove("open");
+
+            icon.classList.remove("fa-angle-up");
+            icon.classList.add("fa-angle-down");
+        } else {
+            subAccountContainer.classList.add("open");
+
+            icon.classList.remove("fa-angle-down");
+            icon.classList.add("fa-angle-up");
+        }
+    });
+
 
 
         // 🏢 AGENCY MENUS
