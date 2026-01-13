@@ -5535,7 +5535,7 @@ function addCursorPointerSelectorSettings(container) {
             const arrow = document.createElement("span");
 
             // Insert Font Awesome icon
-            arrow.innerHTML = `<i class="fa-solid fa-angle-down tb-toggle-icon" style="color:white;margin-right:6px;font-size:17px;"></i>`;
+            arrow.innerHTML = `<i class="fa-solid fa-angle-down tb-toggle-icon" style="color:white;margin-right:6px;font-size:16px; border-radius: 4px; border: 2px solid #ffffff;"></i>`;
 
             // Optional spacing (if needed)
             arrow.style.marginLeft = "8px";
