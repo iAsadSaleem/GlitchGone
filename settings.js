@@ -4853,7 +4853,7 @@ function addCursorPointerSelectorSettings(container) {
         // Arrow Icon (Font Awesome)
         const agencyArrow = document.createElement("span");
         agencyArrow.style.marginLeft = "8px";
-        agencyArrow.innerHTML = `<i class="fa-solid fa-angle-down"></i>`; // initial closed
+        agencyArrow.innerHTML = `<i class="fa-solid fa-angle-down" style="color:white;margin-right:6px;font-size:16px; border-radius: 4px; border: 2px solid #ffffff;></i>`; // initial closed
         agencyTitle.appendChild(agencyArrow);
 
         // Toggle logic
@@ -4912,7 +4912,7 @@ function addCursorPointerSelectorSettings(container) {
     // Arrow Icon (Font Awesome)
     const subAccountArrow = document.createElement("span");
     subAccountArrow.style.marginLeft = "8px";
-    subAccountArrow.innerHTML = `<i class="fa-solid fa-angle-down"></i>`; // closed state
+    subAccountArrow.innerHTML = `<i class="fa-solid fa-angle-down" style="color:white;margin-right:6px;font-size:16px; border-radius: 4px; border: 2px solid #ffffff;></i>`; // closed state
     mainTitle.appendChild(subAccountArrow);
 
     // Toggle logic
