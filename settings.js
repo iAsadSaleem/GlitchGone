@@ -5760,7 +5760,7 @@ function addCursorPointerSelectorSettings(container) {
                     listContainer.classList.remove("open");
 
                     icon.classList.remove("fa-angle-down");
-                    icon.classList.add("fa-angle-right"); // collapsed icon
+                    icon.classList.add("fa-angle-up"); // collapsed icon
                 } else {
                     // Expand
                     listContainer.style.maxHeight = listContainer.scrollHeight + "px";
@@ -5768,7 +5768,7 @@ function addCursorPointerSelectorSettings(container) {
                     listContainer.classList.add("open");
 
                     icon.classList.remove("fa-angle-right");
-                    icon.classList.add("fa-angle-down"); // expanded icon
+                    icon.classList.add("fa-angle-up"); // expanded icon
                 }
             });
             // ==========================
