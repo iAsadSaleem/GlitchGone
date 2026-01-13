@@ -3987,7 +3987,7 @@
            // Arrow Icon (Font Awesome)
         const arrow = document.createElement("span");
         arrow.style.marginLeft = "8px";
-        arrow.innerHTML = `<i class="fa-solid fa-angle-down" style="color:white;margin-right:6px;font-size:16px; border-radius: 4px; border: 2px solid #ffffff;"></i>`; // initial closed
+        arrow.innerHTML = `<i class="fa-solid fa-angle-down" style="color:white;margin-right:6px;font-size:16px; border-radius: 4px; border: 2px solid #ffffff; padding: 0px 2px 0px 2px;"></i>`; // initial closed
         title.appendChild(arrow);
 
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
@@ -4121,7 +4121,7 @@ function addCursorPointerSelectorSettings(container) {
 
      const arrow = document.createElement("span");
         arrow.style.marginLeft = "8px";
-        arrow.innerHTML = `<i class="fa-solid fa-angle-down" style="color:white;margin-right:6px;font-size:16px; border-radius: 4px; border: 2px solid #ffffff;"></i>`; // initial closed
+        arrow.innerHTML = `<i class="fa-solid fa-angle-down" style="color:white;margin-right:6px;font-size:16px; border-radius: 4px; border: 2px solid #ffffff;padding: 0px 2px 0px 2px;"></i>`; // initial closed
         title.appendChild(arrow);
 
     const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
@@ -4883,7 +4883,7 @@ function addCursorPointerSelectorSettings(container) {
         // Arrow Icon (Font Awesome)
         const agencyArrow = document.createElement("span");
         agencyArrow.style.marginLeft = "8px";
-        agencyArrow.innerHTML = `<i class="fa-solid fa-angle-down" style="color:white;margin-right:6px;font-size:16px; border-radius: 4px; border: 2px solid #ffffff;"></i>`; // initial closed
+        agencyArrow.innerHTML = `<i class="fa-solid fa-angle-down" style="color:white;margin-right:6px;font-size:16px; border-radius: 4px; border: 2px solid #ffffff; padding: 0px 2px 0px 2px;"></i>`; // initial closed
         agencyTitle.appendChild(agencyArrow);
 
         // Toggle logic
@@ -4942,7 +4942,7 @@ function addCursorPointerSelectorSettings(container) {
     // Arrow Icon (Font Awesome)
     const subAccountArrow = document.createElement("span");
     subAccountArrow.style.marginLeft = "8px";
-    subAccountArrow.innerHTML = `<i class="fa-solid fa-angle-down" style="color:white;margin-right:6px;font-size:16px; border-radius: 4px; border: 2px solid #ffffff;"></i>`; // closed state
+    subAccountArrow.innerHTML = `<i class="fa-solid fa-angle-down" style="color:white;margin-right:6px;font-size:16px; border-radius: 4px; border: 2px solid #ffffff; padding: 0px 2px 0px 2px;"></i>`; // closed state
     mainTitle.appendChild(subAccountArrow);
 
     // Toggle logic
@@ -5617,7 +5617,7 @@ function addCursorPointerSelectorSettings(container) {
             // arrow.style.marginLeft = "8px";
             // sectionHeading.appendChild(arrow);
             const arrow = document.createElement("span");
-            arrow.innerHTML = `<i class="fa-solid fa-angle-down tb-toggle-icon" style="color:white;margin-right:6px;font-size:16px; border-radius: 4px; border: 2px solid #ffffff;"></i>`;
+            arrow.innerHTML = `<i class="fa-solid fa-angle-down tb-toggle-icon" style="color:white;margin-right:6px;font-size:16px; border-radius: 4px; border: 2px solid #ffffff; padding: 0px 2px 0px 2px;"></i>`;
             arrow.style.marginLeft = "8px";
             sectionHeading.appendChild(arrow);
             wrapper.appendChild(sectionHeading);
