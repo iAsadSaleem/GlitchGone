@@ -5767,8 +5767,8 @@ function addCursorPointerSelectorSettings(container) {
                     listContainer.style.padding = "10px 0";
                     listContainer.classList.add("open");
 
-                    icon.classList.remove("fa-angle-right");
-                    icon.classList.add("fa-angle-up"); // expanded icon
+                    icon.classList.remove("fa-angle-up");
+                    icon.classList.add("fa-angle-down"); // expanded icon
                 }
             });
             // ==========================
