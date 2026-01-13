@@ -6940,7 +6940,7 @@ function addCursorPointerSelectorSettings(container) {
                                         updatedAt: new Date().toISOString(),
                                         updatedBy:email || null
                                     };
-                                    console.log('dbData:', dbData);
+                                    // console.log('dbData:', dbData);
                                     //console.log('Here is the themeData:', dbData.themeData);
                                     await fetch("https://theme-builder-delta.vercel.app/api/theme", {
                                         method: "POST",
