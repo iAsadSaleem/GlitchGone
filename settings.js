@@ -5528,10 +5528,19 @@ function addCursorPointerSelectorSettings(container) {
             sectionHeading.style.alignItems = "center";
 
              // Add arrow for toggle
+            // const arrow = document.createElement("span");
+            // arrow.innerHTML = "▶"; // Right arrow initially
+            // arrow.style.marginLeft = "8px";
+            // sectionHeading.appendChild(arrow);
             const arrow = document.createElement("span");
-            arrow.innerHTML = "▶"; // Right arrow initially
+
+            // Insert Font Awesome icon
+            arrow.innerHTML = `<i class="fa-solid fa-gear" style="color:white;margin-right:6px;font-size:17px;"></i>`;
+
+            // Optional spacing (if needed)
             arrow.style.marginLeft = "8px";
-            sectionHeading.appendChild(arrow);
+
+            title.appendChild(arrow);
 
             wrapper.appendChild(sectionHeading);
 
