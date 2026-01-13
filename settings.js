@@ -5540,7 +5540,7 @@ function addCursorPointerSelectorSettings(container) {
             // Optional spacing (if needed)
             arrow.style.marginLeft = "8px";
 
-            title.appendChild(arrow);
+            sectionHeading.appendChild(arrow);
 
             wrapper.appendChild(sectionHeading);
 
