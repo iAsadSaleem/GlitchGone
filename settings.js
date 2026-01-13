@@ -3980,11 +3980,15 @@
         title.style.cursor = "var(--custom-pointer,auto)"; // make it look clickable
         wrapper.appendChild(title);
 
+        // const arrow = document.createElement("span");
+        // arrow.innerHTML = "▶"; // right arrow
+        // arrow.style.marginLeft = "8px";
+        // title.appendChild(arrow);
+           // Arrow Icon (Font Awesome)
         const arrow = document.createElement("span");
-        arrow.innerHTML = "▶"; // right arrow
         arrow.style.marginLeft = "8px";
+        arrow.innerHTML = `<i class="fa-solid fa-angle-down" style="color:white;margin-right:6px;font-size:16px; border-radius: 4px; border: 2px solid #ffffff;"></i>`; // initial closed
         title.appendChild(arrow);
-        
 
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         savedThemeObj.themeData = savedThemeObj.themeData || {};
@@ -4080,10 +4084,25 @@
         renderCursorOptions();
         // --- Toggle cursor list slide on click ---
         title.addEventListener("click", () => {
-            cursorList.classList.toggle("open"); // 'open' class triggers CSS slide
-            arrow.innerHTML = cursorList.classList.contains("open") ? "▼" : "▶";
+            const icon = arrow.querySelector("i");
 
+            if (cursorList.classList.contains("open")) {
+                cursorList.classList.remove("open");
+
+                icon.classList.remove("fa-angle-up");
+                icon.classList.add("fa-angle-down");
+            } else {
+                cursorList.classList.add("open");
+
+                icon.classList.remove("fa-angle-down");
+                icon.classList.add("fa-angle-up");
+            }
         });
+        // title.addEventListener("click", () => {
+        //     cursorList.classList.toggle("open"); // 'open' class triggers CSS slide
+        //     arrow.innerHTML = cursorList.classList.contains("open") ? "▼" : "▶";
+
+        // });
         container.appendChild(wrapper);
     }
 function addCursorPointerSelectorSettings(container) {
