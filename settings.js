@@ -6938,6 +6938,7 @@ function addCursorPointerSelectorSettings(container) {
                                         selectedTheme: selectedtheme,
                                         bodyFont: savedTheme.themeData["--body-font"] || "Arial, sans-serif",
                                         updatedAt: new Date().toISOString(),
+                                        updatedBy:email || null
                                     };
                                     console.log('dbData:', dbData);
                                     //console.log('Here is the themeData:', dbData.themeData);
