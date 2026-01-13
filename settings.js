@@ -4119,10 +4119,10 @@ function addCursorPointerSelectorSettings(container) {
     title.style.cursor = "var(--custom-pointer,auto)";
     wrapper.appendChild(title);
 
-    const arrow = document.createElement("span");
-    arrow.innerHTML = "▶";
-    arrow.style.marginLeft = "8px";
-    title.appendChild(arrow);
+     const arrow = document.createElement("span");
+        arrow.style.marginLeft = "8px";
+        arrow.innerHTML = `<i class="fa-solid fa-angle-down" style="color:white;margin-right:6px;font-size:16px; border-radius: 4px; border: 2px solid #ffffff;"></i>`; // initial closed
+        title.appendChild(arrow);
 
     const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
     savedThemeObj.themeData = savedThemeObj.themeData || {};
@@ -4205,10 +4205,21 @@ function addCursorPointerSelectorSettings(container) {
 
     renderPointerOptions();
 
-    title.addEventListener("click", () => {
-        pointerList.classList.toggle("open");
-        arrow.innerHTML = pointerList.classList.contains("open") ? "▼" : "▶";
-    });
+     title.addEventListener("click", () => {
+            const icon = arrow.querySelector("i");
+
+            if (pointerList.classList.contains("open")) {
+                pointerList.classList.remove("open");
+
+                icon.classList.remove("fa-angle-up");
+                icon.classList.add("fa-angle-down");
+            } else {
+                pointerList.classList.add("open");
+
+                icon.classList.remove("fa-angle-down");
+                icon.classList.add("fa-angle-up");
+            }
+        });
 
     container.appendChild(wrapper);
 }
