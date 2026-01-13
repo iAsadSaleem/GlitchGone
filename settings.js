@@ -5737,17 +5737,38 @@ function addCursorPointerSelectorSettings(container) {
             });
 
             wrapper.appendChild(listContainer);
-             sectionHeading.addEventListener("click", () => {
+            //  sectionHeading.addEventListener("click", () => {
+            //     if (listContainer.classList.contains("open")) {
+            //         listContainer.style.maxHeight = "0px";
+            //         listContainer.style.padding = "0 0"; 
+            //         listContainer.classList.remove("open");
+            //         arrow.innerHTML = "▶"; // Right arrow
+            //     } else {
+            //         listContainer.style.maxHeight = listContainer.scrollHeight + "px";
+            //         listContainer.style.padding = "10px 0"; 
+            //         listContainer.classList.add("open");
+            //         arrow.innerHTML = "▼"; // Down arrow
+            //     }
+            // });
+            sectionHeading.addEventListener("click", () => {
+                const icon = arrow.querySelector("i");
+
                 if (listContainer.classList.contains("open")) {
+                    // Collapse
                     listContainer.style.maxHeight = "0px";
-                    listContainer.style.padding = "0 0"; 
+                    listContainer.style.padding = "0 0";
                     listContainer.classList.remove("open");
-                    arrow.innerHTML = "▶"; // Right arrow
+
+                    icon.classList.remove("fa-angle-down");
+                    icon.classList.add("fa-angle-right"); // collapsed icon
                 } else {
+                    // Expand
                     listContainer.style.maxHeight = listContainer.scrollHeight + "px";
-                    listContainer.style.padding = "10px 0"; 
+                    listContainer.style.padding = "10px 0";
                     listContainer.classList.add("open");
-                    arrow.innerHTML = "▼"; // Down arrow
+
+                    icon.classList.remove("fa-angle-right");
+                    icon.classList.add("fa-angle-down"); // expanded icon
                 }
             });
             // ==========================
