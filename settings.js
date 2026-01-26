@@ -437,12 +437,9 @@
         function applyImage(rawUrl) {
             // ✅ Strip accidental url("...") wrapper before saving
             const cleanUrl = rawUrl.replace(/^url\(["']?|["']?\)$/g, "").trim();
-            console.log(cleanUrl,"Here is the URL");
            
                 // Save only the raw URL
                 savedThemeObj.themeData["--login-background-image"] = `url('${cleanUrl}')`;;
-            console.log(savedThemeObj,"savedThemeObj");
-
             
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
         }
@@ -3999,12 +3996,10 @@
                 themeData[key] = value;
                 localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
                 document.body.style.setProperty(key, value);
-                console.log("Cursor Set:", key, value);
             } else {
                 delete themeData[key];
                 localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
                 document.body.style.removeProperty(key);
-                console.log("✅ Cursor Reset to Default");
             }
         }
 
@@ -4132,7 +4127,6 @@ function addCursorPointerSelectorSettings(container) {
         themeData[key] = value;
         localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
         document.body.style.setProperty(key, value);
-        console.log("Pointer Set:", key, value);
     }
 
     const pointerOptions = [
@@ -4481,7 +4475,6 @@ function addCursorPointerSelectorSettings(container) {
             themeData[key] = value;
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
             document.body.style.setProperty(key, value);
-            console.log("Logo URL set:", key, value);
         }
 
         // Create a "picker‑style" wrapper similar to color picker in scrollbar settings
@@ -5875,11 +5868,9 @@ function addCursorPointerSelectorSettings(container) {
                     const sidebarNav = document.querySelector(
                         '.hl_nav-header nav[aria-label="header"]'
                     );
-                    console.log('here is sidebarnav', sidebarNav);
                     if (!sidebarNav) return;
 
                     const allExist = newOrder.every(key => sidebarNav.querySelector(`[meta="${key}"]`));
-                    console.log('here is allExist', allExist);
 
                     if (!allExist) return;
 
@@ -5985,7 +5976,6 @@ function addCursorPointerSelectorSettings(container) {
         }
 
         function reorderMenu(order, containerSelector) {
-            console.log(order, 'Here is the order');
             // Try the exact selector first (keeps agency behavior unchanged)
             let container = document.querySelector(containerSelector);
 
