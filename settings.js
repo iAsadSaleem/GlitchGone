@@ -120,7 +120,7 @@
         overlay.style.borderRadius = "10px";
 
         const successGif = document.createElement("img");
-        successGif.src = "https://theme-builder-delta.vercel.app/images/check_mark.gif";
+        successGif.src = "https://themebuilder-six.vercel.app/images/check_mark.gif";
         successGif.style.width = "150px";
         successGif.style.height = "150px";
         successGif.style.objectFit = "contain";
@@ -777,7 +777,7 @@
                 "--body-font": "Roboto",
                 "--login-company-logo": "url('https://msgsndr-private.storage.googleapis.com/companyPhotos/47b7e157-d197-4ce5-9a94-b697c258702a.png')",
                 "--login-background-active": "linear-gradient(135deg, #b7afff 0%, #b7afff 100%)",
-                "--login-background-image": "url('https://theme-builder-delta.vercel.app/images/velvetbgimg.png')",
+                "--login-background-image": "url('https://themebuilder-six.vercel.app/images/velvetbgimg.png')",
                 "--loader-background-color": "linear-gradient(to bottom, #17153B, #2E236C 60%, #433D8B 100%)",
                 "--loader-color-rgb": "255, 255, 255",
                 "--go-back-text-color": "#ffffff",
@@ -4005,19 +4005,19 @@
 
         // --- Cursor Options ---
         const cursorOptions = [
-            { name: "Default Cursor", url: "https://theme-builder-delta.vercel.app/images/defaultc-cursor.png", isDefault: true },
-            { name: "Purple Cursor", url: "https://theme-builder-delta.vercel.app/images/purple-cursor.png" },
-            { name: "Sky Cursor", url: "https://theme-builder-delta.vercel.app/images/sky-cursor.png" },
-            { name: "Sky Blue Cursor", url: "https://theme-builder-delta.vercel.app/images/skyblue-cusror.png" },
-            { name: "Black New Cursor", url: "https://theme-builder-delta.vercel.app/images/black-new.png" },
-            { name: "Mouse Cursor", url: "https://theme-builder-delta.vercel.app/images/mouse-cursor.png" },
-            { name: "Purple Gradient Cursor", url: "https://theme-builder-delta.vercel.app/images/purplegradient-cursor.png" },
-            { name: "Yellow Orange Cursor", url: "https://theme-builder-delta.vercel.app/images/yelloworange-cursor.png" },
-            { name: "Mouse Sharp Cursor", url: "https://theme-builder-delta.vercel.app/images/mousesharp-cursor.png" },
-            { name: "Gradient Border Cursor", url: "https://theme-builder-delta.vercel.app/images/gradientborder-cursor.png" },
-            { name: "Transparent Cursor", url: "https://theme-builder-delta.vercel.app/images/transperant-cursor.png" },
-            { name: "Classic Cursor", url: "https://theme-builder-delta.vercel.app/images/cursor.png" },
-            { name: "Target Cursor", url: "https://theme-builder-delta.vercel.app/images/target-cursor.png" }
+            { name: "Default Cursor", url: "https://themebuilder-six.vercel.app/images/defaultc-cursor.png", isDefault: true },
+            { name: "Purple Cursor", url: "https://themebuilder-six.vercel.app/images/purple-cursor.png" },
+            { name: "Sky Cursor", url: "https://themebuilder-six.vercel.app/images/sky-cursor.png" },
+            { name: "Sky Blue Cursor", url: "https://themebuilder-six.vercel.app/images/skyblue-cusror.png" },
+            { name: "Black New Cursor", url: "https://themebuilder-six.vercel.app/images/black-new.png" },
+            { name: "Mouse Cursor", url: "https://themebuilder-six.vercel.app/images/mouse-cursor.png" },
+            { name: "Purple Gradient Cursor", url: "https://themebuilder-six.vercel.app/images/purplegradient-cursor.png" },
+            { name: "Yellow Orange Cursor", url: "https://themebuilder-six.vercel.app/images/yelloworange-cursor.png" },
+            { name: "Mouse Sharp Cursor", url: "https://themebuilder-six.vercel.app/images/mousesharp-cursor.png" },
+            { name: "Gradient Border Cursor", url: "https://themebuilder-six.vercel.app/images/gradientborder-cursor.png" },
+            { name: "Transparent Cursor", url: "https://themebuilder-six.vercel.app/images/transperant-cursor.png" },
+            { name: "Classic Cursor", url: "https://themebuilder-six.vercel.app/images/cursor.png" },
+            { name: "Target Cursor", url: "https://themebuilder-six.vercel.app/images/target-cursor.png" }
         ];
 
         const cursorList = document.createElement("div");
@@ -4100,126 +4100,123 @@
         // });
         container.appendChild(wrapper);
     }
-function addCursorPointerSelectorSettings(container) {
-    if (document.getElementById("tb-cursor-pointer-settings")) return;
+    function addCursorPointerSelectorSettings(container) {
+        if (document.getElementById("tb-cursor-pointer-settings")) return;
 
-    const wrapper = document.createElement("div");
-    wrapper.className = "tb-cursor-settings";
-    wrapper.id = "tb-cursor-pointer-settings";
-    wrapper.style.marginTop = "16px";
+        const wrapper = document.createElement("div");
+        wrapper.className = "tb-cursor-settings";
+        wrapper.id = "tb-cursor-pointer-settings";
+        wrapper.style.marginTop = "16px";
 
-    const title = document.createElement("h4");
-    title.className = "tb-header-controls";
-    title.innerText = "Custom Pointer";
-    title.style.cursor = "var(--custom-pointer,auto)";
-    wrapper.appendChild(title);
+        const title = document.createElement("h4");
+        title.className = "tb-header-controls";
+        title.innerText = "Custom Pointer";
+        title.style.cursor = "var(--custom-pointer,auto)";
+        wrapper.appendChild(title);
 
-     const arrow = document.createElement("span");
-        arrow.style.marginLeft = "8px";
-        arrow.innerHTML = `<i class="fa-solid fa-angle-down" style="color:white;margin-right:6px;font-size:16px; border-radius: 4px; border: 2px solid #ffffff;padding: 0px 2px 0px 2px;"></i>`; // initial closed
-        title.appendChild(arrow);
+        const arrow = document.createElement("span");
+            arrow.style.marginLeft = "8px";
+            arrow.innerHTML = `<i class="fa-solid fa-angle-down" style="color:white;margin-right:6px;font-size:16px; border-radius: 4px; border: 2px solid #ffffff;padding: 0px 2px 0px 2px;"></i>`; // initial closed
+            title.appendChild(arrow);
 
-    const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-    savedThemeObj.themeData = savedThemeObj.themeData || {};
-    const themeData = savedThemeObj.themeData;
+        const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        savedThemeObj.themeData = savedThemeObj.themeData || {};
+        const themeData = savedThemeObj.themeData;
 
-    function saveVar(key, value) {
-        themeData[key] = value;
-        localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
-        document.body.style.setProperty(key, value);
-    }
+        function saveVar(key, value) {
+            themeData[key] = value;
+            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            document.body.style.setProperty(key, value);
+        }
 
-    const pointerOptions = [
-        { name: "Default Pointer", url: "https://theme-builder-delta.vercel.app/images/default-pointer.png", isDefault: true },
-        { name: "Orange Finger Pointer", url: "https://theme-builder-delta.vercel.app/images/orangefinger-pointer.png" },
-        { name: "Green Pointer", url: "https://theme-builder-delta.vercel.app/images/green-pointer.png" },
-        { name: "Black Pointer", url: "https://theme-builder-delta.vercel.app/images/black-pointer.png" },
-        { name: "Light Orange Pointer", url: "https://theme-builder-delta.vercel.app/images/lightorange-pointer.png" },
-        { name: "Golden Hand Pointer", url: "https://theme-builder-delta.vercel.app/images/goldenhand-pointer.png" },
-        { name: "Glow Hand Pointer", url: "https://theme-builder-delta.vercel.app/images/glowhand-pointer.png" },
-        { name: "Orange R Pointer", url: "https://theme-builder-delta.vercel.app/images/oranger-pointer.png" },
-        { name: "Sky Blue New Pointer", url: "https://theme-builder-delta.vercel.app/images/skybluenew-pointer.png" },
-        { name: "Classic Blue Pointer", url: "https://theme-builder-delta.vercel.app/images/classicblue-pointer.png" },
-        { name: "Black New Pointer", url: "https://theme-builder-delta.vercel.app/images/blacknew-pointer.png" },
-        { name: "Yellow Orange Pointer", url: "https://theme-builder-delta.vercel.app/images/yelloworange-pointer.png" },
-        { name: "Hand Pointer", url: "https://theme-builder-delta.vercel.app/images/hand-pointer.png" }
-    ];
+        const pointerOptions = [
+            { name: "Default Pointer", url: "https://themebuilder-six.vercel.app/images/default-pointer.png", isDefault: true },
+            { name: "Orange Finger Pointer", url: "https://themebuilder-six.vercel.app/images/orangefinger-pointer.png" },
+            { name: "Green Pointer", url: "https://themebuilder-six.vercel.app/images/green-pointer.png" },
+            { name: "Black Pointer", url: "https://themebuilder-six.vercel.app/images/black-pointer.png" },
+            { name: "Light Orange Pointer", url: "https://themebuilder-six.vercel.app/images/lightorange-pointer.png" },
+            { name: "Golden Hand Pointer", url: "https://themebuilder-six.vercel.app/images/goldenhand-pointer.png" },
+            { name: "Glow Hand Pointer", url: "https://themebuilder-six.vercel.app/images/glowhand-pointer.png" },
+            { name: "Orange R Pointer", url: "https://themebuilder-six.vercel.app/images/oranger-pointer.png" },
+            { name: "Sky Blue New Pointer", url: "https://themebuilder-six.vercel.app/images/skybluenew-pointer.png" },
+            { name: "Classic Blue Pointer", url: "https://themebuilder-six.vercel.app/images/classicblue-pointer.png" },
+            { name: "Black New Pointer", url: "https://themebuilder-six.vercel.app/images/blacknew-pointer.png" },
+            { name: "Yellow Orange Pointer", url: "https://themebuilder-six.vercel.app/images/yelloworange-pointer.png" },
+            { name: "Hand Pointer", url: "https://themebuilder-six.vercel.app/images/hand-pointer.png" }
+        ];
 
-    const pointerList = document.createElement("div");
-    pointerList.className = "tb-cursor-list"; // DO NOT set display:none
-    wrapper.appendChild(pointerList);
+        const pointerList = document.createElement("div");
+        pointerList.className = "tb-cursor-list"; // DO NOT set display:none
+        wrapper.appendChild(pointerList);
 
-    function renderPointerOptions() {
-        pointerList.innerHTML = "";
-        const savedPointer = themeData["--custom-pointer"];
+        function renderPointerOptions() {
+            pointerList.innerHTML = "";
+            const savedPointer = themeData["--custom-pointer"];
 
-        pointerOptions.forEach(pointer => {
-            const item = document.createElement("div");
-            item.className = "tb-cursor-item";
-            item.style.cssText = `
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                background: #f8f8f8;
-                border-radius: 8px;
-                padding: 8px 12px;
-                margin-bottom: 8px;
-                transition: background 0.3s;
-            `;
-            item.addEventListener("mouseenter", () => item.style.background = "#fff1e0");
-            item.addEventListener("mouseleave", () => item.style.background = "#f8f8f8");
+            pointerOptions.forEach(pointer => {
+                const item = document.createElement("div");
+                item.className = "tb-cursor-item";
+                item.style.cssText = `
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    background: #f8f8f8;
+                    border-radius: 8px;
+                    padding: 8px 12px;
+                    margin-bottom: 8px;
+                    transition: background 0.3s;
+                `;
+                item.addEventListener("mouseenter", () => item.style.background = "#fff1e0");
+                item.addEventListener("mouseleave", () => item.style.background = "#f8f8f8");
 
-            const img = document.createElement("img");
-            img.src = pointer.url;
-            img.alt = pointer.name;
-            img.style.width = "24px";
-            img.style.height = "24px";
+                const img = document.createElement("img");
+                img.src = pointer.url;
+                img.alt = pointer.name;
+                img.style.width = "24px";
+                img.style.height = "24px";
 
-            const label = document.createElement("span");
-            label.textContent = pointer.name;
-            label.style.flex = "1";
+                const label = document.createElement("span");
+                label.textContent = pointer.name;
+                label.style.flex = "1";
 
-            const toggle = document.createElement("input");
-            toggle.type = "radio";
-            toggle.name = "custom-pointer-toggle";
+                const toggle = document.createElement("input");
+                toggle.type = "radio";
+                toggle.name = "custom-pointer-toggle";
 
-            const pointerCSS = pointer.isDefault ? "pointer" : `url("${pointer.url}") 0 0, pointer`;
-            toggle.checked = savedPointer === pointerCSS;
+                const pointerCSS = pointer.isDefault ? "pointer" : `url("${pointer.url}") 0 0, pointer`;
+                toggle.checked = savedPointer === pointerCSS;
 
-            toggle.addEventListener("change", () => {
-                saveVar("--custom-pointer", pointerCSS);
+                toggle.addEventListener("change", () => {
+                    saveVar("--custom-pointer", pointerCSS);
+                });
+
+                item.appendChild(img);
+                item.appendChild(label);
+                item.appendChild(toggle);
+                pointerList.appendChild(item);
+            });
+        }
+
+        renderPointerOptions();
+
+        title.addEventListener("click", () => {
+                const icon = arrow.querySelector("i");
+
+                if (pointerList.classList.contains("open")) {
+                    pointerList.classList.remove("open");
+
+                    icon.classList.remove("fa-angle-up");
+                    icon.classList.add("fa-angle-down");
+                } else {
+                    pointerList.classList.add("open");
+
+                    icon.classList.remove("fa-angle-down");
+                    icon.classList.add("fa-angle-up");
+                }
             });
 
-            item.appendChild(img);
-            item.appendChild(label);
-            item.appendChild(toggle);
-            pointerList.appendChild(item);
-        });
+        container.appendChild(wrapper);
     }
-
-    renderPointerOptions();
-
-     title.addEventListener("click", () => {
-            const icon = arrow.querySelector("i");
-
-            if (pointerList.classList.contains("open")) {
-                pointerList.classList.remove("open");
-
-                icon.classList.remove("fa-angle-up");
-                icon.classList.add("fa-angle-down");
-            } else {
-                pointerList.classList.add("open");
-
-                icon.classList.remove("fa-angle-down");
-                icon.classList.add("fa-angle-up");
-            }
-        });
-
-    container.appendChild(wrapper);
-}
-
-
-
     async function addLoaderSelectorSettings(container) {
         if (document.getElementById("tb-loader-selector-settings")) return;
 
@@ -4399,7 +4396,7 @@ function addCursorPointerSelectorSettings(container) {
         async function fetchLoaders() {
             try {
                 const res = await fetch(
-                    `https://theme-builder-delta.vercel.app/api/theme/Get-loader-css?agencyId=${agencyId}`
+                    `https://themebuilder-six.vercel.app/api/theme/Get-loader-css?agencyId=${agencyId}`
                 );
                 if (!res.ok) throw new Error("Failed to fetch loaders");
                 const data = await res.json();
@@ -4423,7 +4420,7 @@ function addCursorPointerSelectorSettings(container) {
                 const img = document.createElement("img");
                 img.src =
                     loader.previewImage ||
-                    "https://theme-builder-delta.vercel.app/images/dotsloader.png";
+                    "https://themebuilder-six.vercel.app/images/dotsloader.png";
                 img.alt = loader.loaderName;
                 img.className = "tb-loader-img";
 
@@ -5662,7 +5659,7 @@ function addCursorPointerSelectorSettings(container) {
 
                 // 🖼️ Add drag icon before label
                 const dragIcon = document.createElement("img");
-                dragIcon.src = "https://theme-builder-delta.vercel.app/images/drag-logo-2.png";
+                dragIcon.src = "https://themebuilder-six.vercel.app/images/drag-logo-2.png";
                 dragIcon.alt = "drag";
                 dragIcon.className = "tb-drag-handle"; // 👈 important for Sortable handle
                 dragIcon.style.width = "15px";
@@ -6932,7 +6929,7 @@ function addCursorPointerSelectorSettings(container) {
                                     };
                                     // console.log('dbData:', dbData);
                                     //console.log('Here is the themeData:', dbData.themeData);
-                                    await fetch("https://theme-builder-delta.vercel.app/api/theme", {
+                                    await fetch("https://themebuilder-six.vercel.app/api/theme", {
                                         method: "POST",
                                         headers: { "Content-Type": "application/json" },
                                         body: JSON.stringify(dbData),
@@ -6950,7 +6947,7 @@ function addCursorPointerSelectorSettings(container) {
                                                 isActive: loaderCSSData.isActive,
                                             };
                                             // Send to loader-css/status API
-                                            await fetch("https://theme-builder-delta.vercel.app/api/theme/loader-css/status", {
+                                            await fetch("https://themebuilder-six.vercel.app/api/theme/loader-css/status", {
                                                 method: "PUT",
                                                 headers: { "Content-Type": "application/json" },
                                                 body: JSON.stringify(payload),
@@ -7179,7 +7176,7 @@ function addCursorPointerSelectorSettings(container) {
                     console.error("❌ Email not found in localStorage.");
                     return;
                 }
-                const response = await fetch(`https://theme-builder-delta.vercel.app/api/theme/${decodedEmail}`);
+                const response = await fetch(`https://themebuilder-six.vercel.app/api/theme/${decodedEmail}`);
                 const data = await response.json();
                 if (data.success) {
                     injectThemeBuilderMenu(); 
