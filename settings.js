@@ -6222,7 +6222,7 @@
             // Set inner HTML with logo + text
             brandingWrapper.innerHTML = `
                 <span>Powered by</span>
-                <img src="https://themebuilder-six.vercel.app/images/growthable-logo.png" alt="Growthable" class="tb-branding-logo">
+                <img src="https://themebuilder-six.vercel.app/images/growthable-icon.png" alt="Growthable" class="tb-branding-logo">
             `;
             // Append right after Apply button
             buttonsWrapper.appendChild(brandingWrapper);
