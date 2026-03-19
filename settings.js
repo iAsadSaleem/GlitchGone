@@ -6221,7 +6221,7 @@
 
             // Set inner HTML with logo + text
             brandingWrapper.innerHTML = `
-                <span>Powered by</span>
+                <span>Powered by: growthable</span>
                 <img src="https://themebuilder-six.vercel.app/images/growthable-icon.png" alt="Growthable" class="tb-branding-logo">
             `;
             // Append right after Apply button
