@@ -6215,6 +6215,17 @@
             });
 
             buttonsWrapper.appendChild(applyBtn);
+            // --- Add branding after Apply button ---
+            const brandingWrapper = document.createElement("div");
+            brandingWrapper.className = "tb-branding-wrapper";
+
+            // Set inner HTML with logo + text
+            brandingWrapper.innerHTML = `
+                <span>Powered by</span>
+                <img src="https://themebuilder-six.vercel.app/images/growthable-logo.png" alt="Growthable" class="tb-branding-logo">
+            `;
+            // Append right after Apply button
+            buttonsWrapper.appendChild(brandingWrapper);
             drawer.appendChild(buttonsWrapper); // Outside card
             document.body.appendChild(drawer);
             // ✅ Create loader overlay inside Theme Builder drawer
