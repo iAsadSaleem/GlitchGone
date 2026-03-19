@@ -5675,10 +5675,10 @@
             rightWrapper.className = "tb-header-right";
 
             // Logo
-            const logo = document.createElement('img');
-            logo.src = "https://themebuilder-six.vercel.app/images/growthable-icon.png";
-            logo.className = "tb-company-logo";
-            logo.alt = "Company Logo";
+            // const logo = document.createElement('img');
+            // logo.src = "https://themebuilder-six.vercel.app/images/growthable-icon.png";
+            // logo.className = "tb-company-logo";
+            // logo.alt = "Company Logo";
 
             // Close button (below logo)
             const closeBtn = document.createElement('button');
@@ -5686,7 +5686,7 @@
             closeBtn.className = "tb-drawer-close";
 
             // Assemble right section
-            rightWrapper.appendChild(logo);
+            // rightWrapper.appendChild(logo);
             rightWrapper.appendChild(closeBtn);
 
             // Assemble header
@@ -6221,7 +6221,7 @@
 
             // Set inner HTML with logo + text
             brandingWrapper.innerHTML = `
-                <span>Powered by: growthable</span>
+                <span>Powered by: Growthable</span>
                 <img src="https://themebuilder-six.vercel.app/images/growthable-icon.png" alt="Growthable" class="tb-branding-logo">
             `;
             // Append right after Apply button
