@@ -5676,7 +5676,7 @@
 
             // Logo
             const logo = document.createElement('img');
-            logo.src = "https://msgsndr-private.storage.googleapis.com/companyPhotos/47b7e157-d197-4ce5-9a94-b697c258702a.png";
+            logo.src = "https://themebuilder-six.vercel.app/images/growthable-icon.png";
             logo.className = "tb-company-logo";
             logo.alt = "Company Logo";
 
