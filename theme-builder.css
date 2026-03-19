@@ -6,7 +6,7 @@
     right: -420px;
     width: 328px;
     max-width: 90%;
-    height: 55%;
+    height: auto;
     /* 25% active color, 75% white */
     background: linear-gradient(to bottom, var(--themebuildermaincolor) 40%, #ffffff 0%);
     box-shadow: -4px 1px 30px var(--themebuildermaincolor); /* ✅ Works */
