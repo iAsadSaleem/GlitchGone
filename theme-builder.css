@@ -578,7 +578,7 @@ tb-apply-btn
     font-size: 12px;
     font-family: monospace;
     text-align: center;
-    left: 8px;
+    left: 79px;
     position: relative;
 }
 .tb-number-scroll-input {
@@ -605,7 +605,7 @@ tb-apply-btn
     font-family: monospace;
     text-align: center;
     
-    left: 8px;
+    left: 79px;
     position: relative;
 }
 .tb-number-input-wrapper {
@@ -625,7 +625,7 @@ tb-apply-btn
     -moz-appearance: textfield;
 }
 .tb-header-controls {
-    padding: 4px 1px 1px 1px;
+    padding: 1px 1px 1px 1px;
     text-align: center;
     height: 25px;
     font-size: 12px;

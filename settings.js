@@ -3422,7 +3422,7 @@
         const wrapper = document.createElement("div");
         wrapper.className = "tb-cursor-settings";
         wrapper.id = "tb-cursor-settings";
-        wrapper.style.marginTop = "16px";
+        // wrapper.style.marginTop = "16px";
 
         const title = document.createElement("h4");
         title.className = "tb-header-controls";
@@ -3559,7 +3559,7 @@
         const wrapper = document.createElement("div");
         wrapper.className = "tb-cursor-settings";
         wrapper.id = "tb-cursor-pointer-settings";
-        wrapper.style.marginTop = "16px";
+        // wrapper.style.marginTop = "16px";
 
         const title = document.createElement("h4");
         title.className = "tb-header-controls";
