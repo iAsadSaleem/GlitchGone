@@ -2661,8 +2661,8 @@
         }
 
         // === Create Inputs ===
-        const startPicker = makePicker("Start Color For Header", "--header-gradient-start", "#ff0000");
-        const endPicker = makePicker("End Color For Header", "--header-gradient-end", "#0000ff");
+        const startPicker = makePicker("Start Color For Header", "--header-gradient-start", "#ffffff");
+        const endPicker = makePicker("End Color For Header", "--header-gradient-end", "#ffffff");
 
         gradientWrapper.appendChild(startPicker.wrapper);
         gradientWrapper.appendChild(endPicker.wrapper);
