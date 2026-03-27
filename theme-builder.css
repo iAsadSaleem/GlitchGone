@@ -374,7 +374,7 @@
     margin: 12px auto;
     top: -25px;
     border-radius: 8px !important;
-    background: var(--themebuildermaincolor , #459459) !important;
+    background: var(--themebuildermaincolor , #185828) !important;
     /*background-image: var(--sidebar-main-bg-gradient) !important;*/
     position: relative;
     min-width: 344px !important;
