@@ -1407,7 +1407,6 @@
         
         // apply theme (merges theme vars into saved themeData to avoid overwriting other keys)
         async function applyTheme(themeName, themeVars) {
-            await loadMainCSS();
             const vars = themeVars || themes[themeName];
             if (!vars) return;
 
@@ -1474,8 +1473,9 @@
             const optBtn = document.createElement("button");
             optBtn.type = "button";
             optBtn.textContent = themeName;
-            optBtn.addEventListener("click", (ev) => {
+            optBtn.addEventListener("click", async (ev) => {
                 ev.stopPropagation();
+                await loadMainCSS();
                 applyTheme(themeName,null);
                 dropdownBox.classList.remove("show");
                 arrowIcon.innerHTML = '<i class="fa-solid fa-angle-down" aria-hidden="true"></i>';
