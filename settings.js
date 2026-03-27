@@ -3877,24 +3877,27 @@
 
         modeCheckbox.addEventListener("change", updateModeState);
         updateModeState();
-
+        const email = localStorage.getItem("g-em") ? atob(localStorage.getItem("g-em")) : null;
         // 🌍 Fetch loaders
         async function fetchLoaders() {
             try {
                 const res = await fetch(
-                    `https://themebuilder-six.vercel.app/api/theme/Get-loader-css?agencyId=${agencyId}`
+                    `https://themebuilder-six.vercel.app/api/theme/Get-loader-css?email=${email}`
                 );
                 if (!res.ok) throw new Error("Failed to fetch loaders");
                 const data = await res.json();
-                renderLoaderOptions(data.loaders || []);
-            } catch (err) {
+                renderLoaderOptions(
+                data.loaders || [],
+                data.activeLoaderId
+                );            
+                } catch (err) {
                 console.error("❌ Error fetching loaders:", err);
                 loaderList.innerHTML = "<p class='tb-error-text'>Failed to load loaders.</p>";
             }
         }
 
         // 🎨 Render loaders
-        function renderLoaderOptions(loaders) {
+        function renderLoaderOptions(loaders, activeLoaderId) {
             loaderList.innerHTML = "";
             const savedLoader =
                 themeData["--loader-css"] && JSON.parse(themeData["--loader-css"]);
@@ -3919,11 +3922,12 @@
                 toggle.name = "custom-loader-toggle";
                 toggle.className = "tb-loader-radio";
 
-                if ((savedLoader && savedLoader._id === loader._id) || loader.isActive)
+                // if ((savedLoader && savedLoader._id === loader._id) || loader.isActive)
+                if ( (savedLoader && savedLoader._id === loader._id) ||  loader._id === activeLoaderId )
                     toggle.checked = true;
 
                 toggle.addEventListener("change", () => {
-                    const loaderData = { _id: loader._id, isActive: true };
+                    const loaderData = { _id: loader._id };
                     saveVar("--loader-css", JSON.stringify(loaderData));
                 });
 
@@ -6178,17 +6182,16 @@
                                     });
                                     // --- Add new API call for loader-css status ---
                                     try {
-                                        // Extract the --loader-css value
                                         const loaderCSSRaw = savedTheme.themeData["--loader-css"];
+
                                         if (loaderCSSRaw) {
-                                            // Parse the string (e.g. "{\"_id\":\"68f7d1410aa198636134e673\",\"isActive\":true}")
                                             const loaderCSSData = JSON.parse(loaderCSSRaw);
-                                            // Prepare payload
+
                                             const payload = {
                                                 _id: loaderCSSData._id,
-                                                isActive: loaderCSSData.isActive,
+                                                email: email || null
                                             };
-                                            // Send to loader-css/status API
+
                                             await fetch("https://themebuilder-six.vercel.app/api/theme/loader-css/status", {
                                                 method: "PUT",
                                                 headers: { "Content-Type": "application/json" },
