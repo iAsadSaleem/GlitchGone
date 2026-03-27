@@ -1461,12 +1461,12 @@
         }
 
         // cycle themes when clicking main area of button (but not when clicking the arrow)
-        themeBtn.addEventListener("click", (e) => {
-            // if the click target is the arrow or inside it, ignore (arrow handles dropdown)
-            if (e.target.closest(".themeArrowIcon")) return;
-            currentIndex = (currentIndex + 1) % themeKeys.length;
-            applyTheme(themeKeys[currentIndex], null);
-        });
+        // themeBtn.addEventListener("click", (e) => {
+        //     // if the click target is the arrow or inside it, ignore (arrow handles dropdown)
+        //     if (e.target.closest(".themeArrowIcon")) return;
+        //     currentIndex = (currentIndex + 1) % themeKeys.length;
+        //     applyTheme(themeKeys[currentIndex], null);
+        // });
 
         // populate dropdown
         themeKeys.forEach(themeName => {
