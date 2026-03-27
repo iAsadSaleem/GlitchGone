@@ -8,8 +8,8 @@
     max-width: 90%;
     height: auto;
     /* 25% active color, 75% white */
-    background: linear-gradient(to bottom, var(--themebuildermaincolor) 40%, #ffffff 0%);
-    box-shadow: -4px 1px 30px var(--themebuildermaincolor); /* ✅ Works */
+    background: linear-gradient(to bottom, var(--themebuildermaincolor, #459459) 40%, #ffffff 0%);
+    box-shadow: -4px 1px 30px var(--themebuildermaincolor , #459459); /* ✅ Works */
     transition: right 0.48s ease;
     z-index: 99999;
     padding: 16px 7px;
@@ -176,7 +176,7 @@
 }
 
 .tb-section-header-open {
-    background: var(--themebuildermain-active-bg) !important;
+    background: var(--themebuildermain-active-bg, #275532) !important;
     color: #ffffff; /* white text */
     transition: background 0.3s, color 0.3s;
 }
@@ -341,7 +341,7 @@
     top: 8px;
 }
     .tb-apply-btn:hover {
-        background: var(--second-color) !important;
+        background: var(--second-color,#1d4ed8) !important;
         transform: translateY(-2px);
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
@@ -629,7 +629,7 @@ tb-apply-btn
     font-size: 12px;
     position: relative;
     color: #ffffff;
-    background: var(--themebuildermaincolor);
+    background: var(--themebuildermaincolor , #459459);
     border: solid 1px #ffffff08;
     border-radius: 4px;
     box-shadow: -2px 2px 10px rgb(78 77 189 / 52%);
@@ -665,7 +665,7 @@ tb-apply-btn
     height: 25px;
     font-size: 12px;
     color: #ffffff;
-    background: var(--themebuildermaincolor);
+    background: var(--themebuildermaincolor , #459459);
     border: solid 1px #ffffff08;
     border-radius: 4px;
     top: 8px;
@@ -679,7 +679,7 @@ tb-apply-btn
     height: 25px;
     font-size: 12px;
     color: #ffffff;
-    background: var(--themebuildermaincolor);
+    background: var(--themebuildermaincolor , #459459);
     border: solid 1px #ffffff08;
     border-radius: 4px;
     top: 8px;
@@ -818,7 +818,7 @@ body::-webkit-scrollbar-track {
     height: 25px;
     font-size: 12px;
     color: #ffffff;
-    background: var(--themebuildermaincolor);
+    background: var(--themebuildermaincolor , #459459);
     border: solid 1px #ffffff08;
     border-radius: 4px;
     top: 8px;
@@ -831,7 +831,7 @@ body::-webkit-scrollbar-track {
     height: 25px;
     font-size: 12px;
     color: #ffffff;
-    background: var(--themebuildermaincolor);
+    background: var(--themebuildermaincolor , #459459);
     border: solid 1px #ffffff08;
     border-radius: 4px;
     top: 8px;
@@ -844,7 +844,7 @@ body::-webkit-scrollbar-track {
     height: 25px;
     font-size: 12px;
     color: #ffffff;
-    background: var(--themebuildermaincolor);
+    background: var(--themebuildermaincolor , #459459);
     border: solid 1px #ffffff08;
     border-radius: 4px;
     top: 4px;
