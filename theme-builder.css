@@ -6,7 +6,7 @@
     position: fixed;
     top: 50px;
     right: -420px;
-    width: 328px;
+    width: 378px;
     max-width: 90%;
     height: auto;
     /* 25% active color, 75% white */
@@ -338,7 +338,7 @@
     user-select: none;
     -webkit-user-select: none;
     touch-action: manipulation;
-    width: 284px;
+    width: 337px;
     height: 47px;
     top: 8px;
 }
@@ -377,7 +377,7 @@
     background: var(--themebuildermaincolor , #459459) !important;
     /*background-image: var(--sidebar-main-bg-gradient) !important;*/
     position: relative;
-    min-width: 296px !important;
+    min-width: 344px !important;
     color: #fff;
     border: 1px solid #55555500;
     padding: 7px 4px;
@@ -658,8 +658,8 @@ tb-apply-btn
 
 .tb-instruction-text {
     font-style: italic;
-    color: #757575d6;
-    font-size: 10px;
+    color: #212121d6;
+    font-size: 11px;
 }
 .tb-profile-title {
     padding: 4px 1px 1px 1px;

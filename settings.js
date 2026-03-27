@@ -5821,6 +5821,8 @@
                         instruction.textContent =
                             "💡 For Flat Color: Choose the same color for Start & End. For gradient color choose different in start and end color.";
                         section.appendChild(instruction);
+                        addLogoSettings(section) 
+                        addLogoUrlInputSetting(section);
                         buildThemeColorsSection(section);
                         buildHeaderControlsSection(section);
                         buildFontFamilySelector(section);
@@ -5997,12 +5999,11 @@
                     addScrollbarSettings(section);   // Profile Button Color Controls
                     addDashboardCardSettings(section);
                     addBackgroundGradientSettings(section);
-                    addLogoSettings(section) 
+                   
                     //buildFeedbackForm(section);
                     addCursorSelectorSettings(section);
 
                     addCursorPointerSelectorSettings(section);
-                    addLogoUrlInputSetting(section);
                     addLoaderColorSettings(section);
                     addLoaderSelectorSettings(section);
                     //buildHeadingSettings(section) //Commented Will see next time
