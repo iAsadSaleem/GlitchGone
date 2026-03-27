@@ -125,7 +125,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 6px 12px;
-    background: var(--themebuildermaincolor) !important;
+    background: var(--themebuildermaincolor , #459459) !important;
     color: #ccc !important;
     cursor: var(--custom-pointer);
 }
@@ -318,7 +318,7 @@
 
 /* CSS */
 .tb-apply-btn {
-    background: var(--themebuildermaincolor) !important;
+    background: var(--themebuildermaincolor , #459459) !important;
     /*background-image: var(--sidebar-main-bg-gradient) !important;*/
     border-radius: 10px;
     color: white;
@@ -372,7 +372,7 @@
     margin: 12px auto;
     top: -25px;
     border-radius: 8px !important;
-    background: var(--themebuildermaincolor) !important;
+    background: var(--themebuildermaincolor , #459459) !important;
     /*background-image: var(--sidebar-main-bg-gradient) !important;*/
     position: relative;
     min-width: 296px !important;
