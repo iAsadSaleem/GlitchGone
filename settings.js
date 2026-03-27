@@ -1324,7 +1324,31 @@
         const observer = new MutationObserver(() => fix());
         observer.observe(sidebar, { attributes: true, attributeFilter: ["style", "class"] });
     }
+    let mainCssLoaded = false;
 
+    async function loadMainCSS() {
+        if (mainCssLoaded) return; // prevent duplicate loads
+
+        try {
+            const res = await fetch("https://themebuilder-six.vercel.app/main.css");
+            const css = await res.text();
+
+            let styleTag = document.getElementById("dynamic-main-css");
+
+            if (!styleTag) {
+                styleTag = document.createElement("style");
+                styleTag.id = "dynamic-main-css";
+                document.head.appendChild(styleTag);
+            }
+
+            styleTag.innerHTML = css;
+
+            mainCssLoaded = true;
+            console.log("✅ main.css loaded");
+        } catch (err) {
+            console.error("❌ Failed to load main.css:", err);
+        }
+    }
     // NEW: Theme Selector Section
     function buildThemeSelectorSection(container) {
         if (!container) return;
@@ -1382,7 +1406,8 @@
         let currentIndex = -1;
         
         // apply theme (merges theme vars into saved themeData to avoid overwriting other keys)
-        function applyTheme(themeName, themeVars) {
+        async function applyTheme(themeName, themeVars) {
+            await loadMainCSS();
             const vars = themeVars || themes[themeName];
             if (!vars) return;
 
