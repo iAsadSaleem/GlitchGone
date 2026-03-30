@@ -4127,6 +4127,7 @@
                         }
                         saved.themeData["--lockedMenus"] = JSON.stringify(locked);
                         localStorage.setItem("userTheme", JSON.stringify(saved));
+                        applyLockedMenus();
                     });
 
                     hideInput.addEventListener("change", () => {
@@ -4141,6 +4142,7 @@
                         };
                         saved.themeData["--hiddenMenus"] = JSON.stringify(hidden);
                         localStorage.setItem("userTheme", JSON.stringify(saved));
+                        applyHiddenMenus();
                     });
 
                     row.appendChild(cell);
@@ -4300,7 +4302,7 @@
                 }
                 saved.themeData["--lockedMenus"] = JSON.stringify(locked);
                 localStorage.setItem("userTheme", JSON.stringify(saved));
-                if (!locationId) applyLockedMenus();
+                applyLockedMenus();
             });
 
             hideInput.addEventListener("change", () => {
@@ -4323,7 +4325,7 @@
                 }
                 saved.themeData["--hiddenMenus"] = JSON.stringify(hidden);
                 localStorage.setItem("userTheme", JSON.stringify(saved));
-                if (!locationId) applyLockedMenus();
+                applyHiddenMenus();
             });
 
             row.appendChild(label);
@@ -6344,4 +6346,164 @@
     document.addEventListener('DOMContentLoaded', () =>
         setTimeout(() => initThemeBuilder(0), 1050));
         setTimeout(() => initThemeBuilder(0), 1050);
+
+// ---- Hidden/Locked menus ----
+
+// Function to get current location ID from URL
+function getCurrentLocationId() {
+  const path = window.location.pathname;
+  const parts = path.split('/');
+  const locationIndex = parts.indexOf('location');
+  if (locationIndex !== -1 && parts.length > locationIndex + 1) {
+    return parts[locationIndex + 1];
+  }
+  return null; // No location ID in URL (agency level)
+}
+
+function restoreHiddenMenus() {
+  const savedRaw = localStorage.getItem("userTheme");
+  const saved = JSON.parse(savedRaw) || {};
+  if (!saved.themeData || !saved.themeData["--hiddenMenus"]) return;
+
+  let hiddenMenus;
+  try { hiddenMenus = JSON.parse(saved.themeData["--hiddenMenus"]); } catch (e) { console.warn("[ThemeBuilder] invalid --hiddenMenus"); return; }
+  if (!hiddenMenus || typeof hiddenMenus !== "object") return;
+
+  const locationId = getCurrentLocationId();
+  
+  if (locationId) {
+    // Location-specific mode
+    if (!hiddenMenus[locationId]) return;
+    Object.keys(hiddenMenus[locationId]).forEach(menuId => {
+      const menuEl = document.getElementById(menuId);
+      const toggleEl = document.getElementById("hide-" + menuId);
+      if (!menuEl) return;
+      
+      const menuConfig = hiddenMenus[locationId][menuId];
+      const hidden = !!(menuConfig && menuConfig.hidden);
+      
+      menuEl.style.setProperty("display", hidden ? "none" : "flex", "important");
+      if (toggleEl) toggleEl.checked = hidden;
+    });
+  } else {
+    // Global mode
+    Object.keys(hiddenMenus).forEach(menuId => {
+      if (typeof hiddenMenus[menuId] === 'object') return; // Skip location objects
+      
+      const menuEl = document.getElementById(menuId);
+      const toggleEl = document.getElementById("hide-" + menuId);
+      if (!menuEl) return;
+      
+      const menuConfig = hiddenMenus[menuId];
+      const hidden = !!(menuConfig && menuConfig.hidden);
+      
+      menuEl.style.setProperty("display", hidden ? "none" : "flex", "important");
+      if (toggleEl) toggleEl.checked = hidden;
+    });
+  }
+}
+
+function applyHiddenMenus() { 
+  restoreHiddenMenus(); 
+}
+
+function applyLockedMenus() {
+  const savedRaw = localStorage.getItem("userTheme");
+  const saved = JSON.parse(savedRaw) || {};
+  if (!saved.themeData || !saved.themeData["--lockedMenus"]) return;
+
+  let lockedMenus;
+  try { lockedMenus = JSON.parse(saved.themeData["--lockedMenus"]); } catch (e) { console.warn("[ThemeBuilder] invalid --lockedMenus"); return; }
+  if (!lockedMenus || typeof lockedMenus !== "object") return;
+
+  const locationId = getCurrentLocationId();
+  
+  if (locationId) {
+    // Location-specific mode
+    if (!lockedMenus[locationId]) return;
+    Object.keys(lockedMenus[locationId]).forEach(menuId => {
+      const menuEl = document.getElementById(menuId);
+      if (!menuEl) return;
+      
+      const isLocked = !!lockedMenus[locationId][menuId];
+      
+      if (isLocked) {
+        if (!menuEl.querySelector(".tb-lock-icon")) {
+          const lockIcon = document.createElement("i");
+          lockIcon.className = "tb-lock-icon fas fa-lock ml-2";
+          lockIcon.style.color = "#F54927";
+          menuEl.appendChild(lockIcon);
+        }
+        menuEl.style.opacity = "0.6";
+        menuEl.style.cursor = "not-allowed";
+        if (menuEl.dataset.tbLockBound !== "1") {
+          menuEl.addEventListener("click", blockMenuClick, true);
+          menuEl.dataset.tbLockBound = "1";
+        }
+      } else {
+        const icon = menuEl.querySelector(".tb-lock-icon");
+        if (icon) icon.remove();
+        menuEl.style.opacity = "";
+        menuEl.style.cursor = "";
+        if (menuEl.dataset.tbLockBound === "1") {
+          menuEl.removeEventListener("click", blockMenuClick, true);
+          delete menuEl.dataset.tbLockBound;
+        }
+      }
+    });
+  } else {
+    // Global mode
+    Object.keys(lockedMenus).forEach(menuId => {
+      if (typeof lockedMenus[menuId] === 'object') return; // Skip location objects
+      
+      const menuEl = document.getElementById(menuId);
+      if (!menuEl) return;
+      
+      const isLocked = !!lockedMenus[menuId];
+      
+      if (isLocked) {
+        if (!menuEl.querySelector(".tb-lock-icon")) {
+          const lockIcon = document.createElement("i");
+          lockIcon.className = "tb-lock-icon fas fa-lock ml-2";
+          lockIcon.style.color = "#F54927";
+          menuEl.appendChild(lockIcon);
+        }
+        menuEl.style.opacity = "0.6";
+        menuEl.style.cursor = "not-allowed";
+        if (menuEl.dataset.tbLockBound !== "1") {
+          menuEl.addEventListener("click", blockMenuClick, true);
+          menuEl.dataset.tbLockBound = "1";
+        }
+      } else {
+        const icon = menuEl.querySelector(".tb-lock-icon");
+        if (icon) icon.remove();
+        menuEl.style.opacity = "";
+        menuEl.style.cursor = "";
+        if (menuEl.dataset.tbLockBound === "1") {
+          menuEl.removeEventListener("click", blockMenuClick, true);
+          delete menuEl.dataset.tbLockBound;
+        }
+      }
+    });
+  }
+}
+
+function blockMenuClick(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  document.getElementById("tb-lock-popup")?.remove();
+
+  const overlay = document.createElement("div");
+  overlay.id = "tb-lock-popup";
+  overlay.style = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;z-index:99999";
+  overlay.innerHTML = `
+    <div style="background:#fff;padding:20px 30px;border-radius:12px;max-width:400px;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,0.3)">
+      <h3 style="margin-bottom:12px;">Access Denied</h3>
+      <p style="margin-bottom:20px;">No access. Please contact the Owner.</p>
+      <button style="padding:8px 20px;border:none;border-radius:6px;background:#F54927;color:#fff;cursor:pointer;">OK</button>
+    </div>`;
+  overlay.querySelector("button").addEventListener("click", () => overlay.remove());
+  document.body.appendChild(overlay);
+}
+
 })();
