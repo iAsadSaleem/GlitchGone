@@ -4286,6 +4286,7 @@
 
             // Event listeners
             lockInput.addEventListener("change", () => {
+                console.log("Lock toggle changed for", menu.id, "locationId:", locationId, "checked:", lockInput.checked);
                 const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                 saved.themeData = saved.themeData || {};
                 let locked = saved.themeData["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
