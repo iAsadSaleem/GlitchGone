@@ -3989,11 +3989,12 @@
 
             // First th: Menu
             const menuTh = document.createElement("th");
-            menuTh.textContent = "Menu";
+            menuTh.textContent = "Location ID";
             menuTh.style.border = "1px solid #ddd";
             menuTh.style.padding = "4px";
             menuTh.style.background = "#f2f2f2";
             menuTh.style.fontSize = "10px";
+            menuTh.style.width = "150px"; // wider for location ID
             headerRow.appendChild(menuTh);
 
             // Th for each menu
@@ -4022,6 +4023,7 @@
                 const idCell = document.createElement("td");
                 idCell.style.border = "1px solid #ddd";
                 idCell.style.padding = "4px";
+                idCell.style.width = "150px"; // match header width
 
                 const idInput = document.createElement("input");
                 idInput.type = "text";
