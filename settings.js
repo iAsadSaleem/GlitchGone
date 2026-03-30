@@ -3966,109 +3966,226 @@
             subTitle.style.marginBottom = "10px";
             content.appendChild(subTitle);
 
-            const subContainer = document.createElement("div");
-            content.appendChild(subContainer);
+            // Collect all configured location IDs
+            const allLocations = new Set();
+            Object.keys(lockedMenus).forEach(key => {
+                if (typeof lockedMenus[key] === 'object') allLocations.add(key);
+            });
+            Object.keys(hiddenMenus).forEach(key => {
+                if (typeof hiddenMenus[key] === 'object') allLocations.add(key);
+            });
+            const locationList = Array.from(allLocations);
 
-            const addSubBtn = document.createElement("button");
-            addSubBtn.textContent = "Add Subaccount";
-            addSubBtn.style.padding = "8px 16px";
-            addSubBtn.style.border = "none";
-            addSubBtn.style.borderRadius = "5px";
-            addSubBtn.style.background = "#28a745";
-            addSubBtn.style.color = "#fff";
-            addSubBtn.style.cursor = "pointer";
-            addSubBtn.style.marginBottom = "20px";
-            addSubBtn.addEventListener("click", () => addSubaccountConfig(subContainer, sidebarMenus));
-            content.appendChild(addSubBtn);
+            // Create table
+            const table = document.createElement("table");
+            table.style.width = "100%";
+            table.style.borderCollapse = "collapse";
+            table.style.marginBottom = "20px";
 
-            // Start with one subaccount config
-            addSubaccountConfig(subContainer, sidebarMenus);
+            const thead = document.createElement("thead");
+            const headerRow = document.createElement("tr");
 
-            function addSubaccountConfig(container, sidebarMenus) {
-                const configDiv = document.createElement("div");
-                configDiv.style.border = "1px solid #ddd";
-                configDiv.style.borderRadius = "5px";
-                configDiv.style.padding = "15px";
-                configDiv.style.marginBottom = "15px";
-                configDiv.style.background = "#f9f9f9";
+            // First th: Menu
+            const menuTh = document.createElement("th");
+            menuTh.textContent = "Menu";
+            menuTh.style.border = "1px solid #ddd";
+            menuTh.style.padding = "8px";
+            menuTh.style.background = "#f2f2f2";
+            headerRow.appendChild(menuTh);
 
-                // Location ID input
-                const locationInput = document.createElement("input");
-                locationInput.type = "text";
-                locationInput.placeholder = "Enter Location/Subaccount ID";
-                locationInput.style.width = "100%";
-                locationInput.style.padding = "8px";
-                locationInput.style.border = "1px solid #ccc";
-                locationInput.style.borderRadius = "3px";
-                locationInput.style.marginBottom = "15px";
-                configDiv.appendChild(locationInput);
+            // Th for each location
+            locationList.forEach(locationId => {
+                const locationTh = document.createElement("th");
+                locationTh.colSpan = 2;
+                locationTh.style.border = "1px solid #ddd";
+                locationTh.style.padding = "8px";
+                locationTh.style.background = "#f2f2f2";
+                locationTh.style.textAlign = "center";
 
-                // Header for subaccount
-                const subHeader = document.createElement("div");
-                subHeader.style.display = "flex";
-                subHeader.style.justifyContent = "space-between";
-                subHeader.style.fontWeight = "bold";
-                subHeader.style.marginBottom = "10px";
-                subHeader.style.borderBottom = "1px solid #ccc";
-                subHeader.style.paddingBottom = "5px";
+                const input = document.createElement("input");
+                input.type = "text";
+                input.value = locationId;
+                input.style.width = "100%";
+                input.style.border = "none";
+                input.style.background = "transparent";
+                input.style.textAlign = "center";
+                input.addEventListener("input", () => updateLocation(locationId, input.value, table, sidebarMenus));
+                locationTh.appendChild(input);
 
-                const subMenuHeader = document.createElement("span");
-                subMenuHeader.textContent = "Menu";
-                subMenuHeader.style.flex = "1";
+                headerRow.appendChild(locationTh);
+            });
 
-                const subLockHeader = document.createElement("span");
-                subLockHeader.textContent = "Lock";
-                subLockHeader.style.width = "60px";
-                subLockHeader.style.textAlign = "center";
+            // Add new location th
+            const addTh = document.createElement("th");
+            addTh.style.border = "1px solid #ddd";
+            addTh.style.padding = "8px";
+            addTh.style.background = "#f2f2f2";
+            addTh.style.textAlign = "center";
 
-                const subHideHeader = document.createElement("span");
-                subHideHeader.textContent = "Hide";
-                subHideHeader.style.width = "60px";
-                subHideHeader.style.textAlign = "center";
+            const addBtn = document.createElement("button");
+            addBtn.textContent = "+";
+            addBtn.style.border = "none";
+            addBtn.style.background = "#28a745";
+            addBtn.style.color = "#fff";
+            addBtn.style.padding = "5px 10px";
+            addBtn.style.borderRadius = "3px";
+            addBtn.style.cursor = "pointer";
+            addBtn.addEventListener("click", () => addNewLocation(table, sidebarMenus));
+            addTh.appendChild(addBtn);
 
-                subHeader.appendChild(subMenuHeader);
-                subHeader.appendChild(subLockHeader);
-                subHeader.appendChild(subHideHeader);
-                configDiv.appendChild(subHeader);
+            headerRow.appendChild(addTh);
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
 
-                const subContent = document.createElement("div");
-                configDiv.appendChild(subContent);
+            const tbody = document.createElement("tbody");
 
-                // Remove button
-                const removeBtn = document.createElement("button");
-                removeBtn.textContent = "Remove Subaccount";
-                removeBtn.style.padding = "5px 10px";
-                removeBtn.style.border = "none";
-                removeBtn.style.borderRadius = "3px";
-                removeBtn.style.background = "#dc3545";
-                removeBtn.style.color = "#fff";
-                removeBtn.style.cursor = "pointer";
-                removeBtn.style.marginTop = "10px";
-                removeBtn.addEventListener("click", () => configDiv.remove());
-                configDiv.appendChild(removeBtn);
+            // Rows for each menu
+            sidebarMenus.forEach(menu => {
+                const row = document.createElement("tr");
 
-                container.appendChild(configDiv);
+                // Menu cell
+                const menuCell = document.createElement("td");
+                menuCell.textContent = menu.label;
+                menuCell.style.border = "1px solid #ddd";
+                menuCell.style.padding = "8px";
+                menuCell.style.fontWeight = "bold";
+                row.appendChild(menuCell);
 
-                function loadSubToggles(locationId) {
-                    subContent.innerHTML = "";
-                    if (!locationId) return;
-
-                    const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
-                    const themeData = savedTheme.themeData || {};
-                    const lockedMenus = themeData["--lockedMenus"] ? JSON.parse(themeData["--lockedMenus"]) : {};
-                    const hiddenMenus = themeData["--hiddenMenus"] ? JSON.parse(themeData["--hiddenMenus"]) : {};
-
+                // Cells for each location
+                locationList.forEach(locationId => {
                     const locationLocked = lockedMenus[locationId] || {};
                     const locationHidden = hiddenMenus[locationId] || {};
 
-                    sidebarMenus.forEach(menu => {
-                        createToggleRow(menu, locationId, locationLocked, locationHidden, subContent);
-                    });
-                }
+                    // Lock cell
+                    const lockCell = document.createElement("td");
+                    lockCell.style.border = "1px solid #ddd";
+                    lockCell.style.padding = "8px";
+                    lockCell.style.textAlign = "center";
 
-                locationInput.addEventListener("input", () => {
-                    loadSubToggles(locationInput.value.trim());
+                    const lockSwitch = document.createElement("div");
+                    lockSwitch.className = "toggle-switch";
+
+                    const lockInput = document.createElement("input");
+                    lockInput.type = "checkbox";
+                    lockInput.className = "toggle-input";
+                    lockInput.id = `lock-${locationId}-${menu.id}`;
+                    lockInput.checked = !!locationLocked[menu.id];
+
+                    const lockLabel = document.createElement("label");
+                    lockLabel.className = "toggle-label";
+                    lockLabel.setAttribute("for", lockInput.id);
+
+                    lockSwitch.appendChild(lockInput);
+                    lockSwitch.appendChild(lockLabel);
+                    lockCell.appendChild(lockSwitch);
+
+                    lockInput.addEventListener("change", () => {
+                        const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                        saved.themeData = saved.themeData || {};
+                        let locked = saved.themeData["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
+                        if (!locked[locationId]) locked[locationId] = {};
+                        if (lockInput.checked) {
+                            locked[locationId][menu.id] = true;
+                        } else {
+                            delete locked[locationId][menu.id];
+                        }
+                        saved.themeData["--lockedMenus"] = JSON.stringify(locked);
+                        localStorage.setItem("userTheme", JSON.stringify(saved));
+                    });
+
+                    row.appendChild(lockCell);
+
+                    // Hide cell
+                    const hideCell = document.createElement("td");
+                    hideCell.style.border = "1px solid #ddd";
+                    hideCell.style.padding = "8px";
+                    hideCell.style.textAlign = "center";
+
+                    const hideSwitch = document.createElement("div");
+                    hideSwitch.className = "toggle-switch";
+
+                    const hideInput = document.createElement("input");
+                    hideInput.type = "checkbox";
+                    hideInput.className = "toggle-input";
+                    hideInput.id = `hide-${locationId}-${menu.id}`;
+                    hideInput.checked = locationHidden[menu.id] ? !!locationHidden[menu.id].toggleChecked : false;
+
+                    const hideLabel = document.createElement("label");
+                    hideLabel.className = "toggle-label";
+                    hideLabel.setAttribute("for", hideInput.id);
+
+                    hideSwitch.appendChild(hideInput);
+                    hideSwitch.appendChild(hideLabel);
+                    hideCell.appendChild(hideSwitch);
+
+                    hideInput.addEventListener("change", () => {
+                        const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                        saved.themeData = saved.themeData || {};
+                        let hidden = saved.themeData["--hiddenMenus"] ? JSON.parse(saved.themeData["--hiddenMenus"]) : {};
+                        if (!hidden[locationId]) hidden[locationId] = {};
+                        hidden[locationId][menu.id] = {
+                            hidden: hideInput.checked,
+                            display: hideInput.checked ? "none !important" : "flex !important",
+                            toggleChecked: hideInput.checked
+                        };
+                        saved.themeData["--hiddenMenus"] = JSON.stringify(hidden);
+                        localStorage.setItem("userTheme", JSON.stringify(saved));
+                    });
+
+                    row.appendChild(hideCell);
                 });
+
+                // Empty cells for add column
+                const emptyLock = document.createElement("td");
+                emptyLock.style.border = "1px solid #ddd";
+                row.appendChild(emptyLock);
+
+                const emptyHide = document.createElement("td");
+                emptyHide.style.border = "1px solid #ddd";
+                row.appendChild(emptyHide);
+
+                tbody.appendChild(row);
+            });
+
+            table.appendChild(tbody);
+            content.appendChild(table);
+
+            function updateLocation(oldId, newId, table, sidebarMenus) {
+                if (oldId === newId) return;
+                // Update data
+                const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                saved.themeData = saved.themeData || {};
+                let locked = saved.themeData["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
+                let hidden = saved.themeData["--hiddenMenus"] ? JSON.parse(saved.themeData["--hiddenMenus"]) : {};
+                if (locked[oldId]) {
+                    locked[newId] = locked[oldId];
+                    delete locked[oldId];
+                }
+                if (hidden[oldId]) {
+                    hidden[newId] = hidden[oldId];
+                    delete hidden[oldId];
+                }
+                saved.themeData["--lockedMenus"] = JSON.stringify(locked);
+                saved.themeData["--hiddenMenus"] = JSON.stringify(hidden);
+                localStorage.setItem("userTheme", JSON.stringify(saved));
+                // Reload table
+                loadAllToggles(content, agencyMenus, sidebarMenus);
+            }
+
+            function addNewLocation(table, sidebarMenus) {
+                // Add a new location with empty ID
+                const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                saved.themeData = saved.themeData || {};
+                let locked = saved.themeData["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
+                let hidden = saved.themeData["--hiddenMenus"] ? JSON.parse(saved.themeData["--hiddenMenus"]) : {};
+                const newId = "new_location_" + Date.now();
+                locked[newId] = {};
+                hidden[newId] = {};
+                saved.themeData["--lockedMenus"] = JSON.stringify(locked);
+                saved.themeData["--hiddenMenus"] = JSON.stringify(hidden);
+                localStorage.setItem("userTheme", JSON.stringify(saved));
+                // Reload table
+                loadAllToggles(content, agencyMenus, sidebarMenus);
             }
         }
 
