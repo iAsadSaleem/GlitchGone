@@ -4037,7 +4037,7 @@
                 idInput.style.border = "none";
                 idInput.style.background = "transparent";
                 idInput.style.fontSize = "10px";
-                idInput.addEventListener("change", () => updateLocationId(locationId, idInput.value));
+                // idInput.addEventListener("change", () => updateLocationId(locationId, idInput.value));
                 idCell.appendChild(idInput);
 
                 row.appendChild(idCell);
