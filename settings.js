@@ -3966,63 +3966,110 @@
             subTitle.style.marginBottom = "10px";
             content.appendChild(subTitle);
 
-            // Location ID input
-            const locationInput = document.createElement("input");
-            locationInput.type = "text";
-            locationInput.placeholder = "Enter Location/Subaccount ID";
-            locationInput.style.width = "100%";
-            locationInput.style.padding = "10px";
-            locationInput.style.border = "1px solid #ccc";
-            locationInput.style.borderRadius = "5px";
-            locationInput.style.marginBottom = "20px";
-            content.appendChild(locationInput);
+            const subContainer = document.createElement("div");
+            content.appendChild(subContainer);
 
-            // Header for subaccount
-            const subHeader = document.createElement("div");
-            subHeader.style.display = "flex";
-            subHeader.style.justifyContent = "space-between";
-            subHeader.style.fontWeight = "bold";
-            subHeader.style.marginBottom = "10px";
-            subHeader.style.borderBottom = "1px solid #ccc";
-            subHeader.style.paddingBottom = "5px";
+            const addSubBtn = document.createElement("button");
+            addSubBtn.textContent = "Add Subaccount";
+            addSubBtn.style.padding = "8px 16px";
+            addSubBtn.style.border = "none";
+            addSubBtn.style.borderRadius = "5px";
+            addSubBtn.style.background = "#28a745";
+            addSubBtn.style.color = "#fff";
+            addSubBtn.style.cursor = "pointer";
+            addSubBtn.style.marginBottom = "20px";
+            addSubBtn.addEventListener("click", () => addSubaccountConfig(subContainer, sidebarMenus));
+            content.appendChild(addSubBtn);
 
-            const subMenuHeader = document.createElement("span");
-            subMenuHeader.textContent = "Menu";
-            subMenuHeader.style.flex = "1";
+            // Start with one subaccount config
+            addSubaccountConfig(subContainer, sidebarMenus);
 
-            const subLockHeader = document.createElement("span");
-            subLockHeader.textContent = "Lock";
-            subLockHeader.style.width = "60px";
-            subLockHeader.style.textAlign = "center";
+            function addSubaccountConfig(container, sidebarMenus) {
+                const configDiv = document.createElement("div");
+                configDiv.style.border = "1px solid #ddd";
+                configDiv.style.borderRadius = "5px";
+                configDiv.style.padding = "15px";
+                configDiv.style.marginBottom = "15px";
+                configDiv.style.background = "#f9f9f9";
 
-            const subHideHeader = document.createElement("span");
-            subHideHeader.textContent = "Hide";
-            subHideHeader.style.width = "60px";
-            subHideHeader.style.textAlign = "center";
+                // Location ID input
+                const locationInput = document.createElement("input");
+                locationInput.type = "text";
+                locationInput.placeholder = "Enter Location/Subaccount ID";
+                locationInput.style.width = "100%";
+                locationInput.style.padding = "8px";
+                locationInput.style.border = "1px solid #ccc";
+                locationInput.style.borderRadius = "3px";
+                locationInput.style.marginBottom = "15px";
+                configDiv.appendChild(locationInput);
 
-            subHeader.appendChild(subMenuHeader);
-            subHeader.appendChild(subLockHeader);
-            subHeader.appendChild(subHideHeader);
-            content.appendChild(subHeader);
+                // Header for subaccount
+                const subHeader = document.createElement("div");
+                subHeader.style.display = "flex";
+                subHeader.style.justifyContent = "space-between";
+                subHeader.style.fontWeight = "bold";
+                subHeader.style.marginBottom = "10px";
+                subHeader.style.borderBottom = "1px solid #ccc";
+                subHeader.style.paddingBottom = "5px";
 
-            const subContent = document.createElement("div");
-            content.appendChild(subContent);
+                const subMenuHeader = document.createElement("span");
+                subMenuHeader.textContent = "Menu";
+                subMenuHeader.style.flex = "1";
 
-            function loadSubToggles(locationId) {
-                subContent.innerHTML = "";
-                if (!locationId) return;
+                const subLockHeader = document.createElement("span");
+                subLockHeader.textContent = "Lock";
+                subLockHeader.style.width = "60px";
+                subLockHeader.style.textAlign = "center";
 
-                const locationLocked = lockedMenus[locationId] || {};
-                const locationHidden = hiddenMenus[locationId] || {};
+                const subHideHeader = document.createElement("span");
+                subHideHeader.textContent = "Hide";
+                subHideHeader.style.width = "60px";
+                subHideHeader.style.textAlign = "center";
 
-                sidebarMenus.forEach(menu => {
-                    createToggleRow(menu, locationId, locationLocked, locationHidden, subContent);
+                subHeader.appendChild(subMenuHeader);
+                subHeader.appendChild(subLockHeader);
+                subHeader.appendChild(subHideHeader);
+                configDiv.appendChild(subHeader);
+
+                const subContent = document.createElement("div");
+                configDiv.appendChild(subContent);
+
+                // Remove button
+                const removeBtn = document.createElement("button");
+                removeBtn.textContent = "Remove Subaccount";
+                removeBtn.style.padding = "5px 10px";
+                removeBtn.style.border = "none";
+                removeBtn.style.borderRadius = "3px";
+                removeBtn.style.background = "#dc3545";
+                removeBtn.style.color = "#fff";
+                removeBtn.style.cursor = "pointer";
+                removeBtn.style.marginTop = "10px";
+                removeBtn.addEventListener("click", () => configDiv.remove());
+                configDiv.appendChild(removeBtn);
+
+                container.appendChild(configDiv);
+
+                function loadSubToggles(locationId) {
+                    subContent.innerHTML = "";
+                    if (!locationId) return;
+
+                    const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                    const themeData = savedTheme.themeData || {};
+                    const lockedMenus = themeData["--lockedMenus"] ? JSON.parse(themeData["--lockedMenus"]) : {};
+                    const hiddenMenus = themeData["--hiddenMenus"] ? JSON.parse(themeData["--hiddenMenus"]) : {};
+
+                    const locationLocked = lockedMenus[locationId] || {};
+                    const locationHidden = hiddenMenus[locationId] || {};
+
+                    sidebarMenus.forEach(menu => {
+                        createToggleRow(menu, locationId, locationLocked, locationHidden, subContent);
+                    });
+                }
+
+                locationInput.addEventListener("input", () => {
+                    loadSubToggles(locationInput.value.trim());
                 });
             }
-
-            locationInput.addEventListener("input", () => {
-                loadSubToggles(locationInput.value.trim());
-            });
         }
 
         // Function to create toggle row
@@ -4114,6 +4161,7 @@
                 }
                 saved.themeData["--lockedMenus"] = JSON.stringify(locked);
                 localStorage.setItem("userTheme", JSON.stringify(saved));
+                if (!locationId) applyLockedMenus();
             });
 
             hideInput.addEventListener("change", () => {
@@ -4136,6 +4184,7 @@
                 }
                 saved.themeData["--hiddenMenus"] = JSON.stringify(hidden);
                 localStorage.setItem("userTheme", JSON.stringify(saved));
+                if (!locationId) applyLockedMenus();
             });
 
             row.appendChild(label);
