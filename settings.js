@@ -4477,6 +4477,8 @@
   if (!lockedMenus || typeof lockedMenus !== "object") return;
 
   const locationId = getCurrentLocationId();
+  console.log("applyLockedMenus called, locationId:", locationId);
+  console.log("lockedMenus:", lockedMenus);
   
   // Select all sidebar menus
   const allMenus = document.querySelectorAll(".hl_nav-header a, nav.flex-1.w-full a");
@@ -4486,6 +4488,7 @@
     if (!menuId) return;
     
     const isLocked = locationId ? !!lockedMenus[locationId]?.[menuId] : !!lockedMenus[menuId];
+    console.log("Processing menu:", menuId, "isLocked:", isLocked);
     
     if (isLocked) {
       if (!menu.querySelector(".tb-lock-icon")) {
@@ -4506,8 +4509,14 @@
         menu.dataset.tbLockBound = "1";
       }
     } else {
+      console.log("Unlocking menu:", menuId);
       const icon = menu.querySelector(".tb-lock-icon");
-      if (icon) icon.remove();
+      if (icon) {
+        console.log("Removing icon for", menuId);
+        icon.remove();
+      } else {
+        console.log("No icon found for", menuId);
+      }
       menu.style.opacity = "";
       menu.style.cursor = "";
       if (menu.dataset.tbLockBound === "1") {
