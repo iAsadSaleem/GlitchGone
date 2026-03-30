@@ -4116,6 +4116,7 @@
 
                     // Event listeners
                     lockInput.addEventListener("change", () => {
+                        console.log("Subaccount lock toggle changed for", menu.id, "locationId:", locationId, "checked:", lockInput.checked);
                         const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                         saved.themeData = saved.themeData || {};
                         let locked = saved.themeData["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
@@ -4395,79 +4396,6 @@
             overlay.appendChild(popup);
             document.body.appendChild(overlay);
         }
-    // function applyLockedMenus() {
-    //     // 1️⃣ Load saved theme from localStorage
-    //     let savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
-    //     if (savedTheme.themeData && typeof savedTheme.themeData === "string") {
-    //         try {
-    //             savedTheme.themeData = JSON.parse(savedTheme.themeData);
-    //         } catch (e) {
-    //             savedTheme.themeData = {};
-    //         }
-    //     }
-
-    //     // 2️⃣ Parse lockedMenus + hiddenMenus JSON from theme data
-    //     let lockedMenus = {};
-    //     let hiddenMenus = {};
-    //     if (savedTheme.themeData && savedTheme.themeData["--lockedMenus"]) {
-    //         try {
-    //             lockedMenus = JSON.parse(savedTheme.themeData["--lockedMenus"]);
-    //         } catch (e) {
-    //             console.warn("⚠️ Failed to parse lockedMenus:", e);
-    //         }
-    //     }
-    //     if (savedTheme.themeData && savedTheme.themeData["--hiddenMenus"]) {
-    //         try {
-    //             hiddenMenus = JSON.parse(savedTheme.themeData["--hiddenMenus"]);
-    //         } catch (e) {
-    //             console.warn("⚠️ Failed to parse hiddenMenus:", e);
-    //         }
-    //     }
-
-    //     // 3️⃣ Select all sidebar links (main + agency)
-    //     const allMenus = document.querySelectorAll(".hl_nav-header a, nav.flex-1.w-full a");
-
-    //     allMenus.forEach(menu => {
-    //         const menuId = menu.id?.trim();
-    //         if (!menuId) return; // skip if no ID
-    //         // 🔄 Always remove previous lock icon first (avoid duplicates)
-    //         const existingLock = menu.querySelector(".tb-lock-icon");
-    //         if (existingLock) existingLock.remove();
-
-    //         // ✅ If this menu is hidden → add `d-none`
-    //         if (hiddenMenus[menuId]?.hidden) {
-    //             menu.classList.add("d-none");
-    //         } else {
-    //             menu.classList.remove("d-none");
-    //         }
-            
-
-    //         //// 🔐 If this menu is locked → show lock icon + disable
-    //         if (lockedMenus[menuId]) {
-    //             const lockIcon = document.createElement("i");
-    //             lockIcon.className = "tb-lock-icon fas fa-lock ml-2 text-red-500";
-
-    //             lockIcon.style.setProperty("display", "inline-block", "important");
-    //             lockIcon.style.setProperty("visibility", "visible", "important");
-    //             lockIcon.style.setProperty("opacity", "1", "important");
-    //             lockIcon.style.setProperty("position", "relative", "important");
-    //             lockIcon.style.setProperty("z-index", "9999", "important");
-
-    //             menu.appendChild(lockIcon);
-
-    //             menu.style.opacity = "0.5";
-    //             menu.style.cursor = "not-allowed";
-
-    //             // 🔥 Important: use capture phase to block navigation before it happens
-    //             menu.addEventListener("click", blockMenuClick, true);
-    //         } else {
-    //             menu.style.opacity = "";
-    //             menu.style.cursor = "";
-    //             menu.removeEventListener("click", blockMenuClick, true);
-    //         }
-    //     });
-
-    // }
     function applyLockedMenus() {
   const savedRaw = localStorage.getItem("userTheme");
   const saved = JSON.parse(savedRaw) || {};
