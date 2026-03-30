@@ -6374,17 +6374,17 @@ function getCurrentLocationId() {
 function restoreHiddenMenus() {
   const savedRaw = localStorage.getItem("userTheme");
   const saved = JSON.parse(savedRaw) || {};
-  if (!saved.themeData || !saved.themeData["--hiddenMenus"]) return;
-
-  let hiddenMenus;
-  try { hiddenMenus = JSON.parse(saved.themeData["--hiddenMenus"]); } catch (e) { console.warn("[ThemeBuilder] invalid --hiddenMenus"); return; }
-  if (!hiddenMenus || typeof hiddenMenus !== "object") return;
+  if (!saved.themeData) return;
 
   const locationId = getCurrentLocationId();
   
   if (locationId) {
-    // Location-specific mode
-    if (!hiddenMenus[locationId]) return;
+    // Location-specific mode - use --hiddenMenus
+    if (!saved.themeData["--hiddenMenus"]) return;
+    let hiddenMenus;
+    try { hiddenMenus = JSON.parse(saved.themeData["--hiddenMenus"]); } catch (e) { console.warn("[ThemeBuilder] invalid --hiddenMenus"); return; }
+    if (!hiddenMenus || typeof hiddenMenus !== "object" || !hiddenMenus[locationId]) return;
+    
     Object.keys(hiddenMenus[locationId]).forEach(menuId => {
       const menuEl = document.getElementById(menuId);
       const toggleEl = document.getElementById("hide-" + menuId);
@@ -6397,8 +6397,12 @@ function restoreHiddenMenus() {
       if (toggleEl) toggleEl.checked = hidden;
     });
   } else {
-    // Global mode
-    let agencyData = saved.themeData["--agencyLockedHideMenus"] ? JSON.parse(saved.themeData["--agencyLockedHideMenus"]) : {};
+    // Global mode - use --agencyLockedHideMenus
+    if (!saved.themeData["--agencyLockedHideMenus"]) return;
+    let agencyData;
+    try { agencyData = JSON.parse(saved.themeData["--agencyLockedHideMenus"]); } catch (e) { console.warn("[ThemeBuilder] invalid --agencyLockedHideMenus"); return; }
+    if (!agencyData || typeof agencyData !== "object") return;
+    
     let globalHidden = agencyData.hidden || {};
     Object.keys(globalHidden).forEach(menuId => {
       const menuEl = document.getElementById(menuId);
@@ -6421,17 +6425,17 @@ function applyHiddenMenus() {
 function applyLockedMenus() {
   const savedRaw = localStorage.getItem("userTheme");
   const saved = JSON.parse(savedRaw) || {};
-  if (!saved.themeData || !saved.themeData["--lockedMenus"]) return;
-
-  let lockedMenus;
-  try { lockedMenus = JSON.parse(saved.themeData["--lockedMenus"]); } catch (e) { console.warn("[ThemeBuilder] invalid --lockedMenus"); return; }
-  if (!lockedMenus || typeof lockedMenus !== "object") return;
+  if (!saved.themeData) return;
 
   const locationId = getCurrentLocationId();
   
   if (locationId) {
-    // Location-specific mode
-    if (!lockedMenus[locationId]) return;
+    // Location-specific mode - use --lockedMenus
+    if (!saved.themeData["--lockedMenus"]) return;
+    let lockedMenus;
+    try { lockedMenus = JSON.parse(saved.themeData["--lockedMenus"]); } catch (e) { console.warn("[ThemeBuilder] invalid --lockedMenus"); return; }
+    if (!lockedMenus || typeof lockedMenus !== "object" || !lockedMenus[locationId]) return;
+    
     Object.keys(lockedMenus[locationId]).forEach(menuId => {
       const menuEl = document.getElementById(menuId);
       if (!menuEl) return;
@@ -6463,11 +6467,14 @@ function applyLockedMenus() {
       }
     });
   } else {
-    // Global mode
-    let agencyData = saved.themeData["--agencyLockedHideMenus"] ? JSON.parse(saved.themeData["--agencyLockedHideMenus"]) : {};
+    // Global mode - use --agencyLockedHideMenus
+    if (!saved.themeData["--agencyLockedHideMenus"]) return;
+    let agencyData;
+    try { agencyData = JSON.parse(saved.themeData["--agencyLockedHideMenus"]); } catch (e) { console.warn("[ThemeBuilder] invalid --agencyLockedHideMenus"); return; }
+    if (!agencyData || typeof agencyData !== "object") return;
+    
     let globalLocked = agencyData.locked || {};
     Object.keys(globalLocked).forEach(menuId => {
-      
       const menuEl = document.getElementById(menuId);
       if (!menuEl) return;
       
