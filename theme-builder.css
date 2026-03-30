@@ -1988,4 +1988,11 @@ body.dark-mode {
 
 .tb-lock-options {
     transition: all 0.3s ease;
+    display : none;
+    margin : 10px 0;
+    padding :10px;
+    background : var(--themebuildermaincolor,#1e1e1e);
+    border-radius : 8px;
+    flex-direction : row;
+    gap : 8px;
 }

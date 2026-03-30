@@ -4030,13 +4030,6 @@
                         // 🔽 Lock Options Panel (hidden by default)
             const lockOptionsPanel = document.createElement("div");
             lockOptionsPanel.className = "tb-lock-options";
-            lockOptionsPanel.style.display = "none";
-            lockOptionsPanel.style.margin = "10px 0";
-            lockOptionsPanel.style.padding = "10px";
-            lockOptionsPanel.style.background = "#1e1e1e";
-            lockOptionsPanel.style.borderRadius = "8px";
-            lockOptionsPanel.style.flexDirection = "column";
-            lockOptionsPanel.style.gap = "8px";
 
             // 🎯 3 Popup Options
             const popupOptions = [
