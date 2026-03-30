@@ -3883,6 +3883,9 @@
             modal.style.overflowY = "auto";
             modal.style.boxShadow = "0 8px 24px rgba(0,0,0,0.3)";
 
+            // Prevent clicks inside modal from closing it
+            modal.addEventListener("click", (e) => e.stopPropagation());
+
             const title = document.createElement("h3");
             title.textContent = "Configure Lock & Hide Settings";
             title.style.marginBottom = "15px";
