@@ -4410,7 +4410,7 @@
   console.log("lockedMenus:", lockedMenus);
   
   // Select all sidebar menus
-  const allMenus = document.querySelectorAll(".hl_nav-header a, nav.flex-1.w-full a");
+  const allMenus = document.querySelectorAll("a[id^='sb_'], .hl_nav-header a");
   
   allMenus.forEach(menu => {
     const menuId = menu.id?.trim();
@@ -4446,8 +4446,8 @@
       } else {
         console.log("No icon found for", menuId);
       }
-      menu.style.removeProperty("opacity");
-      menu.style.removeProperty("cursor");
+      menu.style.setProperty("opacity", "1", "important");
+      menu.style.setProperty("cursor", "auto", "important");
       if (menu.dataset.tbLockBound === "1") {
         menu.removeEventListener("click", blockMenuClick, true);
         delete menu.dataset.tbLockBound;
