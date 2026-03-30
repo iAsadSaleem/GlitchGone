@@ -4446,8 +4446,8 @@
       } else {
         console.log("No icon found for", menuId);
       }
-      menu.style.opacity = "";
-      menu.style.cursor = "";
+      menu.style.removeProperty("opacity");
+      menu.style.removeProperty("cursor");
       if (menu.dataset.tbLockBound === "1") {
         menu.removeEventListener("click", blockMenuClick, true);
         delete menu.dataset.tbLockBound;
