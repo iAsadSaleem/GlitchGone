@@ -4037,8 +4037,19 @@
                 idInput.style.border = "none";
                 idInput.style.background = "transparent";
                 idInput.style.fontSize = "10px";
-                idInput.addEventListener("change", () => updateLocationId(locationId, idInput.value));
+                // idInput.addEventListener("change", () => updateLocationId(locationId, idInput.value));
                 idCell.appendChild(idInput);
+
+                // Add update button for all rows
+                const updateBtn = document.createElement("button");
+                updateBtn.textContent = "Update";
+                updateBtn.style.fontSize = "10px";
+                updateBtn.style.padding = "4px 8px";
+                updateBtn.style.border = "1px solid #ccc";
+                updateBtn.style.background = "#f0f0f0";
+                updateBtn.style.cursor = "pointer";
+                updateBtn.addEventListener("click", () => updateLocationId(locationId, idInput.value));
+                idCell.appendChild(updateBtn);
 
                 row.appendChild(idCell);
 
