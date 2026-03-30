@@ -4040,17 +4040,6 @@
                 idInput.addEventListener("change", () => updateLocationId(locationId, idInput.value));
                 idCell.appendChild(idInput);
 
-                // Add update button
-                const updateBtn = document.createElement("button");
-                updateBtn.textContent = "Update";
-                updateBtn.style.fontSize = "8px";
-                updateBtn.style.padding = "2px 4px";
-                updateBtn.style.border = "1px solid #ccc";
-                updateBtn.style.background = "#f0f0f0";
-                updateBtn.style.cursor = "pointer";
-                updateBtn.addEventListener("click", () => updateLocationId(locationId, idInput.value));
-                idCell.appendChild(updateBtn);
-
                 row.appendChild(idCell);
 
                 // Cells for each menu
