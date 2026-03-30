@@ -4033,7 +4033,7 @@
 
             // 🎯 3 Popup Options
             const popupOptions = [
-                { id: "simple", label: "Simple Alert" },
+                { id: "simple", label: "Lock Alert" },
                 { id: "upgrade", label: "Upgrade Plan" },
                 { id: "contact", label: "Contact Admin" }
             ];
@@ -4047,6 +4047,8 @@
                 const optionLabel = document.createElement("span");
                 optionLabel.textContent = option.label;
                 optionLabel.style.fontSize = "11px";
+                optionLabel.style.color = "#ffffff";
+
 
                 const previewBtn = document.createElement("button");
                 previewBtn.textContent = "Preview";
