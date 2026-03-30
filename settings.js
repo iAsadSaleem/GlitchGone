@@ -3784,8 +3784,6 @@
         wrapper.className = "tb-feature-lock-settings";
 
         const themeData = savedTheme.themeData || {};
-        const lockedMenus = themeData["--lockedMenus"] ? JSON.parse(themeData["--lockedMenus"]) : {};
-        const hiddenMenus = themeData["--hiddenMenus"] ? JSON.parse(themeData["--hiddenMenus"]) : {};
 
         const agencyMenus = [
             { id: "sb_agency-dashboard", label: "Agency Dashboard" },
@@ -3827,297 +3825,262 @@
         lockHideInfo.style.marginBottom = "15px";
         lockHideInfo.style.lineHeight = "1.6";
         lockHideInfo.innerHTML = `
-              🔒 <strong>How the Lock & Hide Feature Works:</strong><br><br>
-              1. Each menu item below comes with two toggle options — one for <strong>Lock</strong> and one for <strong>Hide</strong>.  
-              2. Turning the <strong>Lock</strong> toggle <em>on</em> will prevent users from accessing or interacting with that specific menu item. This is helpful if you want to restrict certain features based on user roles or permissions.  
-              3. Switching the <strong>Hide</strong> toggle <em>on</em> will completely remove the menu item from the sidebar view, creating a cleaner and more focused interface.  
-              4. You can use these toggles together or individually to customize the sidebar exactly the way you need — either by restricting access, hiding unused sections, or both.<br><br>
-              ✨ <em>Tip:</em> Use <strong>Lock</strong> to control access and <strong>Hide</strong> to simplify the user interface.
+              🔒 <strong>How the Location-Based Lock & Hide Feature Works:</strong><br><br>
+              1. Use the <strong>Configure Lock</strong> button to set which menus are locked for specific locations/subaccounts.<br>
+              2. Use the <strong>Configure Hide</strong> button to set which menus are hidden for specific locations/subaccounts.<br>
+              3. Enter the Location/Subaccount ID in the input field within the configuration modal.<br>
+              4. Toggle the options for each menu item to apply per location.<br><br>
+              ✨ <em>Note:</em> Settings are stored per location, allowing granular control over menu access and visibility.
             `;
         wrapper.appendChild(lockHideInfo);
 
-        const agencyTitle = document.createElement("h4");
-        agencyTitle.className = "tb-header-controls";
-        agencyTitle.textContent = "Agency Level";
-        agencyTitle.style.marginTop = "20px";
-        agencyTitle.style.cursor = "var(--custom-pointer,auto)";
-        wrapper.appendChild(agencyTitle);
+        // Buttons
+        const buttonContainer = document.createElement("div");
+        buttonContainer.style.display = "flex";
+        buttonContainer.style.gap = "10px";
+        buttonContainer.style.marginBottom = "20px";
 
-        // Agency Section
-        const agencyContainer = document.createElement("div");
-        agencyContainer.className = "tb-section-container"; // for slide animation
-        agencyMenus.forEach(menu =>
-            createToggleRow(menu, lockedMenus, hiddenMenus, agencyContainer)
-        );
-        wrapper.appendChild(agencyContainer);
+        const configureLockBtn = document.createElement("button");
+        configureLockBtn.textContent = "Configure Lock";
+        configureLockBtn.style.padding = "10px 20px";
+        configureLockBtn.style.border = "none";
+        configureLockBtn.style.borderRadius = "5px";
+        configureLockBtn.style.background = "#d9534f";
+        configureLockBtn.style.color = "#fff";
+        configureLockBtn.style.cursor = "pointer";
+        configureLockBtn.addEventListener("click", () => openConfigureModal("lock", agencyMenus, sidebarMenus));
 
-        // Arrow Icon (Font Awesome)
-        const agencyArrow = document.createElement("span");
-        agencyArrow.style.marginLeft = "8px";
-        agencyArrow.innerHTML = `<i class="fa-solid fa-angle-down" style="color:white;margin-right:6px;font-size:16px; border-radius: 4px; border: 2px solid #ffffff; padding: 0px 2px 0px 2px;"></i>`; // initial closed
-        agencyTitle.appendChild(agencyArrow);
+        const configureHideBtn = document.createElement("button");
+        configureHideBtn.textContent = "Configure Hide";
+        configureHideBtn.style.padding = "10px 20px";
+        configureHideBtn.style.border = "none";
+        configureHideBtn.style.borderRadius = "5px";
+        configureHideBtn.style.background = "#5bc0de";
+        configureHideBtn.style.color = "#fff";
+        configureHideBtn.style.cursor = "pointer";
+        configureHideBtn.addEventListener("click", () => openConfigureModal("hide", agencyMenus, sidebarMenus));
 
-        // Toggle logic
-        agencyTitle.addEventListener("click", () => {
-            const icon = agencyArrow.querySelector("i");
-
-            if (agencyContainer.classList.contains("open")) {
-                agencyContainer.classList.remove("open");
-
-                icon.classList.remove("fa-angle-up");
-                icon.classList.add("fa-angle-down");
-            } else {
-                agencyContainer.classList.add("open");
-
-                icon.classList.remove("fa-angle-down");
-                icon.classList.add("fa-angle-up");
-            }
-        });
-
-     const mainTitle = document.createElement("h4");
-    mainTitle.className = "tb-header-controls";
-    mainTitle.textContent = "Sub-Account Level";
-    mainTitle.style.cursor = "var(--custom-pointer,auto)";
-    wrapper.appendChild(mainTitle);
-
-    // Sub-Account Section
-    const subAccountContainer = document.createElement("div");
-    subAccountContainer.className = "tb-section-container"; // for slide animation
-    sidebarMenus.forEach(menu =>
-        createToggleRow(menu, lockedMenus, hiddenMenus, subAccountContainer)
-    );
-    wrapper.appendChild(subAccountContainer);
-
-    // Arrow Icon (Font Awesome)
-    const subAccountArrow = document.createElement("span");
-    subAccountArrow.style.marginLeft = "8px";
-    subAccountArrow.innerHTML = `<i class="fa-solid fa-angle-down" style="color:white;margin-right:6px;font-size:16px; border-radius: 4px; border: 2px solid #ffffff; padding: 0px 2px 0px 2px;"></i>`; // closed state
-    mainTitle.appendChild(subAccountArrow);
-
-    // Toggle logic
-    mainTitle.addEventListener("click", () => {
-        const icon = subAccountArrow.querySelector("i");
-
-        if (subAccountContainer.classList.contains("open")) {
-            subAccountContainer.classList.remove("open");
-
-            icon.classList.remove("fa-angle-up");
-            icon.classList.add("fa-angle-down");
-        } else {
-            subAccountContainer.classList.add("open");
-
-            icon.classList.remove("fa-angle-down");
-            icon.classList.add("fa-angle-up");
-        }
-    });
-
-
-
-        // 🏢 AGENCY MENUS
+        buttonContainer.appendChild(configureLockBtn);
+        buttonContainer.appendChild(configureHideBtn);
+        wrapper.appendChild(buttonContainer);
 
         container.appendChild(wrapper);
-        applyLockedMenus();
 
-        // 🔧 Function to create each toggle row
-        function createToggleRow(menu, lockedMenus, hiddenMenus, parent) {
+        // Function to open configure modal
+        function openConfigureModal(type, agencyMenus, sidebarMenus) {
+            // Remove existing modal
+            document.getElementById("tb-configure-modal")?.remove();
+
+            const overlay = document.createElement("div");
+            overlay.id = "tb-configure-modal";
+            overlay.style.position = "fixed";
+            overlay.style.top = "0";
+            overlay.style.left = "0";
+            overlay.style.width = "100%";
+            overlay.style.height = "100%";
+            overlay.style.background = "rgba(0,0,0,0.5)";
+            overlay.style.display = "flex";
+            overlay.style.alignItems = "center";
+            overlay.style.justifyContent = "center";
+            overlay.style.zIndex = "99999";
+
+            const modal = document.createElement("div");
+            modal.style.background = "#fff";
+            modal.style.padding = "20px";
+            modal.style.borderRadius = "10px";
+            modal.style.maxWidth = "600px";
+            modal.style.width = "90%";
+            modal.style.maxHeight = "80vh";
+            modal.style.overflowY = "auto";
+            modal.style.boxShadow = "0 8px 24px rgba(0,0,0,0.3)";
+
+            const title = document.createElement("h3");
+            title.textContent = type === "lock" ? "Configure Lock Settings" : "Configure Hide Settings";
+            title.style.marginBottom = "15px";
+            modal.appendChild(title);
+
+            // Location ID input
+            const locationInput = document.createElement("input");
+            locationInput.type = "text";
+            locationInput.placeholder = "Enter Location/Subaccount ID";
+            locationInput.style.width = "100%";
+            locationInput.style.padding = "10px";
+            locationInput.style.border = "1px solid #ccc";
+            locationInput.style.borderRadius = "5px";
+            locationInput.style.marginBottom = "20px";
+            modal.appendChild(locationInput);
+
+            const content = document.createElement("div");
+            modal.appendChild(content);
+
+            // Function to load toggles for location
+            function loadToggles(locationId) {
+                content.innerHTML = "";
+                if (!locationId) return;
+
+                const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                const themeData = savedTheme.themeData || {};
+                const lockedMenus = themeData["--lockedMenus"] ? JSON.parse(themeData["--lockedMenus"]) : {};
+                const hiddenMenus = themeData["--hiddenMenus"] ? JSON.parse(themeData["--hiddenMenus"]) : {};
+
+                const locationLocked = lockedMenus[locationId] || {};
+                const locationHidden = hiddenMenus[locationId] || {};
+
+                // Agency Level
+                const agencyTitle = document.createElement("h4");
+                agencyTitle.textContent = "Agency Level";
+                agencyTitle.style.marginTop = "20px";
+                agencyTitle.style.marginBottom = "10px";
+                content.appendChild(agencyTitle);
+
+                agencyMenus.forEach(menu => {
+                    createModalToggleRow(menu, type, locationId, locationLocked, locationHidden, content);
+                });
+
+                // Sub-Account Level
+                const subTitle = document.createElement("h4");
+                subTitle.textContent = "Sub-Account Level";
+                subTitle.style.marginTop = "20px";
+                subTitle.style.marginBottom = "10px";
+                content.appendChild(subTitle);
+
+                sidebarMenus.forEach(menu => {
+                    createModalToggleRow(menu, type, locationId, locationLocked, locationHidden, content);
+                });
+            }
+
+            locationInput.addEventListener("input", () => {
+                loadToggles(locationInput.value.trim());
+            });
+
+            // Close button
+            const closeBtn = document.createElement("button");
+            closeBtn.textContent = "Close";
+            closeBtn.style.padding = "10px 20px";
+            closeBtn.style.border = "none";
+            closeBtn.style.borderRadius = "5px";
+            closeBtn.style.background = "#6c757d";
+            closeBtn.style.color = "#fff";
+            closeBtn.style.cursor = "pointer";
+            closeBtn.style.marginTop = "20px";
+            closeBtn.addEventListener("click", () => overlay.remove());
+            modal.appendChild(closeBtn);
+
+            overlay.appendChild(modal);
+            document.body.appendChild(overlay);
+        }
+
+        // Function to create toggle row in modal
+        function createModalToggleRow(menu, type, locationId, locationLocked, locationHidden, parent) {
             const row = document.createElement("div");
-            row.className = "tb-feature-row";
             row.style.display = "flex";
             row.style.alignItems = "center";
             row.style.justifyContent = "space-between";
-            row.style.marginBottom = "-8px";
+            row.style.marginBottom = "10px";
 
             const label = document.createElement("span");
             label.textContent = menu.label;
             label.style.flex = "1";
-            label.style.fontSize = "10px";
+            label.style.fontSize = "14px";
 
             const toggleWrapper = document.createElement("div");
-            toggleWrapper.style.display = "flex";
-            toggleWrapper.style.gap = "20px";
-            toggleWrapper.style.alignItems = "center";
 
-            // 🔐 Lock toggle
-            const lockWrapper = document.createElement("div");
-            lockWrapper.style.display = "flex";
-            lockWrapper.style.alignItems = "center";
-            lockWrapper.style.gap = "0px";
+            if (type === "lock") {
+                // Lock toggle
+                const lockWrapper = document.createElement("div");
+                lockWrapper.style.display = "flex";
+                lockWrapper.style.alignItems = "center";
+                lockWrapper.style.gap = "5px";
 
-            const lockIconEl = document.createElement("i");
-            lockIconEl.className = "fas fa-lock";
-            lockIconEl.style.color = "#d9534f";
-            lockIconEl.style.fontSize = "16px";
+                const lockIconEl = document.createElement("i");
+                lockIconEl.className = "fas fa-lock";
+                lockIconEl.style.color = "#d9534f";
+                lockIconEl.style.fontSize = "16px";
 
-            const lockSwitch = document.createElement("div");
-            lockSwitch.className = "toggle-switch";
+                const lockSwitch = document.createElement("div");
+                lockSwitch.className = "toggle-switch";
 
-            const lockInput = document.createElement("input");
-            lockInput.type = "checkbox";
-            lockInput.className = "toggle-input";
-            lockInput.id = "lock-" + menu.id;
-            lockInput.checked = !!lockedMenus[menu.id];
+                const lockInput = document.createElement("input");
+                lockInput.type = "checkbox";
+                lockInput.className = "toggle-input";
+                lockInput.id = `lock-${locationId}-${menu.id}`;
+                lockInput.checked = !!locationLocked[menu.id];
 
-            const lockLabel = document.createElement("label");
-            lockLabel.className = "toggle-label";
-            lockLabel.setAttribute("for", "lock-" + menu.id);
+                const lockLabel = document.createElement("label");
+                lockLabel.className = "toggle-label";
+                lockLabel.setAttribute("for", `lock-${locationId}-${menu.id}`);
 
-            lockSwitch.appendChild(lockInput);
-            lockSwitch.appendChild(lockLabel);
-            lockWrapper.appendChild(lockIconEl);
-            lockWrapper.appendChild(lockSwitch);
+                lockSwitch.appendChild(lockInput);
+                lockSwitch.appendChild(lockLabel);
+                lockWrapper.appendChild(lockIconEl);
+                lockWrapper.appendChild(lockSwitch);
 
-            // 👁️ Hide toggle
-            const hideWrapper = document.createElement("div");
-            hideWrapper.style.display = "flex";
-            hideWrapper.style.alignItems = "center";
-            hideWrapper.style.gap = "0px";
+                lockInput.addEventListener("change", () => {
+                    const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                    saved.themeData = saved.themeData || {};
+                    let locked = saved.themeData["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
+                    if (!locked[locationId]) locked[locationId] = {};
+                    if (lockInput.checked) {
+                        locked[locationId][menu.id] = true;
+                    } else {
+                        delete locked[locationId][menu.id];
+                    }
+                    saved.themeData["--lockedMenus"] = JSON.stringify(locked);
+                    localStorage.setItem("userTheme", JSON.stringify(saved));
+                });
 
-            const eyeIconEl = document.createElement("i");
-            eyeIconEl.className = "fas fa-eye";
-            eyeIconEl.style.color = "#5bc0de";
-            eyeIconEl.style.fontSize = "16px";
+                toggleWrapper.appendChild(lockWrapper);
+            } else if (type === "hide") {
+                // Hide toggle
+                const hideWrapper = document.createElement("div");
+                hideWrapper.style.display = "flex";
+                hideWrapper.style.alignItems = "center";
+                hideWrapper.style.gap = "5px";
 
-            const hideSwitch = document.createElement("div");
-            hideSwitch.className = "toggle-switch";
+                const eyeIconEl = document.createElement("i");
+                eyeIconEl.className = "fas fa-eye";
+                eyeIconEl.style.color = "#5bc0de";
+                eyeIconEl.style.fontSize = "16px";
 
-            const hideInput = document.createElement("input");
-            hideInput.type = "checkbox";
-            hideInput.className = "toggle-input";
-            hideInput.id = "hide-" + menu.id;
+                const hideSwitch = document.createElement("div");
+                hideSwitch.className = "toggle-switch";
 
-            // ✅ Set initial state based on toggleChecked
-            hideInput.checked = hiddenMenus[menu.id] ? !!hiddenMenus[menu.id].toggleChecked : false;
+                const hideInput = document.createElement("input");
+                hideInput.type = "checkbox";
+                hideInput.className = "toggle-input";
+                hideInput.id = `hide-${locationId}-${menu.id}`;
+                hideInput.checked = locationHidden[menu.id] ? !!locationHidden[menu.id].toggleChecked : false;
 
-            const hideLabel = document.createElement("label");
-            hideLabel.className = "toggle-label";
-            hideLabel.setAttribute("for", "hide-" + menu.id);
+                const hideLabel = document.createElement("label");
+                hideLabel.className = "toggle-label";
+                hideLabel.setAttribute("for", `hide-${locationId}-${menu.id}`);
 
-            hideSwitch.appendChild(hideInput);
-            hideSwitch.appendChild(hideLabel);
-            hideWrapper.appendChild(eyeIconEl);
-            hideWrapper.appendChild(hideSwitch);
+                hideSwitch.appendChild(hideInput);
+                hideSwitch.appendChild(hideLabel);
+                hideWrapper.appendChild(eyeIconEl);
+                hideWrapper.appendChild(hideSwitch);
 
-            toggleWrapper.appendChild(lockWrapper);
-            toggleWrapper.appendChild(hideWrapper);
+                hideInput.addEventListener("change", () => {
+                    const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                    saved.themeData = saved.themeData || {};
+                    let hidden = saved.themeData["--hiddenMenus"] ? JSON.parse(saved.themeData["--hiddenMenus"]) : {};
+                    if (!hidden[locationId]) hidden[locationId] = {};
+                    hidden[locationId][menu.id] = {
+                        hidden: hideInput.checked,
+                        display: hideInput.checked ? "none !important" : "flex !important",
+                        toggleChecked: hideInput.checked
+                    };
+                    saved.themeData["--hiddenMenus"] = JSON.stringify(hidden);
+                    localStorage.setItem("userTheme", JSON.stringify(saved));
+                });
 
-          
-
-            // Hide toggle listener
-            hideInput.addEventListener("change", () => {
-                const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-                saved.themeData = saved.themeData || {};
-                let hidden = saved.themeData["--hiddenMenus"] ? JSON.parse(saved.themeData["--hiddenMenus"]) : {};
-
-                hidden[menu.id] = {
-                    hidden: hideInput.checked,           // true if toggle is ON
-                    display: hideInput.checked ? "none !important" : "flex !important",
-                    toggleChecked: hideInput.checked     // save toggle state
-                };
-
-                // Update menu display immediately
-                const menuEl = document.getElementById(menu.id);
-                if (menuEl) menuEl.style.setProperty("display", hidden[menu.id].hidden ? "none" : "flex", "important");
-
-                // Save back to localStorage
-                saved.themeData["--hiddenMenus"] = JSON.stringify(hidden);
-                localStorage.setItem("userTheme", JSON.stringify(saved));
-            });
+                toggleWrapper.appendChild(hideWrapper);
+            }
 
             row.appendChild(label);
             row.appendChild(toggleWrapper);
             parent.appendChild(row);
-
-                        // 🔽 Lock Options Panel (hidden by default)
-            const lockOptionsPanel = document.createElement("div");
-            lockOptionsPanel.className = "tb-lock-options";
-
-            // 🎯 3 Popup Options
-            const popupOptions = [
-                { id: "simple", label: "Lock Alert" },
-                { id: "upgrade", label: "Upgrade Plan" },
-                { id: "contact", label: "Contact Admin" }
-            ];
-
-            popupOptions.forEach(option => {
-                const optionRow = document.createElement("div");
-                optionRow.style.display = "flex";
-                optionRow.style.justifyContent = "space-between";
-                optionRow.style.alignItems = "center";
-
-                const optionLabel = document.createElement("span");
-                optionLabel.textContent = option.label;
-                optionLabel.style.fontSize = "11px";
-                optionLabel.style.color = "#ffffff";
-
-
-                const previewBtn = document.createElement("button");
-                previewBtn.textContent = "Preview";
-                previewBtn.style.padding = "4px 10px";
-                previewBtn.style.borderRadius = "5px";
-                previewBtn.style.border = "none";
-                previewBtn.style.cursor = "pointer";
-                previewBtn.style.background = "#F54927";
-                previewBtn.style.color = "#fff";
-
-                previewBtn.addEventListener("click", () => {
-                    showPreviewPopup(option.id);
-                });
-
-                optionRow.appendChild(optionLabel);
-                optionRow.appendChild(previewBtn);
-                lockOptionsPanel.appendChild(optionRow);
-            });
-
-            row.insertAdjacentElement("afterend", lockOptionsPanel);  
-            if (lockedMenus[menu.id]) {
-                lockOptionsPanel.style.display = "flex";
-                lockOptionsPanel.style.maxHeight = "0px";
-                lockOptionsPanel.style.overflow = "hidden";
-
-                setTimeout(() => {
-                    lockOptionsPanel.style.transition = "max-height 0.3s ease";
-                    lockOptionsPanel.style.maxHeight = "200px";
-                }, 10);
-            }
-              // Lock toggle listener
-            lockInput.addEventListener("change", () => {
-                const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-                saved.themeData = saved.themeData || {};
-                let locked = saved.themeData["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
-                if (lockInput.checked) locked[menu.id] = true;
-                else delete locked[menu.id];
-                 // 🔥 Show / Hide panel
-                if (lockInput.checked) {
-                    // close others (optional)
-                    document.querySelectorAll(".tb-lock-options").forEach(p => {
-                        if (p !== lockOptionsPanel) p.style.display = "none";
-                    });
-
-                    lockOptionsPanel.style.display = "flex";
-                    lockOptionsPanel.style.maxHeight = "0px";
-                    lockOptionsPanel.style.overflow = "hidden";
-
-                    setTimeout(() => {
-                        lockOptionsPanel.style.transition = "max-height 0.3s ease";
-                        lockOptionsPanel.style.maxHeight = "200px";
-                    }, 10);
-                } else {
-                    lockOptionsPanel.style.maxHeight = "0px";
-                    setTimeout(() => {
-                        lockOptionsPanel.style.display = "none";
-                    }, 300);
-                }
-                saved.themeData["--lockedMenus"] = JSON.stringify(locked);
-                localStorage.setItem("userTheme", JSON.stringify(saved));
-                applyLockedMenus();
-            });
-            // ✅ Ensure menu display is synced on initial load
-            const menuEl = document.getElementById(menu.id);
-            if (menuEl && hiddenMenus[menu.id]) {
-                menuEl.style.setProperty("display", hiddenMenus[menu.id].hidden ? "none" : "flex", "important");
-            }
         }
-
     }
     function showPreviewPopup(type) {
             document.getElementById("tb-preview-popup")?.remove();
