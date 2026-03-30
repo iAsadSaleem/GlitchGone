@@ -4116,7 +4116,7 @@
 
                     // Event listeners
                     lockInput.addEventListener("change", () => {
-                        console.log("Subaccount lock toggle changed for", menu.id, "locationId:", locationId, "checked:", lockInput.checked);
+                        console.log("(settings.js) Subaccount lock toggle changed for", menu.id, "locationId:", locationId, "checked:", lockInput.checked);
                         const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                         saved.themeData = saved.themeData || {};
                         let locked = saved.themeData["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
@@ -4406,7 +4406,7 @@
   if (!lockedMenus || typeof lockedMenus !== "object") return;
 
   const locationId = getCurrentLocationId();
-  console.log("applyLockedMenus called, locationId:", locationId);
+  console.log("(settings.js) applyLockedMenus called, locationId:", locationId);
   console.log("lockedMenus:", lockedMenus);
   
   // Select all sidebar menus
@@ -4417,7 +4417,7 @@
     if (!menuId) return;
     
     const isLocked = locationId ? !!lockedMenus[locationId]?.[menuId] : !!lockedMenus[menuId];
-    console.log("Processing menu:", menuId, "isLocked:", isLocked);
+    console.log("(settings.js) Processing menu:", menuId, "isLocked:", isLocked);
     
     if (isLocked) {
       if (!menu.querySelector(".tb-lock-icon")) {
@@ -4438,13 +4438,13 @@
         menu.dataset.tbLockBound = "1";
       }
     } else {
-      console.log("Unlocking menu:", menuId);
+      console.log("(settings.js) Unlocking menu:", menuId);
       const icon = menu.querySelector(".tb-lock-icon");
       if (icon) {
-        console.log("Removing icon for", menuId);
+        console.log("(settings.js) Removing icon for", menuId);
         icon.remove();
       } else {
-        console.log("No icon found for", menuId);
+        console.log("(settings.js) No icon found for", menuId);
       }
       menu.style.setProperty("opacity", "1", "important");
       menu.style.setProperty("cursor", "auto", "important");
