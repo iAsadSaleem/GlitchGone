@@ -1993,6 +1993,6 @@ body.dark-mode {
     padding :10px;
     background : var(--themebuildermaincolor,#1e1e1e);
     border-radius : 8px;
-    flex-direction : row;
+    flex-direction : column;
     gap : 8px;
 }
