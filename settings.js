@@ -3983,6 +3983,7 @@
             table.style.borderCollapse = "collapse";
             table.style.marginBottom = "20px";
             table.style.fontSize = "12px"; // smaller font
+            table.style.tableLayout = "fixed"; // respect column widths
 
             const thead = document.createElement("thead");
             const headerRow = document.createElement("tr");
@@ -3994,7 +3995,7 @@
             menuTh.style.padding = "4px";
             menuTh.style.background = "#f2f2f2";
             menuTh.style.fontSize = "10px";
-            menuTh.style.width = "150px"; // wider for location ID
+            menuTh.style.width = "167px"; // wider for location ID
             headerRow.appendChild(menuTh);
 
             // Th for each menu
@@ -4023,13 +4024,13 @@
                 const idCell = document.createElement("td");
                 idCell.style.border = "1px solid #ddd";
                 idCell.style.padding = "4px";
-                idCell.style.width = "150px"; // match header width
+                idCell.style.width = "167px"; // match header width
 
                 const idInput = document.createElement("input");
                 idInput.type = "text";
                 idInput.value = locationId;
                 idInput.placeholder = "Location ID";
-                idInput.style.width = "100%";
+                idInput.style.width = "159px"; // fixed width to fit in 167px cell
                 idInput.style.border = "none";
                 idInput.style.background = "transparent";
                 idInput.style.fontSize = "10px";
