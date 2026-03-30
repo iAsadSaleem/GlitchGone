@@ -3979,7 +3979,7 @@
 
             // Create combined table
             const table = document.createElement("table");
-            table.style.width = "100%";
+            table.style.width = "auto"; // allow natural width for scrolling
             table.style.borderCollapse = "collapse";
             table.style.marginBottom = "20px";
             table.style.fontSize = "12px"; // smaller font
@@ -4151,6 +4151,15 @@
 
             table.appendChild(tbody);
             content.appendChild(table);
+
+            // Wrap table in scrollable container
+            const tableWrapper = document.createElement("div");
+            tableWrapper.style.overflowX = "auto";
+            tableWrapper.style.marginBottom = "20px";
+            // Move table into wrapper
+            content.removeChild(table);
+            tableWrapper.appendChild(table);
+            content.appendChild(tableWrapper);
 
             // Add button below the table
             const addBtn = document.createElement("button");
