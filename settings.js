@@ -4313,8 +4313,14 @@
                         delete locked[locationId][menu.id];
                     }
                 } else {
-                    if (lockInput.checked) locked[menu.id] = true;
-                    else delete locked[menu.id];
+                    let agencyData = saved.themeData["--agencyLockedHideMenus"] ? JSON.parse(saved.themeData["--agencyLockedHideMenus"]) : {};
+                    agencyData.locked = agencyData.locked || {};
+                    if (lockInput.checked) {
+                        agencyData.locked[menu.id] = true;
+                    } else {
+                        delete agencyData.locked[menu.id];
+                    }
+                    saved.themeData["--agencyLockedHideMenus"] = JSON.stringify(agencyData);
                 }
                 saved.themeData["--lockedMenus"] = JSON.stringify(locked);
                 localStorage.setItem("userTheme", JSON.stringify(saved));
@@ -4333,11 +4339,14 @@
                         toggleChecked: hideInput.checked
                     };
                 } else {
-                    hidden[menu.id] = {
+                    let agencyData = saved.themeData["--agencyLockedHideMenus"] ? JSON.parse(saved.themeData["--agencyLockedHideMenus"]) : {};
+                    agencyData.hidden = agencyData.hidden || {};
+                    agencyData.hidden[menu.id] = {
                         hidden: hideInput.checked,
                         display: hideInput.checked ? "none !important" : "flex !important",
                         toggleChecked: hideInput.checked
                     };
+                    saved.themeData["--agencyLockedHideMenus"] = JSON.stringify(agencyData);
                 }
                 saved.themeData["--hiddenMenus"] = JSON.stringify(hidden);
                 localStorage.setItem("userTheme", JSON.stringify(saved));
@@ -6389,14 +6398,14 @@ function restoreHiddenMenus() {
     });
   } else {
     // Global mode
-    Object.keys(hiddenMenus).forEach(menuId => {
-      if (typeof hiddenMenus[menuId] === 'object') return; // Skip location objects
-      
+    let agencyData = saved.themeData["--agencyLockedHideMenus"] ? JSON.parse(saved.themeData["--agencyLockedHideMenus"]) : {};
+    let globalHidden = agencyData.hidden || {};
+    Object.keys(globalHidden).forEach(menuId => {
       const menuEl = document.getElementById(menuId);
       const toggleEl = document.getElementById("hide-" + menuId);
       if (!menuEl) return;
       
-      const menuConfig = hiddenMenus[menuId];
+      const menuConfig = globalHidden[menuId];
       const hidden = !!(menuConfig && menuConfig.hidden);
       
       menuEl.style.setProperty("display", hidden ? "none" : "flex", "important");
@@ -6455,13 +6464,14 @@ function applyLockedMenus() {
     });
   } else {
     // Global mode
-    Object.keys(lockedMenus).forEach(menuId => {
-      if (typeof lockedMenus[menuId] === 'object') return; // Skip location objects
+    let agencyData = saved.themeData["--agencyLockedHideMenus"] ? JSON.parse(saved.themeData["--agencyLockedHideMenus"]) : {};
+    let globalLocked = agencyData.locked || {};
+    Object.keys(globalLocked).forEach(menuId => {
       
       const menuEl = document.getElementById(menuId);
       if (!menuEl) return;
       
-      const isLocked = !!lockedMenus[menuId];
+      const isLocked = !!globalLocked[menuId];
       
       if (isLocked) {
         if (!menuEl.querySelector(".tb-lock-icon")) {
