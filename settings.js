@@ -3814,52 +3814,95 @@
         ];
 
         popupOptions.forEach(option => {
-            const optionDiv = document.createElement("div");
-            optionDiv.style.display = "flex";
-            optionDiv.style.alignItems = "center";
-            optionDiv.style.marginBottom = "15px";
-            optionDiv.style.padding = "10px";
-            optionDiv.style.border = "1px solid #ddd";
-            optionDiv.style.borderRadius = "5px";
+    const card = document.createElement("div");
+    card.style.border = "2px solid #ddd";
+    card.style.borderRadius = "8px";
+    card.style.padding = "15px";
+    card.style.marginBottom = "15px";
+    card.style.cursor = "pointer";
+    card.style.transition = "0.2s ease";
+    card.style.display = "flex";
+    card.style.flexDirection = "column";
+    card.style.gap = "10px";
 
-            const radio = document.createElement("input");
-            radio.type = "radio";
-            radio.name = "popupType";
-            radio.value = option.type;
-            radio.checked = option.type === "simple";
-            radio.addEventListener("change", () => selectedType = option.type);
-            optionDiv.appendChild(radio);
+    // highlight default
+    if (option.type === selectedType) {
+        card.style.borderColor = "#F54927";
+        card.style.background = "#fff5f2";
+    }
 
-            const label = document.createElement("div");
-            label.style.flex = "1";
-            label.style.marginLeft = "10px";
+    // Top Row (Radio + Title)
+    const topRow = document.createElement("div");
+    topRow.style.display = "flex";
+    topRow.style.alignItems = "center";
+    topRow.style.justifyContent = "space-between";
 
-            const optionTitle = document.createElement("h4");
-            optionTitle.textContent = option.title;
-            optionTitle.style.margin = "0 0 5px 0";
-            label.appendChild(optionTitle);
+    const left = document.createElement("div");
+    left.style.display = "flex";
+    left.style.alignItems = "center";
+    left.style.gap = "10px";
 
-            const optionDesc = document.createElement("p");
-            optionDesc.textContent = option.description;
-            optionDesc.style.margin = "0";
-            optionDesc.style.fontSize = "14px";
-            optionDesc.style.color = "#666";
-            label.appendChild(optionDesc);
+    const radio = document.createElement("input");
+    radio.type = "radio";
+    radio.name = "popupType";
+    radio.value = option.type;
+    radio.checked = option.type === selectedType;
 
-            optionDiv.appendChild(label);
+    const title = document.createElement("strong");
+    title.textContent = option.title;
 
-            const previewBtn = document.createElement("button");
-            previewBtn.textContent = "Preview";
-            previewBtn.style.padding = "5px 10px";
-            previewBtn.style.border = "1px solid #ccc";
-            previewBtn.style.borderRadius = "3px";
-            previewBtn.style.background = "#f8f9fa";
-            previewBtn.style.cursor = "pointer";
-            previewBtn.addEventListener("click", () => showPreviewPopup(option.type));
-            optionDiv.appendChild(previewBtn);
+    left.appendChild(radio);
+    left.appendChild(title);
 
-            content.appendChild(optionDiv);
-        });
+    // Preview Button
+    const previewBtn = document.createElement("button");
+    previewBtn.textContent = "Preview";
+    previewBtn.style.padding = "5px 10px";
+    previewBtn.style.border = "1px solid #ccc";
+    previewBtn.style.borderRadius = "5px";
+    previewBtn.style.background = "#f8f9fa";
+    previewBtn.style.cursor = "pointer";
+
+    previewBtn.addEventListener("click", (e) => {
+        e.stopPropagation(); // prevent selecting card
+        showPreviewPopup(option.type);
+    });
+
+    topRow.appendChild(left);
+    topRow.appendChild(previewBtn);
+
+    // Description
+    const desc = document.createElement("p");
+    desc.textContent = option.description;
+    desc.style.margin = "0";
+    desc.style.fontSize = "13px";
+    desc.style.color = "#666";
+
+    // Click card = select
+    card.addEventListener("click", () => {
+        selectedType = option.type;
+
+        // reset all cards
+        document.querySelectorAll("#tb-popup-selection-modal .popup-card")
+            .forEach(c => {
+                c.style.borderColor = "#ddd";
+                c.style.background = "#fff";
+                c.querySelector("input").checked = false;
+            });
+
+        // activate this
+        radio.checked = true;
+        card.style.borderColor = "#F54927";
+        card.style.background = "#fff5f2";
+    });
+
+    card.classList.add("popup-card");
+
+    card.appendChild(topRow);
+    card.appendChild(desc);
+
+    content.appendChild(card);
+});
 
         const buttonContainer = document.createElement("div");
         buttonContainer.style.display = "flex";
