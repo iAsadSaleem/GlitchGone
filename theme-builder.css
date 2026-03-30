@@ -1985,3 +1985,7 @@ body.dark-mode {
     display: inline-block;
     vertical-align: middle;
 }
+
+.tb-lock-options {
+    transition: all 0.3s ease;
+}

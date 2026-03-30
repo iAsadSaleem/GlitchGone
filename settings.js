@@ -3802,25 +3802,6 @@
             { id: "sb_agency-ideas", label: "Agency Ideas" },
             { id: "sb_mobile-app-customiser", label: "Mobile App Customiser" },
             { id: "sb_agency-account-snapshots", label: "Account Snapshots" },
-            //Settings menu
-            //{ id: "sb_agency-profile-settings", label: "My Profile" },
-            //{ id: "sb_agency-company-settings", label: "Company" },
-            //{ id: "sb_agency-team-settings", label: "Team" },
-            //{ id: "sb_agency-twilio-settings", label: "Phone Integration" },
-            //{ id: "sb_agency-email-settings", label: "Email Services" },
-            //{ id: "sb_system-emails-setting", label: "System Emails" },
-            //{ id: "sb_workflow-premium-actions-setting", label: "Workflow - Premium Features" },
-            //{ id: "sb_conversation-ai-setting", label: "AI Employee" },
-            //{ id: "sb_workflow-ai-setting", label: "Workflow - External AI Models" },
-            //{ id: "sb_domain-purchase-setting", label: "Domain Purchase" },
-            //{ id: "sb_undefined", label: "Private Integrations" },
-            //{ id: "sb_agency-affiliate-settings", label: "Affiliates" },
-            //{ id: "sb_agency-custom-link-settings", label: "Custom Menu Links" },
-            //{ id: "sb_agency-stripe-settings", label: "Stripe" },
-            //{ id: "sb_agency-api-keys-settings", label: "API Keys" },
-            //{ id: "sb_agency-compliance-settings", label: "Compliance" },
-            //{ id: "sb_agency-labs-settings", label: "Labs" },
-            //{ id: "sb_agency-audit-logs-settings", label: "Audit Logs" }
         ];
         // 📁 MAIN SIDEBAR MENUS
         const sidebarMenus = [
@@ -3838,28 +3819,6 @@
             { id: "sb_app-media", label: "App Media" },
             { id: "sb_memberships", label: "Memberships" },
             { id: "sb_reputation", label: "Reputation" },
-            //{ id: "sb_app-marketplace", label: "App Marketplace" },
-            //{ id: "sb_custom-values", label: "Custom Values" },
-            //{ id: "sb_manage-scoring", label: "Manage Scoring" },
-            //{ id: "sb_domains-urlRedirects", label: "Domains & URL Redirects" },
-            //{ id: "sb_integrations", label: "Integrations" },
-            //{ id: "sb_undefined", label: "Private Integrations" },
-            //{ id: "sb_conversations_providers", label: "Conversation Providers" },
-            //{ id: "sb_tags", label: "Tags" },
-            //{ id: "sb_labs", label: "Labs" },
-            //{ id: "sb_audit-logs-location", label: "Audit Logs" },
-            //{ id: "sb_brand-boards", label: "Brand Boards" },
-            //{ id: "sb_business_info", label: "Business Profile" },
-            //{ id: "sb_saas-billing", label: "Billing" },
-            //{ id: "sb_my-staff", label: "My Staff" },
-            //{ id: "sb_Opportunities-Pipelines", label: "Opportunities & Pipelines" },
-            //{ id: "sb_", label: "Automation" },
-            //{ id: "sb_calendars", label: "Calendars" },
-            //{ id: "sb_location-email-services", label: "Email Services" },
-            //{ id: "sb_phone-number", label: "Phone Numbers" },
-            //{ id: "sb_whatsapp", label: "WhatsApp" },
-            //{ id: "sb_objects", label: "Objects" },
-            //{ id: "sb_custom-fields-settings", label: "Custom Fields" }
         ];
 
         // 📝 Instruction Paragraph for Lock & Hide Feature
@@ -3914,28 +3873,6 @@
                 icon.classList.add("fa-angle-up");
             }
         });
-
-        // const agencyTitle = document.createElement("h4");
-        // agencyTitle.className = "tb-header-controls";
-        // agencyTitle.textContent = "Agency Level";
-        // agencyTitle.style.marginTop = "20px";
-        // agencyTitle.style.cursor = "var(--custom-pointer,auto)";
-        // wrapper.appendChild(agencyTitle);
-        // // Agency Section
-        // const agencyContainer = document.createElement("div");
-        // agencyContainer.className = "tb-section-container"; // for slide animation
-        // agencyMenus.forEach(menu => createToggleRow(menu, lockedMenus, hiddenMenus, agencyContainer));
-        // wrapper.appendChild(agencyContainer);
-
-        // const agencyArrow = document.createElement("span");
-        // agencyArrow.innerHTML = "▶"; // initial closed state
-        // agencyArrow.style.marginLeft = "8px";
-        // agencyTitle.appendChild(agencyArrow);
-
-        // agencyTitle.addEventListener("click", () => {
-        //     agencyContainer.classList.toggle("open");
-        //     agencyArrow.innerHTML = agencyContainer.classList.contains("open") ? "▼" : "▶";
-        // });
 
      const mainTitle = document.createElement("h4");
     mainTitle.className = "tb-header-controls";
@@ -4063,17 +4000,7 @@
             toggleWrapper.appendChild(lockWrapper);
             toggleWrapper.appendChild(hideWrapper);
 
-            // Lock toggle listener
-            lockInput.addEventListener("change", () => {
-                const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-                saved.themeData = saved.themeData || {};
-                let locked = saved.themeData["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
-                if (lockInput.checked) locked[menu.id] = true;
-                else delete locked[menu.id];
-                saved.themeData["--lockedMenus"] = JSON.stringify(locked);
-                localStorage.setItem("userTheme", JSON.stringify(saved));
-                applyLockedMenus();
-            });
+          
 
             // Hide toggle listener
             hideInput.addEventListener("change", () => {
@@ -4100,13 +4027,164 @@
             row.appendChild(toggleWrapper);
             parent.appendChild(row);
 
+                        // 🔽 Lock Options Panel (hidden by default)
+            const lockOptionsPanel = document.createElement("div");
+            lockOptionsPanel.className = "tb-lock-options";
+            lockOptionsPanel.style.display = "none";
+            lockOptionsPanel.style.margin = "10px 0";
+            lockOptionsPanel.style.padding = "10px";
+            lockOptionsPanel.style.background = "#1e1e1e";
+            lockOptionsPanel.style.borderRadius = "8px";
+            lockOptionsPanel.style.flexDirection = "column";
+            lockOptionsPanel.style.gap = "8px";
+
+            // 🎯 3 Popup Options
+            const popupOptions = [
+                { id: "simple", label: "Simple Alert" },
+                { id: "upgrade", label: "Upgrade Plan" },
+                { id: "contact", label: "Contact Admin" }
+            ];
+
+            popupOptions.forEach(option => {
+                const optionRow = document.createElement("div");
+                optionRow.style.display = "flex";
+                optionRow.style.justifyContent = "space-between";
+                optionRow.style.alignItems = "center";
+
+                const optionLabel = document.createElement("span");
+                optionLabel.textContent = option.label;
+                optionLabel.style.fontSize = "11px";
+
+                const previewBtn = document.createElement("button");
+                previewBtn.textContent = "Preview";
+                previewBtn.style.padding = "4px 10px";
+                previewBtn.style.borderRadius = "5px";
+                previewBtn.style.border = "none";
+                previewBtn.style.cursor = "pointer";
+                previewBtn.style.background = "#F54927";
+                previewBtn.style.color = "#fff";
+
+                previewBtn.addEventListener("click", () => {
+                    showPreviewPopup(option.id);
+                });
+
+                optionRow.appendChild(optionLabel);
+                optionRow.appendChild(previewBtn);
+                lockOptionsPanel.appendChild(optionRow);
+            });
+
+            row.insertAdjacentElement("afterend", lockOptionsPanel);  
+            if (lockedMenus[menu.id]) {
+                lockOptionsPanel.style.display = "flex";
+                lockOptionsPanel.style.maxHeight = "0px";
+                lockOptionsPanel.style.overflow = "hidden";
+
+                setTimeout(() => {
+                    lockOptionsPanel.style.transition = "max-height 0.3s ease";
+                    lockOptionsPanel.style.maxHeight = "200px";
+                }, 10);
+            }
+              // Lock toggle listener
+            lockInput.addEventListener("change", () => {
+                const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                saved.themeData = saved.themeData || {};
+                let locked = saved.themeData["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
+                if (lockInput.checked) locked[menu.id] = true;
+                else delete locked[menu.id];
+                 // 🔥 Show / Hide panel
+                if (lockInput.checked) {
+                    // close others (optional)
+                    document.querySelectorAll(".tb-lock-options").forEach(p => {
+                        if (p !== lockOptionsPanel) p.style.display = "none";
+                    });
+
+                    lockOptionsPanel.style.display = "flex";
+                    lockOptionsPanel.style.maxHeight = "0px";
+                    lockOptionsPanel.style.overflow = "hidden";
+
+                    setTimeout(() => {
+                        lockOptionsPanel.style.transition = "max-height 0.3s ease";
+                        lockOptionsPanel.style.maxHeight = "200px";
+                    }, 10);
+                } else {
+                    lockOptionsPanel.style.maxHeight = "0px";
+                    setTimeout(() => {
+                        lockOptionsPanel.style.display = "none";
+                    }, 300);
+                }
+                saved.themeData["--lockedMenus"] = JSON.stringify(locked);
+                localStorage.setItem("userTheme", JSON.stringify(saved));
+                applyLockedMenus();
+            });
             // ✅ Ensure menu display is synced on initial load
             const menuEl = document.getElementById(menu.id);
             if (menuEl && hiddenMenus[menu.id]) {
                 menuEl.style.setProperty("display", hiddenMenus[menu.id].hidden ? "none" : "flex", "important");
             }
         }
+
     }
+    function showPreviewPopup(type) {
+            document.getElementById("tb-preview-popup")?.remove();
+
+            const overlay = document.createElement("div");
+            overlay.id = "tb-preview-popup";
+            overlay.style = `
+                position: fixed;
+                top:0; left:0;
+                width:100%; height:100%;
+                background: rgba(0,0,0,0.5);
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                z-index:99999;
+            `;
+
+            const popup = document.createElement("div");
+            popup.style = `
+                background:#fff;
+                padding:20px;
+                border-radius:10px;
+                max-width:350px;
+                text-align:center;
+            `;
+
+            let content = "";
+
+            if (type === "simple") {
+                content = `
+                    <h3>Access Denied</h3>
+                    <p>You cannot access this feature.</p>
+                `;
+            }
+
+            if (type === "upgrade") {
+                content = `
+                    <h3>Upgrade Required 🚀</h3>
+                    <p>This feature is available in Premium Plan.</p>
+                    <button style="margin-top:10px;padding:6px 12px;background:#28a745;color:#fff;border:none;border-radius:5px;">Upgrade</button>
+                `;
+            }
+
+            if (type === "contact") {
+                content = `
+                    <h3>Restricted</h3>
+                    <p>Please contact admin to get access.</p>
+                    <button style="margin-top:10px;padding:6px 12px;background:#007bff;color:#fff;border:none;border-radius:5px;">Contact</button>
+                `;
+            }
+
+            popup.innerHTML = content;
+
+            const closeBtn = document.createElement("button");
+            closeBtn.textContent = "Close";
+            closeBtn.style.marginTop = "15px";
+            closeBtn.onclick = () => overlay.remove();
+
+            popup.appendChild(closeBtn);
+            overlay.appendChild(popup);
+            document.body.appendChild(overlay);
+        }
     function applyLockedMenus() {
         // 1️⃣ Load saved theme from localStorage
         let savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
