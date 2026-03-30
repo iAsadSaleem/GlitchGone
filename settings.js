@@ -4478,84 +4478,44 @@
 
   const locationId = getCurrentLocationId();
   
-  if (locationId) {
-    // Location-specific mode
-    if (!lockedMenus[locationId]) return;
-    Object.keys(lockedMenus[locationId]).forEach(menuId => {
-      const menuEl = document.getElementById(menuId);
-      if (!menuEl) return;
-      
-      const isLocked = !!lockedMenus[locationId][menuId];
-      
-      if (isLocked) {
-        if (!menuEl.querySelector(".tb-lock-icon")) {
-          const lockIcon = document.createElement("i");
-          lockIcon.className = "tb-lock-icon fas fa-lock ml-2";
-          lockIcon.style.color = "#F54927";
-          lockIcon.style.setProperty("display", "inline-block", "important");
-          lockIcon.style.setProperty("visibility", "visible", "important");
-          lockIcon.style.setProperty("opacity", "1", "important");
-          lockIcon.style.setProperty("position", "relative", "important");
-          lockIcon.style.setProperty("z-index", "9999", "important");
-          menuEl.appendChild(lockIcon);
-        }
-        menuEl.style.setProperty("opacity", "0.6", "important");
-        menuEl.style.setProperty("cursor", "not-allowed", "important");
-        if (menuEl.dataset.tbLockBound !== "1") {
-          menuEl.addEventListener("click", blockMenuClick, true);
-          menuEl.dataset.tbLockBound = "1";
-        }
-      } else {
-        const icon = menuEl.querySelector(".tb-lock-icon");
-        if (icon) icon.remove();
-        menuEl.style.opacity = "";
-        menuEl.style.cursor = "";
-        if (menuEl.dataset.tbLockBound === "1") {
-          menuEl.removeEventListener("click", blockMenuClick, true);
-          delete menuEl.dataset.tbLockBound;
-        }
+  // Select all sidebar menus
+  const allMenus = document.querySelectorAll(".hl_nav-header a, nav.flex-1.w-full a");
+  
+  allMenus.forEach(menu => {
+    const menuId = menu.id?.trim();
+    if (!menuId) return;
+    
+    const isLocked = locationId ? !!lockedMenus[locationId]?.[menuId] : !!lockedMenus[menuId];
+    
+    if (isLocked) {
+      if (!menu.querySelector(".tb-lock-icon")) {
+        const lockIcon = document.createElement("i");
+        lockIcon.className = "tb-lock-icon fas fa-lock ml-2";
+        lockIcon.style.color = "#F54927";
+        lockIcon.style.setProperty("display", "inline-block", "important");
+        lockIcon.style.setProperty("visibility", "visible", "important");
+        lockIcon.style.setProperty("opacity", "1", "important");
+        lockIcon.style.setProperty("position", "relative", "important");
+        lockIcon.style.setProperty("z-index", "9999", "important");
+        menu.appendChild(lockIcon);
       }
-    });
-  } else {
-    // Global mode
-    Object.keys(lockedMenus).forEach(menuId => {
-      if (typeof lockedMenus[menuId] === 'object') return; // Skip location objects
-      
-      const menuEl = document.getElementById(menuId);
-      if (!menuEl) return;
-      
-      const isLocked = !!lockedMenus[menuId];
-      
-      if (isLocked) {
-        if (!menuEl.querySelector(".tb-lock-icon")) {
-          const lockIcon = document.createElement("i");
-          lockIcon.className = "tb-lock-icon fas fa-lock ml-2";
-          lockIcon.style.color = "#F54927";
-          lockIcon.style.setProperty("display", "inline-block", "important");
-          lockIcon.style.setProperty("visibility", "visible", "important");
-          lockIcon.style.setProperty("opacity", "1", "important");
-          lockIcon.style.setProperty("position", "relative", "important");
-          lockIcon.style.setProperty("z-index", "9999", "important");
-          menuEl.appendChild(lockIcon);
-        }
-        menuEl.style.setProperty("opacity", "0.6", "important");
-        menuEl.style.setProperty("cursor", "not-allowed", "important");
-        if (menuEl.dataset.tbLockBound !== "1") {
-          menuEl.addEventListener("click", blockMenuClick, true);
-          menuEl.dataset.tbLockBound = "1";
-        }
-      } else {
-        const icon = menuEl.querySelector(".tb-lock-icon");
-        if (icon) icon.remove();
-        menuEl.style.opacity = "";
-        menuEl.style.cursor = "";
-        if (menuEl.dataset.tbLockBound === "1") {
-          menuEl.removeEventListener("click", blockMenuClick, true);
-          delete menuEl.dataset.tbLockBound;
-        }
+      menu.style.setProperty("opacity", "0.6", "important");
+      menu.style.setProperty("cursor", "not-allowed", "important");
+      if (menu.dataset.tbLockBound !== "1") {
+        menu.addEventListener("click", blockMenuClick, true);
+        menu.dataset.tbLockBound = "1";
       }
-    });
-  }
+    } else {
+      const icon = menu.querySelector(".tb-lock-icon");
+      if (icon) icon.remove();
+      menu.style.opacity = "";
+      menu.style.cursor = "";
+      if (menu.dataset.tbLockBound === "1") {
+        menu.removeEventListener("click", blockMenuClick, true);
+        delete menu.dataset.tbLockBound;
+      }
+    }
+  });
 }
 
     document.addEventListener("DOMContentLoaded", applyLockedMenus);
