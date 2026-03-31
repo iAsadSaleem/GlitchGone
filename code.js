@@ -282,7 +282,7 @@ function getCurrentLocationId() {
 function applyHiddenMenus() { 
   restoreHiddenMenus(); 
 }
-    function showPreviewPopup(type, popupUrl, popupHeadline) {
+    function showPreviewPopup(type, popupUrl, popupHeadline, popupSubHeadline, popupButtonText) {
     document.getElementById("tb-preview-popup")?.remove();
 
     const overlay = document.createElement("div");
@@ -295,14 +295,17 @@ function applyHiddenMenus() {
     if (type === "simple") {
         popup.innerHTML = `<h3>Access Denied</h3><p>You cannot access this feature.</p>`;
     } else if (type === "upgrade") {
-        const headline = popupHeadline || "Upgrade Required 🚀";
-        popup.innerHTML = `<h3>${headline}</h3><p>This feature is available in Premium Plan.</p><button id="tb-popup-action-btn" style="margin-top:10px;padding:8px 16px;background:#28a745;color:#fff;border:none;border-radius:5px;cursor:pointer;">Upgrade</button>`;
+        const headline    = popupHeadline    || "Upgrade Required 🚀";
+        const subHeadline = popupSubHeadline || "This feature is available in Premium Plan.";
+        const btnText     = popupButtonText  || "Upgrade";
+        popup.innerHTML = `<h3>${headline}</h3><p>${subHeadline}</p><button id="tb-popup-action-btn" style="margin-top:10px;padding:8px 16px;background:#28a745;color:#fff;border:none;border-radius:5px;cursor:pointer;">${btnText}</button>`;
     } else if (type === "contact") {
-        const headline = popupHeadline || "Restricted";
-        popup.innerHTML = `<h3>${headline}</h3><p>Please contact admin to get access.</p><button id="tb-popup-action-btn" style="margin-top:10px;padding:8px 16px;background:#007bff;color:#fff;border:none;border-radius:5px;cursor:pointer;">Contact</button>`;
+        const headline    = popupHeadline    || "Restricted";
+        const subHeadline = popupSubHeadline || "Please contact admin to get access.";
+        const btnText     = popupButtonText  || "Contact";
+        popup.innerHTML = `<h3>${headline}</h3><p>${subHeadline}</p><button id="tb-popup-action-btn" style="margin-top:10px;padding:8px 16px;background:#007bff;color:#fff;border:none;border-radius:5px;cursor:pointer;">${btnText}</button>`;
     }
 
-    // Wire the action button to open the saved URL
     const actionBtn = popup.querySelector("#tb-popup-action-btn");
     if (actionBtn) {
         if (popupUrl) {
@@ -368,11 +371,13 @@ function applyHiddenMenus() {
             const popupType = (lockData && typeof lockData === "object" && lockData.popupType) ? lockData.popupType : "simple";
             const popupUrl = (lockData && typeof lockData === "object" && lockData.popupUrl) ? lockData.popupUrl : "";
             const popupHeadline = (lockData && typeof lockData === "object" && lockData.popupHeadline) ? lockData.popupHeadline : "";
+            const popupSubHeadline = (lockData && typeof lockData === "object" && lockData.popupSubHeadline) ? lockData.popupSubHeadline : "";
+            const popupButtonText  = (lockData && typeof lockData === "object" && lockData.popupButtonText)  ? lockData.popupButtonText  : "";
 
             if (menu.dataset.tbLockBound !== "1") {
                 menu.addEventListener("click", (e) => {
                     blockMenuClick(e, menuId);
-                    showPreviewPopup(popupType, popupUrl, popupHeadline);
+                    showPreviewPopup(popupType, popupUrl, popupHeadline, popupSubHeadline, popupButtonText);
                 }, true);
                 menu.dataset.tbLockBound = "1";
             }
@@ -406,8 +411,10 @@ function applyHiddenMenus() {
     const popupType = (lockData && typeof lockData === "object" && lockData.popupType) ? lockData.popupType : "simple";
     const popupUrl = (lockData && typeof lockData === "object" && lockData.popupUrl) ? lockData.popupUrl : "";
     const popupHeadline = (lockData && typeof lockData === "object" && lockData.popupHeadline) ? lockData.popupHeadline : "";
+    const popupSubHeadline = (lockData && typeof lockData === "object" && lockData.popupSubHeadline) ? lockData.popupSubHeadline : "";
+    const popupButtonText  = (lockData && typeof lockData === "object" && lockData.popupButtonText)  ? lockData.popupButtonText  : "";
 
-    showPreviewPopup(popupType, popupUrl, popupHeadline);
+    showPreviewPopup(popupType, popupUrl, popupHeadline, popupSubHeadline, popupButtonText);
     }
 
 // Call on page load

@@ -3748,7 +3748,8 @@
     let selectedType = "simple";
     let selectedUrl = "";
     let selectedHeadline = "";
-
+    let selectedSubHeadline = "";
+    let selectedButtonText = "";
     // Pre-load saved values if re-editing an existing lock
     const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
     const themeData = savedTheme.themeData || {};
@@ -3758,6 +3759,8 @@
         if (existingLock.popupType) selectedType = existingLock.popupType;
         if (existingLock.popupUrl) selectedUrl = existingLock.popupUrl;
         if (existingLock.popupHeadline) selectedHeadline = existingLock.popupHeadline;
+        if (existingLock.popupSubHeadline) selectedSubHeadline = existingLock.popupSubHeadline;
+        if (existingLock.popupButtonText) selectedButtonText = existingLock.popupButtonText;
     }
 
     const popupOptions = [
@@ -3818,7 +3821,7 @@
         previewBtn.style.cursor = "pointer";
         previewBtn.addEventListener("click", (e) => {
             e.stopPropagation();
-            showPreviewPopup(option.type, selectedUrl, selectedHeadline);
+            showPreviewPopup(option.type, selectedUrl, selectedHeadline, selectedSubHeadline, selectedButtonText);
         });
         btnGroup.appendChild(previewBtn);
 
@@ -3845,9 +3848,11 @@
                 card.style.borderColor = "#F54927";
                 card.style.background = "#fff5f2";
                 // Open customize popup
-                showCustomizePopup(option.type, selectedUrl, selectedHeadline, (savedUrl, savedHeadline) => {
+                showCustomizePopup(option.type, selectedUrl, selectedHeadline, selectedSubHeadline, selectedButtonText, (savedUrl, savedHeadline, savedSubHeadline, savedButtonText) => {
                     selectedUrl = savedUrl;
                     selectedHeadline = savedHeadline;
+                    selectedSubHeadline = savedSubHeadline;
+                    selectedButtonText = savedButtonText;
                 });
             });
             btnGroup.appendChild(customizeBtn);
@@ -3910,7 +3915,7 @@
     okBtn.style.cursor = "pointer";
     okBtn.addEventListener("click", () => {
         overlay.remove();
-        callback(selectedType, selectedUrl, selectedHeadline); // passes all 3 values
+        callback(selectedType, selectedUrl, selectedHeadline, selectedSubHeadline, selectedButtonText); // passes all 3 values
     });
     buttonContainer.appendChild(okBtn);
 
@@ -3918,70 +3923,62 @@
     overlay.appendChild(modal);
     document.body.appendChild(overlay);
 }
-    function showCustomizePopup(type, currentUrl, currentHeadline, onSave) {
-        document.getElementById("tb-customize-popup")?.remove();
+    function showCustomizePopup(type, currentUrl, currentHeadline, currentSubHeadline, currentButtonText, onSave) {
+    document.getElementById("tb-customize-popup")?.remove();
 
-        const overlay = document.createElement("div");
-        overlay.id = "tb-customize-popup";
-        overlay.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:200000;";
+    const overlay = document.createElement("div");
+    overlay.id = "tb-customize-popup";
+    overlay.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:200000;";
 
-        const popup = document.createElement("div");
-        popup.style.cssText = "background:#fff;padding:24px;border-radius:10px;max-width:400px;width:90%;box-shadow:0 8px 24px rgba(0,0,0,0.3);";
+    const popup = document.createElement("div");
+    popup.style.cssText = "background:#fff;padding:24px;border-radius:10px;max-width:420px;width:90%;box-shadow:0 8px 24px rgba(0,0,0,0.3);";
 
-        const popupTitle = document.createElement("h3");
-        popupTitle.textContent = type === "upgrade" ? "Customize Upgrade Popup" : "Customize Contact Admin Popup";
-        popupTitle.style.marginBottom = "16px";
-        popup.appendChild(popupTitle);
+    const popupTitle = document.createElement("h3");
+    popupTitle.textContent = type === "upgrade" ? "Customize Upgrade Popup" : "Customize Contact Admin Popup";
+    popupTitle.style.marginBottom = "16px";
+    popup.appendChild(popupTitle);
 
-        // Headline input
-        const headlineLabel = document.createElement("label");
-        headlineLabel.textContent = "Headline Text:";
-        headlineLabel.style.cssText = "display:block;font-size:13px;font-weight:bold;margin-bottom:5px;";
-        popup.appendChild(headlineLabel);
-
-        const headlineInput = document.createElement("input");
-        headlineInput.type = "text";
-        headlineInput.value = currentHeadline || "";
-        headlineInput.placeholder = type === "upgrade" ? "Upgrade Required 🚀" : "Restricted";
-        headlineInput.style.cssText = "width:100%;padding:8px;border:1px solid #ccc;border-radius:5px;font-size:13px;box-sizing:border-box;margin-bottom:14px;";
-        popup.appendChild(headlineInput);
-
-        // URL input
-        const urlLabel = document.createElement("label");
-        urlLabel.textContent = type === "upgrade" ? "Upgrade Button URL:" : "Contact Button URL:";
-        urlLabel.style.cssText = "display:block;font-size:13px;font-weight:bold;margin-bottom:5px;";
-        popup.appendChild(urlLabel);
-
-        const urlInput = document.createElement("input");
-        urlInput.type = "text";
-        urlInput.value = currentUrl || "";
-        urlInput.placeholder = "https://your-url.com";
-        urlInput.style.cssText = "width:100%;padding:8px;border:1px solid #ccc;border-radius:5px;font-size:13px;box-sizing:border-box;";
-        popup.appendChild(urlInput);
-
-        const btnRow = document.createElement("div");
-        btnRow.style.cssText = "display:flex;gap:10px;justify-content:flex-end;margin-top:20px;";
-
-        const cancelBtn = document.createElement("button");
-        cancelBtn.textContent = "Cancel";
-        cancelBtn.style.cssText = "padding:8px 18px;border:1px solid #ccc;border-radius:5px;background:#fff;cursor:pointer;";
-        cancelBtn.onclick = () => overlay.remove();
-
-        const saveBtn = document.createElement("button");
-        saveBtn.textContent = "Save";
-        saveBtn.style.cssText = "padding:8px 18px;border:none;border-radius:5px;background:#F54927;color:#fff;cursor:pointer;";
-        saveBtn.onclick = () => {
-            onSave(urlInput.value.trim(), headlineInput.value.trim());
-            overlay.remove();
-        };
-
-        btnRow.appendChild(cancelBtn);
-        btnRow.appendChild(saveBtn);
-        popup.appendChild(btnRow);
-
-        overlay.appendChild(popup);
-        document.body.appendChild(overlay);
+    function addField(labelText, value, placeholder) {
+        const label = document.createElement("label");
+        label.textContent = labelText;
+        label.style.cssText = "display:block;font-size:13px;font-weight:bold;margin-bottom:5px;";
+        popup.appendChild(label);
+        const input = document.createElement("input");
+        input.type = "text";
+        input.value = value || "";
+        input.placeholder = placeholder;
+        input.style.cssText = "width:100%;padding:8px;border:1px solid #ccc;border-radius:5px;font-size:13px;box-sizing:border-box;margin-bottom:14px;";
+        popup.appendChild(input);
+        return input;
     }
+
+    const headlineInput    = addField("Headline Text:", currentHeadline, type === "upgrade" ? "Upgrade Required 🚀" : "Restricted");
+    const subHeadlineInput = addField("Sub-Headline Text:", currentSubHeadline, type === "upgrade" ? "This feature is available in Premium Plan." : "Please contact admin to get access.");
+    const buttonTextInput  = addField("Button Text:", currentButtonText, type === "upgrade" ? "Upgrade" : "Contact");
+    const urlInput         = addField(type === "upgrade" ? "Upgrade Button URL:" : "Contact Button URL:", currentUrl, "https://your-url.com");
+
+    const btnRow = document.createElement("div");
+    btnRow.style.cssText = "display:flex;gap:10px;justify-content:flex-end;margin-top:6px;";
+
+    const cancelBtn = document.createElement("button");
+    cancelBtn.textContent = "Cancel";
+    cancelBtn.style.cssText = "padding:8px 18px;border:1px solid #ccc;border-radius:5px;background:#fff;cursor:pointer;";
+    cancelBtn.onclick = () => overlay.remove();
+
+    const saveBtn = document.createElement("button");
+    saveBtn.textContent = "Save";
+    saveBtn.style.cssText = "padding:8px 18px;border:none;border-radius:5px;background:#F54927;color:#fff;cursor:pointer;";
+    saveBtn.onclick = () => {
+        onSave(urlInput.value.trim(), headlineInput.value.trim(), subHeadlineInput.value.trim(), buttonTextInput.value.trim());
+        overlay.remove();
+    };
+
+    btnRow.appendChild(cancelBtn);
+    btnRow.appendChild(saveBtn);
+    popup.appendChild(btnRow);
+    overlay.appendChild(popup);
+    document.body.appendChild(overlay);
+}
     function buildFeatureLockSection(container) {
         let savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         if (savedTheme.themeData && typeof savedTheme.themeData === "string") {
@@ -4360,13 +4357,14 @@
                         console.log("(settings.js) Subaccount lock toggle changed for", menu.id, "locationId:", locationId, "checked:", lockInput.checked);
                         if (lockInput.checked) {
                             // Show popup selection modal
-                            showPopupSelectionModal(menu, locationId, (selectedType, selectedUrl, selectedHeadline) => {
+                            showPopupSelectionModal(menu, locationId, (selectedType, selectedUrl, selectedHeadline, selectedSubHeadline, selectedButtonText) => {
                                 const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                                 saved.themeData = saved.themeData || {};
                                 let locked = saved.themeData["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
                                 if (!locked[locationId]) locked[locationId] = {};
                                 // locked[locationId][menu.id] = { locked: true, popupType: selectedType };
-                                locked[locationId][menu.id] = { locked: true, popupType: selectedType, popupUrl: selectedUrl, popupHeadline: selectedHeadline };
+                                // locked[locationId][menu.id] = { locked: true, popupType: selectedType, popupUrl: selectedUrl, popupHeadline: selectedHeadline };
+                                locked[locationId][menu.id] = { locked: true, popupType: selectedType, popupUrl: selectedUrl, popupHeadline: selectedHeadline, popupSubHeadline: selectedSubHeadline, popupButtonText: selectedButtonText };
                                 saved.themeData["--lockedMenus"] = JSON.stringify(locked);
                                 localStorage.setItem("userTheme", JSON.stringify(saved));
                                 applyLockedMenus();
@@ -4543,13 +4541,14 @@
                 if (lockInput.checked) {
                     if (locationId) {
                         // Show popup selection modal for subaccounts
-                        showPopupSelectionModal(menu, locationId, (selectedType, selectedUrl, selectedHeadline) => {
+                        showPopupSelectionModal(menu, locationId, (selectedType, selectedUrl, selectedHeadline, selectedSubHeadline, selectedButtonText) => {
                             const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                             saved.themeData = saved.themeData || {};
                             let locked = saved.themeData["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
                             if (!locked[locationId]) locked[locationId] = {};
                             // locked[locationId][menu.id] = { locked: true, popupType: selectedType };
-                            locked[locationId][menu.id] = { locked: true, popupType: selectedType, popupUrl: selectedUrl, popupHeadline: selectedHeadline };
+                            // locked[locationId][menu.id] = { locked: true, popupType: selectedType, popupUrl: selectedUrl, popupHeadline: selectedHeadline };
+                            locked[locationId][menu.id] = { locked: true, popupType: selectedType, popupUrl: selectedUrl, popupHeadline: selectedHeadline, popupSubHeadline: selectedSubHeadline, popupButtonText: selectedButtonText };
                             saved.themeData["--lockedMenus"] = JSON.stringify(locked);
                             localStorage.setItem("userTheme", JSON.stringify(saved));
                             applyLockedMenus();
@@ -4618,7 +4617,7 @@
             parent.appendChild(row);
         }
     }
-    function showPreviewPopup(type, popupUrl, popupHeadline) {
+    function showPreviewPopup(type, popupUrl, popupHeadline, popupSubHeadline, popupButtonText) {
     document.getElementById("tb-preview-popup")?.remove();
 
     const overlay = document.createElement("div");
@@ -4631,17 +4630,26 @@
     if (type === "simple") {
         popup.innerHTML = `<h3>Access Denied</h3><p>You cannot access this feature.</p>`;
     } else if (type === "upgrade") {
-        const headline = popupHeadline || "Upgrade Required 🚀";
-        popup.innerHTML = `<h3>${headline}</h3><p>This feature is available in Premium Plan.</p><button style="margin-top:10px;padding:8px 16px;background:#28a745;color:#fff;border:none;border-radius:5px;cursor:pointer;">Upgrade</button>`;
+        const headline    = popupHeadline    || "Upgrade Required 🚀";
+        const subHeadline = popupSubHeadline || "This feature is available in Premium Plan.";
+        const btnText     = popupButtonText  || "Upgrade";
+        popup.innerHTML = `<h3>${headline}</h3><p>${subHeadline}</p><button id="tb-popup-action-btn" style="margin-top:10px;padding:8px 16px;background:#28a745;color:#fff;border:none;border-radius:5px;cursor:pointer;">${btnText}</button>`;
     } else if (type === "contact") {
-        const headline = popupHeadline || "Restricted";
-        popup.innerHTML = `<h3>${headline}</h3><p>Please contact admin to get access.</p><button style="margin-top:10px;padding:8px 16px;background:#007bff;color:#fff;border:none;border-radius:5px;cursor:pointer;">Contact</button>`;
+        const headline    = popupHeadline    || "Restricted";
+        const subHeadline = popupSubHeadline || "Please contact admin to get access.";
+        const btnText     = popupButtonText  || "Contact";
+        popup.innerHTML = `<h3>${headline}</h3><p>${subHeadline}</p><button id="tb-popup-action-btn" style="margin-top:10px;padding:8px 16px;background:#007bff;color:#fff;border:none;border-radius:5px;cursor:pointer;">${btnText}</button>`;
     }
 
-    // Wire up action button to open URL
-    const actionBtn = popup.querySelector("button");
-    if (actionBtn && popupUrl) {
-        actionBtn.addEventListener("click", () => window.open(popupUrl, "_blank"));
+    const actionBtn = popup.querySelector("#tb-popup-action-btn");
+    if (actionBtn) {
+        if (popupUrl) {
+            actionBtn.addEventListener("click", () => window.open(popupUrl, "_blank"));
+        } else {
+            actionBtn.style.opacity = "0.5";
+            actionBtn.style.cursor = "not-allowed";
+            actionBtn.title = "No URL configured";
+        }
     }
 
     const closeBtn = document.createElement("button");
@@ -4652,7 +4660,7 @@
     popup.appendChild(closeBtn);
     overlay.appendChild(popup);
     document.body.appendChild(overlay);
-    }
+}
     function applyLockedMenus() {
     const savedRaw = localStorage.getItem("userTheme");
     const saved = JSON.parse(savedRaw) || {};
@@ -4698,11 +4706,13 @@
             const popupType = (lockData && typeof lockData === "object" && lockData.popupType) ? lockData.popupType : "simple";
             const popupUrl = (lockData && typeof lockData === "object" && lockData.popupUrl) ? lockData.popupUrl : "";
             const popupHeadline = (lockData && typeof lockData === "object" && lockData.popupHeadline) ? lockData.popupHeadline : "";
+            const popupSubHeadline = (lockData && typeof lockData === "object" && lockData.popupSubHeadline) ? lockData.popupSubHeadline : "";
+            const popupButtonText  = (lockData && typeof lockData === "object" && lockData.popupButtonText)  ? lockData.popupButtonText  : "";
 
             if (menu.dataset.tbLockBound !== "1") {
                 menu.addEventListener("click", (e) => {
                     blockMenuClick(e, menuId);
-                    showPreviewPopup(popupType, popupUrl, popupHeadline);
+                    showPreviewPopup(popupType, popupUrl, popupHeadline, popupSubHeadline, popupButtonText);
                 }, true);
                 menu.dataset.tbLockBound = "1";
             }
@@ -4742,8 +4752,10 @@
     const popupType = (lockData && typeof lockData === "object" && lockData.popupType) ? lockData.popupType : "simple";
     const popupUrl = (lockData && typeof lockData === "object" && lockData.popupUrl) ? lockData.popupUrl : "";
     const popupHeadline = (lockData && typeof lockData === "object" && lockData.popupHeadline) ? lockData.popupHeadline : "";
+    const popupSubHeadline = (lockData && typeof lockData === "object" && lockData.popupSubHeadline) ? lockData.popupSubHeadline : "";
+    const popupButtonText  = (lockData && typeof lockData === "object" && lockData.popupButtonText)  ? lockData.popupButtonText  : "";
 
-    showPreviewPopup(popupType, popupUrl, popupHeadline);
+    showPreviewPopup(popupType, popupUrl, popupHeadline, popupSubHeadline, popupButtonText);
     }
     function updateIconVariable(menuId, unicodeValue) {
         const cssVarName = getCssVarName(menuId);
