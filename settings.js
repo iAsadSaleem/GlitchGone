@@ -6650,20 +6650,10 @@ function applyLockedMenus() {
         }
         menuEl.style.opacity = "0.6";
         menuEl.style.cursor = "not-allowed";
-        // Extract the popup type stored for this menu
-                const lockData = locationId
-                    ? lockedMenus[locationId]?.[menuId]
-                    : lockedMenus[menuId];
-                const popupType = (lockData && typeof lockData === "object" && lockData.popupType)
-                    ? lockData.popupType
-                    : "simple"; // fallback for old entries that stored just `true`
-                if (menuEl.dataset.tbLockBound !== "1") {
-                    menuEl.addEventListener("click", (e) => {
-                        blockMenuClick(e, menuId);
-                        showPreviewPopup(popupType);
-                    }, true);
-                    menuEl.dataset.tbLockBound = "1";
-                }
+        if (menuEl.dataset.tbLockBound !== "1") {
+          menuEl.addEventListener("click", blockMenuClick, true);
+          menuEl.dataset.tbLockBound = "1";
+        }
       } else {
         const icon = menuEl.querySelector(".tb-lock-icon");
         if (icon) icon.remove();
@@ -6758,6 +6748,8 @@ function applyLockedMenus() {
         let popupType = "simple"; // default
         if (locationId) {
             const lockData = lockedMenus[locationId]?.[menuId];
+            console.log(lockedMenus,'Here is the lockedMenus');
+            console.log(lockData,'Here is the lockData');
             if (lockData && typeof lockData === 'object') {
                 popupType = lockData.popupType || "simple";
             }
@@ -6767,6 +6759,7 @@ function applyLockedMenus() {
                 popupType = lockData.popupType || "simple";
             }
         }
+        console.log('(settings.js) last method popup type on click:', popupType);
         showPreviewPopup(popupType);
     }
 })();
