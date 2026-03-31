@@ -3806,6 +3806,8 @@
         modal.appendChild(content);
 
         let selectedType = "simple"; // default
+        let selectedUrl = ""; // ← NEW
+
 
         const popupOptions = [
             { type: "simple", title: "Simple Access Denied", description: "Basic access denied message." },
@@ -3889,7 +3891,17 @@
                 c.style.background = "#fff";
                 c.querySelector("input").checked = false;
             });
-
+            const urlSection = document.getElementById("tb-popup-url-section");
+        if (urlSection) {
+            urlSection.style.display = (option.type === "upgrade" || option.type === "contact") ? "block" : "none";
+        }
+    
+    okBtn.addEventListener("click", () => {
+        const urlInput = document.getElementById("tb-popup-url-input");
+        selectedUrl = urlInput ? urlInput.value.trim() : "";
+        overlay.remove();
+        callback(selectedType, selectedUrl); // ← pass URL too
+    });
         // activate this
         radio.checked = true;
         card.style.borderColor = "#F54927";
@@ -3903,7 +3915,25 @@
 
     content.appendChild(card);
 });
-
+        const urlSection = document.createElement("div");
+            urlSection.id = "tb-popup-url-section";
+            urlSection.style.marginTop = "10px";
+            urlSection.style.display = "none"; // hidden by default
+            urlSection.innerHTML = `
+                <label style="font-size:13px;font-weight:bold;display:block;margin-bottom:5px;">Button URL:</label>
+                <input id="tb-popup-url-input" type="text" placeholder="https://your-url.com"
+                    style="width:100%;padding:8px;border:1px solid #ccc;border-radius:5px;font-size:13px;box-sizing:border-box;" />
+                <p style="font-size:11px;color:#888;margin-top:4px;">Users will be redirected here when they click the button.</p>
+            `;
+    modal.insertBefore(urlSection, buttonContainer);
+     const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+    const themeData = savedTheme.themeData || {};
+    const lockedMenus = themeData["--lockedMenus"] ? JSON.parse(themeData["--lockedMenus"]) : {};
+    const existingLock = locationId ? lockedMenus[locationId]?.[menu.id] : lockedMenus[menu.id];
+    if (existingLock && typeof existingLock === "object" && existingLock.popupUrl) {
+        document.getElementById("tb-popup-url-input") && (document.getElementById("tb-popup-url-input").value = existingLock.popupUrl);
+        selectedUrl = existingLock.popupUrl;
+    }
         const buttonContainer = document.createElement("div");
         buttonContainer.style.display = "flex";
         buttonContainer.style.justifyContent = "flex-end";
@@ -4321,12 +4351,13 @@
                         console.log("(settings.js) Subaccount lock toggle changed for", menu.id, "locationId:", locationId, "checked:", lockInput.checked);
                         if (lockInput.checked) {
                             // Show popup selection modal
-                            showPopupSelectionModal(menu, locationId, (selectedType) => {
+                            showPopupSelectionModal(menu, locationId, (selectedType, selectedUrl) => {
                                 const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                                 saved.themeData = saved.themeData || {};
                                 let locked = saved.themeData["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
                                 if (!locked[locationId]) locked[locationId] = {};
-                                locked[locationId][menu.id] = { locked: true, popupType: selectedType };
+                                // locked[locationId][menu.id] = { locked: true, popupType: selectedType };
+                                locked[locationId][menu.id] = { locked: true, popupType: selectedType, popupUrl: selectedUrl };
                                 saved.themeData["--lockedMenus"] = JSON.stringify(locked);
                                 localStorage.setItem("userTheme", JSON.stringify(saved));
                                 applyLockedMenus();
@@ -4503,12 +4534,13 @@
                 if (lockInput.checked) {
                     if (locationId) {
                         // Show popup selection modal for subaccounts
-                        showPopupSelectionModal(menu, locationId, (selectedType) => {
+                        showPopupSelectionModal(menu, locationId, (selectedType, selectedUrl)=> {
                             const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                             saved.themeData = saved.themeData || {};
                             let locked = saved.themeData["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
                             if (!locked[locationId]) locked[locationId] = {};
-                            locked[locationId][menu.id] = { locked: true, popupType: selectedType };
+                            // locked[locationId][menu.id] = { locked: true, popupType: selectedType };
+                               locked[locationId][menu.id] = { locked: true, popupType: selectedType, popupUrl: selectedUrl };
                             saved.themeData["--lockedMenus"] = JSON.stringify(locked);
                             localStorage.setItem("userTheme", JSON.stringify(saved));
                             applyLockedMenus();
@@ -4577,67 +4609,205 @@
             parent.appendChild(row);
         }
     }
-    function showPreviewPopup(type) {
-            document.getElementById("tb-preview-popup")?.remove();
+   function showPopupSelectionModal(menu, locationId, callback) {
+    document.getElementById("tb-popup-selection-modal")?.remove();
 
-            const overlay = document.createElement("div");
-            overlay.id = "tb-preview-popup";
-            overlay.style = `
-                position: fixed;
-                top:0; left:0;
-                width:100%; height:100%;
-                background: rgba(0,0,0,0.5);
-                display:flex;
-                align-items:center;
-                justify-content:center;
-                z-index:200000;
-            `;
+    const overlay = document.createElement("div");
+    overlay.id = "tb-popup-selection-modal";
+    overlay.style.position = "fixed";
+    overlay.style.top = "0";
+    overlay.style.left = "0";
+    overlay.style.width = "100%";
+    overlay.style.height = "100%";
+    overlay.style.background = "rgba(0,0,0,0.5)";
+    overlay.style.display = "flex";
+    overlay.style.alignItems = "center";
+    overlay.style.justifyContent = "center";
+    overlay.style.zIndex = "100000";
 
-            const popup = document.createElement("div");
-            popup.style = `
-                background:#fff;
-                padding:20px;
-                border-radius:10px;
-                max-width:350px;
-                text-align:center;
-            `;
+    const modal = document.createElement("div");
+    modal.style.background = "#fff";
+    modal.style.padding = "20px";
+    modal.style.borderRadius = "10px";
+    modal.style.maxWidth = "600px";
+    modal.style.width = "90%";
+    modal.style.maxHeight = "80vh";
+    modal.style.overflowY = "auto";
+    modal.style.boxShadow = "0 8px 24px rgba(0,0,0,0.3)";
 
-            let content = "";
+    const title = document.createElement("h3");
+    title.textContent = `Select Popup for Locked Menu: ${menu.label}`;
+    title.style.marginBottom = "15px";
+    modal.appendChild(title);
 
-            if (type === "simple") {
-                content = `
-                    <h3>Access Denied</h3>
-                    <p>You cannot access this feature.</p>
-                `;
-            }
+    const content = document.createElement("div");
+    modal.appendChild(content);
 
-            if (type === "upgrade") {
-                content = `
-                    <h3>Upgrade Required 🚀</h3>
-                    <p>This feature is available in Premium Plan.</p>
-                    <button style="margin-top:10px;padding:6px 12px;background:#28a745;color:#fff;border:none;border-radius:5px;">Upgrade</button>
-                `;
-            }
+    let selectedType = "simple";
+    let selectedUrl = "";
 
-            if (type === "contact") {
-                content = `
-                    <h3>Restricted</h3>
-                    <p>Please contact admin to get access.</p>
-                    <button style="margin-top:10px;padding:6px 12px;background:#007bff;color:#fff;border:none;border-radius:5px;">Contact</button>
-                `;
-            }
+    const popupOptions = [
+        { type: "simple", title: "Simple Access Denied", description: "Basic access denied message." },
+        { type: "upgrade", title: "Upgrade Required", description: "Prompts user to upgrade their plan." },
+        { type: "contact", title: "Contact Admin", description: "Asks user to contact administrator." }
+    ];
 
-            popup.innerHTML = content;
+    popupOptions.forEach(option => {
+        const card = document.createElement("div");
+        card.style.border = "2px solid #ddd";
+        card.style.borderRadius = "8px";
+        card.style.padding = "15px";
+        card.style.marginBottom = "15px";
+        card.style.cursor = "pointer";
+        card.style.transition = "0.2s ease";
+        card.style.display = "flex";
+        card.style.flexDirection = "column";
+        card.style.gap = "10px";
 
-            const closeBtn = document.createElement("button");
-            closeBtn.textContent = "Close";
-            closeBtn.style.marginTop = "15px";
-            closeBtn.onclick = () => overlay.remove();
-
-            popup.appendChild(closeBtn);
-            overlay.appendChild(popup);
-            document.body.appendChild(overlay);
+        if (option.type === selectedType) {
+            card.style.borderColor = "#F54927";
+            card.style.background = "#fff5f2";
         }
+
+        const topRow = document.createElement("div");
+        topRow.style.display = "flex";
+        topRow.style.alignItems = "center";
+        topRow.style.justifyContent = "space-between";
+
+        const left = document.createElement("div");
+        left.style.display = "flex";
+        left.style.alignItems = "center";
+        left.style.gap = "10px";
+
+        const radio = document.createElement("input");
+        radio.type = "radio";
+        radio.name = "popupType";
+        radio.value = option.type;
+        radio.checked = option.type === selectedType;
+
+        const cardTitle = document.createElement("strong");
+        cardTitle.textContent = option.title;
+
+        left.appendChild(radio);
+        left.appendChild(cardTitle);
+
+        const previewBtn = document.createElement("button");
+        previewBtn.textContent = "Preview";
+        previewBtn.style.padding = "5px 10px";
+        previewBtn.style.border = "1px solid #ccc";
+        previewBtn.style.borderRadius = "5px";
+        previewBtn.style.background = "#f8f9fa";
+        previewBtn.style.cursor = "pointer";
+        previewBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            showPreviewPopup(option.type);
+        });
+
+        topRow.appendChild(left);
+        topRow.appendChild(previewBtn);
+
+        const desc = document.createElement("p");
+        desc.textContent = option.description;
+        desc.style.margin = "0";
+        desc.style.fontSize = "13px";
+        desc.style.color = "#666";
+
+        // Card click — just selects the type and shows/hides URL input
+        card.addEventListener("click", () => {
+            selectedType = option.type;
+            document.querySelectorAll("#tb-popup-selection-modal .popup-card").forEach(c => {
+                c.style.borderColor = "#ddd";
+                c.style.background = "#fff";
+                c.querySelector("input").checked = false;
+            });
+            radio.checked = true;
+            card.style.borderColor = "#F54927";
+            card.style.background = "#fff5f2";
+
+            // Show URL input only for upgrade and contact
+            const urlSection = document.getElementById("tb-popup-url-section");
+            if (urlSection) {
+                urlSection.style.display = (option.type === "upgrade" || option.type === "contact") ? "block" : "none";
+            }
+        });
+
+        card.classList.add("popup-card");
+        card.appendChild(topRow);
+        card.appendChild(desc);
+        content.appendChild(card);
+    });
+
+    // URL input section (hidden by default)
+    const urlSection = document.createElement("div");
+    urlSection.id = "tb-popup-url-section";
+    urlSection.style.marginTop = "10px";
+    urlSection.style.display = "none";
+    urlSection.innerHTML = `
+        <label style="font-size:13px;font-weight:bold;display:block;margin-bottom:5px;">Button URL:</label>
+        <input id="tb-popup-url-input" type="text" placeholder="https://your-url.com"
+            style="width:100%;padding:8px;border:1px solid #ccc;border-radius:5px;font-size:13px;box-sizing:border-box;" />
+        <p style="font-size:11px;color:#888;margin-top:4px;">Users will be redirected here when they click the button.</p>
+    `;
+    modal.appendChild(urlSection);
+
+    // Load saved URL if re-editing an existing lock
+    const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+    const themeData = savedTheme.themeData || {};
+    const lockedMenus = themeData["--lockedMenus"] ? JSON.parse(themeData["--lockedMenus"]) : {};
+    const existingLock = locationId ? lockedMenus[locationId]?.[menu.id] : lockedMenus[menu.id];
+    if (existingLock && typeof existingLock === "object" && existingLock.popupUrl) {
+        const urlInput = document.getElementById("tb-popup-url-input");
+        if (urlInput) urlInput.value = existingLock.popupUrl;
+        selectedUrl = existingLock.popupUrl;
+        // Also show the URL section if current type uses it
+        if (existingLock.popupType === "upgrade" || existingLock.popupType === "contact") {
+            urlSection.style.display = "block";
+            selectedType = existingLock.popupType;
+        }
+    }
+
+    // Buttons
+    const buttonContainer = document.createElement("div");
+    buttonContainer.style.display = "flex";
+    buttonContainer.style.justifyContent = "flex-end";
+    buttonContainer.style.gap = "10px";
+    buttonContainer.style.marginTop = "20px";
+
+    const cancelBtn = document.createElement("button");
+    cancelBtn.textContent = "Cancel";
+    cancelBtn.style.padding = "10px 20px";
+    cancelBtn.style.border = "1px solid #ccc";
+    cancelBtn.style.borderRadius = "5px";
+    cancelBtn.style.background = "#fff";
+    cancelBtn.style.cursor = "pointer";
+    cancelBtn.addEventListener("click", () => {
+        overlay.remove();
+        const lockInput = document.getElementById(locationId ? `lock-${locationId}-${menu.id}` : `lock-global-${menu.id}`);
+        if (lockInput) lockInput.checked = false;
+    });
+    buttonContainer.appendChild(cancelBtn);
+
+    const okBtn = document.createElement("button");
+    okBtn.textContent = "OK";
+    okBtn.style.padding = "10px 20px";
+    okBtn.style.border = "none";
+    okBtn.style.borderRadius = "5px";
+    okBtn.style.background = "#F54927";
+    okBtn.style.color = "#fff";
+    okBtn.style.cursor = "pointer";
+    // Single OK handler — reads URL at click time and passes both values
+    okBtn.addEventListener("click", () => {
+        const urlInput = document.getElementById("tb-popup-url-input");
+        selectedUrl = urlInput ? urlInput.value.trim() : "";
+        overlay.remove();
+        callback(selectedType, selectedUrl); // ✅ passes both
+    });
+    buttonContainer.appendChild(okBtn);
+
+    modal.appendChild(buttonContainer);
+    overlay.appendChild(modal);
+    document.body.appendChild(overlay);
+}
     function applyLockedMenus() {
             const savedRaw = localStorage.getItem("userTheme");
             const saved = JSON.parse(savedRaw) || {};
@@ -4682,10 +4852,13 @@
                 const popupType = (lockData && typeof lockData === "object" && lockData.popupType)
                     ? lockData.popupType
                     : "simple"; // fallback for old entries that stored just `true`
+                    const popupUrl = (lockData && typeof lockData === "object" && lockData.popupUrl)
+                    ? lockData.popupUrl
+                    : ""; // ← NEW
                 if (menu.dataset.tbLockBound !== "1") {
                     menu.addEventListener("click", (e) => {
                         blockMenuClick(e, menuId);
-                        showPreviewPopup(popupType);
+                        showPreviewPopup(popupType, popupUrl); // ← pass URL
                     }, true);
                     menu.dataset.tbLockBound = "1";
                 }
@@ -6657,12 +6830,15 @@ function applyLockedMenus() {
                 const popupType = (lockData && typeof lockData === "object" && lockData.popupType)
                     ? lockData.popupType
                     : "simple"; // fallback for old entries that stored just `true`
-                if (menuEl.dataset.tbLockBound !== "1") {
-                    menuEl.addEventListener("click", (e) => {
+                    const popupUrl = (lockData && typeof lockData === "object" && lockData.popupUrl)
+                    ? lockData.popupUrl
+                    : ""; // ← NEW
+                if (menu.dataset.tbLockBound !== "1") {
+                    menu.addEventListener("click", (e) => {
                         blockMenuClick(e, menuId);
-                        showPreviewPopup(popupType);
+                        showPreviewPopup(popupType, popupUrl); // ← pass URL
                     }, true);
-                    menuEl.dataset.tbLockBound = "1";
+                    menu.dataset.tbLockBound = "1";
                 }
       } else {
         const icon = menuEl.querySelector(".tb-lock-icon");
@@ -6703,13 +6879,16 @@ function applyLockedMenus() {
                 const lockData = locationId
                     ? lockedMenus[locationId]?.[menuId]
                     : lockedMenus[menuId];
-                const popupType = (lockData && typeof lockData === "object" && lockData.popupType)
+               const popupType = (lockData && typeof lockData === "object" && lockData.popupType)
                     ? lockData.popupType
                     : "simple"; // fallback for old entries that stored just `true`
+                    const popupUrl = (lockData && typeof lockData === "object" && lockData.popupUrl)
+                    ? lockData.popupUrl
+                    : ""; // ← NEW
                 if (menu.dataset.tbLockBound !== "1") {
                     menu.addEventListener("click", (e) => {
                         blockMenuClick(e, menuId);
-                        showPreviewPopup(popupType);
+                        showPreviewPopup(popupType, popupUrl); // ← pass URL
                     }, true);
                     menu.dataset.tbLockBound = "1";
                 }
@@ -6758,8 +6937,6 @@ function applyLockedMenus() {
         let popupType = "simple"; // default
         if (locationId) {
             const lockData = lockedMenus[locationId]?.[menuId];
-            console.log(lockedMenus,'Here is the lockedMenus');
-            console.log(lockData,'Here is the lockData');
             if (lockData && typeof lockData === 'object') {
                 popupType = lockData.popupType || "simple";
             }
@@ -6769,7 +6946,6 @@ function applyLockedMenus() {
                 popupType = lockData.popupType || "simple";
             }
         }
-        console.log('(settings.js) last method popup type on click:', popupType);
         showPreviewPopup(popupType);
     }
 })();
