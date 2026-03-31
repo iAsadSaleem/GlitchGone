@@ -4360,7 +4360,7 @@
                         console.log("(settings.js) Subaccount lock toggle changed for", menu.id, "locationId:", locationId, "checked:", lockInput.checked);
                         if (lockInput.checked) {
                             // Show popup selection modal
-                            showPopupSelectionModal(menu, locationId, (selectedType) => {
+                            showPopupSelectionModal(menu, locationId, (selectedType, selectedUrl, selectedHeadline) => {
                                 const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                                 saved.themeData = saved.themeData || {};
                                 let locked = saved.themeData["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
@@ -4543,7 +4543,7 @@
                 if (lockInput.checked) {
                     if (locationId) {
                         // Show popup selection modal for subaccounts
-                        showPopupSelectionModal(menu, locationId, (selectedType) => {
+                        showPopupSelectionModal(menu, locationId, (selectedType, selectedUrl, selectedHeadline) => {
                             const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                             saved.themeData = saved.themeData || {};
                             let locked = saved.themeData["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
