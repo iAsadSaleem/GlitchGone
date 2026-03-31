@@ -6748,7 +6748,7 @@ function applyLockedMenus() {
         let popupType = "simple"; // default
         if (locationId) {
             const lockData = lockedMenus[locationId]?.[menuId];
-            console.log(lockData.popupType,'Here is the popup type');
+            console.log(lockData,'Here is the lockData');
             if (lockData && typeof lockData === 'object') {
                 popupType = lockData.popupType || "simple";
             }
