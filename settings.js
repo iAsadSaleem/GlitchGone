@@ -934,7 +934,17 @@
             }
 
             // Merge and save
-            savedThemeObj.themeData = { ...(savedThemeObj.themeData || {}), ...vars };
+            // Preserve these keys — they must never be overwritten by a theme change
+            const keysToPreserve = ["--lockedMenus", "--hiddenMenus", "--agencyLockedHideMenus", "--menuCustomizations"];
+            const preserved = {};
+            keysToPreserve.forEach(key => {
+                if (savedThemeObj.themeData && savedThemeObj.themeData[key] !== undefined) {
+                    preserved[key] = savedThemeObj.themeData[key];
+                }
+            });
+
+            // Merge theme vars, then restore preserved keys on top so they can never be overwritten
+            savedThemeObj.themeData = { ...(savedThemeObj.themeData || {}), ...vars, ...preserved };
             savedThemeObj.selectedTheme = themeName;
 
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
