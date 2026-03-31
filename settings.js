@@ -4590,7 +4590,7 @@
                 display:flex;
                 align-items:center;
                 justify-content:center;
-                z-index:99999;
+                z-index:200000;
             `;
 
             const popup = document.createElement("div");
