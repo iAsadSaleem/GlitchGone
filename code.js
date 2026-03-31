@@ -194,15 +194,7 @@ function applySidebarLogoFromTheme() {
                 );
             });
         })();
-  function updateElementText(selector, newText, attempt = 1) {
-    const el = document.querySelector(selector);
-    if (!el && attempt < 20) return setTimeout(() => updateElementText(selector, newText, attempt + 1), 300);
-    if (el) el.textContent = newText;
-  }
-  function stripQuotes(str) {
-      if (!str) return str;
-      return str.replace(/^"(.*)"$/, "$1");  // remove first+last quote ONLY
-  }
+
   // ---- Theme data injection ----
   function injectThemeData(themeData) {
     if (!themeData || typeof themeData !== "object") return;
@@ -238,229 +230,6 @@ function getCurrentLocationId() {
   }
   return null; // No location ID in URL (agency level)
 }
-// function applyLockedMenus() {
-//   const savedRaw = localStorage.getItem(STORAGE.userTheme);
-//   const saved = safeJsonParse(savedRaw) || {};
-//   if (!saved.themeData || !saved.themeData["--lockedMenus"]) return;
-
-//   let lockedMenus;
-//   try { lockedMenus = JSON.parse(saved.themeData["--lockedMenus"]); } catch (e) { console.warn("[ThemeBuilder] invalid --lockedMenus"); return; }
-//   if (!lockedMenus || typeof lockedMenus !== "object") return;
-
-//   const locationId = getCurrentLocationId();
-//     console.log("applyLockedMenus called, locationId:", locationId);
-//   console.log("lockedMenus:", lockedMenus);
-//   if (locationId) {
-//     // Location-specific mode
-//     if (!lockedMenus[locationId]) return;
-//     Object.keys(lockedMenus[locationId]).forEach(menuId => {
-//       const menuEl = document.getElementById(menuId);
-//       if (!menuEl) return;
-      
-//       const isLocked = !!lockedMenus[locationId][menuId];
-//           console.log("Processing menu:", menuId, "isLocked:", isLocked);
-
-//       if (isLocked) {
-//         if (!menuEl.querySelector(".tb-lock-icon")) {
-//           const lockIcon = document.createElement("i");
-//           lockIcon.className = "tb-lock-icon fas fa-lock ml-2";
-//           lockIcon.style.color = "#F54927";
-//           menuEl.appendChild(lockIcon);
-//         }
-//         menuEl.style.opacity = "0.6";
-//         menuEl.style.cursor = "not-allowed";
-//         if (menuEl.dataset.tbLockBound !== "1") {
-//           menuEl.addEventListener("click", blockMenuClick, true);
-//           menuEl.dataset.tbLockBound = "1";
-//         }
-//       } else {
-//         const icon = menuEl.querySelector(".tb-lock-icon");
-//         if (icon) icon.remove();
-//         menuEl.style.opacity = "";
-//         menuEl.style.cursor = "";
-//         if (menuEl.dataset.tbLockBound === "1") {
-//           menuEl.removeEventListener("click", blockMenuClick, true);
-//           delete menuEl.dataset.tbLockBound;
-//         }
-//       }
-//     });
-//   } else {
-//     // Global mode
-//     Object.keys(lockedMenus).forEach(menuId => {
-//       if (typeof lockedMenus[menuId] === 'object') return; // Skip location objects
-      
-//       const menuEl = document.getElementById(menuId);
-//       if (!menuEl) return;
-      
-//       const isLocked = !!lockedMenus[menuId];
-      
-//       if (isLocked) {
-//         if (!menuEl.querySelector(".tb-lock-icon")) {
-//           const lockIcon = document.createElement("i");
-//           lockIcon.className = "tb-lock-icon fas fa-lock ml-2";
-//           lockIcon.style.color = "#F54927";
-//           menuEl.appendChild(lockIcon);
-//         }
-//         menuEl.style.opacity = "0.6";
-//         menuEl.style.cursor = "not-allowed";
-//         if (menuEl.dataset.tbLockBound !== "1") {
-//           menuEl.addEventListener("click", blockMenuClick, true);
-//           menuEl.dataset.tbLockBound = "1";
-//         }
-//       } else {
-//         const icon = menuEl.querySelector(".tb-lock-icon");
-//         if (icon) icon.remove();
-//         menuEl.style.opacity = "";
-//         menuEl.style.cursor = "";
-//         if (menuEl.dataset.tbLockBound === "1") {
-//           menuEl.removeEventListener("click", blockMenuClick, true);
-//           delete menuEl.dataset.tbLockBound;
-//         }
-//       }
-//     });
-//   }
-// }
-// function restoreHiddenMenus() {
-//   const savedRaw = localStorage.getItem(STORAGE.userTheme);
-//   const saved = safeJsonParse(savedRaw) || {};
-//   if (!saved.themeData || !saved.themeData["--hiddenMenus"]) return;
-
-//   let hiddenMenus;
-//   try { hiddenMenus = JSON.parse(saved.themeData["--hiddenMenus"]); } catch (e) { console.warn("[ThemeBuilder] invalid --hiddenMenus"); return; }
-//   if (!hiddenMenus || typeof hiddenMenus !== "object") return;
-
-//   const locationId = getCurrentLocationId();
-  
-//   if (locationId) {
-//     // Location-specific mode
-//     if (!hiddenMenus[locationId]) return;
-//     Object.keys(hiddenMenus[locationId]).forEach(menuId => {
-//       const menuEl = document.getElementById(menuId);
-//       const toggleEl = document.getElementById("hide-" + menuId);
-//       if (!menuEl) return;
-      
-//       const menuConfig = hiddenMenus[locationId][menuId];
-//       const hidden = !!(menuConfig && menuConfig.hidden);
-      
-//       menuEl.style.setProperty("display", hidden ? "none" : "flex", "important");
-//       if (toggleEl) toggleEl.checked = hidden;
-//     });
-//   } else {
-//     // Global mode
-//     Object.keys(hiddenMenus).forEach(menuId => {
-//       if (typeof hiddenMenus[menuId] === 'object') return; // Skip location objects
-      
-//       const menuEl = document.getElementById(menuId);
-//       const toggleEl = document.getElementById("hide-" + menuId);
-//       if (!menuEl) return;
-      
-//       const menuConfig = hiddenMenus[menuId];
-//       const hidden = !!(menuConfig && menuConfig.hidden);
-      
-//       menuEl.style.setProperty("display", hidden ? "none" : "flex", "important");
-//       if (toggleEl) toggleEl.checked = hidden;
-//     });
-//   }
-// }
-
-// function applyHiddenMenus() { 
-//   restoreHiddenMenus(); 
-// }
-
-
-// function applyLockedMenus() {
-//   const savedRaw = localStorage.getItem("userTheme");
-//   const saved = JSON.parse(savedRaw) || {};
-//   if (!saved.themeData || !saved.themeData["--lockedMenus"]) return;
-
-//   let lockedMenus;
-//   try { lockedMenus = JSON.parse(saved.themeData["--lockedMenus"]); } catch (e) { console.warn("[ThemeBuilder] invalid --lockedMenus"); return; }
-//   if (!lockedMenus || typeof lockedMenus !== "object") return;
-
-//   const locationId = getCurrentLocationId();
-
-  
-//   // Select all sidebar menus
-//   // const allMenus = document.querySelectorAll(".hl_nav-header a, nav.flex-1.w-full a");
-//   const allMenus = document.querySelectorAll("a[id^='sb_'], .hl_nav-header a");
-//   allMenus.forEach(menu => {
-//     const menuId = menu.id?.trim();
-//     if (!menuId) return;
-    
-//     const isLocked = locationId ? !!lockedMenus[locationId]?.[menuId] : !!lockedMenus[menuId];
-    
-//     if (isLocked) {
-//       if (!menu.querySelector(".tb-lock-icon")) {
-//         const lockIcon = document.createElement("i");
-//         lockIcon.className = "tb-lock-icon fas fa-lock ml-2";
-//         lockIcon.style.color = "#F54927";
-//         lockIcon.style.setProperty("display", "inline-block", "important");
-//         lockIcon.style.setProperty("visibility", "visible", "important");
-//         lockIcon.style.setProperty("opacity", "1", "important");
-//         lockIcon.style.setProperty("position", "relative", "important");
-//         lockIcon.style.setProperty("z-index", "9999", "important");
-//         menu.appendChild(lockIcon);
-//       }
-//       menu.style.setProperty("opacity", "0.6", "important");
-//       menu.style.setProperty("cursor", "not-allowed", "important");
-//       if (menu.dataset.tbLockBound !== "1") {
-//         menu.addEventListener("click", blockMenuClick, true);
-//         menu.dataset.tbLockBound = "1";
-//       }
-//     } else {
-//       const icon = menu.querySelector(".tb-lock-icon");
-//       if (icon) {
-//         icon.remove();
-//       } else {
-//       }
-//       // menu.style.opacity = "";
-//       // menu.style.cursor = "";
-//       // menu.style.removeProperty("opacity");
-//       // menu.style.removeProperty("cursor");
-//       menu.style.setProperty("opacity", "1", "important");
-//       menu.style.setProperty("cursor", "auto", "important");
-//       if (menu.dataset.tbLockBound === "1") {
-//         menu.removeEventListener("click", blockMenuClick, true);
-//         delete menu.dataset.tbLockBound;
-//       }
-//     }
-//   });
-// }
-
-// function blockMenuClick(e) {
-//   e.preventDefault();
-//   e.stopPropagation();
-//   document.getElementById("tb-lock-popup")?.remove();
-
-//   const overlay = document.createElement("div");
-//   overlay.id = "tb-lock-popup";
-//   overlay.style = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;z-index:99999";
-//   overlay.innerHTML = `
-//     <div style="background:#fff;padding:20px 30px;border-radius:12px;max-width:400px;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,0.3)">
-//       <h3 style="margin-bottom:12px;">Access Denied</h3>
-//       <p style="margin-bottom:20px;">No access. Please contact the Owner.</p>
-//       <button style="padding:8px 20px;border:none;border-radius:6px;background:#F54927;color:#fff;cursor:pointer;">OK</button>
-//     </div>`;
-//   overlay.querySelector("button").addEventListener("click", () => overlay.remove());
-//   document.body.appendChild(overlay);
-// }
-
-// // Call on page load
-// document.addEventListener('DOMContentLoaded', function() {
-//   applyHiddenMenus();
-//   applyLockedMenus();
-// });
-
-// // Also call when localStorage changes (if settings are updated dynamically)
-// // Polling fallback for iframe updates (checks every 500ms)
-// setInterval(() => {
-//   const current = localStorage.getItem(STORAGE.userTheme);
-//   if (current !== window.lastUserTheme) {
-//     window.lastUserTheme = current;
-//     applyHiddenMenus();
-//     applyLockedMenus();
-//   }
-// }, 500);
 
   // ---- Logo injection ----
   function restoreHiddenMenus() {
@@ -513,220 +282,133 @@ function getCurrentLocationId() {
 function applyHiddenMenus() { 
   restoreHiddenMenus(); 
 }
-    function showPreviewPopup(type) {
-            document.getElementById("tb-preview-popup")?.remove();
+    function showPreviewPopup(type, popupUrl, popupHeadline) {
+    document.getElementById("tb-preview-popup")?.remove();
 
-            const overlay = document.createElement("div");
-            overlay.id = "tb-preview-popup";
-            overlay.style = `
-                position: fixed;
-                top:0; left:0;
-                width:100%; height:100%;
-                background: rgba(0,0,0,0.5);
-                display:flex;
-                align-items:center;
-                justify-content:center;
-                z-index:200000;
-            `;
+    const overlay = document.createElement("div");
+    overlay.id = "tb-preview-popup";
+    overlay.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:200000;";
 
-            const popup = document.createElement("div");
-            popup.style = `
-                background:#fff;
-                padding:20px;
-                border-radius:10px;
-                max-width:350px;
-                text-align:center;
-            `;
+    const popup = document.createElement("div");
+    popup.style.cssText = "background:#fff;padding:30px;border-radius:10px;max-width:350px;width:90%;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,0.3);";
 
-            let content = "";
+    if (type === "simple") {
+        popup.innerHTML = `<h3>Access Denied</h3><p>You cannot access this feature.</p>`;
+    } else if (type === "upgrade") {
+        const headline = popupHeadline || "Upgrade Required 🚀";
+        popup.innerHTML = `<h3>${headline}</h3><p>This feature is available in Premium Plan.</p><button id="tb-popup-action-btn" style="margin-top:10px;padding:8px 16px;background:#28a745;color:#fff;border:none;border-radius:5px;cursor:pointer;">Upgrade</button>`;
+    } else if (type === "contact") {
+        const headline = popupHeadline || "Restricted";
+        popup.innerHTML = `<h3>${headline}</h3><p>Please contact admin to get access.</p><button id="tb-popup-action-btn" style="margin-top:10px;padding:8px 16px;background:#007bff;color:#fff;border:none;border-radius:5px;cursor:pointer;">Contact</button>`;
+    }
 
-            if (type === "simple") {
-                content = `
-                    <h3>Access Denied</h3>
-                    <p>You cannot access this feature.</p>
-                `;
-            }
-
-            if (type === "upgrade") {
-                content = `
-                    <h3>Upgrade Required 🚀</h3>
-                    <p>This feature is available in Premium Plan.</p>
-                    <button style="margin-top:10px;padding:6px 12px;background:#28a745;color:#fff;border:none;border-radius:5px;">Upgrade</button>
-                `;
-            }
-
-            if (type === "contact") {
-                content = `
-                    <h3>Restricted</h3>
-                    <p>Please contact admin to get access.</p>
-                    <button style="margin-top:10px;padding:6px 12px;background:#007bff;color:#fff;border:none;border-radius:5px;">Contact</button>
-                `;
-            }
-
-            popup.innerHTML = content;
-
-            const closeBtn = document.createElement("button");
-            closeBtn.textContent = "Close";
-            closeBtn.style.marginTop = "15px";
-            closeBtn.onclick = () => overlay.remove();
-
-            popup.appendChild(closeBtn);
-            overlay.appendChild(popup);
-            document.body.appendChild(overlay);
+    // Wire the action button to open the saved URL
+    const actionBtn = popup.querySelector("#tb-popup-action-btn");
+    if (actionBtn) {
+        if (popupUrl) {
+            actionBtn.addEventListener("click", () => window.open(popupUrl, "_blank"));
+        } else {
+            actionBtn.style.opacity = "0.5";
+            actionBtn.style.cursor = "not-allowed";
+            actionBtn.title = "No URL configured";
         }
+    }
 
-function applyLockedMenus() {
-  const savedRaw = localStorage.getItem("userTheme");
-  const saved = JSON.parse(savedRaw) || {};
-  if (!saved.themeData) return;
+    const closeBtn = document.createElement("button");
+    closeBtn.textContent = "Close";
+    closeBtn.style.cssText = "margin-top:15px;padding:8px 16px;border:1px solid #ccc;border-radius:5px;background:#fff;cursor:pointer;display:block;margin-left:auto;margin-right:auto;";
+    closeBtn.onclick = () => overlay.remove();
 
-  const locationId = getCurrentLocationId();
-  
-  if (locationId) {
-    // Location-specific mode - use --lockedMenus
-    if (!saved.themeData["--lockedMenus"]) return;
+    popup.appendChild(closeBtn);
+    overlay.appendChild(popup);
+    document.body.appendChild(overlay);
+}
+    function applyLockedMenus() {
+    const savedRaw = localStorage.getItem("userTheme");
+    const saved = JSON.parse(savedRaw) || {};
+    if (!saved.themeData || !saved.themeData["--lockedMenus"]) return;
+
     let lockedMenus;
     try { lockedMenus = JSON.parse(saved.themeData["--lockedMenus"]); } catch (e) { console.warn("[ThemeBuilder] invalid --lockedMenus"); return; }
-    if (!lockedMenus || typeof lockedMenus !== "object" || !lockedMenus[locationId]) return;
-    
-    // Select all sidebar menus
+    if (!lockedMenus || typeof lockedMenus !== "object") return;
+
+    const locationId = getCurrentLocationId();
+
     const allMenus = document.querySelectorAll("a[id^='sb_'], .hl_nav-header a");
+
     allMenus.forEach(menu => {
-      const menuId = menu.id?.trim();
-      if (!menuId) return;
-      
-      const lockData = lockedMenus[locationId][menuId];
-      const isLocked = lockData && typeof lockData === 'object' ? lockData.locked : !!lockData;
-      
-      if (isLocked) {
-        if (!menu.querySelector(".tb-lock-icon")) {
-          const lockIcon = document.createElement("i");
-          lockIcon.className = "tb-lock-icon fas fa-lock ml-2";
-          lockIcon.style.color = "#F54927";
-          lockIcon.style.setProperty("display", "inline-block", "important");
-          lockIcon.style.setProperty("visibility", "visible", "important");
-          lockIcon.style.setProperty("opacity", "1", "important");
-          lockIcon.style.setProperty("position", "relative", "important");
-          lockIcon.style.setProperty("z-index", "9999", "important");
-          menu.appendChild(lockIcon);
+        const menuId = menu.id?.trim();
+        if (!menuId) return;
+
+        // Read lockData ONCE — works for both location and global
+        const lockData = locationId
+            ? lockedMenus[locationId]?.[menuId]
+            : lockedMenus[menuId];
+
+        const isLocked = (lockData && typeof lockData === "object")
+            ? lockData.locked
+            : !!lockData;
+
+        if (isLocked) {
+            if (!menu.querySelector(".tb-lock-icon")) {
+                const lockIcon = document.createElement("i");
+                lockIcon.className = "tb-lock-icon fas fa-lock ml-2";
+                lockIcon.style.color = "#F54927";
+                lockIcon.style.setProperty("display", "inline-block", "important");
+                lockIcon.style.setProperty("visibility", "visible", "important");
+                lockIcon.style.setProperty("opacity", "1", "important");
+                lockIcon.style.setProperty("position", "relative", "important");
+                lockIcon.style.setProperty("z-index", "9999", "important");
+                menu.appendChild(lockIcon);
+            }
+            menu.style.setProperty("opacity", "0.6", "important");
+            menu.style.setProperty("cursor", "not-allowed", "important");
+
+            // Extract popup config from the single lockData read above
+            const popupType = (lockData && typeof lockData === "object" && lockData.popupType) ? lockData.popupType : "simple";
+            const popupUrl = (lockData && typeof lockData === "object" && lockData.popupUrl) ? lockData.popupUrl : "";
+            const popupHeadline = (lockData && typeof lockData === "object" && lockData.popupHeadline) ? lockData.popupHeadline : "";
+
+            if (menu.dataset.tbLockBound !== "1") {
+                menu.addEventListener("click", (e) => {
+                    blockMenuClick(e, menuId);
+                    showPreviewPopup(popupType, popupUrl, popupHeadline);
+                }, true);
+                menu.dataset.tbLockBound = "1";
+            }
+        } else {
+            const icon = menu.querySelector(".tb-lock-icon");
+            if (icon) icon.remove();
+            menu.style.setProperty("opacity", "1", "important");
+            menu.style.setProperty("cursor", "auto", "important");
+            if (menu.dataset.tbLockBound === "1") {
+                menu.removeEventListener("click", blockMenuClick, true);
+                delete menu.dataset.tbLockBound;
+            }
         }
-        menu.style.setProperty("opacity", "0.6", "important");
-        menu.style.setProperty("cursor", "not-allowed", "important");
-        // Extract the popup type stored for this menu
-                const lockData = locationId
-                    ? lockedMenus[locationId]?.[menuId]
-                    : lockedMenus[menuId];
-                const popupType = (lockData && typeof lockData === "object" && lockData.popupType)
-                    ? lockData.popupType
-                    : "simple"; // fallback for old entries that stored just `true`
-                if (menu.dataset.tbLockBound !== "1") {
-                    menu.addEventListener("click", (e) => {
-                        blockMenuClick(e, menuId);
-                        showPreviewPopup(popupType);
-                    }, true);
-                    menu.dataset.tbLockBound = "1";
-                }
-      } else {
-        const icon = menu.querySelector(".tb-lock-icon");
-        if (icon) {
-          icon.remove();
-        }
-        menu.style.setProperty("opacity", "1", "important");
-        menu.style.setProperty("cursor", "auto", "important");
-        if (menu.dataset.tbLockBound === "1") {
-          menu.removeEventListener("click", blockMenuClick, true);
-          delete menu.dataset.tbLockBound;
-        }
-      }
     });
-  } else {
-    // Global mode - use --agencyLockedHideMenus
-    if (!saved.themeData["--agencyLockedHideMenus"]) return;
-    let agencyData;
-    try { agencyData = JSON.parse(saved.themeData["--agencyLockedHideMenus"]); } catch (e) { console.warn("[ThemeBuilder] invalid --agencyLockedHideMenus"); return; }
-    if (!agencyData || typeof agencyData !== "object") return;
-    
-    let globalLocked = agencyData.locked || {};
-    
-    // Select all sidebar menus
-    const allMenus = document.querySelectorAll("a[id^='sb_'], .hl_nav-header a");
-    allMenus.forEach(menu => {
-      const menuId = menu.id?.trim();
-      if (!menuId) return;
-      
-      const lockData = globalLocked[menuId];
-      const isLocked = lockData && typeof lockData === 'object' ? lockData.locked : !!lockData;
-      
-      if (isLocked) {
-        if (!menu.querySelector(".tb-lock-icon")) {
-          const lockIcon = document.createElement("i");
-          lockIcon.className = "tb-lock-icon fas fa-lock ml-2";
-          lockIcon.style.color = "#F54927";
-          lockIcon.style.setProperty("display", "inline-block", "important");
-          lockIcon.style.setProperty("visibility", "visible", "important");
-          lockIcon.style.setProperty("opacity", "1", "important");
-          lockIcon.style.setProperty("position", "relative", "important");
-          lockIcon.style.setProperty("z-index", "9999", "important");
-          menu.appendChild(lockIcon);
-        }
-        menu.style.setProperty("opacity", "0.6", "important");
-        menu.style.setProperty("cursor", "not-allowed", "important");
-        // Extract the popup type stored for this menu
-                const lockData = locationId
-                    ? lockedMenus[locationId]?.[menuId]
-                    : lockedMenus[menuId];
-                const popupType = (lockData && typeof lockData === "object" && lockData.popupType)
-                    ? lockData.popupType
-                    : "simple"; // fallback for old entries that stored just `true`
-                if (menu.dataset.tbLockBound !== "1") {
-                    menu.addEventListener("click", (e) => {
-                        blockMenuClick(e, menuId);
-                        showPreviewPopup(popupType);
-                    }, true);
-                    menu.dataset.tbLockBound = "1";
-                }
-      } else {
-        const icon = menu.querySelector(".tb-lock-icon");
-        if (icon) {
-          icon.remove();
-        }
-        menu.style.setProperty("opacity", "1", "important");
-        menu.style.setProperty("cursor", "auto", "important");
-        if (menu.dataset.tbLockBound === "1") {
-          menu.removeEventListener("click", blockMenuClick, true);
-          delete menu.dataset.tbLockBound;
-        }
-      }
-    });
-  }
 }
+  function blockMenuClick(e, menuId) {
+    e.preventDefault();
+    e.stopImmediatePropagation();
 
-function blockMenuClick(e, menuId) {
-  e.preventDefault();
-  e.stopPropagation();
-  
-  // Get popupType from localStorage
-  const savedRaw = localStorage.getItem("userTheme");
-  const saved = JSON.parse(savedRaw) || {};
-  const lockedMenus = saved.themeData && saved.themeData["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
-  const agencyData = saved.themeData && saved.themeData["--agencyLockedHideMenus"] ? JSON.parse(saved.themeData["--agencyLockedHideMenus"]) : {};
-  const locationId = getCurrentLocationId();
+    const savedRaw = localStorage.getItem("userTheme");
+    const saved = JSON.parse(savedRaw) || {};
+    const lockedMenus = saved.themeData?.["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
+    const agencyData = saved.themeData?.["--agencyLockedHideMenus"] ? JSON.parse(saved.themeData["--agencyLockedHideMenus"]) : {};
+    const locationId = getCurrentLocationId();
 
-  let popupType = "simple"; // default
-  if (locationId) {
-    const lockData = lockedMenus[locationId]?.[menuId];
-    if (lockData && typeof lockData === 'object') {
-      popupType = lockData.popupType || "simple";
+    // Read lockData once — covers both location and global
+    const lockData = locationId
+        ? lockedMenus[locationId]?.[menuId]
+        : agencyData.locked?.[menuId];
+
+    const popupType = (lockData && typeof lockData === "object" && lockData.popupType) ? lockData.popupType : "simple";
+    const popupUrl = (lockData && typeof lockData === "object" && lockData.popupUrl) ? lockData.popupUrl : "";
+    const popupHeadline = (lockData && typeof lockData === "object" && lockData.popupHeadline) ? lockData.popupHeadline : "";
+
+    showPreviewPopup(popupType, popupUrl, popupHeadline);
     }
-  } else {
-    const lockData = agencyData.locked?.[menuId];
-    if (lockData && typeof lockData === 'object') {
-      popupType = lockData.popupType || "simple";
-    }
-  }
-
-  showPreviewPopup(popupType);
-}
 
 // Call on page load
 document.addEventListener('DOMContentLoaded', function() {
