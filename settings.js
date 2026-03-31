@@ -6757,7 +6757,7 @@ function applyLockedMenus() {
                 popupType = lockData.popupType || "simple";
             }
         }
-
+        console.log('(settings.js) last method popup type on click:', popupType);
         showPreviewPopup(popupType);
     }
 })();
