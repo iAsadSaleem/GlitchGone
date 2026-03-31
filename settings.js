@@ -4654,74 +4654,70 @@
     document.body.appendChild(overlay);
     }
     function applyLockedMenus() {
-            const savedRaw = localStorage.getItem("userTheme");
-            const saved = JSON.parse(savedRaw) || {};
-            if (!saved.themeData || !saved.themeData["--lockedMenus"]) return;
+    const savedRaw = localStorage.getItem("userTheme");
+    const saved = JSON.parse(savedRaw) || {};
+    if (!saved.themeData || !saved.themeData["--lockedMenus"]) return;
 
-            let lockedMenus;
-            try { lockedMenus = JSON.parse(saved.themeData["--lockedMenus"]); } catch (e) { console.warn("[ThemeBuilder] invalid --lockedMenus"); return; }
-            if (!lockedMenus || typeof lockedMenus !== "object") return;
+    let lockedMenus;
+    try { lockedMenus = JSON.parse(saved.themeData["--lockedMenus"]); } catch (e) { console.warn("[ThemeBuilder] invalid --lockedMenus"); return; }
+    if (!lockedMenus || typeof lockedMenus !== "object") return;
 
-            const locationId = getCurrentLocationId();
-            console.log("(settings.js) applyLockedMenus called, locationId:", locationId);
-            console.log("lockedMenus:", lockedMenus);
-            
-            // Select all sidebar menus
-            const allMenus = document.querySelectorAll("a[id^='sb_'], .hl_nav-header a");
-            
-            allMenus.forEach(menu => {
-                const menuId = menu.id?.trim();
-                if (!menuId) return;
-                
-                const isLocked = locationId ? (lockedMenus[locationId]?.[menuId] && typeof lockedMenus[locationId][menuId] === 'object' ? lockedMenus[locationId][menuId].locked : !!lockedMenus[locationId]?.[menuId]) : (lockedMenus[menuId] && typeof lockedMenus[menuId] === 'object' ? lockedMenus[menuId].locked : !!lockedMenus[menuId]);
-                console.log("(settings.js) Processing menu:", menuId, "isLocked:", isLocked);
-                
-                if (isLocked) {
-                if (!menu.querySelector(".tb-lock-icon")) {
-                    const lockIcon = document.createElement("i");
-                    lockIcon.className = "tb-lock-icon fas fa-lock ml-2";
-                    lockIcon.style.color = "#F54927";
-                    lockIcon.style.setProperty("display", "inline-block", "important");
-                    lockIcon.style.setProperty("visibility", "visible", "important");
-                    lockIcon.style.setProperty("opacity", "1", "important");
-                    lockIcon.style.setProperty("position", "relative", "important");
-                    lockIcon.style.setProperty("z-index", "9999", "important");
-                    menu.appendChild(lockIcon);
-                }
-                menu.style.setProperty("opacity", "0.6", "important");
-                menu.style.setProperty("cursor", "not-allowed", "important");
-                // Extract the popup type stored for this menu
-                const lockData = locationId
-                    ? lockedMenus[locationId]?.[menuId]
-                    : lockedMenus[menuId];
-                const popupType = (lockData && typeof lockData === "object" && lockData.popupType) ? lockData.popupType : "simple";
-                const popupUrl = (lockData && typeof lockData === "object" && lockData.popupUrl) ? lockData.popupUrl : "";
-                const popupHeadline = (lockData && typeof lockData === "object" && lockData.popupHeadline) ? lockData.popupHeadline : "";
-                if (menu.dataset.tbLockBound !== "1") {
-                    menu.addEventListener("click", (e) => {
-                        blockMenuClick(e, menuId);
-                        showPreviewPopup(popupType, popupUrl, popupHeadline);
-                    }, true);
-                    menu.dataset.tbLockBound = "1";
-                }
-                } else {
-                console.log("(settings.js) Unlocking menu:", menuId);
-                const icon = menu.querySelector(".tb-lock-icon");
-                if (icon) {
-                    console.log("(settings.js) Removing icon for", menuId);
-                    icon.remove();
-                } else {
-                    console.log("(settings.js) No icon found for", menuId);
-                }
-                menu.style.setProperty("opacity", "1", "important");
-                menu.style.setProperty("cursor", "auto", "important");
-                if (menu.dataset.tbLockBound === "1") {
-                    menu.removeEventListener("click", blockMenuClick, true);
-                    delete menu.dataset.tbLockBound;
-                }
-                }
-        });
+    const locationId = getCurrentLocationId();
+
+    const allMenus = document.querySelectorAll("a[id^='sb_'], .hl_nav-header a");
+
+    allMenus.forEach(menu => {
+        const menuId = menu.id?.trim();
+        if (!menuId) return;
+
+        // Read lockData ONCE — works for both location and global
+        const lockData = locationId
+            ? lockedMenus[locationId]?.[menuId]
+            : lockedMenus[menuId];
+
+        const isLocked = (lockData && typeof lockData === "object")
+            ? lockData.locked
+            : !!lockData;
+
+        if (isLocked) {
+            if (!menu.querySelector(".tb-lock-icon")) {
+                const lockIcon = document.createElement("i");
+                lockIcon.className = "tb-lock-icon fas fa-lock ml-2";
+                lockIcon.style.color = "#F54927";
+                lockIcon.style.setProperty("display", "inline-block", "important");
+                lockIcon.style.setProperty("visibility", "visible", "important");
+                lockIcon.style.setProperty("opacity", "1", "important");
+                lockIcon.style.setProperty("position", "relative", "important");
+                lockIcon.style.setProperty("z-index", "9999", "important");
+                menu.appendChild(lockIcon);
+            }
+            menu.style.setProperty("opacity", "0.6", "important");
+            menu.style.setProperty("cursor", "not-allowed", "important");
+
+            // Extract popup config from the single lockData read above
+            const popupType = (lockData && typeof lockData === "object" && lockData.popupType) ? lockData.popupType : "simple";
+            const popupUrl = (lockData && typeof lockData === "object" && lockData.popupUrl) ? lockData.popupUrl : "";
+            const popupHeadline = (lockData && typeof lockData === "object" && lockData.popupHeadline) ? lockData.popupHeadline : "";
+
+            if (menu.dataset.tbLockBound !== "1") {
+                menu.addEventListener("click", (e) => {
+                    blockMenuClick(e, menuId);
+                    showPreviewPopup(popupType, popupUrl, popupHeadline);
+                }, true);
+                menu.dataset.tbLockBound = "1";
+            }
+        } else {
+            const icon = menu.querySelector(".tb-lock-icon");
+            if (icon) icon.remove();
+            menu.style.setProperty("opacity", "1", "important");
+            menu.style.setProperty("cursor", "auto", "important");
+            if (menu.dataset.tbLockBound === "1") {
+                menu.removeEventListener("click", blockMenuClick, true);
+                delete menu.dataset.tbLockBound;
+            }
         }
+    });
+}
 
     document.addEventListener("DOMContentLoaded", applyLockedMenus);
    
