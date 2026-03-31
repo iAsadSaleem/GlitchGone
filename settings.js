@@ -4727,7 +4727,6 @@
         let popupType = "simple"; // default
         if (locationId) {
             const lockData = lockedMenus[locationId]?.[menuId];
-            console.log(lockData.popupType,'Here is the popup type');
             if (lockData && typeof lockData === 'object') {
                 popupType = lockData.popupType || "simple";
             }
@@ -6749,13 +6748,11 @@ function applyLockedMenus() {
         let popupType = "simple"; // default
         if (locationId) {
             const lockData = lockedMenus[locationId]?.[menuId];
-            console.log(lockData.popupType,'Here is the popup type');
             if (lockData && typeof lockData === 'object') {
                 popupType = lockData.popupType || "simple";
             }
         } else {
             const lockData = agencyData.locked?.[menuId];
-            console.log(lockData.popupType,'Here is the popup type Fro agency level');
             if (lockData && typeof lockData === 'object') {
                 popupType = lockData.popupType || "simple";
             }
