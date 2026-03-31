@@ -6717,22 +6717,47 @@ function applyLockedMenus() {
   }
 }
 
-function blockMenuClick(e) {
-  e.preventDefault();
-  e.stopPropagation();
-  document.getElementById("tb-lock-popup")?.remove();
+// function blockMenuClick(e) {
+//   e.preventDefault();
+//   e.stopPropagation();
+//   document.getElementById("tb-lock-popup")?.remove();
 
-  const overlay = document.createElement("div");
-  overlay.id = "tb-lock-popup";
-  overlay.style = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;z-index:99999";
-  overlay.innerHTML = `
-    <div style="background:#fff;padding:20px 30px;border-radius:12px;max-width:400px;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,0.3)">
-      <h3 style="margin-bottom:12px;">Access Denied</h3>
-      <p style="margin-bottom:20px;">No access. Please contact the Owner.</p>
-      <button style="padding:8px 20px;border:none;border-radius:6px;background:#F54927;color:#fff;cursor:pointer;">OK</button>
-    </div>`;
-  overlay.querySelector("button").addEventListener("click", () => overlay.remove());
-  document.body.appendChild(overlay);
-}
+//   const overlay = document.createElement("div");
+//   overlay.id = "tb-lock-popup";
+//   overlay.style = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;z-index:99999";
+//   overlay.innerHTML = `
+//     <div style="background:#fff;padding:20px 30px;border-radius:12px;max-width:400px;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,0.3)">
+//       <h3 style="margin-bottom:12px;">Access Denied</h3>
+//       <p style="margin-bottom:20px;">No access. Please contact the Owner.</p>
+//       <button style="padding:8px 20px;border:none;border-radius:6px;background:#F54927;color:#fff;cursor:pointer;">OK</button>
+//     </div>`;
+//   overlay.querySelector("button").addEventListener("click", () => overlay.remove());
+//   document.body.appendChild(overlay);
+// }
+ function blockMenuClick(e, menuId) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
 
+        // Get popupType from localStorage
+        const savedRaw = localStorage.getItem("userTheme");
+        const saved = JSON.parse(savedRaw) || {};
+        const lockedMenus = saved.themeData && saved.themeData["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
+        const agencyData = saved.themeData && saved.themeData["--agencyLockedHideMenus"] ? JSON.parse(saved.themeData["--agencyLockedHideMenus"]) : {};
+        const locationId = getCurrentLocationId();
+
+        let popupType = "simple"; // default
+        if (locationId) {
+            const lockData = lockedMenus[locationId]?.[menuId];
+            if (lockData && typeof lockData === 'object') {
+                popupType = lockData.popupType || "simple";
+            }
+        } else {
+            const lockData = agencyData.locked?.[menuId];
+            if (lockData && typeof lockData === 'object') {
+                popupType = lockData.popupType || "simple";
+            }
+        }
+
+        showPreviewPopup(popupType);
+    }
 })();
