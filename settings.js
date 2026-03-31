@@ -4301,23 +4301,48 @@
 
                     cell.appendChild(hideDiv);
 
-                    // Event listeners
+                    // Event listeners Working Fine but not showing Modals
+                    // lockInput.addEventListener("change", () => {
+                    //     console.log("(settings.js) Subaccount lock toggle changed for", menu.id, "locationId:", locationId, "checked:", lockInput.checked);
+                    //     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                    //     saved.themeData = saved.themeData || {};
+                    //     let locked = saved.themeData["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
+                    //     if (!locked[locationId]) locked[locationId] = {};
+                    //     if (lockInput.checked) {
+                    //         locked[locationId][menu.id] = true;
+                    //     } else {
+                    //         delete locked[locationId][menu.id];
+                    //     }
+                    //     saved.themeData["--lockedMenus"] = JSON.stringify(locked);
+                    //     localStorage.setItem("userTheme", JSON.stringify(saved));
+                    //     applyLockedMenus();
+                    // });
                     lockInput.addEventListener("change", () => {
                         console.log("(settings.js) Subaccount lock toggle changed for", menu.id, "locationId:", locationId, "checked:", lockInput.checked);
-                        const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-                        saved.themeData = saved.themeData || {};
-                        let locked = saved.themeData["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
-                        if (!locked[locationId]) locked[locationId] = {};
                         if (lockInput.checked) {
-                            locked[locationId][menu.id] = true;
+                            // Show popup selection modal
+                            showPopupSelectionModal(menu, locationId, (selectedType) => {
+                                const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                                saved.themeData = saved.themeData || {};
+                                let locked = saved.themeData["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
+                                if (!locked[locationId]) locked[locationId] = {};
+                                locked[locationId][menu.id] = { locked: true, popupType: selectedType };
+                                saved.themeData["--lockedMenus"] = JSON.stringify(locked);
+                                localStorage.setItem("userTheme", JSON.stringify(saved));
+                                applyLockedMenus();
+                            });
                         } else {
-                            delete locked[locationId][menu.id];
+                            const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                            saved.themeData = saved.themeData || {};
+                            let locked = saved.themeData["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
+                            if (locked[locationId]) {
+                                delete locked[locationId][menu.id];
+                            }
+                            saved.themeData["--lockedMenus"] = JSON.stringify(locked);
+                            localStorage.setItem("userTheme", JSON.stringify(saved));
+                            applyLockedMenus();
                         }
-                        saved.themeData["--lockedMenus"] = JSON.stringify(locked);
-                        localStorage.setItem("userTheme", JSON.stringify(saved));
-                        applyLockedMenus();
                     });
-
                     hideInput.addEventListener("change", () => {
                         const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                         saved.themeData = saved.themeData || {};
@@ -4614,64 +4639,64 @@
             document.body.appendChild(overlay);
         }
     function applyLockedMenus() {
-  const savedRaw = localStorage.getItem("userTheme");
-  const saved = JSON.parse(savedRaw) || {};
-  if (!saved.themeData || !saved.themeData["--lockedMenus"]) return;
+            const savedRaw = localStorage.getItem("userTheme");
+            const saved = JSON.parse(savedRaw) || {};
+            if (!saved.themeData || !saved.themeData["--lockedMenus"]) return;
 
-  let lockedMenus;
-  try { lockedMenus = JSON.parse(saved.themeData["--lockedMenus"]); } catch (e) { console.warn("[ThemeBuilder] invalid --lockedMenus"); return; }
-  if (!lockedMenus || typeof lockedMenus !== "object") return;
+            let lockedMenus;
+            try { lockedMenus = JSON.parse(saved.themeData["--lockedMenus"]); } catch (e) { console.warn("[ThemeBuilder] invalid --lockedMenus"); return; }
+            if (!lockedMenus || typeof lockedMenus !== "object") return;
 
-  const locationId = getCurrentLocationId();
-  console.log("(settings.js) applyLockedMenus called, locationId:", locationId);
-  console.log("lockedMenus:", lockedMenus);
-  
-  // Select all sidebar menus
-  const allMenus = document.querySelectorAll("a[id^='sb_'], .hl_nav-header a");
-  
-  allMenus.forEach(menu => {
-    const menuId = menu.id?.trim();
-    if (!menuId) return;
-    
-    const isLocked = locationId ? (lockedMenus[locationId]?.[menuId] && typeof lockedMenus[locationId][menuId] === 'object' ? lockedMenus[locationId][menuId].locked : !!lockedMenus[locationId]?.[menuId]) : (lockedMenus[menuId] && typeof lockedMenus[menuId] === 'object' ? lockedMenus[menuId].locked : !!lockedMenus[menuId]);
-    console.log("(settings.js) Processing menu:", menuId, "isLocked:", isLocked);
-    
-    if (isLocked) {
-      if (!menu.querySelector(".tb-lock-icon")) {
-        const lockIcon = document.createElement("i");
-        lockIcon.className = "tb-lock-icon fas fa-lock ml-2";
-        lockIcon.style.color = "#F54927";
-        lockIcon.style.setProperty("display", "inline-block", "important");
-        lockIcon.style.setProperty("visibility", "visible", "important");
-        lockIcon.style.setProperty("opacity", "1", "important");
-        lockIcon.style.setProperty("position", "relative", "important");
-        lockIcon.style.setProperty("z-index", "9999", "important");
-        menu.appendChild(lockIcon);
-      }
-      menu.style.setProperty("opacity", "0.6", "important");
-      menu.style.setProperty("cursor", "not-allowed", "important");
-      if (menu.dataset.tbLockBound !== "1") {
-        menu.addEventListener("click", (e) => blockMenuClick(e, menuId), true);
-        menu.dataset.tbLockBound = "1";
-      }
-    } else {
-      console.log("(settings.js) Unlocking menu:", menuId);
-      const icon = menu.querySelector(".tb-lock-icon");
-      if (icon) {
-        console.log("(settings.js) Removing icon for", menuId);
-        icon.remove();
-      } else {
-        console.log("(settings.js) No icon found for", menuId);
-      }
-      menu.style.setProperty("opacity", "1", "important");
-      menu.style.setProperty("cursor", "auto", "important");
-      if (menu.dataset.tbLockBound === "1") {
-        menu.removeEventListener("click", blockMenuClick, true);
-        delete menu.dataset.tbLockBound;
-      }
-    }
-  });
-}
+            const locationId = getCurrentLocationId();
+            console.log("(settings.js) applyLockedMenus called, locationId:", locationId);
+            console.log("lockedMenus:", lockedMenus);
+            
+            // Select all sidebar menus
+            const allMenus = document.querySelectorAll("a[id^='sb_'], .hl_nav-header a");
+            
+            allMenus.forEach(menu => {
+                const menuId = menu.id?.trim();
+                if (!menuId) return;
+                
+                const isLocked = locationId ? (lockedMenus[locationId]?.[menuId] && typeof lockedMenus[locationId][menuId] === 'object' ? lockedMenus[locationId][menuId].locked : !!lockedMenus[locationId]?.[menuId]) : (lockedMenus[menuId] && typeof lockedMenus[menuId] === 'object' ? lockedMenus[menuId].locked : !!lockedMenus[menuId]);
+                console.log("(settings.js) Processing menu:", menuId, "isLocked:", isLocked);
+                
+                if (isLocked) {
+                if (!menu.querySelector(".tb-lock-icon")) {
+                    const lockIcon = document.createElement("i");
+                    lockIcon.className = "tb-lock-icon fas fa-lock ml-2";
+                    lockIcon.style.color = "#F54927";
+                    lockIcon.style.setProperty("display", "inline-block", "important");
+                    lockIcon.style.setProperty("visibility", "visible", "important");
+                    lockIcon.style.setProperty("opacity", "1", "important");
+                    lockIcon.style.setProperty("position", "relative", "important");
+                    lockIcon.style.setProperty("z-index", "9999", "important");
+                    menu.appendChild(lockIcon);
+                }
+                menu.style.setProperty("opacity", "0.6", "important");
+                menu.style.setProperty("cursor", "not-allowed", "important");
+                if (menu.dataset.tbLockBound !== "1") {
+                    menu.addEventListener("click", (e) => blockMenuClick(e, menuId), true);
+                    menu.dataset.tbLockBound = "1";
+                }
+                } else {
+                console.log("(settings.js) Unlocking menu:", menuId);
+                const icon = menu.querySelector(".tb-lock-icon");
+                if (icon) {
+                    console.log("(settings.js) Removing icon for", menuId);
+                    icon.remove();
+                } else {
+                    console.log("(settings.js) No icon found for", menuId);
+                }
+                menu.style.setProperty("opacity", "1", "important");
+                menu.style.setProperty("cursor", "auto", "important");
+                if (menu.dataset.tbLockBound === "1") {
+                    menu.removeEventListener("click", blockMenuClick, true);
+                    delete menu.dataset.tbLockBound;
+                }
+                }
+        });
+        }
 
     document.addEventListener("DOMContentLoaded", applyLockedMenus);
    
