@@ -3711,177 +3711,275 @@
 
         observer.observe(document.body, { childList: true, subtree: true });
     }
-    function showPopupSelectionModal(menu, locationId, callback) {
-        // Remove existing modal
-        document.getElementById("tb-popup-selection-modal")?.remove();
+   function showPopupSelectionModal(menu, locationId, callback) {
+    document.getElementById("tb-popup-selection-modal")?.remove();
 
-        const overlay = document.createElement("div");
-        overlay.id = "tb-popup-selection-modal";
-        overlay.style.position = "fixed";
-        overlay.style.top = "0";
-        overlay.style.left = "0";
-        overlay.style.width = "100%";
-        overlay.style.height = "100%";
-        overlay.style.background = "rgba(0,0,0,0.5)";
-        overlay.style.display = "flex";
-        overlay.style.alignItems = "center";
-        overlay.style.justifyContent = "center";
-        overlay.style.zIndex = "100000";
+    const overlay = document.createElement("div");
+    overlay.id = "tb-popup-selection-modal";
+    overlay.style.position = "fixed";
+    overlay.style.top = "0";
+    overlay.style.left = "0";
+    overlay.style.width = "100%";
+    overlay.style.height = "100%";
+    overlay.style.background = "rgba(0,0,0,0.5)";
+    overlay.style.display = "flex";
+    overlay.style.alignItems = "center";
+    overlay.style.justifyContent = "center";
+    overlay.style.zIndex = "100000";
 
-        const modal = document.createElement("div");
-        modal.style.background = "#fff";
-        modal.style.padding = "20px";
-        modal.style.borderRadius = "10px";
-        modal.style.maxWidth = "600px";
-        modal.style.width = "90%";
-        modal.style.maxHeight = "80vh";
-        modal.style.overflowY = "auto";
-        modal.style.boxShadow = "0 8px 24px rgba(0,0,0,0.3)";
+    const modal = document.createElement("div");
+    modal.style.background = "#fff";
+    modal.style.padding = "20px";
+    modal.style.borderRadius = "10px";
+    modal.style.maxWidth = "600px";
+    modal.style.width = "90%";
+    modal.style.maxHeight = "80vh";
+    modal.style.overflowY = "auto";
+    modal.style.boxShadow = "0 8px 24px rgba(0,0,0,0.3)";
 
-        const title = document.createElement("h3");
-        title.textContent = `Select Popup for Locked Menu: ${menu.label}`;
-        title.style.marginBottom = "15px";
-        modal.appendChild(title);
+    const title = document.createElement("h3");
+    title.textContent = `Select Popup for Locked Menu: ${menu.label}`;
+    title.style.marginBottom = "15px";
+    modal.appendChild(title);
 
-        const content = document.createElement("div");
-        modal.appendChild(content);
+    const content = document.createElement("div");
+    modal.appendChild(content);
 
-        let selectedType = "simple"; // default
+    let selectedType = "simple";
+    let selectedUrl = "";
+    let selectedHeadline = "";
 
-        const popupOptions = [
-            { type: "simple", title: "Simple Access Denied", description: "Basic access denied message." },
-            { type: "upgrade", title: "Upgrade Required", description: "Prompts user to upgrade their plan." },
-            { type: "contact", title: "Contact Admin", description: "Asks user to contact administrator." }
-        ];
-
-        popupOptions.forEach(option => {
-    const card = document.createElement("div");
-    card.style.border = "2px solid #ddd";
-    card.style.borderRadius = "8px";
-    card.style.padding = "15px";
-    card.style.marginBottom = "15px";
-    card.style.cursor = "pointer";
-    card.style.transition = "0.2s ease";
-    card.style.display = "flex";
-    card.style.flexDirection = "column";
-    card.style.gap = "10px";
-
-    // highlight default
-    if (option.type === selectedType) {
-        card.style.borderColor = "#F54927";
-        card.style.background = "#fff5f2";
+    // Pre-load saved values if re-editing an existing lock
+    const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+    const themeData = savedTheme.themeData || {};
+    const lockedMenus = themeData["--lockedMenus"] ? JSON.parse(themeData["--lockedMenus"]) : {};
+    const existingLock = locationId ? lockedMenus[locationId]?.[menu.id] : lockedMenus[menu.id];
+    if (existingLock && typeof existingLock === "object") {
+        if (existingLock.popupType) selectedType = existingLock.popupType;
+        if (existingLock.popupUrl) selectedUrl = existingLock.popupUrl;
+        if (existingLock.popupHeadline) selectedHeadline = existingLock.popupHeadline;
     }
 
-    // Top Row (Radio + Title)
-    const topRow = document.createElement("div");
-    topRow.style.display = "flex";
-    topRow.style.alignItems = "center";
-    topRow.style.justifyContent = "space-between";
+    const popupOptions = [
+        { type: "simple", title: "Simple Access Denied", description: "Basic access denied message." },
+        { type: "upgrade", title: "Upgrade Required", description: "Prompts user to upgrade their plan." },
+        { type: "contact", title: "Contact Admin", description: "Asks user to contact administrator." }
+    ];
 
-    const left = document.createElement("div");
-    left.style.display = "flex";
-    left.style.alignItems = "center";
-    left.style.gap = "10px";
+    popupOptions.forEach(option => {
+        const card = document.createElement("div");
+        card.style.border = "2px solid #ddd";
+        card.style.borderRadius = "8px";
+        card.style.padding = "15px";
+        card.style.marginBottom = "15px";
+        card.style.cursor = "pointer";
+        card.style.transition = "0.2s ease";
+        card.style.display = "flex";
+        card.style.flexDirection = "column";
+        card.style.gap = "10px";
 
-    const radio = document.createElement("input");
-    radio.type = "radio";
-    radio.name = "popupType";
-    radio.value = option.type;
-    radio.checked = option.type === selectedType;
+        if (option.type === selectedType) {
+            card.style.borderColor = "#F54927";
+            card.style.background = "#fff5f2";
+        }
 
-    const title = document.createElement("strong");
-    title.textContent = option.title;
+        const topRow = document.createElement("div");
+        topRow.style.display = "flex";
+        topRow.style.alignItems = "center";
+        topRow.style.justifyContent = "space-between";
 
-    left.appendChild(radio);
-    left.appendChild(title);
+        const left = document.createElement("div");
+        left.style.display = "flex";
+        left.style.alignItems = "center";
+        left.style.gap = "10px";
 
-    // Preview Button
-    const previewBtn = document.createElement("button");
-    previewBtn.textContent = "Preview";
-    previewBtn.style.padding = "5px 10px";
-    previewBtn.style.border = "1px solid #ccc";
-    previewBtn.style.borderRadius = "5px";
-    previewBtn.style.background = "#f8f9fa";
-    previewBtn.style.cursor = "pointer";
+        const radio = document.createElement("input");
+        radio.type = "radio";
+        radio.name = "popupType";
+        radio.value = option.type;
+        radio.checked = option.type === selectedType;
 
-    previewBtn.addEventListener("click", (e) => {
-        e.stopPropagation(); // prevent selecting card
-        showPreviewPopup(option.type);
-    });
+        const cardTitle = document.createElement("strong");
+        cardTitle.textContent = option.title;
 
-    topRow.appendChild(left);
-    topRow.appendChild(previewBtn);
+        left.appendChild(radio);
+        left.appendChild(cardTitle);
 
-    // Description
-    const desc = document.createElement("p");
-    desc.textContent = option.description;
-    desc.style.margin = "0";
-    desc.style.fontSize = "13px";
-    desc.style.color = "#666";
+        const btnGroup = document.createElement("div");
+        btnGroup.style.display = "flex";
+        btnGroup.style.gap = "6px";
 
-    // Click card = select
-    card.addEventListener("click", () => {
-        selectedType = option.type;
+        const previewBtn = document.createElement("button");
+        previewBtn.textContent = "Preview";
+        previewBtn.style.padding = "5px 10px";
+        previewBtn.style.border = "1px solid #ccc";
+        previewBtn.style.borderRadius = "5px";
+        previewBtn.style.background = "#f8f9fa";
+        previewBtn.style.cursor = "pointer";
+        previewBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            showPreviewPopup(option.type, selectedUrl, selectedHeadline);
+        });
+        btnGroup.appendChild(previewBtn);
 
-        // reset all cards
-        document.querySelectorAll("#tb-popup-selection-modal .popup-card")
-            .forEach(c => {
+        // Customize button only for upgrade and contact types
+        if (option.type === "upgrade" || option.type === "contact") {
+            const customizeBtn = document.createElement("button");
+            customizeBtn.textContent = "Customize";
+            customizeBtn.style.padding = "5px 10px";
+            customizeBtn.style.border = "1px solid #F54927";
+            customizeBtn.style.borderRadius = "5px";
+            customizeBtn.style.background = "#fff5f2";
+            customizeBtn.style.color = "#F54927";
+            customizeBtn.style.cursor = "pointer";
+            customizeBtn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                // Select this card first
+                selectedType = option.type;
+                document.querySelectorAll("#tb-popup-selection-modal .popup-card").forEach(c => {
+                    c.style.borderColor = "#ddd";
+                    c.style.background = "#fff";
+                    c.querySelector("input[type='radio']").checked = false;
+                });
+                radio.checked = true;
+                card.style.borderColor = "#F54927";
+                card.style.background = "#fff5f2";
+                // Open customize popup
+                showCustomizePopup(option.type, selectedUrl, selectedHeadline, (savedUrl, savedHeadline) => {
+                    selectedUrl = savedUrl;
+                    selectedHeadline = savedHeadline;
+                });
+            });
+            btnGroup.appendChild(customizeBtn);
+        }
+
+        topRow.appendChild(left);
+        topRow.appendChild(btnGroup);
+
+        const desc = document.createElement("p");
+        desc.textContent = option.description;
+        desc.style.margin = "0";
+        desc.style.fontSize = "13px";
+        desc.style.color = "#666";
+
+        card.addEventListener("click", () => {
+            selectedType = option.type;
+            document.querySelectorAll("#tb-popup-selection-modal .popup-card").forEach(c => {
                 c.style.borderColor = "#ddd";
                 c.style.background = "#fff";
-                c.querySelector("input").checked = false;
+                c.querySelector("input[type='radio']").checked = false;
             });
+            radio.checked = true;
+            card.style.borderColor = "#F54927";
+            card.style.background = "#fff5f2";
+        });
 
-        // activate this
-        radio.checked = true;
-        card.style.borderColor = "#F54927";
-        card.style.background = "#fff5f2";
+        card.classList.add("popup-card");
+        card.appendChild(topRow);
+        card.appendChild(desc);
+        content.appendChild(card);
     });
 
-    card.classList.add("popup-card");
+    const buttonContainer = document.createElement("div");
+    buttonContainer.style.display = "flex";
+    buttonContainer.style.justifyContent = "flex-end";
+    buttonContainer.style.gap = "10px";
+    buttonContainer.style.marginTop = "20px";
 
-    card.appendChild(topRow);
-    card.appendChild(desc);
+    const cancelBtn = document.createElement("button");
+    cancelBtn.textContent = "Cancel";
+    cancelBtn.style.padding = "10px 20px";
+    cancelBtn.style.border = "1px solid #ccc";
+    cancelBtn.style.borderRadius = "5px";
+    cancelBtn.style.background = "#fff";
+    cancelBtn.style.cursor = "pointer";
+    cancelBtn.addEventListener("click", () => {
+        overlay.remove();
+        const lockInput = document.getElementById(locationId ? `lock-${locationId}-${menu.id}` : `lock-global-${menu.id}`);
+        if (lockInput) lockInput.checked = false;
+    });
+    buttonContainer.appendChild(cancelBtn);
 
-    content.appendChild(card);
-});
+    const okBtn = document.createElement("button");
+    okBtn.textContent = "OK";
+    okBtn.style.padding = "10px 20px";
+    okBtn.style.border = "none";
+    okBtn.style.borderRadius = "5px";
+    okBtn.style.background = "#F54927";
+    okBtn.style.color = "#fff";
+    okBtn.style.cursor = "pointer";
+    okBtn.addEventListener("click", () => {
+        overlay.remove();
+        callback(selectedType, selectedUrl, selectedHeadline); // passes all 3 values
+    });
+    buttonContainer.appendChild(okBtn);
 
-        const buttonContainer = document.createElement("div");
-        buttonContainer.style.display = "flex";
-        buttonContainer.style.justifyContent = "flex-end";
-        buttonContainer.style.gap = "10px";
-        buttonContainer.style.marginTop = "20px";
+    modal.appendChild(buttonContainer);
+    overlay.appendChild(modal);
+    document.body.appendChild(overlay);
+}
+    function showCustomizePopup(type, currentUrl, currentHeadline, onSave) {
+        document.getElementById("tb-customize-popup")?.remove();
+
+        const overlay = document.createElement("div");
+        overlay.id = "tb-customize-popup";
+        overlay.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:200000;";
+
+        const popup = document.createElement("div");
+        popup.style.cssText = "background:#fff;padding:24px;border-radius:10px;max-width:400px;width:90%;box-shadow:0 8px 24px rgba(0,0,0,0.3);";
+
+        const popupTitle = document.createElement("h3");
+        popupTitle.textContent = type === "upgrade" ? "Customize Upgrade Popup" : "Customize Contact Admin Popup";
+        popupTitle.style.marginBottom = "16px";
+        popup.appendChild(popupTitle);
+
+        // Headline input
+        const headlineLabel = document.createElement("label");
+        headlineLabel.textContent = "Headline Text:";
+        headlineLabel.style.cssText = "display:block;font-size:13px;font-weight:bold;margin-bottom:5px;";
+        popup.appendChild(headlineLabel);
+
+        const headlineInput = document.createElement("input");
+        headlineInput.type = "text";
+        headlineInput.value = currentHeadline || "";
+        headlineInput.placeholder = type === "upgrade" ? "Upgrade Required 🚀" : "Restricted";
+        headlineInput.style.cssText = "width:100%;padding:8px;border:1px solid #ccc;border-radius:5px;font-size:13px;box-sizing:border-box;margin-bottom:14px;";
+        popup.appendChild(headlineInput);
+
+        // URL input
+        const urlLabel = document.createElement("label");
+        urlLabel.textContent = type === "upgrade" ? "Upgrade Button URL:" : "Contact Button URL:";
+        urlLabel.style.cssText = "display:block;font-size:13px;font-weight:bold;margin-bottom:5px;";
+        popup.appendChild(urlLabel);
+
+        const urlInput = document.createElement("input");
+        urlInput.type = "text";
+        urlInput.value = currentUrl || "";
+        urlInput.placeholder = "https://your-url.com";
+        urlInput.style.cssText = "width:100%;padding:8px;border:1px solid #ccc;border-radius:5px;font-size:13px;box-sizing:border-box;";
+        popup.appendChild(urlInput);
+
+        const btnRow = document.createElement("div");
+        btnRow.style.cssText = "display:flex;gap:10px;justify-content:flex-end;margin-top:20px;";
 
         const cancelBtn = document.createElement("button");
         cancelBtn.textContent = "Cancel";
-        cancelBtn.style.padding = "10px 20px";
-        cancelBtn.style.border = "1px solid #ccc";
-        cancelBtn.style.borderRadius = "5px";
-        cancelBtn.style.background = "#fff";
-        cancelBtn.style.cursor = "pointer";
-        cancelBtn.addEventListener("click", () => {
-            overlay.remove();
-            // Reset the checkbox since cancelled
-            const lockInput = document.getElementById(locationId ? `lock-${locationId}-${menu.id}` : `lock-global-${menu.id}`);
-            if (lockInput) lockInput.checked = false;
-        });
-        buttonContainer.appendChild(cancelBtn);
+        cancelBtn.style.cssText = "padding:8px 18px;border:1px solid #ccc;border-radius:5px;background:#fff;cursor:pointer;";
+        cancelBtn.onclick = () => overlay.remove();
 
-        const okBtn = document.createElement("button");
-        okBtn.textContent = "OK";
-        okBtn.style.padding = "10px 20px";
-        okBtn.style.border = "none";
-        okBtn.style.borderRadius = "5px";
-        okBtn.style.background = "#F54927";
-        okBtn.style.color = "#fff";
-        okBtn.style.cursor = "pointer";
-        okBtn.addEventListener("click", () => {
+        const saveBtn = document.createElement("button");
+        saveBtn.textContent = "Save";
+        saveBtn.style.cssText = "padding:8px 18px;border:none;border-radius:5px;background:#F54927;color:#fff;cursor:pointer;";
+        saveBtn.onclick = () => {
+            onSave(urlInput.value.trim(), headlineInput.value.trim());
             overlay.remove();
-            callback(selectedType);
-        });
-        buttonContainer.appendChild(okBtn);
+        };
 
-        modal.appendChild(buttonContainer);
-        overlay.appendChild(modal);
+        btnRow.appendChild(cancelBtn);
+        btnRow.appendChild(saveBtn);
+        popup.appendChild(btnRow);
+
+        overlay.appendChild(popup);
         document.body.appendChild(overlay);
     }
     function buildFeatureLockSection(container) {
@@ -4267,7 +4365,8 @@
                                 saved.themeData = saved.themeData || {};
                                 let locked = saved.themeData["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
                                 if (!locked[locationId]) locked[locationId] = {};
-                                locked[locationId][menu.id] = { locked: true, popupType: selectedType };
+                                // locked[locationId][menu.id] = { locked: true, popupType: selectedType };
+                                locked[locationId][menu.id] = { locked: true, popupType: selectedType, popupUrl: selectedUrl, popupHeadline: selectedHeadline };
                                 saved.themeData["--lockedMenus"] = JSON.stringify(locked);
                                 localStorage.setItem("userTheme", JSON.stringify(saved));
                                 applyLockedMenus();
@@ -4449,7 +4548,8 @@
                             saved.themeData = saved.themeData || {};
                             let locked = saved.themeData["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
                             if (!locked[locationId]) locked[locationId] = {};
-                            locked[locationId][menu.id] = { locked: true, popupType: selectedType };
+                            // locked[locationId][menu.id] = { locked: true, popupType: selectedType };
+                            locked[locationId][menu.id] = { locked: true, popupType: selectedType, popupUrl: selectedUrl, popupHeadline: selectedHeadline };
                             saved.themeData["--lockedMenus"] = JSON.stringify(locked);
                             localStorage.setItem("userTheme", JSON.stringify(saved));
                             applyLockedMenus();
@@ -4518,67 +4618,41 @@
             parent.appendChild(row);
         }
     }
-    function showPreviewPopup(type) {
-            document.getElementById("tb-preview-popup")?.remove();
+    function showPreviewPopup(type, popupUrl, popupHeadline) {
+    document.getElementById("tb-preview-popup")?.remove();
 
-            const overlay = document.createElement("div");
-            overlay.id = "tb-preview-popup";
-            overlay.style = `
-                position: fixed;
-                top:0; left:0;
-                width:100%; height:100%;
-                background: rgba(0,0,0,0.5);
-                display:flex;
-                align-items:center;
-                justify-content:center;
-                z-index:200000;
-            `;
+    const overlay = document.createElement("div");
+    overlay.id = "tb-preview-popup";
+    overlay.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:200000;";
 
-            const popup = document.createElement("div");
-            popup.style = `
-                background:#fff;
-                padding:20px;
-                border-radius:10px;
-                max-width:350px;
-                text-align:center;
-            `;
+    const popup = document.createElement("div");
+    popup.style.cssText = "background:#fff;padding:30px;border-radius:10px;max-width:350px;width:90%;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,0.3);";
 
-            let content = "";
+    if (type === "simple") {
+        popup.innerHTML = `<h3>Access Denied</h3><p>You cannot access this feature.</p>`;
+    } else if (type === "upgrade") {
+        const headline = popupHeadline || "Upgrade Required 🚀";
+        popup.innerHTML = `<h3>${headline}</h3><p>This feature is available in Premium Plan.</p><button style="margin-top:10px;padding:8px 16px;background:#28a745;color:#fff;border:none;border-radius:5px;cursor:pointer;">Upgrade</button>`;
+    } else if (type === "contact") {
+        const headline = popupHeadline || "Restricted";
+        popup.innerHTML = `<h3>${headline}</h3><p>Please contact admin to get access.</p><button style="margin-top:10px;padding:8px 16px;background:#007bff;color:#fff;border:none;border-radius:5px;cursor:pointer;">Contact</button>`;
+    }
 
-            if (type === "simple") {
-                content = `
-                    <h3>Access Denied</h3>
-                    <p>You cannot access this feature.</p>
-                `;
-            }
+    // Wire up action button to open URL
+    const actionBtn = popup.querySelector("button");
+    if (actionBtn && popupUrl) {
+        actionBtn.addEventListener("click", () => window.open(popupUrl, "_blank"));
+    }
 
-            if (type === "upgrade") {
-                content = `
-                    <h3>Upgrade Required 🚀</h3>
-                    <p>This feature is available in Premium Plan.</p>
-                    <button style="margin-top:10px;padding:6px 12px;background:#28a745;color:#fff;border:none;border-radius:5px;">Upgrade</button>
-                `;
-            }
+    const closeBtn = document.createElement("button");
+    closeBtn.textContent = "Close";
+    closeBtn.style.cssText = "margin-top:15px;padding:8px 16px;border:1px solid #ccc;border-radius:5px;background:#fff;cursor:pointer;display:block;margin-left:auto;margin-right:auto;";
+    closeBtn.onclick = () => overlay.remove();
 
-            if (type === "contact") {
-                content = `
-                    <h3>Restricted</h3>
-                    <p>Please contact admin to get access.</p>
-                    <button style="margin-top:10px;padding:6px 12px;background:#007bff;color:#fff;border:none;border-radius:5px;">Contact</button>
-                `;
-            }
-
-            popup.innerHTML = content;
-
-            const closeBtn = document.createElement("button");
-            closeBtn.textContent = "Close";
-            closeBtn.style.marginTop = "15px";
-            closeBtn.onclick = () => overlay.remove();
-
-            popup.appendChild(closeBtn);
-            overlay.appendChild(popup);
-            document.body.appendChild(overlay);
-        }
+    popup.appendChild(closeBtn);
+    overlay.appendChild(popup);
+    document.body.appendChild(overlay);
+    }
     function applyLockedMenus() {
             const savedRaw = localStorage.getItem("userTheme");
             const saved = JSON.parse(savedRaw) || {};
@@ -4620,13 +4694,13 @@
                 const lockData = locationId
                     ? lockedMenus[locationId]?.[menuId]
                     : lockedMenus[menuId];
-                const popupType = (lockData && typeof lockData === "object" && lockData.popupType)
-                    ? lockData.popupType
-                    : "simple"; // fallback for old entries that stored just `true`
+                const popupType = (lockData && typeof lockData === "object" && lockData.popupType) ? lockData.popupType : "simple";
+                const popupUrl = (lockData && typeof lockData === "object" && lockData.popupUrl) ? lockData.popupUrl : "";
+                const popupHeadline = (lockData && typeof lockData === "object" && lockData.popupHeadline) ? lockData.popupHeadline : "";
                 if (menu.dataset.tbLockBound !== "1") {
                     menu.addEventListener("click", (e) => {
                         blockMenuClick(e, menuId);
-                        showPreviewPopup(popupType);
+                        showPreviewPopup(popupType, popupUrl, popupHeadline);
                     }, true);
                     menu.dataset.tbLockBound = "1";
                 }
@@ -4655,30 +4729,25 @@
 
     // Helper for blocking click
     function blockMenuClick(e, menuId) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
+    e.preventDefault();
+    e.stopImmediatePropagation();
 
-        // Get popupType from localStorage
-        const savedRaw = localStorage.getItem("userTheme");
-        const saved = JSON.parse(savedRaw) || {};
-        const lockedMenus = saved.themeData && saved.themeData["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
-        const agencyData = saved.themeData && saved.themeData["--agencyLockedHideMenus"] ? JSON.parse(saved.themeData["--agencyLockedHideMenus"]) : {};
-        const locationId = getCurrentLocationId();
+    const savedRaw = localStorage.getItem("userTheme");
+    const saved = JSON.parse(savedRaw) || {};
+    const lockedMenus = saved.themeData?.["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
+    const agencyData = saved.themeData?.["--agencyLockedHideMenus"] ? JSON.parse(saved.themeData["--agencyLockedHideMenus"]) : {};
+    const locationId = getCurrentLocationId();
 
-        let popupType = "simple"; // default
-        if (locationId) {
-            const lockData = lockedMenus[locationId]?.[menuId];
-            if (lockData && typeof lockData === 'object') {
-                popupType = lockData.popupType || "simple";
-            }
-        } else {
-            const lockData = agencyData.locked?.[menuId];
-            if (lockData && typeof lockData === 'object') {
-                popupType = lockData.popupType || "simple";
-            }
-        }
+    // Read lockData once — covers both location and global
+    const lockData = locationId
+        ? lockedMenus[locationId]?.[menuId]
+        : agencyData.locked?.[menuId];
 
-        showPreviewPopup(popupType);
+    const popupType = (lockData && typeof lockData === "object" && lockData.popupType) ? lockData.popupType : "simple";
+    const popupUrl = (lockData && typeof lockData === "object" && lockData.popupUrl) ? lockData.popupUrl : "";
+    const popupHeadline = (lockData && typeof lockData === "object" && lockData.popupHeadline) ? lockData.popupHeadline : "";
+
+    showPreviewPopup(popupType, popupUrl, popupHeadline);
     }
     function updateIconVariable(menuId, unicodeValue) {
         const cssVarName = getCssVarName(menuId);
@@ -6576,15 +6645,15 @@ function applyLockedMenus() {
                 const lockData = locationId
                     ? lockedMenus[locationId]?.[menuId]
                     : lockedMenus[menuId];
-                const popupType = (lockData && typeof lockData === "object" && lockData.popupType)
-                    ? lockData.popupType
-                    : "simple"; // fallback for old entries that stored just `true`
-                if (menuEl.dataset.tbLockBound !== "1") {
-                    menuEl.addEventListener("click", (e) => {
+                const popupType = (lockData && typeof lockData === "object" && lockData.popupType) ? lockData.popupType : "simple";
+                const popupUrl = (lockData && typeof lockData === "object" && lockData.popupUrl) ? lockData.popupUrl : "";
+                const popupHeadline = (lockData && typeof lockData === "object" && lockData.popupHeadline) ? lockData.popupHeadline : "";
+                if (menu.dataset.tbLockBound !== "1") {
+                    menu.addEventListener("click", (e) => {
                         blockMenuClick(e, menuId);
-                        showPreviewPopup(popupType);
+                        showPreviewPopup(popupType, popupUrl, popupHeadline);
                     }, true);
-                    menuEl.dataset.tbLockBound = "1";
+                    menu.dataset.tbLockBound = "1";
                 }
       } else {
         const icon = menuEl.querySelector(".tb-lock-icon");
@@ -6625,13 +6694,13 @@ function applyLockedMenus() {
                 const lockData = locationId
                     ? lockedMenus[locationId]?.[menuId]
                     : lockedMenus[menuId];
-                const popupType = (lockData && typeof lockData === "object" && lockData.popupType)
-                    ? lockData.popupType
-                    : "simple"; // fallback for old entries that stored just `true`
+                const popupType = (lockData && typeof lockData === "object" && lockData.popupType) ? lockData.popupType : "simple";
+                const popupUrl = (lockData && typeof lockData === "object" && lockData.popupUrl) ? lockData.popupUrl : "";
+                const popupHeadline = (lockData && typeof lockData === "object" && lockData.popupHeadline) ? lockData.popupHeadline : "";
                 if (menu.dataset.tbLockBound !== "1") {
                     menu.addEventListener("click", (e) => {
                         blockMenuClick(e, menuId);
-                        showPreviewPopup(popupType);
+                        showPreviewPopup(popupType, popupUrl, popupHeadline);
                     }, true);
                     menu.dataset.tbLockBound = "1";
                 }
