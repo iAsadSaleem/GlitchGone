@@ -353,27 +353,7 @@
             .trim() || start;
 
         let gradient;
-
-        // ---------------------------------------------
-        // ⭐ SPECIAL CASE: VelvetNight Theme gradient
-        // ---------------------------------------------
-        //if (selectedtheme === "VelvetNight Theme") {
-        //    const whiteMiddle = "rgba(255, 255, 255, 1)";
-
-        //    gradient = `linear-gradient(
-        //    130deg,
-        //    ${start} 40%,
-        //    ${whiteMiddle} 40%,
-        //    ${whiteMiddle} 60%,
-        //    ${end} 60%
-        //)`;
-        //}
-        //else {
-        //    // ---------------------------------------------
-        //    // DEFAULT GRADIENT (existing logic)
-        //    // ---------------------------------------------
-        //    gradient = `linear-gradient(90deg, ${start} 0%, ${end} 100%)`;
-        //}
+      
         gradient = `linear-gradient(90deg, ${start} 0%, ${end} 100%)`;
         // Apply gradient
         document.body.style.setProperty("--login-background-active", gradient);
@@ -388,31 +368,6 @@
 
         localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
     }
-
-    // function updateLoginBackgroundGradient() {
-    //    const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-    //    const selectedtheme = localStorage.getItem("themebuilder_selectedTheme");
-
-    //    savedThemeObj.themeData = savedThemeObj.themeData || {};
-
-    //    const start = getComputedStyle(document.body).getPropertyValue("--login-background-gradient-start").trim() || "#ffffff";
-    //    const end = getComputedStyle(document.body).getPropertyValue("--login-background-gradient-end").trim() || start;
-    //    const gradient = `linear-gradient(to bottom, ${start} 0%, ${start} 20%, ${end} 100%)`;
-
-    //    // ✅ Apply gradient
-    //    document.body.style.setProperty("--login-background-active", gradient);
-
-    //    // ✅ Save gradient
-    //    savedThemeObj.themeData["--login-background-active"] = gradient;
-    //    if (selectedtheme != 'Default Theme' || selectedtheme != 'Default Light Theme') {
-    //        delete savedThemeObj.themeData["--login-background-image"];
-    //    }
-    //    // ❌ Remove background image so it doesn’t conflict
-
-    //    // ✅ Save updated theme
-    //    localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
-    // }
-
     // === Background Image Input ===
     function createLoginBackgroundImageInput() {
         const wrapper = document.createElement("div");
@@ -554,20 +509,6 @@
     // Load themes once at startup
     loadThemes();
 
-    //function openGHLLocationSwitcher() {
-    //    console.log("Triggering via Vue event…");
-
-    //    const vueRoot = document.querySelector("#app")?._vue_app_ ||
-    //        document.querySelector("#root")?._vue_app_;
-
-    //    if (vueRoot?._component?.exposed?.toggleLocationPopup) {
-    //        vueRoot._component.exposed.toggleLocationPopup();
-    //        console.log("Opened via exposed Vue method");
-    //        return;
-    //    }
-
-    //    console.warn("Vue toggle method not found.");
-    //}
     function enableBlueWaveTopNav() {
         // Prevent duplicates
         if (document.getElementById("ghl_custom_topnav_wrapper_v4")) return;
@@ -6533,25 +6474,6 @@
             initThemeBuilder(0);
         }, 500); // ⏳ delay so "Login As" exists
     });
-   // 🔁 Re-apply menu customizations on theme change
-//     function applyMenuWhenReady(retries = 20) {
-//     const sidebar = document.querySelector(".sidebar-menu"); // <-- Update this selector if needed
-//     if (sidebar) {
-//         applyMenuIconCustomizations();
-//         applyMenuCustomizations();
-//         console.log("Menu applied after theme change");
-//     } else if (retries > 0) {
-//         setTimeout(() => applyMenuWhenReady(retries - 1), 50); // retry every 50ms
-//     } else {
-//         console.warn("Sidebar not found, menu customizations not applied");
-//     }
-//     }
-
-// // Listen for theme changes
-//     window.addEventListener("themeChanged", () => {
-//     console.log("Theme change detected");
-//     applyMenuWhenReady();
-//     });
 
     document.addEventListener('DOMContentLoaded', () =>
         setTimeout(() => initThemeBuilder(0), 1050));
@@ -6727,23 +6649,6 @@ function applyLockedMenus() {
   }
 }
 
-// function blockMenuClick(e) {
-//   e.preventDefault();
-//   e.stopPropagation();
-//   document.getElementById("tb-lock-popup")?.remove();
-
-//   const overlay = document.createElement("div");
-//   overlay.id = "tb-lock-popup";
-//   overlay.style = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;z-index:99999";
-//   overlay.innerHTML = `
-//     <div style="background:#fff;padding:20px 30px;border-radius:12px;max-width:400px;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,0.3)">
-//       <h3 style="margin-bottom:12px;">Access Denied</h3>
-//       <p style="margin-bottom:20px;">No access. Please contact the Owner.</p>
-//       <button style="padding:8px 20px;border:none;border-radius:6px;background:#F54927;color:#fff;cursor:pointer;">OK</button>
-//     </div>`;
-//   overlay.querySelector("button").addEventListener("click", () => overlay.remove());
-//   document.body.appendChild(overlay);
-// }
  function blockMenuClick(e, menuId) {
         e.preventDefault();
         e.stopImmediatePropagation();
