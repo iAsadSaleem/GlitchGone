@@ -3780,7 +3780,7 @@
         return null; // No location ID in URL (agency level)
         }
 
-       function buildFeatureLockSection(container) {
+    function buildFeatureLockSection(container) {
         let savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         if (savedTheme.themeData && typeof savedTheme.themeData === "string") {
             savedTheme.themeData = JSON.parse(savedTheme.themeData);
@@ -4751,6 +4751,7 @@
 }
 
     function applyLockedMenus() {
+        console.log('settings js first applyLockedMenus called');
             const savedRaw = localStorage.getItem("userTheme");
             const saved = JSON.parse(savedRaw) || {};
             if (!saved.themeData || !saved.themeData["--lockedMenus"]) return;
@@ -6737,6 +6738,8 @@ function applyHiddenMenus() {
 }
 
 function applyLockedMenus() {
+            console.log('settings js 2nd applyLockedMenus called');
+
   const savedRaw = localStorage.getItem("userTheme");
   const saved = JSON.parse(savedRaw) || {};
   if (!saved.themeData) return;
