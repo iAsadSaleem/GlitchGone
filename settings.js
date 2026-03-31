@@ -6707,12 +6707,12 @@ function applyLockedMenus() {
                     const popupUrl = (lockData && typeof lockData === "object" && lockData.popupUrl)
                     ? lockData.popupUrl
                     : ""; // ← NEW
-                if (menu.dataset.tbLockBound !== "1") {
-                    menu.addEventListener("click", (e) => {
+                if (menuEl.dataset.tbLockBound !== "1") {
+                    menuEl.addEventListener("click", (e) => {
                         blockMenuClick(e, menuId);
                         showPreviewPopup(popupType, popupUrl); // ← pass URL
                     }, true);
-                    menu.dataset.tbLockBound = "1";
+                    menuEl.dataset.tbLockBound = "1";
                 }
       } else {
         const icon = menuEl.querySelector(".tb-lock-icon");
