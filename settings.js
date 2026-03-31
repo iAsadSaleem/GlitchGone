@@ -3770,210 +3770,17 @@
 
         observer.observe(document.body, { childList: true, subtree: true });
     }
-    function showPopupSelectionModal(menu, locationId, callback) {
-        // Remove existing modal
-        document.getElementById("tb-popup-selection-modal")?.remove();
-
-        const overlay = document.createElement("div");
-        overlay.id = "tb-popup-selection-modal";
-        overlay.style.position = "fixed";
-        overlay.style.top = "0";
-        overlay.style.left = "0";
-        overlay.style.width = "100%";
-        overlay.style.height = "100%";
-        overlay.style.background = "rgba(0,0,0,0.5)";
-        overlay.style.display = "flex";
-        overlay.style.alignItems = "center";
-        overlay.style.justifyContent = "center";
-        overlay.style.zIndex = "100000";
-
-        const modal = document.createElement("div");
-        modal.style.background = "#fff";
-        modal.style.padding = "20px";
-        modal.style.borderRadius = "10px";
-        modal.style.maxWidth = "600px";
-        modal.style.width = "90%";
-        modal.style.maxHeight = "80vh";
-        modal.style.overflowY = "auto";
-        modal.style.boxShadow = "0 8px 24px rgba(0,0,0,0.3)";
-
-        const title = document.createElement("h3");
-        title.textContent = `Select Popup for Locked Menu: ${menu.label}`;
-        title.style.marginBottom = "15px";
-        modal.appendChild(title);
-
-        const content = document.createElement("div");
-        modal.appendChild(content);
-
-        let selectedType = "simple"; // default
-        let selectedUrl = ""; // ← NEW
-
-
-        const popupOptions = [
-            { type: "simple", title: "Simple Access Denied", description: "Basic access denied message." },
-            { type: "upgrade", title: "Upgrade Required", description: "Prompts user to upgrade their plan." },
-            { type: "contact", title: "Contact Admin", description: "Asks user to contact administrator." }
-        ];
-
-        popupOptions.forEach(option => {
-    const card = document.createElement("div");
-    card.style.border = "2px solid #ddd";
-    card.style.borderRadius = "8px";
-    card.style.padding = "15px";
-    card.style.marginBottom = "15px";
-    card.style.cursor = "pointer";
-    card.style.transition = "0.2s ease";
-    card.style.display = "flex";
-    card.style.flexDirection = "column";
-    card.style.gap = "10px";
-
-    // highlight default
-    if (option.type === selectedType) {
-        card.style.borderColor = "#F54927";
-        card.style.background = "#fff5f2";
-    }
-
-    // Top Row (Radio + Title)
-    const topRow = document.createElement("div");
-    topRow.style.display = "flex";
-    topRow.style.alignItems = "center";
-    topRow.style.justifyContent = "space-between";
-
-    const left = document.createElement("div");
-    left.style.display = "flex";
-    left.style.alignItems = "center";
-    left.style.gap = "10px";
-
-    const radio = document.createElement("input");
-    radio.type = "radio";
-    radio.name = "popupType";
-    radio.value = option.type;
-    radio.checked = option.type === selectedType;
-
-    const title = document.createElement("strong");
-    title.textContent = option.title;
-
-    left.appendChild(radio);
-    left.appendChild(title);
-
-    // Preview Button
-    const previewBtn = document.createElement("button");
-    previewBtn.textContent = "Preview";
-    previewBtn.style.padding = "5px 10px";
-    previewBtn.style.border = "1px solid #ccc";
-    previewBtn.style.borderRadius = "5px";
-    previewBtn.style.background = "#f8f9fa";
-    previewBtn.style.cursor = "pointer";
-
-    previewBtn.addEventListener("click", (e) => {
-        e.stopPropagation(); // prevent selecting card
-        showPreviewPopup(option.type);
-    });
-
-    topRow.appendChild(left);
-    topRow.appendChild(previewBtn);
-
-    // Description
-    const desc = document.createElement("p");
-    desc.textContent = option.description;
-    desc.style.margin = "0";
-    desc.style.fontSize = "13px";
-    desc.style.color = "#666";
-
-    // Click card = select
-    card.addEventListener("click", () => {
-        selectedType = option.type;
-
-        // reset all cards
-        document.querySelectorAll("#tb-popup-selection-modal .popup-card")
-            .forEach(c => {
-                c.style.borderColor = "#ddd";
-                c.style.background = "#fff";
-                c.querySelector("input").checked = false;
-            });
-            const urlSection = document.getElementById("tb-popup-url-section");
-        if (urlSection) {
-            urlSection.style.display = (option.type === "upgrade" || option.type === "contact") ? "block" : "none";
+    function getCurrentLocationId() {
+        const path = window.location.pathname;
+        const parts = path.split('/');
+        const locationIndex = parts.indexOf('location');
+        if (locationIndex !== -1 && parts.length > locationIndex + 1) {
+            return parts[locationIndex + 1];
         }
-    
-    okBtn.addEventListener("click", () => {
-        const urlInput = document.getElementById("tb-popup-url-input");
-        selectedUrl = urlInput ? urlInput.value.trim() : "";
-        overlay.remove();
-        callback(selectedType, selectedUrl); // ← pass URL too
-    });
-        // activate this
-        radio.checked = true;
-        card.style.borderColor = "#F54927";
-        card.style.background = "#fff5f2";
-    });
+        return null; // No location ID in URL (agency level)
+        }
 
-    card.classList.add("popup-card");
-
-    card.appendChild(topRow);
-    card.appendChild(desc);
-
-    content.appendChild(card);
-});
-        const urlSection = document.createElement("div");
-            urlSection.id = "tb-popup-url-section";
-            urlSection.style.marginTop = "10px";
-            urlSection.style.display = "none"; // hidden by default
-            urlSection.innerHTML = `
-                <label style="font-size:13px;font-weight:bold;display:block;margin-bottom:5px;">Button URL:</label>
-                <input id="tb-popup-url-input" type="text" placeholder="https://your-url.com"
-                    style="width:100%;padding:8px;border:1px solid #ccc;border-radius:5px;font-size:13px;box-sizing:border-box;" />
-                <p style="font-size:11px;color:#888;margin-top:4px;">Users will be redirected here when they click the button.</p>
-            `;
-    modal.insertBefore(urlSection, buttonContainer);
-     const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
-    const themeData = savedTheme.themeData || {};
-    const lockedMenus = themeData["--lockedMenus"] ? JSON.parse(themeData["--lockedMenus"]) : {};
-    const existingLock = locationId ? lockedMenus[locationId]?.[menu.id] : lockedMenus[menu.id];
-    if (existingLock && typeof existingLock === "object" && existingLock.popupUrl) {
-        document.getElementById("tb-popup-url-input") && (document.getElementById("tb-popup-url-input").value = existingLock.popupUrl);
-        selectedUrl = existingLock.popupUrl;
-    }
-        const buttonContainer = document.createElement("div");
-        buttonContainer.style.display = "flex";
-        buttonContainer.style.justifyContent = "flex-end";
-        buttonContainer.style.gap = "10px";
-        buttonContainer.style.marginTop = "20px";
-
-        const cancelBtn = document.createElement("button");
-        cancelBtn.textContent = "Cancel";
-        cancelBtn.style.padding = "10px 20px";
-        cancelBtn.style.border = "1px solid #ccc";
-        cancelBtn.style.borderRadius = "5px";
-        cancelBtn.style.background = "#fff";
-        cancelBtn.style.cursor = "pointer";
-        cancelBtn.addEventListener("click", () => {
-            overlay.remove();
-            // Reset the checkbox since cancelled
-            const lockInput = document.getElementById(locationId ? `lock-${locationId}-${menu.id}` : `lock-global-${menu.id}`);
-            if (lockInput) lockInput.checked = false;
-        });
-        buttonContainer.appendChild(cancelBtn);
-
-        const okBtn = document.createElement("button");
-        okBtn.textContent = "OK";
-        okBtn.style.padding = "10px 20px";
-        okBtn.style.border = "none";
-        okBtn.style.borderRadius = "5px";
-        okBtn.style.background = "#F54927";
-        okBtn.style.color = "#fff";
-        okBtn.style.cursor = "pointer";
-        okBtn.addEventListener("click", () => {
-            overlay.remove();
-            callback(selectedType);
-        });
-        buttonContainer.appendChild(okBtn);
-
-        modal.appendChild(buttonContainer);
-        overlay.appendChild(modal);
-        document.body.appendChild(overlay);
-    }
-    function buildFeatureLockSection(container) {
+       function buildFeatureLockSection(container) {
         let savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         if (savedTheme.themeData && typeof savedTheme.themeData === "string") {
             savedTheme.themeData = JSON.parse(savedTheme.themeData);
@@ -4703,8 +4510,38 @@
             showPreviewPopup(option.type);
         });
 
+        const btnGroup = document.createElement("div");
+        btnGroup.style.display = "flex";
+        btnGroup.style.gap = "6px";
+        btnGroup.appendChild(previewBtn);
+        if (option.type === "upgrade" || option.type === "contact") {
+            const customizeBtn = document.createElement("button");
+            customizeBtn.textContent = "Customize";
+            customizeBtn.style.padding = "5px 10px";
+            customizeBtn.style.border = "1px solid #F54927";
+            customizeBtn.style.borderRadius = "5px";
+            customizeBtn.style.background = "#fff5f2";
+            customizeBtn.style.color = "#F54927";
+            customizeBtn.style.cursor = "pointer";
+            customizeBtn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                selectedType = option.type;
+                document.querySelectorAll("#tb-popup-selection-modal .popup-card").forEach(c => {
+                    c.style.borderColor = "#ddd";
+                    c.style.background = "#fff";
+                    c.querySelector("input").checked = false;
+                });
+                radio.checked = true;
+                card.style.borderColor = "#F54927";
+                card.style.background = "#fff5f2";
+                showCustomizePopup(option.type, selectedUrl, (savedUrl) => {
+                    selectedUrl = savedUrl;
+                });
+            });
+            btnGroup.appendChild(customizeBtn);
+        }
         topRow.appendChild(left);
-        topRow.appendChild(previewBtn);
+        topRow.appendChild(btnGroup);
 
         const desc = document.createElement("p");
         desc.textContent = option.description;
@@ -4723,12 +4560,6 @@
             radio.checked = true;
             card.style.borderColor = "#F54927";
             card.style.background = "#fff5f2";
-
-            // Show URL input only for upgrade and contact
-            const urlSection = document.getElementById("tb-popup-url-section");
-            if (urlSection) {
-                urlSection.style.display = (option.type === "upgrade" || option.type === "contact") ? "block" : "none";
-            }
         });
 
         card.classList.add("popup-card");
@@ -4736,36 +4567,15 @@
         card.appendChild(desc);
         content.appendChild(card);
     });
-
-    // URL input section (hidden by default)
-    const urlSection = document.createElement("div");
-    urlSection.id = "tb-popup-url-section";
-    urlSection.style.marginTop = "10px";
-    urlSection.style.display = "none";
-    urlSection.innerHTML = `
-        <label style="font-size:13px;font-weight:bold;display:block;margin-bottom:5px;">Button URL:</label>
-        <input id="tb-popup-url-input" type="text" placeholder="https://your-url.com"
-            style="width:100%;padding:8px;border:1px solid #ccc;border-radius:5px;font-size:13px;box-sizing:border-box;" />
-        <p style="font-size:11px;color:#888;margin-top:4px;">Users will be redirected here when they click the button.</p>
-    `;
-    modal.appendChild(urlSection);
-
-    // Load saved URL if re-editing an existing lock
+    // Pre-load saved URL so Customize popup shows it
     const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
     const themeData = savedTheme.themeData || {};
     const lockedMenus = themeData["--lockedMenus"] ? JSON.parse(themeData["--lockedMenus"]) : {};
     const existingLock = locationId ? lockedMenus[locationId]?.[menu.id] : lockedMenus[menu.id];
-    if (existingLock && typeof existingLock === "object" && existingLock.popupUrl) {
-        const urlInput = document.getElementById("tb-popup-url-input");
-        if (urlInput) urlInput.value = existingLock.popupUrl;
-        selectedUrl = existingLock.popupUrl;
-        // Also show the URL section if current type uses it
-        if (existingLock.popupType === "upgrade" || existingLock.popupType === "contact") {
-            urlSection.style.display = "block";
-            selectedType = existingLock.popupType;
-        }
+    if (existingLock && typeof existingLock === "object") {
+        if (existingLock.popupUrl) selectedUrl = existingLock.popupUrl;
+        if (existingLock.popupType) selectedType = existingLock.popupType;
     }
-
     // Buttons
     const buttonContainer = document.createElement("div");
     buttonContainer.style.display = "flex";
@@ -4797,10 +4607,8 @@
     okBtn.style.cursor = "pointer";
     // Single OK handler — reads URL at click time and passes both values
     okBtn.addEventListener("click", () => {
-        const urlInput = document.getElementById("tb-popup-url-input");
-        selectedUrl = urlInput ? urlInput.value.trim() : "";
-        overlay.remove();
-        callback(selectedType, selectedUrl); // ✅ passes both
+    overlay.remove();
+    callback(selectedType, selectedUrl); // selectedUrl already set by Customize popup
     });
     buttonContainer.appendChild(okBtn);
 
@@ -4910,7 +4718,16 @@
             }
         }
 
-        showPreviewPopup(popupType);
+        // CORRECT:
+        let popupUrl = "";
+        if (locationId) {
+            const lockData = lockedMenus[locationId]?.[menuId];
+            if (lockData && typeof lockData === "object") popupUrl = lockData.popupUrl || "";
+        } else {
+            const lockData = agencyData.locked?.[menuId];
+            if (lockData && typeof lockData === "object") popupUrl = lockData.popupUrl || "";
+        }
+        showPreviewPopup(popupType, popupUrl);    
     }
     function updateIconVariable(menuId, unicodeValue) {
         const cssVarName = getCssVarName(menuId);
@@ -6733,178 +6550,169 @@
 // ---- Hidden/Locked menus ----
 
 // Function to get current location ID from URL
-function getCurrentLocationId() {
-  const path = window.location.pathname;
-  const parts = path.split('/');
-  const locationIndex = parts.indexOf('location');
-  if (locationIndex !== -1 && parts.length > locationIndex + 1) {
-    return parts[locationIndex + 1];
-  }
-  return null; // No location ID in URL (agency level)
-}
 
-function restoreHiddenMenus() {
-  const savedRaw = localStorage.getItem("userTheme");
-  const saved = JSON.parse(savedRaw) || {};
-  if (!saved.themeData) return;
+// function restoreHiddenMenus() {
+//   const savedRaw = localStorage.getItem("userTheme");
+//   const saved = JSON.parse(savedRaw) || {};
+//   if (!saved.themeData) return;
 
-  const locationId = getCurrentLocationId();
+//   const locationId = getCurrentLocationId();
   
-  if (locationId) {
-    // Location-specific mode - use --hiddenMenus
-    if (!saved.themeData["--hiddenMenus"]) return;
-    let hiddenMenus;
-    try { hiddenMenus = JSON.parse(saved.themeData["--hiddenMenus"]); } catch (e) { console.warn("[ThemeBuilder] invalid --hiddenMenus"); return; }
-    if (!hiddenMenus || typeof hiddenMenus !== "object" || !hiddenMenus[locationId]) return;
+//   if (locationId) {
+//     // Location-specific mode - use --hiddenMenus
+//     if (!saved.themeData["--hiddenMenus"]) return;
+//     let hiddenMenus;
+//     try { hiddenMenus = JSON.parse(saved.themeData["--hiddenMenus"]); } catch (e) { console.warn("[ThemeBuilder] invalid --hiddenMenus"); return; }
+//     if (!hiddenMenus || typeof hiddenMenus !== "object" || !hiddenMenus[locationId]) return;
     
-    Object.keys(hiddenMenus[locationId]).forEach(menuId => {
-      const menuEl = document.getElementById(menuId);
-      const toggleEl = document.getElementById("hide-" + menuId);
-      if (!menuEl) return;
+//     Object.keys(hiddenMenus[locationId]).forEach(menuId => {
+//       const menuEl = document.getElementById(menuId);
+//       const toggleEl = document.getElementById("hide-" + menuId);
+//       if (!menuEl) return;
       
-      const menuConfig = hiddenMenus[locationId][menuId];
-      const hidden = !!(menuConfig && menuConfig.hidden);
+//       const menuConfig = hiddenMenus[locationId][menuId];
+//       const hidden = !!(menuConfig && menuConfig.hidden);
       
-      menuEl.style.setProperty("display", hidden ? "none" : "flex", "important");
-      if (toggleEl) toggleEl.checked = hidden;
-    });
-  } else {
-    // Global mode - use --agencyLockedHideMenus
-    if (!saved.themeData["--agencyLockedHideMenus"]) return;
-    let agencyData;
-    try { agencyData = JSON.parse(saved.themeData["--agencyLockedHideMenus"]); } catch (e) { console.warn("[ThemeBuilder] invalid --agencyLockedHideMenus"); return; }
-    if (!agencyData || typeof agencyData !== "object") return;
+//       menuEl.style.setProperty("display", hidden ? "none" : "flex", "important");
+//       if (toggleEl) toggleEl.checked = hidden;
+//     });
+//   } else {
+//     // Global mode - use --agencyLockedHideMenus
+//     if (!saved.themeData["--agencyLockedHideMenus"]) return;
+//     let agencyData;
+//     try { agencyData = JSON.parse(saved.themeData["--agencyLockedHideMenus"]); } catch (e) { console.warn("[ThemeBuilder] invalid --agencyLockedHideMenus"); return; }
+//     if (!agencyData || typeof agencyData !== "object") return;
     
-    let globalHidden = agencyData.hidden || {};
-    Object.keys(globalHidden).forEach(menuId => {
-      const menuEl = document.getElementById(menuId);
-      const toggleEl = document.getElementById("hide-" + menuId);
-      if (!menuEl) return;
+//     let globalHidden = agencyData.hidden || {};
+//     Object.keys(globalHidden).forEach(menuId => {
+//       const menuEl = document.getElementById(menuId);
+//       const toggleEl = document.getElementById("hide-" + menuId);
+//       if (!menuEl) return;
       
-      const menuConfig = globalHidden[menuId];
-      const hidden = !!(menuConfig && menuConfig.hidden);
+//       const menuConfig = globalHidden[menuId];
+//       const hidden = !!(menuConfig && menuConfig.hidden);
       
-      menuEl.style.setProperty("display", hidden ? "none" : "flex", "important");
-      if (toggleEl) toggleEl.checked = hidden;
-    });
-  }
-}
+//       menuEl.style.setProperty("display", hidden ? "none" : "flex", "important");
+//       if (toggleEl) toggleEl.checked = hidden;
+//     });
+//   }
+// }
 
-function applyHiddenMenus() { 
-  restoreHiddenMenus(); 
-}
+// function applyHiddenMenus() { 
+//   restoreHiddenMenus(); 
+// }
 
-function applyLockedMenus() {
-  const savedRaw = localStorage.getItem("userTheme");
-  const saved = JSON.parse(savedRaw) || {};
-  if (!saved.themeData) return;
+// function applyLockedMenus() {
+//   const savedRaw = localStorage.getItem("userTheme");
+//   const saved = JSON.parse(savedRaw) || {};
+//   if (!saved.themeData) return;
 
-  const locationId = getCurrentLocationId();
+//   const locationId = getCurrentLocationId();
   
-  if (locationId) {
-    // Location-specific mode - use --lockedMenus
-    if (!saved.themeData["--lockedMenus"]) return;
-    let lockedMenus;
-    try { lockedMenus = JSON.parse(saved.themeData["--lockedMenus"]); } catch (e) { console.warn("[ThemeBuilder] invalid --lockedMenus"); return; }
-    if (!lockedMenus || typeof lockedMenus !== "object" || !lockedMenus[locationId]) return;
+//   if (locationId) {
+//     // Location-specific mode - use --lockedMenus
+//     if (!saved.themeData["--lockedMenus"]) return;
+//     let lockedMenus;
+//     try { lockedMenus = JSON.parse(saved.themeData["--lockedMenus"]); } catch (e) { console.warn("[ThemeBuilder] invalid --lockedMenus"); return; }
+//     if (!lockedMenus || typeof lockedMenus !== "object" || !lockedMenus[locationId]) return;
     
-    Object.keys(lockedMenus[locationId]).forEach(menuId => {
-      const menuEl = document.getElementById(menuId);
-      if (!menuEl) return;
+//     Object.keys(lockedMenus[locationId]).forEach(menuId => {
+//       const menuEl = document.getElementById(menuId);
+//       if (!menuEl) return;
       
-      const isLocked = !!lockedMenus[locationId][menuId];
+//       const isLocked = !!lockedMenus[locationId][menuId];
       
-      if (isLocked) {
-        if (!menuEl.querySelector(".tb-lock-icon")) {
-          const lockIcon = document.createElement("i");
-          lockIcon.className = "tb-lock-icon fas fa-lock ml-2";
-          lockIcon.style.color = "#F54927";
-          menuEl.appendChild(lockIcon);
-        }
-        menuEl.style.opacity = "0.6";
-        menuEl.style.cursor = "not-allowed";
-        // Extract the popup type stored for this menu
-                const lockData = locationId
-                    ? lockedMenus[locationId]?.[menuId]
-                    : lockedMenus[menuId];
-                const popupType = (lockData && typeof lockData === "object" && lockData.popupType)
-                    ? lockData.popupType
-                    : "simple"; // fallback for old entries that stored just `true`
-                    const popupUrl = (lockData && typeof lockData === "object" && lockData.popupUrl)
-                    ? lockData.popupUrl
-                    : ""; // ← NEW
-                if (menu.dataset.tbLockBound !== "1") {
-                    menu.addEventListener("click", (e) => {
-                        blockMenuClick(e, menuId);
-                        showPreviewPopup(popupType, popupUrl); // ← pass URL
-                    }, true);
-                    menu.dataset.tbLockBound = "1";
-                }
-      } else {
-        const icon = menuEl.querySelector(".tb-lock-icon");
-        if (icon) icon.remove();
-        menuEl.style.opacity = "";
-        menuEl.style.cursor = "";
-        if (menuEl.dataset.tbLockBound === "1") {
-          menuEl.removeEventListener("click", blockMenuClick, true);
-          delete menuEl.dataset.tbLockBound;
-        }
-      }
-    });
-  } else {
-    // Global mode - use --agencyLockedHideMenus
-    if (!saved.themeData["--agencyLockedHideMenus"]) return;
-    let agencyData;
-    try { agencyData = JSON.parse(saved.themeData["--agencyLockedHideMenus"]); } catch (e) { console.warn("[ThemeBuilder] invalid --agencyLockedHideMenus"); return; }
-    if (!agencyData || typeof agencyData !== "object") return;
+//       if (isLocked) {
+//         if (!menuEl.querySelector(".tb-lock-icon")) {
+//           const lockIcon = document.createElement("i");
+//           lockIcon.className = "tb-lock-icon fas fa-lock ml-2";
+//           lockIcon.style.color = "#F54927";
+//           menuEl.appendChild(lockIcon);
+//         }
+//         menuEl.style.opacity = "0.6";
+//         menuEl.style.cursor = "not-allowed";
+//         // Extract the popup type stored for this menu
+//                 const lockData = locationId
+//                     ? lockedMenus[locationId]?.[menuId]
+//                     : lockedMenus[menuId];
+//                 const popupType = (lockData && typeof lockData === "object" && lockData.popupType)
+//                     ? lockData.popupType
+//                     : "simple"; // fallback for old entries that stored just `true`
+//                     const popupUrl = (lockData && typeof lockData === "object" && lockData.popupUrl)
+//                     ? lockData.popupUrl
+//                     : ""; // ← NEW
+//                 if (menu.dataset.tbLockBound !== "1") {
+//                     menu.addEventListener("click", (e) => {
+//                         blockMenuClick(e, menuId);
+//                         showPreviewPopup(popupType, popupUrl); // ← pass URL
+//                     }, true);
+//                     menu.dataset.tbLockBound = "1";
+//                 }
+//       } else {
+//         const icon = menuEl.querySelector(".tb-lock-icon");
+//         if (icon) icon.remove();
+//         menuEl.style.opacity = "";
+//         menuEl.style.cursor = "";
+//         if (menuEl.dataset.tbLockBound === "1") {
+//           menuEl.removeEventListener("click", blockMenuClick, true);
+//           delete menuEl.dataset.tbLockBound;
+//         }
+//       }
+//     });
+//   } else {
+//     // Global mode - use --agencyLockedHideMenus
+//     if (!saved.themeData["--agencyLockedHideMenus"]) return;
+//     let agencyData;
+//     try { agencyData = JSON.parse(saved.themeData["--agencyLockedHideMenus"]); } catch (e) { console.warn("[ThemeBuilder] invalid --agencyLockedHideMenus"); return; }
+//     if (!agencyData || typeof agencyData !== "object") return;
     
-    let globalLocked = agencyData.locked || {};
-    Object.keys(globalLocked).forEach(menuId => {
-      const menuEl = document.getElementById(menuId);
-      if (!menuEl) return;
+//     let globalLocked = agencyData.locked || {};
+//     Object.keys(globalLocked).forEach(menuId => {
+//       const menuEl = document.getElementById(menuId);
+//       if (!menuEl) return;
       
-      const lockData = globalLocked[menuId];
-      const isLocked = lockData && typeof lockData === 'object' ? lockData.locked : !!lockData;
+//       const lockData = globalLocked[menuId];
+//       const isLocked = lockData && typeof lockData === 'object' ? lockData.locked : !!lockData;
       
-      if (isLocked) {
-        if (!menuEl.querySelector(".tb-lock-icon")) {
-          const lockIcon = document.createElement("i");
-          lockIcon.className = "tb-lock-icon fas fa-lock ml-2";
-          lockIcon.style.color = "#F54927";
-          menuEl.appendChild(lockIcon);
-        }
-        menuEl.style.opacity = "0.6";
-        menuEl.style.cursor = "not-allowed";
-        // Extract the popup type stored for this menu
-                const lockData = locationId
-                    ? lockedMenus[locationId]?.[menuId]
-                    : lockedMenus[menuId];
-               const popupType = (lockData && typeof lockData === "object" && lockData.popupType)
-                    ? lockData.popupType
-                    : "simple"; // fallback for old entries that stored just `true`
-                    const popupUrl = (lockData && typeof lockData === "object" && lockData.popupUrl)
-                    ? lockData.popupUrl
-                    : ""; // ← NEW
-                if (menu.dataset.tbLockBound !== "1") {
-                    menu.addEventListener("click", (e) => {
-                        blockMenuClick(e, menuId);
-                        showPreviewPopup(popupType, popupUrl); // ← pass URL
-                    }, true);
-                    menu.dataset.tbLockBound = "1";
-                }
-      } else {
-        const icon = menuEl.querySelector(".tb-lock-icon");
-        if (icon) icon.remove();
-        menuEl.style.opacity = "";
-        menuEl.style.cursor = "";
-        if (menuEl.dataset.tbLockBound === "1") {
-          menuEl.removeEventListener("click", blockMenuClick, true);
-          delete menuEl.dataset.tbLockBound;
-        }
-      }
-    });
-  }
-}
+//       if (isLocked) {
+//         if (!menuEl.querySelector(".tb-lock-icon")) {
+//           const lockIcon = document.createElement("i");
+//           lockIcon.className = "tb-lock-icon fas fa-lock ml-2";
+//           lockIcon.style.color = "#F54927";
+//           menuEl.appendChild(lockIcon);
+//         }
+//         menuEl.style.opacity = "0.6";
+//         menuEl.style.cursor = "not-allowed";
+//         // Extract the popup type stored for this menu
+//                 const lockData = locationId
+//                     ? lockedMenus[locationId]?.[menuId]
+//                     : lockedMenus[menuId];
+//                const popupType = (lockData && typeof lockData === "object" && lockData.popupType)
+//                     ? lockData.popupType
+//                     : "simple"; // fallback for old entries that stored just `true`
+//                     const popupUrl = (lockData && typeof lockData === "object" && lockData.popupUrl)
+//                     ? lockData.popupUrl
+//                     : ""; // ← NEW
+//                 if (menu.dataset.tbLockBound !== "1") {
+//                     menu.addEventListener("click", (e) => {
+//                         blockMenuClick(e, menuId);
+//                         showPreviewPopup(popupType, popupUrl); // ← pass URL
+//                     }, true);
+//                     menu.dataset.tbLockBound = "1";
+//                 }
+//       } else {
+//         const icon = menuEl.querySelector(".tb-lock-icon");
+//         if (icon) icon.remove();
+//         menuEl.style.opacity = "";
+//         menuEl.style.cursor = "";
+//         if (menuEl.dataset.tbLockBound === "1") {
+//           menuEl.removeEventListener("click", blockMenuClick, true);
+//           delete menuEl.dataset.tbLockBound;
+//         }
+//       }
+//     });
+//   }
+// }
 
 // function blockMenuClick(e) {
 //   e.preventDefault();
@@ -6923,29 +6731,38 @@ function applyLockedMenus() {
 //   overlay.querySelector("button").addEventListener("click", () => overlay.remove());
 //   document.body.appendChild(overlay);
 // }
- function blockMenuClick(e, menuId) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
+//  function blockMenuClick(e, menuId) {
+//         e.preventDefault();
+//         e.stopImmediatePropagation();
 
-        // Get popupType from localStorage
-        const savedRaw = localStorage.getItem("userTheme");
-        const saved = JSON.parse(savedRaw) || {};
-        const lockedMenus = saved.themeData && saved.themeData["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
-        const agencyData = saved.themeData && saved.themeData["--agencyLockedHideMenus"] ? JSON.parse(saved.themeData["--agencyLockedHideMenus"]) : {};
-        const locationId = getCurrentLocationId();
+//         // Get popupType from localStorage
+//         const savedRaw = localStorage.getItem("userTheme");
+//         const saved = JSON.parse(savedRaw) || {};
+//         const lockedMenus = saved.themeData && saved.themeData["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
+//         const agencyData = saved.themeData && saved.themeData["--agencyLockedHideMenus"] ? JSON.parse(saved.themeData["--agencyLockedHideMenus"]) : {};
+//         const locationId = getCurrentLocationId();
 
-        let popupType = "simple"; // default
-        if (locationId) {
-            const lockData = lockedMenus[locationId]?.[menuId];
-            if (lockData && typeof lockData === 'object') {
-                popupType = lockData.popupType || "simple";
-            }
-        } else {
-            const lockData = agencyData.locked?.[menuId];
-            if (lockData && typeof lockData === 'object') {
-                popupType = lockData.popupType || "simple";
-            }
-        }
-        showPreviewPopup(popupType);
-    }
+//         let popupType = "simple"; // default
+//         if (locationId) {
+//             const lockData = lockedMenus[locationId]?.[menuId];
+//             if (lockData && typeof lockData === 'object') {
+//                 popupType = lockData.popupType || "simple";
+//             }
+//         } else {
+//             const lockData = agencyData.locked?.[menuId];
+//             if (lockData && typeof lockData === 'object') {
+//                 popupType = lockData.popupType || "simple";
+//             }
+//         }
+//         // CORRECT:
+//         let popupUrl = "";
+//         if (locationId) {
+//             const lockData = lockedMenus[locationId]?.[menuId];
+//             if (lockData && typeof lockData === "object") popupUrl = lockData.popupUrl || "";
+//         } else {
+//             const lockData = agencyData.locked?.[menuId];
+//             if (lockData && typeof lockData === "object") popupUrl = lockData.popupUrl || "";
+//         }
+//         showPreviewPopup(popupType, popupUrl);
+//     }
 })();
