@@ -290,7 +290,7 @@ function applyHiddenMenus() {
     overlay.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:200000;";
 
     const popup = document.createElement("div");
-    popup.style.cssText = "background:#fff;padding:30px;border-radius:10px;max-width:350px;width:90%;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,0.3);";
+    popup.style.cssText = "background:var(--card-body-bg-color) !important;padding:30px;border-radius:10px;max-width:350px;width:90%;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,0.3);";
 
     if (type === "simple") {
         popup.innerHTML = `<h3>Access Denied</h3><p>You cannot access this feature.</p>`;
@@ -303,7 +303,7 @@ function applyHiddenMenus() {
         const headline    = popupHeadline    || "Restricted";
         const subHeadline = popupSubHeadline || "Please contact admin to get access.";
         const btnText     = popupButtonText  || "Contact";
-        popup.innerHTML = `<h3>${headline}</h3><p>${subHeadline}</p><button id="tb-popup-action-btn" style="margin-top:10px;padding:8px 16px;background:#007bff;color:#fff;border:none;border-radius:5px;cursor:pointer;">${btnText}</button>`;
+        popup.innerHTML = `<h3 class="modal-title">${headline}</h3><p class="modal-title" >${subHeadline}</p><button id="tb-popup-action-btn" style="margin-top:10px;padding:8px 16px;background:var(--primary-color);color:#fff;border:none;border-radius:5px;cursor:pointer;">${btnText}</button>`;
     }
 
     const actionBtn = popup.querySelector("#tb-popup-action-btn");
