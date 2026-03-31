@@ -4416,6 +4416,74 @@
             parent.appendChild(row);
         }
     }
+    function showPreviewPopup(type, popupUrl) {
+            document.getElementById("tb-preview-popup")?.remove();
+
+            const overlay = document.createElement("div");
+            overlay.id = "tb-preview-popup";
+            overlay.style = `
+                position: fixed;
+                top:0; left:0;
+                width:100%; height:100%;
+                background: rgba(0,0,0,0.5);
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                z-index:200000;
+            `;
+
+            const popup = document.createElement("div");
+            popup.style = `
+                background:#fff;
+                padding:20px;
+                border-radius:10px;
+                max-width:350px;
+                text-align:center;
+            `;
+
+            let content = "";
+
+            if (type === "simple") {
+                content = `
+                    <h3>Access Denied</h3>
+                    <p>You cannot access this feature.</p>
+                `;
+            }
+
+            if (type === "upgrade") {
+                content = `
+                    <h3>Upgrade Required 🚀</h3>
+                    <p>This feature is available in Premium Plan.</p>
+                    <button style="margin-top:10px;padding:6px 12px;background:#28a745;color:#fff;border:none;border-radius:5px;">Upgrade</button>
+                `;
+            }
+
+            if (type === "contact") {
+                content = `
+                    <h3>Restricted</h3>
+                    <p>Please contact admin to get access.</p>
+                    <button style="margin-top:10px;padding:6px 12px;background:#007bff;color:#fff;border:none;border-radius:5px;">Contact</button>
+                `;
+            }
+
+            popup.innerHTML = content;
+            const actionBtn = popup.querySelector("button");
+            if (actionBtn && popupUrl) {
+                actionBtn.style.cursor = "pointer";
+                actionBtn.addEventListener("click", () => {
+                    window.open(popupUrl, "_blank");
+                });
+            }
+            const closeBtn = document.createElement("button");
+            closeBtn.textContent = "Close";
+            closeBtn.style.marginTop = "15px";
+            closeBtn.onclick = () => overlay.remove();
+
+            popup.appendChild(closeBtn);
+            overlay.appendChild(popup);
+            document.body.appendChild(overlay);
+        }
+
     function showCustomizePopup(type, currentUrl, onSave) {
     document.getElementById("tb-customize-popup")?.remove();
 
