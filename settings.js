@@ -6657,12 +6657,12 @@ function applyLockedMenus() {
                 const popupType = (lockData && typeof lockData === "object" && lockData.popupType)
                     ? lockData.popupType
                     : "simple"; // fallback for old entries that stored just `true`
-                if (menu.dataset.tbLockBound !== "1") {
-                    menu.addEventListener("click", (e) => {
+                if (menuEl.dataset.tbLockBound !== "1") {
+                    menuEl.addEventListener("click", (e) => {
                         blockMenuClick(e, menuId);
                         showPreviewPopup(popupType);
                     }, true);
-                    menu.dataset.tbLockBound = "1";
+                    menuEl.dataset.tbLockBound = "1";
                 }
       } else {
         const icon = menuEl.querySelector(".tb-lock-icon");
