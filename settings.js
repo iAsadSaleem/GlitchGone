@@ -1026,44 +1026,44 @@
             dropdownBox.classList.add("show");
 
             try {
-                const res = await fetch("https://themebuilder-six.vercel.app/api/theme/getallthemes");
-                const data = await res.json();
+                    if (Object.keys(themes).length === 0) {
+                        arrowIcon.innerHTML = '<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>';
+                        const res = await fetch("https://themebuilder-six.vercel.app/api/theme/getallthemes");
+                        const data = await res.json();
+                        data.themes.forEach(t => {
+                            themes[t.themeName] = t.themeData;
+                        });
+                    }
 
-                // Rebuild themes object
-                data.themes.forEach(t => {
-                    themes[t.themeName] = t.themeData;
-                });
+                    // Restore arrow to up state (spinner or not, set to up)
+                    arrowIcon.innerHTML = '<i class="fa-solid fa-angle-up" aria-hidden="true"></i>';
 
-                // Restore arrow to up state
-                arrowIcon.innerHTML = '<i class="fa-solid fa-angle-up" aria-hidden="true"></i>';
-
-                // Populate dropdown fresh
-                dropdownBox.innerHTML = "";
-                Object.keys(themes).forEach(themeName => {
-                    const optBtn = document.createElement("button");
-                    optBtn.type = "button";
-                    optBtn.textContent = themeName;
-                    optBtn.addEventListener("click", async (ev) => {
-                        ev.stopPropagation();
-                        if (!localStorage.getItem("themebuilder_selectedTheme")) {
-                            loadMainCSS();
-                        }
-                        applyTheme(themeName, null);
-                        dropdownBox.classList.remove("show");
-                        arrowIcon.innerHTML = '<i class="fa-solid fa-angle-down" aria-hidden="true"></i>';
+                    // Populate dropdown fresh
+                    dropdownBox.innerHTML = "";
+                    Object.keys(themes).forEach(themeName => {
+                        const optBtn = document.createElement("button");
+                        optBtn.type = "button";
+                        optBtn.textContent = themeName;
+                        optBtn.addEventListener("click", async (ev) => {
+                            ev.stopPropagation();
+                            if (!localStorage.getItem("themebuilder_selectedTheme")) {
+                                loadMainCSS();
+                            }
+                            applyTheme(themeName, null);
+                            dropdownBox.classList.remove("show");
+                            arrowIcon.innerHTML = '<i class="fa-solid fa-angle-down" aria-hidden="true"></i>';
+                        });
+                        dropdownBox.appendChild(optBtn);
                     });
-                    dropdownBox.appendChild(optBtn);
-                });
 
-                if (Object.keys(themes).length === 0) {
-                    dropdownBox.innerHTML = '<div style="padding:10px;font-size:13px;color:#888;">No themes found.</div>';
+                    if (Object.keys(themes).length === 0) {
+                        dropdownBox.innerHTML = '<div style="padding:10px;font-size:13px;color:#888;">No themes found.</div>';
+                    }
+                } catch (err) {
+                    console.error("❌ Failed to load themes:", err);
+                    arrowIcon.innerHTML = '<i class="fa-solid fa-angle-up" aria-hidden="true"></i>';
+                    dropdownBox.innerHTML = '<div style="padding:10px;font-size:13px;color:red;">Failed to load themes. Try again.</div>';
                 }
-            } catch (err) {
-                console.error("❌ Failed to load themes:", err);
-                // Restore arrow even on error
-                arrowIcon.innerHTML = '<i class="fa-solid fa-angle-up" aria-hidden="true"></i>';
-                dropdownBox.innerHTML = '<div style="padding:10px;font-size:13px;color:red;">Failed to load themes. Try again.</div>';
-            }
         });
 
         // close when clicking outside
