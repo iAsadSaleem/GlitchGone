@@ -4495,28 +4495,28 @@
             toggleWrapper.style.alignItems = "center";
 
             // Lock toggle
-            const lockWrapper = document.createElement("div");
-            lockWrapper.style.display = "flex";
-            lockWrapper.style.alignItems = "center";
-            lockWrapper.style.justifyContent = "center";
-            lockWrapper.style.width = "60px";
+            // const lockWrapper = document.createElement("div");
+            // lockWrapper.style.display = "flex";
+            // lockWrapper.style.alignItems = "center";
+            // lockWrapper.style.justifyContent = "center";
+            // lockWrapper.style.width = "60px";
 
-            const lockSwitch = document.createElement("div");
-            lockSwitch.className = "toggle-switch";
+            // const lockSwitch = document.createElement("div");
+            // lockSwitch.className = "toggle-switch";
 
-            const lockInput = document.createElement("input");
-            lockInput.type = "checkbox";
-            lockInput.className = "toggle-input";
-            lockInput.id = locationId ? `lock-${locationId}-${menu.id}` : `lock-global-${menu.id}`;
-            lockInput.checked = locationId ? !!lockedMenus[menu.id] : (lockedMenus[menu.id] && typeof lockedMenus[menu.id] === 'object' ? lockedMenus[menu.id].locked : !!lockedMenus[menu.id]);
+            // const lockInput = document.createElement("input");
+            // lockInput.type = "checkbox";
+            // lockInput.className = "toggle-input";
+            // lockInput.id = locationId ? `lock-${locationId}-${menu.id}` : `lock-global-${menu.id}`;
+            // lockInput.checked = locationId ? !!lockedMenus[menu.id] : (lockedMenus[menu.id] && typeof lockedMenus[menu.id] === 'object' ? lockedMenus[menu.id].locked : !!lockedMenus[menu.id]);
 
-            const lockLabel = document.createElement("label");
-            lockLabel.className = "toggle-label";
-            lockLabel.setAttribute("for", lockInput.id);
+            // const lockLabel = document.createElement("label");
+            // lockLabel.className = "toggle-label";
+            // lockLabel.setAttribute("for", lockInput.id);
 
-            lockSwitch.appendChild(lockInput);
-            lockSwitch.appendChild(lockLabel);
-            lockWrapper.appendChild(lockSwitch);
+            // lockSwitch.appendChild(lockInput);
+            // lockSwitch.appendChild(lockLabel);
+            // lockWrapper.appendChild(lockSwitch);
 
             // Hide toggle
             const hideWrapper = document.createElement("div");
@@ -4542,59 +4542,59 @@
             hideSwitch.appendChild(hideLabel);
             hideWrapper.appendChild(hideSwitch);
 
-            toggleWrapper.appendChild(lockWrapper);
+            // toggleWrapper.appendChild(lockWrapper);
             toggleWrapper.appendChild(hideWrapper);
 
             // Event listeners
-            lockInput.addEventListener("change", () => {
-                console.log("Lock toggle changed for", menu.id, "locationId:", locationId, "checked:", lockInput.checked);
-                if (lockInput.checked) {
-                    if (locationId) {
-                        // Show popup selection modal for subaccounts
-                        showPopupSelectionModal(menu, locationId, (selectedType, selectedUrl, selectedHeadline, selectedSubHeadline, selectedButtonText) => {
-                            const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-                            saved.themeData = saved.themeData || {};
-                            let locked = saved.themeData["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
-                            if (!locked[locationId]) locked[locationId] = {};
-                            // locked[locationId][menu.id] = { locked: true, popupType: selectedType };
-                            // locked[locationId][menu.id] = { locked: true, popupType: selectedType, popupUrl: selectedUrl, popupHeadline: selectedHeadline };
-                            locked[locationId][menu.id] = { locked: true, popupType: selectedType, popupUrl: selectedUrl, popupHeadline: selectedHeadline, popupSubHeadline: selectedSubHeadline, popupButtonText: selectedButtonText };
-                            saved.themeData["--lockedMenus"] = JSON.stringify(locked);
-                            localStorage.setItem("userTheme", JSON.stringify(saved));
-                            applyLockedMenus();
-                        });
-                    } else {
-                        // Direct save for agency with default popup
-                        const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-                        saved.themeData = saved.themeData || {};
-                        let agencyData = saved.themeData["--agencyLockedHideMenus"] ? JSON.parse(saved.themeData["--agencyLockedHideMenus"]) : {};
-                        agencyData.locked = agencyData.locked || {};
-                        agencyData.locked[menu.id] = { locked: true, popupType: "simple" };
-                        saved.themeData["--agencyLockedHideMenus"] = JSON.stringify(agencyData);
-                        localStorage.setItem("userTheme", JSON.stringify(saved));
-                        applyLockedMenus();
-                    }
-                } else {
-                    // Uncheck, remove lock
-                    const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-                    saved.themeData = saved.themeData || {};
-                    if (locationId) {
-                        let locked = saved.themeData["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
-                        if (locked[locationId]) {
-                            delete locked[locationId][menu.id];
-                        }
-                        saved.themeData["--lockedMenus"] = JSON.stringify(locked);
-                    } else {
-                        let agencyData = saved.themeData["--agencyLockedHideMenus"] ? JSON.parse(saved.themeData["--agencyLockedHideMenus"]) : {};
-                        if (agencyData.locked) {
-                            delete agencyData.locked[menu.id];
-                        }
-                        saved.themeData["--agencyLockedHideMenus"] = JSON.stringify(agencyData);
-                    }
-                    localStorage.setItem("userTheme", JSON.stringify(saved));
-                    applyLockedMenus();
-                }
-            });
+            // lockInput.addEventListener("change", () => {
+            //     console.log("Lock toggle changed for", menu.id, "locationId:", locationId, "checked:", lockInput.checked);
+            //     if (lockInput.checked) {
+            //         if (locationId) {
+            //             // Show popup selection modal for subaccounts
+            //             showPopupSelectionModal(menu, locationId, (selectedType, selectedUrl, selectedHeadline, selectedSubHeadline, selectedButtonText) => {
+            //                 const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+            //                 saved.themeData = saved.themeData || {};
+            //                 let locked = saved.themeData["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
+            //                 if (!locked[locationId]) locked[locationId] = {};
+            //                 // locked[locationId][menu.id] = { locked: true, popupType: selectedType };
+            //                 // locked[locationId][menu.id] = { locked: true, popupType: selectedType, popupUrl: selectedUrl, popupHeadline: selectedHeadline };
+            //                 locked[locationId][menu.id] = { locked: true, popupType: selectedType, popupUrl: selectedUrl, popupHeadline: selectedHeadline, popupSubHeadline: selectedSubHeadline, popupButtonText: selectedButtonText };
+            //                 saved.themeData["--lockedMenus"] = JSON.stringify(locked);
+            //                 localStorage.setItem("userTheme", JSON.stringify(saved));
+            //                 applyLockedMenus();
+            //             });
+            //         } else {
+            //             // Direct save for agency with default popup
+            //             const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+            //             saved.themeData = saved.themeData || {};
+            //             let agencyData = saved.themeData["--agencyLockedHideMenus"] ? JSON.parse(saved.themeData["--agencyLockedHideMenus"]) : {};
+            //             agencyData.locked = agencyData.locked || {};
+            //             agencyData.locked[menu.id] = { locked: true, popupType: "simple" };
+            //             saved.themeData["--agencyLockedHideMenus"] = JSON.stringify(agencyData);
+            //             localStorage.setItem("userTheme", JSON.stringify(saved));
+            //             applyLockedMenus();
+            //         }
+            //     } else {
+            //         // Uncheck, remove lock
+            //         const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+            //         saved.themeData = saved.themeData || {};
+            //         if (locationId) {
+            //             let locked = saved.themeData["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
+            //             if (locked[locationId]) {
+            //                 delete locked[locationId][menu.id];
+            //             }
+            //             saved.themeData["--lockedMenus"] = JSON.stringify(locked);
+            //         } else {
+            //             let agencyData = saved.themeData["--agencyLockedHideMenus"] ? JSON.parse(saved.themeData["--agencyLockedHideMenus"]) : {};
+            //             if (agencyData.locked) {
+            //                 delete agencyData.locked[menu.id];
+            //             }
+            //             saved.themeData["--agencyLockedHideMenus"] = JSON.stringify(agencyData);
+            //         }
+            //         localStorage.setItem("userTheme", JSON.stringify(saved));
+            //         applyLockedMenus();
+            //     }
+            // });
 
             hideInput.addEventListener("change", () => {
                 const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
