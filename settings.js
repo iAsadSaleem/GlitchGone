@@ -6291,8 +6291,8 @@
                                         updatedAt: new Date().toISOString(),
                                         updatedBy:email || null
                                     };
-                                    // console.log('dbData:', dbData);
-                                    //console.log('Here is the themeData:', dbData.themeData);
+                                    console.log('dbData:', dbData);
+                                    console.log('Here is the themeData:', dbData.themeData);
                                     await fetch("https://themebuilder-six.vercel.app/api/theme", {
                                         method: "POST",
                                         headers: { "Content-Type": "application/json" },
