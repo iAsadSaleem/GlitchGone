@@ -639,6 +639,8 @@ async function waitForStableSidebar(selector = '#sidebar-v2 nav.flex-1.w-full', 
   window.addEventListener("locationchange", () => {
     ThemeBuilder.reapply();
     ThemeBuilder.applyAgencyLogo();
+ applySidebarLogoFromTheme();
+
     setTimeout(() => {
       applyStoredSidebarTitles();
     }, 1200);
