@@ -6309,7 +6309,7 @@
                                                 _id: loaderCSSData._id,
                                                 email: email || null
                                             };
-
+                                            console.log(payload,'here is the Payload');
                                             await fetch("https://themebuilder-six.vercel.app/api/theme/loader-css/status", {
                                                 method: "PUT",
                                                 headers: { "Content-Type": "application/json" },
