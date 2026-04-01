@@ -76,6 +76,7 @@
  * Fallback: --agency-logo (url("..."))
  */
 function applySidebarLogoFromTheme() {
+  console.log("[ThemeBuilder] Applying sidebar logo from theme...");
     try {
         const root = document.documentElement;
         const img = document.querySelector(".agency-logo");
