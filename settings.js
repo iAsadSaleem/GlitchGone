@@ -4173,7 +4173,7 @@
             hideHeader.style.textAlign = "center";
 
             agencyHeader.appendChild(menuHeader);
-            agencyHeader.appendChild(lockHeader);
+            // agencyHeader.appendChild(lockHeader);
             agencyHeader.appendChild(hideHeader);
             content.appendChild(agencyHeader);
 
