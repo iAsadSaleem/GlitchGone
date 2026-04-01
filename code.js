@@ -624,6 +624,7 @@ async function waitForStableSidebar(selector = '#sidebar-v2 nav.flex-1.w-full', 
     _doReapplyTheme,
     applyCSSFile,
     applyAgencyLogo,
+    applySidebarLogoFromTheme,
     reapply: () => {
       if (ThemeBuilder._reapplyLock) return;
       ThemeBuilder._reapplyLock = true;
@@ -640,7 +641,7 @@ async function waitForStableSidebar(selector = '#sidebar-v2 nav.flex-1.w-full', 
   window.addEventListener("locationchange", () => {
     ThemeBuilder.reapply();
     ThemeBuilder.applyAgencyLogo();
- applySidebarLogoFromTheme();
+    ThemeBuilder.applySidebarLogoFromTheme();
 
     setTimeout(() => {
       applyStoredSidebarTitles();
