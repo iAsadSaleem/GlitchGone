@@ -492,23 +492,7 @@
             if (span) span.style.setProperty("color", color, "important");
         });
     }
-    async function loadThemes() {
-        try {
-            const res = await fetch("https://themebuilder-six.vercel.app/api/theme/getallthemes");
-            const data = await res.json();
-
-            // Convert array to key-value by themeName
-            data.themes.forEach(t => {
-                themes[t.themeName] = t.themeData;
-            });
-        } catch (err) {
-            console.error("❌ Failed to load themes:", err);
-        }
-    }
-
-    // Load themes once at startup
-    loadThemes();
-
+ 
     function enableBlueWaveTopNav() {
         // Prevent duplicates
         if (document.getElementById("ghl_custom_topnav_wrapper_v4")) return;
@@ -853,6 +837,25 @@
 
         mainCssLoaded = true;
     }
+
+       async function loadThemes() {
+        try {
+            const res = await fetch("https://themebuilder-six.vercel.app/api/theme/getallthemes");
+            const data = await res.json();
+
+            // Convert array to key-value by themeName
+            data.themes.forEach(t => {
+                themes[t.themeName] = t.themeData;
+            });
+        } catch (err) {
+            console.error("❌ Failed to load themes:", err);
+        }
+    }
+
+    // Load themes once at startup
+    loadThemes();
+
+
     // NEW: Theme Selector Section
     function buildThemeSelectorSection(container) {
         if (!container) return;
@@ -906,8 +909,8 @@
         container.appendChild(wrapper);
         // Themes object (kept from your original)
         // const themes = darkthemes();
-        const themeKeys = Object.keys(themes);
-        let currentIndex = -1;
+        // const themeKeys = Object.keys(themes);
+        // let currentIndex = -1;
         
         // apply theme (merges theme vars into saved themeData to avoid overwriting other keys)
         async function applyTheme(themeName, themeVars) {
@@ -983,27 +986,84 @@
         // });
 
         // populate dropdown
-        themeKeys.forEach(themeName => {
-            const optBtn = document.createElement("button");
-            optBtn.type = "button";
-            optBtn.textContent = themeName;
-            optBtn.addEventListener("click", async (ev) => {
-                ev.stopPropagation();
-                if(!selectedtheme){
-                    loadMainCSS();
-                }
-                applyTheme(themeName,null);
-                dropdownBox.classList.remove("show");
-                arrowIcon.innerHTML = '<i class="fa-solid fa-angle-down" aria-hidden="true"></i>';
-            });
-            dropdownBox.appendChild(optBtn);
-        });
+        // themeKeys.forEach(themeName => {
+        //     const optBtn = document.createElement("button");
+        //     optBtn.type = "button";
+        //     optBtn.textContent = themeName;
+        //     optBtn.addEventListener("click", async (ev) => {
+        //         ev.stopPropagation();
+        //         if(!selectedtheme){
+        //             loadMainCSS();
+        //         }
+        //         applyTheme(themeName,null);
+        //         dropdownBox.classList.remove("show");
+        //         arrowIcon.innerHTML = '<i class="fa-solid fa-angle-down" aria-hidden="true"></i>';
+        //     });
+        //     dropdownBox.appendChild(optBtn);
+        // });
 
         // arrow toggles dropdown
-        arrowIcon.addEventListener("click", (ev) => {
+        // arrowIcon.addEventListener("click", (ev) => {
+        //     ev.stopPropagation();
+        //     const open = dropdownBox.classList.toggle("show");
+        //     arrowIcon.innerHTML = open ? '<i class="fa-solid fa-angle-up" aria-hidden="true"></i>' : '<i class="fa-solid fa-angle-down" aria-hidden="true"></i>';
+        // });
+        // arrow toggles dropdown — fetches themes fresh on each open
+        arrowIcon.addEventListener("click", async (ev) => {
             ev.stopPropagation();
-            const open = dropdownBox.classList.toggle("show");
-            arrowIcon.innerHTML = open ? '<i class="fa-solid fa-angle-up" aria-hidden="true"></i>' : '<i class="fa-solid fa-angle-down" aria-hidden="true"></i>';
+            const isOpen = dropdownBox.classList.contains("show");
+
+            if (isOpen) {
+                // Close
+                dropdownBox.classList.remove("show");
+                arrowIcon.innerHTML = '<i class="fa-solid fa-angle-down" aria-hidden="true"></i>';
+                return;
+            }
+
+            // Show spinner while loading
+            arrowIcon.innerHTML = '<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>';
+            dropdownBox.innerHTML = '';
+            dropdownBox.classList.add("show");
+
+            try {
+                const res = await fetch("https://themebuilder-six.vercel.app/api/theme/getallthemes");
+                const data = await res.json();
+
+                // Rebuild themes object
+                data.themes.forEach(t => {
+                    themes[t.themeName] = t.themeData;
+                });
+
+                // Restore arrow to up state
+                arrowIcon.innerHTML = '<i class="fa-solid fa-angle-up" aria-hidden="true"></i>';
+
+                // Populate dropdown fresh
+                dropdownBox.innerHTML = "";
+                Object.keys(themes).forEach(themeName => {
+                    const optBtn = document.createElement("button");
+                    optBtn.type = "button";
+                    optBtn.textContent = themeName;
+                    optBtn.addEventListener("click", async (ev) => {
+                        ev.stopPropagation();
+                        if (!localStorage.getItem("themebuilder_selectedTheme")) {
+                            loadMainCSS();
+                        }
+                        applyTheme(themeName, null);
+                        dropdownBox.classList.remove("show");
+                        arrowIcon.innerHTML = '<i class="fa-solid fa-angle-down" aria-hidden="true"></i>';
+                    });
+                    dropdownBox.appendChild(optBtn);
+                });
+
+                if (Object.keys(themes).length === 0) {
+                    dropdownBox.innerHTML = '<div style="padding:10px;font-size:13px;color:#888;">No themes found.</div>';
+                }
+            } catch (err) {
+                console.error("❌ Failed to load themes:", err);
+                // Restore arrow even on error
+                arrowIcon.innerHTML = '<i class="fa-solid fa-angle-up" aria-hidden="true"></i>';
+                dropdownBox.innerHTML = '<div style="padding:10px;font-size:13px;color:red;">Failed to load themes. Try again.</div>';
+            }
         });
 
         // close when clicking outside
