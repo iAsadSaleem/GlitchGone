@@ -6278,6 +6278,7 @@
                                     localStorage.setItem("userTheme", JSON.stringify(savedTheme));
 
                                     const rlNo = localStorage.getItem("rlno") ? atob(localStorage.getItem("rlno")) : null;
+                                    console.log('Relationshipno', rlNo);
                                     const email = localStorage.getItem("g-em") ? atob(localStorage.getItem("g-em")) : null;
                                     const agencyId = localStorage.getItem("agn") ? atob(localStorage.getItem("agn")) : null;
 
