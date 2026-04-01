@@ -4178,7 +4178,7 @@
             content.appendChild(agencyHeader);
 
             agencyMenus.forEach(menu => {
-                createToggleRow(menu, null, null, hiddenMenus, content); // null for locationId since global
+                createToggleRow(menu, null, lockedMenus, hiddenMenus, content); // null for locationId since global
             });
 
             // Sub-Account Level
