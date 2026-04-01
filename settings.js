@@ -972,9 +972,9 @@
         // restore saved theme if exists
         if (selectedtheme) {
             applyTheme(selectedtheme, savedThemeObj.themeData);
-            if (themeKeys.includes(selectedtheme)) {
-                currentIndex = themeKeys.indexOf(selectedtheme);
-            }
+            // if (themeKeys.includes(selectedtheme)) {
+            //     currentIndex = themeKeys.indexOf(selectedtheme);
+            // }
         }
 
         // cycle themes when clicking main area of button (but not when clicking the arrow)
