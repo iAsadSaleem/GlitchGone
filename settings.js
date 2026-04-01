@@ -6278,7 +6278,7 @@
                                     localStorage.setItem("userTheme", JSON.stringify(savedTheme));
 
                                     const rlNo = localStorage.getItem("rlno") ? atob(localStorage.getItem("rlno")) : null;
-                                    console.log('Relationshipno', rlNo);
+                                    // console.log('Relationshipno', rlNo);
                                     const email = localStorage.getItem("g-em") ? atob(localStorage.getItem("g-em")) : null;
                                     const agencyId = localStorage.getItem("agn") ? atob(localStorage.getItem("agn")) : null;
 
@@ -6292,8 +6292,8 @@
                                         updatedAt: new Date().toISOString(),
                                         updatedBy:email || null
                                     };
-                                    console.log('dbData:', dbData);
-                                    console.log('Here is the themeData:', dbData.themeData);
+                                    // console.log('dbData:', dbData);
+                                    // console.log('Here is the themeData:', dbData.themeData);
                                     await fetch("https://themebuilder-six.vercel.app/api/theme", {
                                         method: "POST",
                                         headers: { "Content-Type": "application/json" },
@@ -6321,7 +6321,7 @@
                                         console.error("Error sending loader-css status:", error);
                                     }
 
-                                    // location.reload();
+                                    location.reload();
                                 } catch (error) {
                                     console.error(error);
                                     loaderOverlay.style.display = "none";
