@@ -6809,11 +6809,7 @@ function applyHiddenMenus() {
 //     });
 //   }
 // }
-window.addEventListener("locationchange", () => {
-    // Clean up previous location's lock/hide visual states first
-    cleanupMenuStates();
-   
-});
+
 
 function blockMenuClick(e, menuId) {
     // Guard: re-check current location before doing anything
@@ -6836,4 +6832,9 @@ function blockMenuClick(e, menuId) {
     const popupButtonText = (lockData && typeof lockData === "object" && lockData.popupButtonText) ? lockData.popupButtonText : "";
     showPreviewPopup(popupType, popupUrl, popupHeadline, popupSubHeadline, popupButtonText);
 }
+window.addEventListener("locationchange", () => {
+    // Clean up previous location's lock/hide visual states first
+    cleanupMenuStates();
+   
+});
 })();
