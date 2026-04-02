@@ -75,43 +75,40 @@
  * Reads: --agency-logo-url (raw URL)
  * Fallback: --agency-logo (url("..."))
  */
-function applySidebarLogoFromTheme() {
-  console.log("[ThemeBuilder] Applying sidebar logo from theme...");
+function applySidebarLogoFromTheme(retries = 15, delay = 300) {
+    console.log("[ThemeBuilder] Applying sidebar logo from theme...");
     try {
         const root = document.documentElement;
         const img = document.querySelector(".agency-logo");
-        if (!img) return;
-
+        if (!img) {
+            // Element not in DOM yet — retry after delay
+            if (retries > 0) {
+                setTimeout(() => applySidebarLogoFromTheme(retries - 1, delay), delay);
+            } else {
+                console.warn("[ThemeBuilder] .agency-logo not found after retries.");
+            }
+            return;
+        }
         // First check --agency-logo-url (raw clean URL)
         let url = getComputedStyle(root)
             .getPropertyValue("--agency-logo-url")
             .trim()
-            .replace(/^"|"$/g, ""); // remove quotes
-
+            .replace(/^"|"$/g, "");
         if (!url) {
-            // fallback to --agency-logo: url("...")
             let cssUrl = getComputedStyle(root)
                 .getPropertyValue("--agency-logo")
                 .trim()
                 .replace(/^"|"$/g, "");
-
             const match = cssUrl.match(/url\(['"]?(.*?)['"]?\)/);
-            if (match) {
-                url = match[1];
-            }
+            if (match) url = match[1];
         }
-
         if (!url) return;
-
         img.src = url;
         img.style.objectFit = "contain";
-
-        // Optional: apply dynamic width & height from vars
         const w = getComputedStyle(root).getPropertyValue("--logo-width").trim();
         const h = getComputedStyle(root).getPropertyValue("--logo-height").trim();
         if (w) img.style.width = w;
         if (h) img.style.height = h;
-
         console.debug("[ThemeBuilder] Sidebar logo updated →", url);
     } catch (e) {
         console.error("[ThemeBuilder] Failed applying sidebar logo", e);
@@ -641,12 +638,21 @@ async function waitForStableSidebar(selector = '#sidebar-v2 nav.flex-1.w-full', 
   window.addEventListener("locationchange", () => {
     ThemeBuilder.reapply();
     ThemeBuilder.applyAgencyLogo();
-    ThemeBuilder.applySidebarLogoFromTheme();
-
+    // Watch for .agency-logo to appear in DOM after navigation, then apply logo
+    const observer = new MutationObserver(() => {
+        const img = document.querySelector(".agency-logo");
+        if (img) {
+            observer.disconnect();
+            ThemeBuilder.applySidebarLogoFromTheme();
+        }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+    // Safety timeout — disconnect observer after 5s to avoid leaks
+    setTimeout(() => observer.disconnect(), 5000);
     setTimeout(() => {
-      applyStoredSidebarTitles();
+        applyStoredSidebarTitles();
     }, 1200);
-  });
+});
 
   // ---- Initial bootstrap ----
   // Run applyCSSFile (fetch + inject)
