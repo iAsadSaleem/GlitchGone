@@ -288,7 +288,7 @@ function applyHiddenMenus() {
     overlay.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:200000;";
 
     const popup = document.createElement("div");
-    popup.style.cssText = "background:var(--card-body-bg-color) !important;padding:30px;border-radius:10px;max-width:350px;width:90%;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,0.3);";
+    popup.style.cssText = "position:relative;background:var(--card-body-bg-color) !important;padding:30px;border-radius:10px;max-width:350px;width:90%;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,0.3);";
 
     if (type === "simple") {
         popup.innerHTML = `<h3>Access Denied</h3><p>You cannot access this feature.</p>`;
@@ -316,8 +316,9 @@ function applyHiddenMenus() {
     }
 
     const closeBtn = document.createElement("button");
-    closeBtn.textContent = "Close";
-    closeBtn.style.cssText = "margin-top:15px;padding:8px 16px;border:1px solid #ccc;border-radius:5px;background:#fff;cursor:pointer;display:block;margin-left:auto;margin-right:auto;";
+    closeBtn.innerHTML = "&times;";
+    closeBtn.style.cssText = "position:absolute;top:10px;right:14px;background:none;border:none;font-size:22px;line-height:1;color:#888;cursor:pointer;padding:0;";
+    closeBtn.title = "Close";
     closeBtn.onclick = () => overlay.remove();
 
     popup.appendChild(closeBtn);
