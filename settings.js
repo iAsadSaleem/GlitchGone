@@ -3001,7 +3001,7 @@
         // wrapper.style.marginTop = "16px";
 
         const title = document.createElement("h4");
-        title.className = "tb-header-controls";
+        title.className = ".tb-header-controls-cursor";
         title.innerText = "Custom Cursor";
         title.style.cursor = "var(--custom-pointer,auto)"; // make it look clickable
         wrapper.appendChild(title);
@@ -3138,7 +3138,7 @@
         // wrapper.style.marginTop = "16px";
 
         const title = document.createElement("h4");
-        title.className = "tb-header-controls";
+        title.className = ".tb-header-controls-cursor";
         title.innerText = "Custom Pointer";
         title.style.cursor = "var(--custom-pointer,auto)";
         wrapper.appendChild(title);
