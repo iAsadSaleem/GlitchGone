@@ -6802,32 +6802,25 @@ window.addEventListener("locationchange", () => {
    
 });
 
- function blockMenuClick(e, menuId) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-
-        // Get popupType from localStorage
-        const savedRaw = localStorage.getItem("userTheme");
-        const saved = JSON.parse(savedRaw) || {};
-        const lockedMenus = saved.themeData && saved.themeData["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
-        const agencyData = saved.themeData && saved.themeData["--agencyLockedHideMenus"] ? JSON.parse(saved.themeData["--agencyLockedHideMenus"]) : {};
-        const locationId = getCurrentLocationId();
-
-        let popupType = "simple"; // default
-        if (locationId) {
-            const lockData = lockedMenus[locationId]?.[menuId];
-            console.log(lockedMenus,'Here is the lockedMenus');
-            console.log(lockData,'Here is the lockData');
-            if (lockData && typeof lockData === 'object') {
-                popupType = lockData.popupType || "simple";
-            }
-        } else {
-            const lockData = agencyData.locked?.[menuId];
-            if (lockData && typeof lockData === 'object') {
-                popupType = lockData.popupType || "simple";
-            }
-        }
-        console.log('(settings.js) last method popup type on click:', popupType);
-        showPreviewPopup(popupType);
-    }
+function blockMenuClick(e, menuId) {
+    // Guard: re-check current location before doing anything
+    const savedRaw = localStorage.getItem("userTheme");
+    const saved = JSON.parse(savedRaw) || {};
+    const lockedMenus = saved.themeData?.["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
+    const agencyData = saved.themeData?.["--agencyLockedHideMenus"] ? JSON.parse(saved.themeData["--agencyLockedHideMenus"]) : {};
+    const locationId = getCurrentLocationId();
+    const lockData = locationId
+        ? lockedMenus[locationId]?.[menuId]
+        : agencyData.locked?.[menuId];
+    // Stale listener from a previous location — do nothing
+    if (!lockData) return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    const popupType = (lockData && typeof lockData === "object" && lockData.popupType) ? lockData.popupType : "simple";
+    const popupUrl = (lockData && typeof lockData === "object" && lockData.popupUrl) ? lockData.popupUrl : "";
+    const popupHeadline = (lockData && typeof lockData === "object" && lockData.popupHeadline) ? lockData.popupHeadline : "";
+    const popupSubHeadline = (lockData && typeof lockData === "object" && lockData.popupSubHeadline) ? lockData.popupSubHeadline : "";
+    const popupButtonText = (lockData && typeof lockData === "object" && lockData.popupButtonText) ? lockData.popupButtonText : "";
+    showPreviewPopup(popupType, popupUrl, popupHeadline, popupSubHeadline, popupButtonText);
+}
 })();
