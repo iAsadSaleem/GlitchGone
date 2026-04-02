@@ -5155,7 +5155,7 @@
         // ---------------- Helper to build each section ----------------
         const buildSection = (menus, sectionTitle, storageKey, sidebarParentSelector) => {
             const sectionHeading = document.createElement("h4");
-            sectionHeading.className = "tb-header-controls";
+            sectionHeading.className = "tb-header-controls-cursor";
             sectionHeading.textContent = sectionTitle;
             sectionHeading.style.cursor = "var(--custom-pointer,auto)"; // Make clickable
             // sectionHeading.style.display = "flex";
