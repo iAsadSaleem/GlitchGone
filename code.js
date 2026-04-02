@@ -392,29 +392,41 @@ function applyHiddenMenus() {
         }
     });
 }
+function cleanupMenuStates() {
+    document.querySelectorAll("a[id^='sb_'], .hl_nav-header a").forEach(menu => {
+        // Remove lock icon
+        const icon = menu.querySelector(".tb-lock-icon");
+        if (icon) icon.remove();
+
+        // Reset lock styles
+        menu.style.removeProperty("opacity");
+        menu.style.removeProperty("cursor");
+
+        // Reset hidden styles
+        menu.style.removeProperty("display");
+    });
+}
   function blockMenuClick(e, menuId) {
-    e.preventDefault();
-    e.stopImmediatePropagation();
-
-    const savedRaw = localStorage.getItem("userTheme");
-    const saved = JSON.parse(savedRaw) || {};
-    const lockedMenus = saved.themeData?.["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
-    const agencyData = saved.themeData?.["--agencyLockedHideMenus"] ? JSON.parse(saved.themeData["--agencyLockedHideMenus"]) : {};
-    const locationId = getCurrentLocationId();
-
-    // Read lockData once — covers both location and global
-    const lockData = locationId
-        ? lockedMenus[locationId]?.[menuId]
-        : agencyData.locked?.[menuId];
-
-    const popupType = (lockData && typeof lockData === "object" && lockData.popupType) ? lockData.popupType : "simple";
-    const popupUrl = (lockData && typeof lockData === "object" && lockData.popupUrl) ? lockData.popupUrl : "";
-    const popupHeadline = (lockData && typeof lockData === "object" && lockData.popupHeadline) ? lockData.popupHeadline : "";
-    const popupSubHeadline = (lockData && typeof lockData === "object" && lockData.popupSubHeadline) ? lockData.popupSubHeadline : "";
-    const popupButtonText  = (lockData && typeof lockData === "object" && lockData.popupButtonText)  ? lockData.popupButtonText  : "";
-
-    showPreviewPopup(popupType, popupUrl, popupHeadline, popupSubHeadline, popupButtonText);
-    }
+      // Guard: re-check current location before doing anything
+      const savedRaw = localStorage.getItem("userTheme");
+      const saved = JSON.parse(savedRaw) || {};
+      const lockedMenus = saved.themeData?.["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
+      const agencyData = saved.themeData?.["--agencyLockedHideMenus"] ? JSON.parse(saved.themeData["--agencyLockedHideMenus"]) : {};
+      const locationId = getCurrentLocationId();
+      const lockData = locationId
+          ? lockedMenus[locationId]?.[menuId]
+          : agencyData.locked?.[menuId];
+      // Stale listener from a previous location — do nothing
+      if (!lockData) return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      const popupType = (lockData && typeof lockData === "object" && lockData.popupType) ? lockData.popupType : "simple";
+      const popupUrl = (lockData && typeof lockData === "object" && lockData.popupUrl) ? lockData.popupUrl : "";
+      const popupHeadline = (lockData && typeof lockData === "object" && lockData.popupHeadline) ? lockData.popupHeadline : "";
+      const popupSubHeadline = (lockData && typeof lockData === "object" && lockData.popupSubHeadline) ? lockData.popupSubHeadline : "";
+      const popupButtonText = (lockData && typeof lockData === "object" && lockData.popupButtonText) ? lockData.popupButtonText : "";
+      showPreviewPopup(popupType, popupUrl, popupHeadline, popupSubHeadline, popupButtonText);
+  }
 
 // Call on page load
 document.addEventListener('DOMContentLoaded', function() {
@@ -636,7 +648,9 @@ async function waitForStableSidebar(selector = '#sidebar-v2 nav.flex-1.w-full', 
   };
 
   // ---- Listen to SPA location changes ----
-  window.addEventListener("locationchange", () => {
+window.addEventListener("locationchange", () => {
+    // Clean up previous location's lock/hide visual states first
+    cleanupMenuStates();
     ThemeBuilder.reapply();
     ThemeBuilder.applyAgencyLogo();
     // Watch for .agency-logo to appear in DOM after navigation, then apply logo
@@ -648,7 +662,6 @@ async function waitForStableSidebar(selector = '#sidebar-v2 nav.flex-1.w-full', 
         }
     });
     observer.observe(document.body, { childList: true, subtree: true });
-    // Safety timeout — disconnect observer after 5s to avoid leaks
     setTimeout(() => observer.disconnect(), 5000);
     setTimeout(() => {
         applyStoredSidebarTitles();

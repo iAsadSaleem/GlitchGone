@@ -4805,29 +4805,28 @@
     setTimeout(applyLockedMenus, 1500);
 
     // Helper for blocking click
-    function blockMenuClick(e, menuId) {
-    e.preventDefault();
-    e.stopImmediatePropagation();
 
-    const savedRaw = localStorage.getItem("userTheme");
-    const saved = JSON.parse(savedRaw) || {};
-    const lockedMenus = saved.themeData?.["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
-    const agencyData = saved.themeData?.["--agencyLockedHideMenus"] ? JSON.parse(saved.themeData["--agencyLockedHideMenus"]) : {};
-    const locationId = getCurrentLocationId();
-
-    // Read lockData once — covers both location and global
-    const lockData = locationId
-        ? lockedMenus[locationId]?.[menuId]
-        : agencyData.locked?.[menuId];
-
-    const popupType = (lockData && typeof lockData === "object" && lockData.popupType) ? lockData.popupType : "simple";
-    const popupUrl = (lockData && typeof lockData === "object" && lockData.popupUrl) ? lockData.popupUrl : "";
-    const popupHeadline = (lockData && typeof lockData === "object" && lockData.popupHeadline) ? lockData.popupHeadline : "";
-    const popupSubHeadline = (lockData && typeof lockData === "object" && lockData.popupSubHeadline) ? lockData.popupSubHeadline : "";
-    const popupButtonText  = (lockData && typeof lockData === "object" && lockData.popupButtonText)  ? lockData.popupButtonText  : "";
-
-    showPreviewPopup(popupType, popupUrl, popupHeadline, popupSubHeadline, popupButtonText);
-    }
+  function blockMenuClick(e, menuId) {
+      // Guard: re-check current location before doing anything
+      const savedRaw = localStorage.getItem("userTheme");
+      const saved = JSON.parse(savedRaw) || {};
+      const lockedMenus = saved.themeData?.["--lockedMenus"] ? JSON.parse(saved.themeData["--lockedMenus"]) : {};
+      const agencyData = saved.themeData?.["--agencyLockedHideMenus"] ? JSON.parse(saved.themeData["--agencyLockedHideMenus"]) : {};
+      const locationId = getCurrentLocationId();
+      const lockData = locationId
+          ? lockedMenus[locationId]?.[menuId]
+          : agencyData.locked?.[menuId];
+      // Stale listener from a previous location — do nothing
+      if (!lockData) return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      const popupType = (lockData && typeof lockData === "object" && lockData.popupType) ? lockData.popupType : "simple";
+      const popupUrl = (lockData && typeof lockData === "object" && lockData.popupUrl) ? lockData.popupUrl : "";
+      const popupHeadline = (lockData && typeof lockData === "object" && lockData.popupHeadline) ? lockData.popupHeadline : "";
+      const popupSubHeadline = (lockData && typeof lockData === "object" && lockData.popupSubHeadline) ? lockData.popupSubHeadline : "";
+      const popupButtonText = (lockData && typeof lockData === "object" && lockData.popupButtonText) ? lockData.popupButtonText : "";
+      showPreviewPopup(popupType, popupUrl, popupHeadline, popupSubHeadline, popupButtonText);
+  }
     function updateIconVariable(menuId, unicodeValue) {
         const cssVarName = getCssVarName(menuId);
         if (!cssVarName) {
