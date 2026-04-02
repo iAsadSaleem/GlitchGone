@@ -6728,12 +6728,12 @@ function applyLockedMenus() {
                 const popupType = (lockData && typeof lockData === "object" && lockData.popupType) ? lockData.popupType : "simple";
                 const popupUrl = (lockData && typeof lockData === "object" && lockData.popupUrl) ? lockData.popupUrl : "";
                 const popupHeadline = (lockData && typeof lockData === "object" && lockData.popupHeadline) ? lockData.popupHeadline : "";
-                if (menu.dataset.tbLockBound !== "1") {
-                    menu.addEventListener("click", (e) => {
+                if (menuEl.dataset.tbLockBound !== "1") {
+                    menuEl.addEventListener("click", (e) => {
                         blockMenuClick(e, menuId);
                         showPreviewPopup(popupType, popupUrl, popupHeadline);
                     }, true);
-                    menu.dataset.tbLockBound = "1";
+                    menuEl.dataset.tbLockBound = "1";
                 }
       } else {
         const icon = menuEl.querySelector(".tb-lock-icon");
