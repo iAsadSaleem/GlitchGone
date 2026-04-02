@@ -4805,7 +4805,20 @@
     setTimeout(applyLockedMenus, 1500);
 
     // Helper for blocking click
+function cleanupMenuStates() {
+    document.querySelectorAll("a[id^='sb_'], .hl_nav-header a").forEach(menu => {
+        // Remove lock icon
+        const icon = menu.querySelector(".tb-lock-icon");
+        if (icon) icon.remove();
 
+        // Reset lock styles
+        menu.style.removeProperty("opacity");
+        menu.style.removeProperty("cursor");
+
+        // Reset hidden styles
+        menu.style.removeProperty("display");
+    });
+}
   function blockMenuClick(e, menuId) {
       // Guard: re-check current location before doing anything
       const savedRaw = localStorage.getItem("userTheme");
