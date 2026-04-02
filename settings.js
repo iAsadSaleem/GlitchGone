@@ -6692,111 +6692,111 @@ function applyHiddenMenus() {
   restoreHiddenMenus(); 
 }
 
-function applyLockedMenus() {
-  const savedRaw = localStorage.getItem("userTheme");
-  const saved = JSON.parse(savedRaw) || {};
-  if (!saved.themeData) return;
+// function applyLockedMenus() {
+//   const savedRaw = localStorage.getItem("userTheme");
+//   const saved = JSON.parse(savedRaw) || {};
+//   if (!saved.themeData) return;
 
-  const locationId = getCurrentLocationId();
+//   const locationId = getCurrentLocationId();
   
-  if (locationId) {
-    // Location-specific mode - use --lockedMenus
-    if (!saved.themeData["--lockedMenus"]) return;
-    let lockedMenus;
-    try { lockedMenus = JSON.parse(saved.themeData["--lockedMenus"]); } catch (e) { console.warn("[ThemeBuilder] invalid --lockedMenus"); return; }
-    if (!lockedMenus || typeof lockedMenus !== "object" || !lockedMenus[locationId]) return;
+//   if (locationId) {
+//     // Location-specific mode - use --lockedMenus
+//     if (!saved.themeData["--lockedMenus"]) return;
+//     let lockedMenus;
+//     try { lockedMenus = JSON.parse(saved.themeData["--lockedMenus"]); } catch (e) { console.warn("[ThemeBuilder] invalid --lockedMenus"); return; }
+//     if (!lockedMenus || typeof lockedMenus !== "object" || !lockedMenus[locationId]) return;
     
-    Object.keys(lockedMenus[locationId]).forEach(menuId => {
-      const menuEl = document.getElementById(menuId);
-      if (!menuEl) return;
+//     Object.keys(lockedMenus[locationId]).forEach(menuId => {
+//       const menuEl = document.getElementById(menuId);
+//       if (!menuEl) return;
       
-      const isLocked = !!lockedMenus[locationId][menuId];
+//       const isLocked = !!lockedMenus[locationId][menuId];
       
-      if (isLocked) {
-        if (!menuEl.querySelector(".tb-lock-icon")) {
-          const lockIcon = document.createElement("i");
-          lockIcon.className = "tb-lock-icon fas fa-lock ml-2";
-          lockIcon.style.color = "#F54927";
-          menuEl.appendChild(lockIcon);
-        }
-        menuEl.style.opacity = "0.6";
-        menuEl.style.cursor = "not-allowed";
-        // Extract the popup type stored for this menu
-                const lockData = locationId
-                    ? lockedMenus[locationId]?.[menuId]
-                    : lockedMenus[menuId];
-                const popupType = (lockData && typeof lockData === "object" && lockData.popupType) ? lockData.popupType : "simple";
-                const popupUrl = (lockData && typeof lockData === "object" && lockData.popupUrl) ? lockData.popupUrl : "";
-                const popupHeadline = (lockData && typeof lockData === "object" && lockData.popupHeadline) ? lockData.popupHeadline : "";
-                if (menuEl.dataset.tbLockBound !== "1") {
-                    menuEl.addEventListener("click", (e) => {
-                        blockMenuClick(e, menuId);
-                        showPreviewPopup(popupType, popupUrl, popupHeadline);
-                    }, true);
-                    menuEl.dataset.tbLockBound = "1";
-                }
-      } else {
-        const icon = menuEl.querySelector(".tb-lock-icon");
-        if (icon) icon.remove();
-        menuEl.style.opacity = "";
-        menuEl.style.cursor = "";
-        if (menuEl.dataset.tbLockBound === "1") {
-          menuEl.removeEventListener("click", blockMenuClick, true);
-          delete menuEl.dataset.tbLockBound;
-        }
-      }
-    });
-  } else {
-    // Global mode - use --agencyLockedHideMenus
-    if (!saved.themeData["--agencyLockedHideMenus"]) return;
-    let agencyData;
-    try { agencyData = JSON.parse(saved.themeData["--agencyLockedHideMenus"]); } catch (e) { console.warn("[ThemeBuilder] invalid --agencyLockedHideMenus"); return; }
-    if (!agencyData || typeof agencyData !== "object") return;
+//       if (isLocked) {
+//         if (!menuEl.querySelector(".tb-lock-icon")) {
+//           const lockIcon = document.createElement("i");
+//           lockIcon.className = "tb-lock-icon fas fa-lock ml-2";
+//           lockIcon.style.color = "#F54927";
+//           menuEl.appendChild(lockIcon);
+//         }
+//         menuEl.style.opacity = "0.6";
+//         menuEl.style.cursor = "not-allowed";
+//         // Extract the popup type stored for this menu
+//                 const lockData = locationId
+//                     ? lockedMenus[locationId]?.[menuId]
+//                     : lockedMenus[menuId];
+//                 const popupType = (lockData && typeof lockData === "object" && lockData.popupType) ? lockData.popupType : "simple";
+//                 const popupUrl = (lockData && typeof lockData === "object" && lockData.popupUrl) ? lockData.popupUrl : "";
+//                 const popupHeadline = (lockData && typeof lockData === "object" && lockData.popupHeadline) ? lockData.popupHeadline : "";
+//                 if (menuEl.dataset.tbLockBound !== "1") {
+//                     menuEl.addEventListener("click", (e) => {
+//                         blockMenuClick(e, menuId);
+//                         showPreviewPopup(popupType, popupUrl, popupHeadline);
+//                     }, true);
+//                     menuEl.dataset.tbLockBound = "1";
+//                 }
+//       } else {
+//         const icon = menuEl.querySelector(".tb-lock-icon");
+//         if (icon) icon.remove();
+//         menuEl.style.opacity = "";
+//         menuEl.style.cursor = "";
+//         if (menuEl.dataset.tbLockBound === "1") {
+//           menuEl.removeEventListener("click", blockMenuClick, true);
+//           delete menuEl.dataset.tbLockBound;
+//         }
+//       }
+//     });
+//   } else {
+//     // Global mode - use --agencyLockedHideMenus
+//     if (!saved.themeData["--agencyLockedHideMenus"]) return;
+//     let agencyData;
+//     try { agencyData = JSON.parse(saved.themeData["--agencyLockedHideMenus"]); } catch (e) { console.warn("[ThemeBuilder] invalid --agencyLockedHideMenus"); return; }
+//     if (!agencyData || typeof agencyData !== "object") return;
     
-    let globalLocked = agencyData.locked || {};
-    Object.keys(globalLocked).forEach(menuId => {
-      const menuEl = document.getElementById(menuId);
-      if (!menuEl) return;
+//     let globalLocked = agencyData.locked || {};
+//     Object.keys(globalLocked).forEach(menuId => {
+//       const menuEl = document.getElementById(menuId);
+//       if (!menuEl) return;
       
-      const lockData = globalLocked[menuId];
-      const isLocked = lockData && typeof lockData === 'object' ? lockData.locked : !!lockData;
+//       const lockData = globalLocked[menuId];
+//       const isLocked = lockData && typeof lockData === 'object' ? lockData.locked : !!lockData;
       
-      if (isLocked) {
-        if (!menuEl.querySelector(".tb-lock-icon")) {
-          const lockIcon = document.createElement("i");
-          lockIcon.className = "tb-lock-icon fas fa-lock ml-2";
-          lockIcon.style.color = "#F54927";
-          menuEl.appendChild(lockIcon);
-        }
-        menuEl.style.opacity = "0.6";
-        menuEl.style.cursor = "not-allowed";
-        // Extract the popup type stored for this menu
-                const lockData = locationId
-                    ? lockedMenus[locationId]?.[menuId]
-                    : lockedMenus[menuId];
-                const popupType = (lockData && typeof lockData === "object" && lockData.popupType) ? lockData.popupType : "simple";
-                const popupUrl = (lockData && typeof lockData === "object" && lockData.popupUrl) ? lockData.popupUrl : "";
-                const popupHeadline = (lockData && typeof lockData === "object" && lockData.popupHeadline) ? lockData.popupHeadline : "";
-                if (menuEl.dataset.tbLockBound !== "1") {
-                    menuEl.addEventListener("click", (e) => {
-                        blockMenuClick(e, menuId);
-                        showPreviewPopup(popupType, popupUrl, popupHeadline);
-                    }, true);
-                    menuEl.dataset.tbLockBound = "1";
-                }
-      } else {
-        const icon = menuEl.querySelector(".tb-lock-icon");
-        if (icon) icon.remove();
-        menuEl.style.opacity = "";
-        menuEl.style.cursor = "";
-        if (menuEl.dataset.tbLockBound === "1") {
-          menuEl.removeEventListener("click", blockMenuClick, true);
-          delete menuEl.dataset.tbLockBound;
-        }
-      }
-    });
-  }
-}
+//       if (isLocked) {
+//         if (!menuEl.querySelector(".tb-lock-icon")) {
+//           const lockIcon = document.createElement("i");
+//           lockIcon.className = "tb-lock-icon fas fa-lock ml-2";
+//           lockIcon.style.color = "#F54927";
+//           menuEl.appendChild(lockIcon);
+//         }
+//         menuEl.style.opacity = "0.6";
+//         menuEl.style.cursor = "not-allowed";
+//         // Extract the popup type stored for this menu
+//                 const lockData = locationId
+//                     ? lockedMenus[locationId]?.[menuId]
+//                     : lockedMenus[menuId];
+//                 const popupType = (lockData && typeof lockData === "object" && lockData.popupType) ? lockData.popupType : "simple";
+//                 const popupUrl = (lockData && typeof lockData === "object" && lockData.popupUrl) ? lockData.popupUrl : "";
+//                 const popupHeadline = (lockData && typeof lockData === "object" && lockData.popupHeadline) ? lockData.popupHeadline : "";
+//                 if (menuEl.dataset.tbLockBound !== "1") {
+//                     menuEl.addEventListener("click", (e) => {
+//                         blockMenuClick(e, menuId);
+//                         showPreviewPopup(popupType, popupUrl, popupHeadline);
+//                     }, true);
+//                     menuEl.dataset.tbLockBound = "1";
+//                 }
+//       } else {
+//         const icon = menuEl.querySelector(".tb-lock-icon");
+//         if (icon) icon.remove();
+//         menuEl.style.opacity = "";
+//         menuEl.style.cursor = "";
+//         if (menuEl.dataset.tbLockBound === "1") {
+//           menuEl.removeEventListener("click", blockMenuClick, true);
+//           delete menuEl.dataset.tbLockBound;
+//         }
+//       }
+//     });
+//   }
+// }
 
  function blockMenuClick(e, menuId) {
         e.preventDefault();
