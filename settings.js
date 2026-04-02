@@ -6796,6 +6796,11 @@ function applyHiddenMenus() {
 //     });
 //   }
 // }
+window.addEventListener("locationchange", () => {
+    // Clean up previous location's lock/hide visual states first
+    cleanupMenuStates();
+   
+});
 
  function blockMenuClick(e, menuId) {
         e.preventDefault();
