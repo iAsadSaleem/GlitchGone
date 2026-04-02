@@ -4708,7 +4708,7 @@
         const headline    = popupHeadline    || "Restricted";
         const subHeadline = popupSubHeadline || "Please contact admin to get access.";
         const btnText     = popupButtonText  || "Contact";
-        popup.innerHTML = `<h3 class="modal-title">${headline}</h3><p class="modal-title" >${subHeadline}</p><button id="tb-popup-action-btn" style="margin-top:10px;padding:8px 16px;background:var(--sidebar-menu-bg,#1A1A1A);color:#fff;border:none;border-radius:5px;cursor:pointer;">${btnText}</button>`;
+        popup.innerHTML = `<h3 class="modal-title">${headline}</h3><p class="modal-title" >${subHeadline}</p><button id="tb-popup-action-btn" style="margin-top:10px;padding:8px 16px;background:var(--scroll-color,#1A1A1A);color:#fff;border:none;border-radius:5px;cursor:pointer;">${btnText}</button>`;
     }
 
     const actionBtn = popup.querySelector("#tb-popup-action-btn");
