@@ -4196,9 +4196,9 @@
         // Function to load all toggles
         function loadAllToggles(content, agencyMenus, sidebarMenus) {
             content.innerHTML = "";
-            const agencyData = themeData["--agencyLockedHideMenus"] ? JSON.parse(themeData["--agencyLockedHideMenus"]) : {};
             const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
             const themeData = savedTheme.themeData || {};
+            const agencyData = themeData["--agencyLockedHideMenus"] ? JSON.parse(themeData["--agencyLockedHideMenus"]) : {};
             const lockedMenus = themeData["--lockedMenus"] ? JSON.parse(themeData["--lockedMenus"]) : {};
             const hiddenMenus = themeData["--hiddenMenus"] ? JSON.parse(themeData["--hiddenMenus"]) : {};
 
@@ -4237,8 +4237,11 @@
             agencyHeader.appendChild(hideHeader);
             content.appendChild(agencyHeader);
 
+            // agencyMenus.forEach(menu => {
+            //     createToggleRow(menu, null, lockedMenus, hiddenMenus, content); // null for locationId since global
+            // });
             agencyMenus.forEach(menu => {
-                createToggleRow(menu, null, lockedMenus, hiddenMenus, content); // null for locationId since global
+            createToggleRow(menu, null, lockedMenus, hiddenMenus, content, agencyData); // ← add agencyData
             });
 
             // Sub-Account Level
@@ -4535,7 +4538,7 @@
         }
 
         // Function to create toggle row
-        function createToggleRow(menu, locationId, lockedMenus, hiddenMenus, parent) {
+        function createToggleRow(menu, locationId, lockedMenus, hiddenMenus, parent, agencyData = {}) {
             const row = document.createElement("div");
             row.style.display = "flex";
             row.style.alignItems = "center";
