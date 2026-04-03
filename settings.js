@@ -6201,13 +6201,16 @@ function cleanupMenuStates() {
                         instruction.textContent =
                              "💡 For Flat Color: Choose the same color for Start & End. For gradient color choose different in start and end color. This Logo will only be use on login page.!";
                         section.appendChild(instruction);
+                        if(email == 'iamhaseeb01@outlook.com'){
+                            const previewBtn = document.createElement("button");
+                            previewBtn.id = "tb-login-preview-btn";
+                            previewBtn.innerHTML = '<i class="fas fa-eye" style="margin-right:6px;"></i>Preview Login Page';
+                            previewBtn.style.cssText = "display:inline-flex;align-items:center;padding:8px 16px;background:#F54927;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px;margin-top:10px;margin-bottom:5px;font-weight:500;";
+                            previewBtn.addEventListener("click", openLoginPreview);
+                            section.appendChild(previewBtn);
+                        }
                         // Preview Button
-                        const previewBtn = document.createElement("button");
-                        previewBtn.id = "tb-login-preview-btn";
-                        previewBtn.innerHTML = '<i class="fas fa-eye" style="margin-right:6px;"></i>Preview Login Page';
-                        previewBtn.style.cssText = "display:inline-flex;align-items:center;padding:8px 16px;background:#F54927;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px;margin-top:10px;margin-bottom:5px;font-weight:500;";
-                        previewBtn.addEventListener("click", openLoginPreview);
-                        section.appendChild(previewBtn);
+                        
 
                         const selectedTheme = localStorage.getItem("themebuilder_selectedTheme");
 
