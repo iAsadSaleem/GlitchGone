@@ -5969,7 +5969,7 @@ function cleanupMenuStates() {
 
         // 🔹 Load theme (prefer rlno, fallback to email)
         const rlNo = localStorage.getItem("rlno") ? atob(localStorage.getItem("rlno")) : null;
-        const email = localStorage.getItem("userEmail") ? atob(localStorage.getItem("g-em")) : null;
+        const email = localStorage.getItem("g-em") ? atob(localStorage.getItem("g-em")) : null;
 console.log("Decoded email:", email);
         if (rlNo) {
             applySavedSettings();
