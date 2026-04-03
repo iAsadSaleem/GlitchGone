@@ -2097,178 +2097,139 @@
     window.addEventListener("themeChanged", onThemeChange);
     }
     async function buildLoginPreviewContent(iframe) {
-        const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        const themeData = savedTheme.themeData || {};
-        const logoUrl = themeData['--login-company-logo'] ||
-                        getComputedStyle(document.documentElement).getPropertyValue('--login-company-logo').trim() || '';
-        // ── Step 1: Get the merged CSS from the browser ──────────────────────────
-        let mergedCSS = '';
-        // Try to find the <link> tag pointing to the merged-css API and fetch it
-        const mergedLink = document.querySelector('link[href*="merged-css"]');
-        if (mergedLink) {
-            try {
-                const res = await fetch(mergedLink.href);
-                if (res.ok) mergedCSS = await res.text();
-            } catch (e) {
-                console.warn('[TB Preview] Could not fetch merged-css:', e);
+    const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+    const themeData = savedTheme.themeData || {};
+    const logoUrl = themeData['--login-company-logo'] ||
+                    getComputedStyle(document.documentElement).getPropertyValue('--login-company-logo').trim() || '';
+
+    // ── Read ALL CSS currently active in the browser ──────────────────────────
+    // This pulls the exact same CSS the browser already applied — no fetch needed
+    let allCSS = '';
+
+    const sheets = Array.from(document.styleSheets);
+    for (const sheet of sheets) {
+        try {
+            // Same-origin sheets: read rules directly
+            const rules = Array.from(sheet.cssRules || sheet.rules || []);
+            for (const rule of rules) {
+                allCSS += rule.cssText + '\n';
+            }
+        } catch (e) {
+            // Cross-origin sheet: try fetching it
+            if (sheet.href) {
+                try {
+                    const res = await fetch(sheet.href, { credentials: 'include' });
+                    if (res.ok) allCSS += await res.text() + '\n';
+                } catch (fetchErr) {
+                    // Silently skip truly inaccessible sheets
+                }
             }
         }
-        // Fallback: look for a <style> tag containing login CSS already injected
-        if (!mergedCSS) {
-            document.querySelectorAll('style').forEach(s => {
-                const t = s.textContent || '';
-                if (t.includes('.hl_login') || t.includes('hl-btn') || t.includes('hl-text-input') || t.includes('login-card-heading')) {
-                    mergedCSS += t + '\n';
-                }
-            });
-        }
-        // Last fallback: build :root block from themeData + empty login styles
-        if (!mergedCSS) {
-            let rootVars = ':root {\n';
-            Object.entries(themeData).forEach(([k, v]) => {
-                if (typeof v === 'string' && k.startsWith('--')) rootVars += `  ${k}: ${v};\n`;
-            });
-            rootVars += '}\n';
-            mergedCSS = rootVars;
-        }
-        // ── Step 2: Build the preview HTML ───────────────────────────────────────
-        const html = `<!DOCTYPE html>
-    <html lang="en">
-    <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" crossorigin="anonymous">
-    <style>
-    /* ── All CSS fetched live from merged-css API ── */
-    ${mergedCSS}
-    </style>
-    <style>
-    /* ── Preview layout base (does not override theme) ── */
-    *, *::before, *::after { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; width: 100%; min-height: 100vh; }
-    .hl_login {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
-    min-height: 100vh;
-    padding-top: 40px;
     }
-    .hl_login--header {
-    width: 100%;
-    padding: 0 20px 10px;
-    }
-    .hl_login--header .container-fluid {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    }
-    .hl_login--header img {
-    max-height: 60px;
-    max-width: 200px;
-    object-fit: contain;
-    margin-bottom: 10px;
-    }
-    .logo-placeholder {
-    font-size: 22px;
-    font-weight: 700;
-    color: #fff;
-    margin-bottom: 10px;
-    display: block;
-    }
-    .language-dropdown-container {
-    position: absolute;
-    top: 0;
-    right: 20px;
-    }
-    .language-dropdown-container select {
-    padding: 4px 8px;
-    font-size: 12px;
-    border-radius: 6px;
-    }
-    .hl_login--body {
-    display: flex !important;
-    justify-content: center;
-    width: 100%;
-    }
-    .card-body { padding: 35px !important; }
-    .form-group { margin-bottom: 16px; }
-    .hl-text-input { width: 100%; display: block; }
-    .hl-btn { width: 100%; display: block; }
-    .forgot-row { display: flex; justify-content: flex-end; margin-bottom: 20px; }
-    .divider { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
-    .divider span { font-size: 12px; white-space: nowrap; color: #888; }
-    .divider hr { flex: 1; border: none; border-top: 1px solid rgba(255,255,255,0.1); }
-    .google-btn-placeholder {
-    border: 1px solid rgba(255,255,255,0.15);
-    border-radius: 10px;
-    padding: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    font-size: 14px;
-    cursor: pointer;
-    margin-bottom: 16px;
-    }
-    .foot-note { text-align: center; font-size: 12px; margin-top: 8px; }
-    </style>
-    </head>
-    <body>
-    <div class="hl_login">
-        <div class="hl_login--header">
-        <div class="container-fluid">
-            ${logoUrl
-                ? `<img src="${logoUrl}" alt="Logo" onerror="this.style.display='none'">`
-                : `<span class="logo-placeholder">Your Logo</span>`}
-            <div class="language-dropdown-container">
-            <select><option>English</option></select>
-            </div>
+
+    // ── Build the preview HTML with the full browser CSS injected ─────────────
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" crossorigin="anonymous">
+<style>
+/* ── Full browser CSS (same as live page) ── */
+${allCSS}
+</style>
+<style>
+/* ── Preview layout fixes ── */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; width: 100%; min-height: 100vh; }
+.hl_login {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  min-height: 100vh;
+  padding-top: 40px;
+}
+.hl_login--header { width: 100%; padding: 0 20px 10px; }
+.hl_login--header .container-fluid {
+  display: flex; flex-direction: column; align-items: center; position: relative;
+}
+.hl_login--header img { max-height: 60px; max-width: 200px; object-fit: contain; margin-bottom: 10px; }
+.logo-placeholder { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 10px; display: block; }
+.language-dropdown-container { position: absolute; top: 0; right: 20px; }
+.language-dropdown-container select { padding: 4px 8px; font-size: 12px; border-radius: 6px; }
+.hl_login--body { display: flex !important; justify-content: center; width: 100%; }
+.card-body { padding: 35px !important; }
+.form-group { margin-bottom: 16px; }
+.hl-text-input { width: 100%; display: block; }
+.hl-btn { width: 100%; display: block; }
+.forgot-row { display: flex; justify-content: flex-end; margin-bottom: 20px; }
+.divider { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.divider span { font-size: 12px; white-space: nowrap; color: #888; }
+.divider hr { flex: 1; border: none; border-top: 1px solid rgba(255,255,255,0.1); }
+.google-btn-placeholder {
+  border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; padding: 10px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  font-size: 14px; cursor: pointer; margin-bottom: 16px;
+}
+.foot-note { text-align: center; font-size: 12px; margin-top: 8px; }
+</style>
+</head>
+<body>
+  <div class="hl_login">
+    <div class="hl_login--header">
+      <div class="container-fluid">
+        ${logoUrl
+            ? `<img src="${logoUrl}" alt="Logo" onerror="this.style.display='none'">`
+            : `<span class="logo-placeholder">Your Logo</span>`}
+        <div class="language-dropdown-container">
+          <select><option>English</option></select>
         </div>
-        </div>
-        <div class="hl_login--body">
-        <div class="card">
-            <div class="card-body">
-            <div class="login-card-heading">
-                <h2>Sign In</h2>
-                <h4>Welcome back! Please enter your details.</h4>
-            </div>
-            <div class="form-group">
-                <label class="hl-text-input-label">Email</label>
-                <input type="email" class="hl-text-input" placeholder="you@example.com">
-            </div>
-            <div class="form-group">
-                <label class="hl-text-input-label">Password</label>
-                <input type="password" class="hl-text-input" placeholder="••••••••">
-            </div>
-            <div class="forgot-row">
-                <a class="forgot-password" href="#">Forgot Password?</a>
-            </div>
-            <button class="hl-btn">Log In</button>
-            <div class="divider">
-                <hr><span>or continue with</span><hr>
-            </div>
-            <div class="google-btn-placeholder">
-                <svg width="18" height="18" viewBox="0 0 18 18">
-                <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/>
-                <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/>
-                <path fill="#FBBC05" d="M3.964 10.706c-.18-.54-.282-1.117-.282-1.706s.102-1.166.282-1.706V4.962H.957C.347 6.175 0 7.55 0 9s.348 2.826.957 4.038l3.007-2.332z"/>
-                <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.962L3.964 7.294C4.672 5.163 6.656 3.58 9 3.58z"/>
-                </svg>
-                Sign in with Google
-            </div>
-            <p class="foot-note">By signing in, you agree to our <a href="#">Terms</a> &amp; <a href="#">Privacy Policy</a></p>
-            </div>
-        </div>
-        </div>
+      </div>
     </div>
-    </body>
-    </html>`;
-        const doc = iframe.contentDocument || iframe.contentWindow.document;
-        doc.open();
-        doc.write(html);
-        doc.close();
+    <div class="hl_login--body">
+      <div class="card">
+        <div class="card-body">
+          <div class="login-card-heading">
+            <h2>Sign In</h2>
+            <h4>Welcome back! Please enter your details.</h4>
+          </div>
+          <div class="form-group">
+            <label class="hl-text-input-label">Email</label>
+            <input type="email" class="hl-text-input" placeholder="you@example.com">
+          </div>
+          <div class="form-group">
+            <label class="hl-text-input-label">Password</label>
+            <input type="password" class="hl-text-input" placeholder="••••••••">
+          </div>
+          <div class="forgot-row">
+            <a class="forgot-password" href="#">Forgot Password?</a>
+          </div>
+          <button class="hl-btn">Log In</button>
+          <div class="divider">
+            <hr><span>or continue with</span><hr>
+          </div>
+          <div class="google-btn-placeholder">
+            <svg width="18" height="18" viewBox="0 0 18 18">
+              <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/>
+              <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/>
+              <path fill="#FBBC05" d="M3.964 10.706c-.18-.54-.282-1.117-.282-1.706s.102-1.166.282-1.706V4.962H.957C.347 6.175 0 7.55 0 9s.348 2.826.957 4.038l3.007-2.332z"/>
+              <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.962L3.964 7.294C4.672 5.163 6.656 3.58 9 3.58z"/>
+            </svg>
+            Sign in with Google
+          </div>
+          <p class="foot-note">By signing in, you agree to our <a href="#">Terms</a> &amp; <a href="#">Privacy Policy</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>`;
+
+    const doc = iframe.contentDocument || iframe.contentWindow.document;
+    doc.open();
+    doc.write(html);
+    doc.close();
     }
     function buildHeaderControlsSection(container) {
         const section = document.createElement("div");
