@@ -6668,8 +6668,10 @@ function restoreHiddenMenus() {
     
     Object.keys(hiddenMenus[locationId]).forEach(menuId => {
       const menuEl = document.getElementById(menuId);
-      const toggleEl = document.getElementById("hide-" + menuId);
-      if (!menuEl) return;
+    //   const toggleEl = document.getElementById("hide-" + menuId);
+
+    const toggleEl = document.getElementById("hide-global-" + menuId);
+    if (!menuEl) return;
       
       const menuConfig = hiddenMenus[locationId][menuId];
       const hidden = !!(menuConfig && menuConfig.hidden);
@@ -6687,7 +6689,9 @@ function restoreHiddenMenus() {
     let globalHidden = agencyData.hidden || {};
     Object.keys(globalHidden).forEach(menuId => {
       const menuEl = document.getElementById(menuId);
-      const toggleEl = document.getElementById("hide-" + menuId);
+    //   const toggleEl = document.getElementById("hide-" + menuId);
+    const toggleEl = document.getElementById("hide-global-" + menuId);
+
       if (!menuEl) return;
       
       const menuConfig = globalHidden[menuId];
