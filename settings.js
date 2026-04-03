@@ -6268,6 +6268,8 @@ function cleanupMenuStates() {
 
                                     if (localSaved.themeData["--subMenuOrder"])
                                         savedTheme.themeData["--subMenuOrder"] = localSaved.themeData["--subMenuOrder"];
+                                    if (localSaved.themeData["--agencyLockedHideMenus"])
+                                        savedTheme.themeData["--agencyLockedHideMenus"] = localSaved.themeData["--agencyLockedHideMenus"];
 
                                     const lockedMenus = JSON.parse(savedTheme.themeData["--lockedMenus"] || "{}");
                                     savedTheme.themeData["--lockedMenus"] = JSON.stringify(lockedMenus);
