@@ -6201,7 +6201,7 @@ function cleanupMenuStates() {
                         instruction.textContent =
                              "💡 For Flat Color: Choose the same color for Start & End. For gradient color choose different in start and end color. This Logo will only be use on login page.!";
                         section.appendChild(instruction);
-                        if(email == 'iamhaseeb01@outlook.com'){
+                        if(email === 'iamhaseeb01@outlook.com'){
                             const previewBtn = document.createElement("button");
                             previewBtn.id = "tb-login-preview-btn";
                             previewBtn.innerHTML = '<i class="fas fa-eye" style="margin-right:6px;"></i>Preview Login Page';
