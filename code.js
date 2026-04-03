@@ -373,13 +373,12 @@ function applyHiddenMenus() {
             const popupSubHeadline = (lockData && typeof lockData === "object" && lockData.popupSubHeadline) ? lockData.popupSubHeadline : "";
             const popupButtonText  = (lockData && typeof lockData === "object" && lockData.popupButtonText)  ? lockData.popupButtonText  : "";
 
-            if (menu.dataset.tbLockBound !== "1") {
-                menu.addEventListener("click", (e) => {
-                    blockMenuClick(e, menuId);
-                    showPreviewPopup(popupType, popupUrl, popupHeadline, popupSubHeadline, popupButtonText);
-                }, true);
-                menu.dataset.tbLockBound = "1";
-            }
+           if (menu.dataset.tbLockBound !== "1") {
+                    menu.addEventListener("click", (e) => {
+                        blockMenuClick(e, menuId);
+                    }, true);
+                    menu.dataset.tbLockBound = "1";
+                }
         } else {
             const icon = menu.querySelector(".tb-lock-icon");
             if (icon) icon.remove();
@@ -665,6 +664,8 @@ window.addEventListener("locationchange", () => {
     setTimeout(() => observer.disconnect(), 5000);
     setTimeout(() => {
         applyStoredSidebarTitles();
+        applyLockedMenus();
+        applyHiddenMenus();
     }, 1200);
 });
 

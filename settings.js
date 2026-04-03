@@ -4781,12 +4781,11 @@
             const popupButtonText  = (lockData && typeof lockData === "object" && lockData.popupButtonText)  ? lockData.popupButtonText  : "";
 
             if (menu.dataset.tbLockBound !== "1") {
-                menu.addEventListener("click", (e) => {
-                    blockMenuClick(e, menuId);
-                    showPreviewPopup(popupType, popupUrl, popupHeadline, popupSubHeadline, popupButtonText);
-                }, true);
-                menu.dataset.tbLockBound = "1";
-            }
+                    menu.addEventListener("click", (e) => {
+                        blockMenuClick(e, menuId);
+                    }, true);
+                    menu.dataset.tbLockBound = "1";
+                }
         } else {
             const icon = menu.querySelector(".tb-lock-icon");
             if (icon) icon.remove();
@@ -6835,6 +6834,10 @@ function blockMenuClick(e, menuId) {
 window.addEventListener("locationchange", () => {
     // Clean up previous location's lock/hide visual states first
     cleanupMenuStates();
-   
+    // Wait briefly for GHL's React to update the sidebar DOM for the new location
+    setTimeout(() => {
+        applyLockedMenus();
+        applyHiddenMenus();
+    }, 800);
 });
 })();
