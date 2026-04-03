@@ -4196,7 +4196,7 @@
         // Function to load all toggles
         function loadAllToggles(content, agencyMenus, sidebarMenus) {
             content.innerHTML = "";
-
+            const agencyData = themeData["--agencyLockedHideMenus"] ? JSON.parse(themeData["--agencyLockedHideMenus"]) : {};
             const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
             const themeData = savedTheme.themeData || {};
             const lockedMenus = themeData["--lockedMenus"] ? JSON.parse(themeData["--lockedMenus"]) : {};
@@ -4592,7 +4592,9 @@
             hideInput.type = "checkbox";
             hideInput.className = "toggle-input";
             hideInput.id = locationId ? `hide-${locationId}-${menu.id}` : `hide-global-${menu.id}`;
-            hideInput.checked = locationId ? (hiddenMenus[menu.id] ? !!hiddenMenus[menu.id].toggleChecked : false) : (hiddenMenus[menu.id] ? !!hiddenMenus[menu.id].toggleChecked : false);
+            // hideInput.checked = locationId ? (hiddenMenus[menu.id] ? !!hiddenMenus[menu.id].toggleChecked : false) : (hiddenMenus[menu.id] ? !!hiddenMenus[menu.id].toggleChecked : false);
+            // AFTER (correct):
+            hideInput.checked = locationId ? (hiddenMenus[locationId]?.[menu.id] ? !!hiddenMenus[locationId][menu.id].toggleChecked : false) : (agencyData.hidden?.[menu.id] ? !!agencyData.hidden[menu.id].toggleChecked : false);
 
             const hideLabel = document.createElement("label");
             hideLabel.className = "toggle-label";
