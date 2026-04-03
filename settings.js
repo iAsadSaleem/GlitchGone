@@ -6340,7 +6340,7 @@ function cleanupMenuStates() {
                                         console.error("Error sending loader-css status:", error);
                                     }
 
-                                    // location.reload();
+                                    location.reload();
                                 } catch (error) {
                                     console.error(error);
                                     loaderOverlay.style.display = "none";
