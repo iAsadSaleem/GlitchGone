@@ -2042,187 +2042,234 @@
     document.getElementById("tb-login-preview-modal")?.remove();
     const overlay = document.createElement("div");
     overlay.id = "tb-login-preview-modal";
-    overlay.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.88);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999999;";
-    const topBar = document.createElement("div");
-    topBar.style.cssText = "display:flex;align-items:center;justify-content:space-between;width:92%;max-width:1100px;margin-bottom:10px;";
-    const titleEl = document.createElement("span");
-    titleEl.textContent = "Login Page Preview";
-    titleEl.style.cssText = "color:#fff;font-size:15px;font-weight:600;";
+    overlay.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.72);display:flex;align-items:center;justify-content:center;z-index:999999;";
+    overlay.addEventListener("click", (e) => { if (e.target === overlay) overlay.remove(); });
+    // Card container
+    const card = document.createElement("div");
+    card.style.cssText = "position:relative;border-radius:14px;width:92%;max-width:1100px;height:86vh;overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,0.55);display:flex;flex-direction:column;";
+    // Title bar
+    const titleBar = document.createElement("div");
+    titleBar.style.cssText = "display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:#1a1a1a;flex-shrink:0;";
+    const titleText = document.createElement("span");
+    titleText.textContent = "Login Page Preview";
+    titleText.style.cssText = "color:#fff;font-size:14px;font-weight:600;";
+    // X close button
     const closeBtn = document.createElement("button");
-    closeBtn.innerHTML = "✕ Close";
-    closeBtn.style.cssText = "padding:6px 14px;background:#fff;color:#333;border:none;border-radius:5px;cursor:pointer;font-size:13px;";
+    closeBtn.innerHTML = "&#10005;";
+    closeBtn.title = "Close";
+    closeBtn.style.cssText = "width:28px;height:28px;border-radius:50%;border:none;background:rgba(255,255,255,0.12);color:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s;";
+    closeBtn.onmouseover = () => closeBtn.style.background = "rgba(255,255,255,0.25)";
+    closeBtn.onmouseleave = () => closeBtn.style.background = "rgba(255,255,255,0.12)";
     closeBtn.onclick = () => overlay.remove();
-    topBar.appendChild(titleEl);
-    topBar.appendChild(closeBtn);
-    overlay.appendChild(topBar);
+    titleBar.appendChild(titleText);
+    titleBar.appendChild(closeBtn);
     const iframe = document.createElement("iframe");
     iframe.id = "tb-login-preview-iframe";
-    iframe.style.cssText = "width:92%;max-width:1100px;height:80vh;border:none;border-radius:10px;";
-    overlay.appendChild(iframe);
+    iframe.style.cssText = "flex:1;width:100%;border:none;background:#0f1722;";
+    card.appendChild(titleBar);
+    card.appendChild(iframe);
+    overlay.appendChild(card);
     document.body.appendChild(overlay);
     buildLoginPreviewContent(iframe);
-    // Live update: re-render when theme changes while preview is open
-    function onThemeChange() {
-        const liveIframe = document.getElementById("tb-login-preview-iframe");
-        if (liveIframe) buildLoginPreviewContent(liveIframe);
-    }
-    window.addEventListener("themeChanged", onThemeChange);
-    overlay.addEventListener("remove", () => window.removeEventListener("themeChanged", onThemeChange));
-    // Also poll localStorage changes (same-tab color picker updates)
+    // Auto-refresh when theme changes (same-tab color pickers)
     let lastSnapshot = localStorage.getItem("userTheme");
     const pollInterval = setInterval(() => {
         if (!document.getElementById("tb-login-preview-modal")) {
             clearInterval(pollInterval);
-            window.removeEventListener("themeChanged", onThemeChange);
             return;
         }
         const current = localStorage.getItem("userTheme");
         if (current !== lastSnapshot) {
             lastSnapshot = current;
-            const liveIframe = document.getElementById("tb-login-preview-iframe");
-            if (liveIframe) buildLoginPreviewContent(liveIframe);
+            const f = document.getElementById("tb-login-preview-iframe");
+            if (f) buildLoginPreviewContent(f);
         }
-    }, 600);
-}
-function buildLoginPreviewContent(iframe) {
-    const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
-    const themeData = savedTheme.themeData || {};
-    const logoUrl = themeData['--login-company-logo'] || 
-                    getComputedStyle(document.documentElement).getPropertyValue('--login-company-logo').trim() || '';
-
-    // ─── Collect the live CSS already injected into the browser ───
-    let injectedCSS = '';
-
-    // 1. Grab ALL inline <style> tags added by your extension/script
-    //    (Filter out browser/app native styles by checking for login-related keywords)
-    document.querySelectorAll('style').forEach(styleEl => {
-        const text = styleEl.textContent || '';
-        // Pick up any style element that targets login page classes
-        if (
-            text.includes('.hl_login') ||
-            text.includes('--login-') ||
-            text.includes('hl-btn') ||
-            text.includes('hl-text-input') ||
-            text.includes('login-card-heading') ||
-            styleEl.id.toLowerCase().includes('login') ||
-            styleEl.id.toLowerCase().includes('theme') ||
-            styleEl.dataset.tb
-        ) {
-            injectedCSS += text + '\n';
+    }, 700);
+    // Also respond to themeChanged event
+    function onThemeChange() {
+        if (!document.getElementById("tb-login-preview-modal")) {
+            window.removeEventListener("themeChanged", onThemeChange);
+            return;
         }
-    });
-
-    // 2. Also grab CSS variables from :root (covers variables set inline)
-    let rootVars = ':root {\n';
-    Object.entries(themeData).forEach(([k, v]) => {
-        if (typeof v === 'string' && k.startsWith('--')) {
-            rootVars += `  ${k}: ${v};\n`;
+        const f = document.getElementById("tb-login-preview-iframe");
+        if (f) buildLoginPreviewContent(f);
+    }
+    window.addEventListener("themeChanged", onThemeChange);
+    }
+    async function buildLoginPreviewContent(iframe) {
+        const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        const themeData = savedTheme.themeData || {};
+        const logoUrl = themeData['--login-company-logo'] ||
+                        getComputedStyle(document.documentElement).getPropertyValue('--login-company-logo').trim() || '';
+        // ── Step 1: Get the merged CSS from the browser ──────────────────────────
+        let mergedCSS = '';
+        // Try to find the <link> tag pointing to the merged-css API and fetch it
+        const mergedLink = document.querySelector('link[href*="merged-css"]');
+        if (mergedLink) {
+            try {
+                const res = await fetch(mergedLink.href);
+                if (res.ok) mergedCSS = await res.text();
+            } catch (e) {
+                console.warn('[TB Preview] Could not fetch merged-css:', e);
+            }
         }
-    });
-    rootVars += '}\n';
-
-    const html = `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" crossorigin="anonymous">
-<style>
-/* CSS variables from theme settings */
-${rootVars}
-</style>
-<style>
-/* Live CSS currently active in the browser (from your API/injection) */
-${injectedCSS}
-</style>
-<style>
-/* Preview layout base */
-* { box-sizing: border-box; }
-body { margin: 0; padding: 0; }
-.hl_login {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  min-height: 100vh;
-  padding-top: 40px;
-}
-.hl_login--header { width: 100%; padding: 0 20px 10px; background: transparent; }
-.hl_login--header .container-fluid {
-  display: flex; flex-direction: column; align-items: center; position: relative;
-}
-.hl_login--header img { max-height: 60px; max-width: 200px; object-fit: contain; margin-bottom: 10px; }
-.hl_login--header .logo-placeholder { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 10px; }
-.language-dropdown-container { position: absolute; top: 0; right: 20px; }
-.language-dropdown-container select { padding: 4px 8px; font-size: 12px; border-radius: 6px; }
-.hl_login--body { display: flex; justify-content: center; width: 100%; }
-.card-body { padding: 35px !important; }
-.form-group { margin-bottom: 16px; }
-.forgot-row { display: flex; justify-content: flex-end; margin-bottom: 20px; }
-.divider { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
-.divider span { font-size: 12px; white-space: nowrap; }
-.divider hr { flex: 1; border: none; border-top: 1px solid rgba(255,255,255,0.1); }
-.google-btn-placeholder {
-  border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; padding: 10px;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  font-size: 14px; cursor: pointer; margin-bottom: 16px; color: inherit;
-}
-.foot-note { text-align: center; font-size: 12px; margin-top: 8px; }
-input { width: 100%; display: block; }
-button.hl-btn { width: 100%; display: block; }
-</style>
-</head>
-<body>
-  <div class="hl_login">
-    <div class="hl_login--header">
-      <div class="container-fluid">
-        ${logoUrl
-            ? `<img src="${logoUrl}" alt="Logo" onerror="this.style.display='none'">`
-            : `<span class="logo-placeholder">Your Logo</span>`}
-        <div class="language-dropdown-container">
-          <select><option>English</option></select>
+        // Fallback: look for a <style> tag containing login CSS already injected
+        if (!mergedCSS) {
+            document.querySelectorAll('style').forEach(s => {
+                const t = s.textContent || '';
+                if (t.includes('.hl_login') || t.includes('hl-btn') || t.includes('hl-text-input') || t.includes('login-card-heading')) {
+                    mergedCSS += t + '\n';
+                }
+            });
+        }
+        // Last fallback: build :root block from themeData + empty login styles
+        if (!mergedCSS) {
+            let rootVars = ':root {\n';
+            Object.entries(themeData).forEach(([k, v]) => {
+                if (typeof v === 'string' && k.startsWith('--')) rootVars += `  ${k}: ${v};\n`;
+            });
+            rootVars += '}\n';
+            mergedCSS = rootVars;
+        }
+        // ── Step 2: Build the preview HTML ───────────────────────────────────────
+        const html = `<!DOCTYPE html>
+    <html lang="en">
+    <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" crossorigin="anonymous">
+    <style>
+    /* ── All CSS fetched live from merged-css API ── */
+    ${mergedCSS}
+    </style>
+    <style>
+    /* ── Preview layout base (does not override theme) ── */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; width: 100%; min-height: 100vh; }
+    .hl_login {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    min-height: 100vh;
+    padding-top: 40px;
+    }
+    .hl_login--header {
+    width: 100%;
+    padding: 0 20px 10px;
+    }
+    .hl_login--header .container-fluid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    }
+    .hl_login--header img {
+    max-height: 60px;
+    max-width: 200px;
+    object-fit: contain;
+    margin-bottom: 10px;
+    }
+    .logo-placeholder {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 10px;
+    display: block;
+    }
+    .language-dropdown-container {
+    position: absolute;
+    top: 0;
+    right: 20px;
+    }
+    .language-dropdown-container select {
+    padding: 4px 8px;
+    font-size: 12px;
+    border-radius: 6px;
+    }
+    .hl_login--body {
+    display: flex !important;
+    justify-content: center;
+    width: 100%;
+    }
+    .card-body { padding: 35px !important; }
+    .form-group { margin-bottom: 16px; }
+    .hl-text-input { width: 100%; display: block; }
+    .hl-btn { width: 100%; display: block; }
+    .forgot-row { display: flex; justify-content: flex-end; margin-bottom: 20px; }
+    .divider { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .divider span { font-size: 12px; white-space: nowrap; color: #888; }
+    .divider hr { flex: 1; border: none; border-top: 1px solid rgba(255,255,255,0.1); }
+    .google-btn-placeholder {
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-bottom: 16px;
+    }
+    .foot-note { text-align: center; font-size: 12px; margin-top: 8px; }
+    </style>
+    </head>
+    <body>
+    <div class="hl_login">
+        <div class="hl_login--header">
+        <div class="container-fluid">
+            ${logoUrl
+                ? `<img src="${logoUrl}" alt="Logo" onerror="this.style.display='none'">`
+                : `<span class="logo-placeholder">Your Logo</span>`}
+            <div class="language-dropdown-container">
+            <select><option>English</option></select>
+            </div>
         </div>
-      </div>
-    </div>
-    <div class="hl_login--body">
-      <div class="card">
-        <div class="card-body">
-          <div class="login-card-heading">
-            <h2>Sign In</h2>
-            <h4>Welcome back! Please enter your details.</h4>
-          </div>
-          <div class="form-group">
-            <label class="hl-text-input-label">Email</label>
-            <input type="email" class="hl-text-input" placeholder="you@example.com">
-          </div>
-          <div class="form-group">
-            <label class="hl-text-input-label">Password</label>
-            <input type="password" class="hl-text-input" placeholder="••••••••">
-          </div>
-          <div class="forgot-row">
-            <a class="forgot-password">Forgot Password?</a>
-          </div>
-          <button class="hl-btn">Log In</button>
-          <div class="divider">
-            <hr><span>or continue with</span><hr>
-          </div>
-          <div class="google-btn-placeholder">
-            <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/><path fill="#FBBC05" d="M3.964 10.706c-.18-.54-.282-1.117-.282-1.706s.102-1.166.282-1.706V4.962H.957C.347 6.175 0 7.55 0 9s.348 2.826.957 4.038l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.962L3.964 7.294C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
-            Sign in with Google
-          </div>
-          <p class="foot-note">By signing in, you agree to our <a href="#">Terms</a> &amp; <a href="#">Privacy Policy</a></p>
         </div>
-      </div>
+        <div class="hl_login--body">
+        <div class="card">
+            <div class="card-body">
+            <div class="login-card-heading">
+                <h2>Sign In</h2>
+                <h4>Welcome back! Please enter your details.</h4>
+            </div>
+            <div class="form-group">
+                <label class="hl-text-input-label">Email</label>
+                <input type="email" class="hl-text-input" placeholder="you@example.com">
+            </div>
+            <div class="form-group">
+                <label class="hl-text-input-label">Password</label>
+                <input type="password" class="hl-text-input" placeholder="••••••••">
+            </div>
+            <div class="forgot-row">
+                <a class="forgot-password" href="#">Forgot Password?</a>
+            </div>
+            <button class="hl-btn">Log In</button>
+            <div class="divider">
+                <hr><span>or continue with</span><hr>
+            </div>
+            <div class="google-btn-placeholder">
+                <svg width="18" height="18" viewBox="0 0 18 18">
+                <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/>
+                <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/>
+                <path fill="#FBBC05" d="M3.964 10.706c-.18-.54-.282-1.117-.282-1.706s.102-1.166.282-1.706V4.962H.957C.347 6.175 0 7.55 0 9s.348 2.826.957 4.038l3.007-2.332z"/>
+                <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.962L3.964 7.294C4.672 5.163 6.656 3.58 9 3.58z"/>
+                </svg>
+                Sign in with Google
+            </div>
+            <p class="foot-note">By signing in, you agree to our <a href="#">Terms</a> &amp; <a href="#">Privacy Policy</a></p>
+            </div>
+        </div>
+        </div>
     </div>
-  </div>
-</body>
-</html>`;
-
-    const doc = iframe.contentDocument || iframe.contentWindow.document;
-    doc.open();
-    doc.write(html);
-    doc.close();
-}
+    </body>
+    </html>`;
+        const doc = iframe.contentDocument || iframe.contentWindow.document;
+        doc.open();
+        doc.write(html);
+        doc.close();
+    }
     function buildHeaderControlsSection(container) {
         const section = document.createElement("div");
         section.className = "tb-controls-section";
