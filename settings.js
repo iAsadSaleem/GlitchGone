@@ -6272,6 +6272,9 @@ function cleanupMenuStates() {
                                     const lockedMenus = JSON.parse(savedTheme.themeData["--lockedMenus"] || "{}");
                                     savedTheme.themeData["--lockedMenus"] = JSON.stringify(lockedMenus);
 
+                                    const agencydata = JSON.parse(savedTheme.themeData["--agencyLockedHideMenus"] || "{}");
+                                    savedTheme.themeData["--agencyLockedHideMenus"] = JSON.stringify(agencydata);
+
                                     const hiddenMenus = JSON.parse(savedTheme.themeData["--hiddenMenus"] || "{}");
                                     savedTheme.themeData["--hiddenMenus"] = JSON.stringify(hiddenMenus);
 
