@@ -5970,7 +5970,6 @@ function cleanupMenuStates() {
         // 🔹 Load theme (prefer rlno, fallback to email)
         const rlNo = localStorage.getItem("rlno") ? atob(localStorage.getItem("rlno")) : null;
         const email = localStorage.getItem("g-em") ? atob(localStorage.getItem("g-em")) : null;
-console.log("Decoded email:", email);
         if (rlNo) {
             applySavedSettings();
         } else if (email) {
@@ -6201,7 +6200,6 @@ console.log("Decoded email:", email);
                         instruction.textContent =
                              "💡 For Flat Color: Choose the same color for Start & End. For gradient color choose different in start and end color. This Logo will only be use on login page.!";
                         section.appendChild(instruction);
-                        console.log(email,'here is the email');
                         if(email === 'iamhaseeb01@outlook.com'){
                             const previewBtn = document.createElement("button");
                             previewBtn.id = "tb-login-preview-btn";
