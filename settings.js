@@ -6272,9 +6272,6 @@ function cleanupMenuStates() {
                                     const lockedMenus = JSON.parse(savedTheme.themeData["--lockedMenus"] || "{}");
                                     savedTheme.themeData["--lockedMenus"] = JSON.stringify(lockedMenus);
 
-                                    const agencydata = JSON.parse(savedTheme.themeData["--agencyLockedHideMenus"] || "{}");
-                                    savedTheme.themeData["--agencyLockedHideMenus"] = JSON.stringify(agencydata);
-
                                     const hiddenMenus = JSON.parse(savedTheme.themeData["--hiddenMenus"] || "{}");
                                     savedTheme.themeData["--hiddenMenus"] = JSON.stringify(hiddenMenus);
 
@@ -6312,7 +6309,7 @@ function cleanupMenuStates() {
                                         updatedAt: new Date().toISOString(),
                                         updatedBy:email || null
                                     };
-                                    // console.log('dbData:', dbData);
+                                    console.log('dbData:', dbData);
                                     // console.log('Here is the themeData:', dbData.themeData);
                                     await fetch("https://themebuilder-six.vercel.app/api/theme", {
                                         method: "POST",
@@ -6341,7 +6338,7 @@ function cleanupMenuStates() {
                                         console.error("Error sending loader-css status:", error);
                                     }
 
-                                    location.reload();
+                                    // location.reload();
                                 } catch (error) {
                                     console.error(error);
                                     loaderOverlay.style.display = "none";
