@@ -613,7 +613,7 @@ async function waitForStableSidebar(selector = '#sidebar-v2 nav.flex-1.w-full', 
     lastHTML = currentHTML;
     await new Promise(r => setTimeout(r, 300));
   }
-  console.warn('[ThemeBuilder] Sidebar did not stabilize within timeout.');
+  // console.warn('[ThemeBuilder] Sidebar did not stabilize within timeout.');
   return false;
 }
 
