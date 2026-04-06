@@ -76,7 +76,6 @@
  * Fallback: --agency-logo (url("..."))
  */
 function applySidebarLogoFromTheme(retries = 15, delay = 300) {
-    console.log("[ThemeBuilder] Applying sidebar logo from theme...");
     try {
         const root = document.documentElement;
         const img = document.querySelector(".agency-logo");
@@ -109,7 +108,6 @@ function applySidebarLogoFromTheme(retries = 15, delay = 300) {
         const h = getComputedStyle(root).getPropertyValue("--logo-height").trim();
         if (w) img.style.width = w;
         if (h) img.style.height = h;
-        console.debug("[ThemeBuilder] Sidebar logo updated →", url);
     } catch (e) {
         console.error("[ThemeBuilder] Failed applying sidebar logo", e);
     }
