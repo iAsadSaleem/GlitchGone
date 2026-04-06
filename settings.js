@@ -2159,6 +2159,42 @@ html, body { margin: 0; padding: 0; width: 100%; min-height: 100vh; }
 .language-dropdown-container { position: absolute; top: 0; right: 20px; }
 .language-dropdown-container select { padding: 4px 8px; font-size: 12px; border-radius: 6px; }
 .hl_login--body { display: flex !important; justify-content: center; width: 100%; }
+.hl_login .card {
+    background: var(--card-bg) !important;
+    backdrop-filter: blur(15px);
+    border-radius: 20px !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6) !important;
+    width: 460px !important;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+    .hl_login--body .card {
+    width: 100%;
+    max-width: 550px;
+    margin: 0 auto;
+    -webkit-box-shadow: 15px 26px 40px 0 rgba(0, 0, 0, .05);
+    box-shadow: 15px 26px 40px #0000000d;
+}
+    .login-card-heading h2 {
+    color: var(--primary) !important;
+    font-size: 28px !important;
+    font-weight: 600;
+    text-align: center;
+}
+    .hl_login--body .heading2 {
+    margin-bottom: 10px;
+}
+    .hl_login--body .login-card-heading {
+    margin-bottom: 32px;
+    text-align: center;
+}
+    .hl-btn {
+    background: linear-gradient(90deg, #EF3E6C, #ff6f91) !important;
+    border-radius: 12px !important;
+    font-weight: 500;
+    padding: 12px !important;
+    transition: all 0.3s ease;
+    border: none !important;
+}
 .card-body { padding: 35px !important; }
 .form-group { margin-bottom: 16px; }
 .hl-text-input { width: 100%; display: block; }
