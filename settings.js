@@ -2139,153 +2139,31 @@
 ${allCSS}
 </style>
 <style>
-/* === BASE STYLES === */
+/* ===============================
+   PAGE BACKGROUND
+================================ */
+html, body {
+  height: 100%;
+  margin: 0;
+  background: var(--login-background-active,#e5e7ea) !important;
+}
+
+/* ===============================
+   CENTER LOGIN WRAPPER
+================================ */
 .hl_login {
+  min-height: 100vh !important;
   display: flex;
-  flex-wrap: wrap;
-  align-items: stretch;
-  justify-content: center;
-  height: 100vh;
-  width: 100%;
-  overflow: hidden;
-  background-color: #000;
-  background-color: var(--login-card-bg-gradient,#000);
-  font-family: "Inter", "Poppins", sans-serif;
-  color: #fff;
-  position: relative;
-}
-
-/* === LEFT SIDE IMAGE === */
-.hl_login::before {
-  border-bottom-right-radius: 0px !important;
-  border-top-right-radius: 0px !important;
-  content: "";
-  flex: 1;
-  min-width: 50%;
-  background: linear-gradient(
-      rgba(0, 0, 0, 0.4),
-      rgba(0, 0, 0, 0.4)
-    ),
-    var(--login-background-image) center center /
-      cover no-repeat;
-  border-top-left-radius: 16px;
-  border-bottom-left-radius: 16px;
-  transition: all 0.4s ease;
-}
-
-/* === RIGHT SIDE LOGIN FORM === */
-.hl_login--body {
-  flex: 0 0 600px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  background:var(--login-background-active,#0b0b0b);
-  padding: 60px;
-  border-top-right-radius: 16px;
-  border-bottom-right-radius: 16px;
-  box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
-  position: relative;
-  z-index: 2;
-  transition: all 0.3s ease;
-}
-
-/* === CARD === */
-.hl_login--body .card {
-  background: var(--login-card-bg-gradient,#0b0b0b00) !important;
-  width: 100%;
-  background: transparent !important;
-  border: none;
-  box-shadow: none;
-}
-.hl_login--body .card-body {
-  color: #fff;
-}
-
-/* === LOGO (Fixed Position on Top of Form) === */
-.hl_login--header {
-  position: absolute !important;
-  top: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
-  display: none !important;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  pointer-events: none; /* so logo doesn’t block inputs */
+  padding: 40px !important;
 }
 
-.hl_login--header img {
-  max-height: 75px !important;
-  width: auto;
-  height: auto;
-  filter: none !important;
-}
-.hl_login--header img {
-  max-height: 70px;
-}
-
-/* === HEADINGS === */
-.login-card-heading h2 {
-  font-size: var(--login-headline-font-size,25px);
-  color: var(--login-headline-text-color,#00c853) !important;
-  font-weight: 700;
-  font-size: 26px;
-  margin-bottom: 10px;
-  text-transform: capitalize; /* ✅ makes text capital */
-
-}
-
-/* === INPUTS === */
-.hl-text-input-container {
-  margin-bottom: 20px;
-}
-.hl-text-input {
-  width: 100%;
-  background: #111;
-  border: 1px solid #222;
-  border-radius: 8px;
-  padding: 12px 14px; 
-  font-size: 14px;
-  color: #fff;
-  transition: border-color 0.3s, box-shadow 0.3s;
-}
-.hl-text-input:focus {
-  outline: none;
-  border-color: #00c853;
-  box-shadow: 0 0 0 2px rgba(0, 200, 83, 0.25);
-}
-
-/* === BUTTON === */
-.hl_login--body button[type="submit"] {
-  background: var(--login-button-bg-gradient,#00c853) !important;
-  border: none;
-   border-radius: var(--login-button-border-radius,8px) !important;
-  padding: 12px !important;
-  font-size: 16px;
-  font-weight: 600;
-  color:var(--login-button-text-color,#000) !important ;
-  width: 100%;
-  transition: all 0.3s ease;
-  text-transform: capitalize; /* ✅ makes text capital */
-}
-.hl_login--body button[type="submit"]:hover {
-  color: var(--login-button-hover-text-color, #000) !important;
-  background:var(--login-button-hover-bg-color,#00e676) !important;
-  transform: translateY(-2px);
-}
-
-/* === LINKS === */
-.forgot-password {
-  display: block;
-  text-align: right;
-  font-size: 13px;
-  color:var(--login-link-text-color,#9e9e9e) !important;
-  margin-top: -10px;
-  margin-bottom: 20px;
-}
-.forgot-password:hover {
-  color: #3060ff;
+/* FORCE container to be wide */
+.hl_login .container-fluid {
+  max-width: 1050px !important;
+  width: 1050px !important;
+  padding: 0 !important;
 }
 .bg-curious-blue-500{
     background: var(--login-button-bg-gradient,#00c853) !important;
@@ -2298,138 +2176,188 @@ ${allCSS}
     width: 100%;
     transition: all 0.3s ease;
 }
-/* === FOOT NOTE === */
-.foot-note {
-  text-align: center;
-  font-size: 13px;
-  color:var(--login-link-text-color,#9e9e9e) !important;
-  margin-top: 25px;
-}
-.foot-note a {
-  color: var(--login-link-text-color, #9e9e9e) !important;
-  text-decoration: none;
-}
-.foot-note a:hover {
-  text-decoration: underline;
-}
-
-/* === RESPONSIVE BREAKPOINTS === */
-
-/* Large Desktops */
-@media (min-width: 1600px) {
-  .hl_login--body {
-    flex: 0 0 650px;
-  }
-}
-
-/* Tablets and below */
-@media (max-width: 1024px) {
-  .hl_login {
-    flex-direction: column;
-    height: auto;
-  }
-
-  .hl_login::before {
-    display: none;
-  }
-
-  .hl_login--body {
-    flex: 1;
-    width: 100%;
-    height: auto;
-    border-radius: 0;
-    box-shadow: none;
-    padding: 50px 30px;
-  }
-
- .hl_login--header {
+/* ===============================
+   MAIN CARD (FORM + IMAGE)
+================================ */
+.hl_login .card {
   position: relative !important;
-  transform: none !important;
-  top: 0 !important;
-  margin-bottom: 20px !important;
-  pointer-events: none;
-  }
+  display: flex !important;
+  flex-direction: row !important;
+  width: 100% !important;
+  max-width: 1050px !important;
+  height: 620px !important;
+  border-radius: 4px !important;
+  overflow: hidden !important;
+  border: none !important;
+  background: transparent !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.842);
+}
+.bg-curious-blue-500{
+    background: var(--login-button-bg-gradient,#00c853) !important;
+    border: none;
+    border-radius: var(--login-button-border-radius,8px) !important;
+    padding: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+/* ===============================
+   LEFT SIDE – LOGIN FORM
+================================ */
+.hl_login .card-body {
+  position: relative;
+  left: -401px !important;
+  max-width: 546px !important;
+  width: 52% !important;
+  padding: 86px 57px 0px 57px !important;
+  background: var(--login-card-bg-gradient, #276678)  !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #fff !important;
+  z-index: 2;
 }
 
-/* Mobile */
-@media (max-width: 600px) {
-  .hl_login--body {
-    padding: 30px 20px;
-  }
-
-  .login-card-heading h2 {
-    font-size: 22px;
-  }
-
-  .hl-text-input {
-    font-size: 13px;
-    padding: 10px 12px;
-  }
-
-  .hl_login--body button[type="submit"] {
-    font-size: 14px;
-    padding: 10px;
-  }
+/* Headings */
+.hl_login .heading2 {
+  color: var(--login-headline-text-color,#fff) !important;
+  font-size: var(--login-headline-font-size, 38px);
+  margin-bottom: 3px;
 }
-/* === CUSTOM LOGO ABOVE LOGIN FORM (CSS-ONLY METHOD) === */
+/* 
+[data-v-7d68b16e] .login-card-heading h2.heading2 {
+    color: transparent !important;
+    position: relative;
+}
 
-/* Hide the default header logo completely */
+[data-v-7d68b16e] .login-card-heading h2.heading2::after {
+    content: var(--login-headline-text);
+    font-size: var(--login-headline-font-size, 25px);
+    color: var(--login-headline-text-color, #00c853) !important;
+    position: absolute;
+    left: 0;
+    top: 0;
+} */
+.text-gray-700{
+  color: #e5e7ea !important;
+}
+/* Inputs */
+.hl-text-input {
+  background: rgba(255,255,255,.06) !important;
+  border: 1px solid rgba(255,255,255,.35) !important;
+  color: #fff !important;
+  border-radius: 4px !important;
+}
+.hl-text-input:focus {
+  border-color: #379fdb !important;
+  box-shadow: 0 0 10px rgba(0, 132, 255, 0.3);
+}
+.hl-text-input::placeholder {
+  color: rgba(255,255,255,.75) !important;
+}
+/* ============================
+   LOGO INSIDE THE CARD
+============================ */
+.hl_login--body .card::before {
+    top:34px !important;
+  left: 117px;
+  position: relative;
+  z-index: 9;
+  content: "";
+  display: block;
+  width: 91px;
+  height: 107px;
+  margin: 0 auto -25px auto;
+  background-image: var(--login-company-logo);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+.hl_login--header{
+    display: none !important;
+}
+/* Forgot password */
+.forgot-password {
+  color:var(--login-link-text-color, #9dd1ea) !important;
+  font-weight: 600;
+}
+
+.forgot-password:hover::after {
+    color: #2883fa; /* hover color */
+}
+button:focus,
+button:active {
+  border-color: #9dd1ea !important;
+  outline-color: #9dd1ea !important;
+}
+input:focus {
+  border-color: #9dd1ea  !important;
+}
+
+/* Sign In Button */
+.hl-btn {
+  color: var(--login-button-text-color, #ffffff) !important;
+  height: 46px !important;
+  border-radius:var(--login-button-border-radius, 6px) !important;
+  background: var(--login-button-bg-gradient,#e54b3b) !important;
+  font-weight: 700 !important;
+  transition: all 0.25s ease-in-out;
+}
+/* Sign In Button Hover */
+.hl-btn:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+  transition: all 0.25s ease-in-out;
+  background: var(--login-button-hover-bg-color,#e54b3b) !important;
+}
+
+/* ===============================
+   RIGHT SIDE – IMAGE PANEL
+================================ */
+.hl_login .card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 48% !important;
+  height: 100% !important;
+  background-image: var(--login-background-image);
+  background-size: cover;
+  background-position: center;
+}
+
+/* ===============================
+   REMOVE HEADER
+================================ */
 .hl_login--header {
   display: none !important;
 }
 
-/* Add new custom logo above form */
-.hl_login--body::before {
-  z-index: 3 !important;
-  content: "";
-  display: block;
-  width: 110px;
-  height: 100px;
-  margin: 0 auto -17px auto;
-  background-image: var(--login-company-logo);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-
-  /* Continuous Bounce + Glow */
-  animation: bounceGlow 2.8s ease-in-out infinite;
-}
-
-/* Smooth continuous bounce + glowing green aura */
-@keyframes bounceGlow {
-  0% {
-    transform: translateY(0);
-    filter: drop-shadow(0 0 4px rgba(0, 255, 0, 0.35));
+/* ===============================
+   MOBILE: STACK
+================================ */
+@media (max-width: 980px) {
+  .hl_login .container-fluid {
+    width: 100% !important;
   }
 
-  25% {
-    transform: translateY(-12px);
-    filter: drop-shadow(0 0 16px rgba(102, 255, 102, 0.75));
+  .hl_login .card {
+    flex-direction: column !important;
+    height: auto !important;
   }
 
-  50% {
-    transform: translateY(0);
-    filter: drop-shadow(0 0 22px rgba(0, 255, 0, 0.9));
+  .hl_login .card-body {
+    width: 100% !important;
+    padding: 40px 25px !important;
   }
 
-  75% {
-    transform: translateY(-8px);
-    filter: drop-shadow(0 0 14px rgba(130, 255, 130, 0.65));
-  }
-
-  100% {
-    transform: translateY(0);
-    filter: drop-shadow(0 0 6px rgba(0, 255, 0, 0.45));
-  }
-}
-
-
-/* Responsive version for tablets and mobiles */
-@media (max-width: 768px) {
-  .hl_login--body::before {
-    width: 90px;
-    height: 55px;
-    margin-bottom: 20px;
+  .hl_login .card::after {
+    position: relative !important;
+    width: 100% !important;
+    height: 240px;
   }
 }
 
