@@ -368,12 +368,12 @@
     }*/
 
 .tb-theme-cycle-btn {
-    box-shadow: -2px 6px 10px rgb(61 60 101);
+    /* box-shadow: -2px 6px 10px rgb(61 60 101); */
     width: calc(115% - 24px);
     font-size: 15px;
     text-align: center;
     margin: 12px auto;
-    top: -25px;
+    top: -22px;
     border-radius: 8px !important;
     background: var(--themebuildermaincolor , #185828) !important;
     /*background-image: var(--sidebar-main-bg-gradient) !important;*/
@@ -539,8 +539,8 @@
 .tb-drawer-card {
     background-color: #ffffff;
     margin: 2px 2px 1px 1px;
-    border-radius: 8px;
-    padding: 10px 6px 0px 7px;
+    border-radius: 13px;
+    padding: 16px 6px 0px 7px;
     display: flex;
     flex-direction: column;
     height: auto;
@@ -1209,7 +1209,7 @@ body::-webkit-scrollbar-track {
 .tb-title {
     top: -2px;
     position: relative;
-    font-weight: 500;
+    font-weight: 800;
 }
 
 /* === Loader Mode Toggle === */
