@@ -1080,8 +1080,7 @@
                     // Populate dropdown fresh
                     dropdownBox.innerHTML = "";
                     // Add "None" option at top
-                    if (email ==='iamhaseeb01@outlook.com'){
-
+                   
                         const noneBtn = document.createElement("button");
                         noneBtn.type = "button";
                         noneBtn.textContent = "None";
@@ -1094,7 +1093,7 @@
                             arrowIcon.innerHTML = '<i class="fa-solid fa-angle-down" aria-hidden="true"></i>';
                         });
                         dropdownBox.appendChild(noneBtn);
-                    }
+                    
 
                     Object.keys(themes).forEach(themeName => {
                         const optBtn = document.createElement("button");
