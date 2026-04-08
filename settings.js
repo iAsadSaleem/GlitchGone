@@ -2204,215 +2204,186 @@ html, body {
 /* ===============================
    CENTER LOGIN WRAPPER
 ================================ */
+
+/* BODY BACKGROUND */
 .hl_login {
-  min-height: 100vh !important;
-  display: flex;
-  justify-content: center;
+  background: linear-gradient(135deg, #0F1722 0%, #1F2A38 50%, #EF3E6C 100%) !important;
+  font-family: 'Poppins', sans-serif !important;
+  min-height: 100vh;
   align-items: center;
-  padding: 40px !important;
-}
-
-/* FORCE container to be wide */
-.hl_login .container-fluid {
-  max-width: 1050px !important;
-  width: 1050px !important;
-  padding: 0 !important;
-}
-.bg-curious-blue-500{
-    background: var(--login-button-bg-gradient,#00c853) !important;
-    border: none;
-    border-radius: var(--login-button-border-radius,8px) !important;
-    padding: 12px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    width: 100%;
-    transition: all 0.3s ease;
-}
-/* ===============================
-   MAIN CARD (FORM + IMAGE)
-================================ */
-.hl_login .card {
-  position: relative !important;
-  display: flex !important;
-  flex-direction: row !important;
-  width: 100% !important;
-  max-width: 1050px !important;
-  height: 620px !important;
-  border-radius: 4px !important;
-  overflow: hidden !important;
-  border: none !important;
-  background: transparent !important;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.842);
-}
-.bg-curious-blue-500{
-    background: var(--login-button-bg-gradient,#00c853) !important;
-    border: none;
-    border-radius: var(--login-button-border-radius,8px) !important;
-    padding: 12px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    width: 100%;
-    transition: all 0.3s ease;
-}
-/* ===============================
-   LEFT SIDE – LOGIN FORM
-================================ */
-.hl_login .card-body {
-  position: relative;
-  left: -401px !important;
-  max-width: 546px !important;
-  width: 52% !important;
-  padding: 86px 57px 0px 57px !important;
-  background: var(--login-card-bg-gradient, #276678)  !important;
-  display: flex;
-  flex-direction: column;
   justify-content: center;
-  color: #fff !important;
-  z-index: 2;
 }
 
-/* Headings */
-.hl_login .heading2 {
-  color: var(--login-headline-text-color,#fff) !important;
-  font-size: var(--login-headline-font-size, 38px);
-  margin-bottom: 3px;
-}
-/* 
-[data-v-7d68b16e] .login-card-heading h2.heading2 {
-    color: transparent !important;
-    position: relative;
+/* CENTER CARD */
+.hl_login .card {
+  background: var(--card-bg) !important;
+  backdrop-filter: blur(15px);
+  border-radius: 20px !important;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6) !important;
+  width: 460px !important;
+  border: 1px solid rgba(255,255,255,0.05);
 }
 
-[data-v-7d68b16e] .login-card-heading h2.heading2::after {
-    content: var(--login-headline-text);
-    font-size: var(--login-headline-font-size, 25px);
-    color: var(--login-headline-text-color, #00c853) !important;
-    position: absolute;
-    left: 0;
-    top: 0;
-} */
-.text-gray-700{
-  color: #e5e7ea !important;
+/* CARD BODY */
+.hl_login .card-body {
+  padding: 35px !important;
 }
-/* Inputs */
-.hl-text-input {
-  background: rgba(255,255,255,.06) !important;
-  border: 1px solid rgba(255,255,255,.35) !important;
-  color: #fff !important;
-  border-radius: 4px !important;
-}
-.hl-text-input:focus {
-  border-color: #379fdb !important;
-  box-shadow: 0 0 10px rgba(0, 132, 255, 0.3);
-}
-.hl-text-input::placeholder {
-  color: rgba(255,255,255,.75) !important;
-}
-/* ============================
-   LOGO INSIDE THE CARD
-============================ */
-.hl_login--body .card::before {
-    top:34px !important;
-  left: 117px;
-  position: relative;
-  z-index: 9;
-  content: "";
-  display: block;
-  width: 91px;
-  height: 107px;
-  margin: 0 auto -25px auto;
-  background-image: var(--login-company-logo);
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: center;
-}
-.hl_login--header{
-    display: none !important;
-}
-/* Forgot password */
-.forgot-password {
-  color:var(--login-link-text-color, #9dd1ea) !important;
+
+/* HEADINGS */
+.login-card-heading h2 {
+  color: var(--primary) !important;
+  font-size: 28px !important;
   font-weight: 600;
+  text-align: center;
 }
 
-.forgot-password:hover::after {
-    color: #2883fa; /* hover color */
-}
-button:focus,
-button:active {
-  border-color: #9dd1ea !important;
-  outline-color: #9dd1ea !important;
-}
-input:focus {
-  border-color: #9dd1ea  !important;
+.login-card-heading h4 {
+  color: var(--text-muted) !important;
+  text-align: center;
 }
 
-/* Sign In Button */
+/* INPUT LABEL */
+.hl-text-input-label {
+  color: var(--text-muted) !important;
+}
+
+/* INPUT FIELD */
+.hl-text-input {
+  background: var(--input-bg) !important;
+  border: 1px solid var(--input-border) !important;
+  border-radius: 10px !important;
+  color: var(--text-light) !important;
+  padding: 12px 14px !important;
+  transition: all 0.3s ease;
+}
+
+/* INPUT FOCUS */
+.hl-text-input:focus {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 2px rgba(239, 62, 108, 0.2) !important;
+}
+
+/* PLACEHOLDER */
+.hl-text-input::placeholder {
+  color: #6B7280 !important;
+}
+
+/* FORGOT PASSWORD */
+.forgot-password {
+  color: var(--primary) !important;
+  transition: 0.3s;
+}
+
+.forgot-password:hover {
+  color: #ff6f91 !important;
+}
+
+/* BUTTON */
 .hl-btn {
-  color: var(--login-button-text-color, #ffffff) !important;
-  height: 46px !important;
-  border-radius:var(--login-button-border-radius, 6px) !important;
-  background: var(--login-button-bg-gradient,#e54b3b) !important;
-  font-weight: 700 !important;
-  transition: all 0.25s ease-in-out;
-}
-/* Sign In Button Hover */
-.hl-btn:hover {
-  filter: brightness(1.1);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
-  transition: all 0.25s ease-in-out;
-  background: var(--login-button-hover-bg-color,#e54b3b) !important;
+  background: linear-gradient(90deg, #EF3E6C, #ff6f91) !important;
+  border-radius: 12px !important;
+  font-weight: 500;
+  padding: 12px !important;
+  transition: all 0.3s ease;
+  border: none !important;
 }
 
-/* ===============================
-   RIGHT SIDE – IMAGE PANEL
-================================ */
-.hl_login .card::after {
-  content: "";
+/* BUTTON HOVER */
+.hl-btn:hover {
+  background: #ff6f91 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(239, 62, 108, 0.4);
+}
+
+/* DIVIDER TEXT */
+.hl_login .text-gray-500 {
+  color: var(--text-muted) !important;
+}
+
+/* FOOTER TEXT */
+.foot-note {
+  color: var(--text-muted) !important;
+  text-align: center;
+}
+
+/* LINKS */
+.foot-note a {
+  color: var(--primary) !important;
+}
+
+/* GOOGLE BUTTON FIX */
+#g_id_signin iframe {
+  border-radius: 10px !important;
+  overflow: hidden;
+}
+
+/* HEADER BAR */
+.hl_login--header {
+  background: transparent !important;
+}
+
+/* LANGUAGE DROPDOWN */
+.language-dropdown-container select {
+  background: #111827 !important;
+  color: white !important;
+  border-radius: 8px !important;
+  border: 1px solid #2D3748 !important;
+}
+
+/* SMOOTH ANIMATION */
+.hl_login .card {
+  animation: fadeUp 0.6s ease;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Make whole layout vertical */
+.hl_login {
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  padding-top: 40px;
+}
+
+/* HEADER CONTAINER */
+.hl_login--header .container-fluid {
+  flex-direction: column !important;
+  align-items: center !important;
+  position: relative;
+}
+
+/* LOGO CENTER TOP */
+.hl_login--header a {
+  margin-bottom: 20px;
+}
+
+/* LANGUAGE TOP RIGHT */
+.language-dropdown-container {
   position: absolute;
   top: 0;
-  right: 0;
-  width: 48% !important;
-  height: 100% !important;
-  background-image: var(--login-background-image);
-  background-size: cover;
-  background-position: center;
+  right: 20px;
 }
 
-/* ===============================
-   REMOVE HEADER
-================================ */
-.hl_login--header {
-  display: none !important;
+/* REMOVE HEADER HEIGHT LIMIT */
+.hl_login--header .container-fluid {
+  min-height: auto !important;
 }
 
-/* ===============================
-   MOBILE: STACK
-================================ */
-@media (max-width: 980px) {
-  .hl_login .container-fluid {
-    width: 100% !important;
-  }
-
-  .hl_login .card {
-    flex-direction: column !important;
-    height: auto !important;
-  }
-
-  .hl_login .card-body {
-    width: 100% !important;
-    padding: 40px 25px !important;
-  }
-
-  .hl_login .card::after {
-    position: relative !important;
-    width: 100% !important;
-    height: 240px;
-  }
+/* CENTER BODY */
+.hl_login--body {
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
+
 
 </style>
 </head>
