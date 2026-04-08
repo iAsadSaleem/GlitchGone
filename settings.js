@@ -968,13 +968,52 @@
                 disableBlueWaveTopNav();
             }
         }
+        function applyNoneTheme() {
+            const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+            const currentThemeData = savedThemeObj.themeData || {};
 
+            // Keys to keep (non-theme customizations)
+            const keysToPreserve = ["--lockedMenus", "--hiddenMenus", "--agencyLockedHideMenus", "--menuCustomizations"];
+            const preserved = {};
+            keysToPreserve.forEach(key => {
+                if (currentThemeData[key] !== undefined) {
+                    preserved[key] = currentThemeData[key];
+                }
+            });
+
+            // Remove all theme CSS variables from body
+            Object.keys(currentThemeData).forEach(key => {
+                if (!keysToPreserve.includes(key)) {
+                    document.body.style.removeProperty(key);
+                }
+            });
+
+            // Reset button UI
+            textSpan.textContent = "None";
+            themeBtn.style.backgroundColor = "";
+            themeBtn.style.color = "";
+
+            // Save — only preserve non-theme keys, clear selectedTheme
+            savedThemeObj.themeData = preserved;
+            savedThemeObj.selectedTheme = "";
+            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            localStorage.setItem("themebuilder_selectedTheme", "");
+
+            // Restore default CSS
+            loadMainCSS();
+
+            window.dispatchEvent(new Event("themeChanged"));
+
+            // Reset BlueWave if active
+            window.__BLUEWAVE_TOPNAV_ENABLED__ = false;
+            resetGhlSidebar();
+            disableBlueWaveTopNav();
+        }
         // restore saved theme if exists
         if (selectedtheme) {
             applyTheme(selectedtheme, savedThemeObj.themeData);
-            // if (themeKeys.includes(selectedtheme)) {
-            //     currentIndex = themeKeys.indexOf(selectedtheme);
-            // }
+        } else {
+            textSpan.textContent = "None";
         }
 
         // cycle themes when clicking main area of button (but not when clicking the arrow)
@@ -1040,6 +1079,20 @@
 
                     // Populate dropdown fresh
                     dropdownBox.innerHTML = "";
+                    // Add "None" option at top
+                    const noneBtn = document.createElement("button");
+                    noneBtn.type = "button";
+                    noneBtn.textContent = "None";
+                    noneBtn.style.fontStyle = "italic";
+                    noneBtn.style.color = "#888";
+                    noneBtn.addEventListener("click", (ev) => {
+                        ev.stopPropagation();
+                        applyNoneTheme();
+                        dropdownBox.classList.remove("show");
+                        arrowIcon.innerHTML = '<i class="fa-solid fa-angle-down" aria-hidden="true"></i>';
+                    });
+                    dropdownBox.appendChild(noneBtn);
+
                     Object.keys(themes).forEach(themeName => {
                         const optBtn = document.createElement("button");
                         optBtn.type = "button";
