@@ -37,18 +37,40 @@
       if (text) injectCSS(text);
     }
 
-    try {
-      const res = await fetch(finalUrl, { cache: "no-cache" });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const json = await res.json();
-      const css = json.css || "";
-      const themeData = json.themeData || {};
-      const selectedtheme = json.selectedTheme || "";
-      if (themeData && themeData["--custom-logo-url"]) {
-        changeFavicon(themeData["--custom-logo-url"]);
-      } else {
+    // try {
+    //   const res = await fetch(finalUrl, { cache: "no-cache" });
+    //   if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    //   const json = await res.json();
+    //   const css = json.css || "";
+    //   const themeData = json.themeData || {};
+    //   const selectedtheme = json.selectedTheme || "";
+    //   if (themeData && themeData["--custom-logo-url"]) {
+    //     changeFavicon(themeData["--custom-logo-url"]);
+    //   } else {
+    //     changeFavicon('');
+    //   }
+
+    // Apply favicon immediately from localStorage to prevent flash on refresh
+    const cachedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+    const cachedThemeData = cachedTheme.themeData || {};
+    if (cachedThemeData["--custom-logo-url"]) {
+        changeFavicon(cachedThemeData["--custom-logo-url"]);
+    } else {
         changeFavicon('');
-      }
+    }
+    // Then your existing fetch below...
+    try {
+        const res = await fetch(finalUrl, { cache: "no-cache" });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const json = await res.json();
+        const css = json.css || "";
+        const themeData = json.themeData || {};
+        const selectedtheme = json.selectedTheme || "";
+        if (themeData && themeData["--custom-logo-url"]) {
+            changeFavicon(themeData["--custom-logo-url"]);
+        } else {
+            changeFavicon('');
+        }
 
       const cssText = decodeBase64Utf8(css);
       try { localStorage.setItem(STORAGE.themeCSS, css); } catch (e) { /* ignore storage quota */ }
