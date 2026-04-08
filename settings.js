@@ -3911,11 +3911,16 @@ input:focus {
 
         input.addEventListener("change", () => {
             const url = input.value.trim();
-            if (url) {
-                const cssValue = `url("${url}")`;
-                saveLogoVar("--custom-logo-url", url);
-                saveLogoVar("--custom-logo-css", cssValue);
+
+            if (!url) {
+                saveLogoVar("--custom-logo-url", "");
+                saveLogoVar("--custom-logo-css", "");
+                return;
             }
+
+            const cssValue = `url("${url}")`;
+            saveLogoVar("--custom-logo-url", url);
+            saveLogoVar("--custom-logo-css", cssValue);
         });
 
         input.addEventListener("keypress", e => {
@@ -4000,21 +4005,43 @@ input:focus {
             logoInput.value = cleanURL;
         }
 
-        logoInput.addEventListener("input", () => {
-            const url = logoInput.value.trim();
-            if (!url) return;
+        // logoInput.addEventListener("input", () => {
+        //     const url = logoInput.value.trim();
+        //     if (!url) return;
 
-            // Save both CSS and Raw URL versions
-            saveVar("--agency-logo", `url("${url}")`);
-            saveVar("--agency-logo-url", url);
+        //     // Save both CSS and Raw URL versions
+        //     saveVar("--agency-logo", `url("${url}")`);
+        //     saveVar("--agency-logo-url", url);
 
-            // Update IMG directly
-            const img = document.querySelector(".agency-logo");
-            if (img) {
-                img.src = url;
-            }
-        });
+        //     // Update IMG directly
+        //     const img = document.querySelector(".agency-logo");
+        //     if (img) {
+        //         img.src = url;
+        //     }
+        // });
+            logoInput.addEventListener("input", () => {
+                const url = logoInput.value.trim();
 
+                if (!url) {
+                    // Clear both CSS variables and reset the image
+                    saveVar("--agency-logo", "");
+                    saveVar("--agency-logo-url", "");
+
+                    const img = document.querySelector(".agency-logo");
+                    if (img) {
+                        img.src = "";
+                    }
+                    return;
+                }
+
+                saveVar("--agency-logo", `url("${url}")`);
+                saveVar("--agency-logo-url", url);
+
+                const img = document.querySelector(".agency-logo");
+                if (img) {
+                    img.src = url;
+                }
+            });
 
         logoWrapper.appendChild(logoLabel);
         logoWrapper.appendChild(logoInput);
