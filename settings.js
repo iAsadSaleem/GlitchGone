@@ -4569,6 +4569,8 @@ input:focus {
             modal.style.maxHeight = "80vh";
             modal.style.overflowY = "auto";
             modal.style.boxShadow = "0 8px 24px rgba(0,0,0,0.3)";
+            modal.style.position = "relative";   // ← add this
+
 
             // Prevent clicks inside modal from closing it
             modal.addEventListener("click", (e) => e.stopPropagation());
@@ -4586,14 +4588,17 @@ input:focus {
 
             // Close button
             const closeBtn = document.createElement("button");
-            closeBtn.textContent = "Close";
-            closeBtn.style.padding = "10px 20px";
+            closeBtn.textContent = "✕";
+            closeBtn.style.position = "absolute";
+            closeBtn.style.top = "12px";
+            closeBtn.style.right = "16px";
+            closeBtn.style.background = "transparent";
             closeBtn.style.border = "none";
-            closeBtn.style.borderRadius = "5px";
-            closeBtn.style.background = "#6c757d";
-            closeBtn.style.color = "#fff";
+            closeBtn.style.fontSize = "20px";
             closeBtn.style.cursor = "pointer";
-            closeBtn.style.marginTop = "20px";
+            closeBtn.style.color = "#6c757d";
+            closeBtn.style.lineHeight = "1";
+            closeBtn.style.padding = "0";
             closeBtn.addEventListener("click", () => overlay.remove());
             modal.appendChild(closeBtn);
 
