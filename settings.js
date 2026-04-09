@@ -4603,7 +4603,7 @@ html, body {
 
             const topBar = document.createElement("div");
             topBar.style.position = "sticky";
-            topBar.style.top = "0";
+            topBar.style.top = "-20px";
             topBar.style.display = "flex";
             topBar.style.justifyContent = "space-between"; // 👈 better
             topBar.style.alignItems = "center";
