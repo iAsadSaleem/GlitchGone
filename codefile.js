@@ -29,15 +29,15 @@
       el.style.opacity = '0';
       setTimeout(function () {
         if (el.parentNode) el.parentNode.removeChild(el);
-      }, 300);
+      }, 600);
     }
   }
 
   if (document.readyState === 'complete') {
-    setTimeout(removeLoader, 500);
+    setTimeout(removeLoader, 1000);
   } else {
     window.addEventListener('load', function () {
-      setTimeout(removeLoader, 500);
+      setTimeout(removeLoader, 1000);
     });
   }
 })();
