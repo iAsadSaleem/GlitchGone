@@ -361,8 +361,8 @@
         // Save gradient
         savedThemeObj.themeData["--login-background-active"] = gradient;
 
-        // Remove background image (unless default themes)
-        if (selectedtheme !== 'Default Theme' && selectedtheme !== 'Default Light Theme') {
+        // Remove background image (unless Green Night Themes)
+        if (selectedtheme !== 'Green Night Theme' && selectedtheme !== 'Default Light Theme') {
             delete savedThemeObj.themeData["--login-background-image"];
         }
 
@@ -2465,7 +2465,7 @@ html, body {
         const themeData = savedThemeObj.themeData || {};
 
         // === Disable logic ===
-        const disabledThemes = ["Default Theme", "OceanMist Theme"];
+        const disabledThemes = ["Green Night Theme", "OceanMist Theme"];
 
         function shouldDisableHeaderSection() {
             const selectedTheme = localStorage.getItem("themebuilder_selectedTheme") || "";
@@ -6349,7 +6349,7 @@ function cleanupMenuStates() {
             //const selectedTheme = localStorage.getItem("themebuilder_selectedTheme");
             //const currentMode = savedThemeObj?.themeData?.["--theme-mode"];
             //if (selectedTheme == "Dark Theme" || selectedTheme == "Light Theme") {
-            //// Apply the saved or default theme
+            //// Apply the saved or Green Night Theme
             //    applyTheme(currentMode);
             //    // Reflect saved mode in toggle + body
             //    if (currentMode === "dark") {
@@ -6521,11 +6521,11 @@ function cleanupMenuStates() {
                         function updateBgSectionState() {
                             const selectedTheme = localStorage.getItem("themebuilder_selectedTheme");
 
-                            const isDefaultTheme = selectedTheme === "Default Theme";
+                            const isDefaultTheme = selectedTheme === "Green Night Theme";
                             const isVelvetNightTheme = selectedTheme === "VelvetNight Theme";
                             const isjetblack = selectedTheme === "JetBlack Luxury Gold Theme";
 
-                            // Default Theme → disable BOTH
+                            // Green Night Theme → disable BOTH
                             if (isDefaultTheme) {
                                 //bgSectionWrapper.classList.add("disabled-section");
                                 loginimageurl.classList.remove("disabled-section");
