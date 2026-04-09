@@ -1081,18 +1081,18 @@
                     dropdownBox.innerHTML = "";
                     // Add "None" option at top
                    
-                        const noneBtn = document.createElement("button");
-                        noneBtn.type = "button";
-                        noneBtn.textContent = "None";
-                        noneBtn.style.fontStyle = "italic";
-                        noneBtn.style.color = "#888";
-                        noneBtn.addEventListener("click", (ev) => {
-                            ev.stopPropagation();
-                            applyNoneTheme();
-                            dropdownBox.classList.remove("show");
-                            arrowIcon.innerHTML = '<i class="fa-solid fa-angle-down" aria-hidden="true"></i>';
-                        });
-                        dropdownBox.appendChild(noneBtn);
+                        // const noneBtn = document.createElement("button");
+                        // noneBtn.type = "button";
+                        // noneBtn.textContent = "None";
+                        // noneBtn.style.fontStyle = "italic";
+                        // noneBtn.style.color = "#888";
+                        // noneBtn.addEventListener("click", (ev) => {
+                        //     ev.stopPropagation();
+                        //     applyNoneTheme();
+                        //     dropdownBox.classList.remove("show");
+                        //     arrowIcon.innerHTML = '<i class="fa-solid fa-angle-down" aria-hidden="true"></i>';
+                        // });
+                        // dropdownBox.appendChild(noneBtn);
                     
 
                     Object.keys(themes).forEach(themeName => {
