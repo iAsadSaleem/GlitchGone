@@ -1,16 +1,22 @@
-﻿// Simple approach - remove all loaders and show ours
+﻿// // Simple approach - remove all loaders and show ours
 
-
+// === LOADER: Hide page instantly ===
 (function () {
+  // Hide immediately — before GHL's own loader ends
+  document.documentElement.style.setProperty('opacity', '0', 'important');
+  document.documentElement.style.setProperty('visibility', 'hidden', 'important');
+
   var loader = document.createElement('div');
   loader.id = 'custom-global-loader';
 
   function injectLoader() {
     if (document.body) {
       document.body.insertBefore(loader, document.body.firstChild);
-      // Restore body — loader now covers the content
-      document.body.style.opacity = '1';
-      document.body.style.visibility = 'visible';
+      // Restore — our loader now covers everything
+      document.documentElement.style.opacity = '';
+      document.documentElement.style.visibility = '';
+      document.body.style.setProperty('opacity', '1', 'important');
+      document.body.style.setProperty('visibility', 'visible', 'important');
     } else {
       setTimeout(injectLoader, 1);
     }
@@ -28,67 +34,102 @@
   }
 
   if (document.readyState === 'complete') {
-    removeLoader();
+    setTimeout(removeLoader, 500);
   } else {
-    window.addEventListener('load', removeLoader);
+    window.addEventListener('load', function () {
+      setTimeout(removeLoader, 500);
+    });
   }
 })();
+// === END LOADER ===
+// (function () {
+//   var loader = document.createElement('div');
+//   loader.id = 'custom-global-loader';
 
-(function () {
-    // Create and show our custom loader immediately
-    const loader = document.createElement('div');
-    loader.id = 'custom-global-loader';
-    document.body.prepend(loader);
+//   function injectLoader() {
+//     if (document.body) {
+//       document.body.insertBefore(loader, document.body.firstChild);
+//       // Restore body — loader now covers the content
+//       document.body.style.opacity = '1';
+//       document.body.style.visibility = 'visible';
+//     } else {
+//       setTimeout(injectLoader, 1);
+//     }
+//   }
+//   injectLoader();
 
-    // Remove our custom loader when page is fully loaded
-    function removeCustomLoader() {
-        const customLoader = document.getElementById('custom-global-loader');
-        if (customLoader) {
-            customLoader.remove();
-        }
-    }
+//   function removeLoader() {
+//     var el = document.getElementById('custom-global-loader');
+//     if (el) {
+//       el.style.opacity = '0';
+//       setTimeout(function () {
+//         if (el.parentNode) el.parentNode.removeChild(el);
+//       }, 300);
+//     }
+//   }
 
-    // Method 1: Remove when window fully loads
-    window.addEventListener('load', function () {
-        setTimeout(removeCustomLoader, 3000); // Small delay after load
-    });
+//   if (document.readyState === 'complete') {
+//     removeLoader();
+//   } else {
+//     window.addEventListener('load', removeLoader);
+//   }
+// })();
 
-    // Method 2: Remove when DOM is ready (fallback)
-    if (document.readyState === 'complete') {
-        setTimeout(removeCustomLoader, 3000);
-    }
+// (function () {
+//     // Create and show our custom loader immediately
+//     const loader = document.createElement('div');
+//     loader.id = 'custom-global-loader';
+//     document.body.prepend(loader);
 
-    // Method 3: Fallback - remove after max 5 seconds
-    setTimeout(removeCustomLoader, 5000);
+//     // Remove our custom loader when page is fully loaded
+//     function removeCustomLoader() {
+//         const customLoader = document.getElementById('custom-global-loader');
+//         if (customLoader) {
+//             customLoader.remove();
+//         }
+//     }
 
-})();
+//     // Method 1: Remove when window fully loads
+//     window.addEventListener('load', function () {
+//         setTimeout(removeCustomLoader, 3000); // Small delay after load
+//     });
 
-(function () {
-    function findAndStore() {
-        const KEY = "g-em";
+//     // Method 2: Remove when DOM is ready (fallback)
+//     if (document.readyState === 'complete') {
+//         setTimeout(removeCustomLoader, 3000);
+//     }
 
-        function tryStore() {
-            const existing = localStorage.getItem(KEY);
-            if (existing) return;
+//     // Method 3: Fallback - remove after max 5 seconds
+//     setTimeout(removeCustomLoader, 5000);
 
-            const emailDiv = document.querySelector("div.text-xs.text-gray-900.truncate");
-            if (emailDiv) {
-                const email = emailDiv.textContent.trim();
-                if (email) {
-                    localStorage.setItem(KEY, btoa(email));
-                }
-            } else {
-                setTimeout(tryStore, 500);
-            }
-        }
+// })();
 
-        tryStore();
-    }
+// (function () {
+//     function findAndStore() {
+//         const KEY = "g-em";
 
-    if (document.readyState === "loading") {
-        window.addEventListener("DOMContentLoaded", findAndStore);
-    } else {
-        // DOM already loaded
-        findAndStore();
-    }
-})();
+//         function tryStore() {
+//             const existing = localStorage.getItem(KEY);
+//             if (existing) return;
+
+//             const emailDiv = document.querySelector("div.text-xs.text-gray-900.truncate");
+//             if (emailDiv) {
+//                 const email = emailDiv.textContent.trim();
+//                 if (email) {
+//                     localStorage.setItem(KEY, btoa(email));
+//                 }
+//             } else {
+//                 setTimeout(tryStore, 500);
+//             }
+//         }
+
+//         tryStore();
+//     }
+
+//     if (document.readyState === "loading") {
+//         window.addEventListener("DOMContentLoaded", findAndStore);
+//     } else {
+//         // DOM already loaded
+//         findAndStore();
+//     }
+// })();
