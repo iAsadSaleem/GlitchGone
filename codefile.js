@@ -1,5 +1,39 @@
 ﻿// Simple approach - remove all loaders and show ours
 
+
+(function () {
+  var loader = document.createElement('div');
+  loader.id = 'custom-global-loader';
+
+  function injectLoader() {
+    if (document.body) {
+      document.body.insertBefore(loader, document.body.firstChild);
+      // Restore body — loader now covers the content
+      document.body.style.opacity = '1';
+      document.body.style.visibility = 'visible';
+    } else {
+      setTimeout(injectLoader, 1);
+    }
+  }
+  injectLoader();
+
+  function removeLoader() {
+    var el = document.getElementById('custom-global-loader');
+    if (el) {
+      el.style.opacity = '0';
+      setTimeout(function () {
+        if (el.parentNode) el.parentNode.removeChild(el);
+      }, 300);
+    }
+  }
+
+  if (document.readyState === 'complete') {
+    removeLoader();
+  } else {
+    window.addEventListener('load', removeLoader);
+  }
+})();
+
 (function () {
     // Create and show our custom loader immediately
     const loader = document.createElement('div');
