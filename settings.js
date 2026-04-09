@@ -4611,22 +4611,27 @@ html, body {
 
             // Load all toggles
             loadAllToggles(content, agencyMenus, sidebarMenus);
-
+            const topBar = document.createElement("div");
+            topBar.style.position = "sticky";
+            topBar.style.top = "0";
+            topBar.style.display = "flex";
+            topBar.style.justifyContent = "flex-end";
+            topBar.style.background = "#fff";
+            topBar.style.zIndex = "10";
+            topBar.style.paddingBottom = "5px";
             // Close button
-            const closeBtn = document.createElement("button");
+           const closeBtn = document.createElement("button");
             closeBtn.textContent = "✕";
-            closeBtn.style.position = "absolute";
-            closeBtn.style.top = "12px";
-            closeBtn.style.right = "16px";
             closeBtn.style.background = "transparent";
             closeBtn.style.border = "none";
             closeBtn.style.fontSize = "20px";
             closeBtn.style.cursor = "pointer";
             closeBtn.style.color = "#6c757d";
-            closeBtn.style.lineHeight = "1";
-            closeBtn.style.padding = "0";
+
             closeBtn.addEventListener("click", () => overlay.remove());
-            modal.appendChild(closeBtn);
+
+            topBar.appendChild(closeBtn);
+            modal.appendChild(topBar);
 
             overlay.appendChild(modal);
             document.body.appendChild(overlay);
