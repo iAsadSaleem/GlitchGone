@@ -4601,26 +4601,24 @@ html, body {
             // Prevent clicks inside modal from closing it
             modal.addEventListener("click", (e) => e.stopPropagation());
 
-            const title = document.createElement("h3");
-            title.textContent = "Configure Lock & Hide Settings";
-            title.style.marginBottom = "15px";
-            modal.appendChild(title);
-
-            const content = document.createElement("div");
-            modal.appendChild(content);
-
-            // Load all toggles
-            loadAllToggles(content, agencyMenus, sidebarMenus);
             const topBar = document.createElement("div");
             topBar.style.position = "sticky";
             topBar.style.top = "0";
             topBar.style.display = "flex";
-            topBar.style.justifyContent = "flex-end";
+            topBar.style.justifyContent = "space-between"; // 👈 better
+            topBar.style.alignItems = "center";
             topBar.style.background = "#fff";
             topBar.style.zIndex = "10";
-            topBar.style.paddingBottom = "5px";
-            // Close button
-           const closeBtn = document.createElement("button");
+            topBar.style.paddingBottom = "10px";
+            topBar.style.borderBottom = "1px solid #eee";
+            topBar.style.padding = "10px 0";
+
+            const title = document.createElement("h3");
+            title.textContent = "Configure Lock & Hide Settings";
+                title.style.margin = "0";
+            
+
+             const closeBtn = document.createElement("button");
             closeBtn.textContent = "✕";
             closeBtn.style.background = "transparent";
             closeBtn.style.border = "none";
@@ -4630,9 +4628,17 @@ html, body {
 
             closeBtn.addEventListener("click", () => overlay.remove());
 
+            topBar.appendChild(title);
             topBar.appendChild(closeBtn);
+
             modal.appendChild(topBar);
 
+            const content = document.createElement("div");
+            modal.appendChild(content);
+
+            // Load all toggles
+            loadAllToggles(content, agencyMenus, sidebarMenus);
+            
             overlay.appendChild(modal);
             document.body.appendChild(overlay);
         }
