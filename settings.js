@@ -5519,7 +5519,7 @@ html, body {
 
                     const lockLabel = document.createElement("span");
 
-                    // Set initial icon based on checked state
+                    lockLabel.innerHTML = '<i class="mdi mdi-lock-open"></i>'; // default icon
                     lockLabel.style.fontSize = "10px";
                     lockLabel.style.marginRight = "2px";
                     lockDiv.appendChild(lockLabel);
@@ -5561,7 +5561,7 @@ html, body {
 
                     const hideLabelSpan = document.createElement("span");
 
-                   
+                    hideLabelSpan.innerHTML = '<i class="mdi mdi-eye-outline"></i>'; // default
                     hideLabelSpan.style.fontSize = "12px";
                     hideLabelSpan.style.fontSize = "8px";
                     hideLabelSpan.style.marginRight = "2px";
@@ -5583,7 +5583,7 @@ html, body {
 
                     hideLabelSpan.style.fontSize = "10px";
                     hideLabelSpan.style.marginRight = "2px";
-                    
+
                     const hideToggleLabel = document.createElement("label");
                     hideToggleLabel.className = "toggle-label";
                     hideToggleLabel.setAttribute("for", hideInput.id);
