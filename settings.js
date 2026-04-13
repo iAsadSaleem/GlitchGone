@@ -2465,7 +2465,7 @@ html, body {
         const themeData = savedThemeObj.themeData || {};
 
         // === Disable logic ===
-        const disabledThemes = ["Green Night Theme", "OceanMist Theme"];
+        const disabledThemes = ["Green Night Theme", "OceanMist Theme","Default Theme"]; // example themes that disable header editing
 
         function shouldDisableHeaderSection() {
             const selectedTheme = localStorage.getItem("themebuilder_selectedTheme") || "";
