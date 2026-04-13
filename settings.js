@@ -5536,8 +5536,8 @@ html, body {
 
 // THEN create label
                     lockLabel.innerHTML = lockInput.checked
-                        ? '<i class="mdi mdi-lock"></i>'
-                        : '<i class="mdi mdi-lock-open"></i>';
+                        ? '<i class="fas fa-lock"></i>'
+                        : '<i class="fas fa-lock-open"></i>';
 
                     lockLabel.style.fontSize = "10px";
                     lockLabel.style.marginRight = "2px";
@@ -5578,8 +5578,8 @@ html, body {
                     hideInput.checked = locationHidden[menu.id] ? !!locationHidden[menu.id].toggleChecked : false;
  // Set initial icon
                     hideLabelSpan.innerHTML = hideInput.checked
-                        ? '<i class="mdi mdi-eye-off"></i>'
-                        : '<i class="mdi mdi-eye-outline"></i>';
+                        ? '<i class="fa-solid fa-eye"></i>'
+                        : '<i class="fa-solid fa-eye-slash"></i>';
 
                     hideLabelSpan.style.fontSize = "10px";
                     hideLabelSpan.style.marginRight = "2px";
