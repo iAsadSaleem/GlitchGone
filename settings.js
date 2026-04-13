@@ -5519,7 +5519,7 @@ html, body {
 
                     const lockLabel = document.createElement("span");
 
-                    lockLabel.innerHTML = '<i class="mdi mdi-lock-open"></i>'; // default icon
+                    lockLabel.innerHTML = '<i class="fas fa-lock"></i>'; // default icon
                     lockLabel.style.fontSize = "10px";
                     lockLabel.style.marginRight = "2px";
                     lockDiv.appendChild(lockLabel);
@@ -5561,7 +5561,7 @@ html, body {
 
                     const hideLabelSpan = document.createElement("span");
 
-                    hideLabelSpan.innerHTML = '<i class="mdi mdi-eye-outline"></i>'; // default
+                    hideLabelSpan.innerHTML = '<i class="fa-solid fa-eye"></i>'; // default
                     hideLabelSpan.style.fontSize = "12px";
                     hideLabelSpan.style.fontSize = "8px";
                     hideLabelSpan.style.marginRight = "2px";
