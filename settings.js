@@ -425,11 +425,11 @@
         const themeData = savedThemeObj.themeData || {};
         let storedColor = themeData[cssVar]
             || getComputedStyle(document.body).getPropertyValue(cssVar).trim()
-            || "#007bff";
+            || "#007bff00";
 
         // ✅ Ensure it’s a valid hex code
         if (!/^#[0-9A-F]{6}$/i.test(storedColor)) {
-            storedColor = "#007bff";
+            storedColor = "#007bff00";
         }
 
         const colorInput = document.createElement("input");
@@ -926,7 +926,7 @@
 
             // Update UI
             textSpan.textContent = themeName;
-            themeBtn.style.backgroundColor = vars["--primary-color"] || "#007bff";
+            themeBtn.style.backgroundColor = vars["--primary-color"] || "#007bff00";
             themeBtn.style.color = "#fff";
 
             // Save
@@ -2583,7 +2583,7 @@ html, body {
 
 
         // === Color picker helper ===
-        function makePicker(labelText, cssVar, fallback = "#007bff") {
+        function makePicker(labelText, cssVar, fallback = "#007bff00") {
             const wrapper = document.createElement("div");
             wrapper.className = "tb-color-picker-wrapper";
 
@@ -6551,7 +6551,7 @@ function cleanupMenuStates() {
         instruction.innerHTML = `
            💡 <strong>How to Customize Your Menu:</strong><br><br>
            1. To add a custom icon for any menu item, please visit the 
-           <a href="https://fontawesome.com/icons" target="_blank" style="color:#007bff; text-decoration:underline;">
+           <a href="https://fontawesome.com/icons" target="_blank" style="color:#007bff00; text-decoration:underline;">
              Font Awesome Icons Library
            </a>. Once there, select your preferred icon. On the <strong>top-right corner</strong> of the icon page, you’ll find a <strong>“Copy Code”</strong> button — click it and then <strong>paste the copied code into the relevant icon field</strong> here.<br><br>
            2. You can <strong>drag and drop the menu items</strong> to change their order. This helps you organize your dashboard according to your preferences or workflow.<br><br>
