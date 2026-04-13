@@ -5412,10 +5412,13 @@ html, body {
             subDescription.style.color = "#555";
             subDescription.style.lineHeight = "1.6";
             subDescription.style.marginBottom = "12px";
-            subDescription.innerHTML = `
-                🔒 Use the <strong>+ Add Subaccount</strong> button below to configure Lock &amp; Hide settings for individual sub-accounts.<br>
-                Enter the <strong>Location ID</strong> for each sub-account row, then use the toggles to control which menus are locked <i class="fa-solid fa-lock"></i> or hidden <i class="fa-solid fa-eye-slash"></i> for that location. After Lock or Hide the Menu Don't Forget to Save the Changes by Clicking the Apply Changes button.
-            `;
+            subDescription.innerHTML = `🔒 Use the <strong>+ Add Subaccount</strong> button below to create a new sub-account configuration.<br><br>
+
+Once added, enter the <strong>Location ID</strong> for that sub-account and click the <strong>Update</strong> button to activate it.<br><br>
+
+After updating, you can use the menu toggles to control which items are <i class="fa-solid fa-lock"></i> <strong>Locked</strong> or <i class="fa-solid fa-eye-slash"></i> <strong>Hidden</strong> for that specific location.<br><br>
+
+Finally, don’t forget to click the <strong>Apply Changes</strong> button to save and apply your settings.`;
             content.appendChild(subDescription);
 
             // Collect all configured location IDs
