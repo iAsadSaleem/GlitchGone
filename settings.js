@@ -5518,8 +5518,13 @@ html, body {
                 lockDiv.style.marginBottom = "2px";
 
                 const lockLabel = document.createElement("span");
-                lockLabel.textContent = "L";
-                lockLabel.style.fontSize = "8px";
+
+                // Set initial icon based on checked state
+                lockLabel.innerHTML = lockInput.checked
+                    ? '<i class="mdi mdi-lock"></i>'
+                    : '<i class="mdi mdi-lock-open"></i>';
+
+                lockLabel.style.fontSize = "10px";
                 lockLabel.style.marginRight = "2px";
                 lockDiv.appendChild(lockLabel);
 
@@ -5533,6 +5538,8 @@ html, body {
                 lockInput.id = `lock-${locationId}-${menu.id}`;
                 lockInput.checked = !!locationLocked[menu.id];
 
+               
+
                 const lockToggleLabel = document.createElement("label");
                 lockToggleLabel.className = "toggle-label";
                 lockToggleLabel.setAttribute("for", lockInput.id);
@@ -5541,7 +5548,7 @@ html, body {
                 lockSwitch.appendChild(lockToggleLabel);
                 lockDiv.appendChild(lockSwitch);
                 cell.appendChild(lockDiv);
-
+                            
                 // Hide toggle
                 const hideDiv = document.createElement("div");
                 hideDiv.style.display = "flex";
@@ -5549,7 +5556,15 @@ html, body {
                 hideDiv.style.justifyContent = "center";
 
                 const hideLabelSpan = document.createElement("span");
-                hideLabelSpan.textContent = "H";
+
+                // Set initial icon
+                hideLabelSpan.innerHTML = hideInput.checked
+                    ? '<i class="mdi mdi-eye-off"></i>'
+                    : '<i class="mdi mdi-eye-outline"></i>';
+
+                hideLabelSpan.style.fontSize = "10px";
+                hideLabelSpan.style.marginRight = "2px";
+                hideLabelSpan.style.fontSize = "12px";
                 hideLabelSpan.style.fontSize = "8px";
                 hideLabelSpan.style.marginRight = "2px";
                 hideDiv.appendChild(hideLabelSpan);
