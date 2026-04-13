@@ -7676,6 +7676,8 @@ function cleanupMenuStates() {
     // Initialize Theme Builder
     async function initThemeBuilder(attempts = 0) {
             const rlno = localStorage.getItem("rlno");
+            console.log('Relationship No (rlno):', rlno ? atob(rlno) : null);
+            console.log('Initializing Theme Builder, attempt:', attempts + 1);
         const gem = localStorage.getItem("g-em");
             if (!rlno && !gem) {
                 if (attempts < MAX_ATTEMPTS) setTimeout(() => initThemeBuilder(attempts + 1), 200);
