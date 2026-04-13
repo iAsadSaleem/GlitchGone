@@ -3847,46 +3847,106 @@ html, body {
         }
 
         // 🎨 Render loaders
+        // function renderLoaderOptions(loaders, activeLoaderId) {
+        //     loaderList.innerHTML = "";
+        //     const savedLoader =
+        //         themeData["--loader-css"] && JSON.parse(themeData["--loader-css"]);
+
+        //     loaders.forEach((loader) => {
+        //         const item = document.createElement("div");
+        //         item.className = "tb-loader-item";
+
+        //         const img = document.createElement("img");
+        //         img.src =
+        //             loader.previewImage ||
+        //             "https://themebuilder-six.vercel.app/images/dotsloader.png";
+        //         img.alt = loader.loaderName;
+        //         img.className = "tb-loader-img";
+
+        //         const label = document.createElement("span");
+        //         label.textContent = loader.loaderName;
+        //         label.className = "tb-loader-label";
+
+        //         const toggle = document.createElement("input");
+        //         toggle.type = "radio";
+        //         toggle.name = "custom-loader-toggle";
+        //         toggle.className = "tb-loader-radio";
+
+        //         // if ((savedLoader && savedLoader._id === loader._id) || loader.isActive)
+        //         if ( (savedLoader && savedLoader._id === loader._id) ||  loader._id === activeLoaderId )
+        //             toggle.checked = true;
+
+        //         toggle.addEventListener("change", () => {
+        //             const loaderData = { _id: loader._id };
+        //             saveVar("--loader-css", JSON.stringify(loaderData));
+        //         });
+
+        //         item.appendChild(img);
+        //         item.appendChild(label);
+        //         item.appendChild(toggle);
+        //         loaderList.appendChild(item);
+        //     });
+        // }
+
         function renderLoaderOptions(loaders, activeLoaderId) {
-            loaderList.innerHTML = "";
-            const savedLoader =
-                themeData["--loader-css"] && JSON.parse(themeData["--loader-css"]);
+    loaderList.innerHTML = "";
 
-            loaders.forEach((loader) => {
-                const item = document.createElement("div");
-                item.className = "tb-loader-item";
-
-                const img = document.createElement("img");
-                img.src =
-                    loader.previewImage ||
-                    "https://themebuilder-six.vercel.app/images/dotsloader.png";
-                img.alt = loader.loaderName;
-                img.className = "tb-loader-img";
-
-                const label = document.createElement("span");
-                label.textContent = loader.loaderName;
-                label.className = "tb-loader-label";
-
-                const toggle = document.createElement("input");
-                toggle.type = "radio";
-                toggle.name = "custom-loader-toggle";
-                toggle.className = "tb-loader-radio";
-
-                // if ((savedLoader && savedLoader._id === loader._id) || loader.isActive)
-                if ( (savedLoader && savedLoader._id === loader._id) ||  loader._id === activeLoaderId )
-                    toggle.checked = true;
-
-                toggle.addEventListener("change", () => {
-                    const loaderData = { _id: loader._id };
-                    saveVar("--loader-css", JSON.stringify(loaderData));
-                });
-
-                item.appendChild(img);
-                item.appendChild(label);
-                item.appendChild(toggle);
-                loaderList.appendChild(item);
-            });
+    // ✅ Safe parse — handles stale/corrupted localStorage values
+    let savedLoader = null;
+    try {
+        const raw = themeData["--loader-css"];
+        if (raw) {
+            const parsed = JSON.parse(raw);
+            // Only treat it as valid if it has an _id (expected shape)
+            if (parsed && parsed._id) {
+                savedLoader = parsed;
+            } else {
+                // Stale data (e.g. old CSS text stored here) — clear it
+                delete themeData["--loader-css"];
+                localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            }
         }
+    } catch (e) {
+        // Corrupted value — wipe it so it doesn't break again next load
+        console.warn("⚠️ --loader-css had invalid JSON, clearing it.", e);
+        delete themeData["--loader-css"];
+        localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+    }
+
+    loaders.forEach((loader) => {
+        const item = document.createElement("div");
+        item.className = "tb-loader-item";
+
+        const img = document.createElement("img");
+        img.src =
+            loader.previewImage ||
+            "https://themebuilder-six.vercel.app/images/dotsloader.png";
+        img.alt = loader.loaderName;
+        img.className = "tb-loader-img";
+
+        const label = document.createElement("span");
+        label.textContent = loader.loaderName;
+        label.className = "tb-loader-label";
+
+        const toggle = document.createElement("input");
+        toggle.type = "radio";
+        toggle.name = "custom-loader-toggle";
+        toggle.className = "tb-loader-radio";
+
+        if ((savedLoader && savedLoader._id === loader._id) || loader._id === activeLoaderId)
+            toggle.checked = true;
+
+        toggle.addEventListener("change", () => {
+            const loaderData = { _id: loader._id };
+            saveVar("--loader-css", JSON.stringify(loaderData));
+        });
+
+        item.appendChild(img);
+        item.appendChild(label);
+        item.appendChild(toggle);
+        loaderList.appendChild(item);
+    });
+}
 
         await fetchLoaders();
         container.appendChild(wrapper);
