@@ -6182,14 +6182,14 @@ Finally, don’t forget to click the <strong>Apply Changes</strong> button to sa
             saveMsg.style.marginLeft = "8px";
             saveMsg.style.verticalAlign = "middle";
             saveMsg.style.display = "none";
-            saveMsg.innerHTML = '<i class="fa-solid fa-circle-check"></i> Changes saved!';
+            saveMsg.innerHTML = '<i class="fa-solid fa-circle-check"></i> Changes saved! Don\'t forget to Apply Changes.';
 
             saveChangesBtn.addEventListener("click", () => {
                 saveChangesBtn.style.display = "none";
                 saveMsg.style.display = "inline";
                 setTimeout(() => {
                     saveMsg.style.display = "none";
-                }, 3000);
+                }, 12000);
             });
 
             content.appendChild(saveChangesBtn);
