@@ -6016,7 +6016,7 @@ html, body {
 
             // Agency Level (Global)
             const agencyTitle = document.createElement("h4");
-            agencyTitle.textContent = "Agency Level (Global Settings)";
+            agencyTitle.textContent = "Agency Level Settings";
             agencyTitle.style.marginTop = "20px";
             agencyTitle.style.marginBottom = "10px";
             content.appendChild(agencyTitle);
