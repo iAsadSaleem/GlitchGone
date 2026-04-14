@@ -124,6 +124,8 @@
     top: -20px;
 }
 .tb-section-header {
+    border-radius: 5px;
+    border: 1px solid ;
     display: flex;
     align-items: center;
     justify-content: space-between;
