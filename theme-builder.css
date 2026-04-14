@@ -6,12 +6,12 @@
     position: fixed;
     top: 50px;
     right: -420px;
-    width: 378px;
+    width: 420px;
     max-width: 90%;
     height: auto;
     /* 25% active color, 75% white */
     background: linear-gradient(to bottom, var(--themebuildermaincolor, #459459) 40%, #ffffff 0%);
-    box-shadow: -4px 1px 30px var(--themebuildermaincolor , #459459); /* ✅ Works */
+    box-shadow: 3px 0px 19px var(--themebuildermaincolor , #459459); /* ✅ Works */
     transition: right 0.48s ease;
     z-index: 99999;
     padding: 16px 7px;
@@ -121,7 +121,7 @@
     border-radius: 6px;
     overflow: hidden;
     position: relative;
-    top: -28px;
+    top: -20px;
 }
 .tb-section-header {
     display: flex;
@@ -378,10 +378,10 @@
     background: var(--themebuildermaincolor , #185828) !important;
     /*background-image: var(--sidebar-main-bg-gradient) !important;*/
     position: relative;
-    min-width: 344px !important;
+    min-width: 385px !important;
     color: #fff;
     border: 1px solid #55555500;
-    padding: 7px 4px;
+    padding: 15px 12px;
     cursor: var(--custom-pointer);
 }
 

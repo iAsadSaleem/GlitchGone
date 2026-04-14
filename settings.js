@@ -257,7 +257,7 @@
             if (content.classList.contains("open")) {
                 // OPEN section
                 content.classList.add("open");
-                content.style.maxHeight = "200px"; // Fixed open height
+                content.style.maxHeight = "270px"; // Fixed open height
                 toggleIcon.className = "fa-solid fa-angle-up tb-toggle-icon"; // 🔼
 
             } else {
