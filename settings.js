@@ -5521,6 +5521,9 @@ Finally, don’t forget to click the <strong>Apply Changes</strong> button to sa
                 const row = document.createElement("tr");
 
                 // Location ID cell
+                 const toggleInputsInRow = [];
+                let isUpdated = !isNew;
+
                 const idCell = document.createElement("td");
                 idCell.style.border = "1px solid #ddd";
                 idCell.style.padding = "4px";
@@ -5528,7 +5531,7 @@ Finally, don’t forget to click the <strong>Apply Changes</strong> button to sa
 
                 const idInput = document.createElement("input");
                 idInput.type = "text";
-                idInput.style.width = "159px";
+                idInput.style.width = "100px";
                 idInput.style.border = "none";
                 idInput.style.background = "transparent";
                 idInput.style.fontSize = "10px";
@@ -5552,14 +5555,50 @@ Finally, don’t forget to click the <strong>Apply Changes</strong> button to sa
                 updateBtn.style.border = "1px solid #ccc";
                 updateBtn.style.background = "#f0f0f0";
                 updateBtn.style.cursor = "pointer";
+                updateBtn.style.marginRight = "4px";
+                const tickIcon = document.createElement("span");
+                tickIcon.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+                tickIcon.style.fontSize = "14px";
+                tickIcon.style.verticalAlign = "middle";
+                if (isNew) {
+                    tickIcon.style.color = "#999";
+                } else {
+                    tickIcon.style.color = "#28a745";
+                }
+                function setTogglesDisabled(disabled) {
+                    toggleInputsInRow.forEach(inp => {
+                        inp.disabled = disabled;
+                        const parentSwitch = inp.closest('.toggle-switch');
+                        if (parentSwitch) {
+                            parentSwitch.style.opacity = disabled ? "0.4" : "1";
+                            parentSwitch.style.pointerEvents = disabled ? "none" : "auto";
+                        }
+                    });
+                }
+                idInput.addEventListener("input", () => {
+                    if (isUpdated) {
+                        isUpdated = false;
+                        tickIcon.style.color = "#999";
+                        setTogglesDisabled(true);
+                    }
+                });
                 updateBtn.addEventListener("click", () => {
                     const newId = idInput.value.trim();
-                    if (!newId) return;
+                    if (!newId) {
+                        tickIcon.style.color = "#dc3545";
+                        setTogglesDisabled(true);
+                        return;
+                    }
+                    tickIcon.style.color = "#28a745";
+                    isUpdated = true;
+                    setTogglesDisabled(false);
                     updateLocationId(locationId, newId);
                     // After update, update the tracked locationId for future clicks
                     locationId = newId;
                 });
                 idCell.appendChild(updateBtn);
+                idCell.appendChild(tickIcon);
+
 
                 row.appendChild(idCell);
 
@@ -5596,7 +5635,10 @@ Finally, don’t forget to click the <strong>Apply Changes</strong> button to sa
                     lockInput.className = "toggle-input";
                     lockInput.id = `lock-${locationId}-${menu.id}`;
                     lockInput.checked = !!locationLocked[menu.id];
-
+                    if (isNew) {
+                        lockInput.disabled = true;
+                    }
+                    toggleInputsInRow.push(lockInput);
 // THEN create label
                     lockLabel.innerHTML = lockInput.checked
                         ? '<i class="fas fa-lock"></i>'
@@ -5626,7 +5668,6 @@ Finally, don’t forget to click the <strong>Apply Changes</strong> button to sa
 
                     hideLabelSpan.innerHTML = '<i class="fa-solid fa-eye"></i>'; // default
                     hideLabelSpan.style.fontSize = "12px";
-                    hideLabelSpan.style.fontSize = "8px";
                     hideLabelSpan.style.marginRight = "2px";
                     hideDiv.appendChild(hideLabelSpan);
 
@@ -5640,6 +5681,10 @@ Finally, don’t forget to click the <strong>Apply Changes</strong> button to sa
                     hideInput.id = `hide-${locationId}-${menu.id}`;
                     hideInput.checked = locationHidden[menu.id] ? !!locationHidden[menu.id].toggleChecked : false;
  // Set initial icon
+                    if (isNew) {
+                        hideInput.disabled = true;
+                    }
+                    toggleInputsInRow.push(hideInput);
                     hideLabelSpan.innerHTML = hideInput.checked
                         ? '<i class="fa-solid fa-eye"></i>'
                         : '<i class="fa-solid fa-eye-slash"></i>';
