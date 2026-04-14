@@ -383,7 +383,7 @@
     min-width: 385px !important;
     color: #fff;
     border: 1px solid #55555500;
-    padding: 15px 12px;
+    padding: 15px 12px !important;
     cursor: var(--custom-pointer);
 }
 
