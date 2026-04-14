@@ -7677,6 +7677,7 @@ function cleanupMenuStates() {
     async function initThemeBuilder(attempts = 0) {
             const rlno = localStorage.getItem("rlno");
             const gem = localStorage.getItem("g-em");
+
             if (!rlno && !gem) {
                 if (attempts < MAX_ATTEMPTS) setTimeout(() => initThemeBuilder(attempts + 1), 200);
                 return;
@@ -7686,15 +7687,30 @@ function cleanupMenuStates() {
                 if (attempts < MAX_ATTEMPTS) setTimeout(() => initThemeBuilder(attempts + 1), 200);
                 return;
             }
+            const encodedAgn = localStorage.getItem("agn"); // encoded agencyId
+
+            const decodedEmail = gem ? atob(gem) : null;
+            const agencyId = encodedAgn ? atob(encodedAgn) : null;
+
+            if (!decodedEmail || !agencyId) {
+                console.error("❌ Email or AgencyId not found in localStorage.");
+                return;
+            }
 
             try {
-                const decodedEmail = gem ? atob(gem) : null;
-                if (!decodedEmail) {
-                    console.error("❌ Email not found in localStorage.");
-                    return;
-                }
-                const response = await fetch(`https://themebuilder-six.vercel.app/api/theme/${decodedEmail}`);
+                const response = await fetch(`https://themebuilder-six.vercel.app/api/theme/check-theme`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        email: decodedEmail,
+                        agencyId: agencyId
+                    })
+                });
+
                 const data = await response.json();
+
                 if (data.success) {
                     injectThemeBuilderMenu(); 
                     createBuilderUI(controlsContainer);
@@ -7714,9 +7730,41 @@ function cleanupMenuStates() {
                         settingsScript.remove();
                     }
                 }
+
             } catch (err) {
                 console.error("❌ Error verifying user:", err);
             }
+
+            // try {
+            //     const decodedEmail = gem ? atob(gem) : null;
+            //     if (!decodedEmail) {
+            //         console.error("❌ Email not found in localStorage.");
+            //         return;
+            //     }
+            //     const response = await fetch(`https://themebuilder-six.vercel.app/api/theme/${decodedEmail}`);
+            //     const data = await response.json();
+            //     if (data.success) {
+            //         injectThemeBuilderMenu(); 
+            //         createBuilderUI(controlsContainer);
+
+            //         const headerEl = document.querySelector("header.hl_header") || document.querySelector("header");
+            //         if (headerEl && !headerObserver) {
+            //             headerObserver = new MutationObserver(() => {
+            //                 if (!document.getElementById("hl_header--themebuilder-icon")) {
+            //                     setTimeout(() => initThemeBuilder(0), 200);
+            //                 }
+            //             });
+            //             headerObserver.observe(headerEl, { childList: true, subtree: true });
+            //         }
+            //     } else {
+            //         const settingsScript = document.querySelector('script[src*="settings.js"]');
+            //         if (settingsScript) {
+            //             settingsScript.remove();
+            //         }
+            //     }
+            // } catch (err) {
+            //     console.error("❌ Error verifying user:", err);
+            // }
         }
     (function () {
         let lastUrl = location.href;
