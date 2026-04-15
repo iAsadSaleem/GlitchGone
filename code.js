@@ -87,9 +87,11 @@
       // restore UI changes
       restoreHiddenMenus();
       applyHiddenMenus();
+      if (typeof window.__themeReady === 'function') window.__themeReady();
       log("Theme applied from remote");
     } catch (err) {
       console.error("[ThemeBuilder] Failed to fetch theme:", err);
+      if (typeof window.__themeReady === 'function') window.__themeReady(); // unblock loader even on error
     }
   }
 /**
