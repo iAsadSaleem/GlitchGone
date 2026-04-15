@@ -87,12 +87,16 @@
       // restore UI changes
       restoreHiddenMenus();
       applyHiddenMenus();
-      // Update loader cache with fresh data from server
+      // After: const json = await res.json();
+      const loaderCSSEncoded = json.loaderCSS || "";
+      const loaderCSSText = loaderCSSEncoded ? decodeBase64Utf8(loaderCSSEncoded) : "";
+      // Cache the full loader CSS string
       if (typeof window.__updateLoaderCache === 'function') {
         window.__updateLoaderCache({
-          logoUrl: themeData["--loader-company-url"] || themeData["--custom-logo-url"] || "",
+          logoUrl: themeData["--loader-company-url"] || "",
           animationType: themeData["--animation-settings"] || "PulsatingLogo",
-          bgColor: themeData["--loader-bg-color"] || "linear-gradient(180deg, #0074f7 0%, #00c0f7 100%)"
+          bgColor: themeData["--loader-bg-color"] || "",
+          fullCSS: loaderCSSText  // ← store the full CSS
         });
       }
       if (typeof window.__themeReady === 'function') window.__themeReady();

@@ -107,15 +107,16 @@
   }
 
   // === Step 3: Apply cached loader CSS immediately ===
-  try {
-    var cached = JSON.parse(localStorage.getItem(LOADER_CACHE_KEY) || 'null');
-    if (cached && cached.logoUrl) {
-      var cachedStyle = document.createElement('style');
-      cachedStyle.id = 'tb-loader-cached-style';
-      cachedStyle.innerHTML = buildLoaderCSS(cached);
-      (document.head || document.documentElement).appendChild(cachedStyle);
-    }
-  } catch (e) {}
+ try {
+  var cached = JSON.parse(localStorage.getItem(LOADER_CACHE_KEY) || 'null');
+  var cssToInject = (cached && cached.fullCSS) ? cached.fullCSS : buildLoaderCSS(cached);
+  if (cssToInject) {
+    var cachedStyle = document.createElement('style');
+    cachedStyle.id = 'tb-loader-cached-style';
+    cachedStyle.innerHTML = cssToInject;
+    (document.head || document.documentElement).appendChild(cachedStyle);
+  }
+} catch (e) {}
 
   // === Step 4: Two-gate system (same as before) ===
   var pageLoaded = false;
@@ -127,17 +128,17 @@
 
   // === Step 5: Expose cache update function for code.js to call ===
   window.__updateLoaderCache = function (config) {
-    try {
-      var current = JSON.parse(localStorage.getItem(LOADER_CACHE_KEY) || 'null');
-      var changed = !current
-        || current.logoUrl !== config.logoUrl
-        || current.animationType !== config.animationType
-        || current.bgColor !== config.bgColor;
-      if (changed) {
-        localStorage.setItem(LOADER_CACHE_KEY, JSON.stringify(config));
-      }
-    } catch (e) {}
-  };
+  try {
+    var current = JSON.parse(localStorage.getItem(LOADER_CACHE_KEY) || 'null');
+    var changed = !current
+      || current.logoUrl !== config.logoUrl
+      || current.animationType !== config.animationType
+      || current.fullCSS !== config.fullCSS;
+    if (changed) {
+      localStorage.setItem(LOADER_CACHE_KEY, JSON.stringify(config));
+    }
+  } catch (e) {}
+};
 
   function tryRemoveLoader() {
     if (!pageLoaded || !themeApplied) return;
