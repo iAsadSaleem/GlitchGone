@@ -78,11 +78,11 @@
       if (!cachedCSS && cssText) injectCSS(cssText);
 
       // merge theme data safely
-      applySidebarLogoFromTheme();
       const savedRaw = localStorage.getItem(STORAGE.userTheme);
       const saved = safeJsonParse(savedRaw) || {};
       const merged = { ...(saved.themeData || {}), ...themeData };
       injectThemeData(merged);
+      applySidebarLogoFromTheme();
 
       // restore UI changes
       restoreHiddenMenus();

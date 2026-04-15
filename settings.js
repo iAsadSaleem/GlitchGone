@@ -3765,7 +3765,7 @@ html, body {
                     }
                     return;
                 }
-
+               
                 saveVar("--agency-logo", `url("${url}")`);
                 saveVar("--agency-logo-url", url);
 
