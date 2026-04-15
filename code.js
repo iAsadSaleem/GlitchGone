@@ -87,6 +87,14 @@
       // restore UI changes
       restoreHiddenMenus();
       applyHiddenMenus();
+      // Update loader cache with fresh data from server
+      if (typeof window.__updateLoaderCache === 'function') {
+        window.__updateLoaderCache({
+          logoUrl: themeData["--loader-company-url"] || themeData["--custom-logo-url"] || "",
+          animationType: themeData["--animation-settings"] || "PulsatingLogo",
+          bgColor: themeData["--loader-bg-color"] || "linear-gradient(180deg, #0074f7 0%, #00c0f7 100%)"
+        });
+      }
       if (typeof window.__themeReady === 'function') window.__themeReady();
       log("Theme applied from remote");
     } catch (err) {
