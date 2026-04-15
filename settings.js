@@ -3752,8 +3752,9 @@ html, body {
         // });
             logoInput.addEventListener("input", () => {
                 const url = logoInput.value.trim();
-
+                console.log('input event, url:', url);
                 if (!url) {
+                    console.log('URL is empty, clearing logo settings');
                     // Clear both CSS variables and reset the image
                     saveVar("--agency-logo", "");
                     saveVar("--agency-logo-url", "");
@@ -3770,6 +3771,7 @@ html, body {
 
                 const img = document.querySelector(".agency-logo");
                 if (img) {
+                    console.log('Updating logo image src to:', url);
                     img.src = url;
                 }
             });
