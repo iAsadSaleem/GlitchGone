@@ -6229,8 +6229,10 @@ function cleanupMenuStates() {
                     (section) => {
                         const instruction = document.createElement("p");
                         instruction.className = "tb-instruction-text";
-                        instruction.textContent =
-                            "💡 For Flat Color: Choose the same color for Start & End. For gradient color choose different in start and end color.";
+                       instruction.className = "tb-instruction-text";
+                        instruction.textContent = `✅ As soon as you enter a valid URL, the logo will immediately appear in the sidebar.
+                        ⚠️ If you remove or clear the URL, the logo will instantly disappear, which may temporarily break the display.
+                        🔄 To restore the default logo, click Apply Changes — your Agency’s default logo will be shown again.`;
                         section.appendChild(instruction);
                         addLogoSettings(section) 
                         addLogoUrlInputSetting(section);
