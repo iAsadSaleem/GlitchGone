@@ -3684,30 +3684,62 @@ html, body {
         savedThemeObj.themeData = savedThemeObj.themeData || {};
         const themeData = savedThemeObj.themeData;
 
+        // function saveVar(key, value) {
+        //     themeData[key] = value;
+        //     localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+        //     document.body.style.setProperty(key, value);
+        // }
         function saveVar(key, value) {
             themeData[key] = value;
             localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
-            document.body.style.setProperty(key, value);
+            document.documentElement.style.setProperty(key, value); // ← set on :root
         }
 
-        function updateSidebarLogo(forceUrl = null) {
-            let url = forceUrl;
-
+        function updateSidebarLogo(forceUrl) {
+            var url = forceUrl;
             if (!url) {
                 url = getComputedStyle(document.documentElement)
                     .getPropertyValue("--agency-logo-url")
                     .trim()
                     .replace(/^"|"$/g, "");
             }
-
+            if (!url) {
+                // also try from localStorage directly
+                const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                url = (saved.themeData || {})["--agency-logo-url"] || "";
+                if (url) url = url.replace(/^url\(["']?/i, "").replace(/["']?\)$/i, "").trim();
+            }
             if (!url) return;
 
-            const img = document.querySelector(".agency-logo");
-            if (img) {
-                img.src = url;
-                img.style.objectFit = "contain";
+            function tryApply(retries) {
+                const img = document.querySelector(".agency-logo");
+                if (img) {
+                    img.src = url;
+                    img.style.objectFit = "contain";
+                } else if (retries > 0) {
+                    setTimeout(() => tryApply(retries - 1), 300);
+                }
             }
+            tryApply(15);
         }
+        // function updateSidebarLogo(forceUrl = null) {
+        //     let url = forceUrl;
+
+        //     if (!url) {
+        //         url = getComputedStyle(document.documentElement)
+        //             .getPropertyValue("--agency-logo-url")
+        //             .trim()
+        //             .replace(/^"|"$/g, "");
+        //     }
+
+        //     if (!url) return;
+
+        //     const img = document.querySelector(".agency-logo");
+        //     if (img) {
+        //         img.src = url;
+        //         img.style.objectFit = "contain";
+        //     }
+        // }
 
 
 
@@ -3750,31 +3782,57 @@ html, body {
         //         img.src = url;
         //     }
         // });
-            logoInput.addEventListener("input", () => {
-                const url = logoInput.value.trim();
-                console.log('input event, url:', url);
-                if (!url) {
-                    console.log('URL is empty, clearing logo settings');
-                    // Clear both CSS variables and reset the image
-                    saveVar("--agency-logo", "");
-                    saveVar("--agency-logo-url", "");
+            // logoInput.addEventListener("input", () => {
+            //     const url = logoInput.value.trim();
+            //     console.log('input event, url:', url);
+            //     if (!url) {
+            //         console.log('URL is empty, clearing logo settings');
+            //         // Clear both CSS variables and reset the image
+            //         saveVar("--agency-logo", "");
+            //         saveVar("--agency-logo-url", "");
 
-                    const img = document.querySelector(".agency-logo");
-                    if (img) {
-                        img.src = "";
-                    }
-                    return;
-                }
+            //         const img = document.querySelector(".agency-logo");
+            //         if (img) {
+            //             img.src = "";
+            //         }
+            //         return;
+            //     }
                
-                saveVar("--agency-logo", `url("${url}")`);
-                saveVar("--agency-logo-url", url);
+            //     saveVar("--agency-logo", `url("${url}")`);
+            //     saveVar("--agency-logo-url", url);
 
+            //     const img = document.querySelector(".agency-logo");
+            //     if (img) {
+            //         console.log('Updating logo image src to:', url);
+            //         img.src = url;
+            //     }
+            // });
+            logoInput.addEventListener("input", () => {
+            const url = logoInput.value.trim();
+
+            if (!url) {
+                saveVar("--agency-logo", "");
+                saveVar("--agency-logo-url", "");
+                const img = document.querySelector(".agency-logo");
+                if (img) img.src = "";
+                return;
+            }
+
+            saveVar("--agency-logo", `url("${url}")`);
+            saveVar("--agency-logo-url", url);
+
+            // Direct update with retry in case element isn't ready
+            function applyLogo(retries) {
                 const img = document.querySelector(".agency-logo");
                 if (img) {
-                    console.log('Updating logo image src to:', url);
                     img.src = url;
+                    img.style.objectFit = "contain";
+                } else if (retries > 0) {
+                    setTimeout(() => applyLogo(retries - 1), 300);
                 }
-            });
+            }
+            applyLogo(10);
+        });
 
         logoWrapper.appendChild(logoLabel);
         logoWrapper.appendChild(logoInput);
