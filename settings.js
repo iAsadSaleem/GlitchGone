@@ -5323,7 +5323,7 @@ function cleanupMenuStates() {
             { id: "sb_email-marketing", label: "Email Marketing" },
             { id: "sb_automation", label: "Automation" },
             { id: "sb_sites", label: "Sites" },
-            { id: "sb_app-media", label: "App Media" },
+            { id: "sb_app-media", label: "Media Storage" },
             { id: "sb_memberships", label: "Memberships" },
             { id: "sb_reputation", label: "Reputation" },
             //{ id: "sb_app-marketplace", label: "App Marketplace" },
