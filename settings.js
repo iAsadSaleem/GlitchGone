@@ -5340,6 +5340,7 @@ function cleanupMenuStates() {
               "sb_calendars": "calendars",
               "sb_contacts": "contacts",
               "sb_payments": "payments",
+              "sb_vibe": "vibe",
               "sb_reporting": "reporting",
               "sb_email-marketing": "marketing",
               "sb_automation": "automation",
