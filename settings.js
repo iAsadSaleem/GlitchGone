@@ -4228,6 +4228,7 @@ html, body {
             { id: "sb_calendars", label: "Calendars" },
             { id: "sb_contacts", label: "Contacts" },
             { id: "sb_payments", label: "Payments" },
+            { id: "sb_vibe", label: "AI Studio" },
             { id: "sb_reporting", label: "Reporting" },
             { id: "sb_email-marketing", label: "Email Marketing" },
             { id: "sb_automation", label: "Automation" },
