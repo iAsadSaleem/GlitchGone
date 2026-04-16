@@ -3666,309 +3666,6 @@ html, body {
 
         container.appendChild(wrapper);
     }
-    // function addLogoSettings(container) {
-    //     if (document.getElementById("tb-logo-settings")) return;
-
-    //     const wrapper = document.createElement("div");
-    //     wrapper.className = "tb-logo-settings";
-    //     wrapper.id = "tb-logo-settings";
-    //     wrapper.style.marginTop = "16px";
-
-    //     const title = document.createElement("h4");
-    //     title.className = "tb-header-controls";
-    //     title.innerText = "Sidebar Logo";
-    //     wrapper.appendChild(title);
-
-    //     // Load saved theme data
-    //     const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-    //     savedThemeObj.themeData = savedThemeObj.themeData || {};
-    //     const themeData = savedThemeObj.themeData;
-
-    //     // function saveVar(key, value) {
-    //     //     themeData[key] = value;
-    //     //     localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
-    //     //     document.body.style.setProperty(key, value);
-    //     // }
-    //     function saveVar(key, value) {
-    //         themeData[key] = value;
-    //         localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
-    //         document.documentElement.style.setProperty(key, value); // ← set on :root
-    //     }
-
-    //     function updateSidebarLogo(forceUrl) {
-    //         var url = forceUrl;
-    //         if (!url) {
-    //             url = getComputedStyle(document.documentElement)
-    //                 .getPropertyValue("--agency-logo-url")
-    //                 .trim()
-    //                 .replace(/^"|"$/g, "");
-    //         }
-    //         if (!url) {
-    //             // also try from localStorage directly
-    //             const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-    //             url = (saved.themeData || {})["--agency-logo-url"] || "";
-    //             if (url) url = url.replace(/^url\(["']?/i, "").replace(/["']?\)$/i, "").trim();
-    //         }
-    //         if (!url) return;
-
-    //         function tryApply(retries) {
-    //             const img = document.querySelector(".agency-logo");
-    //             if (img) {
-    //                 img.src = url;
-    //                 img.style.objectFit = "contain";
-    //             } else if (retries > 0) {
-    //                 setTimeout(() => tryApply(retries - 1), 300);
-    //             }
-    //         }
-    //         tryApply(15);
-    //     }
-    //     // function updateSidebarLogo(forceUrl = null) {
-    //     //     let url = forceUrl;
-
-    //     //     if (!url) {
-    //     //         url = getComputedStyle(document.documentElement)
-    //     //             .getPropertyValue("--agency-logo-url")
-    //     //             .trim()
-    //     //             .replace(/^"|"$/g, "");
-    //     //     }
-
-    //     //     if (!url) return;
-
-    //     //     const img = document.querySelector(".agency-logo");
-    //     //     if (img) {
-    //     //         img.src = url;
-    //     //         img.style.objectFit = "contain";
-    //     //     }
-    //     // }
-
-
-
-    //     /* -----------------------------------------
-    //        LOGO URL INPUT
-    //     ----------------------------------------- */
-    //     const logoWrapper = document.createElement("div");
-    //     logoWrapper.className = "tb-color-picker-wrapper";
-
-    //     const logoLabel = document.createElement("label");
-    //     logoLabel.className = "tb-color-picker-label";
-    //     logoLabel.textContent = "Logo URL";
-
-    //     const logoInput = document.createElement("input");
-    //     logoInput.type = "text";
-    //     logoInput.className = "tb-logo-input";
-    //     logoInput.placeholder = "https://example.com/logo.png";
-
-    //     const savedLogo = themeData["--agency-logo-url"] || themeData["--agency-logo"] || "";
-    //     if (savedLogo) {
-    //         let cleanURL = savedLogo.trim()
-    //             .replace(/^url\(/i, "")
-    //             .replace(/\)$/i, "")
-    //             .replace(/^"|"$/g, "")
-    //             .replace(/^'|'$/g, "");
-    //         logoInput.value = cleanURL;
-    //     }
-
-    //     // logoInput.addEventListener("input", () => {
-    //     //     const url = logoInput.value.trim();
-    //     //     if (!url) return;
-
-    //     //     // Save both CSS and Raw URL versions
-    //     //     saveVar("--agency-logo", `url("${url}")`);
-    //     //     saveVar("--agency-logo-url", url);
-
-    //     //     // Update IMG directly
-    //     //     const img = document.querySelector(".agency-logo");
-    //     //     if (img) {
-    //     //         img.src = url;
-    //     //     }
-    //     // });
-    //         // logoInput.addEventListener("input", () => {
-    //         //     const url = logoInput.value.trim();
-    //         //     console.log('input event, url:', url);
-    //         //     if (!url) {
-    //         //         console.log('URL is empty, clearing logo settings');
-    //         //         // Clear both CSS variables and reset the image
-    //         //         saveVar("--agency-logo", "");
-    //         //         saveVar("--agency-logo-url", "");
-
-    //         //         const img = document.querySelector(".agency-logo");
-    //         //         if (img) {
-    //         //             img.src = "";
-    //         //         }
-    //         //         return;
-    //         //     }
-               
-    //         //     saveVar("--agency-logo", `url("${url}")`);
-    //         //     saveVar("--agency-logo-url", url);
-
-    //         //     const img = document.querySelector(".agency-logo");
-    //         //     if (img) {
-    //         //         console.log('Updating logo image src to:', url);
-    //         //         img.src = url;
-    //         //     }
-    //         // });
-    //         logoInput.addEventListener("input", () => {
-    //         const url = logoInput.value.trim();
-
-    //         if (!url) {
-    //             saveVar("--agency-logo", "");
-    //             saveVar("--agency-logo-url", "");
-    //             const img = document.querySelector(".agency-logo");
-    //             if (img) img.src = "";
-    //             return;
-    //         }
-
-    //         saveVar("--agency-logo", `url("${url}")`);
-    //         saveVar("--agency-logo-url", url);
-
-    //         // Direct update with retry in case element isn't ready
-    //         function applyLogo(retries) {
-    //             const img = document.querySelector(".agency-logo");
-    //             if (img) {
-    //                 img.src = url;
-    //                 img.style.objectFit = "contain";
-    //             } else if (retries > 0) {
-    //                 setTimeout(() => applyLogo(retries - 1), 300);
-    //             }
-    //         }
-    //         applyLogo(10);
-    //     });
-
-    //     logoWrapper.appendChild(logoLabel);
-    //     logoWrapper.appendChild(logoInput);
-    //     wrapper.appendChild(logoWrapper);
-    //     let tbWidth = parseInt(themeData["--logo-width"]) || 150;
-    //     let tbHeight = parseInt(themeData["--logo-height"]) || 40;
-
-    //     // --- WIDTH BLOCK ---
-    //     const widthWrapper = document.createElement("div");
-    //     widthWrapper.className = "tb-slider-block";
-
-    //     // Label
-    //     const widthLabel = document.createElement("label");
-    //     widthLabel.className = "tb-slider-label";
-    //     widthLabel.textContent = "Width";
-    //     widthWrapper.appendChild(widthLabel);
-
-    //     // Input row
-    //     const widthInputRow = document.createElement("div");
-    //     widthInputRow.className = "tb-input-row";
-
-    //     const widthInput = document.createElement("input");
-    //     widthInput.type = "number";
-    //     widthInput.min = "0";
-    //     widthInput.value = tbWidth;
-    //     widthInput.className = "tb-size-input";
-
-    //     const widthPx = document.createElement("span");
-    //     widthPx.textContent = "px";
-
-    //     widthInputRow.appendChild(widthInput);
-    //     widthInputRow.appendChild(widthPx);
-    //     widthWrapper.appendChild(widthInputRow);
-
-    //     // Slider
-    //     const widthSlider = document.createElement("input");
-    //     widthSlider.type = "range";
-    //     widthSlider.min = "0";
-    //     widthSlider.max = "100";
-    //     widthSlider.value = tbWidth;
-    //     widthSlider.className = "tb-range-slider";
-
-    //     widthWrapper.appendChild(widthSlider);
-
-
-    //     // --- HEIGHT BLOCK ---
-    //     const heightWrapper = document.createElement("div");
-    //     heightWrapper.className = "tb-slider-block";
-
-    //     // Label
-    //     const heightLabel = document.createElement("label");
-    //     heightLabel.className = "tb-slider-label";
-    //     heightLabel.textContent = "Height";
-    //     heightWrapper.appendChild(heightLabel);
-
-    //     // Input row
-    //     const heightInputRow = document.createElement("div");
-    //     heightInputRow.className = "tb-input-row";
-
-    //     const heightInput = document.createElement("input");
-    //     heightInput.type = "number";
-    //     heightInput.min = "0";
-    //     heightInput.value = tbHeight;
-    //     heightInput.className = "tb-size-input";
-
-    //     const heightPx = document.createElement("span");
-    //     heightPx.textContent = "px";
-
-    //     heightInputRow.appendChild(heightInput);
-    //     heightInputRow.appendChild(heightPx);
-    //     heightWrapper.appendChild(heightInputRow);
-
-    //     // Slider
-    //     const heightSlider = document.createElement("input");
-    //     heightSlider.type = "range";
-    //     heightSlider.min = "0";
-    //     heightSlider.max = "100";
-    //     heightSlider.value = tbHeight;
-    //     heightSlider.className = "tb-range-slider";
-
-    //     heightWrapper.appendChild(heightSlider);
-    //     function applyLogoSize() {
-    //         const img = document.querySelector(".agency-logo");
-    //         if (!img) return;
-
-    //         img.style.width = tbWidth + "px";
-    //         img.style.height = tbHeight + "px";
-
-    //         saveVar("--logo-width", tbWidth + "px");
-    //         saveVar("--logo-height", tbHeight + "px");
-    //     }
-
-    //     // --- EVENTS (unchanged) ---
-    //     widthSlider.addEventListener("input", () => {
-    //         tbWidth = parseInt(widthSlider.value);
-    //         widthInput.value = tbWidth;
-    //         //this.style.setProperty("--slider-fill", `${(this.value / this.max) * 100}%`);
-
-    //         applyLogoSize();
-    //     });
-
-    //     widthInput.addEventListener("input", () => {
-    //         tbWidth = parseInt(widthInput.value);
-    //         widthSlider.value = tbWidth;
-    //         //widthSlider.style.setProperty("--slider-fill", `${(tbWidth / widthSlider.max) * 100}%`);
-
-    //         applyLogoSize();
-    //     });
-
-    //     heightSlider.addEventListener("input", () => {
-    //         tbHeight = parseInt(heightSlider.value);
-    //         heightInput.value = tbHeight;
-    //         //this.style.setProperty("--slider-fill", `${(this.value / this.max) * 100}%`);
-
-    //         applyLogoSize();
-    //     });
-
-    //     heightInput.addEventListener("input", () => {
-    //         tbHeight = parseInt(heightInput.value);
-    //         heightSlider.value = tbHeight;
-    //         //heightSlider.style.setProperty("--slider-fill", `${(tbHeight / heightSlider.max) * 100}%`);
-
-    //         applyLogoSize();
-    //     });
-
-
-    //     // --- Append to your settings container ---
-    //     wrapper.appendChild(widthWrapper);
-    //     wrapper.appendChild(heightWrapper);
-
-
-    //     container.appendChild(wrapper);
-
-    //     setTimeout(updateSidebarLogo, 500);
-    // }
-
     function addLogoSettings(container) {
         if (document.getElementById("tb-logo-settings")) return;
 
@@ -5345,7 +5042,7 @@ function cleanupMenuStates() {
         document.documentElement.style.setProperty(cssVarName, `"${unicodeValue}"`);
     }
     function getCssVarName(menuId) {
-        const map = {
+        const hardcodedMap  = {
             "sb_agency-dashboard": "--agency-dashboard-icon",
             "sb_agency-saas-configurator": "--agency-sass-configurator-icon",
             "sb_location-prospect": "--agency-prospect-icon",
@@ -5380,7 +5077,9 @@ function cleanupMenuStates() {
             "sb_reputation":"--sidebar-menu-icon-reputation",
         };
 
-        return map[menuId] || null;
+    if (hardcodedMap[menuId]) return hardcodedMap[menuId];
+     const suffix = menuId.replace(/^sb_/, '');
+    return `--sidebar-menu-icon-${suffix}`;
     }
 
     // 🔥 Core function: apply all saved icon customizations
@@ -5542,10 +5241,43 @@ function cleanupMenuStates() {
             }
         });
     }
+    function discoverMenusFromDOM(sidebarSelector) {
+        // Try the direct selector first
+        let sidebar = document.querySelector(sidebarSelector);
 
+        // Fallback: find any element containing sb_ menu items
+        if (!sidebar) {
+            const firstMenu = document.querySelector('[id^="sb_"]');
+            sidebar = firstMenu?.parentElement || null;
+        }
+
+        if (!sidebar) return [];
+
+        const menuEls = sidebar.querySelectorAll('[id^="sb_"]');
+
+        return [...menuEls].map(el => {
+            const id = el.id;
+
+            // Read label from: .nav-title span → data-default-label → derive from ID
+            const titleEl = el.querySelector('.nav-title');
+            const label =
+                titleEl?.textContent?.trim() ||
+                el.dataset.defaultLabel ||
+                id.replace(/^sb_/, '')
+                .replace(/-/g, ' ')
+                .replace(/\b\w/g, c => c.toUpperCase());
+
+            return { id, label };
+        });
+    }
     function buildMenuCustomizationSection(container) {
         if (document.getElementById("tb-menu-customization")) return;
 
+        const subMenusFound = document.querySelectorAll('[id^="sb_"]');
+            if (!subMenusFound.length) {
+                setTimeout(() => buildMenuCustomizationSection(container), 300);
+                return;
+            }
         const wrapper = document.createElement("div");
         wrapper.id = "tb-menu-customization";
         wrapper.className = "tb-menu-customization";
@@ -5554,106 +5286,139 @@ function cleanupMenuStates() {
         separator.className = "tb-section-separator";
         wrapper.appendChild(separator);
         // ---------------- Menu definitions ----------------
-        let subAccountMenus = [
-            { id: "sb_launchpad", label: "Launchpad" },
-            { id: "sb_dashboard", label: "Dashboard" },
-            { id: "sb_conversations", label: "Conversations" },
-            { id: "sb_opportunities", label: "Opportunities" },
-            { id: "sb_calendars", label: "Calendars" },
-            { id: "sb_contacts", label: "Contacts" },
-            { id: "sb_payments", label: "Payments" },
-            { id: "sb_reporting", label: "Reporting" },
-            { id: "sb_email-marketing", label: "Email Marketing" },
-            { id: "sb_automation", label: "Automation" },
-            { id: "sb_sites", label: "Sites" },
-            { id: "sb_app-media", label: "Media Storage" },
-            { id: "sb_memberships", label: "Memberships" },
-            { id: "sb_reputation", label: "Reputation" },
-            //{ id: "sb_app-marketplace", label: "App Marketplace" },
-            //{ id: "sb_custom-values", label: "Custom Values" },
-            //{ id: "sb_manage-scoring", label: "Manage Scoring" },
-            //{ id: "sb_domains-urlRedirects", label: "Domains & URL Redirects" },
-            //{ id: "sb_integrations", label: "Integrations" },
-            //{ id: "sb_undefined", label: "Private Integrations" },
-            //{ id: "sb_conversations_providers", label: "Conversation Providers" },
-            //{ id: "sb_tags", label: "Tags" },
-            //{ id: "sb_labs", label: "Labs" },
-            //{ id: "sb_audit-logs-location", label: "Audit Logs" },
-            //{ id: "sb_brand-boards", label: "Brand Boards" },
-            //{ id: "sb_business_info", label: "Business Profile" },
-            //{ id: "sb_saas-billing", label: "Billing" },
-            //{ id: "sb_my-staff", label: "My Staff" },
-            //{ id: "sb_Opportunities-Pipelines", label: "Opportunities & Pipelines" },
-            //{ id: "sb_", label: "Automation" },
-            //{ id: "sb_calendars", label: "Calendars" },
-            //{ id: "sb_location-email-services", label: "Email Services" },
-            //{ id: "sb_phone-number", label: "Phone Numbers" },
-            //{ id: "sb_whatsapp", label: "WhatsApp" },
-            //{ id: "sb_objects", label: "Objects" },
-            //{ id: "sb_custom-fields-settings", label: "Custom Fields" }
-        ];
+        // let subAccountMenus = [
+        //     { id: "sb_launchpad", label: "Launchpad" },
+        //     { id: "sb_dashboard", label: "Dashboard" },
+        //     { id: "sb_conversations", label: "Conversations" },
+        //     { id: "sb_opportunities", label: "Opportunities" },
+        //     { id: "sb_calendars", label: "Calendars" },
+        //     { id: "sb_contacts", label: "Contacts" },
+        //     { id: "sb_payments", label: "Payments" },
+        //     { id: "sb_reporting", label: "Reporting" },
+        //     { id: "sb_email-marketing", label: "Email Marketing" },
+        //     { id: "sb_automation", label: "Automation" },
+        //     { id: "sb_sites", label: "Sites" },
+        //     { id: "sb_app-media", label: "Media Storage" },
+        //     { id: "sb_memberships", label: "Memberships" },
+        //     { id: "sb_reputation", label: "Reputation" },
+        //     //{ id: "sb_app-marketplace", label: "App Marketplace" },
+        //     //{ id: "sb_custom-values", label: "Custom Values" },
+        //     //{ id: "sb_manage-scoring", label: "Manage Scoring" },
+        //     //{ id: "sb_domains-urlRedirects", label: "Domains & URL Redirects" },
+        //     //{ id: "sb_integrations", label: "Integrations" },
+        //     //{ id: "sb_undefined", label: "Private Integrations" },
+        //     //{ id: "sb_conversations_providers", label: "Conversation Providers" },
+        //     //{ id: "sb_tags", label: "Tags" },
+        //     //{ id: "sb_labs", label: "Labs" },
+        //     //{ id: "sb_audit-logs-location", label: "Audit Logs" },
+        //     //{ id: "sb_brand-boards", label: "Brand Boards" },
+        //     //{ id: "sb_business_info", label: "Business Profile" },
+        //     //{ id: "sb_saas-billing", label: "Billing" },
+        //     //{ id: "sb_my-staff", label: "My Staff" },
+        //     //{ id: "sb_Opportunities-Pipelines", label: "Opportunities & Pipelines" },
+        //     //{ id: "sb_", label: "Automation" },
+        //     //{ id: "sb_calendars", label: "Calendars" },
+        //     //{ id: "sb_location-email-services", label: "Email Services" },
+        //     //{ id: "sb_phone-number", label: "Phone Numbers" },
+        //     //{ id: "sb_whatsapp", label: "WhatsApp" },
+        //     //{ id: "sb_objects", label: "Objects" },
+        //     //{ id: "sb_custom-fields-settings", label: "Custom Fields" }
+        // ];
 
-        let agencyMenus = [
-            { id: "sb_agency-dashboard", label: "Agency Dashboard" },
-            { id: "sb_location-prospect", label: "Prospecting" },
-            { id: "sb_agency-account-reselling", label: "Account Reselling" },
-            { id: "sb_agency-marketplace", label: "Add-Ons" },
-            { id: "sb_agency-affiliate-portal", label: "Affiliate Portal" },
-            { id: "sb_agency-template-library", label: "Template Library" },
-            { id: "sb_agency-partners", label: "Partners" },
-            { id: "sb_agency-university", label: "University" },
-            { id: "sb_saas-education", label: "SaaS Education" },
-            { id: "sb_ghl-swag", label: "GHL Swag" },
-            { id: "sb_agency-saas-configurator", label: "Saas Configurator" },
-            { id: "sb_agency-ideas", label: "Agency Ideas" },
-            { id: "sb_mobile-app-customiser", label: "Mobile App Customiser" },
-            { id: "sb_agency-account-snapshots", label: "Account Snapshots" },
+        // let agencyMenus = [
+        //     { id: "sb_agency-dashboard", label: "Agency Dashboard" },
+        //     { id: "sb_location-prospect", label: "Prospecting" },
+        //     { id: "sb_agency-account-reselling", label: "Account Reselling" },
+        //     { id: "sb_agency-marketplace", label: "Add-Ons" },
+        //     { id: "sb_agency-affiliate-portal", label: "Affiliate Portal" },
+        //     { id: "sb_agency-template-library", label: "Template Library" },
+        //     { id: "sb_agency-partners", label: "Partners" },
+        //     { id: "sb_agency-university", label: "University" },
+        //     { id: "sb_saas-education", label: "SaaS Education" },
+        //     { id: "sb_ghl-swag", label: "GHL Swag" },
+        //     { id: "sb_agency-saas-configurator", label: "Saas Configurator" },
+        //     { id: "sb_agency-ideas", label: "Agency Ideas" },
+        //     { id: "sb_mobile-app-customiser", label: "Mobile App Customiser" },
+        //     { id: "sb_agency-account-snapshots", label: "Account Snapshots" },
 
-            //{ id: "sb_agency-accounts", label: "App Marketplace" },
+        //     //{ id: "sb_agency-accounts", label: "App Marketplace" },
 
-            //Settings menu
-            //{ id: "sb_agency-profile-settings", label: "My Profile" },
-            //{ id: "sb_agency-company-settings", label: "Company" },
-            //{ id: "sb_agency-team-settings", label: "Team" },
-            //{ id: "sb_agency-twilio-settings", label: "Phone Integration" },
-            //{ id: "sb_agency-email-settings", label: "Email Services" },
-            //{ id: "sb_system-emails-setting", label: "System Emails" },
-            //{ id: "sb_agency-banner-management", label: "Announcements" },
-            //{ id: "sb_workflow-premium-actions-setting", label: "Workflow - Premium Features" },
-            //{ id: "sb_conversation-ai-setting", label: "AI Employee" },
-            //{ id: "sb_ask-ai-configuration-setting", label: "Ask AI Configuration" },
-            //{ id: "sb_workflow-ai-setting", label: "Workflow - External AI Models" },
-            //{ id: "sb_domain-purchase-setting", label: "Domain Purchase" },
-            //{ id: "sb_undefined", label: "Private Integrations" },
-            //{ id: "sb_agency-affiliate-settings", label: "Affiliates" },
-            //{ id: "sb_agency-custom-link-settings", label: "Custom Menu Links" },
-            //{ id: "sb_agency-stripe-settings", label: "Stripe" },
-            //{ id: "sb_agency-api-keys-settings", label: "API Keys" },
-            //{ id: "sb_agency-compliance-settings", label: "Compliance" },
-            //{ id: "sb_agency-labs-settings", label: "Labs" },
-            //{ id: "sb_agency-audit-logs-settings", label: "Audit Logs" }
-        ];
-        const SUBACCOUNT_ORDER_MAP = {
-              "sb_launchpad": "launchpad",
-              "sb_dashboard": "dashboard",
-              "sb_conversations": "conversations",
-              "sb_opportunities": "opportunities",
-              "sb_calendars": "calendars",
-              "sb_contacts": "contacts",
-              "sb_payments": "payments",
-              "sb_reporting": "reporting",
-              "sb_email-marketing": "marketing",
-              "sb_automation": "automation",
-              "sb_sites": "sites",
-              "sb_app-media": "media-storage",
-              "sb_memberships": "memberships",
-              "sb_reputation": "reputation",
-              "sb_app-marketplace": "app-marketplace",
-              "sb_location-mobile-app": "mobile-app"
-            };
+        //     //Settings menu
+        //     //{ id: "sb_agency-profile-settings", label: "My Profile" },
+        //     //{ id: "sb_agency-company-settings", label: "Company" },
+        //     //{ id: "sb_agency-team-settings", label: "Team" },
+        //     //{ id: "sb_agency-twilio-settings", label: "Phone Integration" },
+        //     //{ id: "sb_agency-email-settings", label: "Email Services" },
+        //     //{ id: "sb_system-emails-setting", label: "System Emails" },
+        //     //{ id: "sb_agency-banner-management", label: "Announcements" },
+        //     //{ id: "sb_workflow-premium-actions-setting", label: "Workflow - Premium Features" },
+        //     //{ id: "sb_conversation-ai-setting", label: "AI Employee" },
+        //     //{ id: "sb_ask-ai-configuration-setting", label: "Ask AI Configuration" },
+        //     //{ id: "sb_workflow-ai-setting", label: "Workflow - External AI Models" },
+        //     //{ id: "sb_domain-purchase-setting", label: "Domain Purchase" },
+        //     //{ id: "sb_undefined", label: "Private Integrations" },
+        //     //{ id: "sb_agency-affiliate-settings", label: "Affiliates" },
+        //     //{ id: "sb_agency-custom-link-settings", label: "Custom Menu Links" },
+        //     //{ id: "sb_agency-stripe-settings", label: "Stripe" },
+        //     //{ id: "sb_agency-api-keys-settings", label: "API Keys" },
+        //     //{ id: "sb_agency-compliance-settings", label: "Compliance" },
+        //     //{ id: "sb_agency-labs-settings", label: "Labs" },
+        //     //{ id: "sb_agency-audit-logs-settings", label: "Audit Logs" }
+        // ];
+        // ✅ NEW — reads from the actual live sidebar
+        let subAccountMenus = discoverMenusFromDOM('.hl_sidebar-nav, #subAccountSidebar, [data-testid="sidebar"]');
+        let agencyMenus    = discoverMenusFromDOM('.hl_nav-header nav[aria-label="header"], #agencySidebar');
+
+        // Safety fallback if DOM isn't ready yet or no menus found
+        if (!subAccountMenus.length) subAccountMenus = []; // or keep a minimal fallback list
+        if (!agencyMenus.length)    agencyMenus    = [];
+        // const SUBACCOUNT_ORDER_MAP = {
+        //       "sb_launchpad": "launchpad",
+        //       "sb_dashboard": "dashboard",
+        //       "sb_conversations": "conversations",
+        //       "sb_opportunities": "opportunities",
+        //       "sb_calendars": "calendars",
+        //       "sb_contacts": "contacts",
+        //       "sb_payments": "payments",
+        //       "sb_reporting": "reporting",
+        //       "sb_email-marketing": "marketing",
+        //       "sb_automation": "automation",
+        //       "sb_sites": "sites",
+        //       "sb_app-media": "media-storage",
+        //       "sb_memberships": "memberships",
+        //       "sb_reputation": "reputation",
+        //       "sb_app-marketplace": "app-marketplace",
+        //       "sb_location-mobile-app": "mobile-app"
+        //     };
 
         // ✅ Debug: check if your menus arrays are defined correctly
         // Load saved theme 
+        function getOrderCssKey(menuId) {
+            const hardcodedMap = {
+                "sb_launchpad": "launchpad",
+                "sb_dashboard": "dashboard",
+                "sb_conversations": "conversations",
+                "sb_opportunities": "opportunities",
+                "sb_calendars": "calendars",
+                "sb_contacts": "contacts",
+                "sb_payments": "payments",
+                "sb_reporting": "reporting",
+                "sb_email-marketing": "marketing",
+                "sb_automation": "automation",
+                "sb_sites": "sites",
+                "sb_app-media": "media-storage",
+                "sb_memberships": "memberships",
+                "sb_reputation": "reputation",
+                "sb_app-marketplace": "app-marketplace",
+                "sb_location-mobile-app": "mobile-app"
+            };
+
+            if (hardcodedMap[menuId]) return hardcodedMap[menuId];
+
+            // Dynamic fallback for any new GHL menu
+            return menuId.replace(/^sb_/, '');
+        }
+
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedTheme.themeData || {};
 
@@ -5909,7 +5674,8 @@ function cleanupMenuStates() {
             // ==========================
             function applySubaccountMenuOrderCSS(order) {
                 order.forEach((menuId, index) => {
-                    const cssKey = SUBACCOUNT_ORDER_MAP[menuId];
+                    const cssKey = getOrderCssKey(menuId);  // ✅ always returns something
+                    // const cssKey = SUBACCOUNT_ORDER_MAP[menuId];
                     if (!cssKey) return;
 
                     document.documentElement.style.setProperty(
