@@ -87,6 +87,7 @@
       // restore UI changes
       restoreHiddenMenus();
       applyHiddenMenus();
+      applySubaccountTheme();
       // After: const json = await res.json();
       const loaderCSSEncoded = json.loaderCSS || "";
       const loaderCSSText = loaderCSSEncoded ? decodeBase64Utf8(loaderCSSEncoded) : "";
@@ -425,8 +426,58 @@ function applyHiddenMenus() {
         }
     });
 }
+function applySubaccountTheme() {
+    // Only run when we are inside a subaccount page (/location/XXXX/...)
+    const locationId = getCurrentLocationId();
+    if (!locationId) return;
 
+    const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+    if (!saved.themeData || !saved.themeData["--subaccountThemes"]) return;
 
+    let subaccountThemes;
+    try {
+        subaccountThemes = JSON.parse(saved.themeData["--subaccountThemes"]);
+    } catch (e) {
+        console.warn("[ThemeBuilder] invalid --subaccountThemes JSON");
+        return;
+    }
+
+    const locationTheme = subaccountThemes[locationId];
+    if (!locationTheme) return;
+
+    // Apply the selected theme's CSS variables onto :root
+    if (locationTheme.themeData && typeof locationTheme.themeData === "object") {
+        const root = document.documentElement;
+        Object.keys(locationTheme.themeData).forEach(key => {
+            if (key.startsWith("--") && typeof locationTheme.themeData[key] === "string") {
+                try { root.style.setProperty(key, locationTheme.themeData[key]); } catch (e) { /* ignore */ }
+            }
+        });
+    }
+
+    // Apply the subaccount's custom logo URL
+    if (locationTheme.logoUrl) {
+        // 1. Update the sidebar .agency-logo image (with retry for late DOM)
+        function tryApplyLogo(retries) {
+            const logoImg = document.querySelector(".agency-logo");
+            if (logoImg) {
+                logoImg.src = locationTheme.logoUrl;
+                logoImg.style.objectFit = "contain";
+            } else if (retries > 0) {
+                setTimeout(() => tryApplyLogo(retries - 1), 300);
+            }
+        }
+        tryApplyLogo(15);
+
+        // 2. Update the CSS variable so anything using --agency-logo-url also updates
+        document.documentElement.style.setProperty("--agency-logo-url", locationTheme.logoUrl);
+
+        // 3. Optionally update the favicon as well
+        if (typeof changeFavicon === "function") {
+            changeFavicon(locationTheme.logoUrl);
+        }
+    }
+}
 function cleanupMenuStates() {
     document.querySelectorAll("a[id^='sb_'], .hl_nav-header a").forEach(menu => {
         // Remove lock icon
@@ -467,6 +518,7 @@ function cleanupMenuStates() {
 document.addEventListener('DOMContentLoaded', function() {
   applyHiddenMenus();
   applyLockedMenus();
+  applySubaccountTheme();
 });
 
 // Also call when localStorage changes (if settings are updated dynamically)
@@ -477,6 +529,7 @@ setInterval(() => {
     window.lastUserTheme = current;
     applyHiddenMenus();
     applyLockedMenus();
+    applySubaccountTheme();
   }
 }, 500);
   
