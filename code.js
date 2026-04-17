@@ -478,8 +478,6 @@ function applyHiddenMenus() {
     });
 }
 function applySubaccountTheme() {
-  console.log("Applying subaccount theme if available...");
-    // Only run when we are inside a subaccount page (/location/XXXX/...)
     const locationId = getCurrentLocationId();
     if (!locationId) return;
 
@@ -497,31 +495,28 @@ function applySubaccountTheme() {
     const locationTheme = subaccountThemes[locationId];
     if (!locationTheme) return;
 
-    // Apply the selected theme's CSS variables onto :root
-    // if (locationTheme.themeData && typeof locationTheme.themeData === "object") {
-    //     const root = document.documentElement;
-    //     Object.keys(locationTheme.themeData).forEach(key => {
-    //         if (key.startsWith("--") && typeof locationTheme.themeData[key] === "string") {
-    //             try { root.style.setProperty(key, locationTheme.themeData[key]); } catch (e) { /* ignore */ }
-    //         }
-    //     });
-    // }
+    // ── Apply CSS variables ──────────────────────────────────────────────
+    // themeData from the API can be a JSON string — always parse defensively
     let subThemeData = locationTheme.themeData;
     if (typeof subThemeData === "string") {
         try { subThemeData = JSON.parse(subThemeData); } catch (e) { subThemeData = {}; }
     }
+
     if (subThemeData && typeof subThemeData === "object") {
         const root = document.documentElement;
+        let count = 0;
         Object.keys(subThemeData).forEach(key => {
             if (key.startsWith("--") && typeof subThemeData[key] === "string") {
-                try { root.style.setProperty(key, subThemeData[key]); } catch (e) {}
+                try { root.style.setProperty(key, subThemeData[key]); count++; } catch (e) {}
             }
         });
+        console.log(`[ThemeBuilder] Subaccount CSS vars applied (${count} vars) for: ${locationId}`);
+    } else {
+        console.warn("[ThemeBuilder] Subaccount themeData empty or unparseable for:", locationId, "| raw value:", locationTheme.themeData);
     }
 
-    // Apply the subaccount's custom logo URL
+    // ── Apply logo ───────────────────────────────────────────────────────
     if (locationTheme.logoUrl) {
-        // 1. Update the sidebar .agency-logo image (with retry for late DOM)
         function tryApplyLogo(retries) {
             const logoImg = document.querySelector(".agency-logo");
             if (logoImg) {
@@ -532,16 +527,9 @@ function applySubaccountTheme() {
             }
         }
         tryApplyLogo(15);
-
-        // 2. Update the CSS variable so anything using --agency-logo-url also updates
         document.documentElement.style.setProperty("--agency-logo-url", locationTheme.logoUrl);
-
-        // 3. Optionally update the favicon as well
-        if (typeof changeFavicon === "function") {
-            changeFavicon(locationTheme.logoUrl);
-        }
+        if (typeof changeFavicon === "function") changeFavicon(locationTheme.logoUrl);
     }
-    console.log("Subaccount theme applied for location ID:", locationId);
 }
 function cleanupMenuStates() {
     document.querySelectorAll("a[id^='sb_'], .hl_nav-header a").forEach(menu => {
