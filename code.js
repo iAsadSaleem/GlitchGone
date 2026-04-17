@@ -427,6 +427,7 @@ function applyHiddenMenus() {
     });
 }
 function applySubaccountTheme() {
+  console.log("Applying subaccount theme if available...");
     // Only run when we are inside a subaccount page (/location/XXXX/...)
     const locationId = getCurrentLocationId();
     if (!locationId) return;
@@ -477,6 +478,7 @@ function applySubaccountTheme() {
             changeFavicon(locationTheme.logoUrl);
         }
     }
+    console.log("Subaccount theme applied for location ID:", locationId);
 }
 function cleanupMenuStates() {
     document.querySelectorAll("a[id^='sb_'], .hl_nav-header a").forEach(menu => {
