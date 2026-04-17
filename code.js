@@ -279,28 +279,72 @@ function applySidebarLogoFromTheme(retries = 15, delay = 300) {
             });
         })();
 
-  // ---- Theme data injection ----
+  // // ---- Theme data injection ----
+  // function injectThemeData(themeData) {
+  //   if (!themeData || typeof themeData !== "object") return;
+  //   // Save merged version
+  //   const savedRaw = localStorage.getItem(STORAGE.userTheme);
+  //   const saved = safeJsonParse(savedRaw) || {};
+  //   const mergedTheme = { ...(saved.themeData || {}), ...themeData };
+
+  //   try { localStorage.setItem(STORAGE.userTheme, JSON.stringify({ themeData: mergedTheme })); } catch (e) { /* ignore */ }
+
+  //   const root = document.documentElement;
+  //   Object.keys(mergedTheme).forEach(key => {
+  //     if (key.startsWith("--") && typeof mergedTheme[key] === "string") {
+  //       try { root.style.setProperty(key, mergedTheme[key]); } catch (e) { /* ignore */ }
+  //     }
+  //   });
+
+  //   // Optional text updates
+  // //  if (mergedTheme["--login-button-text"]) {const cleanText = stripQuotes(mergedTheme["--login-button-text"]);updateElementText("button.hl-btn.bg-curious-blue-500", cleanText);}
+  // //  if (mergedTheme["--login-headline-text"]) {const cleanText = stripQuotes(mergedTheme["--login-headline-text"]);updateElementText("h2.heading2", cleanText);}
+  // //  if (mergedTheme["--forgetpassword-text"]) {const cleanText = stripQuotes(mergedTheme["--forgetpassword-text"]);updateElementText("#forgot_passowrd_btn", cleanText);}
+  // }
   function injectThemeData(themeData) {
     if (!themeData || typeof themeData !== "object") return;
-    // Save merged version
+
     const savedRaw = localStorage.getItem(STORAGE.userTheme);
     const saved = safeJsonParse(savedRaw) || {};
     const mergedTheme = { ...(saved.themeData || {}), ...themeData };
 
-    try { localStorage.setItem(STORAGE.userTheme, JSON.stringify({ themeData: mergedTheme })); } catch (e) { /* ignore */ }
+    // Save the merged agency data to localStorage (preserves all config data)
+    try { localStorage.setItem(STORAGE.userTheme, JSON.stringify({ themeData: mergedTheme })); } catch (e) {}
 
+    // If on a subaccount page with a configured theme, override agency CSS vars
+    // with subaccount vars BEFORE touching the DOM — no race condition possible
+    let finalTheme = mergedTheme;
+    const locationId = getCurrentLocationId();
+    if (locationId) {
+        try {
+            const subaccountThemes = mergedTheme["--subaccountThemes"]
+                ? JSON.parse(mergedTheme["--subaccountThemes"])
+                : {};
+            const locationTheme = subaccountThemes[locationId];
+            if (locationTheme) {
+                let subThemeData = locationTheme.themeData;
+                if (typeof subThemeData === "string") {
+                    try { subThemeData = JSON.parse(subThemeData); } catch (e) { subThemeData = {}; }
+                }
+                if (subThemeData && typeof subThemeData === "object" && Object.keys(subThemeData).length > 0) {
+                    // Subaccount vars win over agency vars — merged into final object
+                    finalTheme = { ...mergedTheme, ...subThemeData };
+                    console.log(`[ThemeBuilder] injectThemeData: subaccount override active for ${locationId}`);
+                }
+            }
+        } catch (e) {
+            console.warn("[ThemeBuilder] injectThemeData: subaccount theme parse failed", e);
+        }
+    }
+
+    // Apply final resolved CSS vars to DOM (single write — no overwrite needed after this)
     const root = document.documentElement;
-    Object.keys(mergedTheme).forEach(key => {
-      if (key.startsWith("--") && typeof mergedTheme[key] === "string") {
-        try { root.style.setProperty(key, mergedTheme[key]); } catch (e) { /* ignore */ }
-      }
+    Object.keys(finalTheme).forEach(key => {
+        if (key.startsWith("--") && typeof finalTheme[key] === "string") {
+            try { root.style.setProperty(key, finalTheme[key]); } catch (e) {}
+        }
     });
-
-    // Optional text updates
-  //  if (mergedTheme["--login-button-text"]) {const cleanText = stripQuotes(mergedTheme["--login-button-text"]);updateElementText("button.hl-btn.bg-curious-blue-500", cleanText);}
-  //  if (mergedTheme["--login-headline-text"]) {const cleanText = stripQuotes(mergedTheme["--login-headline-text"]);updateElementText("h2.heading2", cleanText);}
-  //  if (mergedTheme["--forgetpassword-text"]) {const cleanText = stripQuotes(mergedTheme["--forgetpassword-text"]);updateElementText("#forgot_passowrd_btn", cleanText);}
-  }
+}
 
 // ---- Hidden/Locked menus ----
 
@@ -485,37 +529,13 @@ function applySubaccountTheme() {
     if (!saved.themeData || !saved.themeData["--subaccountThemes"]) return;
 
     let subaccountThemes;
-    try {
-        subaccountThemes = JSON.parse(saved.themeData["--subaccountThemes"]);
-    } catch (e) {
-        console.warn("[ThemeBuilder] invalid --subaccountThemes JSON");
-        return;
-    }
+    try { subaccountThemes = JSON.parse(saved.themeData["--subaccountThemes"]); }
+    catch (e) { return; }
 
     const locationTheme = subaccountThemes[locationId];
     if (!locationTheme) return;
 
-    // ── Apply CSS variables ──────────────────────────────────────────────
-    // themeData from the API can be a JSON string — always parse defensively
-    let subThemeData = locationTheme.themeData;
-    if (typeof subThemeData === "string") {
-        try { subThemeData = JSON.parse(subThemeData); } catch (e) { subThemeData = {}; }
-    }
-
-    if (subThemeData && typeof subThemeData === "object") {
-        const root = document.documentElement;
-        let count = 0;
-        Object.keys(subThemeData).forEach(key => {
-            if (key.startsWith("--") && typeof subThemeData[key] === "string") {
-                try { root.style.setProperty(key, subThemeData[key]); count++; } catch (e) {}
-            }
-        });
-        console.log(`[ThemeBuilder] Subaccount CSS vars applied (${count} vars) for: ${locationId}`);
-    } else {
-        console.warn("[ThemeBuilder] Subaccount themeData empty or unparseable for:", locationId, "| raw value:", locationTheme.themeData);
-    }
-
-    // ── Apply logo ───────────────────────────────────────────────────────
+    // CSS vars are now handled inside injectThemeData — only handle logo here
     if (locationTheme.logoUrl) {
         function tryApplyLogo(retries) {
             const logoImg = document.querySelector(".agency-logo");
