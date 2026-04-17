@@ -4265,6 +4265,7 @@ function showCustomizePopup(type, currentUrl, currentHeadline, currentSubHeadlin
 }
 
 function buildFeatureLockSection(container) {
+    const email = localStorage.getItem("g-em") ? atob(localStorage.getItem("g-em")) : null;
     let savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
     if (savedTheme.themeData && typeof savedTheme.themeData === "string") {
         savedTheme.themeData = JSON.parse(savedTheme.themeData);
@@ -4347,18 +4348,22 @@ function buildFeatureLockSection(container) {
 
     buttonContainer.appendChild(configureBtn);
     wrapper.appendChild(buttonContainer);
-    
-    const subaccountThemeBtn = document.createElement("button");
-    subaccountThemeBtn.textContent = "Subaccount Theme Settings";
-    subaccountThemeBtn.style.padding = "10px 20px";
-    subaccountThemeBtn.style.border = "none";
-    subaccountThemeBtn.style.borderRadius = "5px";
-    subaccountThemeBtn.style.background = "#5a6acf";
-    subaccountThemeBtn.style.color = "#fff";
-    subaccountThemeBtn.style.cursor = "pointer";
-    subaccountThemeBtn.addEventListener("click", () => openSubaccountThemeModal());
-    buttonContainer.appendChild(subaccountThemeBtn);
-    
+   
+
+    if(email ==="iamhaseeb01@outlook.com" || email === "shahriyarkhalid555@gmail.com"){
+
+        const subaccountThemeBtn = document.createElement("button");
+        subaccountThemeBtn.textContent = "Subaccount Theme Settings";
+        subaccountThemeBtn.style.padding = "10px 20px";
+        subaccountThemeBtn.style.border = "none";
+        subaccountThemeBtn.style.borderRadius = "5px";
+        subaccountThemeBtn.style.background = "#5a6acf";
+        subaccountThemeBtn.style.color = "#fff";
+        subaccountThemeBtn.style.cursor = "pointer";
+        subaccountThemeBtn.addEventListener("click", () => openSubaccountThemeModal());
+        buttonContainer.appendChild(subaccountThemeBtn);
+        
+    }
     container.appendChild(wrapper);
 
     // Function to open configure modal
