@@ -522,6 +522,7 @@ function applyHiddenMenus() {
     });
 }
 function applySubaccountTheme() {
+  console.log("[ThemeBuilder] Applying subaccount theme if configured...");
     const locationId = getCurrentLocationId();
     if (!locationId) return;
 
