@@ -112,12 +112,61 @@
  * Reads: --agency-logo-url (raw URL)
  * Fallback: --agency-logo (url("..."))
  */
+// function applySidebarLogoFromTheme(retries = 15, delay = 300) {
+//     try {
+//         const root = document.documentElement;
+//         const img = document.querySelector(".agency-logo");
+//         if (!img) {
+//             // Element not in DOM yet — retry after delay
+//             if (retries > 0) {
+//                 setTimeout(() => applySidebarLogoFromTheme(retries - 1, delay), delay);
+//             } else {
+//                 console.warn("[ThemeBuilder] .agency-logo not found after retries.");
+//             }
+//             return;
+//         }
+//         // First check --agency-logo-url (raw clean URL)
+//         let url = getComputedStyle(root)
+//             .getPropertyValue("--agency-logo-url")
+//             .trim()
+//             .replace(/^"|"$/g, "");
+//         if (!url) {
+//             let cssUrl = getComputedStyle(root)
+//                 .getPropertyValue("--agency-logo")
+//                 .trim()
+//                 .replace(/^"|"$/g, "");
+//             const match = cssUrl.match(/url\(['"]?(.*?)['"]?\)/);
+//             if (match) url = match[1];
+//         }
+//         if (!url) return;
+//         img.src = url;
+//         img.style.objectFit = "contain";
+//         const w = getComputedStyle(root).getPropertyValue("--logo-width").trim();
+//         const h = getComputedStyle(root).getPropertyValue("--logo-height").trim();
+//         if (w) img.style.width = w;
+//         if (h) img.style.height = h;
+//     } catch (e) {
+//         console.error("[ThemeBuilder] Failed applying sidebar logo", e);
+//     }
+// }
 function applySidebarLogoFromTheme(retries = 15, delay = 300) {
     try {
+        // If we're on a subaccount page that has a configured logo override,
+        // skip entirely — applySubaccountTheme() handles the logo for this location.
+        const locationId = getCurrentLocationId();
+        if (locationId) {
+            const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+            const subaccountThemes = saved.themeData?.["--subaccountThemes"]
+                ? JSON.parse(saved.themeData["--subaccountThemes"])
+                : {};
+            if (subaccountThemes[locationId]?.logoUrl) {
+                return; // Let applySubaccountTheme handle the logo — do not overwrite it
+            }
+        }
+
         const root = document.documentElement;
         const img = document.querySelector(".agency-logo");
         if (!img) {
-            // Element not in DOM yet — retry after delay
             if (retries > 0) {
                 setTimeout(() => applySidebarLogoFromTheme(retries - 1, delay), delay);
             } else {
@@ -125,7 +174,6 @@ function applySidebarLogoFromTheme(retries = 15, delay = 300) {
             }
             return;
         }
-        // First check --agency-logo-url (raw clean URL)
         let url = getComputedStyle(root)
             .getPropertyValue("--agency-logo-url")
             .trim()
