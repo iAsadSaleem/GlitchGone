@@ -4350,7 +4350,7 @@ function buildFeatureLockSection(container) {
     wrapper.appendChild(buttonContainer);
    
 
-    if(email ==="iamhaseeb01@outlook.com" || email === "shahriyarkhalid555@gmail.com"){
+    if(email ==="iamahaseeb01@outlook.com" || email === "shahriyarkhalid555@gmail.com"){
 
         const subaccountThemeBtn = document.createElement("button");
         subaccountThemeBtn.textContent = "Subaccount Theme Settings";
