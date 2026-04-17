@@ -835,6 +835,8 @@ window.addEventListener("locationchange", () => {
         applyStoredSidebarTitles();
         applyLockedMenus();
         applyHiddenMenus();
+                applySubaccountTheme();   // ← ADD THIS LINE
+
     }, 1200);
 });
 
