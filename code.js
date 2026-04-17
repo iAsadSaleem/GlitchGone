@@ -87,7 +87,7 @@
       // restore UI changes
       restoreHiddenMenus();
       applyHiddenMenus();
-      applySubaccountTheme();
+     
       // After: const json = await res.json();
       const loaderCSSEncoded = json.loaderCSS || "";
       const loaderCSSText = loaderCSSEncoded ? decodeBase64Utf8(loaderCSSEncoded) : "";
@@ -102,6 +102,9 @@
       }
       if (typeof window.__themeReady === 'function') window.__themeReady();
       log("Theme applied from remote");
+       applySubaccountTheme();
+      setTimeout(() => applySubaccountTheme(), 200);
+      setTimeout(() => applySubaccountTheme(), 800);
     } catch (err) {
       console.error("[ThemeBuilder] Failed to fetch theme:", err);
       if (typeof window.__themeReady === 'function') window.__themeReady(); // unblock loader even on error
@@ -495,11 +498,23 @@ function applySubaccountTheme() {
     if (!locationTheme) return;
 
     // Apply the selected theme's CSS variables onto :root
-    if (locationTheme.themeData && typeof locationTheme.themeData === "object") {
+    // if (locationTheme.themeData && typeof locationTheme.themeData === "object") {
+    //     const root = document.documentElement;
+    //     Object.keys(locationTheme.themeData).forEach(key => {
+    //         if (key.startsWith("--") && typeof locationTheme.themeData[key] === "string") {
+    //             try { root.style.setProperty(key, locationTheme.themeData[key]); } catch (e) { /* ignore */ }
+    //         }
+    //     });
+    // }
+    let subThemeData = locationTheme.themeData;
+    if (typeof subThemeData === "string") {
+        try { subThemeData = JSON.parse(subThemeData); } catch (e) { subThemeData = {}; }
+    }
+    if (subThemeData && typeof subThemeData === "object") {
         const root = document.documentElement;
-        Object.keys(locationTheme.themeData).forEach(key => {
-            if (key.startsWith("--") && typeof locationTheme.themeData[key] === "string") {
-                try { root.style.setProperty(key, locationTheme.themeData[key]); } catch (e) { /* ignore */ }
+        Object.keys(subThemeData).forEach(key => {
+            if (key.startsWith("--") && typeof subThemeData[key] === "string") {
+                try { root.style.setProperty(key, subThemeData[key]); } catch (e) {}
             }
         });
     }
@@ -581,9 +596,22 @@ setInterval(() => {
     applyLockedMenus();
     applySubaccountTheme();
   }
+    applySubaccountTheme();
 }, 500);
   
   async function applyAgencyLogo(attempt = 1) {
+
+    const locationId = getCurrentLocationId();
+    if (locationId) {
+        try {
+            const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+            const sub = saved.themeData?.["--subaccountThemes"]
+                ? JSON.parse(saved.themeData["--subaccountThemes"])
+                : {};
+            if (sub[locationId]?.logoUrl) return;
+        } catch (e) {}
+    }
+
     const savedRaw = localStorage.getItem(STORAGE.userTheme);
     const saved = safeJsonParse(savedRaw) || {};
     const themeVars = saved.themeData || {};
@@ -717,6 +745,8 @@ function applyStoredSidebarTitles() {
     restoreHiddenMenus();
     applyHiddenMenus();
     applyLockedMenus();
+    applySubaccountTheme();
+
 
     // try {
     //   if (saved.themeData["--subMenuOrder"]) {
