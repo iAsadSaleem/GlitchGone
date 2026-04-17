@@ -575,7 +575,6 @@ function applyHiddenMenus() {
     });
 }
 function applySubaccountTheme() {
-  console.log("[ThemeBuilder] Applying subaccount theme if configured...");
     const locationId = getCurrentLocationId();
     if (!locationId) return;
 
@@ -589,7 +588,23 @@ function applySubaccountTheme() {
     const locationTheme = subaccountThemes[locationId];
     if (!locationTheme) return;
 
-    // CSS vars are now handled inside injectThemeData — only handle logo here
+    // ── Apply CSS vars ───────────────────────────────────────────────────
+    // Must apply here (not just in injectThemeData) so the setInterval
+    // can continuously fight GHL platform overwrites after __themeReady()
+    let subVars = locationTheme.themeData;
+    if (typeof subVars === "string") {
+        try { subVars = JSON.parse(subVars); } catch (e) { subVars = null; }
+    }
+    if (subVars && typeof subVars === "object" && Object.keys(subVars).length > 0) {
+        const root = document.documentElement;
+        Object.keys(subVars).forEach(key => {
+            if (key.startsWith("--") && typeof subVars[key] === "string") {
+                try { root.style.setProperty(key, subVars[key]); } catch (e) {}
+            }
+        });
+    }
+
+    // ── Apply logo ───────────────────────────────────────────────────────
     if (locationTheme.logoUrl) {
         function tryApplyLogo(retries) {
             const logoImg = document.querySelector(".agency-logo");
