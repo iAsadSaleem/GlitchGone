@@ -425,6 +425,8 @@ function applyHiddenMenus() {
         }
     });
 }
+
+
 function cleanupMenuStates() {
     document.querySelectorAll("a[id^='sb_'], .hl_nav-header a").forEach(menu => {
         // Remove lock icon
