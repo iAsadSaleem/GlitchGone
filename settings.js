@@ -7419,11 +7419,13 @@ function cleanupMenuStates() {
                 }, "", true
                 )
             );
+            if (email === "iamhaseeb01@outlook.com" || email === "shahriyarkhalid555@gmail.com") {
             contentWrapper.appendChild(
                 createSection('<i class="fa-solid fa-palette" style="color:white;margin-right:6px;font-size:17px;"></i>Individual Account Themes', (section) => {
                     buildIndividualAccountThemesSection(section);
                 }, "", true)
             );
+            }
             contentWrapper.appendChild(
                 createSection('<i class="fa-brands fa-intercom"style="color:white;margin-right:6px;font-size:17px;"></i>Menu Customizer', (section) => {
                     buildMenuCustomizationSection(section);
