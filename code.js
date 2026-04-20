@@ -419,6 +419,7 @@ function injectThemeData(themeData) {
     if (locationId) {
         try {
             const rawSub = mergedTheme["--subaccountThemes"];
+            console.log("Raw subaccount themes data:", rawSub);
             const sub = (typeof rawSub === "string") ? JSON.parse(rawSub) : (rawSub || {});
             const locTheme = sub[locationId];
             if (locTheme) {
@@ -444,6 +445,7 @@ function injectThemeData(themeData) {
                     return; // ← Exit here. Agency CSS vars are never written to the DOM.
                 }
 
+                console.log("[ThemeBuilder] No inline subaccount theme vars found, checking cache/API for themeName:", locTheme.themeName);
                 // ── New format: only themeName stored, fetch CSS from API ─
                 if (locTheme.themeName) {
                     if (_subaccountThemeCache[locTheme.themeName]) {
