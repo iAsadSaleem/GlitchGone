@@ -626,7 +626,7 @@ const _subaccountThemeCache = {};
 function applySubaccountTheme() {
     const locationId = getCurrentLocationId();
     if (!locationId) return;
-
+  console.log(`[ThemeBuilder] Checking for subaccount theme for location: ${locationId}`);
     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
     if (!saved.themeData || !saved.themeData["--subaccountThemes"]) return;
 
