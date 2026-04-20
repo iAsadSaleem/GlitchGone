@@ -422,6 +422,7 @@ function injectThemeData(themeData) {
             console.log("Raw subaccount themes data:", rawSub);
             const sub = (typeof rawSub === "string") ? JSON.parse(rawSub) : (rawSub || {});
             const locTheme = sub[locationId];
+            console.log(`Subaccount theme for location ${locationId}:`, locTheme);
             if (locTheme) {
                 // Helper: applies CSS vars to the DOM
                 function applySubVars(subVars) {
