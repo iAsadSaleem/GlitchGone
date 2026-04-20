@@ -5933,7 +5933,8 @@ function buildIndividualAccountThemesSection(container) {
         3. Enter the <strong>Location ID</strong> of the subaccount you want to customize.<br>
         4. Optionally provide a <strong>Logo URL</strong> or upload a logo image for that subaccount.<br>
         5. Choose a <strong>Theme</strong> from the dropdown to apply a preset theme to that subaccount.<br>
-        6. Click <strong>Save Settings</strong> on each row to save your changes.<br><br>
+        6. Click <strong>Save Settings</strong> on each row to save your changes.<br>
+        7. And Don't Forget to Click <strong>Apply Changes</strong> to save your changes.<br><br>
         ✨ <em>Note:</em> Each subaccount can have its own unique logo and theme — settings are applied automatically when a user visits that subaccount's location.
     `;
     wrapper.appendChild(instruction);
