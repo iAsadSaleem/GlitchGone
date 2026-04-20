@@ -660,6 +660,7 @@ function applySubaccountTheme() {
     } else if (locationTheme.themeName) {
         // New format: fetch from API using themeName, use in-memory cache
         if (_subaccountThemeCache[locationTheme.themeName]) {
+          console.log(`[ThemeBuilder] Applying subaccount theme from cache: ${locationId} (${locationTheme.themeName})`);
             applyCssVars(_subaccountThemeCache[locationTheme.themeName]);
         } else {
             fetch("https://themebuilder-six.vercel.app/api/theme/getallthemes")
@@ -667,6 +668,7 @@ function applySubaccountTheme() {
                 .then(data => {
                     const match = data.themes.find(t => t.themeName === locationTheme.themeName);
                     if (match && match.themeData) {
+                      console.log(`[ThemeBuilder] Fetched subaccount theme from API: ${locationId} (${match.themeName})`);
                         _subaccountThemeCache[locationTheme.themeName] = match.themeData;
                         applyCssVars(match.themeData);
                     }
