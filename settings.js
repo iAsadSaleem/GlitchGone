@@ -5686,8 +5686,10 @@ function buildIndividualAccountThemesSection(container) {
 
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedTheme.themeData || {};
+        // let subaccountThemes = {};
+        // try { subaccountThemes = themeData["--subaccountThemes"] ? JSON.parse(themeData["--subaccountThemes"]) : {}; } catch (e) {}
         let subaccountThemes = {};
-        try { subaccountThemes = themeData["--subaccountThemes"] ? JSON.parse(themeData["--subaccountThemes"]) : {}; } catch (e) {}
+        try {    const raw = themeData["--subaccountThemes"]; subaccountThemes = (typeof raw === "string") ? JSON.parse(raw) : (raw || {}); } catch (e) {}
 
         const locationIds = Object.keys(subaccountThemes);
 
@@ -5859,7 +5861,7 @@ function buildIndividualAccountThemesSection(container) {
             sub[locId] = {
                 logoUrl: logoUrl,
                 themeName: selectedThemeName,
-                themeData: selectedThemeData
+                // themeData: selectedThemeData
             };
 
             saved.themeData["--subaccountThemes"] = JSON.stringify(sub);
