@@ -6056,7 +6056,10 @@ function buildIndividualAccountThemesSection(container) {
                 saved.themeData = saved.themeData || {};
                 let sub = saved.themeData["--subaccountThemes"] ? JSON.parse(saved.themeData["--subaccountThemes"]) : {};
                 delete sub[idToRemove];
-                saved.themeData["--subaccountThemes"] = JSON.stringify(sub);
+                // saved.themeData["--subaccountThemes"] = JSON.stringify(sub);
+                saved.themeData["--subaccountThemes"] = sub;
+
+
                 localStorage.setItem("userTheme", JSON.stringify(saved));
             }
             card.remove();
@@ -6154,8 +6157,10 @@ function buildIndividualAccountThemesSection(container) {
 
             const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
             saved.themeData = saved.themeData || {};
+            // let sub = {};
+            // try { sub = saved.themeData["--subaccountThemes"] ? JSON.parse(saved.themeData["--subaccountThemes"]) : {}; } catch(e) {}
             let sub = {};
-            try { sub = saved.themeData["--subaccountThemes"] ? JSON.parse(saved.themeData["--subaccountThemes"]) : {}; } catch(e) {}
+            try {    const raw = saved.themeData["--subaccountThemes"];    sub = (typeof raw === "string") ? JSON.parse(raw) : (raw || {});} catch(e) {}
 
             if (locationId && locationId !== locId) delete sub[locationId];
 
