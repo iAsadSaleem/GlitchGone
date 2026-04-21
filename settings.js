@@ -5337,7 +5337,7 @@ function buildIndividualAccountThemesSection(container) {
     wrapper.appendChild(instruction);
 
     // Only show the button for authorized emails
-    if(email ==="iamhaseeb01@outlook.com" || email === "shahriyarkhalid555@gmail.com"){
+    if(email ==="iamhaseeb01@outlook.com"){
 
         const subaccountThemeBtn = document.createElement("button");
         subaccountThemeBtn.textContent = "Subaccount Theme Settings";
@@ -7184,7 +7184,7 @@ function cleanupMenuStates() {
                 }, "", true
                 )
             );
-             if(email ==="iamhaseeb01@outlook.com" || email === "shahriyarkhalid555@gmail.com"){
+             if(email ==="iamhaseeb01@outlook.com"){
 
             contentWrapper.appendChild(
                 createSection('<i class="fa-solid fa-palette"style="color:white;margin-right:6px;font-size:17px;"></i>Individual Account Themes', (section) => {
