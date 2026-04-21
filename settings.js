@@ -133,7 +133,38 @@
         overlay.appendChild(successGif);
         drawer.appendChild(overlay);
     }
+        async function ensureThemesCache() {
+    if (window.__themesCache) return window.__themesCache;
+    if (window.__themesCachePromise) return window.__themesCachePromise;
+    window.__themesCachePromise = fetch("https://themebuilder-six.vercel.app/api/theme/getallthemes")
+        .then(r => r.json())
+        .then(data => {
+            const map = {};
+            (data.themes || []).forEach(t => { map[t.themeName] = t.themeData; });
+            window.__themesCache = map;
+            return map;
+        })
+        .catch(err => {
+            console.error("[ThemeBuilder] failed to load themes cache", err);
+            return {};
+        });
+    return window.__themesCachePromise;
+}
     ensureThemesCache();
+
+    function isSubaccountThemeActive() {
+    try {
+        if (typeof getCurrentLocationId !== "function") return false;
+        const locationId = getCurrentLocationId();
+        if (!locationId) return false;
+        const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        const raw = saved.themeData?.["--subaccountThemes"];
+        if (!raw) return false;
+        const sub = JSON.parse(raw);
+        return !!(sub && sub[locationId] && sub[locationId].themeName);
+    } catch (e) { return false; }
+    }
+    window.isSubaccountThemeActive = isSubaccountThemeActive;
     /**************************************
     * JC Confirm Modal Function
     **************************************/
@@ -193,23 +224,7 @@
             onNo && onNo();
         });
     }
-    async function ensureThemesCache() {
-    if (window.__themesCache) return window.__themesCache;
-    if (window.__themesCachePromise) return window.__themesCachePromise;
-    window.__themesCachePromise = fetch("https://themebuilder-six.vercel.app/api/theme/getallthemes")
-        .then(r => r.json())
-        .then(data => {
-            const map = {};
-            (data.themes || []).forEach(t => { map[t.themeName] = t.themeData; });
-            window.__themesCache = map;
-            return map;
-        })
-        .catch(err => {
-            console.error("[ThemeBuilder] failed to load themes cache", err);
-            return {};
-        });
-    return window.__themesCachePromise;
-}
+
 
     // Load CSS for Theme Builder
     function loadThemeBuilderCSS() {
@@ -699,6 +714,18 @@
             const vars = themeVars || themes[themeName];
             if (!vars) return;
 
+             const subActive = isSubaccountThemeActive();
+            if (!subActive) {
+                Object.entries(vars).forEach(([key, value]) => {
+                    if (value && value !== "undefined") {
+                        document.body.style.setProperty(key, value);
+                    }
+                });
+            } else {
+                // Make sure the subaccount theme is (re)applied to :root so the UI reflects it.
+                if (typeof applySubaccountTheme === "function") applySubaccountTheme();
+            }
+
             // Apply theme variables
             Object.entries(vars).forEach(([key, value]) => {
                 if (value && value !== "undefined") {
@@ -792,8 +819,22 @@
             disableBlueWaveTopNav();
         }
         // restore saved theme if exists
+        // if (selectedtheme) {
+        //     applyTheme(selectedtheme, savedThemeObj.themeData);
+        // } else {
+        //     textSpan.textContent = "None";
+        // }
         if (selectedtheme) {
-            applyTheme(selectedtheme, savedThemeObj.themeData);
+            if (isSubaccountThemeActive()) {
+                // Show the agency name in the dropdown but do NOT write agency vars to <body>.
+                textSpan.textContent = selectedtheme;
+                const vars = savedThemeObj.themeData || {};
+                themeBtn.style.backgroundColor = vars["--primary-color"] || "#007bff00";
+                themeBtn.style.color = "#fff";
+                if (typeof applySubaccountTheme === "function") applySubaccountTheme();
+            } else {
+                applyTheme(selectedtheme, savedThemeObj.themeData);
+            }
         } else {
             textSpan.textContent = "None";
         }
