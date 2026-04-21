@@ -280,71 +280,60 @@ function applySidebarLogoFromTheme(retries = 15, delay = 300) {
         })();
 
   // // ---- Theme data injection ----
-  // function injectThemeData(themeData) {
-  //   if (!themeData || typeof themeData !== "object") return;
-  //   // Save merged version
-  //   const savedRaw = localStorage.getItem(STORAGE.userTheme);
-  //   const saved = safeJsonParse(savedRaw) || {};
-  //   const mergedTheme = { ...(saved.themeData || {}), ...themeData };
-
-  //   try { localStorage.setItem(STORAGE.userTheme, JSON.stringify({ themeData: mergedTheme })); } catch (e) { /* ignore */ }
-
-  //   const root = document.documentElement;
-  //   Object.keys(mergedTheme).forEach(key => {
-  //     if (key.startsWith("--") && typeof mergedTheme[key] === "string") {
-  //       try { root.style.setProperty(key, mergedTheme[key]); } catch (e) { /* ignore */ }
-  //     }
-  //   });
-
-  //   // Optional text updates
-  // //  if (mergedTheme["--login-button-text"]) {const cleanText = stripQuotes(mergedTheme["--login-button-text"]);updateElementText("button.hl-btn.bg-curious-blue-500", cleanText);}
-  // //  if (mergedTheme["--login-headline-text"]) {const cleanText = stripQuotes(mergedTheme["--login-headline-text"]);updateElementText("h2.heading2", cleanText);}
-  // //  if (mergedTheme["--forgetpassword-text"]) {const cleanText = stripQuotes(mergedTheme["--forgetpassword-text"]);updateElementText("#forgot_passowrd_btn", cleanText);}
-  // }
-//   function injectThemeData(themeData) {
+// function injectThemeData(themeData) {
 //     if (!themeData || typeof themeData !== "object") return;
 
 //     const savedRaw = localStorage.getItem(STORAGE.userTheme);
 //     const saved = safeJsonParse(savedRaw) || {};
 //     const mergedTheme = { ...(saved.themeData || {}), ...themeData };
 
-//     // Save the merged agency data to localStorage (preserves all config data)
+//     // Always save the full merged data to localStorage (preserves all config keys)
 //     try { localStorage.setItem(STORAGE.userTheme, JSON.stringify({ themeData: mergedTheme })); } catch (e) {}
 
-//     // If on a subaccount page with a configured theme, override agency CSS vars
-//     // with subaccount vars BEFORE touching the DOM — no race condition possible
-//     let finalTheme = mergedTheme;
+//     const root = document.documentElement;
 //     const locationId = getCurrentLocationId();
+
+//     // ── Subaccount check ─────────────────────────────────────────────────
+//     // If on a subaccount page that has its own configured theme,
+//     // apply ONLY the subaccount CSS vars and return early.
+//     // The agency theme vars are NOT written to the DOM at all.
 //     if (locationId) {
 //         try {
-//             const subaccountThemes = mergedTheme["--subaccountThemes"]
+//             const sub = mergedTheme["--subaccountThemes"]
 //                 ? JSON.parse(mergedTheme["--subaccountThemes"])
 //                 : {};
-//             const locationTheme = subaccountThemes[locationId];
-//             if (locationTheme) {
-//                 let subThemeData = locationTheme.themeData;
-//                 if (typeof subThemeData === "string") {
-//                     try { subThemeData = JSON.parse(subThemeData); } catch (e) { subThemeData = {}; }
+//             const locTheme = sub[locationId];
+//             if (locTheme) {
+//                 let subVars = locTheme.themeData;
+//                 if (typeof subVars === "string") {
+//                     try { subVars = JSON.parse(subVars); } catch (e) { subVars = null; }
 //                 }
-//                 if (subThemeData && typeof subThemeData === "object" && Object.keys(subThemeData).length > 0) {
-//                     // Subaccount vars win over agency vars — merged into final object
-//                     finalTheme = { ...mergedTheme, ...subThemeData };
-//                     console.log(`[ThemeBuilder] injectThemeData: subaccount override active for ${locationId}`);
+//                 if (subVars && typeof subVars === "object" && Object.keys(subVars).length > 0) {
+//                     // Apply ONLY the subaccount theme — skip agency vars entirely
+//                     Object.keys(subVars).forEach(key => {
+//                         if (key.startsWith("--") && typeof subVars[key] === "string") {
+//                             try { root.style.setProperty(key, subVars[key]); } catch (e) {}
+//                         }
+//                     });
+//                     console.log(`[ThemeBuilder Updated code] Subaccount theme applied (${Object.keys(subVars).length} vars) — agency theme skipped for: ${locationId}`);
+//                     return; // ← Exit here. Agency CSS vars are never written to the DOM.
 //                 }
 //             }
 //         } catch (e) {
-//             console.warn("[ThemeBuilder] injectThemeData: subaccount theme parse failed", e);
+//             console.warn("[ThemeBuilder] Subaccount theme check failed, falling back to agency theme:", e);
 //         }
 //     }
 
-//     // Apply final resolved CSS vars to DOM (single write — no overwrite needed after this)
-//     const root = document.documentElement;
-//     Object.keys(finalTheme).forEach(key => {
-//         if (key.startsWith("--") && typeof finalTheme[key] === "string") {
-//             try { root.style.setProperty(key, finalTheme[key]); } catch (e) {}
+//     // ── Agency theme (fallback) ───────────────────────────────────────────
+//     // Only reaches here when: not on a subaccount page, OR no subaccount theme configured
+//     Object.keys(mergedTheme).forEach(key => {
+//         if (key.startsWith("--") && typeof mergedTheme[key] === "string") {
+//             try { root.style.setProperty(key, mergedTheme[key]); } catch (e) {}
 //         }
 //     });
+//     console.log("[ThemeBuilder] Agency theme applied");
 // }
+
 function injectThemeData(themeData) {
     if (!themeData || typeof themeData !== "object") return;
 
@@ -359,38 +348,57 @@ function injectThemeData(themeData) {
     const locationId = getCurrentLocationId();
 
     // ── Subaccount check ─────────────────────────────────────────────────
-    // If on a subaccount page that has its own configured theme,
-    // apply ONLY the subaccount CSS vars and return early.
-    // The agency theme vars are NOT written to the DOM at all.
     if (locationId) {
         try {
             const sub = mergedTheme["--subaccountThemes"]
                 ? JSON.parse(mergedTheme["--subaccountThemes"])
                 : {};
             const locTheme = sub[locationId];
-            if (locTheme) {
-                let subVars = locTheme.themeData;
-                if (typeof subVars === "string") {
-                    try { subVars = JSON.parse(subVars); } catch (e) { subVars = null; }
+
+            if (locTheme && (locTheme.themeName || locTheme.themeData)) {
+                // Resolve CSS vars: prefer cache lookup by themeName, fall back to legacy inline themeData
+                let subVars = null;
+
+                if (locTheme.themeName && window.__themesCache) {
+                    subVars = window.__themesCache[locTheme.themeName] || null;
                 }
+
+                // Legacy fallback for old documents that still have inline themeData
+                if (!subVars && locTheme.themeData) {
+                    subVars = locTheme.themeData;
+                    if (typeof subVars === "string") {
+                        try { subVars = JSON.parse(subVars); } catch (e) { subVars = null; }
+                    }
+                }
+
                 if (subVars && typeof subVars === "object" && Object.keys(subVars).length > 0) {
-                    // Apply ONLY the subaccount theme — skip agency vars entirely
                     Object.keys(subVars).forEach(key => {
                         if (key.startsWith("--") && typeof subVars[key] === "string") {
-                            try { root.style.setProperty(key, subVars[key]); } catch (e) {}
+                            try { root.style.setProperty(key, subVars[key], "important"); } catch (e) {}
                         }
                     });
-                    console.log(`[ThemeBuilder Updated code] Subaccount theme applied (${Object.keys(subVars).length} vars) — agency theme skipped for: ${locationId}`);
-                    return; // ← Exit here. Agency CSS vars are never written to the DOM.
+                    if (locTheme.logoUrl) {
+                        try { root.style.setProperty("--agency-logo-url", locTheme.logoUrl); } catch (e) {}
+                    }
+                    console.log(`[ThemeBuilder] Subaccount theme "${locTheme.themeName || 'inline'}" applied for: ${locationId}`);
+                    return; // ← Agency vars never written
+                }
+
+                // Cache not ready yet — still SKIP agency vars, then load cache and re-apply
+                if (locTheme.themeName && typeof ensureThemesCache === "function") {
+                    console.log(`[ThemeBuilder] Subaccount theme "${locTheme.themeName}" pending cache for: ${locationId}`);
+                    ensureThemesCache().then(() => {
+                        if (typeof applySubaccountTheme === "function") applySubaccountTheme();
+                    });
+                    return; // ← Critical: do NOT fall through to agency theme
                 }
             }
         } catch (e) {
-            console.warn("[ThemeBuilder] Subaccount theme check failed, falling back to agency theme:", e);
+            console.warn("[ThemeBuilder] Subaccount theme check failed:", e);
         }
     }
 
-    // ── Agency theme (fallback) ───────────────────────────────────────────
-    // Only reaches here when: not on a subaccount page, OR no subaccount theme configured
+    // ── Agency theme (only when no subaccount override exists) ───────────
     Object.keys(mergedTheme).forEach(key => {
         if (key.startsWith("--") && typeof mergedTheme[key] === "string") {
             try { root.style.setProperty(key, mergedTheme[key]); } catch (e) {}
