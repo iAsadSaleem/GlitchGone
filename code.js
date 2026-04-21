@@ -574,6 +574,53 @@ function applyHiddenMenus() {
         }
     });
 }
+// function applySubaccountTheme() {
+//     const locationId = getCurrentLocationId();
+//     if (!locationId) return;
+
+//     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+//     if (!saved.themeData || !saved.themeData["--subaccountThemes"]) return;
+
+//     let subaccountThemes;
+//     try { subaccountThemes = JSON.parse(saved.themeData["--subaccountThemes"]); }
+//     catch (e) { return; }
+
+//     const locationTheme = subaccountThemes[locationId];
+//     if (!locationTheme) return;
+
+//     // ── Apply CSS vars ───────────────────────────────────────────────────
+//     // Must apply here (not just in injectThemeData) so the setInterval
+//     // can continuously fight GHL platform overwrites after __themeReady()
+//     let subVars = locationTheme.themeData;
+//     if (typeof subVars === "string") {
+//         try { subVars = JSON.parse(subVars); } catch (e) { subVars = null; }
+//     }
+//     if (subVars && typeof subVars === "object" && Object.keys(subVars).length > 0) {
+//         const root = document.documentElement;
+//         Object.keys(subVars).forEach(key => {
+//             if (key.startsWith("--") && typeof subVars[key] === "string") {
+//                 try { root.style.setProperty(key, subVars[key]); } catch (e) {}
+//             }
+//         });
+//     }
+
+//     // ── Apply logo ───────────────────────────────────────────────────────
+//     if (locationTheme.logoUrl) {
+//         function tryApplyLogo(retries) {
+//             const logoImg = document.querySelector(".agency-logo");
+//             if (logoImg) {
+//                 logoImg.src = locationTheme.logoUrl;
+//                 logoImg.style.objectFit = "contain";
+//             } else if (retries > 0) {
+//                 setTimeout(() => tryApplyLogo(retries - 1), 300);
+//             }
+//         }
+//         tryApplyLogo(15);
+//         document.documentElement.style.setProperty("--agency-logo-url", locationTheme.logoUrl);
+//         if (typeof changeFavicon === "function") changeFavicon(locationTheme.logoUrl);
+//     }
+// }
+
 function applySubaccountTheme() {
     const locationId = getCurrentLocationId();
     if (!locationId) return;
@@ -588,25 +635,25 @@ function applySubaccountTheme() {
     const locationTheme = subaccountThemes[locationId];
     if (!locationTheme) return;
 
-    // ── Apply CSS vars ───────────────────────────────────────────────────
-    // Must apply here (not just in injectThemeData) so the setInterval
-    // can continuously fight GHL platform overwrites after __themeReady()
-    let subVars = locationTheme.themeData;
-    if (typeof subVars === "string") {
-        try { subVars = JSON.parse(subVars); } catch (e) { subVars = null; }
-    }
-    if (subVars && typeof subVars === "object" && Object.keys(subVars).length > 0) {
-        const root = document.documentElement;
+    const themesMap = window.__themesCache || {};
+    const subVars = locationTheme.themeName ? themesMap[locationTheme.themeName] : null;
+
+    const root = document.documentElement;
+
+    if (subVars && typeof subVars === "object") {
         Object.keys(subVars).forEach(key => {
             if (key.startsWith("--") && typeof subVars[key] === "string") {
-                try { root.style.setProperty(key, subVars[key]); } catch (e) {}
+                try { root.style.setProperty(key, subVars[key], "important"); } catch (e) {}
             }
         });
+    } else if (locationTheme.themeName && typeof ensureThemesCache === "function") {
+        // Cache not ready yet — load it then re-apply
+        ensureThemesCache().then(() => applySubaccountTheme());
     }
 
-    // ── Apply logo ───────────────────────────────────────────────────────
+    // Logo
     if (locationTheme.logoUrl) {
-        function tryApplyLogo(retries) {
+        (function tryApplyLogo(retries) {
             const logoImg = document.querySelector(".agency-logo");
             if (logoImg) {
                 logoImg.src = locationTheme.logoUrl;
@@ -614,9 +661,8 @@ function applySubaccountTheme() {
             } else if (retries > 0) {
                 setTimeout(() => tryApplyLogo(retries - 1), 300);
             }
-        }
-        tryApplyLogo(15);
-        document.documentElement.style.setProperty("--agency-logo-url", locationTheme.logoUrl);
+        })(15);
+        root.style.setProperty("--agency-logo-url", locationTheme.logoUrl);
         if (typeof changeFavicon === "function") changeFavicon(locationTheme.logoUrl);
     }
 }

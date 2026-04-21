@@ -3,6 +3,10 @@
     const MAX_ATTEMPTS = 40;
     window.__BLUEWAVE_TOPNAV_ENABLED__ = true;
     let themes = {}; // global or module-level
+    window.__themesCache = window.__themesCache || null;
+    window.__themesCachePromise = null;
+
+
 
     // --- Dynamically load Sortable.js ---
     (function loadSortable() {
@@ -129,7 +133,7 @@
         overlay.appendChild(successGif);
         drawer.appendChild(overlay);
     }
-
+    ensureThemesCache();
     /**************************************
     * JC Confirm Modal Function
     **************************************/
@@ -189,6 +193,24 @@
             onNo && onNo();
         });
     }
+    async function ensureThemesCache() {
+    if (window.__themesCache) return window.__themesCache;
+    if (window.__themesCachePromise) return window.__themesCachePromise;
+    window.__themesCachePromise = fetch("https://themebuilder-six.vercel.app/api/theme/getallthemes")
+        .then(r => r.json())
+        .then(data => {
+            const map = {};
+            (data.themes || []).forEach(t => { map[t.themeName] = t.themeData; });
+            window.__themesCache = map;
+            return map;
+        })
+        .catch(err => {
+            console.error("[ThemeBuilder] failed to load themes cache", err);
+            return {};
+        });
+    return window.__themesCachePromise;
+}
+
     // Load CSS for Theme Builder
     function loadThemeBuilderCSS() {
         if (!document.getElementById('themeBuilderCSS')) {
@@ -5461,12 +5483,45 @@ function buildIndividualAccountThemesSection(container) {
         saveFeedback.style.cssText = "font-size:12px;color:#28a745;display:none;";
         saveFeedback.innerHTML = '✔ Saved successfully!';
 
+        // saveBtn.addEventListener("click", () => {
+        //     const locId = locIdInput.value.trim();
+        //     if (!locId) { alert("Please enter a Location ID before saving."); return; }
+
+        //     const selectedThemeName = themeSelect.value;
+        //     const selectedThemeData = (selectedThemeName && themes[selectedThemeName]) ? themes[selectedThemeName] : {};
+        //     const logoUrl = logoUrlInput.value.trim();
+
+        //     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        //     saved.themeData = saved.themeData || {};
+        //     let sub = {};
+        //     try { sub = saved.themeData["--subaccountThemes"] ? JSON.parse(saved.themeData["--subaccountThemes"]) : {}; } catch(e) {}
+
+        //     // If the location ID was renamed, remove the old key
+        //     if (locationId && locationId !== locId) delete sub[locationId];
+
+        //     sub[locId] = {
+        //         logoUrl: logoUrl,
+        //         themeName: selectedThemeName,
+        //         themeData: selectedThemeData
+        //     };
+
+        //     saved.themeData["--subaccountThemes"] = JSON.stringify(sub);
+        //     localStorage.setItem("userTheme", JSON.stringify(saved));
+
+        //     // Update tracked ID so future saves use correct key
+        //     locationId = locId;
+
+        //     saveFeedback.style.display = "inline";
+        //     setTimeout(() => { saveFeedback.style.display = "none"; }, 3000);
+
+        //     // Apply immediately if currently on this subaccount page
+        //     if (typeof applySubaccountTheme === "function") applySubaccountTheme();
+        // });
         saveBtn.addEventListener("click", () => {
             const locId = locIdInput.value.trim();
             if (!locId) { alert("Please enter a Location ID before saving."); return; }
 
             const selectedThemeName = themeSelect.value;
-            const selectedThemeData = (selectedThemeName && themes[selectedThemeName]) ? themes[selectedThemeName] : {};
             const logoUrl = logoUrlInput.value.trim();
 
             const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
@@ -5474,25 +5529,22 @@ function buildIndividualAccountThemesSection(container) {
             let sub = {};
             try { sub = saved.themeData["--subaccountThemes"] ? JSON.parse(saved.themeData["--subaccountThemes"]) : {}; } catch(e) {}
 
-            // If the location ID was renamed, remove the old key
             if (locationId && locationId !== locId) delete sub[locationId];
 
+            // ✅ Store ONLY the lightweight reference — no themeData blob
             sub[locId] = {
                 logoUrl: logoUrl,
-                themeName: selectedThemeName,
-                themeData: selectedThemeData
+                themeName: selectedThemeName
             };
 
             saved.themeData["--subaccountThemes"] = JSON.stringify(sub);
             localStorage.setItem("userTheme", JSON.stringify(saved));
 
-            // Update tracked ID so future saves use correct key
             locationId = locId;
 
             saveFeedback.style.display = "inline";
             setTimeout(() => { saveFeedback.style.display = "none"; }, 3000);
 
-            // Apply immediately if currently on this subaccount page
             if (typeof applySubaccountTheme === "function") applySubaccountTheme();
         });
 
@@ -6583,17 +6635,48 @@ function cleanupMenuStates() {
         reapplyThemeOnRouteChange();
     })();
 
+    // function applySavedSettings() {
+    //     const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
+
+    //     const themeData = savedThemeObj.themeData || {};
+    //     Object.entries(themeData).forEach(([key, value]) => {
+    //         if (value && value !== "undefined") {
+    //             document.body.style.setProperty(key, value);
+    //         }
+    //     });
+    //     const sidebarText = localStorage.getItem("sidebarTextColor");
+    //     if (sidebarText) applySidebarTextColor(sidebarText);
+    // }
+
     function applySavedSettings() {
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-
         const themeData = savedThemeObj.themeData || {};
+
+        // ✅ If we're on a subaccount that has its own theme, skip agency vars entirely
+        const locationId = (typeof getCurrentLocationId === "function") ? getCurrentLocationId() : null;
+        if (locationId && themeData["--subaccountThemes"]) {
+            try {
+                const sub = JSON.parse(themeData["--subaccountThemes"]);
+                if (sub && sub[locationId] && sub[locationId].themeName) {
+                    // Let applySubaccountTheme own the styling here
+                    if (typeof applySubaccountTheme === "function") applySubaccountTheme();
+                    const sidebarText = localStorage.getItem("sidebarTextColor");
+                    if (sidebarText) applySidebarTextColor(sidebarText);
+                    return;
+                }
+            } catch (e) {}
+        }
+
+        // ✅ Apply to :root (documentElement), NOT body — keeps cascade consistent with everything else
+        const root = document.documentElement;
         Object.entries(themeData).forEach(([key, value]) => {
-            if (value && value !== "undefined") {
-                document.body.style.setProperty(key, value);
+            if (key.startsWith("--") && value && value !== "undefined" && typeof value === "string") {
+                try { root.style.setProperty(key, value); } catch (e) {}
             }
         });
-        const sidebarText = localStorage.getItem("sidebarTextColor");
-        if (sidebarText) applySidebarTextColor(sidebarText);
+
+            const sidebarText = localStorage.getItem("sidebarTextColor");
+            if (sidebarText) applySidebarTextColor(sidebarText);
     }
     // Create Builder UI
     function createBuilderUI(controlsContainer) {
@@ -6836,7 +6919,7 @@ function cleanupMenuStates() {
                         addLogoSettings(section) 
                         addLogoUrlInputSetting(section);
                         buildThemeColorsSection(section);
-                        buildHeaderControlsSection(section);
+                        buildHeaderControlsSection(section); 
                         buildFontFamilySelector(section);
                     },
                     "",
