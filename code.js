@@ -80,7 +80,13 @@
       // merge theme data safely
       const savedRaw = localStorage.getItem(STORAGE.userTheme);
       const saved = safeJsonParse(savedRaw) || {};
+      // const merged = { ...(saved.themeData || {}), ...themeData };
+      // injectThemeData(merged);
       const merged = { ...(saved.themeData || {}), ...themeData };
+      // 🔒 Never let the remote agency JSON wipe the locally-owned subaccount map
+      if (saved.themeData?.["--subaccountThemes"]) {
+          merged["--subaccountThemes"] = saved.themeData["--subaccountThemes"];
+      }
       injectThemeData(merged);
       applySidebarLogoFromTheme();
 

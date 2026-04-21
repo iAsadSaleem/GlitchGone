@@ -165,6 +165,27 @@
     } catch (e) { return false; }
     }
     window.isSubaccountThemeActive = isSubaccountThemeActive;
+
+    // 🔒 Safe writer for userTheme — preserves keys owned by other parts of the app
+    function saveUserTheme(savedThemeObj) {
+        const prev = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        const prevData = prev.themeData || {};
+        const newThemeData = (savedThemeObj && savedThemeObj.themeData) || {};
+        const next = {
+            ...savedThemeObj,
+            themeData: {
+                ...prevData,
+                ...newThemeData,
+                "--subaccountThemes":
+                    newThemeData["--subaccountThemes"] ?? prevData["--subaccountThemes"],
+                "--menuCustomizations":
+                    newThemeData["--menuCustomizations"] ?? prevData["--menuCustomizations"],
+                "--subMenuOrder":
+                    newThemeData["--subMenuOrder"] ?? prevData["--subMenuOrder"],
+            },
+        };
+        localStorage.setItem("userTheme", JSON.stringify(next));
+    }
     /**************************************
     * JC Confirm Modal Function
     **************************************/
@@ -403,7 +424,7 @@
             delete savedThemeObj.themeData["--login-background-image"];
         }
 
-        localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+        saveUserTheme(savedThemeObj);
     }
     // === Background Image Input ===
     function createLoginBackgroundImageInput() {
@@ -434,7 +455,7 @@
                 // Save only the raw URL
                 savedThemeObj.themeData["--login-background-image"] = `url('${cleanUrl}')`;;
             
-            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            saveUserTheme(savedThemeObj);
         }
 
         textInput.addEventListener("input", () => {
@@ -493,7 +514,7 @@
             // Save to localStorage
             savedThemeObj.themeData = savedThemeObj.themeData || {};
             savedThemeObj.themeData[cssVar] = color;
-            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            saveUserTheme(savedThemeObj);
             if (storageKey) localStorage.setItem(storageKey, color);
         }
 
@@ -759,7 +780,7 @@
             savedThemeObj.themeData = { ...(savedThemeObj.themeData || {}), ...vars, ...preserved };
             savedThemeObj.selectedTheme = themeName;
 
-            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            saveUserTheme(savedThemeObj);
             localStorage.setItem("themebuilder_selectedTheme", themeName);
             // injectMenuConfigIntoTheme();
             window.dispatchEvent(new Event("themeChanged"));
@@ -805,7 +826,7 @@
             // Save — only preserve non-theme keys, clear selectedTheme
             savedThemeObj.themeData = preserved;
             savedThemeObj.selectedTheme = "";
-            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            saveUserTheme(savedThemeObj);
             localStorage.setItem("themebuilder_selectedTheme", "");
 
             // Restore default CSS
@@ -1165,7 +1186,7 @@
         savedThemeObj.themeData["--login-card-bg-gradient-start"] = start;
         savedThemeObj.themeData["--login-card-bg-gradient-end"] = end;
         savedThemeObj.themeData["--login-card-bg-gradient"] = gradient;
-        localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+        saveUserTheme(savedThemeObj);
     }
     function createLoginButtonGradientPicker() {
         const wrapper = document.createElement("div");
@@ -1209,7 +1230,7 @@
         savedThemeObj.themeData["--login-button-gradient-end"] = end;
         savedThemeObj.themeData["--login-button-bg-gradient"] = gradient;
 
-        localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+        saveUserTheme(savedThemeObj);
     }
 
     /* ========== Border Radius Input ========== */
@@ -1242,7 +1263,7 @@
 
             savedThemeObj.themeData = savedThemeObj.themeData || {};
             savedThemeObj.themeData["--login-button-border-radius"] = radius;
-            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            saveUserTheme(savedThemeObj);
         }
 
         radiusInput.addEventListener("input", () => {
@@ -1300,7 +1321,7 @@
 
             savedThemeObj.themeData = savedThemeObj.themeData || {};
             savedThemeObj.themeData["--login-button-text-color"] = color;
-            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            saveUserTheme(savedThemeObj);
         }
 
         colorInput.addEventListener("input", () => applyFontColor(colorInput.value));
@@ -1358,7 +1379,7 @@
 
             savedThemeObj.themeData = savedThemeObj.themeData || {};
             savedThemeObj.themeData["--login-button-hover-bg-color"] = color;
-            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            saveUserTheme(savedThemeObj);
         }
 
         colorInput.addEventListener("input", () => applyHoverBgColor(colorInput.value));
@@ -1415,7 +1436,7 @@
 
             savedThemeObj.themeData = savedThemeObj.themeData || {};
             savedThemeObj.themeData["--login-link-text-color"] = color;
-            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            saveUserTheme(savedThemeObj);
         }
 
         colorInput.addEventListener("input", () => applyLinkTextColor(colorInput.value));
@@ -1510,7 +1531,7 @@
             if (!/^#[0-9A-F]{6}$/i.test(hex)) return;
             document.body.style.setProperty("--loader-color-rgb", hexToRgb(hex));
             themeData["--loader-color-rgb"] = hexToRgb(hex);
-            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            saveUserTheme(savedThemeObj);
             dotInput.value = dotCode.value = hex;
         }
 
@@ -1541,7 +1562,7 @@
             const gradient = `linear-gradient(135deg, ${startColor}, ${endColor})`;
             document.body.style.setProperty("--loader-background-color", gradient);
             themeData["--loader-background-color"] = gradient;
-            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            saveUserTheme(savedThemeObj);
         }
 
         // 🟢 START COLOR PICKER
@@ -1645,7 +1666,7 @@
             const size = `${val}px`;
             document.body.style.setProperty("--login-headline-font-size", size);
             savedThemeObj.themeData["--login-headline-font-size"] = size;
-            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            saveUserTheme(savedThemeObj);
         }
 
         sizeInput.addEventListener("input", () => {
@@ -1689,7 +1710,7 @@
             colorCode.value = color;
             document.body.style.setProperty("--login-headline-text-color", color);
             savedThemeObj.themeData["--login-headline-text-color"] = color;
-            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            saveUserTheme(savedThemeObj);
         }
 
         colorInput.addEventListener("input", () => applyColor(colorInput.value));
@@ -1741,7 +1762,7 @@
 
         //    // 3️⃣ Save in localStorage
         //    savedThemeObj.themeData["--login-headline-text"] = cssText; // save with quotes
-        //    localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+        //    saveUserTheme(savedThemeObj);
         //}
 
         //// Save live while typing
@@ -1795,7 +1816,7 @@
             const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
             savedThemeObj.themeData = savedThemeObj.themeData || {};
             savedThemeObj.themeData[cssVar] = value;
-            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            saveUserTheme(savedThemeObj);
         });
 
         wrapper.appendChild(input);
@@ -2286,7 +2307,7 @@ html, body {
             // ✅ Persist
             savedThemeObj.themeData = savedThemeObj.themeData || {};
             savedThemeObj.themeData["--header-main-bg-gradient"] = gradient.trim();
-            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            saveUserTheme(savedThemeObj);
         }
 
 
@@ -2329,7 +2350,7 @@ html, body {
 
                 savedThemeObj.themeData = savedThemeObj.themeData || {};
                 savedThemeObj.themeData[cssVar] = color;
-                localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+                saveUserTheme(savedThemeObj);
 
                 updateGradientPreview();
             }
@@ -2435,7 +2456,7 @@ html, body {
 
                 savedThemeObj.themeData = savedThemeObj.themeData || {};
                 savedThemeObj.themeData[key] = val;
-                localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+                saveUserTheme(savedThemeObj);
 
                 applyFn(val);
             }
@@ -2545,7 +2566,7 @@ html, body {
 
                 savedThemeObj.themeData = savedThemeObj.themeData || {};
                 savedThemeObj.themeData[key] = val;
-                localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+                saveUserTheme(savedThemeObj);
 
                 document.body.style.setProperty(cssVar, val);
             }
@@ -2616,7 +2637,7 @@ html, body {
 
         function saveVar(key, value) {
             themeData[key] = value;
-            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            saveUserTheme(savedThemeObj);
             document.body.style.setProperty(key, value);
         }
 
@@ -2672,7 +2693,7 @@ html, body {
                     const gradient = `linear-gradient(90deg, ${start}, ${end})`;
                     document.body.style.setProperty("--card-header-bg-gradient", gradient);
                     themeData["--card-header-bg-gradient"] = gradient;
-                    localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+                    saveUserTheme(savedThemeObj);
                 }
             }
 
@@ -2768,7 +2789,7 @@ html, body {
 
         function saveVar(key, value) {
             themeData[key] = value;
-            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            saveUserTheme(savedThemeObj);
             document.body.style.setProperty(key, value);
         }
         function updateCardGradient() {
@@ -3028,7 +3049,7 @@ html, body {
 
         function saveVar(key, value) {
             themeData[key] = value;
-            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            saveUserTheme(savedThemeObj);
             document.body.style.setProperty(key, value);
         }
 
@@ -3138,11 +3159,11 @@ html, body {
         function saveVar(key, value) {
             if (value) {
                 themeData[key] = value;
-                localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+                saveUserTheme(savedThemeObj);
                 document.body.style.setProperty(key, value);
             } else {
                 delete themeData[key];
-                localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+                saveUserTheme(savedThemeObj);
                 document.body.style.removeProperty(key);
             }
         }
@@ -3269,7 +3290,7 @@ html, body {
 
         function saveVar(key, value) {
             themeData[key] = value;
-            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            saveUserTheme(savedThemeObj);
             document.body.style.setProperty(key, value);
         }
 
@@ -3437,7 +3458,7 @@ html, body {
                 themeData[key] = value;
                 document.body.style.setProperty(key, value);
             }
-            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            saveUserTheme(savedThemeObj);
         }
 
         // 🖼️ === Company Logo Card ===
@@ -3611,14 +3632,14 @@ html, body {
             } else {
                 // Stale data (e.g. old CSS text stored here) — clear it
                 delete themeData["--loader-css"];
-                localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+                saveUserTheme(savedThemeObj);
             }
         }
     } catch (e) {
         // Corrupted value — wipe it so it doesn't break again next load
         console.warn("⚠️ --loader-css had invalid JSON, clearing it.", e);
         delete themeData["--loader-css"];
-        localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+        saveUserTheme(savedThemeObj);
     }
 
     loaders.forEach((loader) => {
@@ -3678,7 +3699,7 @@ html, body {
 
         function saveLogoVar(key, value) {
             themeData[key] = value;
-            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            saveUserTheme(savedThemeObj);
             document.body.style.setProperty(key, value);
         }
 
@@ -3749,7 +3770,7 @@ html, body {
 
         function saveVar(key, value) {
             themeData[key] = value;
-            localStorage.setItem("userTheme", JSON.stringify(savedThemeObj));
+            saveUserTheme(savedThemeObj);
             document.body.style.setProperty(key, value);
         }
 
@@ -4332,7 +4353,7 @@ function buildFeatureLockSection(container) {
     let savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
     if (savedTheme.themeData && typeof savedTheme.themeData === "string") {
         savedTheme.themeData = JSON.parse(savedTheme.themeData);
-        localStorage.setItem("userTheme", JSON.stringify(savedTheme));
+        saveUserTheme(savedTheme);
     }
 
     if (document.getElementById("tb-feature-lock-settings")) return;
@@ -4601,7 +4622,7 @@ function buildFeatureLockSection(container) {
     //             let sub = saved.themeData["--subaccountThemes"] ? JSON.parse(saved.themeData["--subaccountThemes"]) : {};
     //             delete sub[idToRemove];
     //             saved.themeData["--subaccountThemes"] = JSON.stringify(sub);
-    //             localStorage.setItem("userTheme", JSON.stringify(saved));
+    //             saveUserTheme(saved);
     //         }
     //         card.remove();
     //     });
@@ -4712,7 +4733,7 @@ function buildFeatureLockSection(container) {
     //         };
 
     //         saved.themeData["--subaccountThemes"] = JSON.stringify(sub);
-    //         localStorage.setItem("userTheme", JSON.stringify(saved));
+    //         saveUserTheme(saved);
 
     //         // Update tracked ID so future saves use correct key
     //         locationId = locId;
@@ -4911,7 +4932,7 @@ Finally, don't forget to click the <strong>Apply Changes</strong> button to save
             hidden[placeholderId] = {};
             saved.themeData["--lockedMenus"] = JSON.stringify(locked);
             saved.themeData["--hiddenMenus"] = JSON.stringify(hidden);
-            localStorage.setItem("userTheme", JSON.stringify(saved));
+            saveUserTheme(saved);
 
             // Add row directly without full reload — input shows placeholder, value is empty
             addRowToTbody(tbody, placeholderId, locked, hidden, true);
@@ -5148,7 +5169,7 @@ Finally, don't forget to click the <strong>Apply Changes</strong> button to save
                             if (!locked[currentId]) locked[currentId] = {};
                             locked[currentId][menu.id] = { locked: true, popupType: selectedType, popupUrl: selectedUrl, popupHeadline: selectedHeadline, popupSubHeadline: selectedSubHeadline, popupButtonText: selectedButtonText };
                             saved.themeData["--lockedMenus"] = JSON.stringify(locked);
-                            localStorage.setItem("userTheme", JSON.stringify(saved));
+                            saveUserTheme(saved);
                             applyLockedMenus();
                             markChanged();
                         });
@@ -5159,7 +5180,7 @@ Finally, don't forget to click the <strong>Apply Changes</strong> button to save
                         const currentId = idInput.value.trim() || locationId;
                         if (locked[currentId]) delete locked[currentId][menu.id];
                         saved.themeData["--lockedMenus"] = JSON.stringify(locked);
-                        localStorage.setItem("userTheme", JSON.stringify(saved));
+                        saveUserTheme(saved);
                         applyLockedMenus();
                         markChanged();
                     }
@@ -5178,7 +5199,7 @@ Finally, don't forget to click the <strong>Apply Changes</strong> button to save
                         toggleChecked: hideInput.checked
                     };
                     saved.themeData["--hiddenMenus"] = JSON.stringify(hidden);
-                    localStorage.setItem("userTheme", JSON.stringify(saved));
+                    saveUserTheme(saved);
                     applyHiddenMenus();
                     markChanged();
                 });
@@ -5205,7 +5226,7 @@ Finally, don't forget to click the <strong>Apply Changes</strong> button to save
             }
             saved.themeData["--lockedMenus"] = JSON.stringify(locked);
             saved.themeData["--hiddenMenus"] = JSON.stringify(hidden);
-            localStorage.setItem("userTheme", JSON.stringify(saved));
+            saveUserTheme(saved);
             loadAllToggles(content, agencyMenus, sidebarMenus);
         }
     }
@@ -5279,7 +5300,7 @@ Finally, don't forget to click the <strong>Apply Changes</strong> button to save
                 saved.themeData["--agencyLockedHideMenus"] = JSON.stringify(agencyData);
             }
             saved.themeData["--hiddenMenus"] = JSON.stringify(hidden);
-            localStorage.setItem("userTheme", JSON.stringify(saved));
+            saveUserTheme(saved);
             applyHiddenMenus();
             markChanged();
         });
@@ -5436,7 +5457,7 @@ function buildIndividualAccountThemesSection(container) {
                 let sub = saved.themeData["--subaccountThemes"] ? JSON.parse(saved.themeData["--subaccountThemes"]) : {};
                 delete sub[idToRemove];
                 saved.themeData["--subaccountThemes"] = JSON.stringify(sub);
-                localStorage.setItem("userTheme", JSON.stringify(saved));
+                saveUserTheme(saved);
             }
             card.remove();
         });
@@ -5547,7 +5568,7 @@ function buildIndividualAccountThemesSection(container) {
         //     };
 
         //     saved.themeData["--subaccountThemes"] = JSON.stringify(sub);
-        //     localStorage.setItem("userTheme", JSON.stringify(saved));
+        //     saveUserTheme(saved);
 
         //     // Update tracked ID so future saves use correct key
         //     locationId = locId;
@@ -5579,7 +5600,7 @@ function buildIndividualAccountThemesSection(container) {
             };
 
             saved.themeData["--subaccountThemes"] = JSON.stringify(sub);
-            localStorage.setItem("userTheme", JSON.stringify(saved));
+            saveUserTheme(saved);
 
             locationId = locId;
 
@@ -6233,7 +6254,7 @@ function cleanupMenuStates() {
                     };
 
                     saved.themeData["--menuCustomizations"] = JSON.stringify(customizations);
-                    localStorage.setItem("userTheme", JSON.stringify(saved));
+                    saveUserTheme(saved);
 
                     // Apply title instantly via CSS variable
                     const varName = `--${menu.id}-new-name`;
@@ -6371,7 +6392,7 @@ function cleanupMenuStates() {
                 const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                 saved.themeData ??= {};
                 saved.themeData["--subMenuOrder"] = JSON.stringify(order);
-                localStorage.setItem("userTheme", JSON.stringify(saved));
+                saveUserTheme(saved);
                 }
            
             function updateAgencyaccountSidebarRuntime(newOrder) {
@@ -6414,7 +6435,7 @@ function cleanupMenuStates() {
                     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                     saved.themeData ??= {};
                     saved.themeData[storageKey] = JSON.stringify(newOrder);
-                    localStorage.setItem("userTheme", JSON.stringify(saved));
+                    saveUserTheme(saved);
 
                     if (isSubAccount) {
                         //   restoreSubaccountMenuOrder();
@@ -7282,7 +7303,7 @@ function cleanupMenuStates() {
                                     const mergedSidebarTitles = { ...existingSidebarTitles, ...localSidebarTitles };
                                     savedTheme.themeData["--sidebarTitles"] = JSON.stringify(mergedSidebarTitles);
 
-                                    localStorage.setItem("userTheme", JSON.stringify(savedTheme));
+                                    saveUserTheme(savedTheme);
 
                                     const rlNo = localStorage.getItem("rlno") ? atob(localStorage.getItem("rlno")) : null;
                                     // console.log('Relationshipno', rlNo);
