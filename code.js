@@ -121,43 +121,6 @@
  * Reads: --agency-logo-url (raw URL)
  * Fallback: --agency-logo (url("..."))
  */
-// function applySidebarLogoFromTheme(retries = 15, delay = 300) {
-//     try {
-//         const root = document.documentElement;
-//         const img = document.querySelector(".agency-logo");
-//         if (!img) {
-//             // Element not in DOM yet — retry after delay
-//             if (retries > 0) {
-//                 setTimeout(() => applySidebarLogoFromTheme(retries - 1, delay), delay);
-//             } else {
-//                 console.warn("[ThemeBuilder] .agency-logo not found after retries.");
-//             }
-//             return;
-//         }
-//         // First check --agency-logo-url (raw clean URL)
-//         let url = getComputedStyle(root)
-//             .getPropertyValue("--agency-logo-url")
-//             .trim()
-//             .replace(/^"|"$/g, "");
-//         if (!url) {
-//             let cssUrl = getComputedStyle(root)
-//                 .getPropertyValue("--agency-logo")
-//                 .trim()
-//                 .replace(/^"|"$/g, "");
-//             const match = cssUrl.match(/url\(['"]?(.*?)['"]?\)/);
-//             if (match) url = match[1];
-//         }
-//         if (!url) return;
-//         img.src = url;
-//         img.style.objectFit = "contain";
-//         const w = getComputedStyle(root).getPropertyValue("--logo-width").trim();
-//         const h = getComputedStyle(root).getPropertyValue("--logo-height").trim();
-//         if (w) img.style.width = w;
-//         if (h) img.style.height = h;
-//     } catch (e) {
-//         console.error("[ThemeBuilder] Failed applying sidebar logo", e);
-//     }
-// }
 function applySidebarLogoFromTheme(retries = 15, delay = 300) {
     try {
         // If we're on a subaccount page that has a configured logo override,
@@ -286,60 +249,6 @@ function applySidebarLogoFromTheme(retries = 15, delay = 300) {
         })();
 
   // // ---- Theme data injection ----
-// function injectThemeData(themeData) {
-//     if (!themeData || typeof themeData !== "object") return;
-
-//     const savedRaw = localStorage.getItem(STORAGE.userTheme);
-//     const saved = safeJsonParse(savedRaw) || {};
-//     const mergedTheme = { ...(saved.themeData || {}), ...themeData };
-
-//     // Always save the full merged data to localStorage (preserves all config keys)
-//     try { localStorage.setItem(STORAGE.userTheme, JSON.stringify({ themeData: mergedTheme })); } catch (e) {}
-
-//     const root = document.documentElement;
-//     const locationId = getCurrentLocationId();
-
-//     // ── Subaccount check ─────────────────────────────────────────────────
-//     // If on a subaccount page that has its own configured theme,
-//     // apply ONLY the subaccount CSS vars and return early.
-//     // The agency theme vars are NOT written to the DOM at all.
-//     if (locationId) {
-//         try {
-//             const sub = mergedTheme["--subaccountThemes"]
-//                 ? JSON.parse(mergedTheme["--subaccountThemes"])
-//                 : {};
-//             const locTheme = sub[locationId];
-//             if (locTheme) {
-//                 let subVars = locTheme.themeData;
-//                 if (typeof subVars === "string") {
-//                     try { subVars = JSON.parse(subVars); } catch (e) { subVars = null; }
-//                 }
-//                 if (subVars && typeof subVars === "object" && Object.keys(subVars).length > 0) {
-//                     // Apply ONLY the subaccount theme — skip agency vars entirely
-//                     Object.keys(subVars).forEach(key => {
-//                         if (key.startsWith("--") && typeof subVars[key] === "string") {
-//                             try { root.style.setProperty(key, subVars[key]); } catch (e) {}
-//                         }
-//                     });
-//                     console.log(`[ThemeBuilder Updated code] Subaccount theme applied (${Object.keys(subVars).length} vars) — agency theme skipped for: ${locationId}`);
-//                     return; // ← Exit here. Agency CSS vars are never written to the DOM.
-//                 }
-//             }
-//         } catch (e) {
-//             console.warn("[ThemeBuilder] Subaccount theme check failed, falling back to agency theme:", e);
-//         }
-//     }
-
-//     // ── Agency theme (fallback) ───────────────────────────────────────────
-//     // Only reaches here when: not on a subaccount page, OR no subaccount theme configured
-//     Object.keys(mergedTheme).forEach(key => {
-//         if (key.startsWith("--") && typeof mergedTheme[key] === "string") {
-//             try { root.style.setProperty(key, mergedTheme[key]); } catch (e) {}
-//         }
-//     });
-//     console.log("[ThemeBuilder] Agency theme applied");
-// }
-
 function injectThemeData(themeData) {
     if (!themeData || typeof themeData !== "object") return;
 
@@ -412,8 +321,6 @@ function injectThemeData(themeData) {
     });
     console.log("[ThemeBuilder] Agency theme applied");
 }
-
-// ---- Hidden/Locked menus ----
 
 // Function to get current location ID from URL
 function getCurrentLocationId() {
@@ -588,53 +495,6 @@ function applyHiddenMenus() {
         }
     });
 }
-// function applySubaccountTheme() {
-//     const locationId = getCurrentLocationId();
-//     if (!locationId) return;
-
-//     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-//     if (!saved.themeData || !saved.themeData["--subaccountThemes"]) return;
-
-//     let subaccountThemes;
-//     try { subaccountThemes = JSON.parse(saved.themeData["--subaccountThemes"]); }
-//     catch (e) { return; }
-
-//     const locationTheme = subaccountThemes[locationId];
-//     if (!locationTheme) return;
-
-//     // ── Apply CSS vars ───────────────────────────────────────────────────
-//     // Must apply here (not just in injectThemeData) so the setInterval
-//     // can continuously fight GHL platform overwrites after __themeReady()
-//     let subVars = locationTheme.themeData;
-//     if (typeof subVars === "string") {
-//         try { subVars = JSON.parse(subVars); } catch (e) { subVars = null; }
-//     }
-//     if (subVars && typeof subVars === "object" && Object.keys(subVars).length > 0) {
-//         const root = document.documentElement;
-//         Object.keys(subVars).forEach(key => {
-//             if (key.startsWith("--") && typeof subVars[key] === "string") {
-//                 try { root.style.setProperty(key, subVars[key]); } catch (e) {}
-//             }
-//         });
-//     }
-
-//     // ── Apply logo ───────────────────────────────────────────────────────
-//     if (locationTheme.logoUrl) {
-//         function tryApplyLogo(retries) {
-//             const logoImg = document.querySelector(".agency-logo");
-//             if (logoImg) {
-//                 logoImg.src = locationTheme.logoUrl;
-//                 logoImg.style.objectFit = "contain";
-//             } else if (retries > 0) {
-//                 setTimeout(() => tryApplyLogo(retries - 1), 300);
-//             }
-//         }
-//         tryApplyLogo(15);
-//         document.documentElement.style.setProperty("--agency-logo-url", locationTheme.logoUrl);
-//         if (typeof changeFavicon === "function") changeFavicon(locationTheme.logoUrl);
-//     }
-// }
-
 function applySubaccountTheme() {
     const locationId = getCurrentLocationId();
     if (!locationId) return;
@@ -883,24 +743,10 @@ function applyStoredSidebarTitles() {
     applyHiddenMenus();
     applyLockedMenus();
     applySubaccountTheme();
-
-
-    // try {
-    //   if (saved.themeData["--subMenuOrder"]) {
-    //      const order = JSON.parse(saved.themeData["--subMenuOrder"]);
-    //     reorderMenu(order, "#subAccountSidebar");
-    //     // const order = safeJsonParse(saved.themeData["--subMenuOrder"]) || [];
-    //     // reorderSidebarFromOrder(order.filter(m => m && m.trim() !== "sb_agency-accounts"));
-    //     // applySubMenuOrder(order);
-    //   }
-    // } catch (e) { console.error("[ThemeBuilder] reorder submenu failed", e); }
-
     try {
       if (saved.themeData["--agencyMenuOrder"]) {
         const order = JSON.parse(saved.themeData["--agencyMenuOrder"]);
         reorderMenu(order, "#agencySidebar");
-        // const agencyOrder = safeJsonParse(saved.themeData["--agencyMenuOrder"]) || [];
-        // reorderAgencyFromOrder(agencyOrder.filter(m => m && m.trim() !== "sb_agency-accounts"));
       }
     } catch (e) { console.error("[ThemeBuilder] reorder agency menus failed", e); }
   }
