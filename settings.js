@@ -6133,14 +6133,9 @@ function cleanupMenuStates() {
             sectionHeading.className = "tb-header-controls-cursor";
             sectionHeading.textContent = sectionTitle;
             sectionHeading.style.cursor = "var(--custom-pointer,auto)"; // Make clickable
-            // sectionHeading.style.display = "flex";
             sectionHeading.style.alignItems = "center";
 
              // Add arrow for toggle
-            // const arrow = document.createElement("span");
-            // arrow.innerHTML = "▶"; // Right arrow initially
-            // arrow.style.marginLeft = "8px";
-            // sectionHeading.appendChild(arrow);
             const arrow = document.createElement("span");
             arrow.innerHTML = `<i class="fa-solid fa-angle-down tb-toggle-icon" style="color:white;margin-right:6px;font-size:16px; border-radius: 4px; border: 2px solid #ffffff; padding: 0px 2px 0px 2px;"></i>`;
             arrow.style.marginLeft = "8px";
@@ -6340,19 +6335,6 @@ function cleanupMenuStates() {
             });
 
             wrapper.appendChild(listContainer);
-            //  sectionHeading.addEventListener("click", () => {
-            //     if (listContainer.classList.contains("open")) {
-            //         listContainer.style.maxHeight = "0px";
-            //         listContainer.style.padding = "0 0"; 
-            //         listContainer.classList.remove("open");
-            //         arrow.innerHTML = "▶"; // Right arrow
-            //     } else {
-            //         listContainer.style.maxHeight = listContainer.scrollHeight + "px";
-            //         listContainer.style.padding = "10px 0"; 
-            //         listContainer.classList.add("open");
-            //         arrow.innerHTML = "▼"; // Down arrow
-            //     }
-            // });
             sectionHeading.addEventListener("click", () => {
                 const icon = arrow.querySelector("i");
 
@@ -6427,7 +6409,6 @@ function cleanupMenuStates() {
 
                 onEnd: () => {
                     allowReorder = true; // enable once, only after drag
-
                     const rows = listContainer.querySelectorAll(".tb-menu-row");
                     const newOrder = [...rows].map(r => r.dataset.id);
 
@@ -6438,7 +6419,6 @@ function cleanupMenuStates() {
                     saveUserTheme(saved);
 
                     if (isSubAccount) {
-                        //   restoreSubaccountMenuOrder();
 
                                 saveSubaccountOrder(newOrder);
                                 applySubaccountMenuOrderCSS(newOrder); // 🔥 LIVE APPLY
@@ -6529,11 +6509,6 @@ function cleanupMenuStates() {
             }
 
             if (!container) return;
-
-            // order.forEach(id => {
-            //     const el = document.getElementById(id);
-            //     if (el) container.appendChild(el);
-            // });
            order.forEach(id => {
             const el = document.getElementById(id);
             if (!el) return;
@@ -6697,19 +6672,6 @@ function cleanupMenuStates() {
         reapplyThemeOnRouteChange();
     })();
 
-    // function applySavedSettings() {
-    //     const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-
-    //     const themeData = savedThemeObj.themeData || {};
-    //     Object.entries(themeData).forEach(([key, value]) => {
-    //         if (value && value !== "undefined") {
-    //             document.body.style.setProperty(key, value);
-    //         }
-    //     });
-    //     const sidebarText = localStorage.getItem("sidebarTextColor");
-    //     if (sidebarText) applySidebarTextColor(sidebarText);
-    // }
-
     function applySavedSettings() {
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedThemeObj.themeData || {};
@@ -6787,24 +6749,9 @@ function cleanupMenuStates() {
             title.innerHTML = "Theme Builder";
             title.className = "tb-title";
             
-            // Version text as a small <span> below the title
-            // const version = document.createElement('span');
-            // version.className = "tb-version";
-            // version.textContent = "v1.0";
-
-            // // Append version inside the title div
-            // title.appendChild(document.createElement('br')); // new line
-            // title.appendChild(version);
-
             // Right: Logo + Close Button wrapper
             const rightWrapper = document.createElement('div');
             rightWrapper.className = "tb-header-right";
-
-            // Logo
-            // const logo = document.createElement('img');
-            // logo.src = "https://themebuilder-six.vercel.app/images/growthable-icon.png";
-            // logo.className = "tb-company-logo";
-            // logo.alt = "Company Logo";
 
             // Close button (below logo)
             const closeBtn = document.createElement('button');
@@ -6812,145 +6759,12 @@ function cleanupMenuStates() {
             closeBtn.className = "tb-drawer-close";
 
             // Assemble right section
-            // rightWrapper.appendChild(logo);
             rightWrapper.appendChild(closeBtn);
 
             // Assemble header
             drawerTitleWrapper.appendChild(title);
             drawerTitleWrapper.appendChild(rightWrapper);
             drawer.appendChild(drawerTitleWrapper);
-
-            //old code start from here 12-16-2025
-            //// ===== Title with Close Button =====
-            //const drawerTitleWrapper = document.createElement('div');
-            //drawerTitleWrapper.className = "tb-drawer-title-wrapper";
-
-            ////const title = document.createElement('div');
-            ////title.textContent = "GlitchGone<br>Theme Builder";
-            ////title.className = "tb-title";
-            //const title = document.createElement('div');
-            //title.innerHTML = "Theme Builder";
-            //title.className = "tb-title";
-
-            //const closeBtn = document.createElement('button');
-            //closeBtn.innerHTML = '&times;';
-            //closeBtn.className = "tb-drawer-close";
-
-            //drawerTitleWrapper.appendChild(title);
-            //drawerTitleWrapper.appendChild(closeBtn);
-            //drawer.appendChild(drawerTitleWrapper);
-            //end here 12-16-2025
-
-
-
-            //// ===== Theme Mode Toggle (Dark / Light) =====
-            //const toggleWrapper = document.createElement('div');
-            //toggleWrapper.className = "tb-toggle-wrapper";
-
-            //const toggleTitle = document.createElement('span');
-            //toggleTitle.className = "tb-toggle-title";
-            //toggleTitle.textContent = "Theme Mode";
-
-            //const toggleSwitch = document.createElement('div');
-            //toggleSwitch.className = "toggle-switch";
-
-            //const toggleInput = document.createElement('input');
-            //toggleInput.type = "checkbox";
-            //toggleInput.className = "toggle-input";
-            //toggleInput.id = "tb-theme-toggle";
-
-            //const toggleLabel = document.createElement('label');
-            //toggleLabel.className = "toggle-label";
-            //toggleLabel.setAttribute("for", "tb-theme-toggle");
-
-            //const sunIcon = document.createElement('span');
-            //sunIcon.className = "toggle-icon sun";
-            //sunIcon.innerHTML = "☀️";
-
-            //const moonIcon = document.createElement('span');
-            //moonIcon.className = "toggle-icon moon";
-            //moonIcon.innerHTML = "🌙";
-
-            //toggleLabel.appendChild(sunIcon);
-            //toggleLabel.appendChild(moonIcon);
-
-            //toggleSwitch.appendChild(toggleInput);
-            //toggleSwitch.appendChild(toggleLabel);
-
-            //toggleWrapper.appendChild(toggleTitle);
-            //toggleWrapper.appendChild(toggleSwitch);
-            //drawerTitleWrapper.appendChild(toggleWrapper);
-
-            //// ===============================
-            //// ✅ Load saved mode on startup
-            //// ===============================
-            //const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
-            //const selectedTheme = localStorage.getItem("themebuilder_selectedTheme");
-            //const currentMode = savedThemeObj?.themeData?.["--theme-mode"];
-            //if (selectedTheme == "Dark Theme" || selectedTheme == "Light Theme") {
-            //// Apply the saved or Green Night Theme
-            //    applyTheme(currentMode);
-            //    // Reflect saved mode in toggle + body
-            //    if (currentMode === "dark") {
-            //        toggleInput.checked = true;
-            //        document.body.classList.add("dark-mode");
-            //    } else {
-            //        document.body.classList.remove("dark-mode");
-            //    }
-            //}
-            //    // ===============================
-            //    // ✅ Toggle change event
-            //    // ===============================
-            //    toggleInput.addEventListener("change", (e) => {
-            //        const isDark = e.target.checked;
-            //        const newMode = isDark ? "dark" : "light";
-            //        // Apply and save theme using our helper
-            //        applyTheme(newMode);
-            //        // Visual mode toggle (optional animation or CSS class)
-            //        document.body.classList.toggle("dark-mode", isDark);
-            //    });
-
-            //// Your dark -> light mapping
-            //const darkThemes = darkthemes();
-            //const lightThemes = getPredefinedThemes();
-
-            //// ===============================
-            //// ✅ Initialize toggle on page load
-            //// ===============================
-            //if (selectedTheme) {
-            //    let isDark = false;
-
-            //    // Check if saved theme is a dark theme
-            //    if (darkThemes[selectedTheme]) {
-            //        isDark = true;
-            //    } else if (lightThemes[selectedTheme]) {
-            //        isDark = false;
-            //    } else {
-            //        // fallback: check currentMode
-            //        isDark = currentMode === "dark";
-            //    }
-
-            //    // Apply saved theme
-            //    applyTheme(currentMode || (isDark ? "dark" : "light"));
-
-            //    // Set toggle state and body class
-            //    toggleInput.checked = isDark;
-            //    //document.body.classList.toggle("dark-mode", isDark);
-            //}
-
-            //// ===============================
-            //// ✅ Toggle change event
-            //// ===============================
-            //toggleInput.addEventListener("change", (e) => {
-            //    const isDark = e.target.checked;
-            //    const newMode = isDark ? "dark" : "light";
-
-            //    // Apply and save theme using helper
-            //    applyTheme(newMode);
-
-            //    // Visual mode toggle
-            //    //document.body.classList.toggle("dark-mode", isDark);
-            //});
 
             // ===== Card Wrapper =====
             const cardWrapper = document.createElement('div');
