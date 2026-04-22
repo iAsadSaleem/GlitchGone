@@ -37,19 +37,6 @@
       if (text) injectCSS(text);
     }
 
-    // try {
-    //   const res = await fetch(finalUrl, { cache: "no-cache" });
-    //   if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    //   const json = await res.json();
-    //   const css = json.css || "";
-    //   const themeData = json.themeData || {};
-    //   const selectedtheme = json.selectedTheme || "";
-    //   if (themeData && themeData["--custom-logo-url"]) {
-    //     changeFavicon(themeData["--custom-logo-url"]);
-    //   } else {
-    //     changeFavicon('');
-    //   }
-
     // Apply favicon immediately from localStorage to prevent flash on refresh
     const cachedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
     const cachedThemeData = cachedTheme.themeData || {};
@@ -122,6 +109,8 @@
  * Fallback: --agency-logo (url("..."))
  */
 function applySidebarLogoFromTheme(retries = 15, delay = 300) {
+    const savedRaw = localStorage.getItem(STORAGE.userTheme);
+    const saved = safeJsonParse(savedRaw) || {};
     try {
         // If we're on a subaccount page that has a configured logo override,
         // skip entirely — applySubaccountTheme() handles the logo for this location.
@@ -165,6 +154,7 @@ function applySidebarLogoFromTheme(retries = 15, delay = 300) {
         const h = getComputedStyle(root).getPropertyValue("--logo-height").trim();
         if (w) img.style.width = w;
         if (h) img.style.height = h;
+        if (typeof changeFavicon === "function") changeFavicon(saved.themeData["--custom-logo-url"]);
     } catch (e) {
         console.error("[ThemeBuilder] Failed applying sidebar logo", e);
     }
@@ -818,7 +808,7 @@ window.addEventListener("locationchange", () => {
         applyStoredSidebarTitles();
         applyLockedMenus();
         applyHiddenMenus();
-                applySubaccountTheme();   // ← ADD THIS LINE
+        applySubaccountTheme();   // ← ADD THIS LINE
 
     }, 1200);
 });
