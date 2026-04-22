@@ -7093,6 +7093,8 @@ html, body {
                                         savedTheme.themeData["--subMenuOrder"] = localSaved.themeData["--subMenuOrder"];
                                     if (localSaved.themeData["--agencyLockedHideMenus"])
                                         savedTheme.themeData["--agencyLockedHideMenus"] = localSaved.themeData["--agencyLockedHideMenus"];
+                                    if (localSaved.themeData["--subaccountThemes"])
+                                        savedTheme.themeData["--subaccountThemes"] = localSaved.themeData["--subaccountThemes"];
 
                                     const lockedMenus = JSON.parse(savedTheme.themeData["--lockedMenus"] || "{}");
                                     savedTheme.themeData["--lockedMenus"] = JSON.stringify(lockedMenus);
