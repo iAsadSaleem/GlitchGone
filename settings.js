@@ -5432,8 +5432,8 @@ html, body {
         1. Click <strong>Subaccount Theme Settings</strong> to open the configuration panel.<br>
         2. Click <strong>+ Add Subaccount</strong> to add a new subaccount entry.<br>
         3. Enter the <strong>Location ID</strong>, an optional <strong>Logo URL</strong>, and choose a <strong>Theme</strong>.<br>
-        4. Click <strong>Save</strong> on each row, then <strong>Apply Changes</strong> to finalize.<br><br>
-        ✨ <em>Each subaccount can have its own unique logo and theme.</em>
+        4. Click <strong>Save</strong> on each row, then <strong>Apply Changes</strong> to finalize the Subaccount Theme Implementation.<br><br>
+        ✨ <em>Each subaccount can have its own unique logo and theme. </em>
     `;
     wrapper.appendChild(instruction);
 
