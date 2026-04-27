@@ -5440,7 +5440,7 @@ html, body {
     if (email === "iamhaseeb01@outlook.com") {
         const subaccountThemeBtn = document.createElement("button");
         subaccountThemeBtn.textContent = "Subaccount Theme Settings";
-        subaccountThemeBtn.style.cssText = "padding:10px 20px;border:none;border-radius:5px;background:#5a6acf;color:#fff;cursor:pointer;";
+        subaccountThemeBtn.style.cssText = "padding:10px 20px;border:none;border-radius:5px;background:#fff;color:#797979;cursor:pointer;";
         subaccountThemeBtn.addEventListener("click", () => openSubaccountThemeModal());
         wrapper.appendChild(subaccountThemeBtn);
     }
@@ -5452,10 +5452,10 @@ html, body {
 
         const overlay = document.createElement("div");
         overlay.id = "tb-subaccount-theme-modal";
-        overlay.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;z-index:99999;";
+        overlay.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(255, 255, 255, 0.55);display:flex;align-items:center;justify-content:center;z-index:99999;";
 
         const modal = document.createElement("div");
-        modal.style.cssText = "background:#1e1e2e;padding:24px;border-radius:12px;max-width:860px;width:96%;max-height:88vh;overflow-y:auto;box-shadow:0 16px 48px rgba(0,0,0,0.5);position:relative;color:#e0e0e0;";
+        modal.style.cssText = "background:#1e1e2e;padding:24px;border-radius:12px;max-width:860px;width:96%;max-height:88vh;overflow-y:auto;box-shadow:0 16px 48px rgba(255, 255, 255, 0.5);position:relative;color:#e0e0e0;";
         modal.addEventListener("click", e => e.stopPropagation());
 
         // ── Sticky top bar ──
