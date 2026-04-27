@@ -5080,70 +5080,399 @@ html, body {
             parent.appendChild(row);
         }
     }
-    function buildIndividualAccountThemesSection(container) {
-        const email = localStorage.getItem("g-em") ? atob(localStorage.getItem("g-em")) : null;
+    // function buildIndividualAccountThemesSection(container) {
+    //     const email = localStorage.getItem("g-em") ? atob(localStorage.getItem("g-em")) : null;
 
-        if (document.getElementById("tb-individual-account-themes")) return;
+    //     if (document.getElementById("tb-individual-account-themes")) return;
 
-        const wrapper = document.createElement("div");
-        wrapper.id = "tb-individual-account-themes";
+    //     const wrapper = document.createElement("div");
+    //     wrapper.id = "tb-individual-account-themes";
 
-        // 📝 How-to instruction paragraph
-        const instruction = document.createElement("p");
-        instruction.className = "tb-instruction-text";
-        instruction.style.marginBottom = "16px";
-        instruction.style.lineHeight = "1.7";
-        instruction.innerHTML = `
-            🎨 <strong>How to Use Individual Account Themes:</strong><br><br>
-            1. Click <strong>Subaccount Theme Settings</strong> to open the configuration panel.<br>
-            2. Click <strong>+ Add Subaccount</strong> to add a new subaccount entry.<br>
-            3. Enter the <strong>Location ID</strong> of the subaccount you want to customize.<br>
-            4. Optionally provide a <strong>Logo URL</strong> or upload a logo image for that subaccount.<br>
-            5. Choose a <strong>Theme</strong> from the dropdown to apply a preset theme to that subaccount.<br>
-            6. Click <strong>Save Settings</strong> on each row to save your changes.<br>
-            7. And Don't Forget to Click <strong>Apply Changes</strong> to save your changes.<br><br>
-            ✨ <em>Note:</em> Each subaccount can have its own unique logo and theme — settings are applied automatically when a user visits that subaccount's location.
-        `;
-        wrapper.appendChild(instruction);
+    //     // 📝 How-to instruction paragraph
+    //     const instruction = document.createElement("p");
+    //     instruction.className = "tb-instruction-text";
+    //     instruction.style.marginBottom = "16px";
+    //     instruction.style.lineHeight = "1.7";
+    //     instruction.innerHTML = `
+    //         🎨 <strong>How to Use Individual Account Themes:</strong><br><br>
+    //         1. Click <strong>Subaccount Theme Settings</strong> to open the configuration panel.<br>
+    //         2. Click <strong>+ Add Subaccount</strong> to add a new subaccount entry.<br>
+    //         3. Enter the <strong>Location ID</strong> of the subaccount you want to customize.<br>
+    //         4. Optionally provide a <strong>Logo URL</strong> or upload a logo image for that subaccount.<br>
+    //         5. Choose a <strong>Theme</strong> from the dropdown to apply a preset theme to that subaccount.<br>
+    //         6. Click <strong>Save Settings</strong> on each row to save your changes.<br>
+    //         7. And Don't Forget to Click <strong>Apply Changes</strong> to save your changes.<br><br>
+    //         ✨ <em>Note:</em> Each subaccount can have its own unique logo and theme — settings are applied automatically when a user visits that subaccount's location.
+    //     `;
+    //     wrapper.appendChild(instruction);
 
-        // Only show the button for authorized emails
-        if(email ==="iamhaseeb01@outlook.com"){
+    //     // Only show the button for authorized emails
+    //     if(email ==="iamhaseeb01@outlook.com"){
 
-            const subaccountThemeBtn = document.createElement("button");
-            subaccountThemeBtn.textContent = "Subaccount Theme Settings";
-            subaccountThemeBtn.style.padding = "10px 20px";
-            subaccountThemeBtn.style.border = "none";
-            subaccountThemeBtn.style.borderRadius = "5px";
-            subaccountThemeBtn.style.background = "#5a6acf";
-            subaccountThemeBtn.style.color = "#fff";
-            subaccountThemeBtn.style.cursor = "pointer";
-            subaccountThemeBtn.addEventListener("click", () => openSubaccountThemeModal());
-            wrapper.appendChild(subaccountThemeBtn);
+    //         const subaccountThemeBtn = document.createElement("button");
+    //         subaccountThemeBtn.textContent = "Subaccount Theme Settings";
+    //         subaccountThemeBtn.style.padding = "10px 20px";
+    //         subaccountThemeBtn.style.border = "none";
+    //         subaccountThemeBtn.style.borderRadius = "5px";
+    //         subaccountThemeBtn.style.background = "#5a6acf";
+    //         subaccountThemeBtn.style.color = "#fff";
+    //         subaccountThemeBtn.style.cursor = "pointer";
+    //         subaccountThemeBtn.addEventListener("click", () => openSubaccountThemeModal());
+    //         wrapper.appendChild(subaccountThemeBtn);
             
-        }
+    //     }
 
-        container.appendChild(wrapper);
+    //     container.appendChild(wrapper);
+
+    // function openSubaccountThemeModal() {
+    //     document.getElementById("tb-subaccount-theme-modal")?.remove();
+
+    //     const overlay = document.createElement("div");
+    //     overlay.id = "tb-subaccount-theme-modal";
+    //     overlay.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:99999;";
+
+    //     const modal = document.createElement("div");
+    //     modal.style.cssText = "background:#fff;padding:24px;border-radius:10px;max-width:700px;width:95%;max-height:85vh;overflow-y:auto;box-shadow:0 8px 24px rgba(0,0,0,0.3);position:relative;";
+    //     modal.addEventListener("click", (e) => e.stopPropagation());
+
+    //     const topBar = document.createElement("div");
+    //     topBar.style.cssText = "position:sticky;top:-24px;display:flex;justify-content:space-between;align-items:center;background:#fff;z-index:10;padding:10px 0 12px;border-bottom:1px solid #eee;margin-bottom:16px;";
+
+    //     const titleWrap = document.createElement("div");
+    //     titleWrap.innerHTML = '<h3 style="margin:0;font-size:16px;">Subaccount Theme Settings</h3><p style="margin:4px 0 0;font-size:12px;color:#666;">Set a custom logo and theme for each subaccount location.</p>';
+
+    //     const closeBtn = document.createElement("button");
+    //     closeBtn.textContent = "✕";
+    //     closeBtn.style.cssText = "background:transparent;border:none;font-size:20px;cursor:pointer;color:#6c757d;flex-shrink:0;";
+    //     closeBtn.addEventListener("click", () => overlay.remove());
+
+    //     topBar.appendChild(titleWrap);
+    //     topBar.appendChild(closeBtn);
+    //     modal.appendChild(topBar);
+
+    //     const contentArea = document.createElement("div");
+    //     modal.appendChild(contentArea);
+    //     overlay.appendChild(modal);
+    //     document.body.appendChild(overlay);
+
+    //     renderSubaccountThemeContent(contentArea);
+    //     }
+
+    //     function renderSubaccountThemeContent(contentArea) {
+    //         contentArea.innerHTML = "";
+
+    //         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+    //         const themeData = savedTheme.themeData || {};
+    //         let subaccountThemes = {};
+    //         try { subaccountThemes = themeData["--subaccountThemes"] ? JSON.parse(themeData["--subaccountThemes"]) : {}; } catch (e) {}
+
+    //         const locationIds = Object.keys(subaccountThemes);
+
+    //         const rowsWrapper = document.createElement("div");
+    //         rowsWrapper.id = "tb-subaccount-rows";
+    //         contentArea.appendChild(rowsWrapper);
+
+    //         if (locationIds.length === 0) {
+    //             const emptyMsg = document.createElement("p");
+    //             emptyMsg.id = "tb-subaccount-empty";
+    //             emptyMsg.style.cssText = "color:#888;font-size:13px;margin-bottom:12px;";
+    //             emptyMsg.textContent = "No subaccount themes configured yet. Click '+ Add Subaccount' to get started.";
+    //             rowsWrapper.appendChild(emptyMsg);
+    //         } else {
+    //             locationIds.forEach(locId => {
+    //                 addSubaccountThemeRow(rowsWrapper, locId, subaccountThemes[locId], false);
+    //             });
+    //         }
+
+    //         const addRowBtn = document.createElement("button");
+    //         addRowBtn.textContent = "+ Add Subaccount";
+    //         addRowBtn.style.cssText = "border:none;background:#28a745;color:#fff;padding:8px 16px;border-radius:5px;cursor:pointer;margin-top:10px;font-size:13px;";
+    //         addRowBtn.addEventListener("click", () => {
+    //             document.getElementById("tb-subaccount-empty")?.remove();
+    //             addSubaccountThemeRow(rowsWrapper, "", null, true);
+    //         });
+    //         contentArea.appendChild(addRowBtn);
+    //     }
+
+    //     function addSubaccountThemeRow(rowsWrapper, locationId, existingData, isNew) {
+    //         const themes = {};
+
+    //         const card = document.createElement("div");
+    //         card.style.cssText = "border:1px solid #ddd;border-radius:8px;padding:16px;margin-bottom:14px;background:#fafafa;position:relative;";
+
+    //         // ── Header row: Location ID + Remove button ──
+    //         const cardHeader = document.createElement("div");
+    //         cardHeader.style.cssText = "display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:14px;gap:10px;";
+
+    //         const locGroup = document.createElement("div");
+    //         const locLabel = document.createElement("label");
+    //         locLabel.textContent = "Location ID";
+    //         locLabel.style.cssText = "font-size:12px;font-weight:bold;color:#444;display:block;margin-bottom:4px;";
+    //         const locIdInput = document.createElement("input");
+    //         locIdInput.type = "text";
+    //         locIdInput.value = isNew ? "" : locationId;
+    //         locIdInput.placeholder = "Enter Location ID";
+    //         locIdInput.style.cssText = "width:230px;padding:7px 10px;border:1px solid #ccc;border-radius:5px;font-size:13px;box-sizing:border-box;";
+    //         locGroup.appendChild(locLabel);
+    //         locGroup.appendChild(locIdInput);
+
+    //         const removeBtn = document.createElement("button");
+    //         removeBtn.innerHTML = "🗑 Remove";
+    //         removeBtn.style.cssText = "border:1px solid #dc3545;background:#fff;color:#dc3545;padding:6px 12px;border-radius:5px;cursor:pointer;font-size:12px;";
+    //         removeBtn.addEventListener("click", () => {
+    //             const idToRemove = locIdInput.value.trim() || locationId;
+    //             if (idToRemove) {
+    //                 const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+    //                 saved.themeData = saved.themeData || {};
+    //                 let sub = saved.themeData["--subaccountThemes"] ? JSON.parse(saved.themeData["--subaccountThemes"]) : {};
+    //                 delete sub[idToRemove];
+    //                 saved.themeData["--subaccountThemes"] = JSON.stringify(sub);
+    //                 saveUserTheme(saved);
+    //             }
+    //             card.remove();
+    //         });
+
+    //         cardHeader.appendChild(locGroup);
+    //         cardHeader.appendChild(removeBtn);
+    //         card.appendChild(cardHeader);
+
+    //         // ── Fields row: Logo + Theme dropdown ──
+    //         const fieldsRow = document.createElement("div");
+    //         fieldsRow.style.cssText = "display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start;";
+
+    //         // Logo section
+    //         const logoGroup = document.createElement("div");
+    //         logoGroup.style.cssText = "flex:1;min-width:200px;";
+    //         const logoLabel = document.createElement("label");
+    //         logoLabel.textContent = "Logo URL";
+    //         logoLabel.style.cssText = "font-size:12px;font-weight:bold;color:#444;display:block;margin-bottom:4px;";
+    //         const logoUrlInput = document.createElement("input");
+    //         logoUrlInput.type = "text";
+    //         logoUrlInput.value = existingData?.logoUrl || "";
+    //         logoUrlInput.placeholder = "https://your-logo-url.com/logo.png";
+    //         logoUrlInput.style.cssText = "width:100%;padding:7px 10px;border:1px solid #ccc;border-radius:5px;font-size:13px;box-sizing:border-box;margin-bottom:6px;";
+
+    //         const orDivider = document.createElement("div");
+    //         orDivider.style.cssText = "text-align:center;font-size:11px;color:#999;margin:4px 0;";
+    //         orDivider.textContent = "— or upload file —";
+
+    //         const logoUploadInput = document.createElement("input");
+    //         logoUploadInput.type = "file";
+    //         logoUploadInput.accept = "image/*";
+    //         logoUploadInput.style.display = "none";
+
+    //         const logoUploadBtn = document.createElement("button");
+    //         logoUploadBtn.textContent = "📁 Upload Logo";
+    //         logoUploadBtn.style.cssText = "width:100%;padding:6px;border:1px dashed #ccc;border-radius:5px;background:#fff;cursor:pointer;font-size:12px;color:#555;";
+    //         logoUploadBtn.addEventListener("click", () => logoUploadInput.click());
+    //         logoUploadInput.addEventListener("change", () => {
+    //             const file = logoUploadInput.files[0];
+    //             if (!file) return;
+    //             const reader = new FileReader();
+    //             reader.onload = (ev) => { logoUrlInput.value = ev.target.result; };
+    //             reader.readAsDataURL(file);
+    //         });
+
+    //         logoGroup.appendChild(logoLabel);
+    //         logoGroup.appendChild(logoUrlInput);
+    //         logoGroup.appendChild(orDivider);
+    //         logoGroup.appendChild(logoUploadBtn);
+    //         logoGroup.appendChild(logoUploadInput);
+    //         fieldsRow.appendChild(logoGroup);
+
+    //         // Theme dropdown section
+    //         const themeGroup = document.createElement("div");
+    //         themeGroup.style.cssText = "flex:1;min-width:200px;";
+    //         const themeLabel = document.createElement("label");
+    //         themeLabel.textContent = "Select Theme";
+    //         themeLabel.style.cssText = "font-size:12px;font-weight:bold;color:#444;display:block;margin-bottom:4px;";
+
+    //         const themeSelect = document.createElement("select");
+    //         themeSelect.style.cssText = "width:100%;padding:7px 10px;border:1px solid #ccc;border-radius:5px;font-size:13px;box-sizing:border-box;cursor:pointer;background:#fff;";
+
+    //         const loadingOpt = document.createElement("option");
+    //         loadingOpt.value = "";
+    //         loadingOpt.textContent = "⏳ Loading themes...";
+    //         loadingOpt.disabled = true;
+    //         loadingOpt.selected = true;
+    //         themeSelect.appendChild(loadingOpt);
+
+    //         themeGroup.appendChild(themeLabel);
+    //         themeGroup.appendChild(themeSelect);
+    //         fieldsRow.appendChild(themeGroup);
+
+    //         card.appendChild(fieldsRow);
+
+    //         // ── Save button ──
+    //         const saveRow = document.createElement("div");
+    //         saveRow.style.cssText = "margin-top:14px;display:flex;align-items:center;gap:12px;";
+
+    //         const saveBtn = document.createElement("button");
+    //         saveBtn.textContent = "Save Settings";
+    //         saveBtn.style.cssText = "padding:8px 20px;border:none;border-radius:5px;background:#5a6acf;color:#fff;cursor:pointer;font-size:13px;font-weight:bold;";
+
+    //         const saveFeedback = document.createElement("span");
+    //         saveFeedback.style.cssText = "font-size:12px;color:#28a745;display:none;";
+    //         saveFeedback.innerHTML = '✔ Saved successfully!';
+
+    //         // saveBtn.addEventListener("click", () => {
+    //         //     const locId = locIdInput.value.trim();
+    //         //     if (!locId) { alert("Please enter a Location ID before saving."); return; }
+
+    //         //     const selectedThemeName = themeSelect.value;
+    //         //     const selectedThemeData = (selectedThemeName && themes[selectedThemeName]) ? themes[selectedThemeName] : {};
+    //         //     const logoUrl = logoUrlInput.value.trim();
+
+    //         //     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+    //         //     saved.themeData = saved.themeData || {};
+    //         //     let sub = {};
+    //         //     try { sub = saved.themeData["--subaccountThemes"] ? JSON.parse(saved.themeData["--subaccountThemes"]) : {}; } catch(e) {}
+
+    //         //     // If the location ID was renamed, remove the old key
+    //         //     if (locationId && locationId !== locId) delete sub[locationId];
+
+    //         //     sub[locId] = {
+    //         //         logoUrl: logoUrl,
+    //         //         themeName: selectedThemeName,
+    //         //         themeData: selectedThemeData
+    //         //     };
+
+    //         //     saved.themeData["--subaccountThemes"] = JSON.stringify(sub);
+    //         //     saveUserTheme(saved);
+
+    //         //     // Update tracked ID so future saves use correct key
+    //         //     locationId = locId;
+
+    //         //     saveFeedback.style.display = "inline";
+    //         //     setTimeout(() => { saveFeedback.style.display = "none"; }, 3000);
+
+    //         //     // Apply immediately if currently on this subaccount page
+    //         //     if (typeof applySubaccountTheme === "function") applySubaccountTheme();
+    //         // });
+    //         saveBtn.addEventListener("click", () => {
+    //             const locId = locIdInput.value.trim();
+    //             if (!locId) { alert("Please enter a Location ID before saving."); return; }
+
+    //             const selectedThemeName = themeSelect.value;
+    //             const logoUrl = logoUrlInput.value.trim();
+
+    //             const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+    //             saved.themeData = saved.themeData || {};
+    //             let sub = {};
+    //             try { sub = saved.themeData["--subaccountThemes"] ? JSON.parse(saved.themeData["--subaccountThemes"]) : {}; } catch(e) {}
+
+    //             if (locationId && locationId !== locId) delete sub[locationId];
+
+    //             // ✅ Store ONLY the lightweight reference — no themeData blob
+    //             sub[locId] = {
+    //                 logoUrl: logoUrl,
+    //                 themeName: selectedThemeName
+    //             };
+
+    //             saved.themeData["--subaccountThemes"] = JSON.stringify(sub);
+    //             saveUserTheme(saved);
+
+    //             locationId = locId;
+
+    //             saveFeedback.style.display = "inline";
+    //             setTimeout(() => { saveFeedback.style.display = "none"; }, 3000);
+
+    //             if (typeof applySubaccountTheme === "function") applySubaccountTheme();
+    //         });
+
+    //         saveRow.appendChild(saveBtn);
+    //         saveRow.appendChild(saveFeedback);
+    //         card.appendChild(saveRow);
+    //         rowsWrapper.appendChild(card);
+
+    //         // ── Load themes into dropdown asynchronously ──
+    //         (async function () {
+    //             try {
+    //                 const res = await fetch("https://themebuilder-six.vercel.app/api/theme/getallthemes");
+    //                 const data = await res.json();
+
+    //                 themeSelect.innerHTML = "";
+    //                 const blankOpt = document.createElement("option");
+    //                 blankOpt.value = "";
+    //                 blankOpt.textContent = "-- No theme change --";
+    //                 themeSelect.appendChild(blankOpt);
+
+    //                 data.themes.forEach(t => {
+    //                     themes[t.themeName] = t.themeData;
+    //                     const opt = document.createElement("option");
+    //                     opt.value = t.themeName;
+    //                     opt.textContent = t.themeName;
+    //                     if (existingData?.themeName === t.themeName) opt.selected = true;
+    //                     themeSelect.appendChild(opt);
+    //                 });
+    //             } catch (err) {
+    //                 themeSelect.innerHTML = "";
+    //                 const errOpt = document.createElement("option");
+    //                 errOpt.value = "";
+    //                 errOpt.textContent = "❌ Failed to load themes";
+    //                 themeSelect.appendChild(errOpt);
+    //                 console.error("[ThemeBuilder] Failed to load themes:", err);
+    //             }
+    //         })();
+    //     }
+    // }
+    function buildIndividualAccountThemesSection(container) {
+    const email = localStorage.getItem("g-em") ? atob(localStorage.getItem("g-em")) : null;
+
+    if (document.getElementById("tb-individual-account-themes")) return;
+
+    const wrapper = document.createElement("div");
+    wrapper.id = "tb-individual-account-themes";
+
+    const instruction = document.createElement("p");
+    instruction.className = "tb-instruction-text";
+    instruction.style.cssText = "margin-bottom:16px;line-height:1.7;";
+    instruction.innerHTML = `
+        🎨 <strong>How to Use Individual Account Themes:</strong><br><br>
+        1. Click <strong>Subaccount Theme Settings</strong> to open the configuration panel.<br>
+        2. Click <strong>+ Add Subaccount</strong> to add a new subaccount entry.<br>
+        3. Enter the <strong>Location ID</strong>, an optional <strong>Logo URL</strong>, and choose a <strong>Theme</strong>.<br>
+        4. Click <strong>Save</strong> on each row, then <strong>Apply Changes</strong> to finalize.<br><br>
+        ✨ <em>Each subaccount can have its own unique logo and theme.</em>
+    `;
+    wrapper.appendChild(instruction);
+
+    if (email === "iamhaseeb01@outlook.com") {
+        const subaccountThemeBtn = document.createElement("button");
+        subaccountThemeBtn.textContent = "Subaccount Theme Settings";
+        subaccountThemeBtn.style.cssText = "padding:10px 20px;border:none;border-radius:5px;background:#5a6acf;color:#fff;cursor:pointer;";
+        subaccountThemeBtn.addEventListener("click", () => openSubaccountThemeModal());
+        wrapper.appendChild(subaccountThemeBtn);
+    }
+
+    container.appendChild(wrapper);
 
     function openSubaccountThemeModal() {
         document.getElementById("tb-subaccount-theme-modal")?.remove();
 
         const overlay = document.createElement("div");
         overlay.id = "tb-subaccount-theme-modal";
-        overlay.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:99999;";
+        overlay.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;z-index:99999;";
 
         const modal = document.createElement("div");
-        modal.style.cssText = "background:#fff;padding:24px;border-radius:10px;max-width:700px;width:95%;max-height:85vh;overflow-y:auto;box-shadow:0 8px 24px rgba(0,0,0,0.3);position:relative;";
-        modal.addEventListener("click", (e) => e.stopPropagation());
+        modal.style.cssText = "background:#1e1e2e;padding:24px;border-radius:12px;max-width:860px;width:96%;max-height:88vh;overflow-y:auto;box-shadow:0 16px 48px rgba(0,0,0,0.5);position:relative;color:#e0e0e0;";
+        modal.addEventListener("click", e => e.stopPropagation());
 
+        // ── Sticky top bar ──
         const topBar = document.createElement("div");
-        topBar.style.cssText = "position:sticky;top:-24px;display:flex;justify-content:space-between;align-items:center;background:#fff;z-index:10;padding:10px 0 12px;border-bottom:1px solid #eee;margin-bottom:16px;";
+        topBar.style.cssText = "position:sticky;top:-24px;display:flex;justify-content:space-between;align-items:center;background:#1e1e2e;z-index:10;padding:10px 0 14px;border-bottom:1px solid #333;margin-bottom:18px;";
 
         const titleWrap = document.createElement("div");
-        titleWrap.innerHTML = '<h3 style="margin:0;font-size:16px;">Subaccount Theme Settings</h3><p style="margin:4px 0 0;font-size:12px;color:#666;">Set a custom logo and theme for each subaccount location.</p>';
+        titleWrap.innerHTML = `
+            <h3 style="margin:0;font-size:16px;color:#fff;font-weight:700;letter-spacing:.3px;">Subaccount Theme Settings</h3>
+            <p style="margin:4px 0 0;font-size:12px;color:#888;">Assign a custom logo and theme to each subaccount location.</p>
+        `;
 
         const closeBtn = document.createElement("button");
         closeBtn.textContent = "✕";
-        closeBtn.style.cssText = "background:transparent;border:none;font-size:20px;cursor:pointer;color:#6c757d;flex-shrink:0;";
+        closeBtn.style.cssText = "background:transparent;border:none;font-size:20px;cursor:pointer;color:#888;flex-shrink:0;transition:color .2s;";
+        closeBtn.onmouseenter = () => closeBtn.style.color = "#fff";
+        closeBtn.onmouseleave = () => closeBtn.style.color = "#888";
         closeBtn.addEventListener("click", () => overlay.remove());
 
         topBar.appendChild(titleWrap);
@@ -5156,266 +5485,258 @@ html, body {
         document.body.appendChild(overlay);
 
         renderSubaccountThemeContent(contentArea);
+    }
+
+    function renderSubaccountThemeContent(contentArea) {
+        contentArea.innerHTML = "";
+
+        const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        const themeData = savedTheme.themeData || {};
+        let subaccountThemes = {};
+        try { subaccountThemes = themeData["--subaccountThemes"] ? JSON.parse(themeData["--subaccountThemes"]) : {}; } catch (e) {}
+
+        const locationIds = Object.keys(subaccountThemes);
+
+        // ── Column header bar ──
+        const colHeader = document.createElement("div");
+        colHeader.style.cssText = "display:grid;grid-template-columns:1fr 1fr 1fr 90px 40px;gap:10px;padding:0 10px 8px;border-bottom:1px solid #333;margin-bottom:10px;";
+        colHeader.innerHTML = `
+            <span style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.8px;">Location ID</span>
+            <span style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.8px;">Logo URL</span>
+            <span style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.8px;">Theme</span>
+            <span></span>
+            <span></span>
+        `;
+        contentArea.appendChild(colHeader);
+
+        const rowsWrapper = document.createElement("div");
+        rowsWrapper.id = "tb-subaccount-rows";
+        contentArea.appendChild(rowsWrapper);
+
+        if (locationIds.length === 0) {
+            const emptyMsg = document.createElement("p");
+            emptyMsg.id = "tb-subaccount-empty";
+            emptyMsg.style.cssText = "color:#666;font-size:13px;text-align:center;padding:24px 0;";
+            emptyMsg.textContent = "No subaccounts configured yet. Click '+ Add Subaccount' below to get started.";
+            rowsWrapper.appendChild(emptyMsg);
+        } else {
+            locationIds.forEach(locId => {
+                addSubaccountThemeRow(rowsWrapper, locId, subaccountThemes[locId], false);
+            });
         }
 
-        function renderSubaccountThemeContent(contentArea) {
-            contentArea.innerHTML = "";
+        // ── Add Subaccount button (bottom) ──
+        const addRowBtn = document.createElement("button");
+        addRowBtn.innerHTML = `<span style="font-size:16px;line-height:1;margin-right:6px;">+</span> Add Subaccount`;
+        addRowBtn.style.cssText = `
+            display:flex;align-items:center;justify-content:center;
+            width:100%;margin-top:16px;padding:11px;
+            border:2px dashed #3a3a5a;border-radius:8px;
+            background:transparent;color:#7c7cff;
+            font-size:13px;font-weight:600;cursor:pointer;
+            transition:all .2s;
+        `;
+        addRowBtn.onmouseenter = () => {
+            addRowBtn.style.background = "rgba(124,124,255,.08)";
+            addRowBtn.style.borderColor = "#7c7cff";
+        };
+        addRowBtn.onmouseleave = () => {
+            addRowBtn.style.background = "transparent";
+            addRowBtn.style.borderColor = "#3a3a5a";
+        };
+        addRowBtn.addEventListener("click", () => {
+            document.getElementById("tb-subaccount-empty")?.remove();
+            addSubaccountThemeRow(rowsWrapper, "", null, true);
+            rowsWrapper.lastElementChild?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        });
+        contentArea.appendChild(addRowBtn);
+    }
 
-            const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
-            const themeData = savedTheme.themeData || {};
-            let subaccountThemes = {};
-            try { subaccountThemes = themeData["--subaccountThemes"] ? JSON.parse(themeData["--subaccountThemes"]) : {}; } catch (e) {}
+    function addSubaccountThemeRow(rowsWrapper, locationId, existingData, isNew) {
+        const themes = {};
 
-            const locationIds = Object.keys(subaccountThemes);
+        const row = document.createElement("div");
+        row.style.cssText = `
+            display:grid;grid-template-columns:1fr 1fr 1fr 90px 40px;
+            gap:10px;align-items:center;
+            padding:10px;border-radius:8px;
+            background:#252538;border:1px solid #2e2e45;
+            margin-bottom:8px;transition:border-color .2s;
+        `;
+        row.onmouseenter = () => row.style.borderColor = "#5a6acf";
+        row.onmouseleave = () => row.style.borderColor = "#2e2e45";
 
-            const rowsWrapper = document.createElement("div");
-            rowsWrapper.id = "tb-subaccount-rows";
-            contentArea.appendChild(rowsWrapper);
+        // ── 1: Location ID ──
+        const locIdInput = document.createElement("input");
+        locIdInput.type = "text";
+        locIdInput.value = isNew ? "" : locationId;
+        locIdInput.placeholder = "Location ID";
+        locIdInput.style.cssText = `
+            width:100%;padding:8px 10px;box-sizing:border-box;
+            border:1px solid #3a3a5a;border-radius:6px;
+            background:#1a1a2e;color:#e0e0e0;font-size:13px;
+            outline:none;transition:border-color .2s;
+        `;
+        locIdInput.onfocus = () => locIdInput.style.borderColor = "#5a6acf";
+        locIdInput.onblur  = () => locIdInput.style.borderColor = "#3a3a5a";
 
-            if (locationIds.length === 0) {
-                const emptyMsg = document.createElement("p");
-                emptyMsg.id = "tb-subaccount-empty";
-                emptyMsg.style.cssText = "color:#888;font-size:13px;margin-bottom:12px;";
-                emptyMsg.textContent = "No subaccount themes configured yet. Click '+ Add Subaccount' to get started.";
-                rowsWrapper.appendChild(emptyMsg);
-            } else {
-                locationIds.forEach(locId => {
-                    addSubaccountThemeRow(rowsWrapper, locId, subaccountThemes[locId], false);
-                });
+        // ── 2: Logo URL ──
+        const logoUrlInput = document.createElement("input");
+        logoUrlInput.type = "text";
+        logoUrlInput.value = existingData?.logoUrl || "";
+        logoUrlInput.placeholder = "https://logo-url.com/logo.png";
+        logoUrlInput.style.cssText = `
+            width:100%;padding:8px 10px;box-sizing:border-box;
+            border:1px solid #3a3a5a;border-radius:6px;
+            background:#1a1a2e;color:#e0e0e0;font-size:13px;
+            outline:none;transition:border-color .2s;
+        `;
+        logoUrlInput.onfocus = () => logoUrlInput.style.borderColor = "#5a6acf";
+        logoUrlInput.onblur  = () => logoUrlInput.style.borderColor = "#3a3a5a";
+
+        // ── 3: Theme dropdown ──
+        const themeSelect = document.createElement("select");
+        themeSelect.style.cssText = `
+            width:100%;padding:8px 10px;box-sizing:border-box;
+            border:1px solid #3a3a5a;border-radius:6px;
+            background:#1a1a2e;color:#e0e0e0;font-size:13px;
+            cursor:pointer;outline:none;transition:border-color .2s;
+        `;
+        themeSelect.onfocus = () => themeSelect.style.borderColor = "#5a6acf";
+        themeSelect.onblur  = () => themeSelect.style.borderColor = "#3a3a5a";
+
+        const loadingOpt = document.createElement("option");
+        loadingOpt.value = "";
+        loadingOpt.textContent = "⏳ Loading...";
+        loadingOpt.disabled = true;
+        loadingOpt.selected = true;
+        themeSelect.appendChild(loadingOpt);
+
+        // ── 4: Save button ──
+        const saveBtn = document.createElement("button");
+        saveBtn.textContent = "Save";
+        saveBtn.style.cssText = `
+            padding:8px 12px;border:none;border-radius:6px;
+            background:#5a6acf;color:#fff;font-size:12px;
+            font-weight:700;cursor:pointer;white-space:nowrap;
+            transition:background .2s;width:100%;
+        `;
+        saveBtn.onmouseenter = () => saveBtn.style.background = "#4a58b8";
+        saveBtn.onmouseleave = () => saveBtn.style.background = "#5a6acf";
+
+        saveBtn.addEventListener("click", () => {
+            const locId = locIdInput.value.trim();
+            if (!locId) {
+                locIdInput.style.borderColor = "#dc3545";
+                locIdInput.placeholder = "⚠ Required!";
+                locIdInput.focus();
+                setTimeout(() => {
+                    locIdInput.style.borderColor = "#3a3a5a";
+                    locIdInput.placeholder = "Location ID";
+                }, 2000);
+                return;
             }
 
-            const addRowBtn = document.createElement("button");
-            addRowBtn.textContent = "+ Add Subaccount";
-            addRowBtn.style.cssText = "border:none;background:#28a745;color:#fff;padding:8px 16px;border-radius:5px;cursor:pointer;margin-top:10px;font-size:13px;";
-            addRowBtn.addEventListener("click", () => {
-                document.getElementById("tb-subaccount-empty")?.remove();
-                addSubaccountThemeRow(rowsWrapper, "", null, true);
-            });
-            contentArea.appendChild(addRowBtn);
-        }
+            const selectedThemeName = themeSelect.value;
+            const logoUrl = logoUrlInput.value.trim();
 
-        function addSubaccountThemeRow(rowsWrapper, locationId, existingData, isNew) {
-            const themes = {};
+            const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+            saved.themeData = saved.themeData || {};
+            let sub = {};
+            try { sub = saved.themeData["--subaccountThemes"] ? JSON.parse(saved.themeData["--subaccountThemes"]) : {}; } catch(e) {}
 
-            const card = document.createElement("div");
-            card.style.cssText = "border:1px solid #ddd;border-radius:8px;padding:16px;margin-bottom:14px;background:#fafafa;position:relative;";
+            if (locationId && locationId !== locId) delete sub[locationId];
 
-            // ── Header row: Location ID + Remove button ──
-            const cardHeader = document.createElement("div");
-            cardHeader.style.cssText = "display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:14px;gap:10px;";
+            sub[locId] = { logoUrl, themeName: selectedThemeName };
 
-            const locGroup = document.createElement("div");
-            const locLabel = document.createElement("label");
-            locLabel.textContent = "Location ID";
-            locLabel.style.cssText = "font-size:12px;font-weight:bold;color:#444;display:block;margin-bottom:4px;";
-            const locIdInput = document.createElement("input");
-            locIdInput.type = "text";
-            locIdInput.value = isNew ? "" : locationId;
-            locIdInput.placeholder = "Enter Location ID";
-            locIdInput.style.cssText = "width:230px;padding:7px 10px;border:1px solid #ccc;border-radius:5px;font-size:13px;box-sizing:border-box;";
-            locGroup.appendChild(locLabel);
-            locGroup.appendChild(locIdInput);
+            saved.themeData["--subaccountThemes"] = JSON.stringify(sub);
+            saveUserTheme(saved);
+            locationId = locId;
 
-            const removeBtn = document.createElement("button");
-            removeBtn.innerHTML = "🗑 Remove";
-            removeBtn.style.cssText = "border:1px solid #dc3545;background:#fff;color:#dc3545;padding:6px 12px;border-radius:5px;cursor:pointer;font-size:12px;";
-            removeBtn.addEventListener("click", () => {
-                const idToRemove = locIdInput.value.trim() || locationId;
-                if (idToRemove) {
-                    const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-                    saved.themeData = saved.themeData || {};
-                    let sub = saved.themeData["--subaccountThemes"] ? JSON.parse(saved.themeData["--subaccountThemes"]) : {};
-                    delete sub[idToRemove];
-                    saved.themeData["--subaccountThemes"] = JSON.stringify(sub);
-                    saveUserTheme(saved);
-                }
-                card.remove();
-            });
+            // Flash save button green as feedback
+            saveBtn.textContent = "✔ Saved";
+            saveBtn.style.background = "#28a745";
+            setTimeout(() => {
+                saveBtn.textContent = "Save";
+                saveBtn.style.background = "#5a6acf";
+            }, 2200);
 
-            cardHeader.appendChild(locGroup);
-            cardHeader.appendChild(removeBtn);
-            card.appendChild(cardHeader);
+            if (typeof applySubaccountTheme === "function") applySubaccountTheme();
+        });
 
-            // ── Fields row: Logo + Theme dropdown ──
-            const fieldsRow = document.createElement("div");
-            fieldsRow.style.cssText = "display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start;";
-
-            // Logo section
-            const logoGroup = document.createElement("div");
-            logoGroup.style.cssText = "flex:1;min-width:200px;";
-            const logoLabel = document.createElement("label");
-            logoLabel.textContent = "Logo URL";
-            logoLabel.style.cssText = "font-size:12px;font-weight:bold;color:#444;display:block;margin-bottom:4px;";
-            const logoUrlInput = document.createElement("input");
-            logoUrlInput.type = "text";
-            logoUrlInput.value = existingData?.logoUrl || "";
-            logoUrlInput.placeholder = "https://your-logo-url.com/logo.png";
-            logoUrlInput.style.cssText = "width:100%;padding:7px 10px;border:1px solid #ccc;border-radius:5px;font-size:13px;box-sizing:border-box;margin-bottom:6px;";
-
-            const orDivider = document.createElement("div");
-            orDivider.style.cssText = "text-align:center;font-size:11px;color:#999;margin:4px 0;";
-            orDivider.textContent = "— or upload file —";
-
-            const logoUploadInput = document.createElement("input");
-            logoUploadInput.type = "file";
-            logoUploadInput.accept = "image/*";
-            logoUploadInput.style.display = "none";
-
-            const logoUploadBtn = document.createElement("button");
-            logoUploadBtn.textContent = "📁 Upload Logo";
-            logoUploadBtn.style.cssText = "width:100%;padding:6px;border:1px dashed #ccc;border-radius:5px;background:#fff;cursor:pointer;font-size:12px;color:#555;";
-            logoUploadBtn.addEventListener("click", () => logoUploadInput.click());
-            logoUploadInput.addEventListener("change", () => {
-                const file = logoUploadInput.files[0];
-                if (!file) return;
-                const reader = new FileReader();
-                reader.onload = (ev) => { logoUrlInput.value = ev.target.result; };
-                reader.readAsDataURL(file);
-            });
-
-            logoGroup.appendChild(logoLabel);
-            logoGroup.appendChild(logoUrlInput);
-            logoGroup.appendChild(orDivider);
-            logoGroup.appendChild(logoUploadBtn);
-            logoGroup.appendChild(logoUploadInput);
-            fieldsRow.appendChild(logoGroup);
-
-            // Theme dropdown section
-            const themeGroup = document.createElement("div");
-            themeGroup.style.cssText = "flex:1;min-width:200px;";
-            const themeLabel = document.createElement("label");
-            themeLabel.textContent = "Select Theme";
-            themeLabel.style.cssText = "font-size:12px;font-weight:bold;color:#444;display:block;margin-bottom:4px;";
-
-            const themeSelect = document.createElement("select");
-            themeSelect.style.cssText = "width:100%;padding:7px 10px;border:1px solid #ccc;border-radius:5px;font-size:13px;box-sizing:border-box;cursor:pointer;background:#fff;";
-
-            const loadingOpt = document.createElement("option");
-            loadingOpt.value = "";
-            loadingOpt.textContent = "⏳ Loading themes...";
-            loadingOpt.disabled = true;
-            loadingOpt.selected = true;
-            themeSelect.appendChild(loadingOpt);
-
-            themeGroup.appendChild(themeLabel);
-            themeGroup.appendChild(themeSelect);
-            fieldsRow.appendChild(themeGroup);
-
-            card.appendChild(fieldsRow);
-
-            // ── Save button ──
-            const saveRow = document.createElement("div");
-            saveRow.style.cssText = "margin-top:14px;display:flex;align-items:center;gap:12px;";
-
-            const saveBtn = document.createElement("button");
-            saveBtn.textContent = "Save Settings";
-            saveBtn.style.cssText = "padding:8px 20px;border:none;border-radius:5px;background:#5a6acf;color:#fff;cursor:pointer;font-size:13px;font-weight:bold;";
-
-            const saveFeedback = document.createElement("span");
-            saveFeedback.style.cssText = "font-size:12px;color:#28a745;display:none;";
-            saveFeedback.innerHTML = '✔ Saved successfully!';
-
-            // saveBtn.addEventListener("click", () => {
-            //     const locId = locIdInput.value.trim();
-            //     if (!locId) { alert("Please enter a Location ID before saving."); return; }
-
-            //     const selectedThemeName = themeSelect.value;
-            //     const selectedThemeData = (selectedThemeName && themes[selectedThemeName]) ? themes[selectedThemeName] : {};
-            //     const logoUrl = logoUrlInput.value.trim();
-
-            //     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-            //     saved.themeData = saved.themeData || {};
-            //     let sub = {};
-            //     try { sub = saved.themeData["--subaccountThemes"] ? JSON.parse(saved.themeData["--subaccountThemes"]) : {}; } catch(e) {}
-
-            //     // If the location ID was renamed, remove the old key
-            //     if (locationId && locationId !== locId) delete sub[locationId];
-
-            //     sub[locId] = {
-            //         logoUrl: logoUrl,
-            //         themeName: selectedThemeName,
-            //         themeData: selectedThemeData
-            //     };
-
-            //     saved.themeData["--subaccountThemes"] = JSON.stringify(sub);
-            //     saveUserTheme(saved);
-
-            //     // Update tracked ID so future saves use correct key
-            //     locationId = locId;
-
-            //     saveFeedback.style.display = "inline";
-            //     setTimeout(() => { saveFeedback.style.display = "none"; }, 3000);
-
-            //     // Apply immediately if currently on this subaccount page
-            //     if (typeof applySubaccountTheme === "function") applySubaccountTheme();
-            // });
-            saveBtn.addEventListener("click", () => {
-                const locId = locIdInput.value.trim();
-                if (!locId) { alert("Please enter a Location ID before saving."); return; }
-
-                const selectedThemeName = themeSelect.value;
-                const logoUrl = logoUrlInput.value.trim();
-
+        // ── 5: Remove button ──
+        const removeBtn = document.createElement("button");
+        removeBtn.innerHTML = "🗑";
+        removeBtn.title = "Remove this subaccount";
+        removeBtn.style.cssText = `
+            padding:8px;border:1px solid #3a3a5a;border-radius:6px;
+            background:transparent;color:#888;font-size:14px;
+            cursor:pointer;transition:all .2s;width:100%;
+        `;
+        removeBtn.onmouseenter = () => {
+            removeBtn.style.background = "rgba(220,53,69,.15)";
+            removeBtn.style.borderColor = "#dc3545";
+            removeBtn.style.color = "#dc3545";
+        };
+        removeBtn.onmouseleave = () => {
+            removeBtn.style.background = "transparent";
+            removeBtn.style.borderColor = "#3a3a5a";
+            removeBtn.style.color = "#888";
+        };
+        removeBtn.addEventListener("click", () => {
+            const idToRemove = locIdInput.value.trim() || locationId;
+            if (idToRemove) {
                 const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                 saved.themeData = saved.themeData || {};
-                let sub = {};
-                try { sub = saved.themeData["--subaccountThemes"] ? JSON.parse(saved.themeData["--subaccountThemes"]) : {}; } catch(e) {}
-
-                if (locationId && locationId !== locId) delete sub[locationId];
-
-                // ✅ Store ONLY the lightweight reference — no themeData blob
-                sub[locId] = {
-                    logoUrl: logoUrl,
-                    themeName: selectedThemeName
-                };
-
+                let sub = saved.themeData["--subaccountThemes"] ? JSON.parse(saved.themeData["--subaccountThemes"]) : {};
+                delete sub[idToRemove];
                 saved.themeData["--subaccountThemes"] = JSON.stringify(sub);
                 saveUserTheme(saved);
+            }
+            row.style.opacity = "0";
+            row.style.transform = "scale(.97)";
+            row.style.transition = "all .2s";
+            setTimeout(() => row.remove(), 200);
+        });
 
-                locationId = locId;
+        row.appendChild(locIdInput);
+        row.appendChild(logoUrlInput);
+        row.appendChild(themeSelect);
+        row.appendChild(saveBtn);
+        row.appendChild(removeBtn);
+        rowsWrapper.appendChild(row);
 
-                saveFeedback.style.display = "inline";
-                setTimeout(() => { saveFeedback.style.display = "none"; }, 3000);
+        // ── Load themes into dropdown ──
+        (async function () {
+            try {
+                const res = await fetch("https://themebuilder-six.vercel.app/api/theme/getallthemes");
+                const data = await res.json();
 
-                if (typeof applySubaccountTheme === "function") applySubaccountTheme();
-            });
+                themeSelect.innerHTML = "";
+                const blankOpt = document.createElement("option");
+                blankOpt.value = "";
+                blankOpt.textContent = "— No theme change —";
+                themeSelect.appendChild(blankOpt);
 
-            saveRow.appendChild(saveBtn);
-            saveRow.appendChild(saveFeedback);
-            card.appendChild(saveRow);
-            rowsWrapper.appendChild(card);
-
-            // ── Load themes into dropdown asynchronously ──
-            (async function () {
-                try {
-                    const res = await fetch("https://themebuilder-six.vercel.app/api/theme/getallthemes");
-                    const data = await res.json();
-
-                    themeSelect.innerHTML = "";
-                    const blankOpt = document.createElement("option");
-                    blankOpt.value = "";
-                    blankOpt.textContent = "-- No theme change --";
-                    themeSelect.appendChild(blankOpt);
-
-                    data.themes.forEach(t => {
-                        themes[t.themeName] = t.themeData;
-                        const opt = document.createElement("option");
-                        opt.value = t.themeName;
-                        opt.textContent = t.themeName;
-                        if (existingData?.themeName === t.themeName) opt.selected = true;
-                        themeSelect.appendChild(opt);
-                    });
-                } catch (err) {
-                    themeSelect.innerHTML = "";
-                    const errOpt = document.createElement("option");
-                    errOpt.value = "";
-                    errOpt.textContent = "❌ Failed to load themes";
-                    themeSelect.appendChild(errOpt);
-                    console.error("[ThemeBuilder] Failed to load themes:", err);
-                }
-            })();
-        }
+                data.themes.forEach(t => {
+                    themes[t.themeName] = t.themeData;
+                    const opt = document.createElement("option");
+                    opt.value = t.themeName;
+                    opt.textContent = t.themeName;
+                    if (existingData?.themeName === t.themeName) opt.selected = true;
+                    themeSelect.appendChild(opt);
+                });
+            } catch (err) {
+                themeSelect.innerHTML = "";
+                const errOpt = document.createElement("option");
+                errOpt.value = "";
+                errOpt.textContent = "❌ Failed to load";
+                themeSelect.appendChild(errOpt);
+                console.error("[ThemeBuilder] Failed to load themes:", err);
+            }
+        })();
     }
+}
 
     function showPreviewPopup(type, popupUrl, popupHeadline, popupSubHeadline, popupButtonText) {
         document.getElementById("tb-preview-popup")?.remove();
