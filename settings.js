@@ -5464,7 +5464,7 @@ html, body {
         const titleWrap = document.createElement("div");
         titleWrap.innerHTML = `
             <h3 style="margin:0;font-size:16px;color:#333;font-weight:700;letter-spacing:.3px;">Subaccount Theme Settings</h3>
-            <p style="margin:4px 0 0;font-size:12px;color:#666;">Assign a custom logo and theme to each subaccount location.</p>
+            <p style="margin:4px 0 0;font-size:12px;color:#666;">Assign a custom logo and theme to each subaccount location. And don't forget to save your changes!</p>
         `;
 
         const closeBtn = document.createElement("button");
