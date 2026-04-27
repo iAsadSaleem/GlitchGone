@@ -5677,7 +5677,7 @@ html, body {
             removeBtn.style.background = "rgba(220,53,69,.15)";
             removeBtn.style.borderColor = "#dc3545";
             removeBtn.style.color = "#dc3545";
-        };
+        }; 
         removeBtn.onmouseleave = () => {
             removeBtn.style.background = "transparent";
             removeBtn.style.borderColor = "#3a3a5a";
