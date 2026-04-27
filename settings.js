@@ -5437,13 +5437,12 @@ html, body {
     `;
     wrapper.appendChild(instruction);
 
-    if (email === "iamhaseeb01@outlook.com") {
         const subaccountThemeBtn = document.createElement("button");
         subaccountThemeBtn.textContent = "Subaccount Theme Settings";
         subaccountThemeBtn.style.cssText = "padding:10px 20px;border:none;border-radius:5px;background:#b2857e;color:#fff;cursor:pointer;";
         subaccountThemeBtn.addEventListener("click", () => openSubaccountThemeModal());
         wrapper.appendChild(subaccountThemeBtn);
-    }
+
 
     container.appendChild(wrapper);
 
@@ -7086,15 +7085,12 @@ html, body {
                 }, "", true
                 )
             );
-             if(email ==="iamhaseeb01@outlook.com"){
-
             contentWrapper.appendChild(
                 createSection('<i class="fa-solid fa-palette"style="color:white;margin-right:6px;font-size:17px;"></i>Individual Account Themes', (section) => {
                     buildIndividualAccountThemesSection(section);
                 }, "", true
                 )
             );
-        }
             contentWrapper.appendChild(
                 createSection('<i class="fa-brands fa-intercom"style="color:white;margin-right:6px;font-size:17px;"></i>Menu Customizer', (section) => {
                     buildMenuCustomizationSection(section);
