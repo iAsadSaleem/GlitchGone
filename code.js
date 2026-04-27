@@ -280,6 +280,7 @@ function injectThemeData(themeData) {
                     Object.keys(subVars).forEach(key => {
                         if (key.startsWith("--") && typeof subVars[key] === "string") {
                             try { root.style.setProperty(key, subVars[key], "important"); } catch (e) {}
+                            try { document.body.style.setProperty(key, subVars[key], "important"); } catch (e) {}
                         }
                     });
                     if (locTheme.logoUrl) {
@@ -508,6 +509,7 @@ function applySubaccountTheme() {
         Object.keys(subVars).forEach(key => {
             if (key.startsWith("--") && typeof subVars[key] === "string") {
                 try { root.style.setProperty(key, subVars[key], "important"); } catch (e) {}
+                try { document.body.style.setProperty(key, subVars[key], "important"); } catch (e) {}
             }
         });
     } else if (locationTheme.themeName && typeof ensureThemesCache === "function") {
