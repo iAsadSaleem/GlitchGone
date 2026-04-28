@@ -570,13 +570,23 @@ function cleanupMenuStates() {
 // ── Clears all inline CSS custom properties set by applySubaccountTheme ──────
 function clearSubaccountTheme() {
     const root = document.documentElement;
-    const toRemove = [];
+    const body = document.body;
+
+    // Clear :root inline custom properties
+    const rootVars = [];
     for (let i = 0; i < root.style.length; i++) {
-        const prop = root.style[i];
-        if (prop.startsWith("--")) toRemove.push(prop);
+        if (root.style[i].startsWith("--")) rootVars.push(root.style[i]);
     }
-    toRemove.forEach(prop => root.style.removeProperty(prop));
-    console.log("[ThemeBuilder] Subaccount theme cleared, restoring agency theme.");
+    rootVars.forEach(prop => root.style.removeProperty(prop));
+
+    // Clear document.body inline custom properties (written by injectThemeData's body path)
+    const bodyVars = [];
+    for (let i = 0; i < body.style.length; i++) {
+        if (body.style[i].startsWith("--")) bodyVars.push(body.style[i]);
+    }
+    bodyVars.forEach(prop => body.style.removeProperty(prop));
+
+    console.log("[ThemeBuilder] Subaccount theme cleared from :root and body, restoring agency theme.");
 }
 
 // ── Watches for SPA navigation between agency ↔ subaccount ───────────────────
