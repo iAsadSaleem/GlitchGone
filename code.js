@@ -567,7 +567,50 @@ function cleanupMenuStates() {
       const popupButtonText = (lockData && typeof lockData === "object" && lockData.popupButtonText) ? lockData.popupButtonText : "";
       showPreviewPopup(popupType, popupUrl, popupHeadline, popupSubHeadline, popupButtonText);
   }
+// ── Clears all inline CSS custom properties set by applySubaccountTheme ──────
+function clearSubaccountTheme() {
+    const root = document.documentElement;
+    const toRemove = [];
+    for (let i = 0; i < root.style.length; i++) {
+        const prop = root.style[i];
+        if (prop.startsWith("--")) toRemove.push(prop);
+    }
+    toRemove.forEach(prop => root.style.removeProperty(prop));
+    console.log("[ThemeBuilder] Subaccount theme cleared, restoring agency theme.");
+}
 
+// ── Watches for SPA navigation between agency ↔ subaccount ───────────────────
+(function watchLocationChange() {
+    let lastPath = window.location.pathname;
+
+    function wasSubaccountPath(p) { return p.includes("/location/"); }
+
+    function tick() {
+        const currentPath = window.location.pathname;
+        if (currentPath === lastPath) return;
+
+        const leftSubaccount  = wasSubaccountPath(lastPath)  && !wasSubaccountPath(currentPath);
+        const enteredSubaccount = !wasSubaccountPath(lastPath) && wasSubaccountPath(currentPath);
+
+        lastPath = currentPath;
+
+        if (leftSubaccount) {
+            // Agency view restored — clear subaccount overrides and re-apply agency theme
+            clearSubaccountTheme();
+            const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+            if (saved.themeData) injectThemeData(saved.themeData);
+            if (typeof applySidebarLogoFromTheme === "function") applySidebarLogoFromTheme();
+        }
+
+        if (enteredSubaccount) {
+            // Entered a subaccount — apply its theme
+            setTimeout(() => { if (typeof applySubaccountTheme === "function") applySubaccountTheme(); }, 150);
+            setTimeout(() => { if (typeof applySubaccountTheme === "function") applySubaccountTheme(); }, 600);
+        }
+    }
+
+    setInterval(tick, 300);
+})();
 // Call on page load
 document.addEventListener('DOMContentLoaded', function() {
   applyHiddenMenus();
