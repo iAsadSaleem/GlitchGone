@@ -2010,3 +2010,6 @@ body.dark-mode {
     flex-direction : column;
     gap : 8px;
 }
+.themeBtnText{
+    font-size: 18px;
+}
