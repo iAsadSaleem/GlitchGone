@@ -843,6 +843,42 @@ async function waitForStableSidebar(selector = '#sidebar-v2 nav.flex-1.w-full', 
     _reapplyLock: false
   };
 
+function fixSidebarCursor() {
+  const navLinks = document.querySelectorAll('.hl_nav-header a, .hl_nav-header [tabindex], .hl_nav-header [role="menuitem"]');
+  navLinks.forEach(el => {
+    el.style.removeProperty('cursor');
+  });
+}
+
+// Run on load
+fixSidebarCursor();
+
+// Re-run when GHL dynamically updates the sidebar
+const sidebarObserver = new MutationObserver(() => {
+  fixSidebarCursor();
+});
+
+const sidebar = document.querySelector('.hl_nav-header');
+if (sidebar) {
+  sidebarObserver.observe(sidebar, {
+    childList: true,
+    subtree: true,
+    attributeFilter: ['style']
+  });
+} else {
+  // If sidebar not ready yet, wait for it
+  const bodyObserver = new MutationObserver(() => {
+    const s = document.querySelector('.hl_nav-header');
+    if (s) {
+      fixSidebarCursor();
+      sidebarObserver.observe(s, { childList: true, subtree: true, attributeFilter: ['style'] });
+      bodyObserver.disconnect();
+    }
+  });
+  bodyObserver.observe(document.body, { childList: true, subtree: true });
+}
+
+  
   // ---- Listen to SPA location changes ----
 window.addEventListener("locationchange", () => {
     // Clean up previous location's lock/hide visual states first
