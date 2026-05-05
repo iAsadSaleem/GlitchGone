@@ -5824,6 +5824,10 @@ html, body {
                 }));
             } catch (e) { return null; }
         }
+        // ✅ ADD THIS — strips settings from any menu source
+        function excludeSettings(menus) {
+            return menus.filter(m => !m.id.toLowerCase().includes("setting"));
+        }
         // let subAccountMenus = getSubAccountMenusFromDOM();
       const SUBACCOUNT_LABEL_MAP = {
             "sb_launchpad": "Launchpad", "sb_dashboard": "Dashboard",
@@ -5859,6 +5863,8 @@ html, body {
         } else {
             subAccountMenus = buildFromSavedOrder("--subMenuOrder", SUBACCOUNT_LABEL_MAP) || DEFAULT_SUBACCOUNT_MENUS;
         }
+        subAccountMenus = excludeSettings(subAccountMenus); // ✅ always filter after any source
+
         // ── Agency menus ──────────────────────────────────────────────────
         let agencyMenus;
         if (!isSubAccountLevel) {
@@ -5869,6 +5875,7 @@ html, body {
         } else {
             agencyMenus = buildFromSavedOrder("--agencyMenuOrder", AGENCY_LABEL_MAP) || DEFAULT_AGENCY_MENUS;
         }
+        agencyMenus = excludeSettings(agencyMenus); // ✅ always filter after any source
         
         const SUBACCOUNT_ORDER_MAP = {
               "sb_launchpad": "launchpad",
