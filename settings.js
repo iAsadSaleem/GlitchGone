@@ -6240,7 +6240,7 @@ html, body {
             }, 50);
         }
 
-            const isSubAccount = location.pathname.includes("/location/");
+            const isSubAccounta = location.pathname.includes("/location/");
             let allowReorder = false;
            
             // ---------------- Drag & Drop ----------------
@@ -6260,7 +6260,7 @@ html, body {
                     saved.themeData[storageKey] = JSON.stringify(newOrder);
                     saveUserTheme(saved);
 
-                    if (isSubAccount) {
+                    if (isSubAccounta) {
 
                                 saveSubaccountOrder(newOrder);
                                 applySubaccountMenuOrderCSS(newOrder); // 🔥 LIVE APPLY
@@ -6370,9 +6370,9 @@ html, body {
         // ✅ Restore order if sidebar exists
         const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
 
-        const isSubAccount = location.pathname.includes("/location/");
+        const isSubAccountb = location.pathname.includes("/location/");
 
-        if (!isSubAccount && saved.themeData?.["--agencyMenuOrder"]) {
+        if (!isSubAccountb && saved.themeData?.["--agencyMenuOrder"]) {
             const order = JSON.parse(saved.themeData["--agencyMenuOrder"]);
             reorderMenu(order, "#agencySidebar");
         }
@@ -7375,9 +7375,9 @@ html, body {
 
         if (!themeName) return;
 
-        const isSubAccount = window.location.pathname.startsWith("/v2/location/");
+        const isSubAccountc = window.location.pathname.startsWith("/v2/location/");
 
-        if (themeName === "BlueWave TopNav Theme" && isSubAccount) {
+        if (themeName === "BlueWave TopNav Theme" && isSubAccountc) {
             window.__BLUEWAVE_TOPNAV_ENABLED__ = true;
             // enableBlueWaveTopNav();
         } else {
