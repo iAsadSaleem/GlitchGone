@@ -5805,93 +5805,68 @@ html, body {
                     return { id: el.id, label };
                 });
         }
+        function buildFromSavedOrder(orderKey, labelMap) {
+            try {
+                const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                const order = saved.themeData?.[orderKey]
+                    ? JSON.parse(saved.themeData[orderKey])
+                    : [];
+                if (!order.length) return null; // nothing saved yet
+                return order.map(id => ({
+                    id,
+                    label: labelMap[id]
+                        || id.replace(/^sb_(agency-)?/, "")
+                            .replace(/-/g, " ")
+                            .replace(/\b\w/g, c => c.toUpperCase())
+                }));
+            } catch (e) { return null; }
+        }
         // let subAccountMenus = getSubAccountMenusFromDOM();
+      const SUBACCOUNT_LABEL_MAP = {
+            "sb_launchpad": "Launchpad", "sb_dashboard": "Dashboard",
+            "sb_conversations": "Conversations", "sb_opportunities": "Opportunities",
+            "sb_calendars": "Calendars", "sb_contacts": "Contacts",
+            "sb_payments": "Payments", "sb_vibe": "AI Studio",
+            "sb_reporting": "Reporting", "sb_email-marketing": "Email Marketing",
+            "sb_automation": "Automation", "sb_sites": "Sites",
+            "sb_app-media": "Media Storage", "sb_memberships": "Memberships",
+            "sb_reputation": "Reputation"
+        };
+        const AGENCY_LABEL_MAP = {
+            "sb_agency-dashboard": "Agency Dashboard", "sb_location-prospect": "Prospecting",
+            "sb_agency-account-reselling": "Account Reselling", "sb_agency-marketplace": "Add-Ons",
+            "sb_agency-affiliate-portal": "Affiliate Portal", "sb_agency-template-library": "Template Library",
+            "sb_agency-partners": "Partners", "sb_agency-university": "University",
+            "sb_saas-education": "SaaS Education", "sb_ghl-swag": "GHL Swag",
+            "sb_agency-saas-configurator": "Saas Configurator", "sb_agency-ideas": "Agency Ideas",
+            "sb_mobile-app-customiser": "Mobile App Customiser", "sb_agency-account-snapshots": "Account Snapshots",
+            "sb_agency-launchpad": "Launchpad", "sb_agency-ai-usage": "AI Usage",
+            "sb_desktop-whitelabel-app": "Desktop Whitelabel App"
+        };
+        const DEFAULT_SUBACCOUNT_MENUS = Object.entries(SUBACCOUNT_LABEL_MAP).map(([id, label]) => ({ id, label }));
+        const DEFAULT_AGENCY_MENUS     = Object.entries(AGENCY_LABEL_MAP).map(([id, label]) => ({ id, label }));
         const isSubAccountLevel = location.pathname.includes("/location/");
-        let subAccountMenus = isSubAccountLevel && typeof getSubAccountMenusFromDOM === "function"
-    ? (getSubAccountMenusFromDOM().length > 0 ? getSubAccountMenusFromDOM() : [
-        { id: "sb_launchpad", label: "Launchpad" },
-            { id: "sb_conversations", label: "Conversations" },
-            { id: "sb_opportunities", label: "Opportunities" },
-            { id: "sb_calendars", label: "Calendars" },
-            { id: "sb_contacts", label: "Contacts" },
-            { id: "sb_payments", label: "Payments" },
-            { id: "sb_vibe", label: "AI Studio" },
-            { id: "sb_reporting", label: "Reporting" },
-            { id: "sb_email-marketing", label: "Email Marketing" },
-            { id: "sb_automation", label: "Automation" },
-            { id: "sb_sites", label: "Sites" },
-            { id: "sb_app-media", label: "Media Storage" },
-            { id: "sb_memberships", label: "Memberships" },
-            { id: "sb_reputation", label: "Reputation" },
-            //{ id: "sb_app-marketplace", label: "App Marketplace" },
-            //{ id: "sb_custom-values", label: "Custom Values" },
-            //{ id: "sb_manage-scoring", label: "Manage Scoring" },
-            //{ id: "sb_domains-urlRedirects", label: "Domains & URL Redirects" },
-            //{ id: "sb_integrations", label: "Integrations" },
-            //{ id: "sb_undefined", label: "Private Integrations" },
-            //{ id: "sb_conversations_providers", label: "Conversation Providers" },
-            //{ id: "sb_tags", label: "Tags" },
-            //{ id: "sb_labs", label: "Labs" },
-            //{ id: "sb_audit-logs-location", label: "Audit Logs" },
-            //{ id: "sb_brand-boards", label: "Brand Boards" },
-            //{ id: "sb_business_info", label: "Business Profile" },
-            //{ id: "sb_saas-billing", label: "Billing" },
-            //{ id: "sb_my-staff", label: "My Staff" },
-            //{ id: "sb_Opportunities-Pipelines", label: "Opportunities & Pipelines" },
-            //{ id: "sb_", label: "Automation" },
-            //{ id: "sb_calendars", label: "Calendars" },
-            //{ id: "sb_location-email-services", label: "Email Services" },
-            //{ id: "sb_phone-number", label: "Phone Numbers" },
-            //{ id: "sb_whatsapp", label: "WhatsApp" },
-            //{ id: "sb_objects", label: "Objects" },
-            //{ id: "sb_custom-fields-settings", label: "Custom Fields" }
-              ])
-    : [];
+        // ── Subaccount menus ──────────────────────────────────────────────
+        let subAccountMenus;
+        if (isSubAccountLevel) {
+            const fromDom = getSubAccountMenusFromDOM();
+            subAccountMenus = fromDom.length > 0
+                ? fromDom
+                : (buildFromSavedOrder("--subMenuOrder", SUBACCOUNT_LABEL_MAP) || DEFAULT_SUBACCOUNT_MENUS);
+        } else {
+            subAccountMenus = buildFromSavedOrder("--subMenuOrder", SUBACCOUNT_LABEL_MAP) || DEFAULT_SUBACCOUNT_MENUS;
+        }
+        // ── Agency menus ──────────────────────────────────────────────────
+        let agencyMenus;
+        if (!isSubAccountLevel) {
+            const fromDom = getAgencyMenusFromDOM();
+            agencyMenus = fromDom.length > 0
+                ? fromDom
+                : (buildFromSavedOrder("--agencyMenuOrder", AGENCY_LABEL_MAP) || DEFAULT_AGENCY_MENUS);
+        } else {
+            agencyMenus = buildFromSavedOrder("--agencyMenuOrder", AGENCY_LABEL_MAP) || DEFAULT_AGENCY_MENUS;
+        }
         
-
-
-   let agencyMenus = !isSubAccountLevel && typeof getAgencyMenusFromDOM === "function"
-    ? (getAgencyMenusFromDOM().length > 0 ? getAgencyMenusFromDOM() : [
-        { id: "sb_agency-dashboard", label: "Agency Dashboard" },
-        { id: "sb_location-prospect", label: "Prospecting" },
-            { id: "sb_agency-account-reselling", label: "Account Reselling" },
-            { id: "sb_agency-marketplace", label: "Add-Ons" },
-            { id: "sb_agency-affiliate-portal", label: "Affiliate Portal" },
-            { id: "sb_agency-template-library", label: "Template Library" },
-            { id: "sb_agency-partners", label: "Partners" },
-            { id: "sb_agency-university", label: "University" },
-            { id: "sb_saas-education", label: "SaaS Education" },
-            { id: "sb_ghl-swag", label: "GHL Swag" },
-            { id: "sb_agency-saas-configurator", label: "Saas Configurator" },
-            { id: "sb_agency-ideas", label: "Agency Ideas" },
-            { id: "sb_mobile-app-customiser", label: "Mobile App Customiser" },
-            { id: "sb_agency-account-snapshots", label: "Account Snapshots" },
-
-            //{ id: "sb_agency-accounts", label: "App Marketplace" },
-
-            //Settings menu
-            //{ id: "sb_agency-profile-settings", label: "My Profile" },
-            //{ id: "sb_agency-company-settings", label: "Company" },
-            //{ id: "sb_agency-team-settings", label: "Team" },
-            //{ id: "sb_agency-twilio-settings", label: "Phone Integration" },
-            //{ id: "sb_agency-email-settings", label: "Email Services" },
-            //{ id: "sb_system-emails-setting", label: "System Emails" },
-            //{ id: "sb_agency-banner-management", label: "Announcements" },
-            //{ id: "sb_workflow-premium-actions-setting", label: "Workflow - Premium Features" },
-            //{ id: "sb_conversation-ai-setting", label: "AI Employee" },
-            //{ id: "sb_ask-ai-configuration-setting", label: "Ask AI Configuration" },
-            //{ id: "sb_workflow-ai-setting", label: "Workflow - External AI Models" },
-            //{ id: "sb_domain-purchase-setting", label: "Domain Purchase" },
-            //{ id: "sb_undefined", label: "Private Integrations" },
-            //{ id: "sb_agency-affiliate-settings", label: "Affiliates" },
-            //{ id: "sb_agency-custom-link-settings", label: "Custom Menu Links" },
-            //{ id: "sb_agency-stripe-settings", label: "Stripe" },
-            //{ id: "sb_agency-api-keys-settings", label: "API Keys" },
-            //{ id: "sb_agency-compliance-settings", label: "Compliance" },
-            //{ id: "sb_agency-labs-settings", label: "Labs" },
-            //{ id: "sb_agency-audit-logs-settings", label: "Audit Logs" }
-        ])
-    : [];
         const SUBACCOUNT_ORDER_MAP = {
               "sb_launchpad": "launchpad",
               "sb_dashboard": "dashboard",
