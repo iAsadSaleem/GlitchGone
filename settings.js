@@ -5774,7 +5774,7 @@ html, body {
         wrapper.appendChild(separator);
      function getAgencyMenusFromDOM() {
             // At agency level, all sb_ links in sidebar are agency menus
-           const sidebar = document.querySelector('#sidebar-v2');
+            const sidebar = document.querySelector('#sidebar-v2');
             if (!sidebar) return [];
             const menuEls = sidebar.querySelectorAll('a[id^="sb_"]');
             return Array.from(menuEls)
@@ -5869,7 +5869,7 @@ html, body {
         } else {
             agencyMenus = buildFromSavedOrder("--agencyMenuOrder", AGENCY_LABEL_MAP) || DEFAULT_AGENCY_MENUS;
         }
-
+        
         const SUBACCOUNT_ORDER_MAP = {
               "sb_launchpad": "launchpad",
               "sb_dashboard": "dashboard",
