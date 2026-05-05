@@ -5772,7 +5772,21 @@ html, body {
         const separator = document.createElement("hr");
         separator.className = "tb-section-separator";
         wrapper.appendChild(separator);
+        function getSubAccountMenusFromDOM() {
+            const sidebar = document.querySelector("#sidebar-v2");
+            if (!sidebar) return [];
+            const menuEls = sidebar.querySelectorAll('a[id^="sb_"]');
+            return Array.from(menuEls).map(el => {
+                // Try to read the visible label from the DOM
+                const labelEl = el.querySelector(".menu-title, [class*='title'], span:not([class])");
+                const label = labelEl?.textContent?.trim() || el.id.replace(/^sb_/, "");
+                return { id: el.id, label };
+            });
+        }
+        let subAccountMenus = getSubAccountMenusFromDOM();
+
         // ---------------- Menu definitions ----------------
+        if (!subAccountMenus.length) {
         let subAccountMenus = [
             { id: "sb_launchpad", label: "Launchpad" },
             { id: "sb_dashboard", label: "Dashboard" },
@@ -5812,7 +5826,7 @@ html, body {
             //{ id: "sb_objects", label: "Objects" },
             //{ id: "sb_custom-fields-settings", label: "Custom Fields" }
         ];
-
+        }
         let agencyMenus = [
             { id: "sb_agency-dashboard", label: "Agency Dashboard" },
             { id: "sb_location-prospect", label: "Prospecting" },
@@ -6110,17 +6124,40 @@ html, body {
             // ==========================
             // Subaccount Sidebar Observer
             // ==========================
-            function applySubaccountMenuOrderCSS(order) {
-                order.forEach((menuId, index) => {
-                    const cssKey = SUBACCOUNT_ORDER_MAP[menuId];
-                    if (!cssKey) return;
+            // function applySubaccountMenuOrderCSS(order) {
+            //     order.forEach((menuId, index) => {
+            //         const cssKey = SUBACCOUNT_ORDER_MAP[menuId];
+            //         if (!cssKey) return;
 
-                    document.documentElement.style.setProperty(
-                    `--${cssKey}-order`,
-                    index
-                    );
+            //         document.documentElement.style.setProperty(
+            //         `--${cssKey}-order`,
+            //         index
+            //         );
+            //     });
+            //     }
+            function applySubaccountMenuOrderCSS(order) {
+                // Apply saved order
+                order.forEach((menuId, index) => {
+                    // ✅ CSS variable path (for menus that use var(--x-order))
+                    const cssKey = SUBACCOUNT_ORDER_MAP[menuId];
+                    if (cssKey) {
+                        document.documentElement.style.setProperty(`--${cssKey}-order`, index);
+                    }
+
+                    // ✅ Direct element path (works for ALL menus including new unknown ones)
+                    const el = document.getElementById(menuId);
+                    if (el) el.style.setProperty("order", index, "important");
                 });
-                }
+
+                // ✅ Push any NEW GHL menus (not in saved order) to the end
+                const allSidebarMenus = document.querySelectorAll('#sidebar-v2 [id^="sb_"]');
+                let endIndex = order.length;
+                allSidebarMenus.forEach(el => {
+                    if (!order.includes(el.id)) {
+                        el.style.setProperty("order", endIndex++, "important");
+                    }
+                });
+            }
                 function saveSubaccountOrder(order) {
                 const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                 saved.themeData ??= {};
@@ -6209,23 +6246,28 @@ html, body {
 
         (function applySavedSubAccountOrderOnLoad() {
             if (!location.pathname.includes("/location/")) return;
-
             const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
             const order = saved.themeData?.["--subMenuOrder"]
                 ? JSON.parse(saved.themeData["--subMenuOrder"])
                 : [];
-
             if (!order.length) return;
-
-            // Apply CSS order
             order.forEach((menuId, index) => {
+                // CSS variable (existing approach, keep it)
                 const cssKey = SUBACCOUNT_ORDER_MAP[menuId];
-                if (!cssKey) return;
-
-                document.documentElement.style.setProperty(
-                    `--${cssKey}-order`,
-                    index
-                );
+                if (cssKey) {
+                    document.documentElement.style.setProperty(`--${cssKey}-order`, index);
+                }
+                // ✅ Direct element order (new — handles unknown menus)
+                const el = document.getElementById(menuId);
+                if (el) el.style.setProperty("order", index, "important");
+            });
+            // ✅ Unknown new menus go to end
+            const allSidebarMenus = document.querySelectorAll('#sidebar-v2 [id^="sb_"]');
+            let endIndex = order.length;
+            allSidebarMenus.forEach(el => {
+                if (!order.includes(el.id)) {
+                    el.style.setProperty("order", endIndex++, "important");
+                }
             });
         })();
         // ✅ Restore order if sidebar exists
