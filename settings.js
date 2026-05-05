@@ -5805,12 +5805,9 @@ html, body {
                     return { id: el.id, label };
                 });
         }
-        const isSubAccount = location.pathname.includes("/location/");
         // let subAccountMenus = getSubAccountMenusFromDOM();
-
-        // ---------------- Menu definitions ----------------
-       
-        let subAccountMenus = isSubAccount
+        const isSubAccountLevel = location.pathname.includes("/location/");
+        let subAccountMenus = isSubAccountLevel && typeof getSubAccountMenusFromDOM === "function"
     ? (getSubAccountMenusFromDOM().length > 0 ? getSubAccountMenusFromDOM() : [
         { id: "sb_launchpad", label: "Launchpad" },
             { id: "sb_conversations", label: "Conversations" },
@@ -5853,7 +5850,7 @@ html, body {
         
 
 
-        let agencyMenus = !isSubAccount
+   let agencyMenus = !isSubAccountLevel && typeof getAgencyMenusFromDOM === "function"
     ? (getAgencyMenusFromDOM().length > 0 ? getAgencyMenusFromDOM() : [
         { id: "sb_agency-dashboard", label: "Agency Dashboard" },
         { id: "sb_location-prospect", label: "Prospecting" },
