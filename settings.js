@@ -5772,24 +5772,39 @@ html, body {
         const separator = document.createElement("hr");
         separator.className = "tb-section-separator";
         wrapper.appendChild(separator);
-     function getAgencyMenusFromDOM() {
-            // At agency level, all sb_ links in sidebar are agency menus
+             function getAgencyMenusFromDOM() {
             const sidebar = document.querySelector('#sidebar-v2');
             if (!sidebar) return [];
             const menuEls = sidebar.querySelectorAll('a[id^="sb_"]');
+            const seen = {}; // track duplicate IDs
+
             return Array.from(menuEls)
                 .filter(el =>
                     el.id &&
                     el.id !== "sb_" &&
-                    !el.id.toLowerCase().includes("setting") // filter blank IDs
+                    !el.id.toLowerCase().includes("setting")
                 )
                 .map(el => {
-                    // Try to read the visible label GHL rendered
+                    // Use img alt text first — most reliable, GHL uses it to distinguish
+                    // duplicates like sb_agency-accounts (Sub-Accounts vs App Marketplace)
+                    const imgAlt = el.querySelector('img[alt]')?.getAttribute('alt')
+                        ?.replace(/\s*icon$/i, '').trim();
+
                     const span = el.querySelector('span:not([class*="icon"]):not([class*="dot"])');
-                    const label = span?.textContent?.trim()
+                    const spanText = span?.textContent?.trim();
+
+                    const label = imgAlt || spanText
                         || el.id.replace(/^sb_agency-/, '').replace(/-/g, ' ')
-                            .replace(/\b\w/g, c => c.toUpperCase());
-                    return { id: el.id, label };
+                               .replace(/\b\w/g, c => c.toUpperCase());
+
+                    // Handle duplicate IDs — give second occurrence a unique key
+                    let uniqueId = el.id;
+                    if (seen[el.id]) {
+                        uniqueId = el.id + "--" + label.toLowerCase().replace(/\s+/g, '-');
+                    }
+                    seen[el.id] = true;
+
+                    return { id: uniqueId, originalId: el.id, label };
                 });
         }
 
@@ -5848,7 +5863,8 @@ html, body {
             "sb_agency-saas-configurator": "Saas Configurator", "sb_agency-ideas": "Agency Ideas",
             "sb_mobile-app-customiser": "Mobile App Customiser", "sb_agency-account-snapshots": "Account Snapshots",
             "sb_agency-launchpad": "Launchpad", "sb_agency-ai-usage": "AI Usage",
-            "sb_desktop-whitelabel-app": "Desktop Whitelabel App"
+            "sb_desktop-whitelabel-app": "Desktop Whitelabel App",
+            "sb_agency-accounts--app-marketplace": "App Marketplace"  
         };
         const DEFAULT_SUBACCOUNT_MENUS = Object.entries(SUBACCOUNT_LABEL_MAP).map(([id, label]) => ({ id, label }));
         const DEFAULT_AGENCY_MENUS     = Object.entries(AGENCY_LABEL_MAP).map(([id, label]) => ({ id, label }));
