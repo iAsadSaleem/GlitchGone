@@ -5772,24 +5772,47 @@ html, body {
         const separator = document.createElement("hr");
         separator.className = "tb-section-separator";
         wrapper.appendChild(separator);
-        function getSubAccountMenusFromDOM() {
-            const sidebar = document.querySelector("#sidebar-v2");
+     function getAgencyMenusFromDOM() {
+            // At agency level, all sb_ links in sidebar are agency menus
+            const sidebar = document.querySelector('#sidebar-v2');
             if (!sidebar) return [];
+
             const menuEls = sidebar.querySelectorAll('a[id^="sb_"]');
-            return Array.from(menuEls).map(el => {
-                // Try to read the visible label from the DOM
-                const labelEl = el.querySelector(".menu-title, [class*='title'], span:not([class])");
-                const label = labelEl?.textContent?.trim() || el.id.replace(/^sb_/, "");
-                return { id: el.id, label };
-            });
+            return Array.from(menuEls)
+                .filter(el => el.id && el.id !== "sb_") // filter blank IDs
+                .map(el => {
+                    // Try to read the visible label GHL rendered
+                    const span = el.querySelector('span:not([class*="icon"]):not([class*="dot"])');
+                    const label = span?.textContent?.trim()
+                        || el.id.replace(/^sb_agency-/, '').replace(/-/g, ' ')
+                            .replace(/\b\w/g, c => c.toUpperCase());
+                    return { id: el.id, label };
+                });
         }
-        let subAccountMenus = getSubAccountMenusFromDOM();
+
+        function getSubAccountMenusFromDOM() {
+            const sidebar = document.querySelector('#sidebar-v2');
+            if (!sidebar) return [];
+
+            const menuEls = sidebar.querySelectorAll('a[id^="sb_"]');
+            return Array.from(menuEls)
+                .filter(el => el.id && el.id !== "sb_")
+                .map(el => {
+                    const span = el.querySelector('span:not([class*="icon"]):not([class*="dot"])');
+                    const label = span?.textContent?.trim()
+                        || el.id.replace(/^sb_/, '').replace(/-/g, ' ')
+                            .replace(/\b\w/g, c => c.toUpperCase());
+                    return { id: el.id, label };
+                });
+        }
+        const isSubAccount = location.pathname.includes("/location/");
+        // let subAccountMenus = getSubAccountMenusFromDOM();
 
         // ---------------- Menu definitions ----------------
-        if (!subAccountMenus.length) {
-        let subAccountMenus = [
-            { id: "sb_launchpad", label: "Launchpad" },
-            { id: "sb_dashboard", label: "Dashboard" },
+       
+        let subAccountMenus = isSubAccount
+    ? (getSubAccountMenusFromDOM().length > 0 ? getSubAccountMenusFromDOM() : [
+        { id: "sb_launchpad", label: "Launchpad" },
             { id: "sb_conversations", label: "Conversations" },
             { id: "sb_opportunities", label: "Opportunities" },
             { id: "sb_calendars", label: "Calendars" },
@@ -5825,11 +5848,15 @@ html, body {
             //{ id: "sb_whatsapp", label: "WhatsApp" },
             //{ id: "sb_objects", label: "Objects" },
             //{ id: "sb_custom-fields-settings", label: "Custom Fields" }
-        ];
-        }
-        let agencyMenus = [
-            { id: "sb_agency-dashboard", label: "Agency Dashboard" },
-            { id: "sb_location-prospect", label: "Prospecting" },
+              ])
+    : [];
+        
+
+
+        let agencyMenus = !isSubAccount
+    ? (getAgencyMenusFromDOM().length > 0 ? getAgencyMenusFromDOM() : [
+        { id: "sb_agency-dashboard", label: "Agency Dashboard" },
+        { id: "sb_location-prospect", label: "Prospecting" },
             { id: "sb_agency-account-reselling", label: "Account Reselling" },
             { id: "sb_agency-marketplace", label: "Add-Ons" },
             { id: "sb_agency-affiliate-portal", label: "Affiliate Portal" },
@@ -5866,7 +5893,8 @@ html, body {
             //{ id: "sb_agency-compliance-settings", label: "Compliance" },
             //{ id: "sb_agency-labs-settings", label: "Labs" },
             //{ id: "sb_agency-audit-logs-settings", label: "Audit Logs" }
-        ];
+        ])
+    : [];
         const SUBACCOUNT_ORDER_MAP = {
               "sb_launchpad": "launchpad",
               "sb_dashboard": "dashboard",
@@ -6165,26 +6193,55 @@ html, body {
                 saveUserTheme(saved);
                 }
            
+            // function updateAgencyaccountSidebarRuntime(newOrder) {
+            //     const wait = setInterval(() => {
+            //         const sidebarNav = document.querySelector(
+            //             '.hl_nav-header nav[aria-label="header"]'
+            //         );
+            //         if (!sidebarNav) return;
+
+            //         const allExist = newOrder.every(key => sidebarNav.querySelector(`[meta="${key}"]`));
+
+            //         if (!allExist) return;
+
+            //         clearInterval(wait);
+
+            //         // Reorder DOM elements
+            //         newOrder.forEach(metaKey => {
+            //             const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
+            //             if (el) sidebarNav.appendChild(el); // moves node in new order
+            //         });
+            //     }, 50);
+            // }
             function updateAgencyaccountSidebarRuntime(newOrder) {
-                const wait = setInterval(() => {
-                    const sidebarNav = document.querySelector(
-                        '.hl_nav-header nav[aria-label="header"]'
-                    );
-                    if (!sidebarNav) return;
+            const wait = setInterval(() => {
+                const sidebarNav = document.querySelector('.hl_nav-header nav[aria-label="header"]');
+                if (!sidebarNav) return;
 
-                    const allExist = newOrder.every(key => sidebarNav.querySelector(`[meta="${key}"]`));
+                // ✅ Strip "sb_" prefix to get the meta key GHL actually uses
+                const metaOrder = newOrder.map(id => id.replace(/^sb_/, ""));
 
-                    if (!allExist) return;
+                const allExist = metaOrder.every(key => sidebarNav.querySelector(`[meta="${key}"]`));
+                if (!allExist) return;
 
-                    clearInterval(wait);
+                clearInterval(wait);
 
-                    // Reorder DOM elements
-                    newOrder.forEach(metaKey => {
-                        const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
-                        if (el) sidebarNav.appendChild(el); // moves node in new order
-                    });
-                }, 50);
-            }
+                // Reorder DOM elements by meta attribute
+                metaOrder.forEach(metaKey => {
+                    const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
+                    if (el) sidebarNav.appendChild(el); // moves to end in new order
+                });
+
+                // ✅ Push any new/unknown menus GHL added to end
+                const allMenus = sidebarNav.querySelectorAll('[meta]');
+                allMenus.forEach(el => {
+                    const metaVal = el.getAttribute('meta');
+                    if (!metaOrder.includes(metaVal)) {
+                        sidebarNav.appendChild(el);
+                    }
+                });
+            }, 50);
+        }
 
             const isSubAccount = location.pathname.includes("/location/");
             let allowReorder = false;
@@ -6244,32 +6301,75 @@ html, body {
         container.appendChild(wrapper);
         applyMenuCustomizations();
 
-        (function applySavedSubAccountOrderOnLoad() {
-            if (!location.pathname.includes("/location/")) return;
-            const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-            const order = saved.themeData?.["--subMenuOrder"]
-                ? JSON.parse(saved.themeData["--subMenuOrder"])
-                : [];
-            if (!order.length) return;
-            order.forEach((menuId, index) => {
-                // CSS variable (existing approach, keep it)
-                const cssKey = SUBACCOUNT_ORDER_MAP[menuId];
-                if (cssKey) {
-                    document.documentElement.style.setProperty(`--${cssKey}-order`, index);
-                }
-                // ✅ Direct element order (new — handles unknown menus)
-                const el = document.getElementById(menuId);
-                if (el) el.style.setProperty("order", index, "important");
-            });
-            // ✅ Unknown new menus go to end
-            const allSidebarMenus = document.querySelectorAll('#sidebar-v2 [id^="sb_"]');
-            let endIndex = order.length;
-            allSidebarMenus.forEach(el => {
-                if (!order.includes(el.id)) {
-                    el.style.setProperty("order", endIndex++, "important");
-                }
-            });
-        })();
+        // (function applySavedSubAccountOrderOnLoad() {
+        //     if (!location.pathname.includes("/location/")) return;
+        //     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        //     const order = saved.themeData?.["--subMenuOrder"]
+        //         ? JSON.parse(saved.themeData["--subMenuOrder"])
+        //         : [];
+        //     if (!order.length) return;
+        //     order.forEach((menuId, index) => {
+        //         // CSS variable (existing approach, keep it)
+        //         const cssKey = SUBACCOUNT_ORDER_MAP[menuId];
+        //         if (cssKey) {
+        //             document.documentElement.style.setProperty(`--${cssKey}-order`, index);
+        //         }
+        //         // ✅ Direct element order (new — handles unknown menus)
+        //         const el = document.getElementById(menuId);
+        //         if (el) el.style.setProperty("order", index, "important");
+        //     });
+        //     // ✅ Unknown new menus go to end
+        //     const allSidebarMenus = document.querySelectorAll('#sidebar-v2 [id^="sb_"]');
+        //     let endIndex = order.length;
+        //     allSidebarMenus.forEach(el => {
+        //         if (!order.includes(el.id)) {
+        //             el.style.setProperty("order", endIndex++, "important");
+        //         }
+        //     });
+        // })();
+
+(function applySavedAgencyOrderOnLoad() {
+    // Only run on agency level (not inside /location/)
+    if (location.pathname.includes("/location/")) return;
+
+    const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+    const order = saved.themeData?.["--agencyMenuOrder"]
+        ? JSON.parse(saved.themeData["--agencyMenuOrder"])
+        : [];
+
+    if (!order.length) return;
+
+    // Wait for the nav to exist, then apply
+    const apply = () => {
+        const sidebarNav = document.querySelector('.hl_nav-header nav[aria-label="header"]');
+        if (!sidebarNav) return false;
+
+        const metaOrder = order.map(id => id.replace(/^sb_/, ""));
+
+        metaOrder.forEach(metaKey => {
+            const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
+            if (el) sidebarNav.appendChild(el);
+        });
+
+        // ✅ New menus GHL added go to the end
+        sidebarNav.querySelectorAll('[meta]').forEach(el => {
+            const metaVal = el.getAttribute('meta');
+            if (!metaOrder.includes(metaVal)) sidebarNav.appendChild(el);
+        });
+
+        return true;
+    };
+
+    // Try immediately, then retry until sidebar is ready
+    if (!apply()) {
+        const retryInterval = setInterval(() => {
+            if (apply()) clearInterval(retryInterval);
+        }, 100);
+        // Stop retrying after 10 seconds
+        setTimeout(() => clearInterval(retryInterval), 10000);
+    }
+})();
+        
         // ✅ Restore order if sidebar exists
         const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
 

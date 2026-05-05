@@ -216,6 +216,35 @@ function applySidebarLogoFromTheme(retries = 15, delay = 300) {
               "sb_app-marketplace": "app-marketplace",
               "sb_location-mobile-app": "mobile-app"
             };
+            function getAgencyMenusFromDOM() {
+              const sidebar = document.querySelector('#sidebar-v2');
+              if (!sidebar) return [];
+              const menuEls = sidebar.querySelectorAll('a[id^="sb_"]');
+              return Array.from(menuEls)
+                  .filter(el => el.id && el.id !== "sb_")
+                  .map(el => {
+                      const span = el.querySelector('span:not([class*="icon"]):not([class*="dot"])');
+                      const label = span?.textContent?.trim()
+                          || el.id.replace(/^sb_agency-/, '').replace(/-/g, ' ')
+                                  .replace(/\b\w/g, c => c.toUpperCase());
+                      return { id: el.id, label };
+                  });
+          }
+          function getSubAccountMenusFromDOM() {
+              const sidebar = document.querySelector('#sidebar-v2');
+              if (!sidebar) return [];
+              const menuEls = sidebar.querySelectorAll('a[id^="sb_"]');
+              return Array.from(menuEls)
+                  .filter(el => el.id && el.id !== "sb_")
+                  .map(el => {
+                      const span = el.querySelector('span:not([class*="icon"]):not([class*="dot"])');
+                      const label = span?.textContent?.trim()
+                          || el.id.replace(/^sb_/, '').replace(/-/g, ' ')
+                                  .replace(/\b\w/g, c => c.toUpperCase());
+                      return { id: el.id, label };
+                  });
+          }
+
  (function applySavedSubAccountOrderOnLoad() {
             if (!location.pathname.includes("/location/")) return;
 
@@ -237,7 +266,67 @@ function applySidebarLogoFromTheme(retries = 15, delay = 300) {
                 );
             });
         })();
-
+        (function applySavedAgencyOrderOnLoad() {
+            if (location.pathname.includes("/location/")) return;
+            const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+            const order = saved.themeData?.["--agencyMenuOrder"]
+                ? JSON.parse(saved.themeData["--agencyMenuOrder"])
+                : [];
+            if (!order.length) return;
+            const apply = () => {
+                const sidebarNav = document.querySelector('.hl_nav-header nav[aria-label="header"]');
+                if (!sidebarNav) return false;
+                const metaOrder = order.map(id => id.replace(/^sb_/, ""));
+                metaOrder.forEach(metaKey => {
+                    const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
+                    if (el) sidebarNav.appendChild(el);
+                });
+                sidebarNav.querySelectorAll('[meta]').forEach(el => {
+                    const metaVal = el.getAttribute('meta');
+                    if (!metaOrder.includes(metaVal)) sidebarNav.appendChild(el);
+                });
+                return true;
+            };
+            if (!apply()) {
+                const retryInterval = setInterval(() => {
+                    if (apply()) clearInterval(retryInterval);
+                }, 100);
+                setTimeout(() => clearInterval(retryInterval), 10000);
+            }
+        })();
+        (function watchAgencySidebarForReRender() {
+            if (location.pathname.includes("/location/")) return;
+            let reorderTimer = null;
+            const observer = new MutationObserver(() => {
+                clearTimeout(reorderTimer);
+                reorderTimer = setTimeout(() => {
+                    const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                    const order = saved.themeData?.["--agencyMenuOrder"]
+                        ? JSON.parse(saved.themeData["--agencyMenuOrder"])
+                        : [];
+                    if (!order.length) return;
+                    const sidebarNav = document.querySelector('.hl_nav-header nav[aria-label="header"]');
+                    if (!sidebarNav) return;
+                    const metaOrder = order.map(id => id.replace(/^sb_/, ""));
+                    metaOrder.forEach(metaKey => {
+                        const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
+                        if (el) sidebarNav.appendChild(el);
+                    });
+                    sidebarNav.querySelectorAll('[meta]').forEach(el => {
+                        if (!metaOrder.includes(el.getAttribute('meta'))) sidebarNav.appendChild(el);
+                    });
+                }, 80);
+            });
+            const startObserver = () => {
+                const sidebar = document.querySelector('#sidebar-v2');
+                if (sidebar) {
+                    observer.observe(sidebar, { childList: true, subtree: true });
+                } else {
+                    setTimeout(startObserver, 200);
+                }
+            };
+            startObserver();
+        })();
   // // ---- Theme data injection ----
 function injectThemeData(themeData) {
     if (!themeData || typeof themeData !== "object") return;
