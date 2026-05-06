@@ -254,19 +254,96 @@
         const style = document.createElement('style');
         style.id = 'tb-critical-css';
         style.textContent = `
-            #themeBuilderDrawer.tb-drawer {
-                position: fixed !important;
-                top: 0 !important;
-                right: -480px !important;
-                width: 420px !important;
-                height: 100vh !important;
-                z-index: 99999 !important;
-                overflow-y: auto !important;
-                transition: right 0.3s ease !important;
+            .tb-drawer {
+            position: fixed; /* so it can move anywhere */
+            top: 50px;
+            right: 20px;
+            width: 320px;
+            background: #1e1e1e;
+            border: 1px solid #444;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+
+            .tb-drawer.open {
+                display: block;
             }
-            #themeBuilderDrawer.tb-drawer.open {
-                right: 0 !important;
-            }
+
+        .tb-drawer-header {
+            cursor: move; /* show draggable cursor */
+            background: #333;
+            padding: 10px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 23px;
+        }
+        .tb-drawer-card {
+            background-color: #ffffff;
+            margin: 2px 2px 1px 1px;
+            border-radius: 13px;
+            padding: 16px 6px 0px 7px;
+            display: flex;
+            flex-direction: column;
+            height: auto;
+            box-shadow: 0px 0 5px rgb(237 237 237);
+        }
+             .tb-drawer.open {
+        display: block;
+    }
+        /*Hello Harry*/
+#themeBuilderDrawer {
+    position: fixed;
+    top: 50px;
+    right: -420px;
+    width: 420px;
+    max-width: 90%;
+    height: auto;
+    /* 25% active color, 75% white */
+    background: linear-gradient(to bottom, var(--themebuildermaincolor, #459459) 40%, #ffffff 0%);
+    box-shadow: 3px 0px 19px var(--themebuildermaincolor , #459459); /* ✅ Works */
+    transition: right 0.48s ease;
+    z-index: 99999;
+    padding: 16px 7px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+    #themeBuilderDrawer.open {
+        border-radius: 14px;
+        right: 10px;
+        border: none ;
+    }
+/* Drawer header */
+    #themeBuilderDrawer > div:first-child {
+        font-size: 32px;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: left;
+        position: relative;
+        padding: 14px 16px;
+    }
+
+    /* Only style the close button */
+    #themeBuilderDrawer .tb-drawer-close {
+        position: absolute;
+        right: 0px;
+        top: 8%;
+        transform: translateY(-50%);
+        font-size: 28px;
+        background: none;
+        cursor: var(--custom-pointer) !important;
+        color: #ffffff;
+        border-radius: 21px;
+        padding: 0px 5px 0px 5px;
+    }
+    #themeBuilderDrawer.closing {
+        right: -420px;
+        transition: right 0.4s ease; /* slightly slower close transition */
+    }
         `;
         document.head.appendChild(style);
         }
