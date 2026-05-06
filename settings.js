@@ -275,7 +275,9 @@
             const link = document.createElement('link');
             link.id = 'themeBuilderCSS';
             link.rel = 'stylesheet';
-            link.href = 'https://glitch-gone-nu.vercel.app/theme-builder.css';
+            // link.href = 'https://glitch-gone-nu.vercel.app/theme-builder.css';
+            link.href = 'https://themebuilder-six.vercel.app/theme-builder.css';
+
             document.head.appendChild(link);
         }
     }
