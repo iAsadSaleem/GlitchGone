@@ -249,6 +249,28 @@
 
     // Load CSS for Theme Builder
     function loadThemeBuilderCSS() {
+    // ✅ Inject critical positioning CSS inline — never rely on external file for this
+    if (!document.getElementById('tb-critical-css')) {
+        const style = document.createElement('style');
+        style.id = 'tb-critical-css';
+        style.textContent = `
+            #themeBuilderDrawer.tb-drawer {
+                position: fixed !important;
+                top: 0 !important;
+                right: -480px !important;
+                width: 420px !important;
+                height: 100vh !important;
+                z-index: 99999 !important;
+                overflow-y: auto !important;
+                transition: right 0.3s ease !important;
+            }
+            #themeBuilderDrawer.tb-drawer.open {
+                right: 0 !important;
+            }
+        `;
+        document.head.appendChild(style);
+        }
+        // Then load external CSS for the rest of the styling
         if (!document.getElementById('themeBuilderCSS')) {
             const link = document.createElement('link');
             link.id = 'themeBuilderCSS';
