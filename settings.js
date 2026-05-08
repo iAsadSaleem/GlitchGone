@@ -1,5 +1,6 @@
 (function () {
     let headerObserver = null;
+    window.__TB_REORDERING__ = false;
     const MAX_ATTEMPTS = 40;
     window.__BLUEWAVE_TOPNAV_ENABLED__ = true;
     let themes = {}; // global or module-level
@@ -737,7 +738,10 @@
         fix();
 
         // Prevent GHL from collapsing again
-        const observer = new MutationObserver(() => fix());
+        const observer = new MutationObserver(() => {
+    // ✅ Don't fight with theme builder's own DOM reordering
+            if (!window.__TB_REORDERING__) fix();
+        });
         observer.observe(sidebar, { attributes: true, attributeFilter: ["style", "class"] });
     }
     let mainCssLoaded = false;
@@ -4141,15 +4145,19 @@ html, body {
 
     // ✅ Your existing observer (don’t change this)
     function waitForSidebarMenus(callback) {
-        const observer = new MutationObserver(() => {
-            if (document.querySelectorAll(".hl_nav-header a").length > 0) {
-                observer.disconnect();
-                callback();
-            }
-        });
-
-        observer.observe(document.body, { childList: true, subtree: true });
+    // ✅ If menus already exist, run callback immediately — no observer needed
+    if (document.querySelectorAll(".hl_nav-header a").length > 0) {
+        callback();
+        return;
     }
+    const observer = new MutationObserver(() => {
+        if (document.querySelectorAll(".hl_nav-header a").length > 0) {
+            observer.disconnect();
+            callback();
+        }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+}
     function getGlobalPopupCustomizations() {
         try {
             return JSON.parse(localStorage.getItem("tb-popup-customizations") || "{}");
@@ -5761,103 +5769,181 @@ html, body {
             // Update Title
             const titleSpan = menuEl.querySelector(".nav-title");
             if (titleSpan) titleSpan.textContent = menuData.title || menuEl.dataset.defaultLabel || "";
+            // if (menuData.icon) {
+            //     // Remove only existing icon inside this menu
+            //     const existingImg = menuEl.querySelector("img");
+            //     const existingI = menuEl.querySelector("i");
+            //     if (existingImg) existingImg.remove();
+            //     if (existingI) existingI.remove();
+            // // ✅ Clear old CSS mask icon
+            //     const cssVarName = `--sidebar-menu-icon-${menuId.replace(/^sb_/, "")}`;
+            //     document.documentElement.style.setProperty(cssVarName, "");
+            //     if (/^f[0-9a-f]+$/i.test(menuData.icon)) {
+            //         menuEl.classList.add("tb-has-fa-icon");
+            //         menuEl.classList.remove("tb-has-svg-icon"); // hide the old SVG mask
+            //     } else if (/^https?:\/\//.test(menuData.icon)) {
+            //         menuEl.classList.remove("tb-has-fa-icon");
+            //         menuEl.classList.add("tb-has-svg-icon");
+            //     }
+            //     menuEl.classList.remove('tb-has-svg-icon'); // optional, for clarity
+            //     let iconEl;
+            //     if (/^https?:\/\//.test(menuData.icon)) {
+            //         // Image URL
+            //         iconEl = document.createElement("img");
+            //         iconEl.src = menuData.icon;
+            //         iconEl.alt = menuData.title || "icon";
+            //         iconEl.className = "md:mr-0 h-5 w-5 mr-2 lg:mr-2 xl:mr-2";
+            //     } else if (/^f[0-9a-f]+$/i.test(menuData.icon)) {
+            //             // Unicode like "f015", "f232", "f436"
+
+            //             const iconValue = menuData.icon.toLowerCase();
+
+            //             // Known Font Awesome Brands unicodes (extend as needed)
+            //             const BRAND_UNICODE_RANGE = ["f09a", "f16d", "f232", "f436"];
+
+            //             const isBrandIcon = BRAND_UNICODE_RANGE.includes(iconValue);
+
+            //             iconEl = document.createElement("i");
+            //             iconEl.className = "tb-sidebar-icon";
+            //             iconEl.innerHTML = `&#x${iconValue};`;
+
+            //             if (isBrandIcon) {
+            //                 // ✅ Font Awesome Brands
+            //                 iconEl.style.fontFamily = "Font Awesome 6 Brands";
+            //                 iconEl.style.fontWeight = "400";
+            //             } else {
+            //                 // ✅ Font Awesome Solid
+            //                 iconEl.style.fontFamily = "Font Awesome 6 Free";
+            //                 iconEl.style.fontWeight = "900";
+            //             }
+
+            //             iconEl.style.fontSize = "16px";
+            //             iconEl.style.marginRight = "0.5rem";
+            //             iconEl.style.lineHeight = "1";
+            //         }
+            //         else {
+            //         let iconValue = menuData.icon.trim();
+
+            //         if (/^f[0-9a-f]{3}$/i.test(iconValue)) {
+            //             iconEl = document.createElement("i");
+            //             iconEl.className = "fa-regular tb-sidebar-icon";
+            //             iconEl.innerHTML = `&#x${iconValue};`;
+            //             iconEl.style.fontFamily = "Font Awesome 6 Free";
+            //             iconEl.style.fontWeight = "900";
+            //         } else {
+            //             if (
+            //                 iconValue.startsWith("fa-") &&
+            //                 // !iconValue.includes("fa-solid") &&
+            //                 !iconValue.includes("fa-regular") &&
+            //                 !iconValue.includes("fa-brands")
+            //             ) {
+            //                 iconValue = `fa-regular ${iconValue}`;
+            //             } else if (!iconValue.startsWith("fa-")) {
+            //                 iconValue = `fa-regular fa-${iconValue}`;
+            //             }
+
+            //             iconEl = document.createElement("i");
+            //             iconEl.className = `${iconValue} tb-sidebar-icon`;
+            //             iconEl.style.fontFamily = "Font Awesome 6 Free";
+            //             iconEl.style.fontWeight = "900";
+            //             iconEl.style.fontSize = "16px";
+            //             iconEl.style.marginRight = "0.5rem";
+            //         }
+            //     }
+
+            //     // Add new icon for this menu
+            //     menuEl.prepend(iconEl);
+              
+            //     // ✅ Toggle classes for CSS
+            //     if (/^f[0-9a-f]+$/i.test(menuData.icon)) {
+            //         menuEl.classList.add("tb-has-fa-icon");
+            //         menuEl.classList.remove("tb-has-svg-icon");
+            //     } else if (/^https?:\/\//.test(menuData.icon)) {
+            //         menuEl.classList.remove("tb-has-fa-icon");
+            //         menuEl.classList.add("tb-has-svg-icon");
+            //     }
+            //     // 🧠 If icon is added, shift title like default
+            //     const titleEl = menuEl.querySelector(".nav-title");
+            //     if (titleEl) {
+            //         titleEl.style.right = "28px";
+            //     }
+            // }
             if (menuData.icon) {
-                // Remove only existing icon inside this menu
-                const existingImg = menuEl.querySelector("img");
-                const existingI = menuEl.querySelector("i");
-                if (existingImg) existingImg.remove();
-                if (existingI) existingI.remove();
-            // ✅ Clear old CSS mask icon
-                const cssVarName = `--sidebar-menu-icon-${menuId.replace(/^sb_/, "")}`;
-                document.documentElement.style.setProperty(cssVarName, "");
-                if (/^f[0-9a-f]+$/i.test(menuData.icon)) {
-                    menuEl.classList.add("tb-has-fa-icon");
-                    menuEl.classList.remove("tb-has-svg-icon"); // hide the old SVG mask
-                } else if (/^https?:\/\//.test(menuData.icon)) {
-                    menuEl.classList.remove("tb-has-fa-icon");
-                    menuEl.classList.add("tb-has-svg-icon");
-                }
-                menuEl.classList.remove('tb-has-svg-icon'); // optional, for clarity
-                let iconEl;
-                if (/^https?:\/\//.test(menuData.icon)) {
-                    // Image URL
-                    iconEl = document.createElement("img");
-                    iconEl.src = menuData.icon;
-                    iconEl.alt = menuData.title || "icon";
-                    iconEl.className = "md:mr-0 h-5 w-5 mr-2 lg:mr-2 xl:mr-2";
-                } else if (/^f[0-9a-f]+$/i.test(menuData.icon)) {
-                        // Unicode like "f015", "f232", "f436"
+    // ✅ Skip DOM work if icon is already correct — prevents visual flash
+                const existingIcon = menuEl.querySelector("i.tb-sidebar-icon, img.tb-sidebar-icon-img");
+                if (existingIcon && existingIcon.dataset.tbIcon === menuData.icon) {
+                    // icon already applied, title-only update above is enough
+                } else {
+                    // Remove old icons
+                    const existingImg = menuEl.querySelector("img");
+                    const existingI = menuEl.querySelector("i");
+                    if (existingImg) existingImg.remove();
+                    if (existingI) existingI.remove();
 
+                    // Clear old CSS mask icon
+                    const cssVarName = `--sidebar-menu-icon-${menuId.replace(/^sb_/, "")}`;
+                    document.documentElement.style.setProperty(cssVarName, "");
+
+                    menuEl.classList.remove('tb-has-svg-icon');
+
+                    // ✅ Create the icon element FIRST, then prepend
+                    let iconEl;
+                    if (/^https?:\/\//.test(menuData.icon)) {
+                        iconEl = document.createElement("img");
+                        iconEl.src = menuData.icon;
+                        iconEl.alt = menuData.title || "icon";
+                        iconEl.className = "md:mr-0 h-5 w-5 mr-2 lg:mr-2 xl:mr-2 tb-sidebar-icon-img"; // ✅ add tb-sidebar-icon-img so selector works next call
+                    } else if (/^f[0-9a-f]+$/i.test(menuData.icon)) {
                         const iconValue = menuData.icon.toLowerCase();
-
-                        // Known Font Awesome Brands unicodes (extend as needed)
                         const BRAND_UNICODE_RANGE = ["f09a", "f16d", "f232", "f436"];
-
                         const isBrandIcon = BRAND_UNICODE_RANGE.includes(iconValue);
-
                         iconEl = document.createElement("i");
                         iconEl.className = "tb-sidebar-icon";
                         iconEl.innerHTML = `&#x${iconValue};`;
-
-                        if (isBrandIcon) {
-                            // ✅ Font Awesome Brands
-                            iconEl.style.fontFamily = "Font Awesome 6 Brands";
-                            iconEl.style.fontWeight = "400";
-                        } else {
-                            // ✅ Font Awesome Solid
-                            iconEl.style.fontFamily = "Font Awesome 6 Free";
-                            iconEl.style.fontWeight = "900";
-                        }
-
+                        iconEl.style.fontFamily = isBrandIcon ? "Font Awesome 6 Brands" : "Font Awesome 6 Free";
+                        iconEl.style.fontWeight = isBrandIcon ? "400" : "900";
                         iconEl.style.fontSize = "16px";
                         iconEl.style.marginRight = "0.5rem";
                         iconEl.style.lineHeight = "1";
-                    }
-                    else {
-                    let iconValue = menuData.icon.trim();
-
-                    if (/^f[0-9a-f]{3}$/i.test(iconValue)) {
-                        iconEl = document.createElement("i");
-                        iconEl.className = "fa-regular tb-sidebar-icon";
-                        iconEl.innerHTML = `&#x${iconValue};`;
-                        iconEl.style.fontFamily = "Font Awesome 6 Free";
-                        iconEl.style.fontWeight = "900";
                     } else {
-                        if (
-                            iconValue.startsWith("fa-") &&
-                            // !iconValue.includes("fa-solid") &&
-                            !iconValue.includes("fa-regular") &&
-                            !iconValue.includes("fa-brands")
-                        ) {
-                            iconValue = `fa-regular ${iconValue}`;
-                        } else if (!iconValue.startsWith("fa-")) {
-                            iconValue = `fa-regular fa-${iconValue}`;
+                        let iconValue = menuData.icon.trim();
+                        if (/^f[0-9a-f]{3}$/i.test(iconValue)) {
+                            iconEl = document.createElement("i");
+                            iconEl.className = "fa-regular tb-sidebar-icon";
+                            iconEl.innerHTML = `&#x${iconValue};`;
+                            iconEl.style.fontFamily = "Font Awesome 6 Free";
+                            iconEl.style.fontWeight = "900";
+                        } else {
+                            if (iconValue.startsWith("fa-") && !iconValue.includes("fa-regular") && !iconValue.includes("fa-brands")) {
+                                iconValue = `fa-regular ${iconValue}`;
+                            } else if (!iconValue.startsWith("fa-")) {
+                                iconValue = `fa-regular fa-${iconValue}`;
+                            }
+                            iconEl = document.createElement("i");
+                            iconEl.className = `${iconValue} tb-sidebar-icon`;
+                            iconEl.style.fontFamily = "Font Awesome 6 Free";
+                            iconEl.style.fontWeight = "900";
+                            iconEl.style.fontSize = "16px";
+                            iconEl.style.marginRight = "0.5rem";
                         }
-
-                        iconEl = document.createElement("i");
-                        iconEl.className = `${iconValue} tb-sidebar-icon`;
-                        iconEl.style.fontFamily = "Font Awesome 6 Free";
-                        iconEl.style.fontWeight = "900";
-                        iconEl.style.fontSize = "16px";
-                        iconEl.style.marginRight = "0.5rem";
                     }
-                }
 
-                // Add new icon for this menu
-                menuEl.prepend(iconEl);
-              
-                // ✅ Toggle classes for CSS
-                if (/^f[0-9a-f]+$/i.test(menuData.icon)) {
-                    menuEl.classList.add("tb-has-fa-icon");
-                    menuEl.classList.remove("tb-has-svg-icon");
-                } else if (/^https?:\/\//.test(menuData.icon)) {
-                    menuEl.classList.remove("tb-has-fa-icon");
-                    menuEl.classList.add("tb-has-svg-icon");
-                }
-                // 🧠 If icon is added, shift title like default
-                const titleEl = menuEl.querySelector(".nav-title");
-                if (titleEl) {
-                    titleEl.style.right = "28px";
+                    if (iconEl) {
+                        iconEl.dataset.tbIcon = menuData.icon; // ✅ mark for next-call check
+                        menuEl.prepend(iconEl);                // ✅ only called once, after creation
+                    }
+
+                    // Toggle classes for CSS
+                    if (/^f[0-9a-f]+$/i.test(menuData.icon)) {
+                        menuEl.classList.add("tb-has-fa-icon");
+                        menuEl.classList.remove("tb-has-svg-icon");
+                    } else if (/^https?:\/\//.test(menuData.icon)) {
+                        menuEl.classList.remove("tb-has-fa-icon");
+                        menuEl.classList.add("tb-has-svg-icon");
+                    }
+
+                    const titleEl = menuEl.querySelector(".nav-title");
+                    if (titleEl) titleEl.style.right = "28px";
                 }
             }
         });
@@ -6262,21 +6348,40 @@ html, body {
             //         );
             //     });
             //     }
+            // function applySubaccountMenuOrderCSS(order) {
+            //     // Apply saved order
+            //     order.forEach((menuId, index) => {
+            //         // ✅ CSS variable path (for menus that use var(--x-order))
+            //         const cssKey = SUBACCOUNT_ORDER_MAP[menuId];
+            //         if (cssKey) {
+            //             document.documentElement.style.setProperty(`--${cssKey}-order`, index);
+            //         }
+
+            //         // ✅ Direct element path (works for ALL menus including new unknown ones)
+            //         const el = document.getElementById(menuId);
+            //         if (el) el.style.setProperty("order", index, "important");
+            //     });
+
+            //     // ✅ Push any NEW GHL menus (not in saved order) to the end
+            //     const allSidebarMenus = document.querySelectorAll('#sidebar-v2 [id^="sb_"]');
+            //     let endIndex = order.length;
+            //     allSidebarMenus.forEach(el => {
+            //         if (!order.includes(el.id)) {
+            //             el.style.setProperty("order", endIndex++, "important");
+            //         }
+            //     });
+            // }
             function applySubaccountMenuOrderCSS(order) {
-                // Apply saved order
+                if (window.__TB_REORDERING__) return;
+                window.__TB_REORDERING__ = true;
                 order.forEach((menuId, index) => {
-                    // ✅ CSS variable path (for menus that use var(--x-order))
                     const cssKey = SUBACCOUNT_ORDER_MAP[menuId];
                     if (cssKey) {
                         document.documentElement.style.setProperty(`--${cssKey}-order`, index);
                     }
-
-                    // ✅ Direct element path (works for ALL menus including new unknown ones)
                     const el = document.getElementById(menuId);
                     if (el) el.style.setProperty("order", index, "important");
                 });
-
-                // ✅ Push any NEW GHL menus (not in saved order) to the end
                 const allSidebarMenus = document.querySelectorAll('#sidebar-v2 [id^="sb_"]');
                 let endIndex = order.length;
                 allSidebarMenus.forEach(el => {
@@ -6284,6 +6389,7 @@ html, body {
                         el.style.setProperty("order", endIndex++, "important");
                     }
                 });
+                requestAnimationFrame(() => { window.__TB_REORDERING__ = false; });
             }
                 function saveSubaccountOrder(order) {
                 const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
@@ -6325,20 +6431,19 @@ html, body {
 
                 clearInterval(wait);
 
-                // Reorder DOM elements by meta attribute
-                metaOrder.forEach(metaKey => {
-                    const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
-                    if (el) sidebarNav.appendChild(el); // moves to end in new order
-                });
-
-                // ✅ Push any new/unknown menus GHL added to end
-                const allMenus = sidebarNav.querySelectorAll('[meta]');
-                allMenus.forEach(el => {
-                    const metaVal = el.getAttribute('meta');
-                    if (!metaOrder.includes(metaVal)) {
-                        sidebarNav.appendChild(el);
-                    }
-                });
+            window.__TB_REORDERING__ = true;
+            metaOrder.forEach(metaKey => {
+                const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
+                if (el) sidebarNav.appendChild(el);
+            });
+            const allMenus = sidebarNav.querySelectorAll('[meta]');
+            allMenus.forEach(el => {
+                const metaVal = el.getAttribute('meta');
+                if (!metaOrder.includes(metaVal)) {
+                    sidebarNav.appendChild(el);
+                }
+            });
+            requestAnimationFrame(() => { window.__TB_REORDERING__ = false; });
             }, 50);
         }
 
@@ -6480,37 +6585,31 @@ html, body {
         }
 
         function reorderMenu(order, containerSelector) {
-            // Try the exact selector first (keeps agency behavior unchanged)
-            let container = document.querySelector(containerSelector);
-
-            // If selector not found, attempt to infer the container from the first existing menu item
-            if (!container) {
-                for (let i = 0; i < order.length; i++) {
-                    const id = order[i];
-                    const el = document.getElementById(id);
-                    if (el && el.parentElement) {
-                        container = el.parentElement;
-                        break;
+                let container = document.querySelector(containerSelector);
+                if (!container) {
+                    for (let i = 0; i < order.length; i++) {
+                        const id = order[i];
+                        const el = document.getElementById(id);
+                        if (el && el.parentElement) {
+                            container = el.parentElement;
+                            break;
+                        }
                     }
                 }
+                if (!container) {
+                    container = document.querySelector(".hl_nav-header nav") || document.querySelector(".hl_nav-header");
+                }
+                if (!container) return;
+                window.__TB_REORDERING__ = true;
+                order.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (!el) return;
+                    if (el.parentElement !== container) {
+                        container.appendChild(el);
+                    }
+                });
+                requestAnimationFrame(() => { window.__TB_REORDERING__ = false; });
             }
-
-            // If still not found, try a common sub-account selector (safe fallback)
-            if (!container) {
-                container = document.querySelector(".hl_nav-header nav") || document.querySelector(".hl_nav-header");
-            }
-
-            if (!container) return;
-           order.forEach(id => {
-            const el = document.getElementById(id);
-            if (!el) return;
-
-            if (el.parentElement !== container) {
-                container.appendChild(el);
-            }
-});
-
-        }
 
     }
 
