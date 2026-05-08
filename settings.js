@@ -719,40 +719,18 @@
         localStorage.setItem("sidebarCollapsed", "false");
     }
     function forceSidebarOpen() {
-     
-        const sidebar = document.querySelector("#sidebar-v2")
-            || document.querySelector(".hl_app_sidebar")
-            || document.querySelector(".hl_sidebar");
+    const sidebar = document.querySelector("#sidebar-v2")
+        || document.querySelector(".hl_app_sidebar")
+        || document.querySelector(".hl_sidebar");
+    if (!sidebar) return;
 
-        if (!sidebar) return;
-
-        const fix = () => {
-            sidebar.style.display = "block";
-            sidebar.style.width = "14rem";
-            sidebar.style.minWidth = "14rem";
-            sidebar.style.visibility = "visible";
-            sidebar.style.opacity = "1";
-        };
-
-        // Apply immediately
-        fix();
-
-        const observer = new MutationObserver(() => {
-            if (window.__TB_REORDERING__) return;
-
-            // ✅ Only intervene when sidebar is actually broken — not on every hover class change
-            const isActuallyHidden =
-                sidebar.style.display === "none" ||
-                getComputedStyle(sidebar).display === "none" ||
-                sidebar.style.visibility === "hidden" ||
-                sidebar.style.opacity === "0" ||
-                sidebar.classList.contains("collapsed") ||
-                sidebar.classList.contains("sidebar-collapsed");
-
-            if (isActuallyHidden) fix();
-        });
-        observer.observe(sidebar, { attributes: true, attributeFilter: ["style", "class"] });
-            }
+    // ✅ Apply once only — no observer needed, no loop possible
+    sidebar.style.setProperty("display", "block", "important");
+    sidebar.style.setProperty("width", "14rem", "important");
+    sidebar.style.setProperty("min-width", "14rem", "important");
+    sidebar.style.setProperty("visibility", "visible", "important");
+    sidebar.style.setProperty("opacity", "1", "important");
+}
     let mainCssLoaded = false;
     function loadMainCSS() {
         if (mainCssLoaded) return; // 🚀 prevent re-loading
