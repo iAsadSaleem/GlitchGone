@@ -6379,25 +6379,41 @@ html, body {
             //     });
             // }
             function applySubaccountMenuOrderCSS(order) {
-                if (window.__TB_REORDERING__) return;
-                window.__TB_REORDERING__ = true;
-                order.forEach((menuId, index) => {
-                    const cssKey = SUBACCOUNT_ORDER_MAP[menuId];
-                    if (cssKey) {
-                        document.documentElement.style.setProperty(`--${cssKey}-order`, index);
-                    }
-                    const el = document.getElementById(menuId);
-                    if (el) el.style.setProperty("order", index, "important");
-                });
-                const allSidebarMenus = document.querySelectorAll('#sidebar-v2 [id^="sb_"]');
-                let endIndex = order.length;
-                allSidebarMenus.forEach(el => {
-                    if (!order.includes(el.id)) {
-                        el.style.setProperty("order", endIndex++, "important");
-                    }
-                });
-                requestAnimationFrame(() => { window.__TB_REORDERING__ = false; });
-            }
+                    if (window.__TB_REORDERING__) return;
+                    window.__TB_REORDERING__ = true;
+
+                    // ✅ Remove old injected order style
+                    const old = document.getElementById("tb-menu-order-css");
+                    if (old) old.remove();
+
+                    // ✅ Build CSS rules — invisible to GHL's JS and React reconciliation
+                    let css = "";
+                    order.forEach((menuId, index) => {
+                        css += `#${menuId} { order: ${index} !important; }\n`;
+                    });
+
+                    // Push unknown (new GHL) menus to the end
+                    const allMenus = document.querySelectorAll('#sidebar-v2 [id^="sb_"]');
+                    let endIndex = order.length;
+                    allMenus.forEach(el => {
+                        if (!order.includes(el.id)) {
+                            css += `#${el.id} { order: ${endIndex++} !important; }\n`;
+                        }
+                    });
+
+                    // Also keep CSS variables for themes that use them
+                    order.forEach((menuId, index) => {
+                        const cssKey = SUBACCOUNT_ORDER_MAP[menuId];
+                        if (cssKey) document.documentElement.style.setProperty(`--${cssKey}-order`, index);
+                    });
+
+                    const style = document.createElement("style");
+                    style.id = "tb-menu-order-css";
+                    style.textContent = css;
+                    document.head.appendChild(style);
+
+                    requestAnimationFrame(() => { window.__TB_REORDERING__ = false; });
+                }
                 function saveSubaccountOrder(order) {
                 const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                 saved.themeData ??= {};
@@ -6425,34 +6441,48 @@ html, body {
             //         });
             //     }, 50);
             // }
-            function updateAgencyaccountSidebarRuntime(newOrder) {
-            const wait = setInterval(() => {
-                const sidebarNav = document.querySelector('.hl_nav-header nav[aria-label="header"]');
-                if (!sidebarNav) return;
+           function updateAgencyaccountSidebarRuntime(newOrder) {
+                    if (window.__TB_REORDERING__) return;
+                    window.__TB_REORDERING__ = true;
 
-                // ✅ Strip "sb_" prefix to get the meta key GHL actually uses
-                const metaOrder = newOrder.map(id => id.replace(/^sb_/, ""));
+                    const old = document.getElementById("tb-agency-menu-order-css");
+                    if (old) old.remove();
 
-                const allExist = metaOrder.every(key => sidebarNav.querySelector(`[meta="${key}"]`));
-                if (!allExist) return;
+                    // Strip "sb_" to get the [meta] attribute GHL uses
+                    const metaOrder = newOrder.map(id => id.replace(/^sb_/, ""));
 
-                clearInterval(wait);
+                    let css = "";
+                    metaOrder.forEach((metaKey, index) => {
+                        css += `a[meta="${metaKey}"] { order: ${index} !important; }\n`;
+                    });
 
-            window.__TB_REORDERING__ = true;
-            metaOrder.forEach(metaKey => {
-                const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
-                if (el) sidebarNav.appendChild(el);
-            });
-            const allMenus = sidebarNav.querySelectorAll('[meta]');
-            allMenus.forEach(el => {
-                const metaVal = el.getAttribute('meta');
-                if (!metaOrder.includes(metaVal)) {
-                    sidebarNav.appendChild(el);
+                    // Push unknown GHL menus to end — wait for nav to exist
+                    const tryInject = setInterval(() => {
+                        const sidebarNav = document.querySelector('.hl_nav-header nav[aria-label="header"]');
+                        if (!sidebarNav) return;
+                        clearInterval(tryInject);
+
+                        let endIndex = metaOrder.length;
+                        sidebarNav.querySelectorAll("[meta]").forEach(el => {
+                            const m = el.getAttribute("meta");
+                            if (!metaOrder.includes(m)) {
+                                css += `a[meta="${m}"] { order: ${endIndex++} !important; }\n`;
+                            }
+                        });
+
+                        // Make sure the nav itself is a flex container so order works
+                        sidebarNav.style.setProperty("display", "flex", "important");
+                        sidebarNav.style.setProperty("flex-direction", "column", "important");
+
+                        const style = document.createElement("style");
+                        style.id = "tb-agency-menu-order-css";
+                        style.textContent = css;
+                        document.head.appendChild(style);
+
+                        requestAnimationFrame(() => { window.__TB_REORDERING__ = false; });
+                    }, 50);
+                    setTimeout(() => clearInterval(tryInject), 10000);
                 }
-            });
-            requestAnimationFrame(() => { window.__TB_REORDERING__ = false; });
-            }, 50);
-        }
 
             const isSubAccounta = location.pathname.includes("/location/");
             let allowReorder = false;
@@ -6736,15 +6766,41 @@ html, body {
     }
 
     // --- 1️⃣ Create a helper to run your theme logic ---
+    // function reapplyThemeOnRouteChange() {
+    //     waitForSidebarMenus(() => {
+    //         applyLockedMenus(); // optional
+    //         applyMenuCustomizations();
+    //         initThemeBuilder(0);
+    //         //applymenuReorder();
+    //         applyMenuIconCustomizations();
+    //     });
+    // }
     function reapplyThemeOnRouteChange() {
-        waitForSidebarMenus(() => {
-            applyLockedMenus(); // optional
-            applyMenuCustomizations();
-            initThemeBuilder(0);
-            //applymenuReorder();
-            applyMenuIconCustomizations();
-        });
-    }
+                waitForSidebarMenus(() => {
+                    applyLockedMenus();
+                    applyMenuCustomizations();
+                    initThemeBuilder(0);
+                    applyMenuIconCustomizations();
+
+                    // ✅ Restore saved menu order on every route change
+                    const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+                    const isSubAccount = location.pathname.includes("/location/");
+
+                    if (isSubAccount) {
+                        // Subaccount order — re-inject the CSS
+                        const subOrder = saved.themeData?.["--subMenuOrder"]
+                            ? JSON.parse(saved.themeData["--subMenuOrder"])
+                            : [];
+                        if (subOrder.length) applySubaccountMenuOrderCSS(subOrder);
+                    } else {
+                        // Agency order — re-inject the CSS
+                        const agencyOrder = saved.themeData?.["--agencyMenuOrder"]
+                            ? JSON.parse(saved.themeData["--agencyMenuOrder"])
+                            : [];
+                        if (agencyOrder.length) updateAgencyaccountSidebarRuntime(agencyOrder);
+                    }
+                });
+            }
 
     // --- 2️⃣ Detect URL changes in an SPA ---
     (function () {
