@@ -737,13 +737,20 @@
         // Apply immediately
         fix();
 
-        // Prevent GHL from collapsing again
         const observer = new MutationObserver(() => {
-    // ✅ Don't fight with theme builder's own DOM reordering
-            if (!window.__TB_REORDERING__) fix();
+            // ✅ Only intervene if sidebar is actually hidden/collapsed — not on every hover-triggered class change
+            if (window.__TB_REORDERING__) return;
+            const isCollapsed =
+                sidebar.style.display === "none" ||
+                getComputedStyle(sidebar).display === "none" ||
+                sidebar.style.opacity === "0" ||
+                sidebar.style.visibility === "hidden" ||
+                sidebar.classList.contains("sidebar-collapsed") ||
+                sidebar.classList.contains("collapsed");
+            if (isCollapsed) fix();
         });
         observer.observe(sidebar, { attributes: true, attributeFilter: ["style", "class"] });
-    }
+            }
     let mainCssLoaded = false;
     function loadMainCSS() {
         if (mainCssLoaded) return; // 🚀 prevent re-loading
