@@ -595,8 +595,8 @@ function applyHiddenMenus() {
         } else {
             const icon = menu.querySelector(".tb-lock-icon");
             if (icon) icon.remove();
-            menu.style.setProperty("opacity", "1", "important");
-            menu.style.setProperty("cursor", "auto", "important");
+            // menu.style.setProperty("opacity", "1", "important");
+            // menu.style.setProperty("cursor", "auto", "important");
             if (menu.dataset.tbLockBound === "1") {
                 menu.removeEventListener("click", blockMenuClick, true);
                 delete menu.dataset.tbLockBound;
@@ -657,8 +657,8 @@ function cleanupMenuStates() {
         if (icon) icon.remove();
 
         // Reset lock styles
-        menu.style.removeProperty("opacity");
-        menu.style.removeProperty("cursor");
+        // menu.style.removeProperty("opacity");
+        // menu.style.removeProperty("cursor");
 
         // Reset hidden styles
         menu.style.removeProperty("display");
@@ -756,7 +756,7 @@ setInterval(() => {
     applyLockedMenus();
     applySubaccountTheme();
   }
-    applySubaccountTheme();
+    // applySubaccountTheme();
 }, 500);
   
   async function applyAgencyLogo(attempt = 1) {

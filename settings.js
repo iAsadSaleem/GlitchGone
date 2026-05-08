@@ -5597,8 +5597,8 @@ html, body {
             } else {
                 const icon = menu.querySelector(".tb-lock-icon");
                 if (icon) icon.remove();
-                menu.style.setProperty("opacity", "1", "important");
-                menu.style.setProperty("cursor", "auto", "important");
+                // menu.style.setProperty("opacity", "1", "important");
+                // menu.style.setProperty("cursor", "auto", "important");
                 if (menu.dataset.tbLockBound === "1") {
                     menu.removeEventListener("click", blockMenuClick, true);
                     delete menu.dataset.tbLockBound;
@@ -5619,8 +5619,8 @@ html, body {
             if (icon) icon.remove();
 
             // Reset lock styles
-            menu.style.removeProperty("opacity");
-            menu.style.removeProperty("cursor");
+            // menu.style.removeProperty("opacity");
+            // menu.style.removeProperty("cursor");
 
             // Reset hidden styles
             menu.style.removeProperty("display");
@@ -6752,7 +6752,7 @@ html, body {
                     applyLockedMenus();
                     applyMenuCustomizations();
                     initThemeBuilder(0);
-                    applyMenuIconCustomizations();
+                    // applyMenuIconCustomizations();
 
                     // ✅ Restore saved menu order on every route change
                     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
@@ -7641,7 +7641,7 @@ html, body {
 
     document.addEventListener('DOMContentLoaded', () =>
         setTimeout(() => initThemeBuilder(0), 1050));
-        setTimeout(() => initThemeBuilder(0), 1050);
+        // setTimeout(() => initThemeBuilder(0), 1050);
 
 // ---- Hidden/Locked menus ----
 
