@@ -6421,29 +6421,24 @@ html, body {
             //         });
             //     }, 50);
             // }
-           function updateAgencyaccountSidebarRuntime(newOrder) {
+          function updateAgencyaccountSidebarRuntime(newOrder) {
                 if (window.__TB_REORDERING__) return;
                 window.__TB_REORDERING__ = true;
 
-                // Remove old injected style
                 const old = document.getElementById("tb-agency-menu-order-css");
                 if (old) old.remove();
 
                 const metaOrder = newOrder.map(id => id.replace(/^sb_/, ""));
+                let css = "";
+                metaOrder.forEach((metaKey, index) => {
+                    css += `a[meta="${metaKey}"] { order: ${index} !important; }\n`;
+                });
 
                 const tryInject = setInterval(() => {
                     const sidebarNav = document.querySelector('.hl_nav-header nav[aria-label="header"]');
                     if (!sidebarNav) return;
                     clearInterval(tryInject);
 
-                    let css = "";
-
-                    // Apply saved order
-                    metaOrder.forEach((metaKey, index) => {
-                        css += `a[meta="${metaKey}"] { order: ${index} !important; }\n`;
-                    });
-
-                    // Push unknown GHL menus to end
                     let endIndex = metaOrder.length;
                     sidebarNav.querySelectorAll("[meta]").forEach(el => {
                         const m = el.getAttribute("meta");
@@ -6452,19 +6447,15 @@ html, body {
                         }
                     });
 
-                    // ✅ NO flex-direction change — only inject order rules
-                    // GHL's existing layout stays intact, hover styles unaffected
                     const style = document.createElement("style");
                     style.id = "tb-agency-menu-order-css";
                     style.textContent = css;
                     document.head.appendChild(style);
 
-                    requestAnimationFrame(() => { window.__TB_REORDERING__ = false; }); 
+                    requestAnimationFrame(() => { window.__TB_REORDERING__ = false; });
                 }, 50);
-
                 setTimeout(() => clearInterval(tryInject), 10000);
             }
-
             const isSubAccounta = location.pathname.includes("/location/");
             let allowReorder = false;
            

@@ -267,66 +267,95 @@ function applySidebarLogoFromTheme(retries = 15, delay = 300) {
             });
         })();
         (function applySavedAgencyOrderOnLoad() {
-            if (location.pathname.includes("/location/")) return;
-            const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-            const order = saved.themeData?.["--agencyMenuOrder"]
-                ? JSON.parse(saved.themeData["--agencyMenuOrder"])
-                : [];
-            if (!order.length) return;
-            const apply = () => {
-                const sidebarNav = document.querySelector('.hl_nav-header nav[aria-label="header"]');
-                if (!sidebarNav) return false;
-                const metaOrder = order.map(id => id.replace(/^sb_/, ""));
-                metaOrder.forEach(metaKey => {
-                    const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
-                    if (el) sidebarNav.appendChild(el);
-                });
-                sidebarNav.querySelectorAll('[meta]').forEach(el => {
-                    const metaVal = el.getAttribute('meta');
-                    if (!metaOrder.includes(metaVal)) sidebarNav.appendChild(el);
-                });
-                return true;
-            };
-            if (!apply()) {
-                const retryInterval = setInterval(() => {
-                    if (apply()) clearInterval(retryInterval);
-                }, 100);
-                setTimeout(() => clearInterval(retryInterval), 10000);
-            }
-        })();
-        (function watchAgencySidebarForReRender() {
-            if (location.pathname.includes("/location/")) return;
-            let reorderTimer = null;
-            const observer = new MutationObserver(() => {
-                clearTimeout(reorderTimer);
-                reorderTimer = setTimeout(() => {
-                    const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-                    const order = saved.themeData?.["--agencyMenuOrder"]
-                        ? JSON.parse(saved.themeData["--agencyMenuOrder"])
-                        : [];
-                    if (!order.length) return;
-                    const sidebarNav = document.querySelector('.hl_nav-header nav[aria-label="header"]');
-                    if (!sidebarNav) return;
-                    const metaOrder = order.map(id => id.replace(/^sb_/, ""));
-                    metaOrder.forEach(metaKey => {
-                        const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
-                        if (el) sidebarNav.appendChild(el);
-                    });
-                    sidebarNav.querySelectorAll('[meta]').forEach(el => {
-                        if (!metaOrder.includes(el.getAttribute('meta'))) sidebarNav.appendChild(el);
-                    });
-                }, 80);
-            });
-            const startObserver = () => {
-                const sidebar = document.querySelector('#sidebar-v2');
-                if (sidebar) {
-                    observer.observe(sidebar, { childList: true, subtree: true });
-                } else {
-                    setTimeout(startObserver, 200);
+    if (location.pathname.includes("/location/")) return;
+
+    const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+    const order = saved.themeData?.["--agencyMenuOrder"]
+        ? JSON.parse(saved.themeData["--agencyMenuOrder"])
+        : [];
+    if (!order.length) return;
+
+    // ✅ CSS stylesheet approach — invisible to GHL's React reconciliation
+    // and does NOT trigger childList mutations on #sidebar-v2
+    function injectAgencyOrderCSS(metaOrder) {
+        const old = document.getElementById("tb-agency-menu-order-css");
+        if (old) old.remove();
+
+        let css = "";
+        metaOrder.forEach((metaKey, index) => {
+            css += `a[meta="${metaKey}"] { order: ${index} !important; }\n`;
+        });
+
+        // Push any new unknown GHL menus to the end
+        const sidebarNav = document.querySelector('.hl_nav-header nav[aria-label="header"]');
+        if (sidebarNav) {
+            let endIndex = metaOrder.length;
+            sidebarNav.querySelectorAll("[meta]").forEach(el => {
+                const m = el.getAttribute("meta");
+                if (!metaOrder.includes(m)) {
+                    css += `a[meta="${m}"] { order: ${endIndex++} !important; }\n`;
                 }
-            };
-            startObserver();
+            });
+        }
+
+        const style = document.createElement("style");
+        style.id = "tb-agency-menu-order-css";
+        style.textContent = css;
+        document.head.appendChild(style);
+    }
+
+    const metaOrder = order.map(id => id.replace(/^sb_/, ""));
+
+    // Try immediately, retry until nav exists
+    const tryApply = () => {
+        const sidebarNav = document.querySelector('.hl_nav-header nav[aria-label="header"]');
+        if (sidebarNav) {
+            injectAgencyOrderCSS(metaOrder);
+            return true;
+        }
+        return false;
+    };
+
+    if (!tryApply()) {
+        const retryInterval = setInterval(() => {
+            if (tryApply()) clearInterval(retryInterval);
+        }, 100);
+        setTimeout(() => clearInterval(retryInterval), 10000);
+    }
         })();
+        // (function watchAgencySidebarForReRender() {
+        //     if (location.pathname.includes("/location/")) return;
+        //     let reorderTimer = null;
+        //     const observer = new MutationObserver(() => {
+        //         clearTimeout(reorderTimer);
+        //         reorderTimer = setTimeout(() => {
+        //             const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        //             const order = saved.themeData?.["--agencyMenuOrder"]
+        //                 ? JSON.parse(saved.themeData["--agencyMenuOrder"])
+        //                 : [];
+        //             if (!order.length) return;
+        //             const sidebarNav = document.querySelector('.hl_nav-header nav[aria-label="header"]');
+        //             if (!sidebarNav) return;
+        //             const metaOrder = order.map(id => id.replace(/^sb_/, ""));
+        //             metaOrder.forEach(metaKey => {
+        //                 const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
+        //                 if (el) sidebarNav.appendChild(el);
+        //             });
+        //             sidebarNav.querySelectorAll('[meta]').forEach(el => {
+        //                 if (!metaOrder.includes(el.getAttribute('meta'))) sidebarNav.appendChild(el);
+        //             });
+        //         }, 80);
+        //     });
+        //     const startObserver = () => {
+        //         const sidebar = document.querySelector('#sidebar-v2');
+        //         if (sidebar) {
+        //             observer.observe(sidebar, { childList: true, subtree: true });
+        //         } else {
+        //             setTimeout(startObserver, 200);
+        //         }
+        //     };
+        //     startObserver();
+        // })();
   // // ---- Theme data injection ----
 function injectThemeData(themeData) {
     if (!themeData || typeof themeData !== "object") return;
