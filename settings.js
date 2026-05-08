@@ -738,16 +738,18 @@
         fix();
 
         const observer = new MutationObserver(() => {
-            // ✅ Only intervene if sidebar is actually hidden/collapsed — not on every hover-triggered class change
             if (window.__TB_REORDERING__) return;
-            const isCollapsed =
+
+            // ✅ Only intervene when sidebar is actually broken — not on every hover class change
+            const isActuallyHidden =
                 sidebar.style.display === "none" ||
                 getComputedStyle(sidebar).display === "none" ||
-                sidebar.style.opacity === "0" ||
                 sidebar.style.visibility === "hidden" ||
-                sidebar.classList.contains("sidebar-collapsed") ||
-                sidebar.classList.contains("collapsed");
-            if (isCollapsed) fix();
+                sidebar.style.opacity === "0" ||
+                sidebar.classList.contains("collapsed") ||
+                sidebar.classList.contains("sidebar-collapsed");
+
+            if (isActuallyHidden) fix();
         });
         observer.observe(sidebar, { attributes: true, attributeFilter: ["style", "class"] });
             }
@@ -6442,47 +6444,48 @@ html, body {
             //     }, 50);
             // }
            function updateAgencyaccountSidebarRuntime(newOrder) {
-                    if (window.__TB_REORDERING__) return;
-                    window.__TB_REORDERING__ = true;
+                if (window.__TB_REORDERING__) return;
+                window.__TB_REORDERING__ = true;
 
-                    const old = document.getElementById("tb-agency-menu-order-css");
-                    if (old) old.remove();
+                // Remove old injected style
+                const old = document.getElementById("tb-agency-menu-order-css");
+                if (old) old.remove();
 
-                    // Strip "sb_" to get the [meta] attribute GHL uses
-                    const metaOrder = newOrder.map(id => id.replace(/^sb_/, ""));
+                const metaOrder = newOrder.map(id => id.replace(/^sb_/, ""));
+
+                const tryInject = setInterval(() => {
+                    const sidebarNav = document.querySelector('.hl_nav-header nav[aria-label="header"]');
+                    if (!sidebarNav) return;
+                    clearInterval(tryInject);
 
                     let css = "";
+
+                    // Apply saved order
                     metaOrder.forEach((metaKey, index) => {
                         css += `a[meta="${metaKey}"] { order: ${index} !important; }\n`;
                     });
 
-                    // Push unknown GHL menus to end — wait for nav to exist
-                    const tryInject = setInterval(() => {
-                        const sidebarNav = document.querySelector('.hl_nav-header nav[aria-label="header"]');
-                        if (!sidebarNav) return;
-                        clearInterval(tryInject);
+                    // Push unknown GHL menus to end
+                    let endIndex = metaOrder.length;
+                    sidebarNav.querySelectorAll("[meta]").forEach(el => {
+                        const m = el.getAttribute("meta");
+                        if (!metaOrder.includes(m)) {
+                            css += `a[meta="${m}"] { order: ${endIndex++} !important; }\n`;
+                        }
+                    });
 
-                        let endIndex = metaOrder.length;
-                        sidebarNav.querySelectorAll("[meta]").forEach(el => {
-                            const m = el.getAttribute("meta");
-                            if (!metaOrder.includes(m)) {
-                                css += `a[meta="${m}"] { order: ${endIndex++} !important; }\n`;
-                            }
-                        });
+                    // ✅ NO flex-direction change — only inject order rules
+                    // GHL's existing layout stays intact, hover styles unaffected
+                    const style = document.createElement("style");
+                    style.id = "tb-agency-menu-order-css";
+                    style.textContent = css;
+                    document.head.appendChild(style);
 
-                        // Make sure the nav itself is a flex container so order works
-                        sidebarNav.style.setProperty("display", "flex", "important");
-                        sidebarNav.style.setProperty("flex-direction", "column", "important");
+                    requestAnimationFrame(() => { window.__TB_REORDERING__ = false; }); 
+                }, 50);
 
-                        const style = document.createElement("style");
-                        style.id = "tb-agency-menu-order-css";
-                        style.textContent = css;
-                        document.head.appendChild(style);
-
-                        requestAnimationFrame(() => { window.__TB_REORDERING__ = false; });
-                    }, 50);
-                    setTimeout(() => clearInterval(tryInject), 10000);
-                }
+                setTimeout(() => clearInterval(tryInject), 10000);
+            }
 
             const isSubAccounta = location.pathname.includes("/location/");
             let allowReorder = false;
