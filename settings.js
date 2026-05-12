@@ -7732,13 +7732,24 @@ function blockMenuClick(e, menuId) {
     const popupButtonText = (lockData && typeof lockData === "object" && lockData.popupButtonText) ? lockData.popupButtonText : "";
     showPreviewPopup(popupType, popupUrl, popupHeadline, popupSubHeadline, popupButtonText);
 }
+// window.addEventListener("locationchange", () => {
+//     // Clean up previous location's lock/hide visual states first
+//     cleanupMenuStates();
+//     // Wait briefly for GHL's React to update the sidebar DOM for the new location
+//     setTimeout(() => {
+//         applyLockedMenus();
+//         applyHiddenMenus();
+//     }, 800);
+// });
+
 window.addEventListener("locationchange", () => {
-    // Clean up previous location's lock/hide visual states first
-    cleanupMenuStates();
-    // Wait briefly for GHL's React to update the sidebar DOM for the new location
+    // Only handle menu state cleanup here — navigation/theme transitions
+    // are handled exclusively by watchLocationChange + the listener in code.js
+    if (window.__TB_NAV_TRANSITION__) return;
+
     setTimeout(() => {
         applyLockedMenus();
         applyHiddenMenus();
-    }, 800);
+    }, 900);
 });
 })();

@@ -782,7 +782,7 @@ function clearSubaccountTheme() {
                   if (typeof applySidebarLogoFromTheme === "function") applySidebarLogoFromTheme();
                   navigationLock = false;
                   window.__TB_NAV_TRANSITION__ = false;
-              }, 600);
+              }, 1000);
         }
 
         // if (enteredSubaccount) {
@@ -1119,13 +1119,13 @@ window.addEventListener("load", () => {
 window.__TB_NAV_TRANSITION__ = false;
 
 window.addEventListener("locationchange", () => {
+    if (window.__TB_NAV_TRANSITION__) return;
+
     cleanupMenuStates();
 
-    if (!window.__TB_NAV_TRANSITION__) {
-        const isLeavingSubaccount = !window.location.pathname.includes("/location/");
-        if (!isLeavingSubaccount) {
-            ThemeBuilder.reapply();
-        }
+    const isLeavingSubaccount = !window.location.pathname.includes("/location/");
+    if (!isLeavingSubaccount) {
+        ThemeBuilder.reapply();
     }
 
     ThemeBuilder.applyAgencyLogo();
