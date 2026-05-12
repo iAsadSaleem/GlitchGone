@@ -784,18 +784,78 @@ function clearSubaccountTheme() {
         }, 1000);
     }
 
+    // if (enteredSubaccount) {
+    //     window.__TB_NAV_TRANSITION__ = true;
+    //     navigationLock = true;
+    //     setTimeout(() => {
+    //         if (typeof applySubaccountTheme === "function") applySubaccountTheme();
+    //         navigationLock = false;
+    //         window.__TB_NAV_TRANSITION__ = false;
+    //     }, 300);
+    //     setTimeout(() => {
+    //         if (typeof applySubaccountTheme === "function") applySubaccountTheme();
+    //     }, 750);
+    // }
     if (enteredSubaccount) {
-        window.__TB_NAV_TRANSITION__ = true;
-        navigationLock = true;
-        setTimeout(() => {
-            if (typeof applySubaccountTheme === "function") applySubaccountTheme();
-            navigationLock = false;
-            window.__TB_NAV_TRANSITION__ = false;
-        }, 300);
-        setTimeout(() => {
-            if (typeof applySubaccountTheme === "function") applySubaccountTheme();
-        }, 750);
-    }
+    window.__TB_NAV_TRANSITION__ = true;
+    navigationLock = true;
+
+    // Watch for new sidebar DOM to appear after GHL rebuilds it,
+    // then inject icons immediately into the real new nodes
+    let iconInjected = false;
+
+    const sidebarWatcher = new MutationObserver(() => {
+        const menus = document.querySelectorAll("#sidebar-v2 a[id^='sb_']");
+        if (menus.length > 0 && !iconInjected) {
+            iconInjected = true;
+            sidebarWatcher.disconnect();
+
+            const doApply = () => {
+                applyMenuCustomizations();
+                applyStoredSidebarTitles();
+                // Force repaint so FA glyphs render without needing a click
+                requestAnimationFrame(() => {
+                    document.querySelectorAll(".tb-sidebar-icon").forEach(el => {
+                        el.style.display = "none";
+                        el.offsetHeight; // trigger reflow
+                        el.style.display = "";
+                    });
+                });
+            };
+
+            // Wait for FA font file to actually finish downloading
+            if (document.fonts && document.fonts.load) {
+                document.fonts.load('900 16px "Font Awesome 6 Free"')
+                    .then(doApply)
+                    .catch(doApply); // apply anyway if font check fails
+            } else {
+                doApply();
+            }
+        }
+    });
+
+    sidebarWatcher.observe(document.body, { childList: true, subtree: true });
+
+    // Safety net — if watcher never fires, apply after 5s anyway
+    setTimeout(() => {
+        if (!iconInjected) {
+            sidebarWatcher.disconnect();
+            applyMenuCustomizations();
+            applyStoredSidebarTitles();
+        }
+    }, 5000);
+
+    // These two are unchanged — keep exactly as before
+    setTimeout(() => {
+        if (typeof applySubaccountTheme === "function") applySubaccountTheme();
+        navigationLock = false;
+        window.__TB_NAV_TRANSITION__ = false;
+    }, 300);
+
+    setTimeout(() => {
+        if (typeof applySubaccountTheme === "function") applySubaccountTheme();
+    }, 750);
+}
 }
 
     setInterval(tick, 300);
@@ -1120,6 +1180,35 @@ window.addEventListener("load", () => {
 });
 window.__TB_NAV_TRANSITION__ = false;
 
+// window.addEventListener("locationchange", () => {
+//     if (window.__TB_NAV_TRANSITION__) return;
+
+//     cleanupMenuStates();
+
+//     const isLeavingSubaccount = !window.location.pathname.includes("/location/");
+//     if (!isLeavingSubaccount) {
+//         ThemeBuilder.reapply();
+//     }
+
+//     ThemeBuilder.applyAgencyLogo();
+
+//     const observer = new MutationObserver(() => {
+//         const img = document.querySelector(".agency-logo");
+//         if (img) {
+//             observer.disconnect();
+//             ThemeBuilder.applySidebarLogoFromTheme();
+//         }
+//     });
+//     observer.observe(document.body, { childList: true, subtree: true });
+//     setTimeout(() => observer.disconnect(), 5000);
+
+//     setTimeout(() => {
+//         applyStoredSidebarTitles();
+//         applyLockedMenus();
+//         applyHiddenMenus();
+//         applySubaccountTheme();
+//     }, 1200);
+// });
 window.addEventListener("locationchange", () => {
     if (window.__TB_NAV_TRANSITION__) return;
 
@@ -1128,6 +1217,52 @@ window.addEventListener("locationchange", () => {
     const isLeavingSubaccount = !window.location.pathname.includes("/location/");
     if (!isLeavingSubaccount) {
         ThemeBuilder.reapply();
+
+        // Watch for sidebar DOM rebuild on agency→subaccount navigation
+        // and inject icons the moment real new menu nodes exist
+        let iconInjected = false;
+
+        const iconWatcher = new MutationObserver(() => {
+            const menus = document.querySelectorAll("#sidebar-v2 a[id^='sb_']");
+            if (menus.length > 0 && !iconInjected) {
+                iconInjected = true;
+                iconWatcher.disconnect();
+
+                const doApply = () => {
+                    // applyMenuCustomizations and applyStoredSidebarTitles
+                    // are in scope here via ThemeBuilder's closure exposure
+                    if (typeof window.ThemeBuilder._doReapplyTheme === "function") {
+                        // _doReapplyTheme already calls applyMenuCustomizations
+                        // internally — but we need the repaint too
+                    }
+                    // Directly call via the reapply path which is safe and in scope
+                    ThemeBuilder.reapply();
+                    // Force repaint for FA glyphs
+                    requestAnimationFrame(() => {
+                        document.querySelectorAll(".tb-sidebar-icon").forEach(el => {
+                            el.style.display = "none";
+                            el.offsetHeight; // trigger reflow
+                            el.style.display = "";
+                        });
+                    });
+                };
+
+                if (document.fonts && document.fonts.load) {
+                    document.fonts.load('900 16px "Font Awesome 6 Free"')
+                        .then(doApply)
+                        .catch(doApply);
+                } else {
+                    doApply();
+                }
+            }
+        });
+
+        iconWatcher.observe(document.body, { childList: true, subtree: true });
+        setTimeout(() => {
+            if (!iconInjected) {
+                iconWatcher.disconnect();
+            }
+        }, 5000);
     }
 
     ThemeBuilder.applyAgencyLogo();
@@ -1149,4 +1284,3 @@ window.addEventListener("locationchange", () => {
         applySubaccountTheme();
     }, 1200);
 });
-
