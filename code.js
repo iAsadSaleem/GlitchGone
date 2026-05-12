@@ -708,14 +708,47 @@ function clearSubaccountTheme() {
 }
 
 // ── Watches for SPA navigation between agency ↔ subaccount ───────────────────
+// (function watchLocationChange() {
+//     let lastPath = window.location.pathname;
+
+//     function wasSubaccountPath(p) { return p.includes("/location/"); }
+
+//     function tick() {
+//         const currentPath = window.location.pathname;
+//         if (currentPath === lastPath) return;
+
+//         const leftSubaccount  = wasSubaccountPath(lastPath)  && !wasSubaccountPath(currentPath);
+//         const enteredSubaccount = !wasSubaccountPath(lastPath) && wasSubaccountPath(currentPath);
+
+//         lastPath = currentPath;
+
+//         if (leftSubaccount) {
+//             // Agency view restored — clear subaccount overrides and re-apply agency theme
+//             clearSubaccountTheme();
+//             const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+//             if (saved.themeData) injectThemeData(saved.themeData);
+//             if (typeof applySidebarLogoFromTheme === "function") applySidebarLogoFromTheme();
+//         }
+
+//         if (enteredSubaccount) {
+//             // Entered a subaccount — apply its theme
+//             setTimeout(() => { if (typeof applySubaccountTheme === "function") applySubaccountTheme(); }, 150);
+//             setTimeout(() => { if (typeof applySubaccountTheme === "function") applySubaccountTheme(); }, 600);
+//         }
+//     }
+
+//     setInterval(tick, 300);
+// })();
 (function watchLocationChange() {
     let lastPath = window.location.pathname;
+    let navigationLock = false;
 
     function wasSubaccountPath(p) { return p.includes("/location/"); }
 
     function tick() {
         const currentPath = window.location.pathname;
         if (currentPath === lastPath) return;
+        if (navigationLock) return;
 
         const leftSubaccount  = wasSubaccountPath(lastPath)  && !wasSubaccountPath(currentPath);
         const enteredSubaccount = !wasSubaccountPath(lastPath) && wasSubaccountPath(currentPath);
@@ -723,18 +756,56 @@ function clearSubaccountTheme() {
         lastPath = currentPath;
 
         if (leftSubaccount) {
-            // Agency view restored — clear subaccount overrides and re-apply agency theme
-            clearSubaccountTheme();
+          window.__TB_NAV_TRANSITION__ = true;
+          navigationLock = true;
+
+          clearSubaccountTheme();
+
+            // Read once, apply once — no re-reads inside the callback chain
             const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-            if (saved.themeData) injectThemeData(saved.themeData);
-            if (typeof applySidebarLogoFromTheme === "function") applySidebarLogoFromTheme();
+            if (saved.themeData) {
+                // Strip subaccount-specific keys so they don't get written back to :root
+                const agencyVars = Object.fromEntries(
+                    Object.entries(saved.themeData).filter(([k]) =>
+                        !["--subaccountThemes"].includes(k)
+                    )
+                );
+                injectThemeData(agencyVars);
+            }
+
+            // Logo: only apply after DOM settles, not immediately
+            // setTimeout(() => {
+            //     if (typeof applySidebarLogoFromTheme === "function") applySidebarLogoFromTheme();
+            //     navigationLock = false;
+            // }, 600);
+            setTimeout(() => {
+                  if (typeof applySidebarLogoFromTheme === "function") applySidebarLogoFromTheme();
+                  navigationLock = false;
+                  window.__TB_NAV_TRANSITION__ = false;
+              }, 600);
         }
 
+        // if (enteredSubaccount) {
+        //     navigationLock = true;
+        //     setTimeout(() => {
+        //         if (typeof applySubaccountTheme === "function") applySubaccountTheme();
+        //         navigationLock = false;
+        //     }, 300);
+        //     setTimeout(() => {
+        //         if (typeof applySubaccountTheme === "function") applySubaccountTheme();
+        //     }, 750);
+        // }
         if (enteredSubaccount) {
-            // Entered a subaccount — apply its theme
-            setTimeout(() => { if (typeof applySubaccountTheme === "function") applySubaccountTheme(); }, 150);
-            setTimeout(() => { if (typeof applySubaccountTheme === "function") applySubaccountTheme(); }, 600);
-        }
+              navigationLock = true;
+              setTimeout(() => {
+                  if (typeof applySubaccountTheme === "function") applySubaccountTheme();
+                  navigationLock = false;
+                  window.__TB_NAV_TRANSITION__ = false;
+              }, 300);
+              setTimeout(() => {
+                  if (typeof applySubaccountTheme === "function") applySubaccountTheme();
+              }, 750);
+          }
     }
 
     setInterval(tick, 300);
@@ -998,29 +1069,29 @@ if (sidebar) {
 
   
   // ---- Listen to SPA location changes ----
-window.addEventListener("locationchange", () => {
-    // Clean up previous location's lock/hide visual states first
-    cleanupMenuStates();
-    ThemeBuilder.reapply();
-    ThemeBuilder.applyAgencyLogo();
-    // Watch for .agency-logo to appear in DOM after navigation, then apply logo
-    const observer = new MutationObserver(() => {
-        const img = document.querySelector(".agency-logo");
-        if (img) {
-            observer.disconnect();
-            ThemeBuilder.applySidebarLogoFromTheme();
-        }
-    });
-    observer.observe(document.body, { childList: true, subtree: true });
-    setTimeout(() => observer.disconnect(), 5000);
-    setTimeout(() => {
-        applyStoredSidebarTitles();
-        applyLockedMenus();
-        applyHiddenMenus();
-        applySubaccountTheme();   // ← ADD THIS LINE
+// window.addEventListener("locationchange", () => {
+//     // Clean up previous location's lock/hide visual states first
+//     cleanupMenuStates();
+//     ThemeBuilder.reapply();
+//     ThemeBuilder.applyAgencyLogo();
+//     // Watch for .agency-logo to appear in DOM after navigation, then apply logo
+//     const observer = new MutationObserver(() => {
+//         const img = document.querySelector(".agency-logo");
+//         if (img) {
+//             observer.disconnect();
+//             ThemeBuilder.applySidebarLogoFromTheme();
+//         }
+//     });
+//     observer.observe(document.body, { childList: true, subtree: true });
+//     setTimeout(() => observer.disconnect(), 5000);
+//     setTimeout(() => {
+//         applyStoredSidebarTitles();
+//         applyLockedMenus();
+//         applyHiddenMenus();
+//         applySubaccountTheme();   // ← ADD THIS LINE
 
-    }, 1200);
-});
+//     }, 1200);
+// });
 
   // ---- Initial bootstrap ----
   // Run applyCSSFile (fetch + inject)
@@ -1045,6 +1116,35 @@ window.addEventListener("load", () => {
   document.querySelectorAll("#app + .app-loader, #app > .hl-loader-container")
     .forEach(l => l.remove());
 });
+window.__TB_NAV_TRANSITION__ = false;
 
+window.addEventListener("locationchange", () => {
+    cleanupMenuStates();
 
+    if (!window.__TB_NAV_TRANSITION__) {
+        const isLeavingSubaccount = !window.location.pathname.includes("/location/");
+        if (!isLeavingSubaccount) {
+            ThemeBuilder.reapply();
+        }
+    }
+
+    ThemeBuilder.applyAgencyLogo();
+
+    const observer = new MutationObserver(() => {
+        const img = document.querySelector(".agency-logo");
+        if (img) {
+            observer.disconnect();
+            ThemeBuilder.applySidebarLogoFromTheme();
+        }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+    setTimeout(() => observer.disconnect(), 5000);
+
+    setTimeout(() => {
+        applyStoredSidebarTitles();
+        applyLockedMenus();
+        applyHiddenMenus();
+        applySubaccountTheme();
+    }, 1200);
+});
 
