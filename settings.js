@@ -21,16 +21,16 @@
             document.head.appendChild(script);
         }
     })();
-    (function () {
-        if (!document.querySelector('link[href*="font-awesome"]')) {
-            const link = document.createElement("link");
-            link.rel = "stylesheet";
-            link.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css";
-            link.crossOrigin = "anonymous";
-            link.referrerPolicy = "no-referrer";
-            document.head.appendChild(link);
-        }
-    })();
+    // (function () {
+    //     if (!document.querySelector('link[href*="font-awesome"]')) {
+    //         const link = document.createElement("link");
+    //         link.rel = "stylesheet";
+    //         link.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css";
+    //         link.crossOrigin = "anonymous";
+    //         link.referrerPolicy = "no-referrer";
+    //         document.head.appendChild(link);
+    //     }
+    // })();
     (function loadFontAwesome() {
         if (!document.querySelector('link[href*="font-awesome"]')) {
             const link = document.createElement("link");
@@ -5933,6 +5933,15 @@ html, body {
                     if (titleEl) titleEl.style.right = "28px";
                 }
             }
+            // Force repaint so FA glyphs render without needing a click
+            requestAnimationFrame(() => {
+                document.querySelectorAll(".tb-sidebar-icon").forEach(el => {
+                    el.style.display = "none";
+                    // eslint-disable-next-line no-unused-expressions
+                    el.offsetHeight; // trigger reflow
+                    el.style.display = "";
+                });
+            });
         });
     }
 
