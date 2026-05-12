@@ -5732,6 +5732,8 @@ html, body {
     // 🚀 Run it
     function applyMenuCustomizations() {
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        window.__tbApplyMenuCustomizations = applyMenuCustomizations;
+
 
         const themeData = savedTheme.themeData || {};
         const menuCustomizations = themeData["--menuCustomizations"]

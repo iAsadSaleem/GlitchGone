@@ -796,12 +796,70 @@ function clearSubaccountTheme() {
     //         if (typeof applySubaccountTheme === "function") applySubaccountTheme();
     //     }, 750);
     // }
-    if (enteredSubaccount) {
+//     if (enteredSubaccount) {
+//     window.__TB_NAV_TRANSITION__ = true;
+//     navigationLock = true;
+
+//     // Watch for new sidebar DOM to appear after GHL rebuilds it,
+//     // then inject icons immediately into the real new nodes
+//     let iconInjected = false;
+
+//     const sidebarWatcher = new MutationObserver(() => {
+//         const menus = document.querySelectorAll("#sidebar-v2 a[id^='sb_']");
+//         if (menus.length > 0 && !iconInjected) {
+//             iconInjected = true;
+//             sidebarWatcher.disconnect();
+
+//             const doApply = () => {
+//                 applyMenuCustomizations();
+//                 applyStoredSidebarTitles();
+//                 // Force repaint so FA glyphs render without needing a click
+//                 requestAnimationFrame(() => {
+//                     document.querySelectorAll(".tb-sidebar-icon").forEach(el => {
+//                         el.style.display = "none";
+//                         el.offsetHeight; // trigger reflow
+//                         el.style.display = "";
+//                     });
+//                 });
+//             };
+
+//             // Wait for FA font file to actually finish downloading
+//             if (document.fonts && document.fonts.load) {
+//                 document.fonts.load('900 16px "Font Awesome 6 Free"')
+//                     .then(doApply)
+//                     .catch(doApply); // apply anyway if font check fails
+//             } else {
+//                 doApply();
+//             }
+//         }
+//     });
+
+//     sidebarWatcher.observe(document.body, { childList: true, subtree: true });
+
+//     // Safety net — if watcher never fires, apply after 5s anyway
+//     setTimeout(() => {
+//         if (!iconInjected) {
+//             sidebarWatcher.disconnect();
+//             applyMenuCustomizations();
+//             applyStoredSidebarTitles();
+//         }
+//     }, 5000);
+
+//     // These two are unchanged — keep exactly as before
+//     setTimeout(() => {
+//         if (typeof applySubaccountTheme === "function") applySubaccountTheme();
+//         navigationLock = false;
+//         window.__TB_NAV_TRANSITION__ = false;
+//     }, 300);
+
+//     setTimeout(() => {
+//         if (typeof applySubaccountTheme === "function") applySubaccountTheme();
+//     }, 750);
+// }
+if (enteredSubaccount) {
     window.__TB_NAV_TRANSITION__ = true;
     navigationLock = true;
 
-    // Watch for new sidebar DOM to appear after GHL rebuilds it,
-    // then inject icons immediately into the real new nodes
     let iconInjected = false;
 
     const sidebarWatcher = new MutationObserver(() => {
@@ -811,23 +869,27 @@ function clearSubaccountTheme() {
             sidebarWatcher.disconnect();
 
             const doApply = () => {
-                applyMenuCustomizations();
-                applyStoredSidebarTitles();
-                // Force repaint so FA glyphs render without needing a click
+                // Use window references — applyMenuCustomizations is in a
+                // different IIFE scope and not directly accessible here
+                if (typeof window.__tbApplyMenuCustomizations === "function") {
+                    window.__tbApplyMenuCustomizations();
+                }
+                if (typeof window.__tbApplyStoredSidebarTitles === "function") {
+                    window.__tbApplyStoredSidebarTitles();
+                }
                 requestAnimationFrame(() => {
                     document.querySelectorAll(".tb-sidebar-icon").forEach(el => {
                         el.style.display = "none";
-                        el.offsetHeight; // trigger reflow
+                        el.offsetHeight;
                         el.style.display = "";
                     });
                 });
             };
 
-            // Wait for FA font file to actually finish downloading
             if (document.fonts && document.fonts.load) {
                 document.fonts.load('900 16px "Font Awesome 6 Free"')
                     .then(doApply)
-                    .catch(doApply); // apply anyway if font check fails
+                    .catch(doApply);
             } else {
                 doApply();
             }
@@ -836,16 +898,20 @@ function clearSubaccountTheme() {
 
     sidebarWatcher.observe(document.body, { childList: true, subtree: true });
 
-    // Safety net — if watcher never fires, apply after 5s anyway
+    // Safety net
     setTimeout(() => {
         if (!iconInjected) {
             sidebarWatcher.disconnect();
-            applyMenuCustomizations();
-            applyStoredSidebarTitles();
+            if (typeof window.__tbApplyMenuCustomizations === "function") {
+                window.__tbApplyMenuCustomizations();
+            }
+            if (typeof window.__tbApplyStoredSidebarTitles === "function") {
+                window.__tbApplyStoredSidebarTitles();
+            }
         }
     }, 5000);
 
-    // These two are unchanged — keep exactly as before
+    // Unchanged
     setTimeout(() => {
         if (typeof applySubaccountTheme === "function") applySubaccountTheme();
         navigationLock = false;
@@ -966,6 +1032,7 @@ function applyStoredSidebarTitles() {
     console.error("❌ Failed to apply stored sidebar titles:", err);
   }
 }
+window.__tbApplyStoredSidebarTitles = applyStoredSidebarTitles;
 
   // ---- Mutation observer (throttled) ----
   function observeSidebarMutations(sidebar) {
