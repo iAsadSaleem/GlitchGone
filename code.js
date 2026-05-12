@@ -323,39 +323,6 @@ function applySidebarLogoFromTheme(retries = 15, delay = 300) {
         setTimeout(() => clearInterval(retryInterval), 10000);
     }
         })();
-        // (function watchAgencySidebarForReRender() {
-        //     if (location.pathname.includes("/location/")) return;
-        //     let reorderTimer = null;
-        //     const observer = new MutationObserver(() => {
-        //         clearTimeout(reorderTimer);
-        //         reorderTimer = setTimeout(() => {
-        //             const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        //             const order = saved.themeData?.["--agencyMenuOrder"]
-        //                 ? JSON.parse(saved.themeData["--agencyMenuOrder"])
-        //                 : [];
-        //             if (!order.length) return;
-        //             const sidebarNav = document.querySelector('.hl_nav-header nav[aria-label="header"]');
-        //             if (!sidebarNav) return;
-        //             const metaOrder = order.map(id => id.replace(/^sb_/, ""));
-        //             metaOrder.forEach(metaKey => {
-        //                 const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
-        //                 if (el) sidebarNav.appendChild(el);
-        //             });
-        //             sidebarNav.querySelectorAll('[meta]').forEach(el => {
-        //                 if (!metaOrder.includes(el.getAttribute('meta'))) sidebarNav.appendChild(el);
-        //             });
-        //         }, 80);
-        //     });
-        //     const startObserver = () => {
-        //         const sidebar = document.querySelector('#sidebar-v2');
-        //         if (sidebar) {
-        //             observer.observe(sidebar, { childList: true, subtree: true });
-        //         } else {
-        //             setTimeout(startObserver, 200);
-        //         }
-        //     };
-        //     startObserver();
-        // })();
   // // ---- Theme data injection ----
 function injectThemeData(themeData) {
     if (!themeData || typeof themeData !== "object") return;
@@ -656,10 +623,6 @@ function cleanupMenuStates() {
         const icon = menu.querySelector(".tb-lock-icon");
         if (icon) icon.remove();
 
-        // Reset lock styles
-        // menu.style.removeProperty("opacity");
-        // menu.style.removeProperty("cursor");
-
         // Reset hidden styles
         menu.style.removeProperty("display");
     });
@@ -708,37 +671,6 @@ function clearSubaccountTheme() {
 }
 
 // ── Watches for SPA navigation between agency ↔ subaccount ───────────────────
-// (function watchLocationChange() {
-//     let lastPath = window.location.pathname;
-
-//     function wasSubaccountPath(p) { return p.includes("/location/"); }
-
-//     function tick() {
-//         const currentPath = window.location.pathname;
-//         if (currentPath === lastPath) return;
-
-//         const leftSubaccount  = wasSubaccountPath(lastPath)  && !wasSubaccountPath(currentPath);
-//         const enteredSubaccount = !wasSubaccountPath(lastPath) && wasSubaccountPath(currentPath);
-
-//         lastPath = currentPath;
-
-//         if (leftSubaccount) {
-//             // Agency view restored — clear subaccount overrides and re-apply agency theme
-//             clearSubaccountTheme();
-//             const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-//             if (saved.themeData) injectThemeData(saved.themeData);
-//             if (typeof applySidebarLogoFromTheme === "function") applySidebarLogoFromTheme();
-//         }
-
-//         if (enteredSubaccount) {
-//             // Entered a subaccount — apply its theme
-//             setTimeout(() => { if (typeof applySubaccountTheme === "function") applySubaccountTheme(); }, 150);
-//             setTimeout(() => { if (typeof applySubaccountTheme === "function") applySubaccountTheme(); }, 600);
-//         }
-//     }
-
-//     setInterval(tick, 300);
-// })();
 (function watchLocationChange() {
     let lastPath = window.location.pathname;
     let navigationLock = false;
@@ -784,78 +716,6 @@ function clearSubaccountTheme() {
         }, 1000);
     }
 
-    // if (enteredSubaccount) {
-    //     window.__TB_NAV_TRANSITION__ = true;
-    //     navigationLock = true;
-    //     setTimeout(() => {
-    //         if (typeof applySubaccountTheme === "function") applySubaccountTheme();
-    //         navigationLock = false;
-    //         window.__TB_NAV_TRANSITION__ = false;
-    //     }, 300);
-    //     setTimeout(() => {
-    //         if (typeof applySubaccountTheme === "function") applySubaccountTheme();
-    //     }, 750);
-    // }
-//     if (enteredSubaccount) {
-//     window.__TB_NAV_TRANSITION__ = true;
-//     navigationLock = true;
-
-//     // Watch for new sidebar DOM to appear after GHL rebuilds it,
-//     // then inject icons immediately into the real new nodes
-//     let iconInjected = false;
-
-//     const sidebarWatcher = new MutationObserver(() => {
-//         const menus = document.querySelectorAll("#sidebar-v2 a[id^='sb_']");
-//         if (menus.length > 0 && !iconInjected) {
-//             iconInjected = true;
-//             sidebarWatcher.disconnect();
-
-//             const doApply = () => {
-//                 applyMenuCustomizations();
-//                 applyStoredSidebarTitles();
-//                 // Force repaint so FA glyphs render without needing a click
-//                 requestAnimationFrame(() => {
-//                     document.querySelectorAll(".tb-sidebar-icon").forEach(el => {
-//                         el.style.display = "none";
-//                         el.offsetHeight; // trigger reflow
-//                         el.style.display = "";
-//                     });
-//                 });
-//             };
-
-//             // Wait for FA font file to actually finish downloading
-//             if (document.fonts && document.fonts.load) {
-//                 document.fonts.load('900 16px "Font Awesome 6 Free"')
-//                     .then(doApply)
-//                     .catch(doApply); // apply anyway if font check fails
-//             } else {
-//                 doApply();
-//             }
-//         }
-//     });
-
-//     sidebarWatcher.observe(document.body, { childList: true, subtree: true });
-
-//     // Safety net — if watcher never fires, apply after 5s anyway
-//     setTimeout(() => {
-//         if (!iconInjected) {
-//             sidebarWatcher.disconnect();
-//             applyMenuCustomizations();
-//             applyStoredSidebarTitles();
-//         }
-//     }, 5000);
-
-//     // These two are unchanged — keep exactly as before
-//     setTimeout(() => {
-//         if (typeof applySubaccountTheme === "function") applySubaccountTheme();
-//         navigationLock = false;
-//         window.__TB_NAV_TRANSITION__ = false;
-//     }, 300);
-
-//     setTimeout(() => {
-//         if (typeof applySubaccountTheme === "function") applySubaccountTheme();
-//     }, 750);
-// }
 if (enteredSubaccount) {
     window.__TB_NAV_TRANSITION__ = true;
     navigationLock = true;
@@ -933,18 +793,6 @@ document.addEventListener('DOMContentLoaded', function() {
   applySubaccountTheme();
 });
 
-// Also call when localStorage changes (if settings are updated dynamically)
-// Polling fallback for iframe updates (checks every 500ms)
-// setInterval(() => {
-//   const current = localStorage.getItem("userTheme"); // Changed from STORAGE.userTheme
-//   if (current !== window.lastUserTheme) {
-//     window.lastUserTheme = current;
-//     applyHiddenMenus();
-//     applyLockedMenus();
-//     applySubaccountTheme();
-//   }
-//     // applySubaccountTheme();
-// }, 500);
 setInterval(() => {
   const current = localStorage.getItem("userTheme");
   if (current !== window.lastUserTheme) {
@@ -1198,29 +1046,6 @@ if (sidebar) {
 
   
   // ---- Listen to SPA location changes ----
-// window.addEventListener("locationchange", () => {
-//     // Clean up previous location's lock/hide visual states first
-//     cleanupMenuStates();
-//     ThemeBuilder.reapply();
-//     ThemeBuilder.applyAgencyLogo();
-//     // Watch for .agency-logo to appear in DOM after navigation, then apply logo
-//     const observer = new MutationObserver(() => {
-//         const img = document.querySelector(".agency-logo");
-//         if (img) {
-//             observer.disconnect();
-//             ThemeBuilder.applySidebarLogoFromTheme();
-//         }
-//     });
-//     observer.observe(document.body, { childList: true, subtree: true });
-//     setTimeout(() => observer.disconnect(), 5000);
-//     setTimeout(() => {
-//         applyStoredSidebarTitles();
-//         applyLockedMenus();
-//         applyHiddenMenus();
-//         applySubaccountTheme();   // ← ADD THIS LINE
-
-//     }, 1200);
-// });
 
   // ---- Initial bootstrap ----
   // Run applyCSSFile (fetch + inject)
@@ -1246,36 +1071,6 @@ window.addEventListener("load", () => {
     .forEach(l => l.remove());
 });
 window.__TB_NAV_TRANSITION__ = false;
-
-// window.addEventListener("locationchange", () => {
-//     if (window.__TB_NAV_TRANSITION__) return;
-
-//     cleanupMenuStates();
-
-//     const isLeavingSubaccount = !window.location.pathname.includes("/location/");
-//     if (!isLeavingSubaccount) {
-//         ThemeBuilder.reapply();
-//     }
-
-//     ThemeBuilder.applyAgencyLogo();
-
-//     const observer = new MutationObserver(() => {
-//         const img = document.querySelector(".agency-logo");
-//         if (img) {
-//             observer.disconnect();
-//             ThemeBuilder.applySidebarLogoFromTheme();
-//         }
-//     });
-//     observer.observe(document.body, { childList: true, subtree: true });
-//     setTimeout(() => observer.disconnect(), 5000);
-
-//     setTimeout(() => {
-//         applyStoredSidebarTitles();
-//         applyLockedMenus();
-//         applyHiddenMenus();
-//         applySubaccountTheme();
-//     }, 1200);
-// });
 window.addEventListener("locationchange", () => {
     if (window.__TB_NAV_TRANSITION__) return;
 
