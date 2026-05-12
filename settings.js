@@ -6269,20 +6269,52 @@ html, body {
 
                         }
                     }
+                    // function waitForFontAwesome(cb) {
+                    //     const test = document.createElement("i");
+                    //     test.className = "fa-solid fa-house";
+                    //     document.body.appendChild(test);
+                    //     requestAnimationFrame(() => {
+                    //         const style = getComputedStyle(test).fontFamily;
+                    //         test.remove();
+                    //         if (style.includes("Font Awesome")) {
+                    //             cb();
+                    //         } else {
+                    //             setTimeout(() => waitForFontAwesome(cb), 100);
+                    //         }
+                    //     });
+                    // }
                     function waitForFontAwesome(cb) {
-                        const test = document.createElement("i");
-                        test.className = "fa-solid fa-house";
-                        document.body.appendChild(test);
-                        requestAnimationFrame(() => {
-                            const style = getComputedStyle(test).fontFamily;
-                            test.remove();
-                            if (style.includes("Font Awesome")) {
-                                cb();
+                            if (document.fonts && document.fonts.ready) {
+                                document.fonts.ready.then(() => {
+                                    // Extra check: ensure FA glyphs are actually available
+                                    document.fonts.load('900 16px "Font Awesome 6 Free"').then(() => {
+                                        cb();
+                                    }).catch(() => cb()); // fallback: call anyway
+                                });
                             } else {
-                                setTimeout(() => waitForFontAwesome(cb), 100);
+                                // Fallback for older browsers
+                                const test = document.createElement("i");
+                                test.className = "fa-solid fa-house";
+                                test.style.cssText = "position:absolute;visibility:hidden;font-size:16px;";
+                                document.body.appendChild(test);
+                                
+                                let attempts = 0;
+                                const check = () => {
+                                    attempts++;
+                                    const width = test.getBoundingClientRect().width;
+                                    if (width > 0) {
+                                        test.remove();
+                                        cb();
+                                    } else if (attempts < 50) {
+                                        setTimeout(check, 100);
+                                    } else {
+                                        test.remove();
+                                        cb(); // give up and apply anyway
+                                    }
+                                };
+                                requestAnimationFrame(check);
                             }
-                        });
-                    }
+                        }
 
                     waitForFontAwesome(applyMenuCustomizations);
                 };
