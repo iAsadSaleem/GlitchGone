@@ -746,67 +746,57 @@ function clearSubaccountTheme() {
     function wasSubaccountPath(p) { return p.includes("/location/"); }
 
     function tick() {
-        const currentPath = window.location.pathname;
-        if (currentPath === lastPath) return;
-        if (navigationLock) return;
+    const currentPath = window.location.pathname;
+    if (currentPath === lastPath) return;
+    if (navigationLock) return;
 
-        const leftSubaccount  = wasSubaccountPath(lastPath)  && !wasSubaccountPath(currentPath);
-        const enteredSubaccount = !wasSubaccountPath(lastPath) && wasSubaccountPath(currentPath);
+    const prevPath = lastPath;
+    const leftSubaccount = wasSubaccountPath(prevPath) && !wasSubaccountPath(currentPath);
+    const enteredSubaccount = !wasSubaccountPath(prevPath) && wasSubaccountPath(currentPath);
 
-        lastPath = currentPath;
+    // Update lastPath immediately so rapid ticks don't re-trigger
+    lastPath = currentPath;
 
-        if (leftSubaccount) {
-          window.__TB_NAV_TRANSITION__ = true;
-          navigationLock = true;
+    if (leftSubaccount) {
+        window.__TB_NAV_TRANSITION__ = true;
+        navigationLock = true;
 
-          clearSubaccountTheme();
+        clearSubaccountTheme();
 
-            // Read once, apply once — no re-reads inside the callback chain
-            const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-            if (saved.themeData) {
-                // Strip subaccount-specific keys so they don't get written back to :root
-                const agencyVars = Object.fromEntries(
-                    Object.entries(saved.themeData).filter(([k]) =>
-                        !["--subaccountThemes"].includes(k)
-                    )
-                );
-                injectThemeData(agencyVars);
-            }
-
-            // Logo: only apply after DOM settles, not immediately
-            // setTimeout(() => {
-            //     if (typeof applySidebarLogoFromTheme === "function") applySidebarLogoFromTheme();
-            //     navigationLock = false;
-            // }, 600);
-            setTimeout(() => {
-                  if (typeof applySidebarLogoFromTheme === "function") applySidebarLogoFromTheme();
-                  navigationLock = false;
-                  window.__TB_NAV_TRANSITION__ = false;
-              }, 1000);
+        const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+        if (saved.themeData) {
+            const agencyVars = Object.fromEntries(
+                Object.entries(saved.themeData).filter(([k]) =>
+                    k !== "--subaccountThemes"
+                )
+            );
+            injectThemeData(agencyVars);
         }
 
-        // if (enteredSubaccount) {
-        //     navigationLock = true;
-        //     setTimeout(() => {
-        //         if (typeof applySubaccountTheme === "function") applySubaccountTheme();
-        //         navigationLock = false;
-        //     }, 300);
-        //     setTimeout(() => {
-        //         if (typeof applySubaccountTheme === "function") applySubaccountTheme();
-        //     }, 750);
-        // }
-        if (enteredSubaccount) {
-              navigationLock = true;
-              setTimeout(() => {
-                  if (typeof applySubaccountTheme === "function") applySubaccountTheme();
-                  navigationLock = false;
-                  window.__TB_NAV_TRANSITION__ = false;
-              }, 300);
-              setTimeout(() => {
-                  if (typeof applySubaccountTheme === "function") applySubaccountTheme();
-              }, 750);
-          }
+        setTimeout(() => {
+            // Verify we are still on agency page before applying logo
+            // This prevents applying agency logo if user navigated back to subaccount quickly
+            if (!getCurrentLocationId()) {
+                if (typeof applySidebarLogoFromTheme === "function") applySidebarLogoFromTheme();
+            }
+            navigationLock = false;
+            window.__TB_NAV_TRANSITION__ = false;
+        }, 1000);
     }
+
+    if (enteredSubaccount) {
+        window.__TB_NAV_TRANSITION__ = true;
+        navigationLock = true;
+        setTimeout(() => {
+            if (typeof applySubaccountTheme === "function") applySubaccountTheme();
+            navigationLock = false;
+            window.__TB_NAV_TRANSITION__ = false;
+        }, 300);
+        setTimeout(() => {
+            if (typeof applySubaccountTheme === "function") applySubaccountTheme();
+        }, 750);
+    }
+}
 
     setInterval(tick, 300);
 })();
@@ -819,15 +809,27 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Also call when localStorage changes (if settings are updated dynamically)
 // Polling fallback for iframe updates (checks every 500ms)
+// setInterval(() => {
+//   const current = localStorage.getItem("userTheme"); // Changed from STORAGE.userTheme
+//   if (current !== window.lastUserTheme) {
+//     window.lastUserTheme = current;
+//     applyHiddenMenus();
+//     applyLockedMenus();
+//     applySubaccountTheme();
+//   }
+//     // applySubaccountTheme();
+// }, 500);
 setInterval(() => {
-  const current = localStorage.getItem("userTheme"); // Changed from STORAGE.userTheme
+  const current = localStorage.getItem("userTheme");
   if (current !== window.lastUserTheme) {
     window.lastUserTheme = current;
     applyHiddenMenus();
     applyLockedMenus();
-    applySubaccountTheme();
+    // Only apply subaccount theme if we are actually on a subaccount page
+    if (getCurrentLocationId()) {
+      applySubaccountTheme();
+    }
   }
-    // applySubaccountTheme();
 }, 500);
   
   async function applyAgencyLogo(attempt = 1) {

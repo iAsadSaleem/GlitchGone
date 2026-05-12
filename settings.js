@@ -6775,28 +6775,42 @@ html, body {
             }
 
     // --- 2️⃣ Detect URL changes in an SPA ---
+    // (function () {
+    //     const pushState = history.pushState;
+    //     const replaceState = history.replaceState;
+
+    //     function onRouteChange() {
+    //         reapplyThemeOnRouteChange();
+    //     }
+
+    //     history.pushState = function () {
+    //         pushState.apply(this, arguments);
+    //         onRouteChange();
+    //     };
+    //     history.replaceState = function () {
+    //         replaceState.apply(this, arguments);
+    //         onRouteChange();
+    //     };
+
+    //     window.addEventListener("popstate", onRouteChange);
+
+    //     // Run on first load
+    //     reapplyThemeOnRouteChange();
+    // })();
     (function () {
-        const pushState = history.pushState;
-        const replaceState = history.replaceState;
+    // DO NOT wrap pushState/replaceState here — code.js already wraps them
+    // and dispatches the "locationchange" event. Double-wrapping causes
+    // the navigation loop when leaving a subaccount.
+    // Instead just listen to the locationchange event that code.js dispatches.
 
-        function onRouteChange() {
-            reapplyThemeOnRouteChange();
-        }
-
-        history.pushState = function () {
-            pushState.apply(this, arguments);
-            onRouteChange();
-        };
-        history.replaceState = function () {
-            replaceState.apply(this, arguments);
-            onRouteChange();
-        };
-
-        window.addEventListener("popstate", onRouteChange);
-
-        // Run on first load
+    window.addEventListener("locationchange", () => {
+        if (window.__TB_NAV_TRANSITION__) return;
         reapplyThemeOnRouteChange();
-    })();
+    });
+
+    // Run on first load
+    reapplyThemeOnRouteChange();
+})();
 
     function applySavedSettings() {
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
