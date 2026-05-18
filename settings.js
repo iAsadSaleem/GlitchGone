@@ -2304,7 +2304,7 @@ html, body {
     </div>
   </div>
 </body>
-</html>`;
+    </html>`;
 
     const doc = iframe.contentDocument || iframe.contentWindow.document;
     doc.open();
@@ -5758,106 +5758,7 @@ html, body {
             // Update Title
             const titleSpan = menuEl.querySelector(".nav-title");
             if (titleSpan) titleSpan.textContent = menuData.title || menuEl.dataset.defaultLabel || "";
-            // if (menuData.icon) {
-            //     // Remove only existing icon inside this menu
-            //     const existingImg = menuEl.querySelector("img");
-            //     const existingI = menuEl.querySelector("i");
-            //     if (existingImg) existingImg.remove();
-            //     if (existingI) existingI.remove();
-            // // ✅ Clear old CSS mask icon
-            //     const cssVarName = `--sidebar-menu-icon-${menuId.replace(/^sb_/, "")}`;
-            //     document.documentElement.style.setProperty(cssVarName, "");
-            //     if (/^f[0-9a-f]+$/i.test(menuData.icon)) {
-            //         menuEl.classList.add("tb-has-fa-icon");
-            //         menuEl.classList.remove("tb-has-svg-icon"); // hide the old SVG mask
-            //     } else if (/^https?:\/\//.test(menuData.icon)) {
-            //         menuEl.classList.remove("tb-has-fa-icon");
-            //         menuEl.classList.add("tb-has-svg-icon");
-            //     }
-            //     menuEl.classList.remove('tb-has-svg-icon'); // optional, for clarity
-            //     let iconEl;
-            //     if (/^https?:\/\//.test(menuData.icon)) {
-            //         // Image URL
-            //         iconEl = document.createElement("img");
-            //         iconEl.src = menuData.icon;
-            //         iconEl.alt = menuData.title || "icon";
-            //         iconEl.className = "md:mr-0 h-5 w-5 mr-2 lg:mr-2 xl:mr-2";
-            //     } else if (/^f[0-9a-f]+$/i.test(menuData.icon)) {
-            //             // Unicode like "f015", "f232", "f436"
-
-            //             const iconValue = menuData.icon.toLowerCase();
-
-            //             // Known Font Awesome Brands unicodes (extend as needed)
-            //             const BRAND_UNICODE_RANGE = ["f09a", "f16d", "f232", "f436"];
-
-            //             const isBrandIcon = BRAND_UNICODE_RANGE.includes(iconValue);
-
-            //             iconEl = document.createElement("i");
-            //             iconEl.className = "tb-sidebar-icon";
-            //             iconEl.innerHTML = `&#x${iconValue};`;
-
-            //             if (isBrandIcon) {
-            //                 // ✅ Font Awesome Brands
-            //                 iconEl.style.fontFamily = "Font Awesome 6 Brands";
-            //                 iconEl.style.fontWeight = "400";
-            //             } else {
-            //                 // ✅ Font Awesome Solid
-            //                 iconEl.style.fontFamily = "Font Awesome 6 Free";
-            //                 iconEl.style.fontWeight = "900";
-            //             }
-
-            //             iconEl.style.fontSize = "16px";
-            //             iconEl.style.marginRight = "0.5rem";
-            //             iconEl.style.lineHeight = "1";
-            //         }
-            //         else {
-            //         let iconValue = menuData.icon.trim();
-
-            //         if (/^f[0-9a-f]{3}$/i.test(iconValue)) {
-            //             iconEl = document.createElement("i");
-            //             iconEl.className = "fa-regular tb-sidebar-icon";
-            //             iconEl.innerHTML = `&#x${iconValue};`;
-            //             iconEl.style.fontFamily = "Font Awesome 6 Free";
-            //             iconEl.style.fontWeight = "900";
-            //         } else {
-            //             if (
-            //                 iconValue.startsWith("fa-") &&
-            //                 // !iconValue.includes("fa-solid") &&
-            //                 !iconValue.includes("fa-regular") &&
-            //                 !iconValue.includes("fa-brands")
-            //             ) {
-            //                 iconValue = `fa-regular ${iconValue}`;
-            //             } else if (!iconValue.startsWith("fa-")) {
-            //                 iconValue = `fa-regular fa-${iconValue}`;
-            //             }
-
-            //             iconEl = document.createElement("i");
-            //             iconEl.className = `${iconValue} tb-sidebar-icon`;
-            //             iconEl.style.fontFamily = "Font Awesome 6 Free";
-            //             iconEl.style.fontWeight = "900";
-            //             iconEl.style.fontSize = "16px";
-            //             iconEl.style.marginRight = "0.5rem";
-            //         }
-            //     }
-
-            //     // Add new icon for this menu
-            //     menuEl.prepend(iconEl);
-              
-            //     // ✅ Toggle classes for CSS
-            //     if (/^f[0-9a-f]+$/i.test(menuData.icon)) {
-            //         menuEl.classList.add("tb-has-fa-icon");
-            //         menuEl.classList.remove("tb-has-svg-icon");
-            //     } else if (/^https?:\/\//.test(menuData.icon)) {
-            //         menuEl.classList.remove("tb-has-fa-icon");
-            //         menuEl.classList.add("tb-has-svg-icon");
-            //     }
-            //     // 🧠 If icon is added, shift title like default
-            //     const titleEl = menuEl.querySelector(".nav-title");
-            //     if (titleEl) {
-            //         titleEl.style.right = "28px";
-            //     }
-            // }
-            if (menuData.icon) {
+                        if (menuData.icon) {
     // ✅ Skip DOM work if icon is already correct — prevents visual flash
                 const existingIcon = menuEl.querySelector("i.tb-sidebar-icon, img.tb-sidebar-icon-img");
                 if (existingIcon && existingIcon.dataset.tbIcon === menuData.icon) {
@@ -6781,15 +6682,6 @@ html, body {
     }
 
     // --- 1️⃣ Create a helper to run your theme logic ---
-    // function reapplyThemeOnRouteChange() {
-    //     waitForSidebarMenus(() => {
-    //         applyLockedMenus(); // optional
-    //         applyMenuCustomizations();
-    //         initThemeBuilder(0);
-    //         //applymenuReorder();
-    //         applyMenuIconCustomizations();
-    //     });
-    // }
     function reapplyThemeOnRouteChange() {
                 waitForSidebarMenus(() => {
                     applyLockedMenus();
@@ -6846,7 +6738,7 @@ html, body {
     // the navigation loop when leaving a subaccount.
     // Instead just listen to the locationchange event that code.js dispatches.
 
-    window.addEventListener("locationchange", () => {
+    window.addEventListener("locationchange", () => { 
         if (window.__TB_NAV_TRANSITION__) return;
         reapplyThemeOnRouteChange();
     });
