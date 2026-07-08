@@ -21,16 +21,7 @@
             document.head.appendChild(script);
         }
     })();
-    // (function () {
-    //     if (!document.querySelector('link[href*="font-awesome"]')) {
-    //         const link = document.createElement("link");
-    //         link.rel = "stylesheet";
-    //         link.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css";
-    //         link.crossOrigin = "anonymous";
-    //         link.referrerPolicy = "no-referrer";
-    //         document.head.appendChild(link);
-    //     }
-    // })();
+    
     (function loadFontAwesome() {
         if (!document.querySelector('link[href*="font-awesome"]')) {
             const link = document.createElement("link");
@@ -354,7 +345,9 @@
             link.id = 'themeBuilderCSS';
             link.rel = 'stylesheet';
             // link.href = 'https://glitch-gone-nu.vercel.app/theme-builder.css';
+
             link.href = 'https://themebuilder-six.vercel.app/theme-builder.css';
+            // link.href = 'https://themebuilder-six.vercel.app/theme-builder-v1.css';
 
             document.head.appendChild(link);
         }
@@ -362,7 +355,6 @@
 
     loadThemeBuilderCSS();
 
-    // Utility to create section with optional icon
     function createSection(title, contentBuilder, icon = null) {
         const section = document.createElement("div");
         section.className = "tb-section";
@@ -438,7 +430,6 @@
         return section;
     }
 
-    // Tooltip helper
     function initTooltip(btn, text) {
         const tooltip = document.createElement("div");
         tooltip.className = "tb-tooltip";
@@ -448,8 +439,7 @@
         btn.addEventListener("mouseenter", () => tooltip.classList.add("visible"));
         btn.addEventListener("mouseleave", () => tooltip.classList.remove("visible"));
     }
-    // Color picker creator
-    // 🌟 Mapping of CSS vars -> Human-friendly labels
+
     const cssVarLabels = {
         "--primary-color": "Primary Color",
         "--second-color": "Secondary Color",
@@ -643,7 +633,6 @@
         return wrapper;
     }
 
-    // Apply sidebar text color live
     function applySidebarTextColor(color) {
         const sidebarLinks = document.querySelectorAll('.sidebar-v2 nav a');
         sidebarLinks.forEach(a => {
@@ -762,7 +751,6 @@
         }
     }
 
-    // Load themes once at startup
     loadThemes();
 
     function applySubaccountTheme() {
@@ -811,7 +799,6 @@
             if (typeof changeFavicon === "function") changeFavicon(locationTheme.logoUrl);
         }
     }
-    // NEW: Theme Selector Section
     function buildThemeSelectorSection(container) {
         if (!container) return;
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
@@ -1119,7 +1106,6 @@
         });
     }
 
-    // Build theme colors section
     function buildThemeColorsSection(container) {
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedTheme.themeData || {};
@@ -1193,7 +1179,6 @@
         // --- Initial Gradient Apply ---
         updateSidebarGradient();
     }
-    // Find header controls container
     function findControlsContainer() {
         const header = document.querySelector('header.hl_header') || document.querySelector('header');
         if (!header) return null;
@@ -1281,7 +1266,6 @@
         wrapper.appendChild(select);
     }
 
-    // ⬇️ Create Login Card BG Gradient Picker (Start + End colors)
     function createLoginCardGradientPicker() {
         const wrapper = document.createElement("div");
 
@@ -1304,7 +1288,6 @@
         return wrapper;
     }
 
-    // ⬇️ Function to build + apply gradient
     function updateLoginCardBackgroundGradient() {
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         savedThemeObj.themeData = savedThemeObj.themeData || {};
@@ -1346,9 +1329,7 @@
 
         return wrapper;
     }
-    /**
-     * Update Login Button Gradient based on start & end
-     */
+
     function updateLoginButtonGradient() {
         const savedThemeObj = JSON.parse(localStorage.getItem("userTheme") || "{}");
         savedThemeObj.themeData = savedThemeObj.themeData || {};
@@ -1370,7 +1351,6 @@
         saveUserTheme(savedThemeObj);
     }
 
-    /* ========== Border Radius Input ========== */
     function createLoginButtonBorderRadiusInput() {
         const wrapper = document.createElement("div");
         wrapper.className = "tb-color-picker-wrapper";
@@ -1416,7 +1396,6 @@
         return wrapper;
     }
 
-    /* ========== Font Color Picker ========== */
     function createLoginButtonFontColorPicker() {
         const wrapper = document.createElement("div");
         wrapper.className = "tb-color-picker-wrapper";
@@ -1476,7 +1455,6 @@
         return wrapper;
     }
     
-    /* ========== Hover Background Color Picker ========== */
     function createLoginButtonHoverBgColorPicker() {
         const wrapper = document.createElement("div");
         wrapper.className = "tb-color-picker-wrapper";
@@ -1533,7 +1511,6 @@
 
         return wrapper;
     }
-    /* ========== Link Text Color Picker ========== */
     function createLoginLinkTextColorPicker() {
         const wrapper = document.createElement("div");
         wrapper.className = "tb-color-picker-wrapper";
@@ -1591,8 +1568,6 @@
         return wrapper;
     }
 
-    /* ========== Link Text Font Size Input (with same classes as Border Radius) ========== */
-    // Create Heading Controls
     function addLoaderColorSettings(container) {
         if (document.getElementById("tb-loader-color-settings")) return;
 
@@ -4130,7 +4105,6 @@ html, body {
         setTimeout(updateSidebarLogo, 500);
     }
 
-    // ✅ Your existing observer (don’t change this)
     function waitForSidebarMenus(callback) {
     // ✅ If menus already exist, run callback immediately — no observer needed
     if (document.querySelectorAll(".hl_nav-header a").length > 0) {
@@ -5698,7 +5672,6 @@ html, body {
             return map[menuId] || null;
         }
 
-    // 🔥 Core function: apply all saved icon customizations
     function applyMenuIconCustomizations() {
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         const themeData = savedTheme?.themeData || {};
@@ -5729,7 +5702,6 @@ html, body {
             }
         });
     }
-    // 🚀 Run it
     function applyMenuCustomizations() {
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
         window.__tbApplyMenuCustomizations = applyMenuCustomizations;
@@ -6265,43 +6237,7 @@ html, body {
                     icon.classList.add("fa-angle-up"); // expanded icon
                 }
             });
-            // ==========================
-            // Subaccount Sidebar Observer
-            // ==========================
-            // function applySubaccountMenuOrderCSS(order) {
-            //     order.forEach((menuId, index) => {
-            //         const cssKey = SUBACCOUNT_ORDER_MAP[menuId];
-            //         if (!cssKey) return;
-
-            //         document.documentElement.style.setProperty(
-            //         `--${cssKey}-order`,
-            //         index
-            //         );
-            //     });
-            //     }
-            // function applySubaccountMenuOrderCSS(order) {
-            //     // Apply saved order
-            //     order.forEach((menuId, index) => {
-            //         // ✅ CSS variable path (for menus that use var(--x-order))
-            //         const cssKey = SUBACCOUNT_ORDER_MAP[menuId];
-            //         if (cssKey) {
-            //             document.documentElement.style.setProperty(`--${cssKey}-order`, index);
-            //         }
-
-            //         // ✅ Direct element path (works for ALL menus including new unknown ones)
-            //         const el = document.getElementById(menuId);
-            //         if (el) el.style.setProperty("order", index, "important");
-            //     });
-
-            //     // ✅ Push any NEW GHL menus (not in saved order) to the end
-            //     const allSidebarMenus = document.querySelectorAll('#sidebar-v2 [id^="sb_"]');
-            //     let endIndex = order.length;
-            //     allSidebarMenus.forEach(el => {
-            //         if (!order.includes(el.id)) {
-            //             el.style.setProperty("order", endIndex++, "important");
-            //         }
-            //     });
-            // }
+         
             function applySubaccountMenuOrderCSS(order) {
                     if (window.__TB_REORDERING__) return;
                     window.__TB_REORDERING__ = true;
@@ -6345,26 +6281,7 @@ html, body {
                 saveUserTheme(saved);
                 }
            
-            // function updateAgencyaccountSidebarRuntime(newOrder) {
-            //     const wait = setInterval(() => {
-            //         const sidebarNav = document.querySelector(
-            //             '.hl_nav-header nav[aria-label="header"]'
-            //         );
-            //         if (!sidebarNav) return;
-
-            //         const allExist = newOrder.every(key => sidebarNav.querySelector(`[meta="${key}"]`));
-
-            //         if (!allExist) return;
-
-            //         clearInterval(wait);
-
-            //         // Reorder DOM elements
-            //         newOrder.forEach(metaKey => {
-            //             const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
-            //             if (el) sidebarNav.appendChild(el); // moves node in new order
-            //         });
-            //     }, 50);
-            // }
+           
           function updateAgencyaccountSidebarRuntime(newOrder) {
                 if (window.__TB_REORDERING__) return;
                 window.__TB_REORDERING__ = true;
@@ -6458,75 +6375,50 @@ html, body {
         container.appendChild(wrapper);
         applyMenuCustomizations();
 
-        // (function applySavedSubAccountOrderOnLoad() {
-        //     if (!location.pathname.includes("/location/")) return;
-        //     const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-        //     const order = saved.themeData?.["--subMenuOrder"]
-        //         ? JSON.parse(saved.themeData["--subMenuOrder"])
-        //         : [];
-        //     if (!order.length) return;
-        //     order.forEach((menuId, index) => {
-        //         // CSS variable (existing approach, keep it)
-        //         const cssKey = SUBACCOUNT_ORDER_MAP[menuId];
-        //         if (cssKey) {
-        //             document.documentElement.style.setProperty(`--${cssKey}-order`, index);
-        //         }
-        //         // ✅ Direct element order (new — handles unknown menus)
-        //         const el = document.getElementById(menuId);
-        //         if (el) el.style.setProperty("order", index, "important");
-        //     });
-        //     // ✅ Unknown new menus go to end
-        //     const allSidebarMenus = document.querySelectorAll('#sidebar-v2 [id^="sb_"]');
-        //     let endIndex = order.length;
-        //     allSidebarMenus.forEach(el => {
-        //         if (!order.includes(el.id)) {
-        //             el.style.setProperty("order", endIndex++, "important");
-        //         }
-        //     });
-        // })();
-
-(function applySavedAgencyOrderOnLoad() {
-    // Only run on agency level (not inside /location/)
-    if (location.pathname.includes("/location/")) return;
-
-    const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
-    const order = saved.themeData?.["--agencyMenuOrder"]
-        ? JSON.parse(saved.themeData["--agencyMenuOrder"])
-        : [];
-
-    if (!order.length) return;
-
-    // Wait for the nav to exist, then apply
-    const apply = () => {
-        const sidebarNav = document.querySelector('.hl_nav-header nav[aria-label="header"]');
-        if (!sidebarNav) return false;
-
-        const metaOrder = order.map(id => id.replace(/^sb_/, ""));
-
-        metaOrder.forEach(metaKey => {
-            const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
-            if (el) sidebarNav.appendChild(el);
-        });
-
-        // ✅ New menus GHL added go to the end
-        sidebarNav.querySelectorAll('[meta]').forEach(el => {
-            const metaVal = el.getAttribute('meta');
-            if (!metaOrder.includes(metaVal)) sidebarNav.appendChild(el);
-        });
-
-        return true;
-    };
-
-    // Try immediately, then retry until sidebar is ready
-    if (!apply()) {
-        const retryInterval = setInterval(() => {
-            if (apply()) clearInterval(retryInterval);
-        }, 100);
-        // Stop retrying after 10 seconds
-        setTimeout(() => clearInterval(retryInterval), 10000);
-    }
-})();
         
+
+        (function applySavedAgencyOrderOnLoad() {
+            // Only run on agency level (not inside /location/)
+            if (location.pathname.includes("/location/")) return;
+
+            const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
+            const order = saved.themeData?.["--agencyMenuOrder"]
+                ? JSON.parse(saved.themeData["--agencyMenuOrder"])
+                : [];
+
+            if (!order.length) return;
+
+            // Wait for the nav to exist, then apply
+            const apply = () => {
+                const sidebarNav = document.querySelector('.hl_nav-header nav[aria-label="header"]');
+                if (!sidebarNav) return false;
+
+                const metaOrder = order.map(id => id.replace(/^sb_/, ""));
+
+                metaOrder.forEach(metaKey => {
+                    const el = sidebarNav.querySelector(`[meta="${metaKey}"]`);
+                    if (el) sidebarNav.appendChild(el);
+                });
+
+                // ✅ New menus GHL added go to the end
+                sidebarNav.querySelectorAll('[meta]').forEach(el => {
+                    const metaVal = el.getAttribute('meta');
+                    if (!metaOrder.includes(metaVal)) sidebarNav.appendChild(el);
+                });
+
+                return true;
+            };
+
+            // Try immediately, then retry until sidebar is ready
+            if (!apply()) {
+                const retryInterval = setInterval(() => {
+                    if (apply()) clearInterval(retryInterval);
+                }, 100);
+                // Stop retrying after 10 seconds
+                setTimeout(() => clearInterval(retryInterval), 10000);
+            }
+        })();
+                
         // ✅ Restore order if sidebar exists
         const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
 
@@ -6566,8 +6458,6 @@ html, body {
 
     }
 
-    // === Subaccount Sidebar Menu Title Support ===
-    // === Dynamic Sidebar Title Update ===
     function updateSidebarTitle(metaKey, newLabel) {
         // 🚫 Prevent title change for this menu only
         if (metaKey === "agency-accounts") {
@@ -6681,7 +6571,6 @@ html, body {
         section.appendChild(wrapper);
     }
 
-    // --- 1️⃣ Create a helper to run your theme logic ---
     function reapplyThemeOnRouteChange() {
                 waitForSidebarMenus(() => {
                     applyLockedMenus();
@@ -6709,41 +6598,12 @@ html, body {
                 });
             }
 
-    // --- 2️⃣ Detect URL changes in an SPA ---
-    // (function () {
-    //     const pushState = history.pushState;
-    //     const replaceState = history.replaceState;
-
-    //     function onRouteChange() {
-    //         reapplyThemeOnRouteChange();
-    //     }
-
-    //     history.pushState = function () {
-    //         pushState.apply(this, arguments);
-    //         onRouteChange();
-    //     };
-    //     history.replaceState = function () {
-    //         replaceState.apply(this, arguments);
-    //         onRouteChange();
-    //     };
-
-    //     window.addEventListener("popstate", onRouteChange);
-
-    //     // Run on first load
-    //     reapplyThemeOnRouteChange();
-    // })();
     (function () {
-    // DO NOT wrap pushState/replaceState here — code.js already wraps them
-    // and dispatches the "locationchange" event. Double-wrapping causes
-    // the navigation loop when leaving a subaccount.
-    // Instead just listen to the locationchange event that code.js dispatches.
-
     window.addEventListener("locationchange", () => { 
         if (window.__TB_NAV_TRANSITION__) return;
         reapplyThemeOnRouteChange();
     });
 
-    // Run on first load
     reapplyThemeOnRouteChange();
 })();
 
@@ -7448,7 +7308,6 @@ html, body {
         }
     }
 
-    // Initialize Theme Builder
     async function initThemeBuilder(attempts = 0) {
             const rlno = localStorage.getItem("rlno");
             const gem = localStorage.getItem("g-em");
@@ -7590,9 +7449,6 @@ html, body {
 
     document.addEventListener('DOMContentLoaded', () =>
         setTimeout(() => initThemeBuilder(0), 1050));
-        // setTimeout(() => initThemeBuilder(0), 1050);
-
-// ---- Hidden/Locked menus ----
 
 // Function to get current location ID from URL
 function getCurrentLocationId() {
@@ -7681,16 +7537,6 @@ function blockMenuClick(e, menuId) {
     const popupButtonText = (lockData && typeof lockData === "object" && lockData.popupButtonText) ? lockData.popupButtonText : "";
     showPreviewPopup(popupType, popupUrl, popupHeadline, popupSubHeadline, popupButtonText);
 }
-// window.addEventListener("locationchange", () => {
-//     // Clean up previous location's lock/hide visual states first
-//     cleanupMenuStates();
-//     // Wait briefly for GHL's React to update the sidebar DOM for the new location
-//     setTimeout(() => {
-//         applyLockedMenus();
-//         applyHiddenMenus();
-//     }, 800);
-// });
-
 window.addEventListener("locationchange", () => {
     // Only handle menu state cleanup here — navigation/theme transitions
     // are handled exclusively by watchLocationChange + the listener in code.js
