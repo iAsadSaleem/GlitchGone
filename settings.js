@@ -3280,6 +3280,7 @@ html, body {
             }
         }
 
+        
         // --- Cursor Options ---
         const cursorOptions = [
             { name: "Default Cursor", url: "https://themebuilder-two.vercel.app/images/defaultc-cursor.png", isDefault: true },
