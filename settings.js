@@ -117,7 +117,7 @@
         overlay.style.borderRadius = "10px";
 
         const successGif = document.createElement("img");
-        successGif.src = "https://themebuilder-six.vercel.app/images/check_mark.gif";
+        successGif.src = "https://themebuilder-two.vercel.app/images/check_mark.gif";
         successGif.style.width = "150px";
         successGif.style.height = "150px";
         successGif.style.objectFit = "contain";
@@ -128,7 +128,7 @@
         async function ensureThemesCache() {
     if (window.__themesCache) return window.__themesCache;
     if (window.__themesCachePromise) return window.__themesCachePromise;
-    window.__themesCachePromise = fetch("https://themebuilder-six.vercel.app/api/theme/getallthemes")
+    window.__themesCachePromise = fetch("https://themebuilder-two.vercel.app/api/theme/getallthemes")
         .then(r => r.json())
         .then(data => {
             const map = {};
@@ -346,8 +346,8 @@
             link.rel = 'stylesheet';
             // link.href = 'https://glitch-gone-nu.vercel.app/theme-builder.css';
 
-            link.href = 'https://themebuilder-six.vercel.app/theme-builder.css';
-            // link.href = 'https://themebuilder-six.vercel.app/theme-builder-v1.css';
+            link.href = 'https://themebuilder-two.vercel.app/theme-builder.css';
+            // link.href = 'https://themebuilder-two.vercel.app/theme-builder-v1.css';
 
             document.head.appendChild(link);
         }
@@ -730,7 +730,7 @@
         const link = document.createElement("link");
         link.id = "main-css-link";
         link.rel = "stylesheet";
-        link.href = "https://themebuilder-six.vercel.app/main.css";
+        link.href = "https://themebuilder-two.vercel.app/main.css";
 
         document.head.appendChild(link);
 
@@ -739,7 +739,7 @@
 
        async function loadThemes() {
         try {
-            const res = await fetch("https://themebuilder-six.vercel.app/api/theme/getallthemes");
+            const res = await fetch("https://themebuilder-two.vercel.app/api/theme/getallthemes");
             const data = await res.json();
 
             // Convert array to key-value by themeName
@@ -1035,7 +1035,7 @@
             try {
                     if (Object.keys(themes).length === 0) {
                         arrowIcon.innerHTML = '<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>';
-                        const res = await fetch("https://themebuilder-six.vercel.app/api/theme/getallthemes");
+                        const res = await fetch("https://themebuilder-two.vercel.app/api/theme/getallthemes");
                         const data = await res.json();
                         data.themes.forEach(t => {
                             themes[t.themeName] = t.themeData;
@@ -3282,19 +3282,19 @@ html, body {
 
         // --- Cursor Options ---
         const cursorOptions = [
-            { name: "Default Cursor", url: "https://themebuilder-six.vercel.app/images/defaultc-cursor.png", isDefault: true },
-            { name: "Purple Cursor", url: "https://themebuilder-six.vercel.app/images/purple-cursor.png" },
-            { name: "Sky Cursor", url: "https://themebuilder-six.vercel.app/images/sky-cursor.png" },
-            { name: "Sky Blue Cursor", url: "https://themebuilder-six.vercel.app/images/skyblue-cusror.png" },
-            { name: "Black New Cursor", url: "https://themebuilder-six.vercel.app/images/black-new.png" },
-            { name: "Mouse Cursor", url: "https://themebuilder-six.vercel.app/images/mouse-cursor.png" },
-            { name: "Purple Gradient Cursor", url: "https://themebuilder-six.vercel.app/images/purplegradient-cursor.png" },
-            { name: "Yellow Orange Cursor", url: "https://themebuilder-six.vercel.app/images/yelloworange-cursor.png" },
-            { name: "Mouse Sharp Cursor", url: "https://themebuilder-six.vercel.app/images/mousesharp-cursor.png" },
-            { name: "Gradient Border Cursor", url: "https://themebuilder-six.vercel.app/images/gradientborder-cursor.png" },
-            { name: "Transparent Cursor", url: "https://themebuilder-six.vercel.app/images/transperant-cursor.png" },
-            { name: "Classic Cursor", url: "https://themebuilder-six.vercel.app/images/cursor.png" },
-            { name: "Target Cursor", url: "https://themebuilder-six.vercel.app/images/target-cursor.png" }
+            { name: "Default Cursor", url: "https://themebuilder-two.vercel.app/images/defaultc-cursor.png", isDefault: true },
+            { name: "Purple Cursor", url: "https://themebuilder-two.vercel.app/images/purple-cursor.png" },
+            { name: "Sky Cursor", url: "https://themebuilder-two.vercel.app/images/sky-cursor.png" },
+            { name: "Sky Blue Cursor", url: "https://themebuilder-two.vercel.app/images/skyblue-cusror.png" },
+            { name: "Black New Cursor", url: "https://themebuilder-two.vercel.app/images/black-new.png" },
+            { name: "Mouse Cursor", url: "https://themebuilder-two.vercel.app/images/mouse-cursor.png" },
+            { name: "Purple Gradient Cursor", url: "https://themebuilder-two.vercel.app/images/purplegradient-cursor.png" },
+            { name: "Yellow Orange Cursor", url: "https://themebuilder-two.vercel.app/images/yelloworange-cursor.png" },
+            { name: "Mouse Sharp Cursor", url: "https://themebuilder-two.vercel.app/images/mousesharp-cursor.png" },
+            { name: "Gradient Border Cursor", url: "https://themebuilder-two.vercel.app/images/gradientborder-cursor.png" },
+            { name: "Transparent Cursor", url: "https://themebuilder-two.vercel.app/images/transperant-cursor.png" },
+            { name: "Classic Cursor", url: "https://themebuilder-two.vercel.app/images/cursor.png" },
+            { name: "Target Cursor", url: "https://themebuilder-two.vercel.app/images/target-cursor.png" }
         ];
 
         const cursorList = document.createElement("div");
@@ -3407,19 +3407,19 @@ html, body {
         }
 
         const pointerOptions = [
-            { name: "Default Pointer", url: "https://themebuilder-six.vercel.app/images/default-pointer.png", isDefault: true },
-            { name: "Orange Finger Pointer", url: "https://themebuilder-six.vercel.app/images/orangefinger-pointer.png" },
-            { name: "Green Pointer", url: "https://themebuilder-six.vercel.app/images/green-pointer.png" },
-            { name: "Black Pointer", url: "https://themebuilder-six.vercel.app/images/black-pointer.png" },
-            { name: "Light Orange Pointer", url: "https://themebuilder-six.vercel.app/images/lightorange-pointer.png" },
-            { name: "Golden Hand Pointer", url: "https://themebuilder-six.vercel.app/images/goldenhand-pointer.png" },
-            { name: "Glow Hand Pointer", url: "https://themebuilder-six.vercel.app/images/glowhand-pointer.png" },
-            { name: "Orange R Pointer", url: "https://themebuilder-six.vercel.app/images/oranger-pointer.png" },
-            { name: "Sky Blue New Pointer", url: "https://themebuilder-six.vercel.app/images/skybluenew-pointer.png" },
-            { name: "Classic Blue Pointer", url: "https://themebuilder-six.vercel.app/images/classicblue-pointer.png" },
-            { name: "Black New Pointer", url: "https://themebuilder-six.vercel.app/images/blacknew-pointer.png" },
-            { name: "Yellow Orange Pointer", url: "https://themebuilder-six.vercel.app/images/yelloworange-pointer.png" },
-            { name: "Hand Pointer", url: "https://themebuilder-six.vercel.app/images/hand-pointer.png" }
+            { name: "Default Pointer", url: "https://themebuilder-two.vercel.app/images/default-pointer.png", isDefault: true },
+            { name: "Orange Finger Pointer", url: "https://themebuilder-two.vercel.app/images/orangefinger-pointer.png" },
+            { name: "Green Pointer", url: "https://themebuilder-two.vercel.app/images/green-pointer.png" },
+            { name: "Black Pointer", url: "https://themebuilder-two.vercel.app/images/black-pointer.png" },
+            { name: "Light Orange Pointer", url: "https://themebuilder-two.vercel.app/images/lightorange-pointer.png" },
+            { name: "Golden Hand Pointer", url: "https://themebuilder-two.vercel.app/images/goldenhand-pointer.png" },
+            { name: "Glow Hand Pointer", url: "https://themebuilder-two.vercel.app/images/glowhand-pointer.png" },
+            { name: "Orange R Pointer", url: "https://themebuilder-two.vercel.app/images/oranger-pointer.png" },
+            { name: "Sky Blue New Pointer", url: "https://themebuilder-two.vercel.app/images/skybluenew-pointer.png" },
+            { name: "Classic Blue Pointer", url: "https://themebuilder-two.vercel.app/images/classicblue-pointer.png" },
+            { name: "Black New Pointer", url: "https://themebuilder-two.vercel.app/images/blacknew-pointer.png" },
+            { name: "Yellow Orange Pointer", url: "https://themebuilder-two.vercel.app/images/yelloworange-pointer.png" },
+            { name: "Hand Pointer", url: "https://themebuilder-two.vercel.app/images/hand-pointer.png" }
         ];
 
         const pointerList = document.createElement("div");
@@ -3673,7 +3673,7 @@ html, body {
         async function fetchLoaders() {
             try {
                 const res = await fetch(
-                    `https://themebuilder-six.vercel.app/api/theme/Get-loader-css?email=${email}`
+                    `https://themebuilder-two.vercel.app/api/theme/Get-loader-css?email=${email}`
                 );
                 if (!res.ok) throw new Error("Failed to fetch loaders");
                 const data = await res.json();
@@ -3700,7 +3700,7 @@ html, body {
         //         const img = document.createElement("img");
         //         img.src =
         //             loader.previewImage ||
-        //             "https://themebuilder-six.vercel.app/images/dotsloader.png";
+        //             "https://themebuilder-two.vercel.app/images/dotsloader.png";
         //         img.alt = loader.loaderName;
         //         img.className = "tb-loader-img";
 
@@ -3761,7 +3761,7 @@ html, body {
         const img = document.createElement("img");
         img.src =
             loader.previewImage ||
-            "https://themebuilder-six.vercel.app/images/dotsloader.png";
+            "https://themebuilder-two.vercel.app/images/dotsloader.png";
         img.alt = loader.loaderName;
         img.className = "tb-loader-img";
 
@@ -5440,7 +5440,7 @@ html, body {
         // ── Load themes into dropdown ──
         (async function () {
             try {
-                const res = await fetch("https://themebuilder-six.vercel.app/api/theme/getallthemes");
+                const res = await fetch("https://themebuilder-two.vercel.app/api/theme/getallthemes");
                 const data = await res.json();
 
                 themeSelect.innerHTML = "";
@@ -6038,7 +6038,7 @@ html, body {
 
                 // 🖼️ Add drag icon before label
                 const dragIcon = document.createElement("img");
-                dragIcon.src = "https://themebuilder-six.vercel.app/images/drag-logo-2.png";
+                dragIcon.src = "https://themebuilder-two.vercel.app/images/drag-logo-2.png";
                 dragIcon.alt = "drag";
                 dragIcon.className = "tb-drag-handle"; // 👈 important for Sortable handle
                 dragIcon.style.width = "15px";
@@ -7070,7 +7070,7 @@ html, body {
                                     };
                                     console.log('dbData:', dbData);
                                     // console.log('Here is the themeData:', dbData.themeData);
-                                    await fetch("https://themebuilder-six.vercel.app/api/theme", {
+                                    await fetch("https://themebuilder-two.vercel.app/api/theme", {
                                         method: "POST",
                                         headers: { "Content-Type": "application/json" },
                                         body: JSON.stringify(dbData),
@@ -7087,7 +7087,7 @@ html, body {
                                                 email: email || null
                                             };
                                             console.log(payload,'here is the Payload');
-                                            await fetch("https://themebuilder-six.vercel.app/api/theme/loader-css/status", {
+                                            await fetch("https://themebuilder-two.vercel.app/api/theme/loader-css/status", {
                                                 method: "PUT",
                                                 headers: { "Content-Type": "application/json" },
                                                 body: JSON.stringify(payload),
@@ -7121,7 +7121,7 @@ html, body {
             // Set inner HTML with logo + text
             brandingWrapper.innerHTML = `
                 <span>Powered by: Growthable</span>
-                <img src="https://themebuilder-six.vercel.app/images/growthable-icon.png" alt="Growthable" class="tb-branding-logo">
+                <img src="https://themebuilder-two.vercel.app/images/growthable-icon.png" alt="Growthable" class="tb-branding-logo">
             `;
             // Append right after Apply button
             buttonsWrapper.appendChild(brandingWrapper);
@@ -7332,7 +7332,7 @@ html, body {
             }
 
             try {
-                const response = await fetch(`https://themebuilder-six.vercel.app/api/theme/check-theme`, {
+                const response = await fetch(`https://themebuilder-two.vercel.app/api/theme/check-theme`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -7375,7 +7375,7 @@ html, body {
             //         console.error("❌ Email not found in localStorage.");
             //         return;
             //     }
-            //     const response = await fetch(`https://themebuilder-six.vercel.app/api/theme/${decodedEmail}`);
+            //     const response = await fetch(`https://themebuilder-two.vercel.app/api/theme/${decodedEmail}`);
             //     const data = await response.json();
             //     if (data.success) {
             //         injectThemeBuilderMenu(); 

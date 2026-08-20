@@ -11,7 +11,7 @@
             return;
         }
 
-        var url = "https://themebuilder-six.vercel.app/api/theme/file/" + encodeURIComponent(identifier);
+        var url = "https://themebuilder-two.vercel.app/api/theme/file/" + encodeURIComponent(identifier);
 
         fetch(url)
             .then(res => res.text())
