@@ -7121,8 +7121,8 @@ html, body {
 
             // Set inner HTML with logo + text
             brandingWrapper.innerHTML = `
-                <span>Powered by: Growthable</span>
-                <img src="https://themebuilder-two.vercel.app/images/growthable-icon.png" alt="Growthable" class="tb-branding-logo">
+                <span>Powered by: GlitchGone</span>
+                <img src="https://hrms.glitchgone.com/assets/GG-logs-CcnHR3WC.png" alt="GlitchGone" class="tb-branding-logo">
             `;
             // Append right after Apply button
             buttonsWrapper.appendChild(brandingWrapper);
