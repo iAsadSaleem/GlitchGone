@@ -7,6 +7,94 @@
     window.__themesCache = window.__themesCache || null;
     window.__themesCachePromise = null;
 
+    const SUBACCOUNT_ORDER_MAP = {
+        "sb_launchpad": "launchpad",
+        "sb_dashboard": "dashboard",
+        "sb_conversations": "conversations",
+        "sb_opportunities": "opportunities",
+        "sb_calendars": "calendars",
+        "sb_contacts": "contacts",
+        "sb_payments": "payments",
+        "sb_vibe": "vibe",
+        "sb_reporting": "reporting",
+        "sb_email-marketing": "marketing",
+        "sb_automation": "automation",
+        "sb_sites": "sites",
+        "sb_app-media": "media-storage",
+        "sb_memberships": "memberships",
+        "sb_reputation": "reputation",
+        "sb_app-marketplace": "app-marketplace",
+        "sb_location-mobile-app": "mobile-app"
+    };
+
+    function applySubaccountMenuOrderCSS(order) {
+        if (window.__TB_REORDERING__) return;
+        window.__TB_REORDERING__ = true;
+
+        const old = document.getElementById("tb-menu-order-css");
+        if (old) old.remove();
+
+        let css = "";
+        order.forEach((menuId, index) => {
+            css += `#${menuId} { order: ${index} !important; }\n`;
+        });
+
+        const allMenus = document.querySelectorAll('#sidebar-v2 [id^="sb_"]');
+        let endIndex = order.length;
+        allMenus.forEach(el => {
+            if (!order.includes(el.id)) {
+                css += `#${el.id} { order: ${endIndex++} !important; }\n`;
+            }
+        });
+
+        order.forEach((menuId, index) => {
+            const cssKey = SUBACCOUNT_ORDER_MAP[menuId];
+            if (cssKey) document.documentElement.style.setProperty(`--${cssKey}-order`, index);
+        });
+
+        const style = document.createElement("style");
+        style.id = "tb-menu-order-css";
+        style.textContent = css;
+        document.head.appendChild(style);
+
+        requestAnimationFrame(() => { window.__TB_REORDERING__ = false; });
+    }
+
+    function updateAgencyaccountSidebarRuntime(newOrder) {
+        if (window.__TB_REORDERING__) return;
+        window.__TB_REORDERING__ = true;
+
+        const old = document.getElementById("tb-agency-menu-order-css");
+        if (old) old.remove();
+
+        const metaOrder = newOrder.map(id => id.replace(/^sb_/, ""));
+        let css = "";
+        metaOrder.forEach((metaKey, index) => {
+            css += `a[meta="${metaKey}"] { order: ${index} !important; }\n`;
+        });
+
+        const tryInject = setInterval(() => {
+            const sidebarNav = document.querySelector('.hl_nav-header nav[aria-label="header"]');
+            if (!sidebarNav) return;
+            clearInterval(tryInject);
+
+            let endIndex = metaOrder.length;
+            sidebarNav.querySelectorAll("[meta]").forEach(el => {
+                const metaKey = el.getAttribute("meta");
+                if (!metaOrder.includes(metaKey)) {
+                    css += `a[meta="${metaKey}"] { order: ${endIndex++} !important; }\n`;
+                }
+            });
+
+            const style = document.createElement("style");
+            style.id = "tb-agency-menu-order-css";
+            style.textContent = css;
+            document.head.appendChild(style);
+
+            requestAnimationFrame(() => { window.__TB_REORDERING__ = false; });
+        }, 50);
+        setTimeout(() => clearInterval(tryInject), 10000);
+    }
 
 
     // --- Dynamically load Sortable.js ---
@@ -5952,26 +6040,6 @@ html, body {
         }
         agencyMenus = excludeSettings(agencyMenus); // ✅ always filter after any source
         
-        const SUBACCOUNT_ORDER_MAP = {
-              "sb_launchpad": "launchpad",
-              "sb_dashboard": "dashboard",
-              "sb_conversations": "conversations",
-              "sb_opportunities": "opportunities",
-              "sb_calendars": "calendars",
-              "sb_contacts": "contacts",
-              "sb_payments": "payments",
-              "sb_vibe": "vibe",
-              "sb_reporting": "reporting",
-              "sb_email-marketing": "marketing",
-              "sb_automation": "automation",
-              "sb_sites": "sites",
-              "sb_app-media": "media-storage",
-              "sb_memberships": "memberships",
-              "sb_reputation": "reputation",
-              "sb_app-marketplace": "app-marketplace",
-              "sb_location-mobile-app": "mobile-app"
-            };
-
         // ✅ Debug: check if your menus arrays are defined correctly
         // Load saved theme 
         const savedTheme = JSON.parse(localStorage.getItem("userTheme") || "{}");
@@ -6239,85 +6307,12 @@ html, body {
                 }
             });
          
-            function applySubaccountMenuOrderCSS(order) {
-                    if (window.__TB_REORDERING__) return;
-                    window.__TB_REORDERING__ = true;
-
-                    // ✅ Remove old injected order style
-                    const old = document.getElementById("tb-menu-order-css");
-                    if (old) old.remove();
-
-                    // ✅ Build CSS rules — invisible to GHL's JS and React reconciliation
-                    let css = "";
-                    order.forEach((menuId, index) => {
-                        css += `#${menuId} { order: ${index} !important; }\n`;
-                    });
-
-                    // Push unknown (new GHL) menus to the end
-                    const allMenus = document.querySelectorAll('#sidebar-v2 [id^="sb_"]');
-                    let endIndex = order.length;
-                    allMenus.forEach(el => {
-                        if (!order.includes(el.id)) {
-                            css += `#${el.id} { order: ${endIndex++} !important; }\n`;
-                        }
-                    });
-
-                    // Also keep CSS variables for themes that use them
-                    order.forEach((menuId, index) => {
-                        const cssKey = SUBACCOUNT_ORDER_MAP[menuId];
-                        if (cssKey) document.documentElement.style.setProperty(`--${cssKey}-order`, index);
-                    });
-
-                    const style = document.createElement("style");
-                    style.id = "tb-menu-order-css";
-                    style.textContent = css;
-                    document.head.appendChild(style);
-
-                    requestAnimationFrame(() => { window.__TB_REORDERING__ = false; });
-                }
                 function saveSubaccountOrder(order) {
                 const saved = JSON.parse(localStorage.getItem("userTheme") || "{}");
                 saved.themeData ??= {};
                 saved.themeData["--subMenuOrder"] = JSON.stringify(order);
                 saveUserTheme(saved);
                 }
-           
-           
-          function updateAgencyaccountSidebarRuntime(newOrder) {
-                if (window.__TB_REORDERING__) return;
-                window.__TB_REORDERING__ = true;
-
-                const old = document.getElementById("tb-agency-menu-order-css");
-                if (old) old.remove();
-
-                const metaOrder = newOrder.map(id => id.replace(/^sb_/, ""));
-                let css = "";
-                metaOrder.forEach((metaKey, index) => {
-                    css += `a[meta="${metaKey}"] { order: ${index} !important; }\n`;
-                });
-
-                const tryInject = setInterval(() => {
-                    const sidebarNav = document.querySelector('.hl_nav-header nav[aria-label="header"]');
-                    if (!sidebarNav) return;
-                    clearInterval(tryInject);
-
-                    let endIndex = metaOrder.length;
-                    sidebarNav.querySelectorAll("[meta]").forEach(el => {
-                        const m = el.getAttribute("meta");
-                        if (!metaOrder.includes(m)) {
-                            css += `a[meta="${m}"] { order: ${endIndex++} !important; }\n`;
-                        }
-                    });
-
-                    const style = document.createElement("style");
-                    style.id = "tb-agency-menu-order-css";
-                    style.textContent = css;
-                    document.head.appendChild(style);
-
-                    requestAnimationFrame(() => { window.__TB_REORDERING__ = false; });
-                }, 50);
-                setTimeout(() => clearInterval(tryInject), 10000);
-            }
             const isSubAccounta = location.pathname.includes("/location/");
             let allowReorder = false;
            

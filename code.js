@@ -627,6 +627,7 @@ function cleanupMenuStates() {
         menu.style.removeProperty("display");
     });
 }
+window.__TB_cleanupMenuStates = cleanupMenuStates;
   function blockMenuClick(e, menuId) {
       // Guard: re-check current location before doing anything
       const savedRaw = localStorage.getItem("userTheme");
@@ -1074,7 +1075,7 @@ window.__TB_NAV_TRANSITION__ = false;
 window.addEventListener("locationchange", () => {
     if (window.__TB_NAV_TRANSITION__) return;
 
-    cleanupMenuStates();
+    window.__TB_cleanupMenuStates();
 
     const isLeavingSubaccount = !window.location.pathname.includes("/location/");
     if (!isLeavingSubaccount) {
