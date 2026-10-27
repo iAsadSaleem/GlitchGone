@@ -460,6 +460,7 @@ function getCurrentLocationId() {
 function applyHiddenMenus() { 
   restoreHiddenMenus(); 
 }
+window.__tbApplyHiddenMenus = applyHiddenMenus;
     function showPreviewPopup(type, popupUrl, popupHeadline, popupSubHeadline, popupButtonText) {
     document.getElementById("tb-preview-popup")?.remove();
 
@@ -571,6 +572,7 @@ function applyHiddenMenus() {
         }
     });
 }
+window.__tbApplyLockedMenus = applyLockedMenus;
 function applySubaccountTheme() {
     const locationId = getCurrentLocationId();
     if (!locationId) return;
@@ -617,6 +619,7 @@ function applySubaccountTheme() {
         if (typeof changeFavicon === "function") changeFavicon(locationTheme.logoUrl);
     }
 }
+window.__tbApplySubaccountTheme = applySubaccountTheme;
 function cleanupMenuStates() {
     document.querySelectorAll("a[id^='sb_'], .hl_nav-header a").forEach(menu => {
         // Remove lock icon
@@ -1144,8 +1147,14 @@ window.addEventListener("locationchange", () => {
         if (typeof window.__tbApplyStoredSidebarTitles === "function") {
             window.__tbApplyStoredSidebarTitles();
         }
-        applyLockedMenus();
-        applyHiddenMenus();
-        applySubaccountTheme();
+        if (typeof window.__tbApplyLockedMenus === "function") {
+            window.__tbApplyLockedMenus();
+        }
+        if (typeof window.__tbApplyHiddenMenus === "function") {
+            window.__tbApplyHiddenMenus();
+        }
+        if (typeof window.__tbApplySubaccountTheme === "function") {
+            window.__tbApplySubaccountTheme();
+        }
     }, 1200);
 });
