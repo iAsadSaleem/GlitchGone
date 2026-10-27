@@ -7215,11 +7215,13 @@ html, body {
 
     }
     function injectThemeBuilderMenu() {
-        // Find the "Login As" element
-        const loginAsItem = Array.from(document.querySelectorAll(".dropdown-item"))
+        const dropdownItems = Array.from(document.querySelectorAll(".dropdown-menu .dropdown-item"));
+        const insertionTarget = dropdownItems
             .find(el => el.textContent.trim().startsWith("Login As"));
-        if (!loginAsItem) {
-            console.warn("❗ 'Login As' menu item not found!");
+        const target = insertionTarget || dropdownItems
+            .find(el => el.textContent.trim().startsWith("Signout"));
+        if (!target) {
+            console.warn("❗ No 'Login As' or 'Signout' item found in the account dropdown.");
             return;
         }
 
@@ -7244,8 +7246,7 @@ html, body {
             document.getElementById("themeBuilderDrawer")?.classList.add("open"); // Show drawer
         });
 
-        // Insert before "Login As"
-        loginAsItem.parentNode.insertBefore(themeBuilderItem, loginAsItem);
+        target.parentNode.insertBefore(themeBuilderItem, target);
 
         // Inject CSS (only once)
         if (!document.getElementById("theme-builder-style")) {
