@@ -1141,7 +1141,9 @@ window.addEventListener("locationchange", () => {
     setTimeout(() => observer.disconnect(), 5000);
 
     setTimeout(() => {
-        applyStoredSidebarTitles();
+        if (typeof window.__tbApplyStoredSidebarTitles === "function") {
+            window.__tbApplyStoredSidebarTitles();
+        }
         applyLockedMenus();
         applyHiddenMenus();
         applySubaccountTheme();
