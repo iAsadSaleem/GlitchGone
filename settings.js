@@ -7214,48 +7214,151 @@ html, body {
         }
 
     }
+    // function injectThemeBuilderMenu() {
+    //     const dropdownMenus = Array.from(document.querySelectorAll(".dropdown-menu.show"));
+    //     const dropdownItems = dropdownMenus.flatMap(menu =>
+    //         Array.from(menu.querySelectorAll(".dropdown-item"))
+    //     );
+    //     const insertionTarget = dropdownItems
+    //         .find(el => el.textContent.trim().startsWith("Login As"));
+    //     const target = insertionTarget || dropdownItems
+    //         .find(el => el.textContent.trim().startsWith("Signout"));
+    //     if (!target) return;
+
+    //     // Prevent duplicate insert
+    //     const dropdownMenu = target.closest(".dropdown-menu");
+    //     if (dropdownMenu?.querySelector(".theme-builder-highlight")) {
+    //         return;
+    //     }
+
+    //     // Create new Theme Builder item
+    //     const themeBuilderItem = document.createElement("div");
+    //     themeBuilderItem.className = "py-2 dropdown-item theme-builder-highlight";
+    //     themeBuilderItem.style.cursor = "var(--custom-pointer)";
+    //     themeBuilderItem.innerHTML = `
+    //     <span class="rainbow-text"> Theme Builder</span>
+    //     <span class="new-badge">NEW</span>
+    // `;
+
+    //     // ✅ Add click: Open Theme Builder drawer
+    //     themeBuilderItem.addEventListener("click", function () {
+    //         let controlsContainer = document.querySelector(".hl_header--controls") || document.body;
+    //         createBuilderUI(controlsContainer);
+    //         document.getElementById("themeBuilderDrawer")?.classList.add("open"); // Show drawer
+    //     });
+
+    //     target.parentNode.insertBefore(themeBuilderItem, target);
+
+    //     // Inject CSS (only once)
+    //     if (!document.getElementById("theme-builder-style")) {
+    //         const style = document.createElement("style");
+    //         style.id = "theme-builder-style";
+    //         style.innerHTML = `
+    //         .theme-builder-highlight {
+    //             height:50px;
+    //             position: relative;
+    //             border: 2px solid transparent;
+    //             border-radius: 6px;
+    //             background-color: rgba(255, 255, 255, 0.05);
+    //             font-weight: bold;
+    //             display: flex;
+    //             justify-content: space-between;
+    //             align-items: center;
+    //             animation: borderGlow 2s infinite;
+    //             padding-right: 10px;
+    //         }
+    //         @keyframes borderGlow {
+    //             0% { box-shadow: 0 0 10px red; border-color: red; }
+    //             25% { box-shadow: 0 0 10px orange; border-color: orange; }
+    //             50% { box-shadow: 0 0 10px lime; border-color: lime; }
+    //             75% { box-shadow: 0 0 10px cyan; border-color: cyan; }
+    //             100% { box-shadow: 0 0 10px violet; border-color: violet; }
+    //         }
+    //         .rainbow-text {
+    //             position: relative;
+    //             left: 50px;
+    //             font-size: 23px;
+    //             font-weight: 700;
+    //             -webkit-background-clip: text;
+    //             color: black;
+    //             animation: rainbowMove 2s linear;
+    //         }
+    //         @keyframes rainbowMove {
+    //             from { background-position: 0%; }
+    //             to { background-position: 100%; }
+    //         }
+    //         .new-badge {
+    //             background: red;
+    //             color: white;
+    //             font-size: 10px;
+    //             padding: 2px 6px;
+    //             border-radius: 8px;
+    //             margin-left: 10px;
+    //             animation: pulse 1.2s infinite;
+    //         }
+    //         @keyframes pulse {
+    //             0% { transform: scale(1); box-shadow: 0 0 5px red; }
+    //             50% { transform: scale(1.2); box-shadow: 0 0 10px yellow; }
+    //             100% { transform: scale(1); box-shadow: 0 0 5px red; }
+    //         }
+    //     `;
+    //         document.head.appendChild(style);
+    //     }
+    // }
+
     function injectThemeBuilderMenu() {
-        const dropdownMenus = Array.from(document.querySelectorAll(".dropdown-menu.show"));
-        const dropdownItems = dropdownMenus.flatMap(menu =>
-            Array.from(menu.querySelectorAll(".dropdown-item"))
-        );
-        const insertionTarget = dropdownItems
-            .find(el => el.textContent.trim().startsWith("Login As"));
-        const target = insertionTarget || dropdownItems
-            .find(el => el.textContent.trim().startsWith("Signout"));
+    // 1. Find any open user dropdown (identified by the user-info-card)
+    const menus = Array.from(document.querySelectorAll(".dropdown-menu.show"))
+        .filter(menu => menu.querySelector(".user-info-card"));
+
+    menus.forEach(menu => {
+        // Prevent duplicate insert
+        if (menu.querySelector(".theme-builder-highlight")) return;
+
+        const items = Array.from(menu.querySelectorAll(".dropdown-item"));
+        const find = text =>
+            items.find(el => el.textContent.trim().toLowerCase().startsWith(text));
+
+        // Prefer "Login As", fall back to "Signout"
+        let target = find("login as") || find("signout") || find("sign out");
+
+        // Last-resort fallback: the last divider in the menu
+        if (!target) {
+            const dividers = menu.querySelectorAll(".dropdown-divider");
+            target = dividers[dividers.length - 1];
+        }
         if (!target) return;
 
-        // Prevent duplicate insert
-        const dropdownMenu = target.closest(".dropdown-menu");
-        if (dropdownMenu?.querySelector(".theme-builder-highlight")) {
-            return;
-        }
-
-        // Create new Theme Builder item
+        // Create Theme Builder item
         const themeBuilderItem = document.createElement("div");
         themeBuilderItem.className = "py-2 dropdown-item theme-builder-highlight";
         themeBuilderItem.style.cursor = "var(--custom-pointer)";
         themeBuilderItem.innerHTML = `
-        <span class="rainbow-text"> Theme Builder</span>
-        <span class="new-badge">NEW</span>
-    `;
+            <span class="rainbow-text"> Theme Builder</span>
+            <span class="new-badge">NEW</span>
+        `;
 
-        // ✅ Add click: Open Theme Builder drawer
-        themeBuilderItem.addEventListener("click", function () {
-            let controlsContainer = document.querySelector(".hl_header--controls") || document.body;
+        themeBuilderItem.addEventListener("click", function (e) {
+            e.stopPropagation();
+            const controlsContainer =
+                document.querySelector(".hl_header--controls") || document.body;
             createBuilderUI(controlsContainer);
-            document.getElementById("themeBuilderDrawer")?.classList.add("open"); // Show drawer
+            document.getElementById("themeBuilderDrawer")?.classList.add("open");
         });
 
         target.parentNode.insertBefore(themeBuilderItem, target);
+    });
 
-        // Inject CSS (only once)
-        if (!document.getElementById("theme-builder-style")) {
-            const style = document.createElement("style");
-            style.id = "theme-builder-style";
-            style.innerHTML = `
+    injectThemeBuilderStyles();
+}
+
+    function injectThemeBuilderStyles() {
+        if (document.getElementById("theme-builder-style")) return;
+        const style = document.createElement("style");
+        style.id = "theme-builder-style";
+        style.innerHTML = `
             .theme-builder-highlight {
-                height:50px;
+                height: 50px;
                 position: relative;
                 border: 2px solid transparent;
                 border-radius: 6px;
@@ -7268,10 +7371,10 @@ html, body {
                 padding-right: 10px;
             }
             @keyframes borderGlow {
-                0% { box-shadow: 0 0 10px red; border-color: red; }
-                25% { box-shadow: 0 0 10px orange; border-color: orange; }
-                50% { box-shadow: 0 0 10px lime; border-color: lime; }
-                75% { box-shadow: 0 0 10px cyan; border-color: cyan; }
+                0%   { box-shadow: 0 0 10px red;    border-color: red; }
+                25%  { box-shadow: 0 0 10px orange; border-color: orange; }
+                50%  { box-shadow: 0 0 10px lime;   border-color: lime; }
+                75%  { box-shadow: 0 0 10px cyan;   border-color: cyan; }
                 100% { box-shadow: 0 0 10px violet; border-color: violet; }
             }
             .rainbow-text {
@@ -7279,13 +7382,7 @@ html, body {
                 left: 50px;
                 font-size: 23px;
                 font-weight: 700;
-                -webkit-background-clip: text;
                 color: black;
-                animation: rainbowMove 2s linear;
-            }
-            @keyframes rainbowMove {
-                from { background-position: 0%; }
-                to { background-position: 100%; }
             }
             .new-badge {
                 background: red;
@@ -7297,15 +7394,37 @@ html, body {
                 animation: pulse 1.2s infinite;
             }
             @keyframes pulse {
-                0% { transform: scale(1); box-shadow: 0 0 5px red; }
-                50% { transform: scale(1.2); box-shadow: 0 0 10px yellow; }
-                100% { transform: scale(1); box-shadow: 0 0 5px red; }
+                0%   { transform: scale(1);   box-shadow: 0 0 5px red; }
+                50%  { transform: scale(1.2); box-shadow: 0 0 10px yellow; }
+                100% { transform: scale(1);   box-shadow: 0 0 5px red; }
             }
         `;
-            document.head.appendChild(style);
-        }
+        document.head.appendChild(style);
     }
 
+    // ✅ Run whenever the DOM changes (dropdown opens / re-renders)
+    (function watchForDropdown() {
+        if (window.__themeBuilderObserver) return; // only one observer
+        let scheduled = false;
+
+        window.__themeBuilderObserver = new MutationObserver(() => {
+            if (scheduled) return;
+            scheduled = true;
+            requestAnimationFrame(() => {
+                scheduled = false;
+                injectThemeBuilderMenu();
+            });
+        });
+
+        window.__themeBuilderObserver.observe(document.body, {
+            childList: true,
+            subtree: true,
+            attributes: true,
+            attributeFilter: ["class"] // catches the "show" class being added
+        });
+
+        injectThemeBuilderMenu(); // initial run
+    })();
     async function initThemeBuilder(attempts = 0) {
             const rlno = localStorage.getItem("rlno");
             const gem = localStorage.getItem("g-em");
