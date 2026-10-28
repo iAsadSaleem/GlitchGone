@@ -7215,18 +7215,19 @@ html, body {
 
     }
     function injectThemeBuilderMenu() {
-        const dropdownItems = Array.from(document.querySelectorAll(".dropdown-menu .dropdown-item"));
+        const dropdownMenus = Array.from(document.querySelectorAll(".dropdown-menu.show"));
+        const dropdownItems = dropdownMenus.flatMap(menu =>
+            Array.from(menu.querySelectorAll(".dropdown-item"))
+        );
         const insertionTarget = dropdownItems
             .find(el => el.textContent.trim().startsWith("Login As"));
         const target = insertionTarget || dropdownItems
             .find(el => el.textContent.trim().startsWith("Signout"));
-        if (!target) {
-            console.warn("❗ No 'Login As' or 'Signout' item found in the account dropdown.");
-            return;
-        }
+        if (!target) return;
 
         // Prevent duplicate insert
-        if (document.querySelector(".theme-builder-highlight")) {
+        const dropdownMenu = target.closest(".dropdown-menu");
+        if (dropdownMenu?.querySelector(".theme-builder-highlight")) {
             return;
         }
 
@@ -7349,6 +7350,7 @@ html, body {
                     const headerEl = document.querySelector("header.hl_header") || document.querySelector("header");
                     if (headerEl && !headerObserver) {
                         headerObserver = new MutationObserver(() => {
+                            injectThemeBuilderMenu();
                             if (!document.getElementById("hl_header--themebuilder-icon")) {
                                 setTimeout(() => initThemeBuilder(0), 200);
                             }
